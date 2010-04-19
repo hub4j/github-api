@@ -23,14 +23,19 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
@@ -46,18 +51,37 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
 
+    private GitHub(String login, String apiToken) {
+        this.login = login;
+        this.token = apiToken;
+    }
+
+    /**
+     * Obtains the credential from "~/.github"
+     */
+    public static GitHub connect() throws IOException {
+        Properties props = new Properties();
+        File homeDir = new File(System.getProperty("user.home"));
+        FileInputStream in = new FileInputStream(new File(homeDir, ".github"));
+        try {
+            props.load(in);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+        return new GitHub(props.getProperty("login"),props.getProperty("token"));
+    }
+
+    public static GitHub connect(String login, String apiToken) throws IOException {
+        return new GitHub(login,apiToken);
+    }
+
     /**
      * Connects to GitHub anonymously.
      *
      * All operations that requires authentication will fail.
      */
-    public GitHub() {
-        this(null,null);
-    }
-
-    public GitHub(String login, String apiToken) {
-        this.login = login;
-        this.token = apiToken;
+    public static GitHub connectAnonymously() {
+        return new GitHub(null,null);
     }
 
     /*package*/ void requireCredential() {

@@ -5,10 +5,21 @@ What is this?
 Sample Usage
 
 ------------------
-GitHub github = new GitHub("kohsuke","myApiToken");
+GitHub github = GitHub.connect();
 GHRepository repo = github.createRepository(
   "new-repository","this is my new repository",
   "http://www.kohsuke.org/",true/*public*/);
 repo.addCollaborators(github.getUser("abayer"),github.getUser("rtyler"));
 repo.delete();
+------------------
+
+Credential
+
+  This library allows the caller to supply the credential as parameters, but it also defines a common convention
+  so that applications using this library will look at the consistent location. In this convention, the library
+  looks at "~/.github" property file, which should have the following two values:
+
+------------------
+login=kohsuke
+token=012345678
 ------------------

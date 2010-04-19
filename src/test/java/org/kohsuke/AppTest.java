@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class AppTest extends TestCase {
     public void testApp() throws IOException {
-        GitHub hub = new GitHub("kohsuke","9138245daf860415dfc66419177d95da");
+        GitHub hub = GitHub.connectAnonymously();
 //        hub.createRepository("test","test repository",null,true);
 //        hub.getUser("kohsuke").getRepository("test").delete();
 

@@ -148,28 +148,28 @@ public class GHUser {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Poster(root).to(root.getApiURL("/user/follow/"+login));
+        new Poster(root).withCredential().to(root.getApiURL("/user/follow/"+login));
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Poster(root).to(root.getApiURL("/user/unfollow/"+login));
+        new Poster(root).withCredential().to(root.getApiURL("/user/unfollow/"+login));
     }
 
     /**
      * Lists the users that this user is following
      */
     public Set<GHUser> getFollows() throws IOException {
-        return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
+        return root.retrieve("/user/show/"+login+"/following",JsonUsers.class).toSet(root);
     }
 
     /**
      * Lists the users who are following this user.
      */
-    public Set<GHUser> getFollowings() throws IOException {
-        return root.retrieve("/user/show/"+login+"/following",JsonUsers.class).toSet(root);
+    public Set<GHUser> getFollowers() throws IOException {
+        return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
     }
 
     @Override

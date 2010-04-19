@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import static org.kohsuke.github.GitHub.MAPPER;
@@ -141,6 +142,34 @@ public class GHUser {
 
     public GHRepository getRepository(String name) throws IOException {
         return getRepositories().get(name);
+    }
+
+    /**
+     * Follow this user.
+     */
+    public void follow() throws IOException {
+        new Poster(root).to(root.getApiURL("/user/follow/"+login));
+    }
+
+    /**
+     * Unfollow this user.
+     */
+    public void unfollow() throws IOException {
+        new Poster(root).to(root.getApiURL("/user/unfollow/"+login));
+    }
+
+    /**
+     * Lists the users that this user is following
+     */
+    public Set<GHUser> getFollows() throws IOException {
+        return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
+    }
+
+    /**
+     * Lists the users who are following this user.
+     */
+    public Set<GHUser> getFollowings() throws IOException {
+        return root.retrieve("/user/show/"+login+"/following",JsonUsers.class).toSet(root);
     }
 
     @Override

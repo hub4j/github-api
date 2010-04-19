@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="GitHub API for Java">
+  <bannerLeft>
+    <name>GitHub API for Java</name>
+    <href>http://kohsuke.org/github-api</href>
+  </bannerLeft>
+  <skin>
+    <groupId>org.kohsuke</groupId>
+    <artifactId>maven-skin</artifactId>
+    <version>1.0</version>
+  </skin>
+  <!--<bannerRight>-->
+    <!--<src>http://maven.apache.org/images/maven-small.gif</src>-->
+  <!--</bannerRight>-->
+  <body>
+    <menu name="Git Hub API for Java">
+      <item name="Introduction" href="index.html"/>
+      <!--item name="User Guide" href="user-guide.html"/-->
+      <item name="Download" href="http://maven.dyndns.org/2/org/kohsuke/github-api/"/>
+    </menu>
+
+    <menu name="References">
+      <item name="Javadoc" href="apidocs/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>
+

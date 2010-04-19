@@ -7,7 +7,7 @@
   <skin>
     <groupId>org.kohsuke</groupId>
     <artifactId>maven-skin</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
   </skin>
   <!--<bannerRight>-->
     <!--<src>http://maven.apache.org/images/maven-small.gif</src>-->

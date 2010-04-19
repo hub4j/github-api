@@ -33,6 +33,8 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 
 /**
+ * A repository on GitHub.
+ * 
  * @author Kohsuke Kawaguchi
  */
 public class GHRepository {

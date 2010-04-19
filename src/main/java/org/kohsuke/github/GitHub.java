@@ -97,6 +97,9 @@ public class GitHub {
         return MAPPER.readValue(getApiURL(tail),type);
     }
 
+    /**
+     * Obtains the object that represents the named user.
+     */
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u==null) {
@@ -105,6 +108,14 @@ public class GitHub {
             users.put(login,u);
         }
         return u;
+    }
+
+    /**
+     * Gets the {@link GHUser} that represents yourself.
+     */
+    public GHUser getMyself() throws IOException {
+        requireCredential();
+        return getUser(login);
     }
 
     /**

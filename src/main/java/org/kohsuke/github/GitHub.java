@@ -125,7 +125,6 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        requireCredential();
         GHRepository r = new Poster(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
                 .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).repository;

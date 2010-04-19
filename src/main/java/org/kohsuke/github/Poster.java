@@ -51,6 +51,7 @@ class Poster {
     }
 
     public Poster withCredential() {
+        root.requireCredential();
         return with("login",root.login).with("token",root.token);
     }
 

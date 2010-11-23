@@ -23,6 +23,9 @@
  */
 package org.kohsuke.github;
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -32,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,12 +52,15 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
 public class GitHub {
     /*package*/ final String login;
     /*package*/ final String token;
+    /*package*/ final String password;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
+    private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
 
-    private GitHub(String login, String apiToken) {
+    private GitHub(String login, String apiToken, String password) {
         this.login = login;
         this.token = apiToken;
+        this.password = password;
     }
 
     /**
@@ -68,11 +75,11 @@ public class GitHub {
         } finally {
             IOUtils.closeQuietly(in);
         }
-        return new GitHub(props.getProperty("login"),props.getProperty("token"));
+        return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
     public static GitHub connect(String login, String apiToken) throws IOException {
-        return new GitHub(login,apiToken);
+        return new GitHub(login,apiToken,null);
     }
 
     /**
@@ -81,7 +88,7 @@ public class GitHub {
      * All operations that requires authentication will fail.
      */
     public static GitHub connectAnonymously() {
-        return new GitHub(null,null);
+        return new GitHub(null,null,null);
     }
 
     /*package*/ void requireCredential() {
@@ -110,6 +117,16 @@ public class GitHub {
         return u;
     }
 
+    public GHOrganization getOrganization(String name) throws IOException {
+        GHOrganization o = orgs.get(name);
+        if (o==null) {
+            o = MAPPER.readValue(getApiURL("/organizations/"+name), JsonOrganization.class).organization;
+            o.root = this;
+            orgs.put(name,o);
+        }
+        return o;
+    }
+
     /**
      * Gets the {@link GHUser} that represents yourself.
      */
@@ -130,6 +147,18 @@ public class GitHub {
                 .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).repository;
         r.root = this;
         return r;
+    }
+
+    WebClient createWebClient() throws IOException {
+        WebClient wc = new WebClient();
+        wc.setJavaScriptEnabled(false);
+        wc.setCssEnabled(false);
+        HtmlPage pg = (HtmlPage)wc.getPage("https://github.com/login");
+        HtmlForm f = pg.getForms().get(0);
+        f.getInputByName("login").setValueAttribute(login);
+        f.getInputByName("password").setValueAttribute(password);
+        f.submit();
+        return wc;
     }
 
 

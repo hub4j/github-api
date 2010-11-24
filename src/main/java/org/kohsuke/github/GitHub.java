@@ -182,11 +182,9 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        GHRepository r = new Poster(this).withCredential()
+        return new Poster(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).repository;
-        r.root = this;
-        return r;
+                .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).wrap(this);
     }
 
     WebClient createWebClient() throws IOException {

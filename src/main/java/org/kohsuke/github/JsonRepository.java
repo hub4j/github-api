@@ -28,4 +28,9 @@ package org.kohsuke.github;
  */
 class JsonRepository {
     public GHRepository repository;
+
+    public GHRepository wrap(GitHub root) {
+        repository.root = root;
+        return repository;
+    }
 }

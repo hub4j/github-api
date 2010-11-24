@@ -64,6 +64,10 @@ public class GHRepository {
         return root.getUser(owner);
     }
 
+    protected String getOwnerName() {
+        return owner;
+    }
+
     public boolean hasIssues() {
         return has_issues;
     }
@@ -142,9 +146,7 @@ public class GHRepository {
      * Forks this repository.
      */
     public GHRepository fork() throws IOException {
-        GHRepository r = new Poster(root).withCredential().to(root.getApiURL("/repos/fork/" + owner + "/" + name), JsonRepository.class).repository;
-        r.root = root;
-        return r;
+        return new Poster(root).withCredential().to(root.getApiURL("/repos/fork/" + owner + "/" + name), JsonRepository.class).wrap(root);
     }
 
     private void verifyMine() throws IOException {

@@ -48,6 +48,14 @@ public class GHTeam {
         org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "DELETE");
     }
 
+    public void add(GHRepository r) throws IOException {
+        org.root.retrieveWithAuth(getApiURL("/repositories?name="+r.getOwnerName()+'/'+r.getName()),null, "POST");
+    }
+
+    public void remove(GHRepository r) throws IOException {
+        org.root.retrieveWithAuth(getApiURL("/repositories?name="+r.getOwnerName()+'/'+r.getName()),null, "DELETE");
+    }
+
     private URL getApiURL(String tail) throws IOException {
         return org.root.getApiURL("/organizations/"+org.getLogin()+"/teams/"+id+tail);
     }

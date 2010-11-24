@@ -10,16 +10,7 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GHOrganization {
-    /*package almost final*/ GitHub root;
-
-    private String gravatar_id,login;
-    private int public_repo_count, public_gist_count, following_count, id;
-
-    public String getLogin() {
-        return login;
-    }
-
+public class GHOrganization extends GHPerson {
     /**
      * Creates a new repository.
      *
@@ -52,5 +43,4 @@ public class GHOrganization {
     public Map<String,GHTeam> getTeams() throws IOException {
         return root.retrieveWithAuth(root.getApiURL("/organizations/"+login+"/teams"),JsonTeams.class).toMap(this);
     }
-
 }

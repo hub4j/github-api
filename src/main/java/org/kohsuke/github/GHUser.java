@@ -24,36 +24,16 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-
-import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
  * Represents an user of GitHub.
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHUser {
-    /*package almost final*/ GitHub root;
-
-    private String gravatar_id,name,company,location,created_at,blog,login,email;
-    private int public_gist_count,public_repo_count,following_count,id,followers_count;
-
-    /**
-     * Repositories that this user owns.
-     */
-    private transient Map<String,GHRepository> repositories;
-
-    /**
-     * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105
-     */
-    public String getGravatarId() {
-        return gravatar_id;
-    }
+public class GHUser extends GHPerson {
+    private String name,company,location,created_at,blog,email;
+    private int followers_count;
 
     /**
      * Gets the human-readable name of the user, like "Kohsuke Kawaguchi"
@@ -122,26 +102,6 @@ public class GHUser {
 
     public int getFollowersCount() {
         return followers_count;
-    }
-
-    /**
-     * Gets the repositories this user owns.
-     */
-    public Map<String,GHRepository> getRepositories() throws IOException {
-        if (repositories==null) {
-            repositories = new TreeMap<String, GHRepository>();
-            URL url = new URL("http://github.com/api/v2/json/repos/show/" + login);
-            for (GHRepository r : MAPPER.readValue(url, JsonRepositories.class).repositories) {
-                r.root = root;
-                repositories.put(r.getName(),r);
-            }
-        }
-        
-        return Collections.unmodifiableMap(repositories);
-    }
-
-    public GHRepository getRepository(String name) throws IOException {
-        return getRepositories().get(name);
     }
 
     /**

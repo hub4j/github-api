@@ -78,11 +78,15 @@ class Poster {
      *      {@link Reader} that reads the response.
      */
     public <T> T to(URL url, Class<T> type) throws IOException {
+        return to(url,type,"POST");
+    }
+
+    public <T> T to(URL url, Class<T> type, String method) throws IOException {
         HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
         uc.setDoOutput(true);
         uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-        uc.setRequestMethod("POST");
+        uc.setRequestMethod(method);
 
 
         StringBuilder body = new StringBuilder();

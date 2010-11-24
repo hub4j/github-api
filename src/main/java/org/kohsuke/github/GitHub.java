@@ -108,13 +108,17 @@ public class GitHub {
     }
 
     /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type) throws IOException {
+        return retrieveWithAuth(url,type,"GET");
+    }
+    /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type, String method) throws IOException {
         HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
         BASE64Encoder enc = new sun.misc.BASE64Encoder();
         String userpassword = login + "/token" + ":" + token;
         String encodedAuthorization = enc.encode(userpassword.getBytes());
         uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-
+        uc.setRequestMethod(method);
+        
         try {
             InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
             if (type==null) {

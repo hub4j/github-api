@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
@@ -13,7 +14,12 @@ import java.io.IOException;
  */
 public class AppTest extends TestCase {
     public void testApp() throws IOException {
-        System.out.println(GitHub.connect().getOrganization("HudsonLabs").getTeams().get("Core Developers").getMembers());
+        GitHub gitHub = GitHub.connect();
+        GHTeam t = gitHub.getOrganization("HudsonLabs").getTeams().get("Core Developers");
+        t.add(gitHub.getMyself());
+        System.out.println(t.getMembers());
+        t.remove(gitHub.getMyself());
+        System.out.println(t.getMembers());
 
 //        GHRepository r = GitHub.connect().getOrganization("HudsonLabs").createRepository("auto-test", "some description", "http://kohsuke.org/", "Plugin Developers", true);
 

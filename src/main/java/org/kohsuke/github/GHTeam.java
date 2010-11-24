@@ -27,8 +27,19 @@ public class GHTeam {
         return id;
     }
 
+    /**
+     * Retrieves the current members.
+     */
     public Set<GHUser> getMembers() throws IOException {
         return org.root.retrieveWithAuth(getApiURL("/members"),JsonUsersWithDetails.class).toSet(org.root);
+    }
+
+    public void add(GHUser u) throws IOException {
+        org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "POST");
+    }
+
+    public void remove(GHUser u) throws IOException {
+        org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "DELETE");
     }
 
     private URL getApiURL(String tail) throws IOException {

@@ -34,10 +34,16 @@ public class GHTeam {
         return org.root.retrieveWithAuth(getApiURL("/members"),JsonUsersWithDetails.class).toSet(org.root);
     }
 
+    /**
+     * Adds a member to the team.
+     */
     public void add(GHUser u) throws IOException {
         org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "POST");
     }
 
+    /**
+     * Removes a member to the team.
+     */
     public void remove(GHUser u) throws IOException {
         org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "DELETE");
     }

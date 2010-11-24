@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -14,6 +15,10 @@ public class GHOrganization {
 
     private String gravatar_id,login;
     private int public_repo_count, public_gist_count, following_count, id;
+
+    public String getLogin() {
+        return login;
+    }
 
     /**
      * Creates a new repository.
@@ -40,4 +45,12 @@ public class GHOrganization {
 //        r.root = root;
 //        return r;
     }
+
+    /**
+     * Teams by their names.
+     */
+    public Map<String,GHTeam> getTeams() throws IOException {
+        return root.retrieveWithAuth(root.getApiURL("/organizations/"+login+"/teams"),JsonTeams.class).toMap(this);
+    }
+
 }

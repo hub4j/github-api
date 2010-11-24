@@ -30,11 +30,14 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
+import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -104,6 +107,26 @@ public class GitHub {
         return MAPPER.readValue(getApiURL(tail),type);
     }
 
+    /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+
+        BASE64Encoder enc = new sun.misc.BASE64Encoder();
+        String userpassword = login + "/token" + ":" + token;
+        String encodedAuthorization = enc.encode(userpassword.getBytes());
+        uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+
+        try {
+            InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+            if (type==null) {
+                String data = IOUtils.toString(r);
+                return null;
+            }
+            return MAPPER.readValue(r,type);
+        } catch (IOException e) {
+            throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);
+        }
+    }
+
     /**
      * Obtains the object that represents the named user.
      */
@@ -113,6 +136,19 @@ public class GitHub {
             u = MAPPER.readValue(getApiURL("/user/show/"+login), JsonUser.class).user;
             u.root = this;
             users.put(login,u);
+        }
+        return u;
+    }
+
+    /**
+     * Interns the given {@link GHUser}.
+     */
+    protected GHUser getUser(GHUser orig) throws IOException {
+        GHUser u = users.get(orig.getLogin());
+        if (u==null) {
+            orig.root = this;
+            users.put(login,orig);
+            return orig;
         }
         return u;
     }

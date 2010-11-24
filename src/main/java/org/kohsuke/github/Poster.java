@@ -100,7 +100,10 @@ class Poster {
 
         try {
             InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
-            if (type==null) return null;
+            if (type==null) {
+                String data = IOUtils.toString(r);
+                return null;
+            }
             return MAPPER.readValue(r,type);
         } catch (IOException e) {
             throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);

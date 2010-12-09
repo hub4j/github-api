@@ -1,8 +1,6 @@
 package org.kohsuke;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
@@ -16,6 +14,11 @@ import java.util.Set;
  * Unit test for simple App.
  */
 public class AppTest extends TestCase {
+    public void testCredentialValid() throws IOException {
+        assertTrue(GitHub.connect().isCredentialValid());
+        assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
+    }
+
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
 //        testOrganization(gitHub);

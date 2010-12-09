@@ -188,6 +188,18 @@ public class GitHub {
                 .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).wrap(this);
     }
 
+    /**
+     * Ensures that the credential is valid.
+     */
+    public boolean isCredentialValid() throws IOException {
+        try {
+            retrieveWithAuth(getApiURL("/user/show"),JsonUser.class);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     WebClient createWebClient() throws IOException {
         WebClient wc = new WebClient();
         wc.setJavaScriptEnabled(false);

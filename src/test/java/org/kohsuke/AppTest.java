@@ -9,6 +9,8 @@ import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Set;
 
 /**
  * Unit test for simple App.
@@ -16,10 +18,9 @@ import java.io.IOException;
 public class AppTest extends TestCase {
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
-        GHOrganization labs = gitHub.getOrganization("HudsonLabs");
-        GHTeam t = labs.getTeams().get("Core Developers");
+//        testOrganization(gitHub);
 
-        t.add(labs.getRepository("xyz"));
+        testPostCommitHook(gitHub);
 
 //        t.add(gitHub.getMyself());
 //        System.out.println(t.getMembers());
@@ -34,5 +35,21 @@ public class AppTest extends TestCase {
 ////        hub.getUser("kohsuke").getRepository("test").delete();
 //
 //        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+    }
+
+    private void testPostCommitHook(GitHub gitHub) throws IOException {
+        GHRepository r = gitHub.getMyself().getRepository("foo");
+        Set<URL> hooks = r.getPostCommitHooks();
+        hooks.add(new URL("http://kohsuke.org/test"));
+        System.out.println(hooks);
+        hooks.remove(new URL("http://kohsuke.org/test"));
+        System.out.println(hooks);
+    }
+
+    private void testOrganization(GitHub gitHub) throws IOException {
+        GHOrganization labs = gitHub.getOrganization("HudsonLabs");
+        GHTeam t = labs.getTeams().get("Core Developers");
+
+        t.add(labs.getRepository("xyz"));
     }
 }

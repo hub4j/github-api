@@ -34,18 +34,15 @@ import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 
 /**
  * Root of the GitHub API.
@@ -83,6 +80,10 @@ public class GitHub {
 
     public static GitHub connect(String login, String apiToken) throws IOException {
         return new GitHub(login,apiToken,null);
+    }
+
+    public static GitHub connect(String login, String apiToken, String password) throws IOException {
+        return new GitHub(login,apiToken,password);
     }
 
     /**

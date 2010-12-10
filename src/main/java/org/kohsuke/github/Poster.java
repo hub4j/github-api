@@ -45,6 +45,7 @@ import static org.kohsuke.github.GitHub.MAPPER;
 class Poster {
     private final GitHub root;
     private final Map<String,String> args = new HashMap<String, String>();
+    private boolean authenticate;
 
     Poster(GitHub root) {
         this.root = root;
@@ -52,7 +53,8 @@ class Poster {
 
     public Poster withCredential() {
         root.requireCredential();
-        return with("login",root.login).with("token",root.token);
+        authenticate = true;
+        return this;
     }
 
     public Poster with(String key, int value) {
@@ -86,6 +88,8 @@ class Poster {
 
         uc.setDoOutput(true);
         uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
+        if (authenticate)
+            uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
         uc.setRequestMethod(method);
 
 

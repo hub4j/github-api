@@ -51,16 +51,22 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
  */
 public class GitHub {
     /*package*/ final String login;
-    /*package*/ final String token;
-    /*package*/ final String password;
+    /*package*/ final String encodedAuthorization;
+    final String password;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
 
     private GitHub(String login, String apiToken, String password) {
         this.login = login;
-        this.token = apiToken;
         this.password = password;
+
+        BASE64Encoder enc = new sun.misc.BASE64Encoder();
+        if (apiToken!=null || password!=null) {
+            String userpassword = apiToken!=null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
+            encodedAuthorization = enc.encode(userpassword.getBytes());
+        } else
+            encodedAuthorization = null;
     }
 
     /**
@@ -96,7 +102,7 @@ public class GitHub {
     }
 
     /*package*/ void requireCredential() {
-        if (login ==null || token ==null)
+        if (login==null || encodedAuthorization==null)
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
@@ -114,9 +120,6 @@ public class GitHub {
     /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type, String method) throws IOException {
         HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
-        BASE64Encoder enc = new sun.misc.BASE64Encoder();
-        String userpassword = login + "/token" + ":" + token;
-        String encodedAuthorization = enc.encode(userpassword.getBytes());
         uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
         uc.setRequestMethod(method);
         

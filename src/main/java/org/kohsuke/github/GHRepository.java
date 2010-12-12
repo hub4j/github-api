@@ -146,9 +146,8 @@ public class GHRepository {
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        verifyMine();
         Poster poster = new Poster(root).withCredential();
-        URL url = root.getApiURL("/repos/delete/" + name);
+        URL url = root.getApiURL("/repos/delete/" + owner +"/"+name);
 
         DeleteToken token = poster.to(url, DeleteToken.class);
         poster.with("delete_token",token.delete_token).to(url);

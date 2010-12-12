@@ -29,14 +29,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.kohsuke.github.GitHub.MAPPER;
+import static org.kohsuke.github.GitHub.*;
 
 /**
  * Handles HTTP POST.
@@ -44,7 +44,7 @@ import static org.kohsuke.github.GitHub.MAPPER;
  */
 class Poster {
     private final GitHub root;
-    private final Map<String,String> args = new HashMap<String, String>();
+    private final List<String> args = new ArrayList<String>();
     private boolean authenticate;
 
     Poster(GitHub root) {
@@ -62,8 +62,13 @@ class Poster {
     }
 
     public Poster with(String key, String value) {
-        if (value!=null)
-            this.args.put(key,value);
+        if (value!=null) {
+            try {
+                args.add(URLEncoder.encode(key,"UTF-8")+'='+URLEncoder.encode(value,"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e); // impossible
+            }
+        }
         return this;
     }
 
@@ -94,11 +99,9 @@ class Poster {
 
 
         StringBuilder body = new StringBuilder();
-        for (Entry<String, String> e : args.entrySet()) {
+        for (String e : args) {
             if (body.length()>0)    body.append('&');
-            body.append(URLEncoder.encode(e.getKey(),"UTF-8"));
-            body.append('=');
-            body.append(URLEncoder.encode(e.getValue(),"UTF-8"));
+            body.append(e);
         }
 
         OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");

@@ -31,7 +31,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,15 +72,7 @@ class Poster {
     }
 
     public void to(String tailApiUrl) throws IOException {
-        to(root.getApiURL(tailApiUrl));
-    }
-
-    public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
-        return to(root.getApiURL(tailApiUrl),type);
-    }
-
-    public void to(URL url) throws IOException {
-        to(url,null);
+        to(tailApiUrl,null);
     }
 
     /**
@@ -92,12 +83,12 @@ class Poster {
      * @return
      *      {@link Reader} that reads the response.
      */
-    public <T> T to(URL url, Class<T> type) throws IOException {
-        return to(url,type,"POST");
+    public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
+        return to(tailApiUrl,type,"POST");
     }
 
-    public <T> T to(URL url, Class<T> type, String method) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+    public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
 
         uc.setDoOutput(true);
         uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");

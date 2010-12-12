@@ -2,6 +2,7 @@ package org.kohsuke;
 
 import junit.framework.TestCase;
 import org.kohsuke.github.GHOrganization;
+import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GitHub;
@@ -22,8 +23,11 @@ public class AppTest extends TestCase {
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
 //        testOrganization(gitHub);
+//        testPostCommitHook(gitHub);
 
-        testPostCommitHook(gitHub);
+        GHOrganization o = gitHub.getOrganization("HudsonLabs");
+        GHTeam t = o.createTeam("auto team", Permission.PUSH);
+        t.add(o.getRepository("auto-test"));
 
 //        t.add(gitHub.getMyself());
 //        System.out.println(t.getMembers());

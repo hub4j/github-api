@@ -5,6 +5,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -43,4 +45,22 @@ public class GHOrganization extends GHPerson {
     public Map<String,GHTeam> getTeams() throws IOException {
         return root.retrieveWithAuth(root.getApiURL("/organizations/"+login+"/teams"),JsonTeams.class).toMap(this);
     }
+
+    public enum Permission { ADMIN, PUSH, PULL }
+
+    /**
+     * Creates a new team and assigns the repositories.
+     */
+    public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
+        Poster post = new Poster(root).withCredential().with("team[name]", name).with("team[permission]", p.name().toLowerCase());
+        for (GHRepository r : repositories) {
+            post.with("team[repo_names][]",r.getOwnerName()+'/'+r.getName());
+        }
+        return post.to(root.getApiURL("/organizations/"+login+"/teams"),JsonTeam.class).wrap(this);
+    }
+
+    public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
+        return createTeam(name,p, Arrays.asList(repositories));
+    }
+
 }

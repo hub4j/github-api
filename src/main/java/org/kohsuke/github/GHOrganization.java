@@ -30,7 +30,7 @@ public class GHOrganization extends GHPerson {
         f.getSelectByName("team_id").getOptionByText(team).setSelected(true);
         f.submit(f.getButtonByCaption("Create Repository"));
 
-        return root.getUser(login).getRepository(name);
+        return refreshRepository(name);
 
 //        GHRepository r = new Poster(root).withCredential()
 //                .with("name", name).with("description", description).with("homepage", homepage)

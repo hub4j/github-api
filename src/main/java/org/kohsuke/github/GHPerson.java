@@ -28,17 +28,25 @@ public abstract class GHPerson {
     /**
      * Gets the repositories this user owns.
      */
-    public Map<String,GHRepository> getRepositories() throws IOException {
+    public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         if (repositories==null) {
-            repositories = new TreeMap<String, GHRepository>();
-            URL url = new URL("http://github.com/api/v2/json/repos/show/" + login);
-            for (GHRepository r : MAPPER.readValue(url, JsonRepositories.class).repositories) {
+            repositories = Collections.synchronizedMap(new TreeMap<String, GHRepository>());
+            for (GHRepository r : root.retrieve("/repos/show/" + login, JsonRepositories.class).repositories) {
                 r.root = root;
                 repositories.put(r.getName(),r);
             }
         }
 
         return Collections.unmodifiableMap(repositories);
+    }
+
+    /**
+     * Fetches the repository of the given name from GitHub, and return it.
+     */
+    protected GHRepository refreshRepository(String name) throws IOException {
+        GHRepository r = root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
+        repositories.put(name,r);
+        return r;
     }
 
     public GHRepository getRepository(String name) throws IOException {

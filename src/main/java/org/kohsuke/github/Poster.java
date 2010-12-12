@@ -88,35 +88,36 @@ class Poster {
     }
 
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
+        while (true) {// loop while API rate limit is hit
+            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
 
-        uc.setDoOutput(true);
-        uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-        if (authenticate)
-            uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
-        uc.setRequestMethod(method);
-
-
-        StringBuilder body = new StringBuilder();
-        for (String e : args) {
-            if (body.length()>0)    body.append('&');
-            body.append(e);
-        }
-
-        OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
-        o.write(body.toString());
-        o.close();
+            uc.setDoOutput(true);
+            uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
+            if (authenticate)
+                uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+            uc.setRequestMethod(method);
 
 
-        try {
-            InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
-            if (type==null) {
-                String data = IOUtils.toString(r);
-                return null;
+            StringBuilder body = new StringBuilder();
+            for (String e : args) {
+                if (body.length()>0)    body.append('&');
+                body.append(e);
             }
-            return MAPPER.readValue(r,type);
-        } catch (IOException e) {
-            throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);
+
+            OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
+            o.write(body.toString());
+            o.close();
+
+            try {
+                InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+                if (type==null) {
+                    String data = IOUtils.toString(r);
+                    return null;
+                }
+                return MAPPER.readValue(r,type);
+            } catch (IOException e) {
+                root.handleApiError(e,uc);
+            }
         }
     }
 }

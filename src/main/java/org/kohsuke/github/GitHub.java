@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -111,7 +112,7 @@ public class GitHub {
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
-        return MAPPER.readValue(getApiURL(tailApiUrl),type);
+        return _retrieve(tailApiUrl, type, "GET", false);
     }
 
     /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
@@ -119,21 +120,46 @@ public class GitHub {
     }
 
     /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) getApiURL(tailApiUrl).openConnection();
+        return _retrieve(tailApiUrl, type, method, true);
+    }
 
-        uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-        uc.setRequestMethod(method);
-        
-        try {
-            InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
-            if (type==null) {
-                String data = IOUtils.toString(r);
-                return null;
+    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth) throws IOException {
+        while (true) {// loop while API rate limit is hit
+            HttpURLConnection uc = (HttpURLConnection) getApiURL(tailApiUrl).openConnection();
+
+            if (withAuth)
+                uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+            uc.setRequestMethod(method);
+
+            try {
+                InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+                if (type==null) {
+                    String data = IOUtils.toString(r);
+                    return null;
+                }
+                return MAPPER.readValue(r,type);
+            } catch (IOException e) {
+                handleApiError(e,uc);
             }
-            return MAPPER.readValue(r,type);
-        } catch (IOException e) {
-            throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);
         }
+    }
+
+    /**
+     * If the error is because of the API limit, wait 10 sec and return normally.
+     * Otherwise throw an exception reporting an error.
+     */
+    /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
+        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
+            // API limit reached. wait 10 secs and return normally
+            try {
+                Thread.sleep(10000);
+                return;
+            } catch (InterruptedException _) {
+                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
+            }
+        }
+        
+        throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);
     }
 
     /**

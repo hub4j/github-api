@@ -106,19 +106,20 @@ public class GitHub {
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    /*package*/ URL getApiURL(String tail) throws IOException {
-        return new URL("http://github.com/api/v2/json"+tail);
+    /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
+        return new URL("http://github.com/api/v2/json"+tailApiUrl);
     }
 
-    /*package*/ <T> T retrieve(String tail, Class<T> type) throws IOException {
-        return MAPPER.readValue(getApiURL(tail),type);
+    /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
+        return MAPPER.readValue(getApiURL(tailApiUrl),type);
     }
 
-    /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type) throws IOException {
-        return retrieveWithAuth(url,type,"GET");
+    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
+        return retrieveWithAuth(tailApiUrl,type,"GET");
     }
-    /*package*/ <T> T retrieveWithAuth(URL url, Class<T> type, String method) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+
+    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) getApiURL(tailApiUrl).openConnection();
 
         uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
         uc.setRequestMethod(method);
@@ -141,7 +142,7 @@ public class GitHub {
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u==null) {
-            u = MAPPER.readValue(getApiURL("/user/show/"+login), JsonUser.class).user;
+            u = retrieve("/user/show/"+login,JsonUser.class).user;
             u.root = this;
             users.put(login,u);
         }
@@ -164,7 +165,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = MAPPER.readValue(getApiURL("/organizations/"+name), JsonOrganization.class).organization;
+            o = retrieve("/organizations/"+name,JsonOrganization.class).organization;
             o.root = this;
             orgs.put(name,o);
         }
@@ -188,7 +189,7 @@ public class GitHub {
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
         return new Poster(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0).to(getApiURL("/repos/create"), JsonRepository.class).wrap(this);
+                .with("public", isPublic ? 1 : 0).to("/repos/create", JsonRepository.class).wrap(this);
     }
 
     /**
@@ -196,7 +197,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() throws IOException {
         try {
-            retrieveWithAuth(getApiURL("/user/show"),JsonUser.class);
+            retrieveWithAuth("/user/show",JsonUser.class);
             return true;
         } catch (IOException e) {
             return false;

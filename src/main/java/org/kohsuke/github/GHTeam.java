@@ -31,29 +31,29 @@ public class GHTeam {
      * Retrieves the current members.
      */
     public Set<GHUser> getMembers() throws IOException {
-        return org.root.retrieveWithAuth(getApiURL("/members"),JsonUsersWithDetails.class).toSet(org.root);
+        return org.root.retrieveWithAuth("/members",JsonUsersWithDetails.class).toSet(org.root);
     }
 
     /**
      * Adds a member to the team.
      */
     public void add(GHUser u) throws IOException {
-        org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "POST");
+        org.root.retrieveWithAuth("/members?name="+u.getLogin(),null, "POST");
     }
 
     /**
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        org.root.retrieveWithAuth(getApiURL("/members?name="+u.getLogin()),null, "DELETE");
+        org.root.retrieveWithAuth("/members?name="+u.getLogin(),null, "DELETE");
     }
 
     public void add(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth(getApiURL("/repositories?name="+r.getOwnerName()+'/'+r.getName()),null, "POST");
+        org.root.retrieveWithAuth("/repositories?name="+r.getOwnerName()+'/'+r.getName(),null, "POST");
     }
 
     public void remove(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth(getApiURL("/repositories?name="+r.getOwnerName()+'/'+r.getName()),null, "DELETE");
+        org.root.retrieveWithAuth("/repositories?name="+r.getOwnerName()+'/'+r.getName(),null, "DELETE");
     }
 
     private URL getApiURL(String tail) throws IOException {

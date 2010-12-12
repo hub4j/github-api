@@ -72,6 +72,14 @@ class Poster {
         return this;
     }
 
+    public void to(String tailApiUrl) throws IOException {
+        to(root.getApiURL(tailApiUrl));
+    }
+
+    public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
+        return to(root.getApiURL(tailApiUrl),type);
+    }
+
     public void to(URL url) throws IOException {
         to(url,null);
     }

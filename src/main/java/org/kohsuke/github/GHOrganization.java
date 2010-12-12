@@ -43,7 +43,7 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      */
     public Map<String,GHTeam> getTeams() throws IOException {
-        return root.retrieveWithAuth(root.getApiURL("/organizations/"+login+"/teams"),JsonTeams.class).toMap(this);
+        return root.retrieveWithAuth("/organizations/"+login+"/teams",JsonTeams.class).toMap(this);
     }
 
     public enum Permission { ADMIN, PUSH, PULL }
@@ -56,7 +56,7 @@ public class GHOrganization extends GHPerson {
         for (GHRepository r : repositories) {
             post.with("team[repo_names][]",r.getOwnerName()+'/'+r.getName());
         }
-        return post.to(root.getApiURL("/organizations/"+login+"/teams"),JsonTeam.class).wrap(this);
+        return post.to("/organizations/"+login+"/teams",JsonTeam.class).wrap(this);
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {

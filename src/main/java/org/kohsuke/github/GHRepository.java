@@ -138,7 +138,7 @@ public class GHRepository {
     private void modifyCollaborators(Collection<GHUser> users, String op) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Poster(root).withCredential().to(root.getApiURL("/repos/collaborators/"+name+ op +user.getLogin()));
+            new Poster(root).withCredential().to("/repos/collaborators/"+name+ op +user.getLogin());
         }
     }
 
@@ -147,7 +147,7 @@ public class GHRepository {
      */
     public void delete() throws IOException {
         Poster poster = new Poster(root).withCredential();
-        URL url = root.getApiURL("/repos/delete/" + owner +"/"+name);
+        String url = "/repos/delete/" + owner +"/"+name;
 
         DeleteToken token = poster.to(url, DeleteToken.class);
         poster.with("delete_token",token.delete_token).to(url);
@@ -157,7 +157,7 @@ public class GHRepository {
      * Forks this repository.
      */
     public GHRepository fork() throws IOException {
-        return new Poster(root).withCredential().to(root.getApiURL("/repos/fork/" + owner + "/" + name), JsonRepository.class).wrap(root);
+        return new Poster(root).withCredential().to("/repos/fork/" + owner + "/" + name, JsonRepository.class).wrap(root);
     }
 
     private void verifyMine() throws IOException {

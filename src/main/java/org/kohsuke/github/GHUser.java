@@ -108,14 +108,14 @@ public class GHUser extends GHPerson {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Poster(root).withCredential().to(root.getApiURL("/user/follow/"+login));
+        new Poster(root).withCredential().to("/user/follow/"+login);
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Poster(root).withCredential().to(root.getApiURL("/user/unfollow/"+login));
+        new Poster(root).withCredential().to("/user/unfollow/"+login);
     }
 
     /**

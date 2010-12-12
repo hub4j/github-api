@@ -25,9 +25,7 @@ public class AppTest extends TestCase {
 //        testOrganization(gitHub);
 //        testPostCommitHook(gitHub);
 
-        GHOrganization o = gitHub.getOrganization("HudsonLabs");
-        GHTeam t = o.createTeam("auto team", Permission.PUSH);
-        t.add(o.getRepository("auto-test"));
+//        tryTeamCreation(gitHub);
 
 //        t.add(gitHub.getMyself());
 //        System.out.println(t.getMembers());
@@ -42,6 +40,12 @@ public class AppTest extends TestCase {
 ////        hub.getUser("kohsuke").getRepository("test").delete();
 //
 //        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+    }
+
+    private void tryTeamCreation(GitHub gitHub) throws IOException {
+        GHOrganization o = gitHub.getOrganization("HudsonLabs");
+        GHTeam t = o.createTeam("auto team", Permission.PUSH);
+        t.add(o.getRepository("auto-test"));
     }
 
     private void testPostCommitHook(GitHub gitHub) throws IOException {

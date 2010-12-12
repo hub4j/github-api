@@ -57,6 +57,6 @@ public class GHTeam {
     }
 
     private URL getApiURL(String tail) throws IOException {
-        return org.root.getApiURL("/organizations/"+org.getLogin()+"/teams/"+id+tail);
+        return org.root.getApiURL("/teams/"+id+tail);
     }
 }

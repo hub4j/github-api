@@ -55,8 +55,4 @@ public class GHTeam {
     public void remove(GHRepository r) throws IOException {
         org.root.retrieveWithAuth("/repositories?name="+r.getOwnerName()+'/'+r.getName(),null, "DELETE");
     }
-
-    private URL getApiURL(String tail) throws IOException {
-        return org.root.getApiURL("/teams/"+id+tail);
-    }
 }

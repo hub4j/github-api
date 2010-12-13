@@ -44,6 +44,7 @@ public abstract class GHPerson {
      * Fetches the repository of the given name from GitHub, and return it.
      */
     protected GHRepository refreshRepository(String name) throws IOException {
+        if (repositories==null) getRepositories(); // fetch the base first
         GHRepository r = root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
         repositories.put(name,r);
         return r;

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,6 +32,10 @@ public class GHTeam {
      */
     public Set<GHUser> getMembers() throws IOException {
         return org.root.retrieveWithAuth(api("/members"),JsonUsersWithDetails.class).toSet(org.root);
+    }
+
+    public Map<String,GHRepository> getRepositories() throws IOException {
+        return org.root.retrieveWithAuth(api("/repositories"),JsonRepositories.class).wrap(org.root);
     }
 
     /**

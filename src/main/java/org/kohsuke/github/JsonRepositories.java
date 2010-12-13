@@ -24,10 +24,21 @@
 package org.kohsuke.github;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Kohsuke Kawaguchi
  */
 class JsonRepositories {
     public List<GHRepository> repositories;
+
+    public Map<String,GHRepository> wrap(GitHub root) {
+        Map<String,GHRepository> map = new TreeMap<String, GHRepository>();
+        for (GHRepository r : repositories) {
+            r.root = root;
+            map.put(r.getName(),r);
+        }
+        return map;
+    }
 }

@@ -31,10 +31,7 @@ public abstract class GHPerson {
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         if (repositories==null) {
             repositories = Collections.synchronizedMap(new TreeMap<String, GHRepository>());
-            for (GHRepository r : root.retrieve("/repos/show/" + login, JsonRepositories.class).repositories) {
-                r.root = root;
-                repositories.put(r.getName(),r);
-            }
+            repositories.putAll(root.retrieve("/repos/show/" + login, JsonRepositories.class).wrap(root));
         }
 
         return Collections.unmodifiableMap(repositories);

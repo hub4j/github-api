@@ -3,7 +3,7 @@
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
   <packaging>jar</packaging>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.4</version>
   <name>GitHub API for Java</name>
   <url>http://kohsuke.org/github-api/</url>
   <description>GitHub API for Java</description>

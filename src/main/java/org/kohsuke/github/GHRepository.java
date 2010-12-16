@@ -23,7 +23,9 @@
  */
 package org.kohsuke.github;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -154,11 +156,40 @@ public class GHRepository {
     }
 
     /**
-     * Forks this repository.
+     * Forks this repository as your repository.
+     *
+     * @return
+     *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
         return new Poster(root).withCredential().to("/repos/fork/" + owner + "/" + name, JsonRepository.class).wrap(root);
     }
+
+    /**
+     * Forks this repository into an organization.
+     *
+     * @return
+     *      Newly forked repository that belong to you.
+     */
+    public GHRepository forkTo(GHOrganization org) throws IOException {
+        WebClient wc = root.createWebClient();
+        HtmlPage pg = (HtmlPage)wc.getPage(getUrl());
+        for (HtmlForm f : pg.getForms()) {
+            if (!f.getActionAttribute().endsWith("/fork"))  continue;
+            try {
+                if (org.getLogin().equals(f.getInputByName("organization").getValueAttribute())) {
+                    // found it
+                    f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
+                    return org.refreshRepository(name);
+                }
+            } catch (ElementNotFoundException e) {
+                // continue
+            }
+        }
+
+        throw new IllegalArgumentException("Either you don't have the privilege to fork into "+org.getLogin()+" or there's a bug in HTML scraping");
+    }
+
 
     private void verifyMine() throws IOException {
         if (!root.login.equals(owner))

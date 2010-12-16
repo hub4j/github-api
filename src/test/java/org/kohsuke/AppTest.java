@@ -22,6 +22,9 @@ public class AppTest extends TestCase {
 
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
+
+//        tryOrgFork(gitHub);
+
 //        testOrganization(gitHub);
 //        testPostCommitHook(gitHub);
 
@@ -40,6 +43,11 @@ public class AppTest extends TestCase {
 ////        hub.getUser("kohsuke").getRepository("test").delete();
 //
 //        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+    }
+
+    private void tryOrgFork(GitHub gitHub) throws IOException {
+        GHOrganization o = gitHub.getOrganization("HudsonLabs");
+        System.out.println(gitHub.getUser("rtyler").getRepository("memcache-ada").forkTo(o).getUrl());
     }
 
     private void tryTeamCreation(GitHub gitHub) throws IOException {

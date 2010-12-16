@@ -23,6 +23,7 @@ public class AppTest extends TestCase {
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
 
+//        tryRenaming(gitHub);
 //        tryOrgFork(gitHub);
 
 //        testOrganization(gitHub);
@@ -43,6 +44,10 @@ public class AppTest extends TestCase {
 ////        hub.getUser("kohsuke").getRepository("test").delete();
 //
 //        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+    }
+
+    private void tryRenaming(GitHub gitHub) throws IOException {
+        gitHub.getUser("kohsuke").getRepository("test").renameTo("test2");
     }
 
     private void tryOrgFork(GitHub gitHub) throws IOException {

@@ -190,6 +190,26 @@ public class GHRepository {
         throw new IllegalArgumentException("Either you don't have the privilege to fork into "+org.getLogin()+" or there's a bug in HTML scraping");
     }
 
+    /**
+     * Rename this repository.
+     */
+    public void renameTo(String newName) throws IOException {
+        WebClient wc = root.createWebClient();
+        HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
+        for (HtmlForm f : pg.getForms()) {
+            if (!f.getActionAttribute().endsWith("/rename"))  continue;
+            try {
+                f.getInputByName("name").setValueAttribute(newName);
+                f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
+                name = newName;
+            } catch (ElementNotFoundException e) {
+                // continue
+            }
+        }
+
+        throw new IllegalArgumentException("Either you don't have the privilege to rename "+owner+'/'+name+" or there's a bug in HTML scraping");
+    }
+
 
     private void verifyMine() throws IOException {
         if (!root.login.equals(owner))

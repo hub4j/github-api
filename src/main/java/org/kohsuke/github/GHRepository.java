@@ -202,6 +202,7 @@ public class GHRepository {
                 f.getInputByName("name").setValueAttribute(newName);
                 f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
                 name = newName;
+                return;
             } catch (ElementNotFoundException e) {
                 // continue
             }

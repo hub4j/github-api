@@ -32,10 +32,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +57,7 @@ public class GHRepository {
     private String description, homepage, url, name, owner;
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
     private int watchers,forks;
+    private String created_at, pushed_at;
 
     public String getDescription() {
         return description;
@@ -109,6 +113,23 @@ public class GHRepository {
     public int getWatchers() {
         return watchers;
     }
+
+    public Date getPushedAt() {
+        return parseDate(pushed_at);
+    }
+
+    public Date getCreatedAt() {
+        return parseDate(created_at);
+    }
+
+    private Date parseDate(String timestamp) {
+        try {
+            return new SimpleDateFormat(TIME_FORMAT).parse(timestamp);
+        } catch (ParseException e) {
+            throw new IllegalStateException("Unable to parse the timestamp: "+pushed_at);
+        }
+    }
+
 
     /**
      * Gets the collaborators on this repository.
@@ -321,4 +342,6 @@ public class GHRepository {
     public String toString() {
         return "Repository:"+owner+":"+name;
     }
+
+    private static final String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss ZZZZ";
 }

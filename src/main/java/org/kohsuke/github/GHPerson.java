@@ -1,12 +1,9 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
-
-import static org.kohsuke.github.GitHub.*;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
@@ -31,7 +28,11 @@ public abstract class GHPerson {
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         if (repositories==null) {
             repositories = Collections.synchronizedMap(new TreeMap<String, GHRepository>());
-            repositories.putAll(root.retrieve("/repos/show/" + login, JsonRepositories.class).wrap(root));
+            for (int i=1; ; i++) {
+                Map<String, GHRepository> map = root.retrieve("/repos/show/" + login + "?page=" + i, JsonRepositories.class).wrap(root);
+                repositories.putAll(map);
+                if (map.isEmpty())  break;
+            }
         }
 
         return Collections.unmodifiableMap(repositories);

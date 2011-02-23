@@ -8,11 +8,11 @@
   <url>http://kohsuke.org/github-api/</url>
   <description>GitHub API for Java</description>
 
-    <distributionManagement>
-    <repository>
-      <id>java.net-m2-repository</id>
-      <url>java-net:/maven2-repository/trunk/repository/</url>
-    </repository>
+  <distributionManagement>
+    <repository> 
+      <id>maven.jenkins-ci.org</id> 
+      <url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url> 
+    </repository> 
     <site>
       <id>kohsuke.org</id>
       <url>scp://kohsuke.org/home/kohsuke/kohsuke.org/github-api/</url>

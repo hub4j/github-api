@@ -26,6 +26,8 @@ package org.kohsuke.github;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -163,6 +165,18 @@ public class GHRepository {
         for (GHUser user : users) {
             new Poster(root).withCredential().to("/repos/collaborators/"+name+ op +user.getLogin());
         }
+    }
+
+    public void setEmailServiceHook(String address) throws IOException {
+        WebClient wc = root.createWebClient();
+        HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
+        HtmlInput email = (HtmlInput)pg.getElementById("Email_address");
+        email.setValueAttribute(address);
+        HtmlCheckBoxInput active = (HtmlCheckBoxInput)pg.getElementById("Email[active]");
+        active.setChecked(true);
+
+        final HtmlForm f = email.getEnclosingFormOrDie();
+        f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
     }
 
     /**

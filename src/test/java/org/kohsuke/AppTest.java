@@ -23,6 +23,8 @@ public class AppTest extends TestCase {
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
 
+//        gitHub.getMyself().getRepository("perforce-plugin").setEmailServiceHook("kk@kohsuke.org");
+
 //        tryRenaming(gitHub);
 //        tryOrgFork(gitHub);
 

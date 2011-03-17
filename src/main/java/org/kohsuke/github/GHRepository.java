@@ -33,6 +33,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -236,7 +237,18 @@ public class GHRepository {
             try {
                 f.getInputByName("name").setValueAttribute(newName);
                 f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
-                name = newName;
+
+                // overwrite fields
+                final GHRepository r = getOwner().fetchRepository(newName);
+                for (Field fi : getClass().getDeclaredFields()) {
+                    fi.setAccessible(true);
+                    try {
+                        fi.set(this,fi.get(r));
+                    } catch (IllegalAccessException e) {
+                        throw (IllegalAccessError)new IllegalAccessError().initCause(e);
+                    }
+                }
+
                 return;
             } catch (ElementNotFoundException e) {
                 // continue

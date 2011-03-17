@@ -43,9 +43,13 @@ public abstract class GHPerson {
      */
     protected GHRepository refreshRepository(String name) throws IOException {
         if (repositories==null) getRepositories(); // fetch the base first
-        GHRepository r = root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
+        GHRepository r = fetchRepository(name);
         repositories.put(name,r);
         return r;
+    }
+
+    protected GHRepository fetchRepository(String name) throws IOException {
+        return root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
     }
 
     public GHRepository getRepository(String name) throws IOException {

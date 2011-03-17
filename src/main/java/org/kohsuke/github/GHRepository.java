@@ -34,6 +34,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -241,6 +242,7 @@ public class GHRepository {
                 // overwrite fields
                 final GHRepository r = getOwner().fetchRepository(newName);
                 for (Field fi : getClass().getDeclaredFields()) {
+                    if (Modifier.isStatic(fi.getModifiers()))   continue;
                     fi.setAccessible(true);
                     try {
                         fi.set(this,fi.get(r));

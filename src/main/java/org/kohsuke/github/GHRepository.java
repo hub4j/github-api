@@ -86,6 +86,10 @@ public class GHRepository {
         return root.getUser(owner);
     }
 
+    public Iterable<GHIssue> getIssues(GHIssueState state) throws IOException {
+       return (Iterable<GHIssue>)root.retrieve("/issues/list/" + owner + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).issues;
+    }
+
     protected String getOwnerName() {
         return owner;
     }

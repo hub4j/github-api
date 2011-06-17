@@ -3,13 +3,20 @@ package org.kohsuke;
 import junit.framework.TestCase;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHPullRequest.State;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Unit test for simple App.

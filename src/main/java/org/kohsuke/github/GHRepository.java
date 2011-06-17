@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import static java.util.Arrays.*;
@@ -52,6 +53,7 @@ import static java.util.Arrays.*;
  * 
  * @author Kohsuke Kawaguchi
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class GHRepository {
     /*package almost final*/ GitHub root;
 
@@ -167,7 +169,7 @@ public class GHRepository {
         active.setChecked(true);
 
         final HtmlForm f = email.getEnclosingFormOrDie();
-        f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
+        f.submit((HtmlButton) f.getElementsByTagName("button").get(0));
     }
 
     /**
@@ -249,6 +251,26 @@ public class GHRepository {
         throw new IllegalArgumentException("Either you don't have the privilege to rename "+owner+'/'+name+" or there's a bug in HTML scraping");
     }
 
+    /**
+     * Retrieves a specified pull request.
+     */
+    public GHPullRequest getPullRequest(int i) throws IOException {
+        return root.retrieveWithAuth("/pulls/" + owner + '/' + name + "/" + i, JsonPullRequest.class).wrap(root);
+    }
+
+    /**
+     * Retrieves all the pull requests of a particular state.
+     */
+    public List<GHPullRequest> getPullRequests(GHPullRequest.State state) throws IOException {
+        return root.retrieveWithAuth("/pulls/"+owner+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(root);
+    }
+
+    /**
+     * Retrieves all the pull requests.
+     */
+    public List<GHPullRequest> getPullRequests() throws IOException {
+        return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
+    }
 
     private void verifyMine() throws IOException {
         if (!root.login.equals(owner))

@@ -265,12 +265,13 @@ public class GHRepository {
         return root.retrieveWithAuth("/pulls/"+owner+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(root);
     }
 
-    /**
-     * Retrieves all the pull requests.
-     */
-    public List<GHPullRequest> getPullRequests() throws IOException {
-        return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
-    }
+// this is no different from getPullRequests(OPEN)
+//    /**
+//     * Retrieves all the pull requests.
+//     */
+//    public List<GHPullRequest> getPullRequests() throws IOException {
+//        return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
+//    }
 
     private void verifyMine() throws IOException {
         if (!root.login.equals(owner))

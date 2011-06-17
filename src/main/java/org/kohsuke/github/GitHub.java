@@ -255,16 +255,19 @@ public class GitHub {
     }
 
     /*package*/ static Date parseDate(String timestamp) {
-        try {
-            return new SimpleDateFormat(TIME_FORMAT).parse(timestamp);
-        } catch (ParseException e) {
-            throw new IllegalStateException("Unable to parse the timestamp: "+timestamp);
+        for (String f : TIME_FORMATS) {
+            try {
+                return new SimpleDateFormat(f).parse(timestamp);
+            } catch (ParseException e) {
+                // try next
+            }
         }
+        throw new IllegalStateException("Unable to parse the timestamp: "+timestamp);
     }
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss ZZZZ";
+    private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ","yyyy-MM-dd'T'HH:mm:ss'Z'"};
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));

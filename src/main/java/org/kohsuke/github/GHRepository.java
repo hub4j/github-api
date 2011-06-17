@@ -371,5 +371,20 @@ public class GHRepository {
         return "Repository:"+owner+":"+name;
     }
 
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GHRepository) {
+            GHRepository that = (GHRepository) obj;
+            return this.owner.equals(that.owner)
+                && this.name.equals(that.name);
+        }
+        return false;
+    }
+
     private static final String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss ZZZZ";
 }

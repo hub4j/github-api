@@ -40,6 +40,9 @@ import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -243,7 +246,7 @@ public class GitHub {
         return wc;
     }
 
-    /*package*/ static URL toURL(String s) {
+    /*package*/ static URL parseURL(String s) {
         try {
             return s==null ? null : new URL(s);
         } catch (MalformedURLException e) {
@@ -251,7 +254,17 @@ public class GitHub {
         }
     }
 
+    /*package*/ static Date parseDate(String timestamp) {
+        try {
+            return new SimpleDateFormat(TIME_FORMAT).parse(timestamp);
+        } catch (ParseException e) {
+            throw new IllegalStateException("Unable to parse the timestamp: "+timestamp);
+        }
+    }
+
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss ZZZZ";
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));

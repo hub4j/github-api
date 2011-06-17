@@ -27,7 +27,6 @@ import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -36,8 +35,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,19 +116,11 @@ public class GHRepository {
     }
 
     public Date getPushedAt() {
-        return parseDate(pushed_at);
+        return GitHub.parseDate(pushed_at);
     }
 
     public Date getCreatedAt() {
-        return parseDate(created_at);
-    }
-
-    private Date parseDate(String timestamp) {
-        try {
-            return new SimpleDateFormat(TIME_FORMAT).parse(timestamp);
-        } catch (ParseException e) {
-            throw new IllegalStateException("Unable to parse the timestamp: "+pushed_at);
-        }
+        return GitHub.parseDate(created_at);
     }
 
 
@@ -385,6 +374,4 @@ public class GHRepository {
         }
         return false;
     }
-
-    private static final String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss ZZZZ";
 }

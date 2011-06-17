@@ -77,6 +77,13 @@ public class GHPullRequest {
     }
 
     /**
+     * Repository to which the pull request was sent.
+     */
+    public GHRepository getRepository() {
+        return getBase().getRepository();
+    }
+
+    /**
      * This points to where the change should be pulled into,
      * but I'm not really sure what exactly it means.
      */

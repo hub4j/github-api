@@ -1,12 +1,15 @@
 package org.kohsuke.github;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,4 +66,18 @@ public class GHOrganization extends GHPerson {
         return createTeam(name,p, Arrays.asList(repositories));
     }
 
+    /**
+     * List up repositories that has some open pull requests.
+     */
+    public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
+        WebClient wc = root.createWebClient();
+        HtmlPage pg = (HtmlPage)wc.getPage("https://github.com/organizations/"+login+"/dashboard/pulls");
+        List<GHRepository> r = new ArrayList<GHRepository>();
+        for (HtmlAnchor e : pg.getElementById("js-issue-list").<HtmlAnchor>selectNodes(".//UL[@class='smallnav']/LI[not(@class='zeroed')]/A")) {
+            String a = e.getHrefAttribute();
+            String name = a.substring(a.lastIndexOf('/')+1);
+            r.add(getRepository(name));
+        }
+        return r;
+    }
 }

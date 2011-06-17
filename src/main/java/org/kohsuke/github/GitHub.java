@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -242,6 +243,13 @@ public class GitHub {
         return wc;
     }
 
+    /*package*/ static URL toURL(String s) {
+        try {
+            return s==null ? null : new URL(s);
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Invalid URL: "+s);
+        }
+    }
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 

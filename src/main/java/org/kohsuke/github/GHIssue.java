@@ -116,6 +116,13 @@ public class GHIssue {
         new Poster(root).withCredential().to(getApiRoute("reopen"));
     }
 
+    /**
+     * Obtains all the comments associated with this issue.
+     */
+    public List<GHIssueComment> getComments() throws IOException {
+        return root.retrieve(getApiRoute("comments"), JsonIssueComments.class).wrap(this);
+    }
+
     private String getApiRoute(String verb) {
         return "/issues/"+verb+"/"+owner.getOwnerName()+"/"+owner.getName()+"/"+number;
     }

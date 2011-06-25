@@ -4,7 +4,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.kohsuke.github.GHPullRequest.State;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class GHOrganization extends GHPerson {
     public List<GHPullRequest> getPullRequests() throws IOException {
         List<GHPullRequest> all = new ArrayList<GHPullRequest>();
         for (GHRepository r : getRepositoriesWithOpenPullRequests()) {
-            all.addAll(r.getPullRequests(State.OPEN));
+            all.addAll(r.getPullRequests(GHIssueState.OPEN));
         }
         return all;
     }

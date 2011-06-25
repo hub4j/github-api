@@ -31,9 +31,11 @@ import java.util.List;
 class JsonPullRequests {
     public List<GHPullRequest> pulls;
 
-    public List<GHPullRequest> wrap(GitHub root) {
-        for (GHPullRequest pull : pulls)
-            pull.root = root;
+    public List<GHPullRequest> wrap(GHRepository owner) {
+        for (GHPullRequest pull : pulls) {
+            pull.owner = owner;
+            pull.root = owner.root;
+        }
         return pulls;
     }
 }

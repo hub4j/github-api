@@ -27,4 +27,12 @@ import java.util.List;
 
 class JsonIssues {
     List<GHIssue> issues;
+
+    public List<GHIssue> wrap(GHRepository owner) {
+        for (GHIssue issue : issues) {
+            issue.owner = owner;
+            issue.root = owner.root;
+        }
+        return issues;
+    }
 }

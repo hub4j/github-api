@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2011, Eric Maupin
+ * Copyright (c) 2011, Eric Maupin, Kohsuke Kawaguchi
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,15 +33,26 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * Represents an issue on GitHub.
+ *
  * @author Eric Maupin
+ * @author Kohsuke Kawaguchi
  */
 public class GHIssue {
     GitHub root;
+    GHRepository owner;
 
     private String gravatar_id,body,title,state,created_at,updated_at,html_url;
     private List<String> labels;
     private int number,votes,comments;
     private int position;
+
+    /**
+     * Repository to which the issue belongs.
+     */
+    public GHRepository getRepository() {
+        return owner;
+    }
 
     /**
      * The description of this pull request.
@@ -82,5 +94,13 @@ public class GHIssue {
 
     public Date getUpdatedAt() {
         return GitHub.parseDate(updated_at);
+    }
+
+    /**
+     * Updates the issue by adding a comment.
+     */
+    public void comment(String message) throws IOException {
+        new Poster(root).withCredential().with("comment",message).to("/issues/comment/"+
+        owner.getOwnerName()+"/"+owner.getName()+"/"+number);
     }
 }

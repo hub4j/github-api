@@ -86,7 +86,7 @@ public class GHRepository {
     }
 
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-       return root.retrieve("/issues/list/" + owner + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).issues;
+       return root.retrieve("/issues/list/" + owner + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).wrap(this);
     }
 
     protected String getOwnerName() {
@@ -259,14 +259,14 @@ public class GHRepository {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieveWithAuth("/pulls/" + owner + '/' + name + "/" + i, JsonPullRequest.class).wrap(root);
+        return root.retrieveWithAuth("/pulls/" + owner + '/' + name + "/" + i, JsonPullRequest.class).wrap(this);
     }
 
     /**
      * Retrieves all the pull requests of a particular state.
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return root.retrieveWithAuth("/pulls/"+owner+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(root);
+        return root.retrieveWithAuth("/pulls/"+owner+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(this);
     }
 
 // this is no different from getPullRequests(OPEN)

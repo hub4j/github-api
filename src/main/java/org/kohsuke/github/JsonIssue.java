@@ -28,5 +28,11 @@ package org.kohsuke.github;
  * @author Eric Maupin
  */
 class JsonIssue {
-    public GHIssue issue;
+    GHIssue issue;
+
+    GHIssue wrap(GHRepository r) {
+        issue.owner = r;
+        issue.root = r.root;
+        return issue;
+    }
 }

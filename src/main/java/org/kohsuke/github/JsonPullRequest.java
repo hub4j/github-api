@@ -29,8 +29,9 @@ package org.kohsuke.github;
 class JsonPullRequest {
     public GHPullRequest pull;
 
-    public GHPullRequest wrap(GitHub root) {
-        pull.root = root;
+    public GHPullRequest wrap(GHRepository owner) {
+        pull.owner = owner;
+        pull.root = owner.root;
         return pull;
     }
 }

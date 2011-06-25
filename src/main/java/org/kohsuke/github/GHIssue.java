@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Represents an issue on GitHub.
@@ -100,7 +99,24 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Poster(root).withCredential().with("comment",message).to("/issues/comment/"+
-        owner.getOwnerName()+"/"+owner.getName()+"/"+number);
+        new Poster(root).withCredential().with("comment",message).to(getApiRoute("comment"));
+    }
+
+    /**
+     * Closes this issue.
+     */
+    public void close() throws IOException {
+        new Poster(root).withCredential().to(getApiRoute("close"));
+    }
+
+    /**
+     * Reopens this issue.
+     */
+    public void reopen() throws IOException {
+        new Poster(root).withCredential().to(getApiRoute("reopen"));
+    }
+
+    private String getApiRoute(String verb) {
+        return "/issues/"+verb+"/"+owner.getOwnerName()+"/"+owner.getName()+"/"+number;
     }
 }

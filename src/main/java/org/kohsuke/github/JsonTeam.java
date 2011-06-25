@@ -3,7 +3,7 @@ package org.kohsuke.github;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class JsonTeam {
+class JsonTeam {
     public GHTeam team;
 
     GHTeam wrap(GHOrganization org) {

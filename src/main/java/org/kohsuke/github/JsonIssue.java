@@ -27,6 +27,6 @@ package org.kohsuke.github;
 /**
  * @author Eric Maupin
  */
-public class JsonIssue {
+class JsonIssue {
     public GHIssue issue;
 }

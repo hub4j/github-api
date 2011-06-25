@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import org.kohsuke.github.JsonIssue;
 import java.util.List;
 
 class JsonIssues {

@@ -145,6 +145,14 @@ public class GHRepository {
         return Collections.unmodifiableSet(r);
     }
 
+    /**
+     * If this repository belongs to an organization, return a set of teams.
+     */
+    public Set<GHTeam> getTeams() throws IOException {
+        return Collections.unmodifiableSet(root.retrieve("/repos/show/"+owner+"/"+name+"/teams",JsonTeams.class).toSet(
+                root.getOrganization(owner)));
+    }
+
     public void addCollaborators(GHUser... users) throws IOException {
         addCollaborators(asList(users));
     }

@@ -146,6 +146,15 @@ public class GHRepository {
     }
 
     /**
+     * Gets the names of the collaborators on this repository.
+     * This method deviates from the principle of this library but it works a lot faster than {@link #getCollaborators()}.
+     */
+    public Set<String> getCollaboratorNames() throws IOException {
+        Set<String> r = new HashSet<String>(root.retrieve("/repos/show/"+owner+"/"+name+"/collaborators",JsonCollaborators.class).collaborators);
+        return Collections.unmodifiableSet(r);
+    }
+
+    /**
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {

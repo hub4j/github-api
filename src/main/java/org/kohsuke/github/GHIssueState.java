@@ -25,6 +25,6 @@
 package org.kohsuke.github;
 
 public enum GHIssueState {
-    Open,
-    Closed
+    OPEN,
+    CLOSED
 }

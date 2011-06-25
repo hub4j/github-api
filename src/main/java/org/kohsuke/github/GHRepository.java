@@ -85,8 +85,8 @@ public class GHRepository {
         return root.getUser(owner);
     }
 
-    public Iterable<GHIssue> getIssues(GHIssueState state) throws IOException {
-       return (Iterable<GHIssue>)root.retrieve("/issues/list/" + owner + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).issues;
+    public List<GHIssue> getIssues(GHIssueState state) throws IOException {
+       return root.retrieve("/issues/list/" + owner + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).issues;
     }
 
     protected String getOwnerName() {
@@ -265,7 +265,7 @@ public class GHRepository {
     /**
      * Retrieves all the pull requests of a particular state.
      */
-    public List<GHPullRequest> getPullRequests(GHPullRequest.State state) throws IOException {
+    public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
         return root.retrieveWithAuth("/pulls/"+owner+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(root);
     }
 

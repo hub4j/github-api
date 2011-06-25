@@ -33,26 +33,12 @@ import java.util.Locale;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHPullRequest {
-    /*package almost final*/ GitHub root;
-
-    private String gravatar_id, closed_at, state, body, created_at, patch_url, issue_updated_at;
-    private int number, position, comments, votes;
+public class GHPullRequest extends GHIssue {
+    private String closed_at, patch_url, issue_updated_at;
     private GHUser issue_user, user;
     // labels??
     private GHCommitPointer base, head;
-    private String mergeable, updated_at, html_url, title, diff_url;
-
-    public enum State {
-        OPEN, CLOSED
-    }
-
-    /**
-     * The description of this pull request.
-     */
-    public String getBody() {
-        return body;
-    }
+    private String mergeable, diff_url;
 
     /**
      * The URL of the patch file.
@@ -60,13 +46,6 @@ public class GHPullRequest {
      */
     public URL getPatchUrl() {
         return GitHub.parseURL(patch_url);
-    }
-
-    /**
-     * ID.
-     */
-    public int getNumber() {
-        return number;
     }
 
     /**
@@ -103,11 +82,7 @@ public class GHPullRequest {
      * like https://github.com/jenkinsci/jenkins/pull/100
      */
     public URL getUrl() {
-        return GitHub.parseURL(html_url);
-    }
-
-    public String getTitle() {
-        return title;
+        return super.getUrl();
     }
 
     /**
@@ -120,17 +95,5 @@ public class GHPullRequest {
 
     public Date getClosedAt() {
         return GitHub.parseDate(closed_at);
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
-    }
-
-    public State getState() {
-        return State.valueOf(state.toUpperCase(Locale.ENGLISH));
     }
 }

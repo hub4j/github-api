@@ -59,7 +59,7 @@ public class GHRepository {
 
     private String description, homepage, url, name, owner;
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
-    private int watchers,forks;
+    private int watchers,forks,open_issues;
     private String created_at, pushed_at;
 
     public String getDescription() {
@@ -121,6 +121,10 @@ public class GHRepository {
         return watchers;
     }
 
+    public int getOpenIssueCount() {
+        return open_issues;
+    }
+
     public Date getPushedAt() {
         return GitHub.parseDate(pushed_at);
     }
@@ -174,6 +178,14 @@ public class GHRepository {
 
         final HtmlForm f = email.getEnclosingFormOrDie();
         f.submit((HtmlButton) f.getElementsByTagName("button").get(0));
+    }
+
+    /**
+     * Enables or disables the issue tracker for this repository.
+     */
+    public void enableIssueTracker(boolean v) throws IOException {
+        new Poster(root).withCredential().with("values[has_issues]",String.valueOf(v))
+                .to("/repos/show/" + owner + "/" + name);
     }
 
     /**

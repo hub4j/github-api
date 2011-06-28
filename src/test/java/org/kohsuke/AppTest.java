@@ -3,20 +3,13 @@ package org.kohsuke;
 import junit.framework.TestCase;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
-import org.kohsuke.github.GHPullRequest;
-import org.kohsuke.github.GHPullRequest.State;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Unit test for simple App.
@@ -53,6 +46,26 @@ public class AppTest extends TestCase {
 ////        hub.getUser("kohsuke").getRepository("test").delete();
 //
 //        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+    }
+
+    private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
+        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
+            if (r.hasIssues()) {
+                if (r.getOpenIssueCount()==0) {
+                    System.out.println("DISABLED  "+r.getName());
+                    r.enableIssueTracker(false);
+                } else {
+                    System.out.println("UNTOUCHED "+r.getName());
+                }
+            }
+        }
+    }
+
+    private void tryUpdatingIssueTracker(GitHub gitHub) throws IOException {
+        GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("lib-task-reactor");
+        System.out.println(r.hasIssues());
+        System.out.println(r.getOpenIssueCount());
+        r.enableIssueTracker(false);
     }
 
     private void tryRenaming(GitHub gitHub) throws IOException {

@@ -241,7 +241,7 @@ public class GHRepository {
                 if (org.getLogin().equals(f.getInputByName("organization").getValueAttribute())) {
                     // found it
                     f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
-                    return org.refreshRepository(name);
+                    return org.getRepository(name);
                 }
             } catch (ElementNotFoundException e) {
                 // continue
@@ -264,7 +264,7 @@ public class GHRepository {
                 f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
 
                 // overwrite fields
-                final GHRepository r = getOwner().fetchRepository(newName);
+                final GHRepository r = getOwner().getRepository(newName);
                 for (Field fi : getClass().getDeclaredFields()) {
                     if (Modifier.isStatic(fi.getModifiers()))   continue;
                     fi.setAccessible(true);

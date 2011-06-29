@@ -5,6 +5,7 @@ import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
+import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
@@ -20,8 +21,18 @@ public class AppTest extends TestCase {
         assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
     }
 
+    public void testMembership() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
+        System.out.println(members.contains("kohsuke"));
+    }
+
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
+//        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
+//        for (GHIssueComment c : i.getComments())
+//            System.out.println(c);
+//        System.out.println(i);
 
 //        gitHub.getMyself().getRepository("perforce-plugin").setEmailServiceHook("kk@kohsuke.org");
 

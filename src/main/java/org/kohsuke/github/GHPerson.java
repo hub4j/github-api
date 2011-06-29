@@ -18,42 +18,21 @@ public abstract class GHPerson {
     protected int public_gist_count,public_repo_count,following_count,id;
 
     /**
-     * Repositories that this user owns.
-     */
-    private transient Map<String,GHRepository> repositories;
-
-    /**
      * Gets the repositories this user owns.
      */
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
-        if (repositories==null) {
-            repositories = Collections.synchronizedMap(new TreeMap<String, GHRepository>());
-            for (int i=1; ; i++) {
-                Map<String, GHRepository> map = root.retrieve("/repos/show/" + login + "?page=" + i, JsonRepositories.class).wrap(root);
-                repositories.putAll(map);
-                if (map.isEmpty())  break;
-            }
+        Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
+        for (int i=1; ; i++) {
+            Map<String, GHRepository> map = root.retrieve("/repos/show/" + login + "?page=" + i, JsonRepositories.class).wrap(root);
+            repositories.putAll(map);
+            if (map.isEmpty())  break;
         }
 
         return Collections.unmodifiableMap(repositories);
     }
 
-    /**
-     * Fetches the repository of the given name from GitHub, and return it.
-     */
-    protected GHRepository refreshRepository(String name) throws IOException {
-        if (repositories==null) getRepositories(); // fetch the base first
-        GHRepository r = fetchRepository(name);
-        repositories.put(name,r);
-        return r;
-    }
-
-    protected GHRepository fetchRepository(String name) throws IOException {
-        return root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
-    }
-
     public GHRepository getRepository(String name) throws IOException {
-        return getRepositories().get(name);
+        return root.retrieve("/repos/show/" + login + '/' + name, JsonRepository.class).wrap(root);
     }
 
     /**

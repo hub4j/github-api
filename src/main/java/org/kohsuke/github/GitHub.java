@@ -61,6 +61,7 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
+	private String oauthAccessToken;
 
     private GitHub(String login, String apiToken, String password) {
         this.login = login;
@@ -74,6 +75,14 @@ public class GitHub {
             encodedAuthorization = null;
     }
 
+    private GitHub (String oauthAccessToken) {
+		this.login = null;
+		this.password = null;
+		this.encodedAuthorization = null;
+		
+		this.oauthAccessToken = oauthAccessToken;
+    	
+    }
     /**
      * Obtains the credential from "~/.github"
      */
@@ -97,6 +106,9 @@ public class GitHub {
         return new GitHub(login,apiToken,password);
     }
 
+    public static GitHub connectUsingOAuth (String accessToken) {
+    	return new GitHub(accessToken);
+    }
     /**
      * Connects to GitHub anonymously.
      *
@@ -107,12 +119,20 @@ public class GitHub {
     }
 
     /*package*/ void requireCredential() {
-        if (login==null || encodedAuthorization==null)
+        if ((login==null || encodedAuthorization==null) && oauthAccessToken == null)
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
     /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
-        return new URL("http://github.com/api/v2/json"+tailApiUrl);
+    	
+    	if (oauthAccessToken != null) {
+    		// append the access token
+    		
+    		tailApiUrl = tailApiUrl + "?access_token=" + oauthAccessToken;
+    	}
+    	
+        return new URL("https://github.com/api/v2/json"+tailApiUrl);
+        
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
@@ -129,10 +149,13 @@ public class GitHub {
 
     private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth) throws IOException {
         while (true) {// loop while API rate limit is hit
+        	
+        	
             HttpURLConnection uc = (HttpURLConnection) getApiURL(tailApiUrl).openConnection();
 
-            if (withAuth)
+            if (withAuth && this.oauthAccessToken == null)
                 uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+            
             uc.setRequestMethod(method);
 
             try {
@@ -172,9 +195,18 @@ public class GitHub {
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u==null) {
+        	
+        	if (oauthAccessToken != null) {
+        		u = retrieve("/user/show",JsonUser.class).user;
+        		u.root = this;
+                users.put(u.getLogin(),u);
+        	}
+        	else {
             u = retrieve("/user/show/"+login,JsonUser.class).user;
             u.root = this;
             users.put(login,u);
+        	}
+            
         }
         return u;
     }

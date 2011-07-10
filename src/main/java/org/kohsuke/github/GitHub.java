@@ -42,10 +42,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 
@@ -75,12 +78,15 @@ public class GitHub {
             encodedAuthorization = null;
     }
 
-    private GitHub (String oauthAccessToken) {
-		this.login = null;
+    private GitHub (String oauthAccessToken) throws IOException {
+    	
 		this.password = null;
 		this.encodedAuthorization = null;
 		
 		this.oauthAccessToken = oauthAccessToken;
+		
+		this.login = getMyself().getLogin();
+		
     	
     }
     /**
@@ -106,7 +112,7 @@ public class GitHub {
         return new GitHub(login,apiToken,password);
     }
 
-    public static GitHub connectUsingOAuth (String accessToken) {
+    public static GitHub connectUsingOAuth (String accessToken) throws IOException {
     	return new GitHub(accessToken);
     }
     /**
@@ -234,6 +240,10 @@ public class GitHub {
         return o;
     }
 
+    public Map<String, GHOrganization> getMyOrganizations() throws IOException {
+    	 return retrieveWithAuth("/organizations",JsonOrganizations.class).wrap(this);
+        
+    }
     /**
      * Gets the {@link GHUser} that represents yourself.
      */

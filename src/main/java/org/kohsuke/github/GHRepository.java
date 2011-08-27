@@ -160,7 +160,7 @@ public class GHRepository {
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(root.retrieve("/repos/show/"+owner+"/"+name+"/teams",JsonTeams.class).toSet(
+        return Collections.unmodifiableSet(root.retrieveWithAuth("/repos/show/"+owner+"/"+name+"/teams",JsonTeams.class).toSet(
                 root.getOrganization(owner)));
     }
 

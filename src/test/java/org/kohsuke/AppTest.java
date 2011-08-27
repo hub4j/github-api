@@ -22,6 +22,11 @@ public class AppTest extends TestCase {
         assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
     }
 
+    public void tryOrgFork() throws Exception {
+        GitHub gh = GitHub.connect();
+        gh.getUser("kohsuke").getRepository("rubywm").forkTo(gh.getOrganization("jenkinsci"));
+    }
+
     public void testMembership() throws Exception {
         GitHub gitHub = GitHub.connect();
         Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();

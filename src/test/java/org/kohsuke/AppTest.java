@@ -3,6 +3,7 @@ package org.kohsuke;
 import junit.framework.TestCase;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
+import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
@@ -29,6 +30,9 @@ public class AppTest extends TestCase {
 
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
+        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("parameterized-trigger-plugin").getPullRequest(3);
+        System.out.println(i);
+
 //        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
 //        for (GHIssueComment c : i.getComments())
 //            System.out.println(c);

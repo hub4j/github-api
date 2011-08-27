@@ -32,6 +32,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -47,6 +48,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import static java.util.Arrays.*;
+import static org.kohsuke.github.ApiVersion.V3;
 
 /**
  * A repository on GitHub.
@@ -233,22 +235,8 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        WebClient wc = root.createWebClient();
-        HtmlPage pg = (HtmlPage)wc.getPage(getUrl());
-        for (HtmlForm f : pg.getForms()) {
-            if (!f.getActionAttribute().endsWith("/fork"))  continue;
-            try {
-                if (org.getLogin().equals(f.getInputByName("organization").getValueAttribute())) {
-                    // found it
-                    f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
-                    return org.getRepository(name);
-                }
-            } catch (ElementNotFoundException e) {
-                // continue
-            }
-        }
-
-        throw new IllegalArgumentException("Either you don't have the privilege to fork into "+org.getLogin()+" or there's a bug in HTML scraping");
+        new Poster(root, V3).to(String.format("/repos/%s/%s/forks?org=%s",owner,name,org.getLogin()));
+        return org.getRepository(name);
     }
 
     /**

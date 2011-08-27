@@ -46,8 +46,15 @@ class Poster {
     private final List<String> args = new ArrayList<String>();
     private boolean authenticate;
 
-    Poster(GitHub root) {
+    private final ApiVersion v;
+
+    Poster(GitHub root, ApiVersion v) {
         this.root = root;
+        this.v = v;
+    }
+
+    Poster(GitHub root) {
+        this(root,ApiVersion.V2);
     }
 
     public Poster withCredential() {
@@ -89,7 +96,7 @@ class Poster {
 
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
+            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(v,tailApiUrl).openConnection();
 
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");

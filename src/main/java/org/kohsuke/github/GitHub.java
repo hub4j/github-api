@@ -129,16 +129,13 @@ public class GitHub {
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
-    	
+    /*package*/ URL getApiURL(ApiVersion v, String tailApiUrl) throws IOException {
     	if (oauthAccessToken != null) {
     		// append the access token
-    		
     		tailApiUrl = tailApiUrl + "?access_token=" + oauthAccessToken;
     	}
     	
-        return new URL("https://github.com/api/v2/json"+tailApiUrl);
-        
+        return new URL(v.url+tailApiUrl);
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
@@ -157,7 +154,7 @@ public class GitHub {
         while (true) {// loop while API rate limit is hit
         	
         	
-            HttpURLConnection uc = (HttpURLConnection) getApiURL(tailApiUrl).openConnection();
+            HttpURLConnection uc = (HttpURLConnection) getApiURL(ApiVersion.V2,tailApiUrl).openConnection();
 
             if (withAuth && this.oauthAccessToken == null)
                 uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);

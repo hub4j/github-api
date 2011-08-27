@@ -27,6 +27,12 @@ public class AppTest extends TestCase {
         gh.getUser("kohsuke").getRepository("rubywm").forkTo(gh.getOrganization("jenkinsci"));
     }
 
+    public void tryGetTeamsForRepo() throws Exception {
+        GitHub gh = GitHub.connect();
+        Set<GHTeam> o = gh.getOrganization("jenkinsci").getRepository("rubywm").getTeams();
+        System.out.println(o);
+    }
+
     public void testMembership() throws Exception {
         GitHub gitHub = GitHub.connect();
         Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();

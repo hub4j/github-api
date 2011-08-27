@@ -41,8 +41,10 @@ public class AppTest extends TestCase {
 
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
-        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("parameterized-trigger-plugin").getPullRequest(3);
-        System.out.println(i);
+
+//        tryDisablingIssueTrackers(gitHub);
+
+//        tryDisablingWiki(gitHub);
 
 //        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
 //        for (GHIssueComment c : i.getComments())
@@ -83,6 +85,15 @@ public class AppTest extends TestCase {
                 } else {
                     System.out.println("UNTOUCHED "+r.getName());
                 }
+            }
+        }
+    }
+
+    private void tryDisablingWiki(GitHub gitHub) throws IOException {
+        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
+            if (r.hasWiki()) {
+                System.out.println("DISABLED  "+r.getName());
+                r.enableWiki(false);
             }
         }
     }

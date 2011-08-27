@@ -208,6 +208,14 @@ public class GHRepository {
     }
 
     /**
+     * Enables or disables Wiki for this repository.
+     */
+    public void enableWiki(boolean v) throws IOException {
+        new Poster(root).withCredential().with("values[has_wiki]",String.valueOf(v))
+                .to("/repos/show/" + owner + "/" + name);
+    }
+
+    /**
      * Deletes this repository.
      */
     public void delete() throws IOException {

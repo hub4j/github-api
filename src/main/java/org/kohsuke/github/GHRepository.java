@@ -235,7 +235,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Poster(root, V3).to(String.format("/repos/%s/%s/forks?org=%s",owner,name,org.getLogin()));
+        new Poster(root, V3).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner,name,org.getLogin()));
         return org.getRepository(name);
     }
 

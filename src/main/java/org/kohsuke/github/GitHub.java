@@ -60,7 +60,8 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 public class GitHub {
     /*package*/ final String login;
     /*package*/ final String encodedAuthorization;
-    final String password;
+    /*package*/ final String password;
+    /*package*/ final String apiToken;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
@@ -68,11 +69,12 @@ public class GitHub {
 
     private GitHub(String login, String apiToken, String password) {
         this.login = login;
+        this.apiToken = apiToken;
         this.password = password;
 
         BASE64Encoder enc = new sun.misc.BASE64Encoder();
         if (apiToken!=null || password!=null) {
-            String userpassword = apiToken!=null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
+            String userpassword = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
             encodedAuthorization = enc.encode(userpassword.getBytes());
         } else
             encodedAuthorization = null;
@@ -84,11 +86,11 @@ public class GitHub {
 		this.encodedAuthorization = null;
 		
 		this.oauthAccessToken = oauthAccessToken;
+        this.apiToken = oauthAccessToken;
 		
 		this.login = getMyself().getLogin();
-		
-    	
     }
+    
     /**
      * Obtains the credential from "~/.github"
      */

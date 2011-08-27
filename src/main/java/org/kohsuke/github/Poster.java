@@ -100,8 +100,15 @@ class Poster {
 
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-            if (authenticate)
-                uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+            if (authenticate) {
+                if (v==ApiVersion.V3) {
+                    if (root.password==null)
+                        throw new IllegalArgumentException("V3 API doesn't support API token");
+                    uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+                } else {
+                    uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+                }
+            }
             uc.setRequestMethod(method);
 
 

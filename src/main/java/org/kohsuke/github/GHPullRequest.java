@@ -70,6 +70,10 @@ public class GHPullRequest extends GHIssue {
         return head;
     }
 
+    public Date getIssueUpdatedAt() {
+        return GitHub.parseDate(issue_updated_at);
+    }
+
     /**
      * The HTML page of this pull request,
      * like https://github.com/jenkinsci/jenkins/pull/100

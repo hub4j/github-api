@@ -190,9 +190,9 @@ public class GHRepository {
     public void setEmailServiceHook(String address) throws IOException {
         WebClient wc = root.createWebClient();
         HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
-        HtmlInput email = (HtmlInput)pg.getElementById("Email_address");
+        HtmlInput email = (HtmlInput)pg.getElementById("email_address");
         email.setValueAttribute(address);
-        HtmlCheckBoxInput active = (HtmlCheckBoxInput)pg.getElementById("Email[active]");
+        HtmlCheckBoxInput active = (HtmlCheckBoxInput)pg.getElementById("email[active]");
         active.setChecked(true);
 
         final HtmlForm f = email.getEnclosingFormOrDie();

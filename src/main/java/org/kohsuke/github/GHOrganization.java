@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static org.kohsuke.github.ApiVersion.V3;
+
 /**
  * @author Kohsuke Kawaguchi
  */
@@ -23,23 +25,14 @@ public class GHOrganization extends GHPerson {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic) throws IOException {
+        return createRepository(name,description,homepage,getTeams().get(team),isPublic);
+    }
+
+    public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
         // such API doesn't exist, so fall back to HTML scraping
-        WebClient wc = root.createWebClient();
-        HtmlPage pg = (HtmlPage)wc.getPage("https://github.com/organizations/"+login+"/repositories/new");
-        HtmlForm f = pg.getForms().get(1);
-        f.getInputByName("repository[name]").setValueAttribute(name);
-        f.getInputByName("repository[description]").setValueAttribute(description);
-        f.getInputByName("repository[homepage]").setValueAttribute(homepage);
-        f.getSelectByName("team_id").getOptionByText(team).setSelected(true);
-        f.submit(f.getButtonByCaption("Create Repository"));
-
-        return getRepository(name);
-
-//        GHRepository r = new Poster(root).withCredential()
-//                .with("name", name).with("description", description).with("homepage", homepage)
-//                .with("public", isPublic ? 1 : 0).to(root.getApiURL("/organizations/"+login+"/repos/create"), JsonRepository.class).repository;
-//        r.root = root;
-//        return r;
+        return new Poster(root,V3).withCredential()
+                .with("name", name).with("description", description).with("homepage", homepage)
+                .with("public", isPublic).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
     }
 
     /**

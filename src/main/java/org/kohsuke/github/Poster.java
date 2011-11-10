@@ -24,6 +24,9 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.impl.WriterBasedGenerator;
+import org.codehaus.jackson.node.ObjectNode;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,7 +36,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.kohsuke.github.GitHub.*;
 
@@ -43,10 +48,24 @@ import static org.kohsuke.github.GitHub.*;
  */
 class Poster {
     private final GitHub root;
-    private final List<String> args = new ArrayList<String>();
+    private final List<Entry> args = new ArrayList<Entry>();
     private boolean authenticate;
 
     private final ApiVersion v;
+
+    private static class Entry {
+        String key;
+        Object value;
+
+        private Entry(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String toFormArg() throws UnsupportedEncodingException {
+            return URLEncoder.encode(key,"UTF-8")+'='+URLEncoder.encode(value.toString(),"UTF-8");
+        }
+    }
 
     Poster(GitHub root, ApiVersion v) {
         this.root = root;
@@ -64,16 +83,20 @@ class Poster {
     }
 
     public Poster with(String key, int value) {
-        return with(key,String.valueOf(value));
+        return _with(key, value);
+    }
+
+    public Poster with(String key, boolean value) {
+        return _with(key, value);
     }
 
     public Poster with(String key, String value) {
+        return _with(key, value);
+    }
+
+    private Poster _with(String key, Object value) {
         if (value!=null) {
-            try {
-                args.add(URLEncoder.encode(key,"UTF-8")+'='+URLEncoder.encode(value,"UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new Error(e); // impossible
-            }
+            args.add(new Entry(key,value));
         }
         return this;
     }
@@ -112,23 +135,31 @@ class Poster {
             uc.setRequestMethod(method);
 
 
-            StringBuilder body = new StringBuilder();
-            for (String e : args) {
-                if (body.length()>0)    body.append('&');
-                body.append(e);
-            }
+            if (v==ApiVersion.V2) {
+                StringBuilder body = new StringBuilder();
+                for (Entry e : args) {
+                    if (body.length()>0)    body.append('&');
+                    body.append(e.toFormArg());
+                }
 
-            OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
-            o.write(body.toString());
-            o.close();
+                OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
+                o.write(body.toString());
+                o.close();
+            } else {
+                Map json = new HashMap();
+                for (Entry e : args) {
+                    json.put(e.key, e.value);
+                }
+                MAPPER.writeValue(uc.getOutputStream(),json);
+            }
 
             try {
                 InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+                String data = IOUtils.toString(r);
                 if (type==null) {
-                    String data = IOUtils.toString(r);
                     return null;
                 }
-                return MAPPER.readValue(r,type);
+                return MAPPER.readValue(data,type);
             } catch (IOException e) {
                 root.handleApiError(e,uc);
             }

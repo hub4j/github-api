@@ -35,6 +35,7 @@ import sun.misc.BASE64Encoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
@@ -42,15 +43,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
+import static org.kohsuke.github.ApiVersion.*;
 
 /**
  * Root of the GitHub API.
@@ -141,22 +140,30 @@ public class GitHub {
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", false);
+        return _retrieve(tailApiUrl, type, "GET", false, V2);
+    }
+
+    /*package*/ <T> T retrieve3(String tailApiUrl, Class<T> type) throws IOException {
+        return _retrieve(tailApiUrl, type, "GET", false, V3);
     }
 
     /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
         return retrieveWithAuth(tailApiUrl,type,"GET");
     }
 
-    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return _retrieve(tailApiUrl, type, method, true);
+    /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type) throws IOException {
+        return _retrieve(tailApiUrl, type, "GET", true, V3);
     }
 
-    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth) throws IOException {
+    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
+        return _retrieve(tailApiUrl, type, method, true, V2);
+    }
+
+    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth, ApiVersion v) throws IOException {
         while (true) {// loop while API rate limit is hit
         	
         	
-            HttpURLConnection uc = (HttpURLConnection) getApiURL(ApiVersion.V2,tailApiUrl).openConnection();
+            HttpURLConnection uc = (HttpURLConnection) getApiURL(v,tailApiUrl).openConnection();
 
             if (withAuth && this.oauthAccessToken == null)
                 uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
@@ -190,8 +197,12 @@ public class GitHub {
                 throw (InterruptedIOException)new InterruptedIOException().initCause(e);
             }
         }
-        
-        throw (IOException)new IOException(IOUtils.toString(uc.getErrorStream(),"UTF-8")).initCause(e);
+
+        InputStream es = uc.getErrorStream();
+        if (es!=null)
+            throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
+        else
+            throw e;
     }
 
     /**
@@ -258,9 +269,9 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        return new Poster(this).withCredential()
+        return new Poster(this,V3).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0).to("/repos/create", JsonRepository.class).wrap(this);
+                .with("public", isPublic ? 1 : 0).to("/user/repos", GHRepository.class,"POST").wrap(this);
     }
 
     /**

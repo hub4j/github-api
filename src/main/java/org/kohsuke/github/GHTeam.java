@@ -35,7 +35,7 @@ public class GHTeam {
     }
 
     public Map<String,GHRepository> getRepositories() throws IOException {
-        return org.root.retrieveWithAuth(api("/repositories"),JsonRepositories.class).wrap(org.root);
+        return org.root.retrieveWithAuth3(api("/repos"),JsonRepositories.class).wrap(org.root);
     }
 
     /**

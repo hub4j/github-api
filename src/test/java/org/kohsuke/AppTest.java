@@ -42,6 +42,9 @@ public class AppTest extends TestCase {
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
 
+//        GHRepository r = gitHub.connect().getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
+//        r.fork();
+
 //        tryDisablingIssueTrackers(gitHub);
 
 //        tryDisablingWiki(gitHub);
@@ -129,10 +132,13 @@ public class AppTest extends TestCase {
         System.out.println(hooks);
     }
 
-    private void testOrganization(GitHub gitHub) throws IOException {
-        GHOrganization labs = gitHub.getOrganization("HudsonLabs");
-        GHTeam t = labs.getTeams().get("Core Developers");
+    public void testOrganization() throws IOException {
+        GitHub gitHub = GitHub.connect();
+        GHOrganization j = gitHub.getOrganization("jenkinsci");
+        GHTeam t = j.getTeams().get("Core Developers");
 
-        t.add(labs.getRepository("xyz"));
+        assertNotNull(j.getRepository("jenkins"));
+
+//        t.add(labs.getRepository("xyz"));
     }
 }

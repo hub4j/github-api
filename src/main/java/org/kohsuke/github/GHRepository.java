@@ -59,7 +59,9 @@ import static org.kohsuke.github.ApiVersion.V3;
 public class GHRepository {
     /*package almost final*/ GitHub root;
 
-    private String description, homepage, url, name;
+    private String description, homepage, name;
+    private String url; // this is the API url
+    private String html_url;    // this is the UI
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
     private int watchers,forks,open_issues;
@@ -77,7 +79,7 @@ public class GHRepository {
      * URL of this repository, like 'http://github.com/kohsuke/hudson'
      */
     public String getUrl() {
-        return url;
+        return html_url;
     }
 
     public String getName() {

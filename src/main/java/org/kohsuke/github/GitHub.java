@@ -173,6 +173,11 @@ public class GitHub {
                 uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
             
             uc.setRequestMethod(method);
+            if (method.equals("PUT")) {
+                uc.setDoOutput(true);
+                uc.setRequestProperty("Content-Length","0");
+                uc.getOutputStream().close();
+            }
 
             try {
                 InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");

@@ -159,6 +159,10 @@ public class GitHub {
         return _retrieve(tailApiUrl, type, method, true, V2);
     }
 
+    /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type, String method) throws IOException {
+        return _retrieve(tailApiUrl, type, method, true, V3);
+    }
+
     private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth, ApiVersion v) throws IOException {
         while (true) {// loop while API rate limit is hit
         	

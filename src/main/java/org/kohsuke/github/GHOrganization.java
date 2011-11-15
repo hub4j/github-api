@@ -42,6 +42,20 @@ public class GHOrganization extends GHPerson {
         return root.retrieveWithAuth("/organizations/"+login+"/teams",JsonTeams.class).toMap(this);
     }
 
+    /**
+     * Publicizes the membership.
+     */
+    public void publicize(GHUser u) throws IOException {
+        root.retrieveWithAuth3("/orgs/"+login+"/public_members/"+u.getLogin(),null,"PUT");
+    }
+
+    /**
+     * Conceals the membership.
+     */
+    public void conceal(GHUser u) throws IOException {
+        root.retrieveWithAuth3("/orgs/"+login+"/public_members/"+u.getLogin(),null,"DELETE");
+    }
+
     public enum Permission { ADMIN, PUSH, PULL }
 
     /**

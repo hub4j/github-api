@@ -6,6 +6,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,14 +47,39 @@ public class GHOrganization extends GHPerson {
      * Publicizes the membership.
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieveWithAuth3("/orgs/"+login+"/public_members/"+u.getLogin(),null,"PUT");
+        root.retrieveWithAuth3("/orgs/" + login + "/public_members/" + u.getLogin(), null, "PUT");
+    }
+
+    /**
+     * All the members of this organization.
+     */
+    public List<GHUser> getMembers() throws IOException {
+        return new AbstractList<GHUser>() {
+            // these are shallow objects with only some limited values filled out
+            // TODO: it's better to allow objects to fill themselves in later when missing values are requested
+            final GHUser[] shallow = root.retrieveWithAuth3("/orgs/" + login + "/members", GHUser[].class);
+
+            @Override
+            public GHUser get(int index) {
+                try {
+                    return root.getUser(shallow[index].getLogin());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public int size() {
+                return shallow.length;
+            }
+        };
     }
 
     /**
      * Conceals the membership.
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieveWithAuth3("/orgs/"+login+"/public_members/"+u.getLogin(),null,"DELETE");
+        root.retrieveWithAuth3("/orgs/" + login + "/public_members/" + u.getLogin(), null, "DELETE");
     }
 
     public enum Permission { ADMIN, PUSH, PULL }

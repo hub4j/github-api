@@ -210,26 +210,50 @@ public class GitHub {
     }
 
     /**
-     * Obtains the object that represents the named user.
-     */
-    public GHUser getUser(String login) throws IOException {
-        GHUser u = users.get(login);
-        if (u==null) {
-        	
-        	if (oauthAccessToken != null) {
-        		u = retrieve("/user/show",JsonUser.class).user;
-        		u.root = this;
-                users.put(u.getLogin(),u);
-        	}
-        	else {
-            u = retrieve("/user/show/"+login,JsonUser.class).user;
-            u.root = this;
-            users.put(login,u);
-        	}
-            
-        }
-        return u;
-    }
+	 * Gets the {@link GHUser} that represents yourself.
+	 */
+	public GHUser getMyself() throws IOException {
+		requireCredential();
+
+		GHUser u = null;
+		
+		if (oauthAccessToken != null) {
+		
+			u = retrieve("/user/show", JsonUser.class).user;
+			
+			u.root = this;
+			users.put(u.getLogin(), u);
+			
+			return u;
+		}
+		else {
+			return getUser(login);
+		}
+		
+		
+		
+	}
+
+	/**
+	 * Obtains the object that represents the named user.
+	 */
+	public GHUser getUser(String login) throws IOException {
+		GHUser u = users.get(login);
+		if (u == null) {
+
+			if (oauthAccessToken != null) {
+				u = retrieve("/user/show/" + login, JsonUser.class).user;
+				u.root = this;
+				users.put(u.getLogin(), u);
+			} else {
+				u = retrieve("/user/show/" + login, JsonUser.class).user;
+				u.root = this;
+				users.put(login, u);
+			}
+
+		}
+		return u;
+	}
 
     /**
      * Interns the given {@link GHUser}.
@@ -258,14 +282,7 @@ public class GitHub {
     	 return retrieveWithAuth("/organizations",JsonOrganizations.class).wrap(this);
         
     }
-    /**
-     * Gets the {@link GHUser} that represents yourself.
-     */
-    public GHUser getMyself() throws IOException {
-        requireCredential();
-        return getUser(login);
-    }
-
+    
     /**
      * Creates a new repository.
      *

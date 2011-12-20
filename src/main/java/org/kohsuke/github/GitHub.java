@@ -34,6 +34,7 @@ import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -206,6 +207,9 @@ public class GitHub {
                 throw (InterruptedIOException)new InterruptedIOException().initCause(e);
             }
         }
+        
+        if (e instanceof FileNotFoundException)
+            throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
 
         InputStream es = uc.getErrorStream();
         if (es!=null)

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
@@ -31,8 +32,17 @@ public abstract class GHPerson {
         return Collections.unmodifiableMap(repositories);
     }
 
+    /**
+     *
+     * @return
+     *      null if the repository was not found
+     */
     public GHRepository getRepository(String name) throws IOException {
-        return root.retrieve3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+        try {
+            return root.retrieve3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     /**

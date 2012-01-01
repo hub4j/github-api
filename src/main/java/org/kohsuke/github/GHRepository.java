@@ -30,6 +30,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
 import java.lang.annotation.RetentionPolicy;
@@ -143,11 +144,12 @@ public class GHRepository {
      * Gets the collaborators on this repository.
      * This set always appear to include the owner.
      */
-    public Set<GHUser> getCollaborators() throws IOException {
-        Set<GHUser> r = new HashSet<GHUser>();
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet<GHUser> getCollaborators() throws IOException {
+        GHPersonSet<GHUser> r = new GHPersonSet<GHUser>();
         for (String u : root.retrieve("/repos/show/"+owner.login+"/"+name+"/collaborators",JsonCollaborators.class).collaborators)
             r.add(root.getUser(u));
-        return Collections.unmodifiableSet(r);
+        return r;
     }
 
     /**

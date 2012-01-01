@@ -23,6 +23,9 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.BridgeMethodsAdded;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -123,22 +126,25 @@ public class GHUser extends GHPerson {
     /**
      * Lists the users that this user is following
      */
-    public Set<GHUser> getFollows() throws IOException {
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet<GHUser> getFollows() throws IOException {
         return root.retrieve("/user/show/"+login+"/following",JsonUsers.class).toSet(root);
     }
 
     /**
      * Lists the users who are following this user.
      */
-    public Set<GHUser> getFollowers() throws IOException {
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet<GHUser> getFollowers() throws IOException {
         return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
     }
 
     /**
      * Gets the organization that this user belongs to publicly.
      */
-    public Set<GHOrganization> getOrganizations() throws IOException {
-        Set<GHOrganization> orgs = new HashSet<GHOrganization>();
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
+        GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
         for (GHOrganization o : root.retrieve3("/users/"+login+"/orgs",GHOrganization[].class)) {
             if (names.add(o.getLogin()))    // I've seen some duplicates in the data

@@ -34,8 +34,8 @@ import java.util.Set;
 class JsonUsers {
     public List<String> users;
 
-    public Set<GHUser> toSet(GitHub root) throws IOException {
-        Set<GHUser> r = new HashSet<GHUser>();
+    public GHPersonSet<GHUser> toSet(GitHub root) throws IOException {
+        GHPersonSet<GHUser> r = new GHPersonSet<GHUser>();
         for (String u : users)
             r.add(root.getUser(u));
         return r;

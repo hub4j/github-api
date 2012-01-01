@@ -167,7 +167,6 @@ public class GitHub {
     private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth, ApiVersion v) throws IOException {
         while (true) {// loop while API rate limit is hit
         	
-        	
             HttpURLConnection uc = (HttpURLConnection) getApiURL(v,tailApiUrl).openConnection();
 
             if (withAuth && this.oauthAccessToken == null)
@@ -224,23 +223,16 @@ public class GitHub {
 	public GHUser getMyself() throws IOException {
 		requireCredential();
 
-		GHUser u = null;
-		
 		if (oauthAccessToken != null) {
-		
-			u = retrieve("/user/show", JsonUser.class).user;
+            GHUser u = retrieveWithAuth("/user/show", JsonUser.class).user;
 			
 			u.root = this;
 			users.put(u.getLogin(), u);
 			
 			return u;
-		}
-		else {
+		} else {
 			return getUser(login);
 		}
-		
-		
-		
 	}
 
 	/**

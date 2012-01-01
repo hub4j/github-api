@@ -38,6 +38,12 @@ public class AppTest extends TestCase {
         Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
+    
+    public void testMemberOrgs() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        Set<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
+        System.out.println(o);
+    }
 
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();

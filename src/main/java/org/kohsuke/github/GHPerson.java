@@ -17,6 +17,8 @@ public abstract class GHPerson {
     protected String gravatar_id,login;
 
     protected int public_gist_count,public_repo_count,following_count,id;
+    
+    protected String avatar_url;
 
     /**
      * Gets the repositories this user owns.

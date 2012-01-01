@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.ApiVersion.V3;
+import static org.kohsuke.github.ApiVersion.*;
 
 /**
  * @author Kohsuke Kawaguchi

@@ -24,6 +24,8 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -130,6 +132,19 @@ public class GHUser extends GHPerson {
      */
     public Set<GHUser> getFollowers() throws IOException {
         return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
+    }
+
+    /**
+     * Gets the organization that this user belongs to publicly.
+     */
+    public Set<GHOrganization> getOrganizations() throws IOException {
+        Set<GHOrganization> orgs = new HashSet<GHOrganization>();
+        Set<String> names = new HashSet<String>();
+        for (GHOrganization o : root.retrieve3("/users/"+login+"/orgs",GHOrganization[].class)) {
+            if (names.add(o.getLogin()))    // I've seen some duplicates in the data
+                orgs.add(root.getOrganization(o.getLogin()));
+        }
+        return orgs;
     }
 
     @Override

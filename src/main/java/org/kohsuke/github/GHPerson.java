@@ -32,7 +32,7 @@ public abstract class GHPerson {
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (int i=1; ; i++) {
-            Map<String, GHRepository> map = root.retrieve3("/user/" + login + "/repos?per_page=100&page=" + i, JsonRepositories.class).wrap(root);
+            Map<String, GHRepository> map = root.retrieve3("/users/" + login + "/repos?per_page=100&page=" + i, JsonRepositories.class).wrap(root);
             repositories.putAll(map);
             if (map.isEmpty())  break;
         }

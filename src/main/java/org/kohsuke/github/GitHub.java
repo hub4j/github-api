@@ -134,7 +134,7 @@ public class GitHub {
     /*package*/ URL getApiURL(ApiVersion v, String tailApiUrl) throws IOException {
     	if (oauthAccessToken != null) {
     		// append the access token
-    		tailApiUrl = tailApiUrl + "?access_token=" + oauthAccessToken;
+    		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
     	
         return new URL(v.url+tailApiUrl);

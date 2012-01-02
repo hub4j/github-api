@@ -94,7 +94,7 @@ class Poster {
         return _with(key, value);
     }
 
-    private Poster _with(String key, Object value) {
+    public Poster _with(String key, Object value) {
         if (value!=null) {
             args.add(new Entry(key,value));
         }

@@ -33,12 +33,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -46,6 +46,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.Arrays.*;
@@ -299,6 +300,53 @@ public class GHRepository {
         return root.retrieveWithAuth("/pulls/"+owner.login+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(this);
     }
 
+    /**
+     * Retrieves the currently configured hooks.
+     */
+    public List<GHHook> getHooks() throws IOException {
+        List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
+                root.retrieveWithAuth3(String.format("/repos/%s/%s/hooks",owner.login,name),GHHook[].class)));
+        for (GHHook h : list)
+            h.wrap(this);
+        return list;
+    }
+
+    public GHHook getHook(int id) throws IOException {
+        return root.retrieveWithAuth3(String.format("/repos/%s/%s/hooks/%d",owner.login,name,id),GHHook.class).wrap(this);
+    }
+
+    /**
+     * 
+     * See https://api.github.com/hooks for possible names and their configuration scheme.
+     * TODO: produce type-safe binding
+     * 
+     * @param name
+     *      Type of the hook to be created.
+     * @param config
+     *      The configuration hash.
+     * @param events
+     *      Can be null. Types of events to hook into.
+     */
+    public GHHook createHook(String name, Map<String,String> config, Collection<GHEvent> events, boolean active) throws IOException {
+        List<String> ea = null;
+        if (events!=null) {
+            ea = new ArrayList<String>();
+            for (GHEvent e : events)
+                ea.add(e.name().toLowerCase(Locale.ENGLISH));
+        }
+
+        return new Poster(root,ApiVersion.V3)
+                .with("name",name)
+                .with("active", active)
+                ._with("config", config)
+                ._with("events",ea)
+                .to(String.format("/repos/%s/%s/hooks",owner.login,name),GHHook.class).wrap(this);
+    }
+    
+    public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {
+        return createHook("web",Collections.singletonMap("url",url.toExternalForm()),events,true);
+    }
+
 // this is no different from getPullRequests(OPEN)
 //    /**
 //     * Retrieves all the pull requests.
@@ -315,6 +363,9 @@ public class GHRepository {
     /**
      * Returns a set that represents the post-commit hook URLs.
      * The returned set is live, and changes made to them are reflected to GitHub.
+     * 
+     * @deprecated 
+     *      Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
@@ -326,15 +377,11 @@ public class GHRepository {
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
         private List<URL> getPostCommitHooks() {
             try {
-                verifyMine();
-
-                HtmlForm f = getForm();
-
                 List<URL> r = new ArrayList<URL>();
-                for (HtmlInput i : f.getInputsByName("urls[]")) {
-                    String v = i.getValueAttribute();
-                    if (v.length()==0)  continue;
-                    r.add(new URL(v));
+                for (GHHook h : getHooks()) {
+                    if (h.getName().equals("web")) {
+                        r.add(new URL(h.getConfig().get("url")));
+                    }
                 }
                 return r;
             } catch (IOException e) {
@@ -355,22 +402,7 @@ public class GHRepository {
         @Override
         public boolean add(URL url) {
             try {
-                String u = url.toExternalForm();
-
-                verifyMine();
-
-                HtmlForm f = getForm();
-
-                List<HtmlInput> controls = f.getInputsByName("urls[]");
-                for (HtmlInput i : controls) {
-                    String v = i.getValueAttribute();
-                    if (v.length()==0)  continue;
-                    if (v.equals(u))
-                        return false;   // already there
-                }
-
-                controls.get(controls.size()-1).setValueAttribute(u);
-                f.submit(null);
+                createWebHook(url,null);
                 return true;
             } catch (IOException e) {
                 throw new GHException("Failed to update post-commit hooks",e);
@@ -378,36 +410,19 @@ public class GHRepository {
         }
 
         @Override
-        public boolean remove(Object o) {
+        public boolean remove(Object url) {
             try {
-                String u = ((URL)o).toExternalForm();
-
-                verifyMine();
-
-                HtmlForm f = getForm();
-
-                List<HtmlInput> controls = f.getInputsByName("urls[]");
-                for (HtmlInput i : controls) {
-                    String v = i.getValueAttribute();
-                    if (v.length()==0)  continue;
-                    if (v.equals(u)) {
-                        i.setValueAttribute("");
-                        f.submit(null);
+                String _url = ((URL)url).toExternalForm();
+                for (GHHook h : getHooks()) {
+                    if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                        h.delete();
                         return true;
                     }
                 }
-
                 return false;
             } catch (IOException e) {
                 throw new GHException("Failed to update post-commit hooks",e);
             }
-        }
-
-        private HtmlForm getForm() throws IOException {
-            WebClient wc = root.createWebClient();
-            HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
-            HtmlForm f = (HtmlForm) pg.getElementById("new_service");
-            return f;
         }
     };
 

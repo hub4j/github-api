@@ -336,15 +336,20 @@ public class GHRepository {
         }
 
         return new Poster(root,ApiVersion.V3)
+                .withCredential()
                 .with("name",name)
                 .with("active", active)
                 ._with("config", config)
                 ._with("events",ea)
-                .to(String.format("/repos/%s/%s/hooks",owner.login,name),GHHook.class).wrap(this);
+                .to(String.format("/repos/%s/%s/hooks",owner.login,this.name),GHHook.class).wrap(this);
     }
     
     public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {
         return createHook("web",Collections.singletonMap("url",url.toExternalForm()),events,true);
+    }
+
+    public GHHook createWebHook(URL url) throws IOException {
+        return createWebHook(url,null);
     }
 
 // this is no different from getPullRequests(OPEN)
@@ -402,7 +407,7 @@ public class GHRepository {
         @Override
         public boolean add(URL url) {
             try {
-                createWebHook(url,null);
+                createWebHook(url);
                 return true;
             } catch (IOException e) {
                 throw new GHException("Failed to update post-commit hooks",e);

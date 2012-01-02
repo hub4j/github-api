@@ -54,7 +54,7 @@ public final class GHHook {
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Poster(repository.root,ApiVersion.V3)
-                .to(String.format("/repos/%s/%s/hooks/%d",repository.getOwnerName(),id),null,"DELETE");
+        new Poster(repository.root,ApiVersion.V3).withCredential()
+                .to(String.format("/repos/%s/%s/hooks/%d",repository.getOwnerName(),repository.getName(),id),null,"DELETE");
     }
 }

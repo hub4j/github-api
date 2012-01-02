@@ -1,12 +1,11 @@
 package org.kohsuke;
 
 import junit.framework.TestCase;
+import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
-import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
-import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
@@ -43,6 +42,16 @@ public class AppTest extends TestCase {
         GitHub gitHub = GitHub.connect();
         Set<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         System.out.println(o);
+    }
+
+    public void tryHook() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHRepository r = gitHub.getMyself().getRepository("test2");
+        GHHook hook = r.createWebHook(new URL("http://www.google.com/"));
+        System.out.println(hook);
+
+        for (GHHook h : r.getHooks())
+            h.delete();
     }
 
     public void testApp() throws IOException {

@@ -43,11 +43,7 @@ public class GHOrganization extends GHPerson {
         return root.retrieveWithAuth("/organizations/"+login+"/teams",JsonTeams.class).toMap(this);
     }
 
-    /**
-     *
-     * @return
-     *      null if the repository was not found
-     */
+    @Override
     public GHRepository getRepository(String name) throws IOException {
         try {
             return root.retrieveWithAuth3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);

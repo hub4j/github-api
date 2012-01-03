@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -40,6 +41,19 @@ public class GHOrganization extends GHPerson {
      */
     public Map<String,GHTeam> getTeams() throws IOException {
         return root.retrieveWithAuth("/organizations/"+login+"/teams",JsonTeams.class).toMap(this);
+    }
+
+    /**
+     *
+     * @return
+     *      null if the repository was not found
+     */
+    public GHRepository getRepository(String name) throws IOException {
+        try {
+            return root.retrieveWithAuth3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     /**

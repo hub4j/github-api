@@ -125,9 +125,13 @@ class Poster {
             uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
             if (authenticate) {
                 if (v==ApiVersion.V3) {
-                    if (root.password==null)
-                        throw new IllegalArgumentException("V3 API doesn't support API token");
-                    uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+                    if (root.oauthAccessToken!=null) {
+                        uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
+                    } else {
+                        if (root.password==null)
+                            throw new IllegalArgumentException("V3 API doesn't support API token");
+                        uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+                    }
                 } else {
                     uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
                 }

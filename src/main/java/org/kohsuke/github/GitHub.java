@@ -65,7 +65,7 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
-	private String oauthAccessToken;
+	/*package*/ String oauthAccessToken;
 
     private GitHub(String login, String apiToken, String password) {
         this.login = login;

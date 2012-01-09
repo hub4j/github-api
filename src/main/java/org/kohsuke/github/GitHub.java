@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 import static org.kohsuke.github.ApiVersion.*;
@@ -331,7 +332,9 @@ public class GitHub {
     /*package*/ static Date parseDate(String timestamp) {
         for (String f : TIME_FORMATS) {
             try {
-                return new SimpleDateFormat(f).parse(timestamp);
+                SimpleDateFormat df = new SimpleDateFormat(f);
+                df.setTimeZone(TimeZone.getTimeZone("GMT"));
+                return df.parse(timestamp);
             } catch (ParseException e) {
                 // try next
             }

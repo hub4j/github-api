@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import java.net.URL;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * A pull request.
@@ -64,7 +63,7 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
-     * The change that should be pulled.
+     * The change that should be pulled. The tip of the commits to merge.
      */
     public GHCommitPointer getHead() {
         return head;

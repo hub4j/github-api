@@ -3,6 +3,7 @@ package org.kohsuke;
 import junit.framework.TestCase;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
+import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -60,6 +61,11 @@ public class AppTest extends TestCase {
         GitHub gitHub = GitHub.connect();
         for (GHEventInfo ev : gitHub.getEvents()) {
             System.out.println(ev);
+            if (ev.getType()==GHEvent.PULL_REQUEST) {
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                System.out.println(pr.getNumber());
+                System.out.println(pr.getPullRequest());
+            }
         }
 
 //        GHRepository r = gitHub.connect().getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);

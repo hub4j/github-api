@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -305,6 +306,19 @@ public class GitHub {
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
+    }
+
+    /**
+     * Parses the GitHub event object.
+     *
+     * This is primarily intended for receiving a POST HTTP call from a hook.
+     * Unfortunately, hook script payloads aren't self-descriptive, so you need
+     * to know the type of the payload you are expecting.
+     */
+    public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
+        T t = MAPPER.readValue(r, type);
+        t.wrapUp(this);
+        return t;
     }
     
     /**

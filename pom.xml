@@ -77,6 +77,12 @@
       <version>1.4</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>org.kohsuke.stapler</groupId>
+      <artifactId>stapler-jetty</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <reporting>

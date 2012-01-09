@@ -324,7 +324,7 @@ public class GHRepository {
      * TODO: produce type-safe binding
      * 
      * @param name
-     *      Type of the hook to be created.
+     *      Type of the hook to be created. See https://api.github.com/hooks for possible names.
      * @param config
      *      The configuration hash.
      * @param events

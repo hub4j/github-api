@@ -84,6 +84,9 @@ public class GHRepository {
         return html_url;
     }
 
+    /**
+     * String of the form "owner/reponame"
+     */
     public String getName() {
         return name;
     }

@@ -44,8 +44,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -280,9 +282,29 @@ public class GitHub {
         return o;
     }
 
+    /**
+     * Gets the repository object from 'user/reponame' string that GitHub calls as "repository name"
+     *
+     * @see GHRepository#getName()
+     */
+    public GHRepository getRepository(String name) throws IOException {
+        String[] tokens = name.split("/");
+        return getUser(tokens[0]).getRepository(tokens[1]);
+    }
+
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
     	 return retrieveWithAuth("/organizations",JsonOrganizations.class).wrap(this);
-        
+    }
+
+    /**
+     * Public events visible to you. Equivalent of what's displayed on https://github.com/
+     */
+    public List<GHEventInfo> getEvents() throws IOException {
+        // TODO: pagenation
+        GHEventInfo[] events = retrieve3("/events", GHEventInfo[].class);
+        for (GHEventInfo e : events)
+            e.wrapUp(this);
+        return Arrays.asList(events);
     }
     
     /**

@@ -1,6 +1,8 @@
 package org.kohsuke;
 
 import junit.framework.TestCase;
+import org.kohsuke.github.GHEvent;
+import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -56,6 +58,9 @@ public class AppTest extends TestCase {
 
     public void testApp() throws IOException {
         GitHub gitHub = GitHub.connect();
+        for (GHEventInfo ev : gitHub.getEvents()) {
+            System.out.println(ev);
+        }
 
 //        GHRepository r = gitHub.connect().getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
 //        r.fork();

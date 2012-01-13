@@ -42,12 +42,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import static java.util.Arrays.*;
 import static org.kohsuke.github.ApiVersion.V3;
@@ -68,6 +70,7 @@ public class GHRepository {
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
     private int watchers,forks,open_issues;
     private String created_at, pushed_at;
+    private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
 
     public String getDescription() {
         return description;
@@ -435,6 +438,34 @@ public class GHRepository {
         this.root = root;
         return this;
     }
+
+    public Map<Integer, GHMilestone> getMilestones() throws IOException {
+        Map<Integer,GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
+    	GHMilestone[] ms = root.retrieve3("/repos/"+owner.login+"/"+name+"/milestones", GHMilestone[].class);
+    	for (GHMilestone m : ms) {
+    		m.owner = this;
+    		m.root = root;
+    		milestones.put(m.getNumber(), m);
+    	}
+    	return milestones;
+    }
+
+	public GHMilestone getMilestone(int number) throws IOException {
+		GHMilestone m = milestones.get(number);
+		if (m == null) {
+			m = root.retrieve3("/repos/"+owner.login+"/"+name+"/milestones/"+number, GHMilestone.class);
+    		m.owner = this;
+    		m.root = root;
+			milestones.put(m.getNumber(), m);
+		}
+		return m;
+	}
+	
+	public GHMilestone createMilestone(String title, String description) throws IOException {
+        return new Poster(root,V3).withCredential()
+                .with("title", title).with("description", description)
+                .to("/repos/"+owner.login+"/"+name+"/milestones", GHMilestone.class,"POST").wrap(this);
+	}
 
     @Override
     public String toString() {

@@ -49,7 +49,7 @@ public class GHCommitPointer {
     }
 
     /**
-     * Named ref to the commit.
+     * Named ref to the commit. This appears to be a "short ref" that doesn't include "refs/heads/" portion.
      */
     public String getRef() {
         return ref;

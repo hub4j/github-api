@@ -85,7 +85,7 @@ public class GHRepository {
     }
 
     /**
-     * String of the form "owner/reponame"
+     * Short repository name without the owner. For example 'jenkins' in case of http://github.com/jenkinsci/jenkins
      */
     public String getName() {
         return name;

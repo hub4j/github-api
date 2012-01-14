@@ -20,10 +20,19 @@ public class GHEventInfo {
     private String type;
 
     // these are all shallow objects
-    private GHRepository repo;
+    private GHEventRepository repo;
     private GHUser actor;
     private GHOrganization org;
-    
+
+    /**
+     * Inside the event JSON model, GitHub uses a slightly different format.
+     */
+    public static class GHEventRepository {
+        private int id;
+        private String url;     // repository API URL
+        private String name;    // owner/repo
+    }
+
     public GHEvent getType() {
         String t = type;
         if (t.endsWith("Event"))    t=t.substring(0,t.length()-5);
@@ -47,7 +56,7 @@ public class GHEventInfo {
      * Repository where the change was made.
      */
     public GHRepository getRepository() throws IOException {
-        return root.getRepository(repo.getName());
+        return root.getRepository(repo.name);
     }
     
     public GHUser getActor() throws IOException {

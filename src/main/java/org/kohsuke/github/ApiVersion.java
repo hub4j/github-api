@@ -6,12 +6,19 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  */
 enum ApiVersion {
-    V2("https://github.com/api/v2/json"),
-    V3("https://api.github.com");
+	
+    V2("https://?/api/v2/json"),
+    V3("https://api.?");
 
-    final String url;
+    final String templateUrl;
 
-    ApiVersion(String url) {
-        this.url = url;
+    ApiVersion(String templateUrl) {
+        this.templateUrl = templateUrl;
+    }
+    
+    public String getApiVersionBaseUrl(String githubServer) {
+    	
+    	return templateUrl.replaceFirst("\\?", githubServer);
+    		
     }
 }

@@ -70,9 +70,16 @@ public class GitHub {
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
 	/*package*/ String oauthAccessToken;
+	
+	private final String githubServer;
 
-    private GitHub(String login, String apiToken, String password) {
-        this.login = login;
+	private GitHub(String login, String apiToken, String password) {
+		this ("github.com", login, apiToken, password);
+	}
+	
+    private GitHub(String githubServer, String login, String apiToken, String password) {
+        this.githubServer = githubServer;
+		this.login = login;
         this.apiToken = apiToken;
         this.password = password;
 
@@ -84,8 +91,9 @@ public class GitHub {
             encodedAuthorization = null;
     }
 
-    private GitHub (String oauthAccessToken) throws IOException {
+    private GitHub (String githubServer, String oauthAccessToken) throws IOException {
     	
+		this.githubServer = githubServer;
 		this.password = null;
 		this.encodedAuthorization = null;
 		
@@ -118,8 +126,8 @@ public class GitHub {
         return new GitHub(login,apiToken,password);
     }
 
-    public static GitHub connectUsingOAuth (String accessToken) throws IOException {
-    	return new GitHub(accessToken);
+    public static GitHub connectUsingOAuth (String githubServer, String accessToken) throws IOException {
+    	return new GitHub(githubServer, accessToken);
     }
     /**
      * Connects to GitHub anonymously.
@@ -141,7 +149,7 @@ public class GitHub {
     		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
     	
-        return new URL(v.url+tailApiUrl);
+        return new URL(v.getApiVersionBaseUrl(githubServer)+tailApiUrl);
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {

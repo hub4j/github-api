@@ -23,14 +23,10 @@
  */
 package org.kohsuke.github;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
-import sun.misc.BASE64Encoder;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
+import static org.kohsuke.github.ApiVersion.V2;
+import static org.kohsuke.github.ApiVersion.V3;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,8 +49,16 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
-import static org.kohsuke.github.ApiVersion.*;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
+
+import sun.misc.BASE64Encoder;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
  * Root of the GitHub API.
@@ -126,6 +130,10 @@ public class GitHub {
         return new GitHub(login,apiToken,password);
     }
 
+    public static GitHub connectUsingOAuth (String accessToken) throws IOException {
+    	return connectUsingOAuth("github.com", accessToken);
+    }
+    
     public static GitHub connectUsingOAuth (String githubServer, String accessToken) throws IOException {
     	return new GitHub(githubServer, accessToken);
     }

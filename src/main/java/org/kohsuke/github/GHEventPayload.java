@@ -35,6 +35,12 @@ public abstract class GHEventPayload {
             pull_request.root = root;
             return pull_request;
         }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            pull_request.wrapUp(root);
+        }
     }
 
 }

@@ -92,4 +92,13 @@ public class GHPullRequest extends GHIssue {
     public Date getClosedAt() {
         return GitHub.parseDate(closed_at);
     }
+
+    void wrapUp(GitHub root) {
+        this.root = root;
+        if (owner!=null)    owner.wrap(root);
+        if (issue_user!=null)   issue_user.root=root;
+        if (user!=null)     user.root=root;
+        if (base!=null)     base.wrapUp(root);
+        if (head!=null)     head.wrapUp(root);
+    }
 }

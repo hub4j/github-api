@@ -68,4 +68,10 @@ public class GHCommitPointer {
     public String getLabel() {
         return label;
     }
+
+    void wrapUp(GitHub root) {
+        if (user!=null) user.root = root;
+        if (repo!=null) repo.wrap(root);
+        if (repository!=null) repository.wrap(root);
+    }
 }

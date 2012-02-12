@@ -78,10 +78,26 @@ public class GHRepository {
     }
 
     /**
-     * URL of this repository, like 'http://github.com/kohsuke/hudson'
+     * URL of this repository, like 'http://github.com/kohsuke/jenkins'
      */
     public String getUrl() {
         return html_url;
+    }
+
+    /**
+     * Gets the git:// URL to this repository, such as "git://github.com/kohsuke/jenkins.git"
+     * This URL is read-only.
+     */
+    public String getGitTransportUrl() {
+        return "git://github.com/"+getOwnerName()+"/"+name+".git";
+    }
+
+    /**
+     * Gets the HTTPS URL to this repository, such as "https://github.com/kohsuke/jenkins.git"
+     * This URL is read-only.
+     */
+    public String gitHttpTransportUrl() {
+        return "https://github.com/"+getOwnerName()+"/"+name+".git";
     }
 
     /**

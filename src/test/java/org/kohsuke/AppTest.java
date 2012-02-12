@@ -5,6 +5,7 @@ import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
+import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHRepository;
@@ -22,6 +23,13 @@ public class AppTest extends TestCase {
     public void testCredentialValid() throws IOException {
         assertTrue(GitHub.connect().isCredentialValid());
         assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
+    }
+
+    public void testFetchPullRequest() throws Exception {
+        GitHub gh = GitHub.connect();
+        GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");
+        r.getPullRequest(1);
+        r.getPullRequests(GHIssueState.OPEN);
     }
 
     public void tryOrgFork() throws Exception {

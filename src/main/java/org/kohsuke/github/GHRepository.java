@@ -293,14 +293,17 @@ public class GHRepository {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieveWithAuth("/pulls/" + owner.login + '/' + name + "/" + i, JsonPullRequest.class).wrap(this);
+        return root.retrieveWithAuth3("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
     }
 
     /**
      * Retrieves all the pull requests of a particular state.
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return root.retrieveWithAuth("/pulls/"+owner.login+'/'+name+"/"+state.name().toLowerCase(Locale.ENGLISH),JsonPullRequests.class).wrap(this);
+        GHPullRequest[] r = root.retrieveWithAuth3("/repos/" + owner.login + '/' + name + "/pulls?state=" + state.name().toLowerCase(Locale.ENGLISH), GHPullRequest[].class);
+        for (GHPullRequest p : r)
+            p.wrapUp(this);
+        return new ArrayList<GHPullRequest>(Arrays.asList(r));
     }
 
     /**

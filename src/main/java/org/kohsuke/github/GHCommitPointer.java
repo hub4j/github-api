@@ -31,7 +31,7 @@ package org.kohsuke.github;
 public class GHCommitPointer {
     private String ref, sha, label;
     private GHUser user;
-    private GHRepository repository;
+    private GHRepository repository/*V2*/,repo/*V3*/;
 
     /**
      * This points to the user who owns
@@ -45,7 +45,7 @@ public class GHCommitPointer {
      * The repository that contains the commit.
      */
     public GHRepository getRepository() {
-        return repository;
+        return repo!=null ? repo : repository;
     }
 
     /**

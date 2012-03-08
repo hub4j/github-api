@@ -6,6 +6,6 @@ package org.kohsuke.github;
  *
  */
 public enum GHMilestoneState {
-    open,
-    closed
+    OPEN,
+    CLOSED
 }

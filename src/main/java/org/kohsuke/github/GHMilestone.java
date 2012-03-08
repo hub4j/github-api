@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 
@@ -61,7 +62,7 @@ public class GHMilestone {
 	}
 	
 	public GHMilestoneState getState() {
-		return Enum.valueOf(GHMilestoneState.class, state);
+		return Enum.valueOf(GHMilestoneState.class, state.toUpperCase(Locale.ENGLISH));
 	}
 
 	public GHMilestone wrap(GHRepository repo) {

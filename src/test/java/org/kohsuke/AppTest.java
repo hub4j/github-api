@@ -64,8 +64,8 @@ public class AppTest extends TestCase {
         for (GHHook h : r.getHooks())
             h.delete();
     }
-
-    public void testApp() throws IOException {
+    
+    public void testEventApi() throws Exception {
         GitHub gitHub = GitHub.connect();
         for (GHEventInfo ev : gitHub.getEvents()) {
             System.out.println(ev);
@@ -75,6 +75,11 @@ public class AppTest extends TestCase {
                 System.out.println(pr.getPullRequest());
             }
         }
+    }
+
+    public void testApp() throws IOException {
+        GitHub gitHub = GitHub.connect();
+        System.out.println(gitHub.getMyself().getEmails());
 
 //        GHRepository r = gitHub.connect().getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
 //        r.fork();

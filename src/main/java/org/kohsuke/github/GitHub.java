@@ -49,6 +49,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -240,19 +241,16 @@ public class GitHub {
     /**
 	 * Gets the {@link GHUser} that represents yourself.
 	 */
-	public GHUser getMyself() throws IOException {
+    @WithBridgeMethods(GHUser.class)
+	public GHMyself getMyself() throws IOException {
 		requireCredential();
 
-		if (oauthAccessToken != null) {
-            GHUser u = retrieveWithAuth("/user/show", JsonUser.class).user;
-			
-			u.root = this;
-			users.put(u.getLogin(), u);
-			
-			return u;
-		} else {
-			return getUser(login);
-		}
+        GHMyself u = retrieveWithAuth("/user/show", JsonMyself.class).user;
+
+        u.root = this;
+        users.put(u.getLogin(), u);
+
+        return u;
 	}
 
 	/**

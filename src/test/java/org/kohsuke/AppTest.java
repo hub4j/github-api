@@ -5,6 +5,7 @@ import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
+import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -15,6 +16,7 @@ import org.kohsuke.github.GitHub;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
+import java.util.List;
 
 /**
  * Unit test for simple App.
@@ -55,6 +57,13 @@ public class AppTest extends TestCase {
         System.out.println(o);
     }
 
+    public void testBranches() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        List<GHBranch> b = 
+                gitHub.getUser("jenkinsci").getRepository("jenkins").getBranches();
+        System.out.println(b);
+    }
+    
     public void tryHook() throws Exception {
         GitHub gitHub = GitHub.connect();
         GHRepository r = gitHub.getMyself().getRepository("test2");

@@ -461,6 +461,14 @@ public class GHRepository {
         return this;
     }
 
+    /* get list of branches not merged into master */
+    public List<GHBranch> getBranches() throws IOException {
+        GHBranch[] r = root.retrieve3("/repos/"+owner.login+"/"+name+"/branches", GHBranch[].class);
+        for (GHBranch p : r)
+            p.wrap(this);
+        return new ArrayList<GHBranch>(Arrays.asList(r));
+    }
+
     public Map<Integer, GHMilestone> getMilestones() throws IOException {
         Map<Integer,GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
     	GHMilestone[] ms = root.retrieve3("/repos/"+owner.login+"/"+name+"/milestones", GHMilestone[].class);

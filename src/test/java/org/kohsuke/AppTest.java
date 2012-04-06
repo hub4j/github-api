@@ -15,6 +15,7 @@ import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Set;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class AppTest extends TestCase {
 
     public void testBranches() throws Exception {
         GitHub gitHub = GitHub.connect();
-        List<GHBranch> b = 
+        Map<String,GHBranch> b =
                 gitHub.getUser("jenkinsci").getRepository("jenkins").getBranches();
         System.out.println(b);
     }

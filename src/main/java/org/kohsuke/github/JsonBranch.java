@@ -31,8 +31,6 @@ class JsonBranch {
     GHBranch branch;
 
     GHBranch wrap(GHRepository r) {
-        branch.owner = r;
-        branch.root = r.root;
-        return branch;
+        return branch.wrap(r);
     }
 }

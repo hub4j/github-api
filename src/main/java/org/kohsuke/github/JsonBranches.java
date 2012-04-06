@@ -33,10 +33,8 @@ class JsonBranches {
     List<GHBranch> branches;
 
     public List<GHBranch> wrap(GHRepository owner) {
-        for (GHBranch branch : branches) {
-            branch.owner = owner;
-            branch.root = owner.root;
-        }
+        for (GHBranch branch : branches)
+            branch.wrap(owner);
         return branches;
     }
 }

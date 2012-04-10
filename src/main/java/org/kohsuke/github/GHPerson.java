@@ -58,9 +58,20 @@ public abstract class GHPerson {
 
     /**
      * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105
+     *
+     * @deprecated
+     *      No longer available in the v3 API.
      */
     public String getGravatarId() {
         return gravatar_id;
+    }
+
+    /**
+     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105'
+     * that indicates the avatar image URL.
+     */
+    public String getAvatarUrl() {
+        return avatar_url;
     }
 
     /**

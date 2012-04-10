@@ -71,7 +71,11 @@ public abstract class GHPerson {
      * that indicates the avatar image URL.
      */
     public String getAvatarUrl() {
-        return avatar_url;
+        if (avatar_url!=null)
+            return avatar_url;
+        if (gravatar_id!=null)
+            return "https://secure.gravatar.com/avatar/"+gravatar_id;
+        return null;
     }
 
     /**

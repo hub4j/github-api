@@ -7,10 +7,12 @@ import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
+import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
@@ -33,6 +35,14 @@ public class AppTest extends TestCase {
         GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
+    }
+    
+    public void testGetMyself() throws Exception {
+        GitHub hub = GitHub.connect();
+        GHMyself me = hub.getMyself();
+        System.out.println(me);
+        GHUser u = hub.getUser("kohsuke2");
+        System.out.println(u);
     }
 
     public void tryOrgFork() throws Exception {

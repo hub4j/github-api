@@ -245,7 +245,7 @@ public class GitHub {
 	public GHMyself getMyself() throws IOException {
 		requireCredential();
 
-        GHMyself u = retrieveWithAuth("/user/show", JsonMyself.class).user;
+        GHMyself u = retrieveWithAuth3("/user", GHMyself.class);
 
         u.root = this;
         users.put(u.getLogin(), u);
@@ -259,17 +259,9 @@ public class GitHub {
 	public GHUser getUser(String login) throws IOException {
 		GHUser u = users.get(login);
 		if (u == null) {
-
-			if (oauthAccessToken != null) {
-				u = retrieve("/user/show/" + login, JsonUser.class).user;
-				u.root = this;
-				users.put(u.getLogin(), u);
-			} else {
-				u = retrieve("/user/show/" + login, JsonUser.class).user;
-				u.root = this;
-				users.put(login, u);
-			}
-
+            u = retrieve3("/users/" + login, GHUser.class);
+            u.root = this;
+            users.put(u.getLogin(), u);
 		}
 		return u;
 	}
@@ -352,7 +344,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() throws IOException {
         try {
-            retrieveWithAuth("/user/show",JsonUser.class);
+            retrieveWithAuth3("/user",GHUser.class);
             return true;
         } catch (IOException e) {
             return false;

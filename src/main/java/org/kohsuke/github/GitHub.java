@@ -44,14 +44,17 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
@@ -171,7 +174,7 @@ public class GitHub {
     }
 
     /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
-        return retrieveWithAuth(tailApiUrl,type,"GET");
+        return retrieveWithAuth(tailApiUrl, type, "GET");
     }
 
     /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type) throws IOException {
@@ -188,36 +191,125 @@ public class GitHub {
 
     private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth, ApiVersion v) throws IOException {
         while (true) {// loop while API rate limit is hit
-        	
-            HttpURLConnection uc = (HttpURLConnection) getApiURL(v,tailApiUrl).openConnection();
-
-            if (withAuth && this.oauthAccessToken == null)
-                uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-            
-            uc.setRequestMethod(method);
-            if (method.equals("PUT")) {
-                uc.setDoOutput(true);
-                uc.setRequestProperty("Content-Length","0");
-                uc.getOutputStream().close();
-            }
-            uc.setRequestProperty("Accept-Encoding", "gzip");
-
-            InputStreamReader r = null;
+            HttpURLConnection uc = setupConnection(method, withAuth, getApiURL(v, tailApiUrl));
             try {
-                r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
-                if (type==null) {
-                    String data = IOUtils.toString(r);
-                    return null;
-                }
-                return MAPPER.readValue(r,type);
+                return parse(uc,type);
             } catch (IOException e) {
                 handleApiError(e,uc);
-            } finally {
-                IOUtils.closeQuietly(r);
             }
         }
     }
 
+    /**
+     * Loads pagenated resources.
+     *
+     * Every iterator call reports a new batch.
+     */
+    /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth, final ApiVersion v) {
+        return new Iterator<T>() {
+            T next;
+            URL url;
+
+            {
+                try {
+                    url = getApiURL(v, tailApiUrl);
+                } catch (IOException e) {
+                    throw new Error(e);
+                }
+            }
+
+            public boolean hasNext() {
+                fetch();
+                return next!=null;
+            }
+
+            public T next() {
+                fetch();
+                T r = next;
+                if (r==null)    throw new NoSuchElementException();
+                next = null;
+                return r;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+            private void fetch() {
+                if (next!=null) return; // already fetched
+                if (url==null)  return; // no more data to fetch
+
+                try {
+                    while (true) {// loop while API rate limit is hit
+                        HttpURLConnection uc = setupConnection("GET", withAuth, url);
+                        try {
+                            next = parse(uc,type);
+                            assert next!=null;
+                            findNextURL(uc);
+                            return;
+                        } catch (IOException e) {
+                            handleApiError(e,uc);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new Error(e);
+                }
+            }
+
+            /**
+             * Locate the next page from the pagination "Link" tag.
+             */
+            private void findNextURL(HttpURLConnection uc) throws MalformedURLException {
+                url = null; // start defensively
+                String link = uc.getHeaderField("Link");
+                if (link==null) return;
+
+                for (String token : link.split(", ")) {
+                    if (token.endsWith("rel=\"next\"")) {
+                        // found the next page. This should look something like
+                        // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
+                        int idx = token.indexOf('>');
+                        url = new URL(token.substring(1,idx));
+                        return;
+                    }
+                }
+            }
+        };
+    }
+
+    private HttpURLConnection setupConnection(String method, boolean withAuth, URL url) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+
+        if (withAuth && this.oauthAccessToken == null)
+            uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+
+        uc.setRequestMethod(method);
+        if (method.equals("PUT")) {
+            uc.setDoOutput(true);
+            uc.setRequestProperty("Content-Length","0");
+            uc.getOutputStream().close();
+        }
+        uc.setRequestProperty("Accept-Encoding", "gzip");
+        return uc;
+    }
+
+    private <T> T parse(HttpURLConnection uc, Class<T> type) throws IOException {
+        InputStreamReader r = null;
+        try {
+            r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
+            if (type==null) {
+                String data = IOUtils.toString(r);
+                return null;
+            }
+            return MAPPER.readValue(r,type);
+        } finally {
+            IOUtils.closeQuietly(r);
+        }
+    }
+
+    /**
+     * Handles the "Content-Encoding" header.
+     */
     private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
         String encoding = uc.getContentEncoding();
         if (encoding==null) return in;

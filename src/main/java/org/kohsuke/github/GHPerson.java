@@ -2,9 +2,14 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static org.kohsuke.github.ApiVersion.*;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
@@ -31,16 +36,46 @@ public abstract class GHPerson {
      */
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (int i=1; ; i++) {
-            GHRepository[] array = root.retrieve3("/users/" + login + "/repos?per_page=100&page=" + i, GHRepository[].class);
-            for (GHRepository r : array) {
-                r.root = root;
+        for (List<GHRepository> batch : iterateRepositories(100)) {
+            for (GHRepository r : batch)
                 repositories.put(r.getName(),r);
-            }
-            if (array.length==0)  break;
         }
-
         return Collections.unmodifiableMap(repositories);
+    }
+
+    /**
+     * Loads repository list in a pagenated fashion.
+     * 
+     * <p>
+     * For a person with a lot of repositories, GitHub returns the list of repositories in a pagenated fashion.
+     * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
+     * 
+     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
+     * into {@link Error}.
+     */
+    public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
+        return new Iterable<List<GHRepository>>() {
+            public Iterator<List<GHRepository>> iterator() {
+                final Iterator<GHRepository[]> pager = root.retrievePaged("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class,false, V3);
+
+                return new Iterator<List<GHRepository>>() {
+                    public boolean hasNext() {
+                        return pager.hasNext();
+                    }
+
+                    public List<GHRepository> next() {
+                        GHRepository[] batch = pager.next();
+                        for (GHRepository r : batch)
+                            r.root = root;
+                        return Arrays.asList(batch);
+                    }
+
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
     }
 
     /**

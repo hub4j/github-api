@@ -192,6 +192,15 @@ public class AppTest extends TestCase {
         System.out.println(hooks);
     }
 
+    public void testOrgRepositories() throws IOException {
+        GitHub gitHub = GitHub.connect();
+        GHOrganization j = gitHub.getOrganization("jenkinsci");
+        long start = System.currentTimeMillis();
+        Map<String, GHRepository> repos = j.getRepositories();
+        long end = System.currentTimeMillis();
+        System.out.printf("%d repositories in %dms\n",repos.size(),end-start);
+    }
+    
     public void testOrganization() throws IOException {
         GitHub gitHub = GitHub.connect();
         GHOrganization j = gitHub.getOrganization("jenkinsci");

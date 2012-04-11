@@ -68,7 +68,7 @@ public class GHRepository {
     private String html_url;    // this is the UI
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
-    private int watchers,forks,open_issues;
+    private int watchers,forks,open_issues,size;
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
@@ -172,6 +172,10 @@ public class GHRepository {
      */
     public String getMasterBranch() {
         return master_branch;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     /**

@@ -71,6 +71,8 @@ public class GHRepository {
     private int watchers,forks,open_issues;
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
+    
+    private String master_branch;
 
     public String getDescription() {
         return description;
@@ -162,6 +164,15 @@ public class GHRepository {
         return GitHub.parseDate(created_at);
     }
 
+    /**
+     * Returns the primary branch you'll configure in the "Admin > Options" config page.
+     *
+     * @return
+     *      This field is null until the user explicitly configures the master branch.
+     */
+    public String getMasterBranch() {
+        return master_branch;
+    }
 
     /**
      * Gets the collaborators on this repository.

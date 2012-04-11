@@ -33,11 +33,12 @@ public class AppTest extends TestCase {
     public void testFetchPullRequest() throws Exception {
         GitHub gh = GitHub.connect();
         GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");
+        assertEquals("master",r.getMasterBranch());
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
     }
     
-    public void testGetMyself() throws Exception {
+    public void tryGetMyself() throws Exception {
         GitHub hub = GitHub.connect();
         GHMyself me = hub.getMyself();
         System.out.println(me);

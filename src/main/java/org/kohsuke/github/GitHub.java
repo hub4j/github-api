@@ -207,7 +207,13 @@ public class GitHub {
      */
     /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth, final ApiVersion v) {
         return new Iterator<T>() {
+            /**
+             * The next batch to be returned from {@link #next()}.
+             */
             T next;
+            /**
+             * URL of the next resource to be retrieved, or null if no more data is available.
+             */
             URL url;
 
             {
@@ -273,6 +279,8 @@ public class GitHub {
                         return;
                     }
                 }
+
+                // no more "next" link. we are done.
             }
         };
     }

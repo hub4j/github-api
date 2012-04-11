@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.zip.GZIPInputStream;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.io.IOUtils;
@@ -199,9 +200,11 @@ public class GitHub {
                 uc.setRequestProperty("Content-Length","0");
                 uc.getOutputStream().close();
             }
+            uc.setRequestProperty("Accept-Encoding", "gzip");
 
+            InputStreamReader r = null;
             try {
-                InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+                r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
                 if (type==null) {
                     String data = IOUtils.toString(r);
                     return null;
@@ -209,8 +212,18 @@ public class GitHub {
                 return MAPPER.readValue(r,type);
             } catch (IOException e) {
                 handleApiError(e,uc);
+            } finally {
+                IOUtils.closeQuietly(r);
             }
         }
+    }
+
+    private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
+        String encoding = uc.getContentEncoding();
+        if (encoding==null) return in;
+        if (encoding.equals("gzip"))    return new GZIPInputStream(in);
+
+        throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
     }
 
     /**
@@ -231,11 +244,15 @@ public class GitHub {
         if (e instanceof FileNotFoundException)
             throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
 
-        InputStream es = uc.getErrorStream();
-        if (es!=null)
-            throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
-        else
-            throw e;
+        InputStream es = wrapStream(uc, uc.getErrorStream());
+        try {
+            if (es!=null)
+                throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
+            else
+                throw e;
+        } finally {
+            IOUtils.closeQuietly(es);
+        }
     }
 
     /**

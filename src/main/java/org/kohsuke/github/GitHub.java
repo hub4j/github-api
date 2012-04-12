@@ -489,6 +489,7 @@ public class GitHub {
     }
 
     /*package*/ static Date parseDate(String timestamp) {
+        if (timestamp==null)    return null;
         for (String f : TIME_FORMATS) {
             try {
                 SimpleDateFormat df = new SimpleDateFormat(f);

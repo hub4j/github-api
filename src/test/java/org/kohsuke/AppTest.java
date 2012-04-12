@@ -44,6 +44,11 @@ public class AppTest extends TestCase {
         System.out.println(me);
         GHUser u = hub.getUser("kohsuke2");
         System.out.println(u);
+        for (List<GHRepository> lst : me.iterateRepositories(100)) {
+            for (GHRepository r : lst) {
+                System.out.println(r.getPushedAt());
+            }
+        }
     }
 
     public void tryOrgFork() throws Exception {

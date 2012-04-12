@@ -156,6 +156,11 @@ public class GHRepository {
         return open_issues;
     }
 
+    /**
+     *
+     * @return
+     *      null if the repository was never pushed at.
+     */
     public Date getPushedAt() {
         return GitHub.parseDate(pushed_at);
     }

@@ -320,7 +320,7 @@ public class GitHub {
      */
     private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
         String encoding = uc.getContentEncoding();
-        if (encoding==null) return in;
+        if (encoding==null || in==null) return in;
         if (encoding.equals("gzip"))    return new GZIPInputStream(in);
 
         throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);

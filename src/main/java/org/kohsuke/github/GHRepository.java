@@ -73,6 +73,7 @@ public class GHRepository {
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
     private String master_branch;
+    private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
     public String getDescription() {
         return description;
@@ -358,6 +359,18 @@ public class GHRepository {
 
     public GHHook getHook(int id) throws IOException {
         return root.retrieveWithAuth3(String.format("/repos/%s/%s/hooks/%d",owner.login,name,id),GHHook.class).wrap(this);
+    }
+
+    /**
+     * Gets a commit object in this repository.
+     */
+    public GHCommit getCommit(String sha1) throws IOException {
+        GHCommit c = commits.get(sha1);
+        if (c==null) {
+            c = root.retrieve3(String.format("/repos/%s/%s/commits/%s",owner.login,name,sha1),GHCommit.class).wrapUp(this);
+            commits.put(sha1,c);
+        }
+        return c;
     }
 
     /**

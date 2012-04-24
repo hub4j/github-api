@@ -1,6 +1,8 @@
 package org.kohsuke;
 
 import junit.framework.TestCase;
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
@@ -72,6 +74,19 @@ public class AppTest extends TestCase {
         GitHub gitHub = GitHub.connect();
         Set<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         System.out.println(o);
+    }
+
+    public void testCommit() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
+        System.out.println(commit);
+        assertEquals(1, commit.getParents().size());
+        assertEquals(1,commit.getFiles().size());
+
+        File f = commit.getFiles().get(0);
+        assertEquals(48,f.getLinesChanged());
+        assertEquals("modified",f.getStatus());
+        assertEquals("changelog.html",f.getFileName());
     }
 
     public void testBranches() throws Exception {

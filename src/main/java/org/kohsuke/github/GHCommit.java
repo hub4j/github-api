@@ -23,7 +23,7 @@ public class GHCommit {
     /**
      * A file that was modified.
      */
-    public class File {
+    public static class File {
         String status;
         int changes,additions,deletions;
         String raw_url, blob_url, filename, sha, patch;

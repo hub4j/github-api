@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Kohsuke Kawaguchi
  */
-public class PagedIterator<T> implements Iterator<T> {
+public abstract class PagedIterator<T> implements Iterator<T> {
     private final Iterator<T[]> base;
 
     /**
@@ -21,9 +21,11 @@ public class PagedIterator<T> implements Iterator<T> {
     private T[] current;
     private int pos;
 
-    public PagedIterator(Iterator<T[]> base) {
+    /*package*/ PagedIterator(Iterator<T[]> base) {
         this.base = base;
     }
+
+    protected abstract void wrapUp(T[] page);
 
     public boolean hasNext() {
         return (current!=null && pos<current.length) || base.hasNext();

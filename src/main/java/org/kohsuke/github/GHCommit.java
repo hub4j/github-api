@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.kohsuke.github.ApiVersion.V3;
+
 /**
  * A commit in a repository.
  *
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getCommit(String)
+ * @see GHCommitComment#getCommit()
  */
 public class GHCommit {
     private GHRepository owner;
@@ -194,6 +197,23 @@ public class GHCommit {
     private GHUser resolveUser(User author) throws IOException {
         if (author==null || author.login==null) return null;
         return owner.root.getUser(author.login);
+    }
+
+    /**
+     * Lists up all the commit comments in this repository.
+     */
+    public PagedIterable<GHCommitComment> listComments() {
+        return new PagedIterable<GHCommitComment>() {
+            public PagedIterator<GHCommitComment> iterator() {
+                return new PagedIterator<GHCommitComment>(owner.root.retrievePaged(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment[].class,false,V3)) {
+                    @Override
+                    protected void wrapUp(GHCommitComment[] page) {
+                        for (GHCommitComment c : page)
+                            c.wrap(owner);
+                    }
+                };
+            }
+        };
     }
 
     GHCommit wrapUp(GHRepository owner) {

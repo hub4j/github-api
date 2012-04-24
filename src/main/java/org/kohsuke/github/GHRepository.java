@@ -379,7 +379,29 @@ public class GHRepository {
     public PagedIterable<GHCommit> listCommits() {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrievePaged(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class,false,V3));
+                return new PagedIterator<GHCommit>(root.retrievePaged(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class,false,V3)) {
+                    protected void wrapUp(GHCommit[] page) {
+                        for (GHCommit c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Lists up all the commit comments in this repository.
+     */
+    public PagedIterable<GHCommitComment> listCommitComments() {
+        return new PagedIterable<GHCommitComment>() {
+            public PagedIterator<GHCommitComment> iterator() {
+                return new PagedIterator<GHCommitComment>(root.retrievePaged(String.format("/repos/%s/%s/comments",owner.login,name),GHCommitComment[].class,false,V3)) {
+                    @Override
+                    protected void wrapUp(GHCommitComment[] page) {
+                        for (GHCommitComment c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
             }
         };
     }

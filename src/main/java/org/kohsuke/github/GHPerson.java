@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;

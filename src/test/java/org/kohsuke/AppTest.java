@@ -3,6 +3,7 @@ package org.kohsuke;
 import junit.framework.TestCase;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
+import org.kohsuke.github.GHCommitComment;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
@@ -16,6 +17,7 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.PagedIterable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -94,8 +96,8 @@ public class AppTest extends TestCase {
         GitHub gitHub = GitHub.connect();
         List<String> sha1 = new ArrayList<String>();
         for (GHCommit c : gitHub.getUser("kohsuke").getRepository("empty-commit").listCommits()) {
-            System.out.println(c.getSha());
-            sha1.add(c.getSha());
+            System.out.println(c.getSHA1());
+            sha1.add(c.getSHA1());
         }
         assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7",sha1.get(0));
         assertEquals(1,sha1.size());
@@ -106,6 +108,17 @@ public class AppTest extends TestCase {
         Map<String,GHBranch> b =
                 gitHub.getUser("jenkinsci").getRepository("jenkins").getBranches();
         System.out.println(b);
+    }
+
+    public void testCommitComment() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHRepository r = gitHub.getUser("jenkinsci").getRepository("jenkins");
+        PagedIterable<GHCommitComment> comments = r.listCommitComments();
+        List<GHCommitComment> batch = comments.iterator().nextPage();
+        for (GHCommitComment comment : batch) {
+            System.out.println(comment.getBody());
+            assertSame(comment.getOwner(),r);
+        }
     }
     
     public void tryHook() throws Exception {

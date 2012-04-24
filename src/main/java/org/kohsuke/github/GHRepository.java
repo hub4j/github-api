@@ -272,7 +272,7 @@ public class GHRepository {
         String url = "/repos/delete/" + owner.login +"/"+name;
 
         DeleteToken token = poster.to(url, DeleteToken.class);
-        poster.with("delete_token",token.delete_token).to(url);
+        poster.with("delete_token", token.delete_token).to(url);
     }
 
     /**
@@ -371,6 +371,17 @@ public class GHRepository {
             commits.put(sha1,c);
         }
         return c;
+    }
+
+    /**
+     * Lists all the commits.
+     */
+    public PagedIterable<GHCommit> listCommits() {
+        return new PagedIterable<GHCommit>() {
+            public PagedIterator<GHCommit> iterator() {
+                return new PagedIterator<GHCommit>(root.retrievePaged(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class,false,V3));
+            }
+        };
     }
 
     /**

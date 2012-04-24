@@ -19,6 +19,7 @@ import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -87,6 +88,17 @@ public class AppTest extends TestCase {
         assertEquals(48,f.getLinesChanged());
         assertEquals("modified",f.getStatus());
         assertEquals("changelog.html",f.getFileName());
+    }
+
+    public void testListCommits() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        List<String> sha1 = new ArrayList<String>();
+        for (GHCommit c : gitHub.getUser("kohsuke").getRepository("empty-commit").listCommits()) {
+            System.out.println(c.getSha());
+            sha1.add(c.getSha());
+        }
+        assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7",sha1.get(0));
+        assertEquals(1,sha1.size());
     }
 
     public void testBranches() throws Exception {

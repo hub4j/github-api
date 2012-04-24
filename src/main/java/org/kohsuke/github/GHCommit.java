@@ -141,7 +141,7 @@ public class GHCommit {
     /**
      * [0-9a-f]{40} SHA1 checksum.
      */
-    public String getSha() {
+    public String getSHA1() {
         return sha;
     }
 
@@ -158,7 +158,7 @@ public class GHCommit {
     /**
      * Returns the SHA1 of parent commit objects.
      */
-    public List<String> getParentShas() {
+    public List<String> getParentSHA1s() {
         if (parents==null)  return Collections.emptyList();
         return new AbstractList<String>() {
             @Override
@@ -178,7 +178,7 @@ public class GHCommit {
      */
     public List<GHCommit> getParents() throws IOException {
         List<GHCommit> r = new ArrayList<GHCommit>();
-        for (String sha1 : getParentShas())
+        for (String sha1 : getParentSHA1s())
             r.add(owner.getCommit(sha1));
         return r;
     }

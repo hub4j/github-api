@@ -86,6 +86,12 @@ class Poster {
         return _with(key, value);
     }
 
+    public Poster with(String key, Integer value) {
+        if (value!=null)
+            _with(key, value.intValue());
+        return this;
+    }
+
     public Poster with(String key, boolean value) {
         return _with(key, value);
     }

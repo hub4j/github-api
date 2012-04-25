@@ -10,6 +10,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  * @see GHRepository#listCommitComments()
  * @see GHCommit#listComments()
+ * @see GHCommit#createComment(String, String, Integer, Integer)
  */
 public class GHCommitComment {
     private GHRepository owner;

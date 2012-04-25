@@ -216,6 +216,26 @@ public class GHCommit {
         };
     }
 
+    /**
+     * Creates a commit comment.
+     *
+     * I'm not sure how path/line/position parameters interact with each other.
+     */
+    public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
+        GHCommitComment r = new Poster(owner.root,V3)
+                .with("body",body)
+                .with("path",path)
+                .with("line",line)
+                .with("position",position)
+                .withCredential()
+                .to(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment.class);
+        return r.wrap(owner);
+    }
+
+    public GHCommitComment createComment(String body) throws IOException {
+        return createComment(body,null,null,null);
+    }
+
     GHCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

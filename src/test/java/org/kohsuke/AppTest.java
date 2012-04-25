@@ -117,10 +117,17 @@ public class AppTest extends TestCase {
         List<GHCommitComment> batch = comments.iterator().nextPage();
         for (GHCommitComment comment : batch) {
             System.out.println(comment.getBody());
-            assertSame(comment.getOwner(),r);
+            assertSame(comment.getOwner(), r);
         }
     }
-    
+
+    public void tryCreateCommitComment() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHCommit commit = gitHub.getUser("kohsuke").getRepository("sandbox-ant").getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
+        GHCommitComment c = commit.createComment("[testing](http://kohsuse.org/)");
+        System.out.println(c);
+    }
+
     public void tryHook() throws Exception {
         GitHub gitHub = GitHub.connect();
         GHRepository r = gitHub.getMyself().getRepository("test2");

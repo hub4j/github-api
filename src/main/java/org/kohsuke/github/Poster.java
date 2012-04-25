@@ -33,7 +33,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,7 +144,18 @@ class Poster {
                     uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
                 }
             }
-            uc.setRequestMethod(method);
+            try {
+                uc.setRequestMethod(method);
+            } catch (ProtocolException e) {
+                // JDK only allows one of the fixed set of verbs. Try to override that
+                try {
+                    Field $method = HttpURLConnection.class.getDeclaredField("method");
+                    $method.setAccessible(true);
+                    $method.set(uc,method);
+                } catch (Exception x) {
+                    throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+                }
+            }
 
 
             if (v==ApiVersion.V2) {

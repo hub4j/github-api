@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+import static org.kohsuke.github.ApiVersion.V3;
+
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
  *
@@ -91,6 +93,17 @@ public class GHCommitComment {
      */
     public GHCommit getCommit() throws IOException {
         return getOwner().getCommit(getSHA1());
+    }
+
+    /**
+     * Updates the body of the commit message.
+     */
+    public void update(String body) throws IOException {
+        GHCommitComment r = new Poster(owner.root,V3)
+                .with("body",body)
+                .withCredential()
+                .to(String.format("/repos/%s/%s/comments/%s",owner.getOwnerName(),owner.getName(),id),GHCommitComment.class,"PATCH");
+        this.body = body;
     }
 
 

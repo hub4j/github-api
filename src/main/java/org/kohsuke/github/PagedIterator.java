@@ -40,6 +40,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     private void fetch() {
         while (current==null || current.length<=pos) {
             current = base.next();
+            wrapUp(current);
             pos = 0;
         }
         // invariant at the end: there's some data to retrieve

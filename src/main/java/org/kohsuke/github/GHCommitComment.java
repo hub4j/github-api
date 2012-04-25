@@ -102,8 +102,19 @@ public class GHCommitComment {
         GHCommitComment r = new Poster(owner.root,V3)
                 .with("body",body)
                 .withCredential()
-                .to(String.format("/repos/%s/%s/comments/%s",owner.getOwnerName(),owner.getName(),id),GHCommitComment.class,"PATCH");
+                .to(getApiTail(),GHCommitComment.class,"PATCH");
         this.body = body;
+    }
+
+    /**
+     * Deletes this comment.
+     */
+    public void delete() throws IOException {
+        new Poster(owner.root,V3).withCredential().to(getApiTail(),null,"DELETE");
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/comments/%s",owner.getOwnerName(),owner.getName(),id);
     }
 
 

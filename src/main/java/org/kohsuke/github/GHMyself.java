@@ -26,6 +26,16 @@ public class GHMyself extends GHUser {
         String[] addresses = root.retrieveWithAuth3("/user/emails",String[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
+
+    /**
+     * Returns the read-only list of all the pulic keys of the current user.
+     *
+     * @return
+     *      Always non-null.
+     */
+    public List<GHKey> getPublicKeys() throws IOException {
+        return Collections.unmodifiableList(Arrays.asList(root.retrieveWithAuth3("/user/keys",GHKey[].class)));
+    }
     
 //    public void addEmails(Collection<String> emails) throws IOException {
 ////        new Poster(root,ApiVersion.V3).withCredential().to("/user/emails");

@@ -10,6 +10,7 @@ import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHKey;
 import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -54,6 +55,12 @@ public class AppTest extends TestCase {
                 System.out.println(r.getPushedAt());
             }
         }
+    }
+
+    public void testPublicKeys() throws Exception {
+        GitHub gh = GitHub.connect();
+        List<GHKey> keys = gh.getMyself().getPublicKeys();
+        System.out.println(keys);
     }
 
     public void tryOrgFork() throws Exception {

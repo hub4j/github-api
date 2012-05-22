@@ -87,7 +87,7 @@ public abstract class GHPerson {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.retrieve3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+            return root.retrieveWithAuth3("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
         } catch (FileNotFoundException e) {
             return null;
         }

@@ -43,6 +43,15 @@ public class AppTest extends TestCase {
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
     }
+
+    public void testRepoPermissions() throws Exception {
+        GitHub gh = GitHub.connect();
+        GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");
+        assertTrue(r.hasPullAccess());
+
+        r = gh.getOrganization("github").getRepository("tire");
+        assertFalse(r.hasAdminAccess());
+    }
     
     public void tryGetMyself() throws Exception {
         GitHub hub = GitHub.connect();

@@ -72,8 +72,15 @@ public class GHRepository {
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
-    private String master_branch;
+    private String master_branch,language;
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
+
+    private GHRepoPermission permissions;
+
+    private static class GHRepoPermission {
+        boolean pull,push,admin;
+    }
+
 
     public String getDescription() {
         return description;
@@ -111,6 +118,25 @@ public class GHRepository {
      */
     public String getName() {
         return name;
+    }
+
+    public boolean hasPullAccess() {
+        return permissions!=null && permissions.pull;
+    }
+
+    public boolean hasPushAccess() {
+        return permissions!=null && permissions.push;
+    }
+
+    public boolean hasAdminAccess() {
+        return permissions!=null && permissions.admin;
+    }
+
+    /**
+     * Gets the primary programming language.
+     */
+    public String getLanguage() {
+        return language;
     }
 
     public GHUser getOwner() throws IOException {

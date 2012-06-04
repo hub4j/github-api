@@ -36,6 +36,10 @@ public class AppTest extends TestCase {
         assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
     }
 
+    public void testRateLimit() throws IOException {
+        System.out.println(GitHub.connect().getRateLimit());
+    }
+
     public void testFetchPullRequest() throws Exception {
         GitHub gh = GitHub.connect();
         GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");

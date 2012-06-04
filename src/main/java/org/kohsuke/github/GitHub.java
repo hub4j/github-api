@@ -359,6 +359,13 @@ public class GitHub {
     }
 
     /**
+     * Gets the current rate limit.
+     */
+    public GHRateLimit getRateLimit() throws IOException {
+        return retrieveWithAuth3("/rate_limit",JsonRateLimit.class).rate;
+    }
+
+    /**
 	 * Gets the {@link GHUser} that represents yourself.
 	 */
     @WithBridgeMethods(GHUser.class)

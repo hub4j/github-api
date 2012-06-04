@@ -288,7 +288,10 @@ public class GitHub {
     private HttpURLConnection setupConnection(String method, boolean withAuth, URL url) throws IOException {
         HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
-        if (withAuth && this.oauthAccessToken == null)
+        // if the authentication is needed but no credential is given, try it anyway (so that some calls
+        // that do work with anonymous access in the reduced form should still work.)
+        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
+        if (withAuth && encodedAuthorization!=null && this.oauthAccessToken == null)
             uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
 
         uc.setRequestMethod(method);

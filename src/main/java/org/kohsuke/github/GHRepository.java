@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
@@ -33,8 +32,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -144,7 +141,7 @@ public class GHRepository {
     }
 
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-       return root.retrieve("/issues/list/" + owner.login + "/" + name + "/" + state.toString().toLowerCase(), JsonIssues.class).wrap(this);
+       return Arrays.asList(GHIssue.wrap(root.retrieve3("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
     }
 
     protected String getOwnerName() {
@@ -216,10 +213,7 @@ public class GHRepository {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        GHPersonSet<GHUser> r = new GHPersonSet<GHUser>();
-        for (String u : root.retrieve("/repos/show/"+owner.login+"/"+name+"/collaborators",JsonCollaborators.class).collaborators)
-            r.add(root.getUser(u));
-        return r;
+        return new GHPersonSet<GHUser>(GHUser.wrap(root.retrieve3("/repos/"+owner.login+"/"+name+"/collaborators",GHUser[].class),root));
     }
 
     /**
@@ -227,16 +221,17 @@ public class GHRepository {
      * This method deviates from the principle of this library but it works a lot faster than {@link #getCollaborators()}.
      */
     public Set<String> getCollaboratorNames() throws IOException {
-        Set<String> r = new HashSet<String>(root.retrieve("/repos/show/"+owner.login+"/"+name+"/collaborators",JsonCollaborators.class).collaborators);
-        return Collections.unmodifiableSet(r);
+        Set<String> r = new HashSet<String>();
+        for (GHUser u : GHUser.wrap(root.retrieve3("/repos/"+owner.login+"/"+name+"/collaborators",GHUser[].class),root))
+            r.add(u.login);
+        return r;
     }
 
     /**
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(root.retrieveWithAuth("/repos/show/"+owner.login+"/"+name+"/teams",JsonTeams.class).toSet(
-                root.getOrganization(owner.login)));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieveWithAuth3("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
     }
 
     public void addCollaborators(GHUser... users) throws IOException {
@@ -244,7 +239,7 @@ public class GHRepository {
     }
 
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "/add/");
+        modifyCollaborators(users, "PUT");
     }
 
     public void removeCollaborators(GHUser... users) throws IOException {
@@ -252,13 +247,13 @@ public class GHRepository {
     }
 
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "/remove/");
+        modifyCollaborators(users, "DELETE");
     }
 
-    private void modifyCollaborators(Collection<GHUser> users, String op) throws IOException {
+    private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Poster(root).withCredential().to("/repos/collaborators/"+name+ op +user.getLogin());
+            new Poster(root,V3).withCredential().to("/repos/"+owner.login+"/"+name+"/collaborators/"+user.getLogin(),null,method);
         }
     }
 
@@ -274,31 +269,54 @@ public class GHRepository {
         f.submit((HtmlButton) f.getElementsByTagName("button").get(0));
     }
 
+    private void edit(String key, String value) throws IOException {
+        new Poster(root,V3).withCredential().with(key,value)
+                .to("/repos/" + owner.login + "/" + name,null,"PATCH");
+    }
+
     /**
      * Enables or disables the issue tracker for this repository.
      */
     public void enableIssueTracker(boolean v) throws IOException {
-        new Poster(root).withCredential().with("values[has_issues]",String.valueOf(v))
-                .to("/repos/show/" + owner.login + "/" + name);
+        edit("has_issues", String.valueOf(v));
     }
 
     /**
      * Enables or disables Wiki for this repository.
      */
     public void enableWiki(boolean v) throws IOException {
-        new Poster(root).withCredential().with("values[has_wiki]",String.valueOf(v))
-                .to("/repos/show/" + owner.login + "/" + name);
+        edit("has_wiki", String.valueOf(v));
+    }
+
+    public void enableDownloads(boolean v) throws IOException {
+        edit("has_downloads",String.valueOf(v));
+    }
+
+    /**
+     * Rename this repository.
+     */
+    public void renameTo(String name) throws IOException {
+        edit("name",name);
+    }
+
+    public void setDescription(String value) throws IOException {
+        edit("description",value);
+    }
+
+    public void setHomepage(String value) throws IOException {
+        edit("homepage",value);
     }
 
     /**
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        Poster poster = new Poster(root).withCredential();
-        String url = "/repos/delete/" + owner.login +"/"+name;
-
-        DeleteToken token = poster.to(url, DeleteToken.class);
-        poster.with("delete_token", token.delete_token).to(url);
+        throw new UnsupportedOperationException(); // doesn't appear to be available in V3
+//        Poster poster = new Poster(root).withCredential();
+//        String url = "/repos/delete/" + owner.login +"/"+name;
+//
+//        DeleteToken token = poster.to(url, DeleteToken.class);
+//        poster.with("delete_token", token.delete_token).to(url);
     }
 
     /**
@@ -320,39 +338,6 @@ public class GHRepository {
     public GHRepository forkTo(GHOrganization org) throws IOException {
         new Poster(root, V3).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
         return org.getRepository(name);
-    }
-
-    /**
-     * Rename this repository.
-     */
-    public void renameTo(String newName) throws IOException {
-        WebClient wc = root.createWebClient();
-        HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
-        for (HtmlForm f : pg.getForms()) {
-            if (!f.getActionAttribute().endsWith("/rename"))  continue;
-            try {
-                f.getInputByName("name").setValueAttribute(newName);
-                f.submit((HtmlButton)f.getElementsByTagName("button").get(0));
-
-                // overwrite fields
-                final GHRepository r = getOwner().getRepository(newName);
-                for (Field fi : getClass().getDeclaredFields()) {
-                    if (Modifier.isStatic(fi.getModifiers()))   continue;
-                    fi.setAccessible(true);
-                    try {
-                        fi.set(this,fi.get(r));
-                    } catch (IllegalAccessException e) {
-                        throw (IllegalAccessError)new IllegalAccessError().initCause(e);
-                    }
-                }
-
-                return;
-            } catch (ElementNotFoundException e) {
-                // continue
-            }
-        }
-
-        throw new IllegalArgumentException("Either you don't have the privilege to rename "+owner.login+'/'+name+" or there's a bug in HTML scraping");
     }
 
     /**

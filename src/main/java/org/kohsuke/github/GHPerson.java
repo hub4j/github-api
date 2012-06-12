@@ -33,6 +33,11 @@ public abstract class GHPerson {
     protected String avatar_url,html_url;
     protected int followers,following,public_repos,public_gists;
 
+    /*package*/ GHPerson wrapUp(GitHub root) {
+        this.root = root;
+        return this;
+    }
+
     /**
      * Gets the repositories this user owns.
      */

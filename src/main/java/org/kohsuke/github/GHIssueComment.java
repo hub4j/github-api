@@ -37,6 +37,11 @@ public class GHIssueComment {
     private String body, gravatar_id, user, created_at, updated_at;
     private int id;
 
+    /*package*/ GHIssueComment wrapUp(GHIssue owner) {
+        this.owner = owner;
+        return this;
+    }
+
     /**
      * Gets the issue to which this comment is associated.
      */

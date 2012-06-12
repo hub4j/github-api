@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
-import static org.kohsuke.github.ApiVersion.V2;
 import static org.kohsuke.github.ApiVersion.V3;
 
 import java.io.File;
@@ -165,24 +164,12 @@ public class GitHub {
         return new URL(v.getApiVersionBaseUrl(githubServer)+tailApiUrl);
     }
 
-    /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", false, V2);
-    }
-
     /*package*/ <T> T retrieve3(String tailApiUrl, Class<T> type) throws IOException {
         return _retrieve(tailApiUrl, type, "GET", false, V3);
     }
 
-    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
-        return retrieveWithAuth(tailApiUrl, type, "GET");
-    }
-
     /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type) throws IOException {
         return _retrieve(tailApiUrl, type, "GET", true, V3);
-    }
-
-    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return _retrieve(tailApiUrl, type, method, true, V2);
     }
 
     /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type, String method) throws IOException {
@@ -409,8 +396,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve("/organizations/"+name,JsonOrganization.class).organization;
-            o.root = this;
+            o = retrieve3("/orgs/"+name,GHOrganization.class).wrapUp(this);
             orgs.put(name,o);
         }
         return o;
@@ -427,7 +413,12 @@ public class GitHub {
     }
 
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-    	 return retrieveWithAuth("/organizations",JsonOrganizations.class).wrap(this);
+        GHOrganization[] orgs = retrieveWithAuth3("/user/orgs", GHOrganization[].class);
+        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        for (GHOrganization o : orgs) {
+            r.put(o.name,o.wrapUp(this));
+        }
+        return r;
     }
 
     /**

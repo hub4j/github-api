@@ -38,6 +38,7 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,19 +64,11 @@ class Poster {
             this.key = key;
             this.value = value;
         }
-
-        public String toFormArg() throws UnsupportedEncodingException {
-            return URLEncoder.encode(key,"UTF-8")+'='+URLEncoder.encode(value.toString(),"UTF-8");
-        }
     }
 
     Poster(GitHub root, ApiVersion v) {
         this.root = root;
         this.v = v;
-    }
-
-    Poster(GitHub root) {
-        this(root,ApiVersion.V2);
     }
 
     public Poster withCredential() {
@@ -99,6 +92,10 @@ class Poster {
     }
 
     public Poster with(String key, String value) {
+        return _with(key, value);
+    }
+
+    public Poster with(String key, Collection<String> value) {
         return _with(key, value);
     }
 
@@ -158,23 +155,11 @@ class Poster {
             }
 
 
-            if (v==ApiVersion.V2) {
-                StringBuilder body = new StringBuilder();
-                for (Entry e : args) {
-                    if (body.length()>0)    body.append('&');
-                    body.append(e.toFormArg());
-                }
-
-                OutputStreamWriter o = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
-                o.write(body.toString());
-                o.close();
-            } else {
-                Map json = new HashMap();
-                for (Entry e : args) {
-                    json.put(e.key, e.value);
-                }
-                MAPPER.writeValue(uc.getOutputStream(),json);
+            Map json = new HashMap();
+            for (Entry e : args) {
+                json.put(e.key, e.value);
             }
+            MAPPER.writeValue(uc.getOutputStream(),json);
 
             try {
                 InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");

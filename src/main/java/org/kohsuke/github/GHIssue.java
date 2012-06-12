@@ -26,10 +26,13 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static org.kohsuke.github.ApiVersion.V3;
 
 /**
  * Represents an issue on GitHub.
@@ -45,6 +48,18 @@ public class GHIssue {
     private List<String> labels;
     private int number,votes,comments;
     private int position;
+
+    /*package*/ GHIssue wrap(GHRepository owner) {
+        this.owner = owner;
+        this.root = owner.root;
+        return this;
+    }
+
+    /*package*/ static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
+        for (GHIssue i : issues)
+            i.wrap(owner);
+        return issues;
+    }
 
     /**
      * Repository to which the issue belongs.
@@ -99,31 +114,55 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Poster(root).withCredential().with("comment",message).to(getApiRoute("comment"));
+        new Poster(root, V3).withCredential().with("body",message).to(getApiRoute()+"/comments",null,"POST");
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        new Poster(root,V3).withCredential()._with(key, value)
+                .to(getApiRoute(),null,"PATCH");
     }
 
     /**
      * Closes this issue.
      */
     public void close() throws IOException {
-        new Poster(root).withCredential().to(getApiRoute("close"));
+        edit("state", "closed");
     }
 
     /**
      * Reopens this issue.
      */
     public void reopen() throws IOException {
-        new Poster(root).withCredential().to(getApiRoute("reopen"));
+        edit("state", "open");
+    }
+
+    public void setTitle(String title) throws IOException {
+        edit("title",title);
+    }
+
+    public void setBody(String body) throws IOException {
+        edit("body",body);
+    }
+
+    public void assignTo(GHUser user) throws IOException {
+        edit("assignee",user.getLogin());
+    }
+
+    public void setLabels(String... labels) throws IOException {
+        edit("assignee",labels);
     }
 
     /**
      * Obtains all the comments associated with this issue.
      */
     public List<GHIssueComment> getComments() throws IOException {
-        return root.retrieve(getApiRoute("comments"), JsonIssueComments.class).wrap(this);
+        GHIssueComment[] r = root.retrieve3(getApiRoute()+"/comments", GHIssueComment[].class);
+        for (GHIssueComment c : r)
+            c.wrapUp(this);
+        return Arrays.asList(r);
     }
 
-    private String getApiRoute(String verb) {
-        return "/issues/"+verb+"/"+owner.getOwnerName()+"/"+owner.getName()+"/"+number;
+    private String getApiRoute() {
+        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 }

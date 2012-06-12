@@ -4,7 +4,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.kohsuke.github.ApiVersion.*;
 
@@ -19,6 +19,10 @@ import static org.kohsuke.github.ApiVersion.*;
  * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
+    /*package*/ GHOrganization wrapUp(GitHub root) {
+        return (GHOrganization)super.wrapUp(root);
+    }
+
     /**
      * Creates a new repository.
      *
@@ -40,7 +44,12 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      */
     public Map<String,GHTeam> getTeams() throws IOException {
-        return root.retrieveWithAuth("/organizations/"+login+"/teams",JsonTeams.class).toMap(this);
+        GHTeam[] teams = root.retrieveWithAuth3("/orgs/" + login + "/teams", GHTeam[].class);
+        Map<String,GHTeam> r = new TreeMap<String, GHTeam>();
+        for (GHTeam t : teams) {
+            r.put(t.getName(),t);
+        }
+        return r;
     }
 
     /**
@@ -88,11 +97,13 @@ public class GHOrganization extends GHPerson {
      * Creates a new team and assigns the repositories.
      */
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Poster post = new Poster(root).withCredential().with("team[name]", name).with("team[permission]", p.name().toLowerCase());
+        Poster post = new Poster(root,V3).withCredential().with("name", name).with("permission", p.name().toLowerCase());
+        List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
-            post.with("team[repo_names][]",r.getOwnerName()+'/'+r.getName());
+            repo_names.add(r.getName());
         }
-        return post.to("/organizations/"+login+"/teams",JsonTeam.class).wrap(this);
+        post.with("repo_names",repo_names);
+        return post.to("/orgs/"+login+"/teams",GHTeam.class,"POST").wrapUp(this);
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {

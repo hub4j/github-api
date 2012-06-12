@@ -7,7 +7,6 @@ package org.kohsuke.github;
  */
 enum ApiVersion {
 	
-    V2("https://?/api/v2/json"),
     V3("https://api.?");
 
     final String templateUrl;

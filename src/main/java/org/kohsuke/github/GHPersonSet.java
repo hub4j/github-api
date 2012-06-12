@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -14,6 +15,10 @@ public final class GHPersonSet<T extends GHPerson> extends HashSet<T> {
 
     public GHPersonSet(Collection<? extends T> c) {
         super(c);
+    }
+
+    public GHPersonSet(T... c) {
+        super(Arrays.asList(c));
     }
 
     public GHPersonSet(int initialCapacity, float loadFactor) {

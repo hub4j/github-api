@@ -27,9 +27,12 @@ import com.infradna.tool.bridge_method_injector.BridgeMethodsAdded;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static org.kohsuke.github.ApiVersion.V3;
 
 /**
  * Represents an user of GitHub.
@@ -42,14 +45,14 @@ public class GHUser extends GHPerson {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Poster(root).withCredential().to("/user/follow/"+login);
+        new Poster(root, V3).withCredential().to("/user/following/"+login,null,"PUT");
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Poster(root).withCredential().to("/user/unfollow/"+login);
+        new Poster(root,V3).withCredential().to("/user/following/"+login,null,"DELETE");
     }
 
     /**
@@ -57,7 +60,8 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
-        return root.retrieve("/user/show/"+login+"/following",JsonUsers.class).toSet(root);
+        GHUser[] followers = root.retrieve3("/users/" + login + "/following", GHUser[].class);
+        return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
     }
 
     /**
@@ -65,7 +69,14 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollowers() throws IOException {
-        return root.retrieve("/user/show/"+login+"/followers",JsonUsers.class).toSet(root);
+        GHUser[] followers = root.retrieve3("/users/" + login + "/followers", GHUser[].class);
+        return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
+    }
+
+    /*package*/ static GHUser[] wrap(GHUser[] users, GitHub root) {
+        for (GHUser f : users)
+            f.root = root;
+        return users;
     }
 
     /**

@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
-import static org.kohsuke.github.ApiVersion.V3;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +52,6 @@ import java.util.zip.GZIPInputStream;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
@@ -155,30 +153,30 @@ public class GitHub {
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    /*package*/ URL getApiURL(ApiVersion v, String tailApiUrl) throws IOException {
+    /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
     	if (oauthAccessToken != null) {
     		// append the access token
     		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
     	
-        return new URL(v.getApiVersionBaseUrl(githubServer)+tailApiUrl);
+        return new URL("https://api."+githubServer+tailApiUrl);
     }
 
     /*package*/ <T> T retrieve3(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", false, V3);
+        return _retrieve(tailApiUrl, type, "GET", false);
     }
 
     /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", true, V3);
+        return _retrieve(tailApiUrl, type, "GET", true);
     }
 
     /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return _retrieve(tailApiUrl, type, method, true, V3);
+        return _retrieve(tailApiUrl, type, method, true);
     }
 
-    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth, ApiVersion v) throws IOException {
+    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = setupConnection(method, withAuth, getApiURL(v, tailApiUrl));
+            HttpURLConnection uc = setupConnection(method, withAuth, getApiURL(tailApiUrl));
             try {
                 return parse(uc,type);
             } catch (IOException e) {
@@ -192,7 +190,7 @@ public class GitHub {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth, final ApiVersion v) {
+    /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth) {
         return new Iterator<T>() {
             /**
              * The next batch to be returned from {@link #next()}.
@@ -205,7 +203,7 @@ public class GitHub {
 
             {
                 try {
-                    url = getApiURL(v, tailApiUrl);
+                    url = getApiURL(tailApiUrl);
                 } catch (IOException e) {
                     throw new Error(e);
                 }
@@ -452,7 +450,7 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        return new Poster(this,V3).withCredential()
+        return new Poster(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
                 .with("public", isPublic ? 1 : 0).to("/user/repos", GHRepository.class,"POST").wrap(this);
     }

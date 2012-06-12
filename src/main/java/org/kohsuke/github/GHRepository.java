@@ -49,7 +49,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import static java.util.Arrays.*;
-import static org.kohsuke.github.ApiVersion.V3;
 
 /**
  * A repository on GitHub.
@@ -253,7 +252,7 @@ public class GHRepository {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Poster(root,V3).withCredential().to("/repos/"+owner.login+"/"+name+"/collaborators/"+user.getLogin(),null,method);
+            new Poster(root).withCredential().to("/repos/"+owner.login+"/"+name+"/collaborators/"+user.getLogin(),null,method);
         }
     }
 
@@ -270,7 +269,7 @@ public class GHRepository {
     }
 
     private void edit(String key, String value) throws IOException {
-        new Poster(root,V3).withCredential().with(key,value)
+        new Poster(root).withCredential().with(key,value)
                 .to("/repos/" + owner.login + "/" + name,null,"PATCH");
     }
 
@@ -326,7 +325,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Poster(root,V3).withCredential().to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class, "POST").wrap(root);
+        return new Poster(root).withCredential().to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class, "POST").wrap(root);
     }
 
     /**
@@ -336,7 +335,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Poster(root, V3).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
+        new Poster(root).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
         return org.getRepository(name);
     }
 
@@ -390,7 +389,7 @@ public class GHRepository {
     public PagedIterable<GHCommit> listCommits() {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrievePaged(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class,false,V3)) {
+                return new PagedIterator<GHCommit>(root.retrievePaged(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class,false)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(GHRepository.this);
@@ -406,7 +405,7 @@ public class GHRepository {
     public PagedIterable<GHCommitComment> listCommitComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(root.retrievePaged(String.format("/repos/%s/%s/comments",owner.login,name),GHCommitComment[].class,false,V3)) {
+                return new PagedIterator<GHCommitComment>(root.retrievePaged(String.format("/repos/%s/%s/comments",owner.login,name),GHCommitComment[].class,false)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -437,7 +436,7 @@ public class GHRepository {
                 ea.add(e.name().toLowerCase(Locale.ENGLISH));
         }
 
-        return new Poster(root,ApiVersion.V3)
+        return new Poster(root)
                 .withCredential()
                 .with("name",name)
                 .with("active", active)
@@ -573,7 +572,7 @@ public class GHRepository {
 	}
 	
 	public GHMilestone createMilestone(String title, String description) throws IOException {
-        return new Poster(root,V3).withCredential()
+        return new Poster(root).withCredential()
                 .with("title", title).with("description", description)
                 .to("/repos/"+owner.login+"/"+name+"/milestones", GHMilestone.class,"POST").wrap(this);
 	}

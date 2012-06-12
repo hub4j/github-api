@@ -24,19 +24,13 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.impl.WriterBasedGenerator;
-import org.codehaus.jackson.node.ObjectNode;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,8 +48,6 @@ class Poster {
     private final List<Entry> args = new ArrayList<Entry>();
     private boolean authenticate;
 
-    private final ApiVersion v;
-
     private static class Entry {
         String key;
         Object value;
@@ -66,9 +58,8 @@ class Poster {
         }
     }
 
-    Poster(GitHub root, ApiVersion v) {
+    Poster(GitHub root) {
         this.root = root;
-        this.v = v;
     }
 
     public Poster withCredential() {
@@ -124,20 +115,16 @@ class Poster {
 
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(v,tailApiUrl).openConnection();
+            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
 
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
             if (authenticate) {
-                if (v==ApiVersion.V3) {
-                    if (root.oauthAccessToken!=null) {
-                        uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
-                    } else {
-                        if (root.password==null)
-                            throw new IllegalArgumentException("V3 API doesn't support API token");
-                        uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
-                    }
+                if (root.oauthAccessToken!=null) {
+                    uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
                 } else {
+                    if (root.password==null)
+                        throw new IllegalArgumentException("V3 API doesn't support API token");
                     uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
                 }
             }

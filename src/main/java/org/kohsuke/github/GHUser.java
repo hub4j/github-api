@@ -23,16 +23,12 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.BridgeMethodsAdded;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import static org.kohsuke.github.ApiVersion.V3;
 
 /**
  * Represents an user of GitHub.
@@ -45,14 +41,14 @@ public class GHUser extends GHPerson {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Poster(root, V3).withCredential().to("/user/following/"+login,null,"PUT");
+        new Poster(root).withCredential().to("/user/following/"+login,null,"PUT");
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Poster(root,V3).withCredential().to("/user/following/"+login,null,"DELETE");
+        new Poster(root).withCredential().to("/user/following/"+login,null,"DELETE");
     }
 
     /**

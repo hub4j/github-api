@@ -32,8 +32,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.kohsuke.github.ApiVersion.V3;
-
 /**
  * Represents an issue on GitHub.
  *
@@ -114,11 +112,11 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Poster(root, V3).withCredential().with("body",message).to(getApiRoute()+"/comments",null,"POST");
+        new Poster(root).withCredential().with("body",message).to(getApiRoute()+"/comments",null,"POST");
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Poster(root,V3).withCredential()._with(key, value)
+        new Poster(root).withCredential()._with(key, value)
                 .to(getApiRoute(),null,"PATCH");
     }
 

@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import static org.kohsuke.github.ApiVersion.*;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
@@ -63,7 +59,7 @@ public abstract class GHPerson {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrievePaged("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class,false, V3);
+                final Iterator<GHRepository[]> pager = root.retrievePaged("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class,false);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {

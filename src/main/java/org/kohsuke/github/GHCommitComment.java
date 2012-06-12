@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
-import static org.kohsuke.github.ApiVersion.V3;
-
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
  *
@@ -99,7 +97,7 @@ public class GHCommitComment {
      * Updates the body of the commit message.
      */
     public void update(String body) throws IOException {
-        GHCommitComment r = new Poster(owner.root,V3)
+        GHCommitComment r = new Poster(owner.root)
                 .with("body",body)
                 .withCredential()
                 .to(getApiTail(),GHCommitComment.class,"PATCH");
@@ -110,7 +108,7 @@ public class GHCommitComment {
      * Deletes this comment.
      */
     public void delete() throws IOException {
-        new Poster(owner.root,V3).withCredential().to(getApiTail(),null,"DELETE");
+        new Poster(owner.root).withCredential().to(getApiTail(),null,"DELETE");
     }
 
     private String getApiTail() {

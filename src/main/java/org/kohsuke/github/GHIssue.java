@@ -154,7 +154,7 @@ public class GHIssue {
      * Obtains all the comments associated with this issue.
      */
     public List<GHIssueComment> getComments() throws IOException {
-        GHIssueComment[] r = root.retrieve3(getApiRoute()+"/comments", GHIssueComment[].class);
+        GHIssueComment[] r = root.retrieve(getApiRoute() + "/comments", GHIssueComment[].class);
         for (GHIssueComment c : r)
             c.wrapUp(this);
         return Arrays.asList(r);

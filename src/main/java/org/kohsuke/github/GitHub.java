@@ -162,15 +162,15 @@ public class GitHub {
         return new URL("https://api."+githubServer+tailApiUrl);
     }
 
-    /*package*/ <T> T retrieve3(String tailApiUrl, Class<T> type) throws IOException {
+    /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
         return _retrieve(tailApiUrl, type, "GET", false);
     }
 
-    /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type) throws IOException {
+    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
         return _retrieve(tailApiUrl, type, "GET", true);
     }
 
-    /*package*/ <T> T retrieveWithAuth3(String tailApiUrl, Class<T> type, String method) throws IOException {
+    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
         return _retrieve(tailApiUrl, type, method, true);
     }
 
@@ -347,7 +347,7 @@ public class GitHub {
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
-        return retrieveWithAuth3("/rate_limit",JsonRateLimit.class).rate;
+        return retrieveWithAuth("/rate_limit", JsonRateLimit.class).rate;
     }
 
     /**
@@ -357,7 +357,7 @@ public class GitHub {
 	public GHMyself getMyself() throws IOException {
 		requireCredential();
 
-        GHMyself u = retrieveWithAuth3("/user", GHMyself.class);
+        GHMyself u = retrieveWithAuth("/user", GHMyself.class);
 
         u.root = this;
         users.put(u.getLogin(), u);
@@ -371,7 +371,7 @@ public class GitHub {
 	public GHUser getUser(String login) throws IOException {
 		GHUser u = users.get(login);
 		if (u == null) {
-            u = retrieve3("/users/" + login, GHUser.class);
+            u = retrieve("/users/" + login, GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
 		}
@@ -394,7 +394,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve3("/orgs/"+name,GHOrganization.class).wrapUp(this);
+            o = retrieve("/orgs/" + name, GHOrganization.class).wrapUp(this);
             orgs.put(name,o);
         }
         return o;
@@ -411,7 +411,7 @@ public class GitHub {
     }
 
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieveWithAuth3("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = retrieveWithAuth("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             r.put(o.name,o.wrapUp(this));
@@ -424,7 +424,7 @@ public class GitHub {
      */
     public List<GHEventInfo> getEvents() throws IOException {
         // TODO: pagenation
-        GHEventInfo[] events = retrieve3("/events", GHEventInfo[].class);
+        GHEventInfo[] events = retrieve("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
@@ -460,7 +460,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() throws IOException {
         try {
-            retrieveWithAuth3("/user",GHUser.class);
+            retrieveWithAuth("/user", GHUser.class);
             return true;
         } catch (IOException e) {
             return false;

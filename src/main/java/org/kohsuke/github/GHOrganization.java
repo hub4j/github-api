@@ -42,7 +42,7 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      */
     public Map<String,GHTeam> getTeams() throws IOException {
-        GHTeam[] teams = root.retrieveWithAuth3("/orgs/" + login + "/teams", GHTeam[].class);
+        GHTeam[] teams = root.retrieveWithAuth("/orgs/" + login + "/teams", GHTeam[].class);
         Map<String,GHTeam> r = new TreeMap<String, GHTeam>();
         for (GHTeam t : teams) {
             r.put(t.getName(),t);
@@ -54,7 +54,7 @@ public class GHOrganization extends GHPerson {
      * Publicizes the membership.
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieveWithAuth3("/orgs/" + login + "/public_members/" + u.getLogin(), null, "PUT");
+        root.retrieveWithAuth("/orgs/" + login + "/public_members/" + u.getLogin(), null, "PUT");
     }
 
     /**
@@ -64,7 +64,7 @@ public class GHOrganization extends GHPerson {
         return new AbstractList<GHUser>() {
             // these are shallow objects with only some limited values filled out
             // TODO: it's better to allow objects to fill themselves in later when missing values are requested
-            final GHUser[] shallow = root.retrieveWithAuth3("/orgs/" + login + "/members", GHUser[].class);
+            final GHUser[] shallow = root.retrieveWithAuth("/orgs/" + login + "/members", GHUser[].class);
 
             @Override
             public GHUser get(int index) {
@@ -86,7 +86,7 @@ public class GHOrganization extends GHPerson {
      * Conceals the membership.
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieveWithAuth3("/orgs/" + login + "/public_members/" + u.getLogin(), null, "DELETE");
+        root.retrieveWithAuth("/orgs/" + login + "/public_members/" + u.getLogin(), null, "DELETE");
     }
 
     public enum Permission { ADMIN, PUSH, PULL }

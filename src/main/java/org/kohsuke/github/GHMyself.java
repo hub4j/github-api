@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class GHMyself extends GHUser {
      *      Always non-null.
      */
     public List<String> getEmails() throws IOException {
-        String[] addresses = root.retrieveWithAuth3("/user/emails",String[].class);
+        String[] addresses = root.retrieveWithAuth("/user/emails", String[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 
@@ -34,7 +33,7 @@ public class GHMyself extends GHUser {
      *      Always non-null.
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieveWithAuth3("/user/keys",GHKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(root.retrieveWithAuth("/user/keys", GHKey[].class)));
     }
     
 //    public void addEmails(Collection<String> emails) throws IOException {

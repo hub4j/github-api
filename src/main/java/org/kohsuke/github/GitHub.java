@@ -409,7 +409,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve("/organizations/"+name,JsonOrganization.class).organization;
+            o = retrieve3("/orgs/" + name,JsonOrganization.class).organization;
             o.root = this;
             orgs.put(name,o);
         }
@@ -427,7 +427,7 @@ public class GitHub {
     }
 
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-    	 return retrieveWithAuth("/organizations",JsonOrganizations.class).wrap(this);
+    	 return retrieveWithAuth3("/user/orgs", JsonOrganizations.class).wrap(this);
     }
 
     /**

@@ -419,7 +419,7 @@ public class GitHub {
         GHOrganization[] orgs = retrieveWithAuth("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
-            r.put(o.name,o.wrapUp(this));
+            r.put(o.getLogin(),o.wrapUp(this));
         }
         return r;
     }

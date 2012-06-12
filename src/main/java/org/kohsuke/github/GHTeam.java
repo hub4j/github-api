@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * A team in GitHub organization.
@@ -45,33 +46,38 @@ public class GHTeam {
      * Retrieves the current members.
      */
     public Set<GHUser> getMembers() throws IOException {
-        return new HashSet<GHUser>(Arrays.asList(GHUser.wrap(org.root.retrieveWithAuth3(api("/members"),GHUser[].class),org.root)));
+        return new HashSet<GHUser>(Arrays.asList(GHUser.wrap(org.root.retrieveWithAuth3(api("/members"), GHUser[].class), org.root)));
     }
 
     public Map<String,GHRepository> getRepositories() throws IOException {
-        return org.root.retrieveWithAuth3(api("/repos"),JsonRepositories.class).wrap(org.root);
+        GHRepository[] repos = org.root.retrieveWithAuth3(api("/repos"), GHRepository[].class);
+        Map<String,GHRepository> m = new TreeMap<String, GHRepository>();
+        for (GHRepository r : repos) {
+            m.put(r.getName(),r.wrap(org.root));
+        }
+        return m;
     }
 
     /**
      * Adds a member to the team.
      */
     public void add(GHUser u) throws IOException {
-        org.root.retrieveWithAuth3(api("/members/"+u.getLogin()),null, "PUT");
+        org.root.retrieveWithAuth3(api("/members/" + u.getLogin()), null, "PUT");
     }
 
     /**
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        org.root.retrieveWithAuth3(api("/members/"+u.getLogin()),null, "DELETE");
+        org.root.retrieveWithAuth3(api("/members/" + u.getLogin()), null, "DELETE");
     }
 
     public void add(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth3(api("/repos/"+r.getOwnerName()+'/'+r.getName()),null, "PUT");
+        org.root.retrieveWithAuth3(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null, "PUT");
     }
 
     public void remove(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth3(api("/repos/"+r.getOwnerName()+'/'+r.getName()),null, "DELETE");
+        org.root.retrieveWithAuth3(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null, "DELETE");
     }
 
     private String api(String tail) {

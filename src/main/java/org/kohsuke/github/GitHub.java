@@ -82,7 +82,12 @@ public class GitHub {
 	private GitHub(String login, String apiToken, String password) {
 		this ("github.com", login, apiToken, password);
 	}
-	
+
+    /**
+     *
+     * @param githubServer
+     *      The host name of the GitHub (or GitHub enterprise) server, such as "github.com".
+     */
     private GitHub(String githubServer, String login, String apiToken, String password) {
         this.githubServer = githubServer;
 		this.login = login;

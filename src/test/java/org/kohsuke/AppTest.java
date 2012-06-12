@@ -141,7 +141,7 @@ public class AppTest extends TestCase {
         }
     }
 
-    public void tryCreateCommitComment() throws Exception {
+    public void testCreateCommitComment() throws Exception {
         GitHub gitHub = GitHub.connect();
         GHCommit commit = gitHub.getUser("kohsuke").getRepository("sandbox-ant").getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
         GHCommitComment c = commit.createComment("[testing](http://kohsuse.org/)");

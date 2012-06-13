@@ -40,6 +40,12 @@ public class AppTest extends TestCase {
         System.out.println(GitHub.connect().getRateLimit());
     }
 
+    public void testMyOrganizations() throws IOException {
+        Map<String, GHOrganization> org = GitHub.connect().getMyOrganizations();
+        assertFalse(org.keySet().contains(null));
+        System.out.println(org);
+    }
+
     public void testFetchPullRequest() throws Exception {
         GitHub gh = GitHub.connect();
         GHRepository r = gh.getOrganization("jenkinsci").getRepository("jenkins");

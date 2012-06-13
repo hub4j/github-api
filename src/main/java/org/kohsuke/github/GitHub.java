@@ -415,11 +415,18 @@ public class GitHub {
         return getUser(tokens[0]).getRepository(tokens[1]);
     }
 
+    /**
+     * This method returns a shallowly populated organizations.
+     *
+     * To retrieve full organization details, you need to call {@link #getOrganization(String)}
+     * TODO: make this automatic.
+     */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
         GHOrganization[] orgs = retrieveWithAuth("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
-            r.put(o.name,o.wrapUp(this));
+            // don't put 'o' into orgs because they are shallow
+            r.put(o.getLogin(),o.wrapUp(this));
         }
         return r;
     }

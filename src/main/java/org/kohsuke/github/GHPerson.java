@@ -22,9 +22,6 @@ public abstract class GHPerson {
     protected int id;
     protected String gravatar_id; // appears in V3 as well but presumably subsumed by avatar_url?
 
-    // V2
-    protected int public_gist_count,public_repo_count,followers_count,following_count;
-
     // V3
     protected String avatar_url,html_url;
     protected int followers,following,public_repos,public_gists;
@@ -163,15 +160,15 @@ public abstract class GHPerson {
     }
 
     public int getPublicGistCount() {
-        return Math.max(public_gist_count,public_gists);
+        return public_gists;
     }
 
     public int getPublicRepoCount() {
-        return Math.max(public_repo_count,public_repos);
+        return public_repos;
     }
 
     public int getFollowingCount() {
-        return Math.max(following_count,following);
+        return following;
     }
 
     /**
@@ -182,7 +179,7 @@ public abstract class GHPerson {
     }
 
     public int getFollowersCount() {
-        return Math.max(followers_count,followers);
+        return followers;
     }
 
 }

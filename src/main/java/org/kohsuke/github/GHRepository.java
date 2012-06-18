@@ -32,6 +32,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -336,7 +337,18 @@ public class GHRepository {
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
         new Poster(root).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
-        return org.getRepository(name);
+
+        // this API is asynchronous. we need to wait for a bit
+        for (int i=0; i<10; i++) {
+            GHRepository r = org.getRepository(name);
+            if (r!=null)    return r;
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw (IOException)new InterruptedIOException().initCause(e);
+            }
+        }
+        throw new IOException(this+" was forked into "+org.getLogin()+" but can't find the new repository");
     }
 
     /**

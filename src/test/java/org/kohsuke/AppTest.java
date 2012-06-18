@@ -253,11 +253,6 @@ public class AppTest extends TestCase {
         gitHub.getUser("kohsuke").getRepository("test").renameTo("test2");
     }
 
-    private void tryOrgFork(GitHub gitHub) throws IOException {
-        GHOrganization o = gitHub.getOrganization("HudsonLabs");
-        System.out.println(gitHub.getUser("rtyler").getRepository("memcache-ada").forkTo(o).getUrl());
-    }
-
     private void tryTeamCreation(GitHub gitHub) throws IOException {
         GHOrganization o = gitHub.getOrganization("HudsonLabs");
         GHTeam t = o.createTeam("auto team", Permission.PUSH);

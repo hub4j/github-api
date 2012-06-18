@@ -285,12 +285,12 @@ public class GitHub {
             uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
 
         uc.setRequestMethod(method);
+        uc.setRequestProperty("Accept-Encoding", "gzip");
         if (method.equals("PUT")) {
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-Length","0");
             uc.getOutputStream().close();
         }
-        uc.setRequestProperty("Accept-Encoding", "gzip");
         return uc;
     }
 

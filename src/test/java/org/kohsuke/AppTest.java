@@ -31,6 +31,16 @@ import java.util.List;
  * Unit test for simple App.
  */
 public class AppTest extends TestCase {
+    public void testRepoCRUD() throws Exception {
+        GitHub hub = GitHub.connect();
+        GHRepository r = hub.createRepository("github-api-test", "a test repository", "http://github-api.kohsuke.org/", true);
+        r.enableIssueTracker(false);
+        r.enableDownloads(false);
+        r.enableWiki(false);
+        r.renameTo("github-api-test2");
+        hub.getMyself().getRepository("github-api-test2").delete();
+    }
+
     public void testCredentialValid() throws IOException {
         assertTrue(GitHub.connect().isCredentialValid());
         assertFalse(GitHub.connect("totally","bogus").isCredentialValid());

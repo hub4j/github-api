@@ -45,7 +45,7 @@ public class GHOrganization extends GHPerson {
         GHTeam[] teams = root.retrieveWithAuth("/orgs/" + login + "/teams", GHTeam[].class);
         Map<String,GHTeam> r = new TreeMap<String, GHTeam>();
         for (GHTeam t : teams) {
-            r.put(t.getName(),t);
+            r.put(t.getName(),t.wrapUp(this));
         }
         return r;
     }

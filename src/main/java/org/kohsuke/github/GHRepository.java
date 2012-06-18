@@ -270,8 +270,11 @@ public class GHRepository {
     }
 
     private void edit(String key, String value) throws IOException {
-        new Poster(root).withCredential().with(key,value)
-                .to("/repos/" + owner.login + "/" + name,null,"PATCH");
+        Poster poster = new Poster(root).withCredential();
+        if (!key.equals("name"))
+            poster.with("name",name);   // even when we don't change the name, we need to send it in
+        poster.with(key, value)
+                .to("/repos/" + owner.login + "/" + name, null, "PATCH");
     }
 
     /**

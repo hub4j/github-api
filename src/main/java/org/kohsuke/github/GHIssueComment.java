@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -34,8 +35,10 @@ import java.util.Date;
 public class GHIssueComment {
     GHIssue owner;
 
-    private String body, gravatar_id, user, created_at, updated_at;
+    private String body, gravatar_id, created_at, updated_at;
+    private URL url;
     private int id;
+    private GHUser user;
 
     /*package*/ GHIssueComment wrapUp(GHIssue owner) {
         this.owner = owner;
@@ -68,17 +71,22 @@ public class GHIssueComment {
         return id;
     }
 
+    public URL getUrl() {
+        return url;
+    }
+
     /**
      * Gets the ID of the user who posted this comment.
      */
+    @Deprecated
     public String getUserName() {
-        return user;
+        return user.getLogin();
     }
 
     /**
      * Gets the user who posted this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user);
+        return owner.root.getUser(user.getLogin());
     }
 }

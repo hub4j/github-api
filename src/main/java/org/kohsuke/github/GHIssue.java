@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents an issue on GitHub.
@@ -93,7 +94,7 @@ public class GHIssue {
     }
 
     public GHIssueState getState() {
-        return Enum.valueOf(GHIssueState.class, state);
+        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
     public Collection<String> getLabels() {

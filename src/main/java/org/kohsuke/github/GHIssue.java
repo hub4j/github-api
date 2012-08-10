@@ -97,6 +97,9 @@ public class GHIssue {
     }
 
     public Collection<String> getLabels() {
+        if(labels == null){
+            return Collections.EMPTY_LIST;
+        }
         return Collections.unmodifiableList(labels);
     }
 

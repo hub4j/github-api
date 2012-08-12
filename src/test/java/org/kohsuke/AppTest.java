@@ -14,11 +14,13 @@ import org.kohsuke.github.GHKey;
 import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
+import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.PagedIterable;
+import org.kohsuke.github.PagedIterator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -62,6 +64,17 @@ public class AppTest extends TestCase {
         assertEquals("master",r.getMasterBranch());
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
+    }
+
+    public void testFetchPullRequestAsList() throws Exception {
+        GitHub gh = GitHub.connect();
+        GHRepository r = gh.getOrganization("symfony").getRepository("symfony-docs");
+        assertEquals("master", r.getMasterBranch());
+        PagedIterator<GHPullRequest> i = r.getPullRequests(GHIssueState.CLOSED).iterator();
+        List<GHPullRequest> prs = i.asList();
+        assertNotNull(prs);
+        assertTrue(prs.size() > 0);
+        assertFalse(i.hasNext());
     }
 
     public void testRepoPermissions() throws Exception {

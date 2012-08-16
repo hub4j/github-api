@@ -129,11 +129,11 @@ public class GitHub {
         return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
-    public static GitHub connect(String login, String apiToken) throws IOException {
+    public static GitHub connect(String login, String apiToken){
         return new GitHub(login,apiToken,null);
     }
 
-    public static GitHub connect(String login, String apiToken, String password) throws IOException {
+    public static GitHub connect(String login, String apiToken, String password){
         return new GitHub(login,apiToken,password);
     }
 

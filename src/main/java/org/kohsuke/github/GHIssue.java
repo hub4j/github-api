@@ -157,11 +157,17 @@ public class GHIssue {
     /**
      * Obtains all the comments associated with this issue.
      */
-    public List<GHIssueComment> getComments() throws IOException {
-        GHIssueComment[] r = root.retrieve(getApiRoute() + "/comments", GHIssueComment[].class);
-        for (GHIssueComment c : r)
-            c.wrapUp(this);
-        return Arrays.asList(r);
+    public PagedIterable<GHIssueComment> getComments() throws IOException {
+        return new PagedIterable<GHIssueComment>() {
+            public PagedIterator<GHIssueComment> iterator() {
+                return new PagedIterator<GHIssueComment>(root.retrievePaged(getApiRoute() + "/comments",GHIssueComment[].class,false)) {
+                    protected void wrapUp(GHIssueComment[] page) {
+                        for (GHIssueComment c : page)
+                            c.wrapUp(GHIssue.this);
+                    }
+                };
+            }
+        };
     }
 
     private String getApiRoute() {

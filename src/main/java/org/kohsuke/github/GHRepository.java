@@ -358,12 +358,28 @@ public class GHRepository {
 
     /**
      * Retrieves all the pull requests of a particular state.
+     *
+     * @see #listPullRequests(GHIssueState)
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        GHPullRequest[] r = root.retrieveWithAuth("/repos/" + owner.login + '/' + name + "/pulls?state=" + state.name().toLowerCase(Locale.ENGLISH), GHPullRequest[].class);
-        for (GHPullRequest p : r)
-            p.wrapUp(this);
-        return new ArrayList<GHPullRequest>(Arrays.asList(r));
+        return listPullRequests(state).asList();
+    }
+
+    /**
+     * Retrieves all the pull requests of a particular state.
+     */
+    public PagedIterable<GHPullRequest> listPullRequests(final GHIssueState state) {
+        return new PagedIterable<GHPullRequest>() {
+            public PagedIterator<GHPullRequest> iterator() {
+                return new PagedIterator<GHPullRequest>(root.retrievePaged(String.format("/repos/%s/%s/pulls?state=%s", owner.login,name,state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class, false)) {
+                    @Override
+                    protected void wrapUp(GHPullRequest[] page) {
+                        for (GHPullRequest pr : page)
+                            pr.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
     /**

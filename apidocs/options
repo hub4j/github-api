@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'GitHub API for Java 1.30 API'
+'GitHub API for Java 1.31 API'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/files/kohsuke/ws/github-api/target/checkout/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'GitHub API for Java 1.30 API'
+'GitHub API for Java 1.31 API'

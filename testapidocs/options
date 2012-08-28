@@ -15,7 +15,7 @@
 -docencoding
 'UTF-8'
 -doctitle
-'GitHub API for Java 1.30 Test API'
+'GitHub API for Java 1.31 Test API'
 -link
 '../apidocs'
 -linkoffline
@@ -23,4 +23,4 @@
 -use
 -version
 -windowtitle
-'GitHub API for Java 1.30 Test API'
+'GitHub API for Java 1.31 Test API'

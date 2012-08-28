@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents an issue on GitHub.
@@ -93,10 +94,13 @@ public class GHIssue {
     }
 
     public GHIssueState getState() {
-        return Enum.valueOf(GHIssueState.class, state);
+        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
     public Collection<String> getLabels() {
+        if(labels == null){
+            return Collections.EMPTY_LIST;
+        }
         return Collections.unmodifiableList(labels);
     }
 
@@ -152,12 +156,27 @@ public class GHIssue {
 
     /**
      * Obtains all the comments associated with this issue.
+	 * 
+	 * @see #listComments() 
      */
-    public List<GHIssueComment> getComments() throws IOException {
-        GHIssueComment[] r = root.retrieve(getApiRoute() + "/comments", GHIssueComment[].class);
-        for (GHIssueComment c : r)
-            c.wrapUp(this);
-        return Arrays.asList(r);
+	public List<GHIssueComment> getComments() throws IOException {
+		return listComments().asList();
+	}
+	
+	/**
+	 * Obtains all the comments associated with this issue.
+	 */
+    public PagedIterable<GHIssueComment> listComments() throws IOException {
+        return new PagedIterable<GHIssueComment>() {
+            public PagedIterator<GHIssueComment> iterator() {
+                return new PagedIterator<GHIssueComment>(root.retrievePaged(getApiRoute() + "/comments",GHIssueComment[].class,false)) {
+                    protected void wrapUp(GHIssueComment[] page) {
+                        for (GHIssueComment c : page)
+                            c.wrapUp(GHIssue.this);
+                    }
+                };
+            }
+        };
     }
 
     private String getApiRoute() {

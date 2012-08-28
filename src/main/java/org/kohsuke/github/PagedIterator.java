@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.List;
  * Iterator over a pagenated data source.
  *
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()}
- * that allows the caller to retrieve items per page and {@link #asList()}
- * that allows the caller to retrieve all items at once.
+ * that allows the caller to retrieve items per page.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -61,17 +59,6 @@ public abstract class PagedIterator<T> implements Iterator<T> {
         r = r.subList(pos,r.size());
         current = null;
         pos = 0;
-        return r;
-    }
-
-    /**
-     * Gets a list of all items
-     */
-    public List<T> asList() {
-        List<T> r = new ArrayList<T>();
-        for(Iterator i = this; i.hasNext();) {
-            r.addAll(nextPage());
-        }
         return r;
     }
 }

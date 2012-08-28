@@ -70,11 +70,10 @@ public class AppTest extends TestCase {
         GitHub gh = GitHub.connect();
         GHRepository r = gh.getOrganization("symfony").getRepository("symfony-docs");
         assertEquals("master", r.getMasterBranch());
-        PagedIterator<GHPullRequest> i = r.getPullRequests(GHIssueState.CLOSED).iterator();
+        PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
         List<GHPullRequest> prs = i.asList();
         assertNotNull(prs);
         assertTrue(prs.size() > 0);
-        assertFalse(i.hasNext());
     }
 
     public void testRepoPermissions() throws Exception {

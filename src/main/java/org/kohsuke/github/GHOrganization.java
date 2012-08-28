@@ -129,7 +129,7 @@ public class GHOrganization extends GHPerson {
     public List<GHPullRequest> getPullRequests() throws IOException {
         List<GHPullRequest> all = new ArrayList<GHPullRequest>();
         for (GHRepository r : getRepositoriesWithOpenPullRequests()) {
-            all.addAll(r.getPullRequests(GHIssueState.OPEN).iterator().asList());
+            all.addAll(r.getPullRequests(GHIssueState.OPEN));
         }
         return all;
     }

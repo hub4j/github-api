@@ -156,8 +156,17 @@ public class GHIssue {
 
     /**
      * Obtains all the comments associated with this issue.
+	 * 
+	 * @see #listComments() 
      */
-    public PagedIterable<GHIssueComment> getComments() throws IOException {
+	public List<GHIssueComment> getComments() throws IOException {
+		return listComments().asList();
+	}
+	
+	/**
+	 * Obtains all the comments associated with this issue.
+	 */
+    public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
             public PagedIterator<GHIssueComment> iterator() {
                 return new PagedIterator<GHIssueComment>(root.retrievePaged(getApiRoute() + "/comments",GHIssueComment[].class,false)) {

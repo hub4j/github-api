@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  *
@@ -32,7 +33,7 @@ import java.io.IOException;
 public class GHSmallUser {
 	private GitHub root;
 	private String avatar_url, login, url, gravatar_id;
-	private Long id;
+	private int id;
 	
 	/*package*/ GHSmallUser wrapUp(GitHub root) {
         this.root = root;
@@ -40,24 +41,20 @@ public class GHSmallUser {
     }
 
 	
-	public String getAvatar_url() {
-		return avatar_url;
+	public URL getAvatar_url() {
+		return GitHub.parseURL(avatar_url);
 	}
 
 	public String getLogin() {
 		return login;
 	}
 
-	public String getUrl() {
-		return url;
+	public URL getApiUrl() {
+		return GitHub.parseURL(url);
 	}
 
 	public String getGravatar_id() {
 		return gravatar_id;
-	}
-
-	public Long getId() {
-		return id;
 	}
 	
 	public GHUser getUser() throws IOException{

@@ -130,6 +130,10 @@ public class GHIssue {
         return GitHub.parseDate(closed_at);
     }
 
+	public URL getApiURL(){
+        return GitHub.parseURL(url);
+	}
+
     /**
      * Updates the issue by adding a comment.
      */

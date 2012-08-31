@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -33,12 +34,24 @@ import java.util.Date;
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHPullRequest extends GHIssue {
-    private String closed_at, patch_url, issue_updated_at;
-    private GHUser issue_user, user;
-    // labels??
-    private GHCommitPointer base, head;
-    private String mergeable, diff_url;
+	
+	private String patch_url, diff_url, issue_url;
+	private GHCommitPointer base;
+	private String merged_at;
+	private GHCommitPointer head;
 
+	GHPullRequest wrapUp(GHRepository owner) {
+		this.wrap(owner);
+        return wrapUp(owner.root);
+    }
+	
+    GHPullRequest wrapUp(GitHub root) {
+        if (owner!=null)    owner.wrap(root);
+        if (base!=null)     base.wrapUp(root);
+        if (head!=null)     head.wrapUp(root);
+        return this;
+    }
+	
     /**
      * The URL of the patch file.
      * like https://github.com/jenkinsci/jenkins/pull/100.patch
@@ -46,12 +59,13 @@ public class GHPullRequest extends GHIssue {
     public URL getPatchUrl() {
         return GitHub.parseURL(patch_url);
     }
-
-    /**
-     * User who submitted a pull request.
+	
+	/**
+     * The URL of the patch file.
+     * like https://github.com/jenkinsci/jenkins/pull/100.patch
      */
-    public GHUser getUser() {
-        return user;
+    public URL getIssueUrl() {
+        return GitHub.parseURL(issue_url);
     }
 
     /**
@@ -69,16 +83,9 @@ public class GHPullRequest extends GHIssue {
         return head;
     }
 
+	@Deprecated
     public Date getIssueUpdatedAt() {
-        return GitHub.parseDate(issue_updated_at);
-    }
-
-    /**
-     * The HTML page of this pull request,
-     * like https://github.com/jenkinsci/jenkins/pull/100
-     */
-    public URL getUrl() {
-        return super.getUrl();
+        return super.getUpdatedAt();
     }
 
     /**
@@ -89,22 +96,22 @@ public class GHPullRequest extends GHIssue {
         return GitHub.parseURL(diff_url);
     }
 
-    public Date getClosedAt() {
-        return GitHub.parseDate(closed_at);
+    public Date getMergedAt() {
+        return GitHub.parseDate(merged_at);
     }
 
-    GHPullRequest wrapUp(GHRepository owner) {
-        this.owner = owner;
-        return wrapUp(owner.root);
-    }
+	@Override
+	public Collection<String> getLabels() {
+		return super.getLabels();
+	}
 
-    GHPullRequest wrapUp(GitHub root) {
-        this.root = root;
-        if (owner!=null)    owner.wrap(root);
-        if (issue_user!=null)   issue_user.root=root;
-        if (user!=null)     user.root=root;
-        if (base!=null)     base.wrapUp(root);
-        if (head!=null)     head.wrapUp(root);
-        return this;
-    }
+	@Override
+	public GHSmallUser getClosedBy() {
+		return null;
+	}
+
+	@Override
+	public PullRequest getPullRequest() {
+		return null;
+	}
 }

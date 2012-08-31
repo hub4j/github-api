@@ -54,7 +54,7 @@ public class GHIssue {
 	private GHSmallUser user;
 	private String title, created_at, html_url;
 	private GHIssue.PullRequest pull_request;
-	// GHIssue milestone
+	private GHMilestone milestone;
 	private String url, updated_at;
 	private int id;
 	private GHSmallUser closed_by;
@@ -62,6 +62,7 @@ public class GHIssue {
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
+		if(milestone != null) milestone.wrap(owner);
 		if(assignee != null) assignee.wrapUp(root);
 		if(user != null) user.wrapUp(root);
 		if(closed_by != null) closed_by.wrapUp(root);
@@ -226,8 +227,12 @@ public class GHIssue {
 
 	public PullRequest getPullRequest() {
 		return pull_request;
-	}	
-	
+	}
+
+	public GHMilestone getMilestone() {
+		return milestone;
+	}
+
 	public class PullRequest{
 		private String diff_url, patch_url, html_url;
 		

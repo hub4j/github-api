@@ -117,6 +117,6 @@ public class GHPullRequest extends GHIssue {
 	}
 
 	public GHDetailedPullRequest getDetailedPullRequest() throws IOException{
-		return (GHDetailedPullRequest) owner.getPullRequest(this.getNumber());
+		return owner.getPullRequest(this.getNumber());
 	}
 }

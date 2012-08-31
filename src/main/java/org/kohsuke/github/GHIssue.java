@@ -26,7 +26,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -208,8 +207,23 @@ public class GHIssue {
 	
     /**
      * User who submitted the issue.
+	 * 
+	 * @return May return null when IOException occures. Prefered way is getSmallUser().getUser().
+	 * @see #getSmallUser() 
      */
-	public GHSmallUser getUser() {
+	@Deprecated
+	public GHUser getUser() {
+		try {
+			return user.getUser();
+		} catch (IOException ex) {
+			return null;
+		}
+	}
+	
+	/**
+     * Shallow user who submitted the issue.
+     */
+	public GHSmallUser getSmallUser(){
 		return user;
 	}
 

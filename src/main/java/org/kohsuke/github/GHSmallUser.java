@@ -41,7 +41,7 @@ public class GHSmallUser {
     }
 
 	
-	public URL getAvatar_url() {
+	public URL getAvatarUrl() {
 		return GitHub.parseURL(avatar_url);
 	}
 
@@ -53,7 +53,7 @@ public class GHSmallUser {
 		return GitHub.parseURL(url);
 	}
 
-	public String getGravatar_id() {
+	public String getGravatarId() {
 		return gravatar_id;
 	}
 	

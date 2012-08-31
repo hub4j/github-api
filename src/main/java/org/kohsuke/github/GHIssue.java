@@ -247,7 +247,7 @@ public class GHIssue {
 		return milestone;
 	}
 
-	public class PullRequest{
+	public static class PullRequest{
 		private String diff_url, patch_url, html_url;
 		
 		public URL getDiffUrl() {

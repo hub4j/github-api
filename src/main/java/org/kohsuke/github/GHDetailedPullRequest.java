@@ -74,4 +74,9 @@ public class GHDetailedPullRequest extends GHPullRequest {
 	public int getChanged_files() {
 		return changed_files;
 	}
+
+	@Override
+	public GHDetailedPullRequest getDetailedPullRequest() {
+		return this;
+	}
 }

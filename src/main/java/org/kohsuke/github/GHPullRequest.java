@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -113,5 +114,9 @@ public class GHPullRequest extends GHIssue {
 	@Override
 	public PullRequest getPullRequest() {
 		return null;
+	}
+
+	public GHDetailedPullRequest getDetailedPullRequest() throws IOException{
+		return (GHDetailedPullRequest) owner.getPullRequest(this.getNumber());
 	}
 }

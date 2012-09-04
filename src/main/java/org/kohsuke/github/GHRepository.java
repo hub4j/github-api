@@ -442,6 +442,28 @@ public class GHRepository {
         };
     }
 
+    public GHCommitStatus getCommitStatus(String sha1) throws IOException {
+        return root.retrieve(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus.class).wrapUp(root);
+    }
+
+    /**
+     * Creates a commit status
+     *
+     * @param targetUrl
+     *      Optional parameter that points to the URL that has more details.
+     * @param description
+     *      Optional short description.
+     */
+    public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
+        return new Poster(root)
+                .withCredential()
+                .with("state",state.name().toLowerCase(Locale.ENGLISH))
+                .with("target_url", targetUrl)
+                .with("description", description)
+                .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
+    }
+
+
     /**
      * 
      * See https://api.github.com/hooks for possible names and their configuration scheme.

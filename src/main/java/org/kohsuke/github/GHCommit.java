@@ -234,6 +234,13 @@ public class GHCommit {
         return createComment(body,null,null,null);
     }
 
+    /**
+     * Gets the status of this commit.
+     */
+    public GHCommitStatus getStatus() throws IOException {
+        return owner.getCommitStatus(sha);
+    }
+
     GHCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

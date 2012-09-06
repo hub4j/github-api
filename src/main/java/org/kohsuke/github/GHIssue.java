@@ -26,7 +26,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -42,15 +41,30 @@ import java.util.Locale;
 public class GHIssue {
     GitHub root;
     GHRepository owner;
-
-    private String gravatar_id,body,title,state,created_at,updated_at,html_url;
+	
+	// API v3
+	private GHSmallUser assignee;
+	private String state;
+	private int number;
+	private String closed_at;
+	private int comments;
+	private String body;
     private List<String> labels;
-    private int number,votes,comments;
-    private int position;
+	private GHSmallUser user;
+	private String title, created_at, html_url;
+	private GHIssue.PullRequest pull_request;
+	private GHMilestone milestone;
+	private String url, updated_at;
+	private int id;
+	private GHSmallUser closed_by;
 
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
+		if(milestone != null) milestone.wrap(owner);
+		if(assignee != null) assignee.wrapUp(root);
+		if(user != null) user.wrapUp(root);
+		if(closed_by != null) closed_by.wrapUp(root);
         return this;
     }
 
@@ -111,6 +125,14 @@ public class GHIssue {
     public Date getUpdatedAt() {
         return GitHub.parseDate(updated_at);
     }
+
+    public Date getClosedAt() {
+        return GitHub.parseDate(closed_at);
+    }
+
+	public URL getApiURL(){
+        return GitHub.parseURL(url);
+	}
 
     /**
      * Updates the issue by adding a comment.
@@ -182,4 +204,66 @@ public class GHIssue {
     private String getApiRoute() {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
+
+	public GHSmallUser getAssignee() {
+		return assignee;
+	}
+	
+    /**
+     * User who submitted the issue.
+	 * 
+	 * @return May return null when IOException occures. Prefered way is getSmallUser().getUser().
+	 * @see #getSmallUser() 
+     */
+	@Deprecated
+	public GHUser getUser() {
+		try {
+			return user.getUser();
+		} catch (IOException ex) {
+			return null;
+		}
+	}
+	
+	/**
+     * Shallow user who submitted the issue.
+     */
+	public GHSmallUser getSmallUser(){
+		return user;
+	}
+
+	public GHSmallUser getClosedBy() {
+		if(!"closed".equals(state)) return null;
+		if(closed_by != null) return closed_by;
+		
+		//TODO closed_by = owner.getIssue(number).getClosed_by();
+		return closed_by;
+	}
+	
+	public int getCommentsCount(){
+		return comments;
+	}
+
+	public PullRequest getPullRequest() {
+		return pull_request;
+	}
+
+	public GHMilestone getMilestone() {
+		return milestone;
+	}
+
+	public static class PullRequest{
+		private String diff_url, patch_url, html_url;
+		
+		public URL getDiffUrl() {
+			return GitHub.parseURL(diff_url);
+		}
+		
+		public URL getPatchUrl() {
+			return GitHub.parseURL(patch_url);
+		}
+		
+		public URL getUrl() {
+			return GitHub.parseURL(html_url);
+		}
+	}
 }

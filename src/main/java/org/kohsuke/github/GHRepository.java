@@ -352,8 +352,8 @@ public class GHRepository {
     /**
      * Retrieves a specified pull request.
      */
-    public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieveWithAuth("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
+    public GHDetailedPullRequest getPullRequest(int i) throws IOException {
+        return root.retrieveWithAuth("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHDetailedPullRequest.class).wrapUp(this);
     }
 
     /**

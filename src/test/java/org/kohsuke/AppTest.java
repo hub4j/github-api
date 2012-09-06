@@ -11,6 +11,7 @@ import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHBranch;
+import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHKey;
 import org.kohsuke.github.GHMyself;
@@ -322,5 +323,13 @@ public class AppTest extends TestCase {
         System.out.println(state);
         assertEquals("oops!",state.getDescription());
         assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
+    }
+
+    public void testPullRequestPopulate() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHRepository r = gitHub.getUser("kohsuke").getRepository("github-api");
+        GHPullRequest p = r.getPullRequest(17);
+        GHUser u = p.getUser();
+        System.out.println(u.getName());
     }
 }

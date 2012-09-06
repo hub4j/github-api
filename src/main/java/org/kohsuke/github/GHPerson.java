@@ -17,18 +17,29 @@ import java.util.TreeMap;
 public abstract class GHPerson {
     /*package almost final*/ GitHub root;
 
-    // common
-    protected String login,location,blog,email,name,created_at,company;
+    // core data fields that exist even for "small" user data (such as the user info in pull request)
+    protected String login, avatar_url, url, gravatar_id;
     protected int id;
-    protected String gravatar_id; // appears in V3 as well but presumably subsumed by avatar_url?
 
-    // V3
-    protected String avatar_url,html_url;
+    // other fields (that only show up in full data)
+    protected String location,blog,email,name,created_at,company;
+    protected String html_url;
     protected int followers,following,public_repos,public_gists;
 
     /*package*/ GHPerson wrapUp(GitHub root) {
         this.root = root;
         return this;
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    protected void populate() throws IOException {
+        if (created_at!=null)    return; // already populated
+
+        root.retrieve().to(url, this);
     }
 
     /**
@@ -123,51 +134,60 @@ public abstract class GHPerson {
     /**
      * Gets the human-readable name of the user, like "Kohsuke Kawaguchi"
      */
-    public String getName() {
+    public String getName() throws IOException {
+        populate();
         return name;
     }
 
     /**
      * Gets the company name of this user, like "Sun Microsystems, Inc."
      */
-    public String getCompany() {
+    public String getCompany() throws IOException {
+        populate();
         return company;
     }
 
     /**
      * Gets the location of this user, like "Santa Clara, California"
      */
-    public String getLocation() {
+    public String getLocation() throws IOException {
+        populate();
         return location;
     }
 
-    public String getCreatedAt() {
+    public String getCreatedAt() throws IOException {
+        populate();
         return created_at;
     }
 
     /**
      * Gets the blog URL of this user.
      */
-    public String getBlog() {
+    public String getBlog() throws IOException {
+        populate();
         return blog;
     }
 
     /**
      * Gets the e-mail address of the user.
      */
-    public String getEmail() {
+    public String getEmail() throws IOException {
+        populate();
         return email;
     }
 
-    public int getPublicGistCount() {
+    public int getPublicGistCount() throws IOException {
+        populate();
         return public_gists;
     }
 
-    public int getPublicRepoCount() {
+    public int getPublicRepoCount() throws IOException {
+        populate();
         return public_repos;
     }
 
-    public int getFollowingCount() {
+    public int getFollowingCount() throws IOException {
+        populate();
         return following;
     }
 
@@ -178,7 +198,8 @@ public abstract class GHPerson {
         return id;
     }
 
-    public int getFollowersCount() {
+    public int getFollowersCount() throws IOException {
+        populate();
         return followers;
     }
 

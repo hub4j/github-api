@@ -43,20 +43,20 @@ public class GHIssue {
     GHRepository owner;
 	
 	// API v3
-	private GHSmallUser assignee;
-	private String state;
-	private int number;
-	private String closed_at;
-	private int comments;
-	private String body;
-    private List<String> labels;
-	private GHSmallUser user;
-	private String title, created_at, html_url;
-	private GHIssue.PullRequest pull_request;
-	private GHMilestone milestone;
-	private String url, updated_at;
-	private int id;
-	private GHSmallUser closed_by;
+    protected GHUser assignee;
+    protected String state;
+    protected int number;
+    protected String closed_at;
+    protected int comments;
+    protected String body;
+    protected List<String> labels;
+    protected GHUser user;
+    protected String title, created_at, html_url;
+    protected GHIssue.PullRequest pull_request;
+    protected GHMilestone milestone;
+	protected String url, updated_at;
+    protected int id;
+    protected GHUser closed_by;
 
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
@@ -204,33 +204,19 @@ public class GHIssue {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-	public GHSmallUser getAssignee() {
+	public GHUser getAssignee() {
 		return assignee;
 	}
 	
     /**
      * User who submitted the issue.
-	 * 
-	 * @return May return null when IOException occures. Prefered way is getSmallUser().getUser().
-	 * @see #getSmallUser() 
      */
 	@Deprecated
 	public GHUser getUser() {
-		try {
-			return user.getUser();
-		} catch (IOException ex) {
-			return null;
-		}
+        return user;
 	}
 	
-	/**
-     * Shallow user who submitted the issue.
-     */
-	public GHSmallUser getSmallUser(){
-		return user;
-	}
-
-	public GHSmallUser getClosedBy() {
+	public GHUser getClosedBy() {
 		if(!"closed".equals(state)) return null;
 		if(closed_by != null) return closed_by;
 		

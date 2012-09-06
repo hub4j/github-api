@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -41,7 +42,7 @@ public class GHPullRequest extends GHIssue {
 	private GHCommitPointer head;
 
     // details that are only available when obtained from ID
-    private GHSmallUser merged_by;
+    private GHUser merged_by;
    	private int review_comments, additions;
    	private boolean merged;
    	private Boolean mergeable;
@@ -117,7 +118,7 @@ public class GHPullRequest extends GHIssue {
 	}
 
 	@Override
-	public GHSmallUser getClosedBy() {
+	public GHUser getClosedBy() {
 		return null;
 	}
 
@@ -130,49 +131,54 @@ public class GHPullRequest extends GHIssue {
 // details that are only available via get with ID
 //
 //
-    public GHSmallUser getMergedBy() {
+    public GHUser getMergedBy() throws IOException {
         populate();
    		return merged_by;
    	}
 
-   	public int getReviewComments() {
+   	public int getReviewComments() throws IOException {
         populate();
    		return review_comments;
    	}
 
-   	public int getAdditions() {
+   	public int getAdditions() throws IOException {
         populate();
    		return additions;
    	}
 
-    public boolean isMerged() {
+    public boolean isMerged() throws IOException {
         populate();
    		return merged;
    	}
 
-   	public Boolean getMergeable() {
+   	public Boolean getMergeable() throws IOException {
         populate();
    		return mergeable;
    	}
 
-   	public int getDeletions() {
+   	public int getDeletions() throws IOException {
         populate();
    		return deletions;
    	}
 
-   	public String getMergeableState() {
+   	public String getMergeableState() throws IOException {
         populate();
    		return mergeable_state;
    	}
 
-   	public int getChangedFiles() {
+   	public int getChangedFiles() throws IOException {
         populate();
    		return changed_files;
    	}
 
-    private void populate() {
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    private void populate() throws IOException {
         if (merged_by!=null)    return; // already populated
 
-        root.retrieveWithAuth(getUrl(), this);
+        root.retrieve().to(url, this);
     }
 }

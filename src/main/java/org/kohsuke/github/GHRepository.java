@@ -253,7 +253,7 @@ public class GHRepository {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Poster(root).withCredential().to("/repos/"+owner.login+"/"+name+"/collaborators/"+user.getLogin(),null,method);
+            new Poster(root).withCredential().method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
         }
     }
 
@@ -273,8 +273,7 @@ public class GHRepository {
         Poster poster = new Poster(root).withCredential();
         if (!key.equals("name"))
             poster.with("name", name);   // even when we don't change the name, we need to send it in
-        poster.with(key, value)
-                .to("/repos/" + owner.login + "/" + name, null, "PATCH");
+        poster.with(key, value).method("PATCH").to("/repos/" + owner.login + "/" + name);
     }
 
     /**
@@ -314,7 +313,7 @@ public class GHRepository {
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        new Poster(root).withCredential().to("/repos/" + owner.login +"/"+name, null, "DELETE");
+        new Poster(root).withCredential().method("DELETE").to("/repos/" + owner.login + "/" + name);
     }
 
     /**
@@ -324,7 +323,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Poster(root).withCredential().to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class, "POST").wrap(root);
+        return new Poster(root).withCredential().method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
     }
 
     /**
@@ -642,8 +641,7 @@ public class GHRepository {
 	
 	public GHMilestone createMilestone(String title, String description) throws IOException {
         return new Poster(root).withCredential()
-                .with("title", title).with("description", description)
-                .to("/repos/"+owner.login+"/"+name+"/milestones", GHMilestone.class,"POST").wrap(this);
+                .with("title", title).with("description", description).method("POST").to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone.class).wrap(this);
 	}
 
     @Override

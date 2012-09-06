@@ -26,7 +26,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -116,12 +115,11 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Poster(root).withCredential().with("body",message).to(getApiRoute()+"/comments",null,"POST");
+        new Poster(root).withCredential().with("body",message).to(getApiRoute() + "/comments");
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Poster(root).withCredential()._with(key, value)
-                .to(getApiRoute(),null,"PATCH");
+        new Poster(root).withCredential()._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     /**

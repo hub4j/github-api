@@ -170,6 +170,10 @@ public class GitHub {
             return new URL(tailApiUrl);
     }
 
+    /*package*/ Poster retrieve() {
+        return new Poster(this).method("GET");
+    }
+
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
         return _retrieve(tailApiUrl, type, "GET", false);
     }
@@ -379,7 +383,7 @@ public class GitHub {
 	public GHUser getUser(String login) throws IOException {
 		GHUser u = users.get(login);
 		if (u == null) {
-            u = retrieve("/users/" + login, GHUser.class);
+            u = retrieve().to("/users/" + login, GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
 		}
@@ -465,9 +469,10 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        return new Poster(this).withCredential()
+        Poster poster = new Poster(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0).to("/user/repos", GHRepository.class,"POST").wrap(this);
+                .with("public", isPublic ? 1 : 0);
+        return poster.method("POST").to("/user/repos", GHRepository.class).wrap(this);
     }
 
     /**

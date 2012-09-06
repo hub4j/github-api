@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Field;
@@ -36,17 +37,24 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import static org.kohsuke.github.GitHub.*;
 
 /**
- * Handles HTTP POST.
+ * A builder pattern for making HTTP call and parsing its output.
+ *
  * @author Kohsuke Kawaguchi
  */
 class Poster {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private boolean authenticate;
+
+    /**
+     * Request method.
+     */
+    private String method = "POST";
 
     private static class Entry {
         String key;
@@ -62,8 +70,12 @@ class Poster {
         this.root = root;
     }
 
+    /**
+     * Makes a request with authentication credential.
+     */
     public Poster withCredential() {
-        root.requireCredential();
+        // keeping it inline with retrieveWithAuth not to enforce the check
+        // root.requireCredential();
         authenticate = true;
         return this;
     }
@@ -97,12 +109,17 @@ class Poster {
         return this;
     }
 
+    public Poster method(String method) {
+        this.method = method;
+        return this;
+    }
+
     public void to(String tailApiUrl) throws IOException {
         to(tailApiUrl,null);
     }
 
     /**
-     * POSTs the form to the specified URL.
+     * Sends a request to the specified URL, and parses the response into the given type via databinding.
      *
      * @throws IOException
      *      if the server returns 4xx/5xx responses.
@@ -110,54 +127,85 @@ class Poster {
      *      {@link Reader} that reads the response.
      */
     public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
-        return to(tailApiUrl,type,"POST");
+        return _to(tailApiUrl, type, null);
     }
 
+    /**
+     * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     */
+    public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
+        return _to(tailApiUrl, null, existingInstance);
+    }
+
+    /**
+     * Short for {@code method(method).to(tailApiUrl,type)}
+     */
+    @Deprecated
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
+        return method(method).to(tailApiUrl,type);
+    }
+
+    private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         while (true) {// loop while API rate limit is hit
             HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
+            uc.setRequestProperty("Accept-Encoding", "gzip");
 
-            uc.setDoOutput(true);
-            uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-            if (authenticate) {
-                if (root.oauthAccessToken!=null) {
-                    uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
-                } else {
-                    if (root.password==null)
-                        throw new IllegalArgumentException("V3 API doesn't support API token");
-                    uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+            if (!method.equals("GET")) {
+                uc.setDoOutput(true);
+                uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
+                if (authenticate) {
+                    if (root.oauthAccessToken!=null) {
+                        uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
+                    } else {
+                        if (root.password==null)
+                            throw new IllegalArgumentException("V3 API doesn't support API token");
+                        uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+                    }
                 }
-            }
-            try {
-                uc.setRequestMethod(method);
-            } catch (ProtocolException e) {
-                // JDK only allows one of the fixed set of verbs. Try to override that
                 try {
-                    Field $method = HttpURLConnection.class.getDeclaredField("method");
-                    $method.setAccessible(true);
-                    $method.set(uc,method);
-                } catch (Exception x) {
-                    throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+                    uc.setRequestMethod(method);
+                } catch (ProtocolException e) {
+                    // JDK only allows one of the fixed set of verbs. Try to override that
+                    try {
+                        Field $method = HttpURLConnection.class.getDeclaredField("method");
+                        $method.setAccessible(true);
+                        $method.set(uc,method);
+                    } catch (Exception x) {
+                        throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+                    }
                 }
-            }
 
 
-            Map json = new HashMap();
-            for (Entry e : args) {
-                json.put(e.key, e.value);
+                Map json = new HashMap();
+                for (Entry e : args) {
+                    json.put(e.key, e.value);
+                }
+                MAPPER.writeValue(uc.getOutputStream(),json);
             }
-            MAPPER.writeValue(uc.getOutputStream(),json);
 
             try {
-                InputStreamReader r = new InputStreamReader(uc.getInputStream(), "UTF-8");
+                InputStreamReader r = new InputStreamReader(wrapStream(uc,uc.getInputStream()), "UTF-8");
                 String data = IOUtils.toString(r);
-                if (type==null) {
-                    return null;
-                }
-                return MAPPER.readValue(data,type);
+                if (type!=null)
+                    return MAPPER.readValue(data,type);
+                if (instance!=null)
+                    return MAPPER.readerForUpdating(instance).<T>readValue(data);
+                return null;
             } catch (IOException e) {
                 root.handleApiError(e,uc);
             }
         }
     }
+
+    /**
+     * Handles the "Content-Encoding" header.
+     */
+    private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
+        String encoding = uc.getContentEncoding();
+        if (encoding==null || in==null) return in;
+        if (encoding.equals("gzip"))    return new GZIPInputStream(in);
+
+        throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
+    }
+
 }

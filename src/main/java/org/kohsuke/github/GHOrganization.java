@@ -101,7 +101,7 @@ public class GHOrganization extends GHPerson {
             repo_names.add(r.getName());
         }
         post.with("repo_names",repo_names);
-        return post.to("/orgs/"+login+"/teams",GHTeam.class,"POST").wrapUp(this);
+        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {

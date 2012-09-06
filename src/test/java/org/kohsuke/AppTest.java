@@ -87,7 +87,7 @@ public class AppTest extends TestCase {
         assertFalse(r.hasAdminAccess());
     }
     
-    public void tryGetMyself() throws Exception {
+    public void testGetMyself() throws Exception {
         GitHub hub = GitHub.connect();
         GHMyself me = hub.getMyself();
         System.out.println(me);

@@ -158,19 +158,6 @@ class Poster {
             if (!method.equals("GET")) {
                 uc.setDoOutput(true);
                 uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-                try {
-                    uc.setRequestMethod(method);
-                } catch (ProtocolException e) {
-                    // JDK only allows one of the fixed set of verbs. Try to override that
-                    try {
-                        Field $method = HttpURLConnection.class.getDeclaredField("method");
-                        $method.setAccessible(true);
-                        $method.set(uc,method);
-                    } catch (Exception x) {
-                        throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
-                    }
-                }
-
 
                 Map json = new HashMap();
                 for (Entry e : args) {
@@ -285,7 +272,18 @@ class Poster {
         if (authenticate && root.encodedAuthorization!=null && root.oauthAccessToken == null)
             uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
 
-        uc.setRequestMethod(method);
+        try {
+            uc.setRequestMethod(method);
+        } catch (ProtocolException e) {
+            // JDK only allows one of the fixed set of verbs. Try to override that
+            try {
+                Field $method = HttpURLConnection.class.getDeclaredField("method");
+                $method.setAccessible(true);
+                $method.set(uc,method);
+            } catch (Exception x) {
+                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+            }
+        }
         uc.setRequestProperty("Accept-Encoding", "gzip");
         return uc;
     }

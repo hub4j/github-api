@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -41,6 +40,16 @@ public class GHPullRequest extends GHIssue {
 	private String merged_at;
 	private GHCommitPointer head;
 
+    // details that are only available when obtained from ID
+    private GHSmallUser merged_by;
+   	private int review_comments, additions;
+   	private boolean merged;
+   	private Boolean mergeable;
+   	private int deletions;
+   	private String mergeable_state;
+   	private int changed_files;
+
+
 	GHPullRequest wrapUp(GHRepository owner) {
 		this.wrap(owner);
         return wrapUp(owner.root);
@@ -50,6 +59,7 @@ public class GHPullRequest extends GHIssue {
         if (owner!=null)    owner.wrap(root);
         if (base!=null)     base.wrapUp(root);
         if (head!=null)     head.wrapUp(root);
+        if (merged_by != null) merged_by.wrapUp(root);
         return this;
     }
 	
@@ -116,7 +126,53 @@ public class GHPullRequest extends GHIssue {
 		return null;
 	}
 
-	public GHDetailedPullRequest getDetailedPullRequest() throws IOException{
-		return owner.getPullRequest(this.getNumber());
-	}
+//
+// details that are only available via get with ID
+//
+//
+    public GHSmallUser getMergedBy() {
+        populate();
+   		return merged_by;
+   	}
+
+   	public int getReviewComments() {
+        populate();
+   		return review_comments;
+   	}
+
+   	public int getAdditions() {
+        populate();
+   		return additions;
+   	}
+
+    public boolean isMerged() {
+        populate();
+   		return merged;
+   	}
+
+   	public Boolean getMergeable() {
+        populate();
+   		return mergeable;
+   	}
+
+   	public int getDeletions() {
+        populate();
+   		return deletions;
+   	}
+
+   	public String getMergeableState() {
+        populate();
+   		return mergeable_state;
+   	}
+
+   	public int getChangedFiles() {
+        populate();
+   		return changed_files;
+   	}
+
+    private void populate() {
+        if (merged_by!=null)    return; // already populated
+
+        root.retrieveWithAuth(getUrl(), this);
+    }
 }

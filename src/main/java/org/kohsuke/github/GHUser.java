@@ -34,6 +34,7 @@ import java.util.Set;
  * Represents an user of GitHub.
  *
  * @author Kohsuke Kawaguchi
+ * @see GHSmallUser
  */
 public class GHUser extends GHPerson {
 

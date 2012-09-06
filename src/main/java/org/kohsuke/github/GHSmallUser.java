@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
+ * This represents a subset of user information that often appear as a part of a bigger data graph in the GitHub API.
  *
  * @author Honza Brázdil
+ * @see GHUser
  */
 public class GHSmallUser {
 	private GitHub root;

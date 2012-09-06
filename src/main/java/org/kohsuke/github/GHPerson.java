@@ -56,7 +56,7 @@ public abstract class GHPerson {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrievePaged("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class,false);
+                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {

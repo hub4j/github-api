@@ -23,18 +23,20 @@
  */
 package org.kohsuke.github;
 
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
+import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -42,25 +44,12 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.zip.GZIPInputStream;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
-
-import sun.misc.BASE64Encoder;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 
 /**
  * Root of the GitHub API.
@@ -172,164 +161,6 @@ public class GitHub {
 
     /*package*/ Poster retrieve() {
         return new Poster(this).method("GET");
-    }
-
-    /**
-     * Loads pagenated resources.
-     *
-     * Every iterator call reports a new batch.
-     */
-    /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth) {
-        return new Iterator<T>() {
-            /**
-             * The next batch to be returned from {@link #next()}.
-             */
-            T next;
-            /**
-             * URL of the next resource to be retrieved, or null if no more data is available.
-             */
-            URL url;
-
-            {
-                try {
-                    url = getApiURL(tailApiUrl);
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
-
-            public boolean hasNext() {
-                fetch();
-                return next!=null;
-            }
-
-            public T next() {
-                fetch();
-                T r = next;
-                if (r==null)    throw new NoSuchElementException();
-                next = null;
-                return r;
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            private void fetch() {
-                if (next!=null) return; // already fetched
-                if (url==null)  return; // no more data to fetch
-
-                try {
-                    while (true) {// loop while API rate limit is hit
-                        HttpURLConnection uc = setupConnection("GET", withAuth, url);
-                        try {
-                            next = parse(uc,type);
-                            assert next!=null;
-                            findNextURL(uc);
-                            return;
-                        } catch (IOException e) {
-                            handleApiError(e,uc);
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
-
-            /**
-             * Locate the next page from the pagination "Link" tag.
-             */
-            private void findNextURL(HttpURLConnection uc) throws MalformedURLException {
-                url = null; // start defensively
-                String link = uc.getHeaderField("Link");
-                if (link==null) return;
-
-                for (String token : link.split(", ")) {
-                    if (token.endsWith("rel=\"next\"")) {
-                        // found the next page. This should look something like
-                        // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
-                        int idx = token.indexOf('>');
-                        url = new URL(token.substring(1,idx));
-                        return;
-                    }
-                }
-
-                // no more "next" link. we are done.
-            }
-        };
-    }
-
-    private HttpURLConnection setupConnection(String method, boolean withAuth, URL url) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-
-        // if the authentication is needed but no credential is given, try it anyway (so that some calls
-        // that do work with anonymous access in the reduced form should still work.)
-        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
-        if (withAuth && encodedAuthorization!=null && this.oauthAccessToken == null)
-            uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-
-        uc.setRequestMethod(method);
-        uc.setRequestProperty("Accept-Encoding", "gzip");
-        if (method.equals("PUT")) {
-            uc.setDoOutput(true);
-            uc.setRequestProperty("Content-Length","0");
-            uc.getOutputStream().close();
-        }
-        return uc;
-    }
-
-    private <T> T parse(HttpURLConnection uc, Class<T> type) throws IOException {
-        InputStreamReader r = null;
-        try {
-            r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
-            if (type==null) {
-                String data = IOUtils.toString(r);
-                return null;
-            }
-            return MAPPER.readValue(r,type);
-        } finally {
-            IOUtils.closeQuietly(r);
-        }
-    }
-
-    /**
-     * Handles the "Content-Encoding" header.
-     */
-    private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
-        String encoding = uc.getContentEncoding();
-        if (encoding==null || in==null) return in;
-        if (encoding.equals("gzip"))    return new GZIPInputStream(in);
-
-        throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
-    }
-
-    /**
-     * If the error is because of the API limit, wait 10 sec and return normally.
-     * Otherwise throw an exception reporting an error.
-     */
-    /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
-        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            // API limit reached. wait 10 secs and return normally
-            try {
-                Thread.sleep(10000);
-                return;
-            } catch (InterruptedException _) {
-                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
-            }
-        }
-        
-        if (e instanceof FileNotFoundException)
-            throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
-
-        InputStream es = wrapStream(uc, uc.getErrorStream());
-        try {
-            if (es!=null)
-                throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
-            else
-                throw e;
-        } finally {
-            IOUtils.closeQuietly(es);
-        }
     }
 
     /**

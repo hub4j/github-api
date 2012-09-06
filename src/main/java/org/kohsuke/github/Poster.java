@@ -25,18 +25,24 @@ package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.zip.GZIPInputStream;
 
 import static org.kohsuke.github.GitHub.*;
@@ -147,21 +153,11 @@ class Poster {
 
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = (HttpURLConnection) root.getApiURL(tailApiUrl).openConnection();
-            uc.setRequestProperty("Accept-Encoding", "gzip");
+            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
 
             if (!method.equals("GET")) {
                 uc.setDoOutput(true);
                 uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-                if (authenticate) {
-                    if (root.oauthAccessToken!=null) {
-                        uc.setRequestProperty("Authorization", "token " + root.oauthAccessToken);
-                    } else {
-                        if (root.password==null)
-                            throw new IllegalArgumentException("V3 API doesn't support API token");
-                        uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
-                    }
-                }
                 try {
                     uc.setRequestMethod(method);
                 } catch (ProtocolException e) {
@@ -184,16 +180,128 @@ class Poster {
             }
 
             try {
-                InputStreamReader r = new InputStreamReader(wrapStream(uc,uc.getInputStream()), "UTF-8");
-                String data = IOUtils.toString(r);
-                if (type!=null)
-                    return MAPPER.readValue(data,type);
-                if (instance!=null)
-                    return MAPPER.readerForUpdating(instance).<T>readValue(data);
-                return null;
+                return parse(uc,type,instance);
             } catch (IOException e) {
-                root.handleApiError(e,uc);
+                handleApiError(e,uc);
             }
+        }
+    }
+
+    /**
+     * Loads pagenated resources.
+     *
+     * Every iterator call reports a new batch.
+     */
+    /*package*/ <T> Iterator<T> asIterator(final String tailApiUrl, final Class<T> type) {
+        method("GET");
+        if (!args.isEmpty())    throw new IllegalStateException();
+
+        return new Iterator<T>() {
+            /**
+             * The next batch to be returned from {@link #next()}.
+             */
+            T next;
+            /**
+             * URL of the next resource to be retrieved, or null if no more data is available.
+             */
+            URL url;
+
+            {
+                try {
+                    url = root.getApiURL(tailApiUrl);
+                } catch (IOException e) {
+                    throw new Error(e);
+                }
+            }
+
+            public boolean hasNext() {
+                fetch();
+                return next!=null;
+            }
+
+            public T next() {
+                fetch();
+                T r = next;
+                if (r==null)    throw new NoSuchElementException();
+                next = null;
+                return r;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+            private void fetch() {
+                if (next!=null) return; // already fetched
+                if (url==null)  return; // no more data to fetch
+
+                try {
+                    while (true) {// loop while API rate limit is hit
+                        HttpURLConnection uc = setupConnection(url);
+                        try {
+                            next = parse(uc,type,null);
+                            assert next!=null;
+                            findNextURL(uc);
+                            return;
+                        } catch (IOException e) {
+                            handleApiError(e,uc);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new Error(e);
+                }
+            }
+
+            /**
+             * Locate the next page from the pagination "Link" tag.
+             */
+            private void findNextURL(HttpURLConnection uc) throws MalformedURLException {
+                url = null; // start defensively
+                String link = uc.getHeaderField("Link");
+                if (link==null) return;
+
+                for (String token : link.split(", ")) {
+                    if (token.endsWith("rel=\"next\"")) {
+                        // found the next page. This should look something like
+                        // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
+                        int idx = token.indexOf('>');
+                        url = new URL(token.substring(1,idx));
+                        return;
+                    }
+                }
+
+                // no more "next" link. we are done.
+            }
+        };
+    }
+
+
+    private HttpURLConnection setupConnection(URL url) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+
+        // if the authentication is needed but no credential is given, try it anyway (so that some calls
+        // that do work with anonymous access in the reduced form should still work.)
+        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
+        if (authenticate && root.encodedAuthorization!=null && root.oauthAccessToken == null)
+            uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+
+        uc.setRequestMethod(method);
+        uc.setRequestProperty("Accept-Encoding", "gzip");
+        return uc;
+    }
+
+    private <T> T parse(HttpURLConnection uc, Class<T> type, T instance) throws IOException {
+        InputStreamReader r = null;
+        try {
+            r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
+            String data = IOUtils.toString(r);
+            if (type!=null)
+                return MAPPER.readValue(data,type);
+            if (instance!=null)
+                return MAPPER.readerForUpdating(instance).<T>readValue(data);
+            return null;
+        } finally {
+            IOUtils.closeQuietly(r);
         }
     }
 
@@ -208,4 +316,32 @@ class Poster {
         throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
     }
 
+    /**
+     * If the error is because of the API limit, wait 10 sec and return normally.
+     * Otherwise throw an exception reporting an error.
+     */
+    /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
+        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
+            // API limit reached. wait 10 secs and return normally
+            try {
+                Thread.sleep(10000);
+                return;
+            } catch (InterruptedException _) {
+                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
+            }
+        }
+
+        if (e instanceof FileNotFoundException)
+            throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
+
+        InputStream es = wrapStream(uc, uc.getErrorStream());
+        try {
+            if (es!=null)
+                throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
+            else
+                throw e;
+        } finally {
+            IOUtils.closeQuietly(es);
+        }
+    }
 }

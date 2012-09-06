@@ -167,7 +167,7 @@ public class GHIssue {
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
             public PagedIterator<GHIssueComment> iterator() {
-                return new PagedIterator<GHIssueComment>(root.retrievePaged(getApiRoute() + "/comments",GHIssueComment[].class,false)) {
+                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getApiRoute() + "/comments",GHIssueComment[].class)) {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);

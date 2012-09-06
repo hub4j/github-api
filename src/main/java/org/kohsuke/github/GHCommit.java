@@ -203,7 +203,7 @@ public class GHCommit {
     public PagedIterable<GHCommitComment> listComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(owner.root.retrievePaged(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment[].class,false)) {
+                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment[].class)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)

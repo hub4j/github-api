@@ -163,8 +163,11 @@ public class GitHub {
     		// append the access token
     		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
-    	
-        return new URL("https://api."+githubServer+tailApiUrl);
+
+        if (tailApiUrl.startsWith("/"))
+            return new URL("https://api."+githubServer+tailApiUrl);
+        else
+            return new URL(tailApiUrl);
     }
 
     /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {

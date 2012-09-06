@@ -235,10 +235,17 @@ public class GHCommit {
     }
 
     /**
-     * Gets the status of this commit.
+     * Gets the status of this commit, newer ones first.
      */
-    public GHCommitStatus getStatus() throws IOException {
-        return owner.getCommitStatus(sha);
+    public PagedIterable<GHCommitStatus> listStatuses() throws IOException {
+        return owner.listCommitStatuses(sha);
+    }
+
+    /**
+     * Gets the last status of this commit, which is what gets shown in the UI.
+     */
+    public GHCommitStatus getLastStatus() throws IOException {
+        return owner.getLastCommitStatus(sha);
     }
 
     GHCommit wrapUp(GHRepository owner) {

@@ -42,6 +42,11 @@ public class GHCommitStatus {
         throw new IllegalStateException("Unexpected state: "+state);
     }
 
+    /**
+     * The URL that this status is linked to.
+     *
+     * This is the URL specified when creating a commit status.
+     */
     public String getTargetUrl() {
         return target_url;
     }
@@ -63,23 +68,5 @@ public class GHCommitStatus {
 
     public GHUser getCreator() {
         return creator;
-    }
-
-    /**
-     * Updates the description.
-     *
-     * TODO: verify if this actually works, and create setTargetUrl, too.
-     */
-    public void setDescription(String description) throws IOException {
-        new Poster(root)
-                .with("description",description)
-                .withCredential()
-                .to(url,null,"PATCH");
-        this.description = description;
-    }
-
-    // TODO: verify if it works
-    public void delete() throws IOException {
-        new Poster(root).withCredential().to(url,null,"DELETE");
     }
 }

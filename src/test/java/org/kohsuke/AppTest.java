@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
+import org.kohsuke.github.GHCommitState;
+import org.kohsuke.github.GHCommitStatus;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
@@ -45,7 +47,7 @@ public class AppTest extends TestCase {
 
     public void testCredentialValid() throws IOException {
         assertTrue(GitHub.connect().isCredentialValid());
-        assertFalse(GitHub.connect("totally","bogus").isCredentialValid());
+        assertFalse(GitHub.connect("totally", "bogus").isCredentialValid());
     }
 
     public void testRateLimit() throws IOException {
@@ -307,5 +309,18 @@ public class AppTest extends TestCase {
         assertNotNull(j.getRepository("jenkins"));
 
 //        t.add(labs.getRepository("xyz"));
+    }
+
+    public void testCommitStatus() throws Exception {
+        GitHub gitHub = GitHub.connect();
+        GHRepository r = gitHub.getUser("kohsuke").getRepository("test");
+        GHCommitStatus state;
+//        state = r.createCommitStatus("edacdd76b06c5f3f0697a22ca75803169f25f296", GHCommitState.FAILURE, "http://jenkins-ci.org/", "oops!");
+
+        List<GHCommitStatus> lst = r.listCommitStatuses("edacdd76b06c5f3f0697a22ca75803169f25f296").asList();
+        state = lst.get(0);
+        System.out.println(state);
+        assertEquals("oops!",state.getDescription());
+        assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
     }
 }

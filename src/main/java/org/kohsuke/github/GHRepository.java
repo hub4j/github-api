@@ -442,8 +442,29 @@ public class GHRepository {
         };
     }
 
-    public GHCommitStatus getCommitStatus(String sha1) throws IOException {
-        return root.retrieve(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus.class).wrapUp(root);
+    /**
+     * Lists all the commit statues attached to the given commit, newer ones first.
+     */
+    public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
+        return new PagedIterable<GHCommitStatus>() {
+            public PagedIterator<GHCommitStatus> iterator() {
+                return new PagedIterator<GHCommitStatus>(root.retrievePaged(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1),GHCommitStatus[].class,false)) {
+                    @Override
+                    protected void wrapUp(GHCommitStatus[] page) {
+                        for (GHCommitStatus c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Gets the last status of this commit, which is what gets shown in the UI.
+     */
+    public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
+        List<GHCommitStatus> v = listCommitStatuses(sha1).asList();
+        return v.isEmpty() ? null : v.get(0);
     }
 
     /**

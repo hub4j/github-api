@@ -52,7 +52,7 @@ import static org.kohsuke.github.GitHub.*;
  *
  * @author Kohsuke Kawaguchi
  */
-class Poster {
+class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private boolean authenticate;
@@ -72,50 +72,50 @@ class Poster {
         }
     }
 
-    Poster(GitHub root) {
+    Requester(GitHub root) {
         this.root = root;
     }
 
     /**
      * Makes a request with authentication credential.
      */
-    public Poster withCredential() {
+    public Requester withCredential() {
         // keeping it inline with retrieveWithAuth not to enforce the check
         // root.requireCredential();
         authenticate = true;
         return this;
     }
 
-    public Poster with(String key, int value) {
+    public Requester with(String key, int value) {
         return _with(key, value);
     }
 
-    public Poster with(String key, Integer value) {
+    public Requester with(String key, Integer value) {
         if (value!=null)
             _with(key, value.intValue());
         return this;
     }
 
-    public Poster with(String key, boolean value) {
+    public Requester with(String key, boolean value) {
         return _with(key, value);
     }
 
-    public Poster with(String key, String value) {
+    public Requester with(String key, String value) {
         return _with(key, value);
     }
 
-    public Poster with(String key, Collection<String> value) {
+    public Requester with(String key, Collection<String> value) {
         return _with(key, value);
     }
 
-    public Poster _with(String key, Object value) {
+    public Requester _with(String key, Object value) {
         if (value!=null) {
             args.add(new Entry(key,value));
         }
         return this;
     }
 
-    public Poster method(String method) {
+    public Requester method(String method) {
         this.method = method;
         return this;
     }

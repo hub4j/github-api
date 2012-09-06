@@ -37,7 +37,7 @@ public class GHMyself extends GHUser {
     }
     
 //    public void addEmails(Collection<String> emails) throws IOException {
-////        new Poster(root,ApiVersion.V3).withCredential().to("/user/emails");
+////        new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
 //        root.retrieveWithAuth3()
 //    }
 }

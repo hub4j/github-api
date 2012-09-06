@@ -33,7 +33,7 @@ public class GHOrganization extends GHPerson {
 
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
         // such API doesn't exist, so fall back to HTML scraping
-        return new Poster(root).withCredential()
+        return new Requester(root).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
                 .with("public", isPublic).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
     }
@@ -95,7 +95,7 @@ public class GHOrganization extends GHPerson {
      * Creates a new team and assigns the repositories.
      */
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Poster post = new Poster(root).withCredential().with("name", name).with("permission", p.name().toLowerCase());
+        Requester post = new Requester(root).withCredential().with("name", name).with("permission", p.name().toLowerCase());
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(r.getName());

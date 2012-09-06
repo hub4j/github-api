@@ -115,11 +115,11 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Poster(root).withCredential().with("body",message).to(getApiRoute() + "/comments");
+        new Requester(root).withCredential().with("body",message).to(getApiRoute() + "/comments");
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Poster(root).withCredential()._with(key, value).method("PATCH").to(getApiRoute());
+        new Requester(root).withCredential()._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     /**
@@ -167,7 +167,7 @@ public class GHIssue {
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
             public PagedIterator<GHIssueComment> iterator() {
-                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getApiRoute() + "/comments",GHIssueComment[].class)) {
+                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getApiRoute() + "/comments", GHIssueComment[].class)) {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);

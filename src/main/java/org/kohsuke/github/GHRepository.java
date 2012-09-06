@@ -253,7 +253,7 @@ public class GHRepository {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Poster(root).withCredential().method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
+            new Requester(root).withCredential().method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
         }
     }
 
@@ -270,10 +270,10 @@ public class GHRepository {
     }
 
     private void edit(String key, String value) throws IOException {
-        Poster poster = new Poster(root).withCredential();
+        Requester requester = new Requester(root).withCredential();
         if (!key.equals("name"))
-            poster.with("name", name);   // even when we don't change the name, we need to send it in
-        poster.with(key, value).method("PATCH").to("/repos/" + owner.login + "/" + name);
+            requester.with("name", name);   // even when we don't change the name, we need to send it in
+        requester.with(key, value).method("PATCH").to("/repos/" + owner.login + "/" + name);
     }
 
     /**
@@ -313,7 +313,7 @@ public class GHRepository {
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        new Poster(root).withCredential().method("DELETE").to("/repos/" + owner.login + "/" + name);
+        new Requester(root).withCredential().method("DELETE").to("/repos/" + owner.login + "/" + name);
     }
 
     /**
@@ -323,7 +323,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Poster(root).withCredential().method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
+        return new Requester(root).withCredential().method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
     }
 
     /**
@@ -333,7 +333,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Poster(root).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
+        new Requester(root).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -370,7 +370,7 @@ public class GHRepository {
     public PagedIterable<GHPullRequest> listPullRequests(final GHIssueState state) {
         return new PagedIterable<GHPullRequest>() {
             public PagedIterator<GHPullRequest> iterator() {
-                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(String.format("/repos/%s/%s/pulls?state=%s", owner.login,name,state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
+                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(String.format("/repos/%s/%s/pulls?state=%s", owner.login, name, state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
                     @Override
                     protected void wrapUp(GHPullRequest[] page) {
                         for (GHPullRequest pr : page)
@@ -414,7 +414,7 @@ public class GHRepository {
     public PagedIterable<GHCommit> listCommits() {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits",owner.login,name),GHCommit[].class)) {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits", owner.login, name), GHCommit[].class)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(GHRepository.this);
@@ -430,7 +430,7 @@ public class GHRepository {
     public PagedIterable<GHCommitComment> listCommitComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(String.format("/repos/%s/%s/comments",owner.login,name),GHCommitComment[].class)) {
+                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(String.format("/repos/%s/%s/comments", owner.login, name), GHCommitComment[].class)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -447,7 +447,7 @@ public class GHRepository {
     public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
         return new PagedIterable<GHCommitStatus>() {
             public PagedIterator<GHCommitStatus> iterator() {
-                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1),GHCommitStatus[].class)) {
+                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus[].class)) {
                     @Override
                     protected void wrapUp(GHCommitStatus[] page) {
                         for (GHCommitStatus c : page)
@@ -475,7 +475,7 @@ public class GHRepository {
      *      Optional short description.
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
-        return new Poster(root)
+        return new Requester(root)
                 .withCredential()
                 .with("state",state.name().toLowerCase(Locale.ENGLISH))
                 .with("target_url", targetUrl)
@@ -504,7 +504,7 @@ public class GHRepository {
                 ea.add(e.name().toLowerCase(Locale.ENGLISH));
         }
 
-        return new Poster(root)
+        return new Requester(root)
                 .withCredential()
                 .with("name",name)
                 .with("active", active)
@@ -640,7 +640,7 @@ public class GHRepository {
 	}
 	
 	public GHMilestone createMilestone(String title, String description) throws IOException {
-        return new Poster(root).withCredential()
+        return new Requester(root).withCredential()
                 .with("title", title).with("description", description).method("POST").to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone.class).wrap(this);
 	}
 

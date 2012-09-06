@@ -97,7 +97,7 @@ public class GHCommitComment {
      * Updates the body of the commit message.
      */
     public void update(String body) throws IOException {
-        GHCommitComment r = new Poster(owner.root)
+        GHCommitComment r = new Requester(owner.root)
                 .with("body", body)
                 .withCredential().method("PATCH").to(getApiTail(), GHCommitComment.class);
         this.body = body;
@@ -107,7 +107,7 @@ public class GHCommitComment {
      * Deletes this comment.
      */
     public void delete() throws IOException {
-        new Poster(owner.root).withCredential().method("DELETE").to(getApiTail());
+        new Requester(owner.root).withCredential().method("DELETE").to(getApiTail());
     }
 
     private String getApiTail() {

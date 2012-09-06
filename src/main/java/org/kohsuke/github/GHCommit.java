@@ -203,7 +203,7 @@ public class GHCommit {
     public PagedIterable<GHCommitComment> listComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment[].class)) {
+                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha), GHCommitComment[].class)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -220,7 +220,7 @@ public class GHCommit {
      * I'm not sure how path/line/position parameters interact with each other.
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = new Poster(owner.root)
+        GHCommitComment r = new Requester(owner.root)
                 .with("body",body)
                 .with("path",path)
                 .with("line",line)

@@ -54,6 +54,6 @@ public final class GHHook {
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Poster(repository.root).withCredential().method("DELETE").to(String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id));
+        new Requester(repository.root).withCredential().method("DELETE").to(String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id));
     }
 }

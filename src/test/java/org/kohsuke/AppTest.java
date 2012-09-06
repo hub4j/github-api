@@ -330,6 +330,6 @@ public class AppTest extends TestCase {
         GHRepository r = gitHub.getUser("kohsuke").getRepository("github-api");
         GHPullRequest p = r.getPullRequest(17);
         GHUser u = p.getUser();
-        System.out.println(u.getName());
+        assertNotNull(u.getName());
     }
 }

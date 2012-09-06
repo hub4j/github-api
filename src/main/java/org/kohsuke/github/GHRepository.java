@@ -141,7 +141,7 @@ public class GHRepository {
     }
 
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-       return Arrays.asList(GHIssue.wrap(root.retrieve("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
+        return Arrays.asList(GHIssue.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
     }
 
     protected String getOwnerName() {
@@ -213,7 +213,7 @@ public class GHRepository {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(GHUser.wrap(root.retrieve("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root));
+        return new GHPersonSet<GHUser>(GHUser.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root));
     }
 
     /**
@@ -222,7 +222,7 @@ public class GHRepository {
      */
     public Set<String> getCollaboratorNames() throws IOException {
         Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(root.retrieve("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root))
+        for (GHUser u : GHUser.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root))
             r.add(u.login);
         return r;
     }
@@ -231,7 +231,7 @@ public class GHRepository {
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieveWithAuth("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().withCredential().to("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
     }
 
     public void addCollaborators(GHUser... users) throws IOException {
@@ -352,7 +352,7 @@ public class GHRepository {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieveWithAuth("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
+        return root.retrieve().withCredential().to("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -386,14 +386,14 @@ public class GHRepository {
      */
     public List<GHHook> getHooks() throws IOException {
         List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieveWithAuth(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
+                root.retrieve().withCredential().to(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
         for (GHHook h : list)
             h.wrap(this);
         return list;
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieveWithAuth(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
+        return root.retrieve().withCredential().to(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
     }
 
     /**
@@ -402,7 +402,7 @@ public class GHRepository {
     public GHCommit getCommit(String sha1) throws IOException {
         GHCommit c = commits.get(sha1);
         if (c==null) {
-            c = root.retrieve(String.format("/repos/%s/%s/commits/%s", owner.login, name, sha1), GHCommit.class).wrapUp(this);
+            c = root.retrieve().to(String.format("/repos/%s/%s/commits/%s", owner.login, name, sha1), GHCommit.class).wrapUp(this);
             commits.put(sha1,c);
         }
         return c;
@@ -610,7 +610,7 @@ public class GHRepository {
      */
     public Map<String,GHBranch> getBranches() throws IOException {
         Map<String,GHBranch> r = new TreeMap<String,GHBranch>();
-        for (GHBranch p : root.retrieve("/repos/" + owner.login + "/" + name + "/branches", GHBranch[].class)) {
+        for (GHBranch p : root.retrieve().to("/repos/" + owner.login + "/" + name + "/branches", GHBranch[].class)) {
             p.wrap(this);
             r.put(p.getName(),p);
         }
@@ -619,7 +619,7 @@ public class GHRepository {
 
     public Map<Integer, GHMilestone> getMilestones() throws IOException {
         Map<Integer,GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
-    	GHMilestone[] ms = root.retrieve("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone[].class);
+        GHMilestone[] ms = root.retrieve().to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone[].class);
     	for (GHMilestone m : ms) {
     		m.owner = this;
     		m.root = root;
@@ -631,7 +631,7 @@ public class GHRepository {
 	public GHMilestone getMilestone(int number) throws IOException {
 		GHMilestone m = milestones.get(number);
 		if (m == null) {
-			m = root.retrieve("/repos/" + owner.login + "/" + name + "/milestones/" + number, GHMilestone.class);
+            m = root.retrieve().to("/repos/" + owner.login + "/" + name + "/milestones/" + number, GHMilestone.class);
     		m.owner = this;
     		m.root = root;
 			milestones.put(m.getNumber(), m);

@@ -46,11 +46,11 @@ public class GHTeam {
      * Retrieves the current members.
      */
     public Set<GHUser> getMembers() throws IOException {
-        return new HashSet<GHUser>(Arrays.asList(GHUser.wrap(org.root.retrieveWithAuth(api("/members"), GHUser[].class), org.root)));
+        return new HashSet<GHUser>(Arrays.asList(GHUser.wrap(org.root.retrieve().withCredential().to(api("/members"), GHUser[].class), org.root)));
     }
 
     public Map<String,GHRepository> getRepositories() throws IOException {
-        GHRepository[] repos = org.root.retrieveWithAuth(api("/repos"), GHRepository[].class);
+        GHRepository[] repos = org.root.retrieve().withCredential().to(api("/repos"), GHRepository[].class);
         Map<String,GHRepository> m = new TreeMap<String, GHRepository>();
         for (GHRepository r : repos) {
             m.put(r.getName(),r.wrap(org.root));
@@ -62,22 +62,22 @@ public class GHTeam {
      * Adds a member to the team.
      */
     public void add(GHUser u) throws IOException {
-        org.root.retrieveWithAuth(api("/members/" + u.getLogin()), null, "PUT");
+        org.root.retrieve().withCredential().method("PUT").to(api("/members/" + u.getLogin()), null);
     }
 
     /**
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        org.root.retrieveWithAuth(api("/members/" + u.getLogin()), null, "DELETE");
+        org.root.retrieve().withCredential().method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null, "PUT");
+        org.root.retrieve().withCredential().method("PUT").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        org.root.retrieveWithAuth(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null, "DELETE");
+        org.root.retrieve().withCredential().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     private String api(String tail) {

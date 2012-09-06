@@ -22,7 +22,7 @@ public class GHMyself extends GHUser {
      *      Always non-null.
      */
     public List<String> getEmails() throws IOException {
-        String[] addresses = root.retrieveWithAuth("/user/emails", String[].class);
+        String[] addresses = root.retrieve().withCredential().to("/user/emails", String[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 
@@ -33,11 +33,11 @@ public class GHMyself extends GHUser {
      *      Always non-null.
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieveWithAuth("/user/keys", GHKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(root.retrieve().withCredential().to("/user/keys", GHKey[].class)));
     }
     
 //    public void addEmails(Collection<String> emails) throws IOException {
-////        new Poster(root,ApiVersion.V3).withCredential().to("/user/emails");
+////        new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
 //        root.retrieveWithAuth3()
 //    }
 }

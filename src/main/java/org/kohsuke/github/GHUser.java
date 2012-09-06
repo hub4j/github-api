@@ -42,14 +42,14 @@ public class GHUser extends GHPerson {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Poster(root).withCredential().to("/user/following/"+login,null,"PUT");
+        new Requester(root).withCredential().method("PUT").to("/user/following/" + login);
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Poster(root).withCredential().to("/user/following/"+login,null,"DELETE");
+        new Requester(root).withCredential().method("DELETE").to("/user/following/" + login);
     }
 
     /**
@@ -57,7 +57,7 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
-        GHUser[] followers = root.retrieve("/users/" + login + "/following", GHUser[].class);
+        GHUser[] followers = root.retrieve().to("/users/" + login + "/following", GHUser[].class);
         return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
     }
 
@@ -66,7 +66,7 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollowers() throws IOException {
-        GHUser[] followers = root.retrieve("/users/" + login + "/followers", GHUser[].class);
+        GHUser[] followers = root.retrieve().to("/users/" + login + "/followers", GHUser[].class);
         return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
     }
 
@@ -83,7 +83,7 @@ public class GHUser extends GHPerson {
     public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve("/users/" + login + "/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.retrieve().to("/users/" + login + "/orgs", GHOrganization[].class)) {
             if (names.add(o.getLogin()))    // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }

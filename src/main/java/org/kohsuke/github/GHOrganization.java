@@ -33,7 +33,7 @@ public class GHOrganization extends GHPerson {
 
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
         // such API doesn't exist, so fall back to HTML scraping
-        return new Poster(root).withCredential()
+        return new Requester(root).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
                 .with("public", isPublic).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
     }
@@ -42,7 +42,7 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      */
     public Map<String,GHTeam> getTeams() throws IOException {
-        GHTeam[] teams = root.retrieveWithAuth("/orgs/" + login + "/teams", GHTeam[].class);
+        GHTeam[] teams = root.retrieve().withCredential().to("/orgs/" + login + "/teams", GHTeam[].class);
         Map<String,GHTeam> r = new TreeMap<String, GHTeam>();
         for (GHTeam t : teams) {
             r.put(t.getName(),t.wrapUp(this));
@@ -54,7 +54,7 @@ public class GHOrganization extends GHPerson {
      * Publicizes the membership.
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieveWithAuth("/orgs/" + login + "/public_members/" + u.getLogin(), null, "PUT");
+        root.retrieve().withCredential().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     /**
@@ -64,7 +64,7 @@ public class GHOrganization extends GHPerson {
         return new AbstractList<GHUser>() {
             // these are shallow objects with only some limited values filled out
             // TODO: it's better to allow objects to fill themselves in later when missing values are requested
-            final GHUser[] shallow = root.retrieveWithAuth("/orgs/" + login + "/members", GHUser[].class);
+            final GHUser[] shallow = root.retrieve().withCredential().to("/orgs/" + login + "/members", GHUser[].class);
 
             @Override
             public GHUser get(int index) {
@@ -86,7 +86,7 @@ public class GHOrganization extends GHPerson {
      * Conceals the membership.
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieveWithAuth("/orgs/" + login + "/public_members/" + u.getLogin(), null, "DELETE");
+        root.retrieve().withCredential().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     public enum Permission { ADMIN, PUSH, PULL }
@@ -95,13 +95,13 @@ public class GHOrganization extends GHPerson {
      * Creates a new team and assigns the repositories.
      */
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Poster post = new Poster(root).withCredential().with("name", name).with("permission", p.name().toLowerCase());
+        Requester post = new Requester(root).withCredential().with("name", name).with("permission", p.name().toLowerCase());
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(r.getName());
         }
         post.with("repo_names",repo_names);
-        return post.to("/orgs/"+login+"/teams",GHTeam.class,"POST").wrapUp(this);
+        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {

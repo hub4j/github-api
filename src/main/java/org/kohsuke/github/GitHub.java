@@ -23,18 +23,20 @@
  */
 package org.kohsuke.github;
 
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
+import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -42,25 +44,12 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.zip.GZIPInputStream;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
-
-import sun.misc.BASE64Encoder;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 
 /**
  * Root of the GitHub API.
@@ -163,196 +152,22 @@ public class GitHub {
     		// append the access token
     		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
-    	
-        return new URL("https://api."+githubServer+tailApiUrl);
+
+        if (tailApiUrl.startsWith("/"))
+            return new URL("https://api."+githubServer+tailApiUrl);
+        else
+            return new URL(tailApiUrl);
     }
 
-    /*package*/ <T> T retrieve(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", false);
-    }
-
-    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type) throws IOException {
-        return _retrieve(tailApiUrl, type, "GET", true);
-    }
-
-    /*package*/ <T> T retrieveWithAuth(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return _retrieve(tailApiUrl, type, method, true);
-    }
-
-    private <T> T _retrieve(String tailApiUrl, Class<T> type, String method, boolean withAuth) throws IOException {
-        while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = setupConnection(method, withAuth, getApiURL(tailApiUrl));
-            try {
-                return parse(uc,type);
-            } catch (IOException e) {
-                handleApiError(e,uc);
-            }
-        }
-    }
-
-    /**
-     * Loads pagenated resources.
-     *
-     * Every iterator call reports a new batch.
-     */
-    /*package*/ <T> Iterator<T> retrievePaged(final String tailApiUrl, final Class<T> type, final boolean withAuth) {
-        return new Iterator<T>() {
-            /**
-             * The next batch to be returned from {@link #next()}.
-             */
-            T next;
-            /**
-             * URL of the next resource to be retrieved, or null if no more data is available.
-             */
-            URL url;
-
-            {
-                try {
-                    url = getApiURL(tailApiUrl);
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
-
-            public boolean hasNext() {
-                fetch();
-                return next!=null;
-            }
-
-            public T next() {
-                fetch();
-                T r = next;
-                if (r==null)    throw new NoSuchElementException();
-                next = null;
-                return r;
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            private void fetch() {
-                if (next!=null) return; // already fetched
-                if (url==null)  return; // no more data to fetch
-
-                try {
-                    while (true) {// loop while API rate limit is hit
-                        HttpURLConnection uc = setupConnection("GET", withAuth, url);
-                        try {
-                            next = parse(uc,type);
-                            assert next!=null;
-                            findNextURL(uc);
-                            return;
-                        } catch (IOException e) {
-                            handleApiError(e,uc);
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
-
-            /**
-             * Locate the next page from the pagination "Link" tag.
-             */
-            private void findNextURL(HttpURLConnection uc) throws MalformedURLException {
-                url = null; // start defensively
-                String link = uc.getHeaderField("Link");
-                if (link==null) return;
-
-                for (String token : link.split(", ")) {
-                    if (token.endsWith("rel=\"next\"")) {
-                        // found the next page. This should look something like
-                        // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
-                        int idx = token.indexOf('>');
-                        url = new URL(token.substring(1,idx));
-                        return;
-                    }
-                }
-
-                // no more "next" link. we are done.
-            }
-        };
-    }
-
-    private HttpURLConnection setupConnection(String method, boolean withAuth, URL url) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-
-        // if the authentication is needed but no credential is given, try it anyway (so that some calls
-        // that do work with anonymous access in the reduced form should still work.)
-        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
-        if (withAuth && encodedAuthorization!=null && this.oauthAccessToken == null)
-            uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-
-        uc.setRequestMethod(method);
-        uc.setRequestProperty("Accept-Encoding", "gzip");
-        if (method.equals("PUT")) {
-            uc.setDoOutput(true);
-            uc.setRequestProperty("Content-Length","0");
-            uc.getOutputStream().close();
-        }
-        return uc;
-    }
-
-    private <T> T parse(HttpURLConnection uc, Class<T> type) throws IOException {
-        InputStreamReader r = null;
-        try {
-            r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
-            if (type==null) {
-                String data = IOUtils.toString(r);
-                return null;
-            }
-            return MAPPER.readValue(r,type);
-        } finally {
-            IOUtils.closeQuietly(r);
-        }
-    }
-
-    /**
-     * Handles the "Content-Encoding" header.
-     */
-    private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
-        String encoding = uc.getContentEncoding();
-        if (encoding==null || in==null) return in;
-        if (encoding.equals("gzip"))    return new GZIPInputStream(in);
-
-        throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
-    }
-
-    /**
-     * If the error is because of the API limit, wait 10 sec and return normally.
-     * Otherwise throw an exception reporting an error.
-     */
-    /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
-        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            // API limit reached. wait 10 secs and return normally
-            try {
-                Thread.sleep(10000);
-                return;
-            } catch (InterruptedException _) {
-                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
-            }
-        }
-        
-        if (e instanceof FileNotFoundException)
-            throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
-
-        InputStream es = wrapStream(uc, uc.getErrorStream());
-        try {
-            if (es!=null)
-                throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
-            else
-                throw e;
-        } finally {
-            IOUtils.closeQuietly(es);
-        }
+    /*package*/ Requester retrieve() {
+        return new Requester(this).method("GET");
     }
 
     /**
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
-        return retrieveWithAuth("/rate_limit", JsonRateLimit.class).rate;
+        return retrieve().withCredential().to("/rate_limit", JsonRateLimit.class).rate;
     }
 
     /**
@@ -362,7 +177,7 @@ public class GitHub {
 	public GHMyself getMyself() throws IOException {
 		requireCredential();
 
-        GHMyself u = retrieveWithAuth("/user", GHMyself.class);
+        GHMyself u = retrieve().withCredential().to("/user", GHMyself.class);
 
         u.root = this;
         users.put(u.getLogin(), u);
@@ -376,7 +191,7 @@ public class GitHub {
 	public GHUser getUser(String login) throws IOException {
 		GHUser u = users.get(login);
 		if (u == null) {
-            u = retrieve("/users/" + login, GHUser.class);
+            u = retrieve().to("/users/" + login, GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
 		}
@@ -399,7 +214,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve("/orgs/" + name, GHOrganization.class).wrapUp(this);
+            o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
             orgs.put(name,o);
         }
         return o;
@@ -422,7 +237,7 @@ public class GitHub {
      * TODO: make this automatic.
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieveWithAuth("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = retrieve().withCredential().to("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -436,7 +251,7 @@ public class GitHub {
      */
     public List<GHEventInfo> getEvents() throws IOException {
         // TODO: pagenation
-        GHEventInfo[] events = retrieve("/events", GHEventInfo[].class);
+        GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
@@ -462,9 +277,10 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        return new Poster(this).withCredential()
+        Requester requester = new Requester(this).withCredential()
                 .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0).to("/user/repos", GHRepository.class,"POST").wrap(this);
+                .with("public", isPublic ? 1 : 0);
+        return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
     }
 
     /**
@@ -472,7 +288,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() throws IOException {
         try {
-            retrieveWithAuth("/user", GHUser.class);
+            retrieve().withCredential().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
             return false;

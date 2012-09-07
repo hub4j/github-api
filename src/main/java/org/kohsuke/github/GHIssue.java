@@ -211,7 +211,6 @@ public class GHIssue {
     /**
      * User who submitted the issue.
      */
-	@Deprecated
 	public GHUser getUser() {
         return user;
 	}

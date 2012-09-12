@@ -167,7 +167,7 @@ public class GitHub {
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
-        return retrieve().withCredential().to("/rate_limit", JsonRateLimit.class).rate;
+        return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
     }
 
     /**
@@ -177,7 +177,7 @@ public class GitHub {
 	public GHMyself getMyself() throws IOException {
 		requireCredential();
 
-        GHMyself u = retrieve().withCredential().to("/user", GHMyself.class);
+        GHMyself u = retrieve().to("/user", GHMyself.class);
 
         u.root = this;
         users.put(u.getLogin(), u);
@@ -237,7 +237,7 @@ public class GitHub {
      * TODO: make this automatic.
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieve().withCredential().to("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -277,7 +277,7 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        Requester requester = new Requester(this).withCredential()
+        Requester requester = new Requester(this)
                 .with("name", name).with("description", description).with("homepage", homepage)
                 .with("public", isPublic ? 1 : 0);
         return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
@@ -288,7 +288,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() throws IOException {
         try {
-            retrieve().withCredential().to("/user", GHUser.class);
+            retrieve().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
             return false;

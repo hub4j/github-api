@@ -12,6 +12,7 @@ import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
 import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueComment;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHKey;
 import org.kohsuke.github.GHMyself;
@@ -49,6 +50,17 @@ public class AppTest extends TestCase {
     public void testCredentialValid() throws IOException {
         assertTrue(GitHub.connect().isCredentialValid());
         assertFalse(GitHub.connect("totally", "bogus").isCredentialValid());
+    }
+
+    public void testIssueWithNoComment() throws IOException {
+        GHRepository repository = GitHub.connect().getRepository("kohsuke/github-api");
+        List<GHIssueComment> v = repository.getIssue(13).getComments();
+        System.out.println(v);
+        assertTrue(v.isEmpty());
+
+        v = repository.getIssue(5).getComments();
+        System.out.println(v);
+        assertTrue(v.size()==3);
     }
 
     public void testRateLimit() throws IOException {

@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
-import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHCommitStatus;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
@@ -24,7 +23,6 @@ import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.PagedIterable;
-import org.kohsuke.github.PagedIterator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,6 +59,12 @@ public class AppTest extends TestCase {
         v = repository.getIssue(5).getComments();
         System.out.println(v);
         assertTrue(v.size()==3);
+    }
+
+    public void testCreateIssue() throws IOException {
+        GHIssue o = GitHub.connect().getRepository("kohsuke/test").createIssue("testing").body("this is body").create();
+        System.out.println(o.getUrl());
+        o.close();
     }
 
     public void testRateLimit() throws IOException {

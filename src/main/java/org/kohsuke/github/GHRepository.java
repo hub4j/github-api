@@ -144,6 +144,10 @@ public class GHRepository {
         return root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues/" + id, GHIssue.class).wrap(this);
     }
 
+    public GHIssueBuilder createIssue(String title) {
+        return new GHIssueBuilder(this,title);
+    }
+
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
     }

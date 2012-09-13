@@ -140,6 +140,10 @@ public class GHRepository {
         return root.getUser(owner.login);   // because 'owner' isn't fully populated
     }
 
+    public GHIssue getIssue(int id) throws IOException {
+        return root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues/" + id, GHIssue.class).wrap(this);
+    }
+
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
     }
@@ -333,7 +337,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Requester(root).to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
+        new Requester(root).to(String.format("/repos/%s/%s/forks?org=%s", owner.login, name, org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -476,7 +480,7 @@ public class GHRepository {
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
         return new Requester(root)
-                .with("state",state.name().toLowerCase(Locale.ENGLISH))
+                .with("state", state.name().toLowerCase(Locale.ENGLISH))
                 .with("target_url", targetUrl)
                 .with("description", description)
                 .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
@@ -504,7 +508,7 @@ public class GHRepository {
         }
 
         return new Requester(root)
-                .with("name",name)
+                .with("name", name)
                 .with("active", active)
                 ._with("config", config)
                 ._with("events",ea)

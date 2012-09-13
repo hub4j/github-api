@@ -655,7 +655,7 @@ public class GHRepository {
 	public GHMilestone getMilestone(int number) throws IOException {
 		GHMilestone m = milestones.get(number);
 		if (m == null) {
-            m = root.retrieve().to("/repos/" + owner.login + "/" + name + "/milestones/" + number, GHMilestone.class);
+            m = root.retrieve().to(getApiTailUrl("milestones/" + number), GHMilestone.class);
     		m.owner = this;
     		m.root = root;
 			milestones.put(m.getNumber(), m);
@@ -665,7 +665,7 @@ public class GHRepository {
 	
 	public GHMilestone createMilestone(String title, String description) throws IOException {
         return new Requester(root)
-                .with("title", title).with("description", description).method("POST").to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone.class).wrap(this);
+                .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
 	}
 
     @Override

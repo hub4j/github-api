@@ -52,12 +52,12 @@ public class AppTest extends TestCase {
     }
 
     public void testIssueWithNoComment() throws IOException {
-        GHRepository repository = GitHub.connect().getRepository("kohsuke/github-api");
-        List<GHIssueComment> v = repository.getIssue(13).getComments();
+        GHRepository repository = GitHub.connect().getRepository("kohsuke/test");
+        List<GHIssueComment> v = repository.getIssue(4).getComments();
         System.out.println(v);
         assertTrue(v.isEmpty());
 
-        v = repository.getIssue(5).getComments();
+        v = repository.getIssue(3).getComments();
         System.out.println(v);
         assertTrue(v.size()==3);
     }

@@ -14,6 +14,7 @@ import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueComment;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHKey;
+import org.kohsuke.github.GHMilestone;
 import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -62,7 +63,10 @@ public class AppTest extends TestCase {
     }
 
     public void testCreateIssue() throws IOException {
-        GHIssue o = GitHub.connect().getRepository("kohsuke/test").createIssue("testing").body("this is body").create();
+        GHUser u = GitHub.connect().getUser("kohsuke");
+        GHRepository r = u.getRepository("test");
+        GHMilestone someMilestone = r.listMilestones(GHIssueState.CLOSED).iterator().next();
+        GHIssue o = r.createIssue("testing").body("this is body").assignee(u).label("bug").label("question").milestone(someMilestone).create();
         System.out.println(o.getUrl());
         o.close();
     }

@@ -616,22 +616,40 @@ public class GHRepository {
      */
     public Map<String,GHBranch> getBranches() throws IOException {
         Map<String,GHBranch> r = new TreeMap<String,GHBranch>();
-        for (GHBranch p : root.retrieve().to("/repos/" + owner.login + "/" + name + "/branches", GHBranch[].class)) {
+        for (GHBranch p : root.retrieve().to(getApiTailUrl("branches"), GHBranch[].class)) {
             p.wrap(this);
             r.put(p.getName(),p);
         }
         return r;
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #listMilestones(GHIssueState)}
+     */
     public Map<Integer, GHMilestone> getMilestones() throws IOException {
         Map<Integer,GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
-        GHMilestone[] ms = root.retrieve().to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone[].class);
-    	for (GHMilestone m : ms) {
-    		m.owner = this;
-    		m.root = root;
+    	for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {
     		milestones.put(m.getNumber(), m);
     	}
     	return milestones;
+    }
+
+    /**
+     * Lists up all the milestones in this repository.
+     */
+    public PagedIterable<GHMilestone> listMilestones(final GHIssueState state) {
+        return new PagedIterable<GHMilestone>() {
+            public PagedIterator<GHMilestone> iterator() {
+                return new PagedIterator<GHMilestone>(root.retrieve().asIterator(getApiTailUrl("milestones?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHMilestone[].class)) {
+                    @Override
+                    protected void wrapUp(GHMilestone[] page) {
+                        for (GHMilestone c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
 	public GHMilestone getMilestone(int number) throws IOException {
@@ -668,5 +686,9 @@ public class GHRepository {
                 && this.name.equals(that.name);
         }
         return false;
+    }
+
+    String getApiTailUrl(String tail) {
+        return "/repos/" + owner.login + "/" + name +'/'+tail;
     }
 }

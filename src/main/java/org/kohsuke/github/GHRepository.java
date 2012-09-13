@@ -231,7 +231,7 @@ public class GHRepository {
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().withCredential().to("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().to("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
     }
 
     public void addCollaborators(GHUser... users) throws IOException {
@@ -253,7 +253,7 @@ public class GHRepository {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Requester(root).withCredential().method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
+            new Requester(root).method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
         }
     }
 
@@ -270,7 +270,7 @@ public class GHRepository {
     }
 
     private void edit(String key, String value) throws IOException {
-        Requester requester = new Requester(root).withCredential();
+        Requester requester = new Requester(root);
         if (!key.equals("name"))
             requester.with("name", name);   // even when we don't change the name, we need to send it in
         requester.with(key, value).method("PATCH").to("/repos/" + owner.login + "/" + name);
@@ -313,7 +313,7 @@ public class GHRepository {
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        new Requester(root).withCredential().method("DELETE").to("/repos/" + owner.login + "/" + name);
+        new Requester(root).method("DELETE").to("/repos/" + owner.login + "/" + name);
     }
 
     /**
@@ -323,7 +323,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Requester(root).withCredential().method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
+        return new Requester(root).method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
     }
 
     /**
@@ -333,7 +333,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Requester(root).withCredential().to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
+        new Requester(root).to(String.format("/repos/%s/%s/forks?org=%s",owner.login,name,org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -352,7 +352,7 @@ public class GHRepository {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieve().withCredential().to("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
+        return root.retrieve().to("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -386,14 +386,14 @@ public class GHRepository {
      */
     public List<GHHook> getHooks() throws IOException {
         List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieve().withCredential().to(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
+                root.retrieve().to(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
         for (GHHook h : list)
             h.wrap(this);
         return list;
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieve().withCredential().to(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
+        return root.retrieve().to(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
     }
 
     /**
@@ -476,7 +476,6 @@ public class GHRepository {
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
         return new Requester(root)
-                .withCredential()
                 .with("state",state.name().toLowerCase(Locale.ENGLISH))
                 .with("target_url", targetUrl)
                 .with("description", description)
@@ -505,7 +504,6 @@ public class GHRepository {
         }
 
         return new Requester(root)
-                .withCredential()
                 .with("name",name)
                 .with("active", active)
                 ._with("config", config)
@@ -640,7 +638,7 @@ public class GHRepository {
 	}
 	
 	public GHMilestone createMilestone(String title, String description) throws IOException {
-        return new Requester(root).withCredential()
+        return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to("/repos/" + owner.login + "/" + name + "/milestones", GHMilestone.class).wrap(this);
 	}
 

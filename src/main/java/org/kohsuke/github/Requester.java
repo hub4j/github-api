@@ -55,7 +55,6 @@ import static org.kohsuke.github.GitHub.*;
 class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
-    private boolean authenticate;
 
     /**
      * Request method.
@@ -79,10 +78,10 @@ class Requester {
     /**
      * Makes a request with authentication credential.
      */
+    @Deprecated
     public Requester withCredential() {
         // keeping it inline with retrieveWithAuth not to enforce the check
         // root.requireCredential();
-        authenticate = true;
         return this;
     }
 
@@ -269,7 +268,7 @@ class Requester {
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
         // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
-        if (authenticate && root.encodedAuthorization!=null && root.oauthAccessToken == null)
+        if (root.encodedAuthorization!=null && root.oauthAccessToken == null)
             uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
 
         try {

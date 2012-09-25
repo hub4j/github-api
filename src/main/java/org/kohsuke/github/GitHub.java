@@ -126,6 +126,10 @@ public class GitHub {
         return new GitHub(login,apiToken,password);
     }
 
+    public static GitHub connect(String githubServer, String login, String apiToken, String password){
+        return new GitHub(githubServer,login,apiToken,password);
+    }
+
     public static GitHub connectUsingOAuth (String accessToken) throws IOException {
     	return connectUsingOAuth("github.com", accessToken);
     }
@@ -154,7 +158,13 @@ public class GitHub {
     	}
 
         if (tailApiUrl.startsWith("/"))
-            return new URL("https://api."+githubServer+tailApiUrl);
+            if("github.com".equals(githubServer)) {
+                return new URL("https://api."+githubServer+tailApiUrl);
+            } else {
+                //we must have an enterprise instance
+                //TODO: what if it is plain text?
+                return new URL("https://"+githubServer+"/api/v3"+tailApiUrl);
+            }
         else
             return new URL(tailApiUrl);
     }

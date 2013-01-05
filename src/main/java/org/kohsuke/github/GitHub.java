@@ -118,6 +118,10 @@ public class GitHub {
         return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
+    public static GitHub connect(String githubServer, String login, String apiToken, String password){
+        return new GitHub(githubServer,login,apiToken,password);
+    }
+
     public static GitHub connect(String login, String apiToken){
         return new GitHub(login,apiToken,null);
     }
@@ -153,10 +157,20 @@ public class GitHub {
     		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
     	}
 
-        if (tailApiUrl.startsWith("/"))
-            return new URL("https://api."+githubServer+tailApiUrl);
-        else
+        if (tailApiUrl.startsWith("/")) {
+            if ("github.com".equals(githubServer)) {
+                return new URL("https://api." + githubServer + tailApiUrl);
+            } else {
+                // use protocol if defined otherwise default to https.
+                if (githubServer.matches("^(https?)://.*$")) {
+                    return new URL(githubServer + "/api/v3" + tailApiUrl);
+                } else {
+                    return new URL("https://" + githubServer + "/api/v3" + tailApiUrl);
+                }
+            }
+        } else {
             return new URL(tailApiUrl);
+        }
     }
 
     /*package*/ Requester retrieve() {

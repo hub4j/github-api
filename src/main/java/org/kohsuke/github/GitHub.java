@@ -69,15 +69,18 @@ public class GitHub {
 	private final String githubServer;
 
 	private GitHub(String login, String apiToken, String password) {
-		this ("github.com", login, apiToken, password);
+		this ("https://api.github.com", login, apiToken, password);
 	}
 
     /**
      *
      * @param githubServer
-     *      The host name of the GitHub (or GitHub enterprise) server, such as "github.com".
+     *      The URL of GitHub (or GitHub enterprise API endpoint), such as "https://api.github.com" or
+     *      "http://ghe.acme.com".
+     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
     private GitHub(String githubServer, String login, String apiToken, String password) {
+        if (githubServer.endsWith("/")) githubServer=githubServer.substring(0,githubServer.length()-1); // normalize
         this.githubServer = githubServer;
 		this.login = login;
         this.apiToken = apiToken;
@@ -158,10 +161,10 @@ public class GitHub {
     	}
 
         if (tailApiUrl.startsWith("/")) {
-            if ("github.com".equals(githubServer)) {
+            if ("github.com".equals(githubServer)) {// backward compatibility
                 return new URL("https://api." + githubServer + tailApiUrl);
             } else {
-                // use protocol if defined otherwise default to https.
+                // use protocol if defined otherwise default to https for backward compatibility
                 if (githubServer.matches("^(https?)://.*$")) {
                     return new URL(githubServer + "/api/v3" + tailApiUrl);
                 } else {

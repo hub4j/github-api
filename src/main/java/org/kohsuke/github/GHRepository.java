@@ -23,12 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
@@ -266,15 +260,10 @@ public class GHRepository {
     }
 
     public void setEmailServiceHook(String address) throws IOException {
-        WebClient wc = root.createWebClient();
-        HtmlPage pg = (HtmlPage)wc.getPage(getUrl()+"/admin");
-        HtmlInput email = (HtmlInput)pg.getElementById("email_address");
-        email.setValueAttribute(address);
-        HtmlCheckBoxInput active = (HtmlCheckBoxInput)pg.getElementById("email[active]");
-        active.setChecked(true);
-
-        final HtmlForm f = email.getEnclosingFormOrDie();
-        f.submit((HtmlButton) f.getElementsByTagName("button").get(0));
+        Map<String, String> config = new HashMap<String, String>();
+        config.put("address", address);
+        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", "true")
+                .to(String.format("/repos/%s/%s/hooks", owner.login, name));
     }
 
     private void edit(String key, String value) throws IOException {

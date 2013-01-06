@@ -66,7 +66,7 @@ public class GitHub {
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
 	/*package*/ String oauthAccessToken;
 	
-	private final String githubServer;
+	private final String apiUrl;
 
 	private GitHub(String login, String apiToken, String password) {
 		this ("https://api.github.com", login, apiToken, password);
@@ -74,14 +74,14 @@ public class GitHub {
 
     /**
      *
-     * @param githubServer
-     *      The URL of GitHub (or GitHub enterprise API endpoint), such as "https://api.github.com" or
-     *      "http://ghe.acme.com".
+     * @param apiUrl
+     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    private GitHub(String githubServer, String login, String apiToken, String password) {
-        if (githubServer.endsWith("/")) githubServer=githubServer.substring(0,githubServer.length()-1); // normalize
-        this.githubServer = githubServer;
+    private GitHub(String apiUrl, String login, String apiToken, String password) {
+        if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
+        this.apiUrl = apiUrl;
 		this.login = login;
         this.apiToken = apiToken;
         this.password = password;
@@ -94,9 +94,9 @@ public class GitHub {
             encodedAuthorization = null;
     }
 
-    private GitHub (String githubServer, String oauthAccessToken) throws IOException {
+    private GitHub (String apiUrl, String oauthAccessToken) throws IOException {
     	
-		this.githubServer = githubServer;
+		this.apiUrl = apiUrl;
 		this.password = null;
 		this.encodedAuthorization = null;
 		
@@ -161,14 +161,14 @@ public class GitHub {
     	}
 
         if (tailApiUrl.startsWith("/")) {
-            if ("github.com".equals(githubServer)) {// backward compatibility
-                return new URL("https://api." + githubServer + tailApiUrl);
+            if ("github.com".equals(apiUrl)) {// backward compatibility
+                return new URL("https://api." + apiUrl + tailApiUrl);
             } else {
                 // use protocol if defined otherwise default to https for backward compatibility
-                if (githubServer.matches("^(https?)://.*$")) {
-                    return new URL(githubServer + "/api/v3" + tailApiUrl);
+                if (apiUrl.matches("^(https?)://.*$")) {
+                    return new URL(apiUrl + tailApiUrl);
                 } else {
-                    return new URL("https://" + githubServer + "/api/v3" + tailApiUrl);
+                    return new URL("https://" + apiUrl + "/api/v3" + tailApiUrl);
                 }
             }
         } else {

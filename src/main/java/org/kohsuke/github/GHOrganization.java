@@ -46,6 +46,24 @@ public class GHOrganization extends GHPerson {
         return r;
     }
 
+    public boolean isMember(String user) {
+        try {
+            root.retrieve().to("/orgs/" + login + "/members/"  + user);
+            return true;
+        } catch (IOException ignore) {
+            return false;
+        }
+    }
+
+    public boolean isPublicMember(String user) {
+        try {
+            root.retrieve().to("/orgs/" + login + "/public_members/" + user);
+            return true;
+        } catch (IOException ignore) {
+            return false;
+        }
+    }
+
     /**
      * Publicizes the membership.
      */

@@ -352,4 +352,14 @@ public class AppTest extends TestCase {
         GHUser u = p.getUser();
         assertNotNull(u.getName());
     }
+
+    public void testCheckMembership() throws Exception {
+        GHOrganization j = GitHub.connect().getOrganization("jenkinsci");
+        assertTrue(j.isMember("kohsuke"));
+    }
+
+    public void testCheckPublicMembership() throws Exception {
+        GHOrganization j = GitHub.connect().getOrganization("jenkinsci");
+        assertTrue(j.isPublicMember("kohsuke"));
+    }
 }

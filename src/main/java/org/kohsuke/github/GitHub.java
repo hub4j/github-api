@@ -121,8 +121,8 @@ public class GitHub {
         return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
-    public static GitHub connect(String githubServer, String login, String apiToken, String password){
-        return new GitHub(githubServer,login,apiToken,password);
+    public static GitHub connect(String apiUrl, String login, String apiToken, String password){
+        return new GitHub(apiUrl,login,apiToken,password);
     }
 
     public static GitHub connect(String login, String apiToken){
@@ -164,12 +164,7 @@ public class GitHub {
             if ("github.com".equals(apiUrl)) {// backward compatibility
                 return new URL("https://api." + apiUrl + tailApiUrl);
             } else {
-                // use protocol if defined otherwise default to https for backward compatibility
-                if (apiUrl.matches("^(https?)://.*$")) {
-                    return new URL(apiUrl + tailApiUrl);
-                } else {
-                    return new URL("https://" + apiUrl + "/api/v3" + tailApiUrl);
-                }
+                return new URL(apiUrl + tailApiUrl);
             }
         } else {
             return new URL(tailApiUrl);

@@ -24,11 +24,11 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
-import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,10 +83,9 @@ public class GitHub {
         this.apiToken = apiToken;
         this.password = password;
 
-        BASE64Encoder enc = new sun.misc.BASE64Encoder();
         if (apiToken!=null || password!=null) {
             String userpassword = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
-            encodedAuthorization = enc.encode(userpassword.getBytes());
+            encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
         } else
             encodedAuthorization = null;
     }

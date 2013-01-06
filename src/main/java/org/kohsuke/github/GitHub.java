@@ -23,9 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
@@ -273,7 +270,7 @@ public class GitHub {
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        // TODO: pagenation
+        // TODO: pagination
         GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
@@ -316,18 +313,6 @@ public class GitHub {
         } catch (IOException e) {
             return false;
         }
-    }
-
-    WebClient createWebClient() throws IOException {
-        WebClient wc = new WebClient();
-        wc.setJavaScriptEnabled(false);
-        wc.setCssEnabled(false);
-        HtmlPage pg = (HtmlPage)wc.getPage("https://github.com/login");
-        HtmlForm f = pg.getForms().get(0);
-        f.getInputByName("login").setValueAttribute(login);
-        f.getInputByName("password").setValueAttribute(password);
-        f.submit();
-        return wc;
     }
 
     /*package*/ static URL parseURL(String s) {

@@ -107,6 +107,10 @@ class Requester {
         return _with(key, value);
     }
 
+    public Requester with(String key, Map<String, String> value) {
+        return _with(key, value);
+    }
+
     public Requester _with(String key, Object value) {
         if (value!=null) {
             args.add(new Entry(key,value));

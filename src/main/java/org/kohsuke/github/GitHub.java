@@ -250,7 +250,7 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return getUser(tokens[0]).getRepository(tokens[1]);
+        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
     }
 
     /**

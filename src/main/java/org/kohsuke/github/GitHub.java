@@ -84,7 +84,7 @@ public class GitHub {
 
         if (apiToken!=null || password!=null) {
             String authorization = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
-            encodedAuthorization = Base64.encodeBase64String(authorization.getBytes());
+            encodedAuthorization = new String(Base64.encodeBase64(authorization.getBytes()));
         } else
             encodedAuthorization = null;
     }

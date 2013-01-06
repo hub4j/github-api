@@ -121,8 +121,19 @@ public class GitHub {
         return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
-    public static GitHub connect(String githubServer, String login, String apiToken, String password){
-        return new GitHub(githubServer,login,apiToken,password);
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
+     * @param apiUrl
+     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     */
+    public static GitHub connectToEnterprise(String apiUrl, String login, String apiToken) {
+        // not exposing password because the login process still assumes https://github.com/
+        // if we are to fix this, fix that by getting rid of createWebClient() and replace the e-mail service hook
+        // with GitHub API.
+        return new GitHub(apiUrl,login,apiToken,null);
     }
 
     public static GitHub connect(String login, String apiToken){
@@ -162,14 +173,9 @@ public class GitHub {
 
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
-                return new URL("https://api." + apiUrl + tailApiUrl);
+                return new URL("https://api.github.com" + tailApiUrl);
             } else {
-                // use protocol if defined otherwise default to https for backward compatibility
-                if (apiUrl.matches("^(https?)://.*$")) {
-                    return new URL(apiUrl + tailApiUrl);
-                } else {
-                    return new URL("https://" + apiUrl + "/api/v3" + tailApiUrl);
-                }
+                return new URL(apiUrl + tailApiUrl);
             }
         } else {
             return new URL(tailApiUrl);

@@ -23,15 +23,12 @@
  */
 package org.kohsuke.github;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
-import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,10 +83,9 @@ public class GitHub {
         this.apiToken = apiToken;
         this.password = password;
 
-        BASE64Encoder enc = new sun.misc.BASE64Encoder();
         if (apiToken!=null || password!=null) {
             String userpassword = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
-            encodedAuthorization = enc.encode(userpassword.getBytes());
+            encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
         } else
             encodedAuthorization = null;
     }
@@ -273,7 +269,7 @@ public class GitHub {
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        // TODO: pagenation
+        // TODO: pagination
         GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
@@ -316,18 +312,6 @@ public class GitHub {
         } catch (IOException e) {
             return false;
         }
-    }
-
-    WebClient createWebClient() throws IOException {
-        WebClient wc = new WebClient();
-        wc.setJavaScriptEnabled(false);
-        wc.setCssEnabled(false);
-        HtmlPage pg = (HtmlPage)wc.getPage("https://github.com/login");
-        HtmlForm f = pg.getForms().get(0);
-        f.getInputByName("login").setValueAttribute(login);
-        f.getInputByName("password").setValueAttribute(password);
-        f.submit();
-        return wc;
     }
 
     /*package*/ static URL parseURL(String s) {

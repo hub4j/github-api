@@ -55,6 +55,8 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
  */
 public class GitHub {
     /*package*/ final String login;
+
+
     /*package*/ final String encodedAuthorization;
     /*package*/ final String apiToken;
 
@@ -65,7 +67,7 @@ public class GitHub {
 	private final String apiUrl;
 
 	private GitHub(String login, String apiToken, String password) {
-		this ("https://api.github.com", login, apiToken, password);
+		this (GITHUB_URL, login, apiToken, password);
 	}
 
     /**
@@ -112,7 +114,11 @@ public class GitHub {
         } finally {
             IOUtils.closeQuietly(in);
         }
-        return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
+        String oauth = props.getProperty("oauth");
+        if (oauth!=null)
+            return new GitHub(GITHUB_URL,oauth);
+        else
+            return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
 
     /**
@@ -164,7 +170,7 @@ public class GitHub {
 
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
-                return new URL("https://api.github.com" + tailApiUrl);
+                return new URL(GITHUB_URL + tailApiUrl);
             } else {
                 return new URL(apiUrl + tailApiUrl);
             }
@@ -339,4 +345,6 @@ public class GitHub {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.getDeserializationConfig().set(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
+
+    private static final String GITHUB_URL = "https://api.github.com";
 }

@@ -56,7 +56,6 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 public class GitHub {
     /*package*/ final String login;
     /*package*/ final String encodedAuthorization;
-    /*package*/ final String password;
     /*package*/ final String apiToken;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
@@ -75,17 +74,17 @@ public class GitHub {
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     *      Password is also considered deprecated as it is no longer required for api usage.
      */
     private GitHub(String apiUrl, String login, String apiToken, String password) {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
 		this.login = login;
         this.apiToken = apiToken;
-        this.password = password;
 
         if (apiToken!=null || password!=null) {
-            String userpassword = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
-            encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
+            String authorization = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
+            encodedAuthorization = new String(Base64.encodeBase64(authorization.getBytes()));
         } else
             encodedAuthorization = null;
     }
@@ -93,7 +92,6 @@ public class GitHub {
     private GitHub (String apiUrl, String oauthAccessToken) throws IOException {
     	
 		this.apiUrl = apiUrl;
-		this.password = null;
 		this.encodedAuthorization = null;
 		
 		this.oauthAccessToken = oauthAccessToken;
@@ -126,9 +124,6 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
     public static GitHub connectToEnterprise(String apiUrl, String login, String apiToken) {
-        // not exposing password because the login process still assumes https://github.com/
-        // if we are to fix this, fix that by getting rid of createWebClient() and replace the e-mail service hook
-        // with GitHub API.
         return new GitHub(apiUrl,login,apiToken,null);
     }
 

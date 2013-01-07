@@ -69,6 +69,20 @@ public class GHUser extends GHPerson {
         return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
     }
 
+    /**
+     * Returns true if this user belongs to the specified organization.
+     */
+    public boolean isMemberOf(GHOrganization org) {
+        return org.hasMember(this);
+    }
+
+    /**
+     * Returns true if this user belongs to the specified organization as a public member.
+     */
+    public boolean isPublicMemberOf(GHOrganization org) {
+        return org.hasPublicMember(this);
+    }
+
     /*package*/ static GHUser[] wrap(GHUser[] users, GitHub root) {
         for (GHUser f : users)
             f.root = root;

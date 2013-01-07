@@ -67,7 +67,7 @@ public class AppTest extends TestCase {
 
         v = repository.getIssue(3).getComments();
         System.out.println(v);
-        assertTrue(v.size()==3);
+        assertTrue(v.size() == 3);
     }
 
     public void testCreateIssue() throws IOException {
@@ -158,7 +158,7 @@ public class AppTest extends TestCase {
         File f = commit.getFiles().get(0);
         assertEquals(48,f.getLinesChanged());
         assertEquals("modified",f.getStatus());
-        assertEquals("changelog.html",f.getFileName());
+        assertEquals("changelog.html", f.getFileName());
     }
 
     public void testListCommits() throws Exception {
@@ -340,17 +340,15 @@ public class AppTest extends TestCase {
         assertNotNull(u.getName());
     }
 
-    // GitHub usernames may only contain alphanumeric characters or dashes and cannot begin with a dash
-
     public void testCheckMembership() throws Exception {
         GHOrganization j = gitHub.getOrganization("jenkinsci");
-        assertTrue(j.isMember("kohsuke"));
-        assertFalse(j.isMember("-kohsuke@#$!"));
-    }
+        GHUser kohsuke = gitHub.getUser("kohsuke");
+        GHUser a = gitHub.getUser("a");
 
-    public void testCheckPublicMembership() throws Exception {
-        GHOrganization j = gitHub.getOrganization("jenkinsci");
-        assertTrue(j.isPublicMember("kohsuke"));
-        assertFalse(j.isPublicMember("-kohsuke@#$!"));
+        assertTrue(j.hasMember(kohsuke));
+        assertFalse(j.hasMember(a));
+
+        assertTrue(j.hasPublicMember(kohsuke));
+        assertFalse(j.hasPublicMember(a));
     }
 }

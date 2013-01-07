@@ -46,18 +46,24 @@ public class GHOrganization extends GHPerson {
         return r;
     }
 
-    public boolean isMember(String user) {
+    /**
+     * Checks if this organization has the specified user as a member.
+     */
+    public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/orgs/" + login + "/members/"  + user);
+            root.retrieve().to("/orgs/" + login + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
         }
     }
 
-    public boolean isPublicMember(String user) {
+    /**
+     * Checks if this organization has the specified user as a public member.
+     */
+    public boolean hasPublicMember(GHUser user) {
         try {
-            root.retrieve().to("/orgs/" + login + "/public_members/" + user);
+            root.retrieve().to("/orgs/" + login + "/public_members/" + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;

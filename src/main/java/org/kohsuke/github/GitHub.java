@@ -90,8 +90,8 @@ public class GitHub {
     }
 
     private GitHub (String apiUrl, String oauthAccessToken) throws IOException {
-    	
-		this.apiUrl = apiUrl;
+        if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
+        this.apiUrl = apiUrl;
 		this.encodedAuthorization = null;
 		
 		this.oauthAccessToken = oauthAccessToken;

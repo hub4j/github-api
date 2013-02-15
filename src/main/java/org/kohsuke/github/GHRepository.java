@@ -394,6 +394,19 @@ public class GHRepository {
     }
 
     /**
+     * Gets a comparison between 2 points in the repository. This would be similar
+     * to calling <tt>git log id1...id2</tt> against a local repository.
+     * @param id1 an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a direct tag name
+     * @param id2 an identifier for the second point to compare to. Can be the same as the first point.
+     * @return the comparison output
+     * @throws IOException on failure communicating with GitHub
+     */
+    public GHCompare getCompare(String id1, String id2) throws IOException {
+        GHCompare compare = root.retrieve().to(String.format("/repos/%s/%s/compare/%s...%s", owner.login, name, id1, id2), GHCompare.class);
+        return compare.wrap(this);
+    }
+
+    /**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {

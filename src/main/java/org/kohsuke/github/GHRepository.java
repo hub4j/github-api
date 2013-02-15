@@ -407,6 +407,25 @@ public class GHRepository {
     }
 
     /**
+     * Retrieves all refs for the github repository.
+     * @return an array of GHRef elements coresponding with the refs in the remote repository.
+     * @throws IOException on failure communicating with GitHub
+     */
+    public GHRef[] getRefs() throws IOException {
+       return root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
+    }
+
+    /**
+     * Retrienved all refs of the given type for the current GitHub repository.
+     * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
+     * @return an array of all refs matching the request type
+     * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public GHRef[] getRefs(String refType) throws IOException {
+        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
+    }
+
+    /**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {

@@ -394,6 +394,38 @@ public class GHRepository {
     }
 
     /**
+     * Gets a comparison between 2 points in the repository. This would be similar
+     * to calling <tt>git log id1...id2</tt> against a local repository.
+     * @param id1 an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a direct tag name
+     * @param id2 an identifier for the second point to compare to. Can be the same as the first point.
+     * @return the comparison output
+     * @throws IOException on failure communicating with GitHub
+     */
+    public GHCompare getCompare(String id1, String id2) throws IOException {
+        GHCompare compare = root.retrieve().to(String.format("/repos/%s/%s/compare/%s...%s", owner.login, name, id1, id2), GHCompare.class);
+        return compare.wrap(this);
+    }
+
+    /**
+     * Retrieves all refs for the github repository.
+     * @return an array of GHRef elements coresponding with the refs in the remote repository.
+     * @throws IOException on failure communicating with GitHub
+     */
+    public GHRef[] getRefs() throws IOException {
+       return root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
+    }
+
+    /**
+     * Retrienved all refs of the given type for the current GitHub repository.
+     * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
+     * @return an array of all refs matching the request type
+     * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public GHRef[] getRefs(String refType) throws IOException {
+        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
+    }
+
+    /**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {

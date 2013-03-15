@@ -406,6 +406,14 @@ public class GHRepository {
         return compare.wrap(this);
     }
 
+    public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
+        return getCompare(id1.getSHA1(),id2.getSHA1());
+    }
+
+    public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {
+        return getCompare(id1.getName(),id2.getName());
+    }
+
     /**
      * Retrieves all refs for the github repository.
      * @return an array of GHRef elements coresponding with the refs in the remote repository.

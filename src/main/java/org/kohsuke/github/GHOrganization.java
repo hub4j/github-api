@@ -134,6 +134,7 @@ public class GHOrganization extends GHPerson {
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
         for (GHRepository repository : root.retrieve().to("/orgs/" + login + "/repos", GHRepository[].class)) {
+            repository.wrap(root);
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {
                 r.add(repository);

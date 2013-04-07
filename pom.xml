@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.kohsuke</groupId>
     <artifactId>pom</artifactId>
-    <version>4</version>
+    <version>5</version>
   </parent>
 
   <artifactId>github-api</artifactId>

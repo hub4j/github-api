@@ -39,11 +39,14 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
@@ -302,6 +305,15 @@ public class GitHub {
                 .with("public", isPublic ? 1 : 0);
         return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
     }
+
+	public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
+		Requester requester = new Requester(this)
+				.with("scopes",scope)
+				.with("note",note)
+				.with("note_url",noteUrl);
+
+		return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+	}
 
     /**
      * Ensures that the credential is valid.

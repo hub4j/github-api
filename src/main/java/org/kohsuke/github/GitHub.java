@@ -306,11 +306,18 @@ public class GitHub {
         return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
     }
 
+    /**
+     * Creates a new authorization.
+     *
+     * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
+     *
+     * @see http://developer.github.com/v3/oauth/#create-a-new-authorization
+     */
 	public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
 		Requester requester = new Requester(this)
-				.with("scopes",scope)
-				.with("note",note)
-				.with("note_url",noteUrl);
+				.with("scopes", scope)
+				.with("note", note)
+				.with("note_url", noteUrl);
 
 		return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
 	}

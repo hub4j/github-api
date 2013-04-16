@@ -1,12 +1,16 @@
 package org.kohsuke.github;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 /**
+ * Generated OAuth token
  *
  * @author janinko
+ * @see GitHub#createToken(Collection, String, String)
+ * @see http://developer.github.com/v3/oauth/#create-a-new-authorization
  */
 public class GHAuthorization {
 	public static final String USER = "user";

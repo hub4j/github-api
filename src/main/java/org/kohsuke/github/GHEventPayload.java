@@ -18,6 +18,11 @@ public abstract class GHEventPayload {
         this.root = root;
     }
 
+    /**
+     * A pull request status has changed.
+     *
+     * @see http://developer.github.com/v3/activity/events/types/#pullrequestevent
+     */
     public static class PullRequest extends GHEventPayload {
         private String action;
         private int number;
@@ -43,6 +48,11 @@ public abstract class GHEventPayload {
         }
     }
 
+    /**
+     * A comment was added to an issue
+     *
+     * @see http://developer.github.com/v3/activity/events/types/#issuecommentevent
+     */
     public static class IssueComment extends GHEventPayload {
         private String action;
         private GHIssueComment comment;

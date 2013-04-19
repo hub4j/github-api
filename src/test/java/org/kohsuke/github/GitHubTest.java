@@ -8,12 +8,12 @@ import junit.framework.TestCase;
 public class GitHubTest extends TestCase {
 
     public void testGitHubServerWithHttp() throws Exception {
-        GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "kohsuke", "token");
+        GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "token");
         assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
 
     public void testGitHubServerWithHttps() throws Exception {
-        GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "kohsuke", "token");
+        GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "token");
         assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
 

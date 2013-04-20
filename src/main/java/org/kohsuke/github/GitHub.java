@@ -132,7 +132,7 @@ public class GitHub {
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    public static GitHub connectToEnterprise(String apiUrl, String accessToken) {
+    public static GitHub connectToEnterprise(String apiUrl, String accessToken) throws IOException {
         return connectUsingOAuth(apiUrl, accessToken);
     }
 

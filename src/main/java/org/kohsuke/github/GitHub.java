@@ -61,17 +61,16 @@ public class GitHub {
 
 
     /*package*/ final String encodedAuthorization;
-    /*package*/ final String apiToken;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
-	/*package*/ String oauthAccessToken;
+    /*package*/ String oauthAccessToken;
 
-	private final String apiUrl;
+    private final String apiUrl;
 
-	private GitHub(String login, String apiToken, String password) {
-		this (GITHUB_URL, login, apiToken, password);
-	}
+    private GitHub(String login, String oauthAccessToken, String password) {
+      this (GITHUB_URL, login, oauthAccessToken, password);
+    }
 
     /**
      *
@@ -100,7 +99,6 @@ public class GitHub {
         this.encodedAuthorization = null;
 
         this.oauthAccessToken = oauthAccessToken;
-        this.apiToken = oauthAccessToken;
 
         this.login = getMyself().getLogin();
     }
@@ -132,24 +130,24 @@ public class GitHub {
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    public static GitHub connectToEnterprise(String apiUrl, String accessToken) throws IOException {
-        return connectUsingOAuth(apiUrl, accessToken);
+    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
+        return connectUsingOAuth(apiUrl, oauthAccessToken);
     }
 
-    public static GitHub connect(String login, String apiToken){
-        return new GitHub(login,apiToken,null);
+    public static GitHub connect(String login, String oauthAccessToken){
+        return new GitHub(login,oauthAccessToken,null);
     }
 
-    public static GitHub connect(String login, String apiToken, String password){
-        return new GitHub(login,apiToken,password);
+    public static GitHub connect(String login, String oauthAccessToken, String password){
+        return new GitHub(login,oauthAccessToken,password);
     }
 
-    public static GitHub connectUsingOAuth (String accessToken) throws IOException {
-    	return connectUsingOAuth("github.com", accessToken);
+    public static GitHub connectUsingOAuth (String oauthAccessToken) throws IOException {
+    	return connectUsingOAuth("github.com", oauthAccessToken);
     }
 
-    public static GitHub connectUsingOAuth (String githubServer, String accessToken) throws IOException {
-    	return new GitHub(githubServer, accessToken);
+    public static GitHub connectUsingOAuth (String githubServer, String oauthAccessToken) throws IOException {
+    	return new GitHub(githubServer, oauthAccessToken);
     }
     /**
      * Connects to GitHub anonymously.
@@ -166,10 +164,10 @@ public class GitHub {
     }
 
     /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
-    	if (oauthAccessToken != null) {
-    		// append the access token
-    		tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
-    	}
+      if (oauthAccessToken != null) {
+        // append the access token
+        tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
+      }
 
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility

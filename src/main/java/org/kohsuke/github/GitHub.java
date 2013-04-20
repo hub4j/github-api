@@ -66,7 +66,7 @@ public class GitHub {
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
 	/*package*/ String oauthAccessToken;
-	
+
 	private final String apiUrl;
 
 	private GitHub(String login, String apiToken, String password) {
@@ -81,14 +81,14 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      */
-    private GitHub(String apiUrl, String login, String apiToken, String password) {
+    private GitHub(String apiUrl, String login, String oauthAccessToken, String password) {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
-		this.login = login;
-        this.apiToken = apiToken;
+        this.login = login;
+        this.oauthAccessToken = oauthAccessToken;
 
-        if (apiToken!=null || password!=null) {
-            String authorization = password==null ? (login + "/token" + ":" + apiToken) : (login + ':'+password);
+        if (password!=null) {
+            String authorization = (login + ':' + password);
             encodedAuthorization = new String(Base64.encodeBase64(authorization.getBytes()));
         } else
             encodedAuthorization = null;
@@ -97,14 +97,14 @@ public class GitHub {
     private GitHub (String apiUrl, String oauthAccessToken) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
-		this.encodedAuthorization = null;
-		
-		this.oauthAccessToken = oauthAccessToken;
+        this.encodedAuthorization = null;
+
+        this.oauthAccessToken = oauthAccessToken;
         this.apiToken = oauthAccessToken;
-		
-		this.login = getMyself().getLogin();
+
+        this.login = getMyself().getLogin();
     }
-    
+
     /**
      * Obtains the credential from "~/.github"
      */
@@ -147,7 +147,7 @@ public class GitHub {
     public static GitHub connectUsingOAuth (String accessToken) throws IOException {
     	return connectUsingOAuth("github.com", accessToken);
     }
-    
+
     public static GitHub connectUsingOAuth (String githubServer, String accessToken) throws IOException {
     	return new GitHub(githubServer, accessToken);
     }
@@ -292,7 +292,7 @@ public class GitHub {
         t.wrapUp(this);
         return t;
     }
-    
+
     /**
      * Creates a new repository.
      *

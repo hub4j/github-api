@@ -114,11 +114,7 @@ public class GitHub {
         } finally {
             IOUtils.closeQuietly(in);
         }
-        String oauth = props.getProperty("oauth");
-        if (oauth!=null)
-            return new GitHub(GITHUB_URL,props.getProperty("login"), oauth,null);
-        else
-            return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
+        return new GitHub(GITHUB_URL,props.getProperty("login"), props.getProperty("oauth"),props.getProperty("password"));
     }
 
     /**

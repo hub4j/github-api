@@ -271,9 +271,8 @@ class Requester {
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
-        if (root.encodedAuthorization!=null && root.oauthAccessToken == null)
-            uc.setRequestProperty("Authorization", "Basic " + root.encodedAuthorization);
+        if (root.encodedAuthorization!=null)
+            uc.setRequestProperty("Authorization", root.encodedAuthorization);
 
         try {
             uc.setRequestMethod(method);

@@ -42,11 +42,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TimeZone;
 
 import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
@@ -59,16 +57,20 @@ import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
 public class GitHub {
     /*package*/ final String login;
 
-
+    /**
+     * Value of the authorization header to be sent with the request.
+     */
     /*package*/ final String encodedAuthorization;
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
-    /*package*/ String oauthAccessToken;
 
     private final String apiUrl;
 
-    private GitHub(String login, String oauthAccessToken, String password) {
+    /**
+     * Connects to GitHub.com
+     */
+    private GitHub(String login, String oauthAccessToken, String password) throws IOException {
       this (GITHUB_URL, login, oauthAccessToken, password);
     }
 
@@ -80,27 +82,24 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      */
-    private GitHub(String apiUrl, String login, String oauthAccessToken, String password) {
+    private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
+
+        if (oauthAccessToken!=null) {
+            encodedAuthorization = "token "+oauthAccessToken;
+        } else {
+            if (password!=null) {
+                String authorization = (login + ':' + password);
+                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes()));
+            } else {// anonymous access
+                encodedAuthorization = null;
+            }
+        }
+
+        if (login==null)
+            login = getMyself().getLogin();
         this.login = login;
-        this.oauthAccessToken = oauthAccessToken;
-
-        if (password!=null) {
-            String authorization = (login + ':' + password);
-            encodedAuthorization = new String(Base64.encodeBase64(authorization.getBytes()));
-        } else
-            encodedAuthorization = null;
-    }
-
-    private GitHub (String apiUrl, String oauthAccessToken) throws IOException {
-        if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
-        this.apiUrl = apiUrl;
-        this.encodedAuthorization = null;
-
-        this.oauthAccessToken = oauthAccessToken;
-
-        this.login = getMyself().getLogin();
     }
 
     /**
@@ -117,7 +116,7 @@ public class GitHub {
         }
         String oauth = props.getProperty("oauth");
         if (oauth!=null)
-            return new GitHub(GITHUB_URL,oauth);
+            return new GitHub(GITHUB_URL,null, oauth,null);
         else
             return new GitHub(props.getProperty("login"),props.getProperty("token"),props.getProperty("password"));
     }
@@ -134,41 +133,49 @@ public class GitHub {
         return connectUsingOAuth(apiUrl, oauthAccessToken);
     }
 
-    public static GitHub connect(String login, String oauthAccessToken){
+    public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
+        return new GitHub(apiUrl, login, null, password);
+    }
+
+    public static GitHub connect(String login, String oauthAccessToken) throws IOException {
         return new GitHub(login,oauthAccessToken,null);
     }
 
-    public static GitHub connect(String login, String oauthAccessToken, String password){
+    /**
+     * @deprecated
+     *      Either OAuth token or password is sufficient, so there's no point in passing both.
+     *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
+     */
+    public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
         return new GitHub(login,oauthAccessToken,password);
     }
 
-    public static GitHub connectUsingOAuth (String oauthAccessToken) throws IOException {
-    	return connectUsingOAuth("github.com", oauthAccessToken);
+    public static GitHub connectUsingPassword(String login, String password) throws IOException {
+        return new GitHub(login,null,password);
     }
 
-    public static GitHub connectUsingOAuth (String githubServer, String oauthAccessToken) throws IOException {
-    	return new GitHub(githubServer, oauthAccessToken);
+    public static GitHub connectUsingOAuth(String oauthAccessToken) throws IOException {
+    	return new GitHub(null, oauthAccessToken, null);
+    }
+
+    public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
+    	return new GitHub(githubServer,null, oauthAccessToken,null);
     }
     /**
      * Connects to GitHub anonymously.
      *
      * All operations that requires authentication will fail.
      */
-    public static GitHub connectAnonymously() {
+    public static GitHub connectAnonymously() throws IOException {
         return new GitHub(null,null,null);
     }
 
     /*package*/ void requireCredential() {
-        if ((login==null || encodedAuthorization==null) && oauthAccessToken == null)
+        if (login==null || encodedAuthorization==null)
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
     /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
-      if (oauthAccessToken != null) {
-        // append the access token
-        tailApiUrl = tailApiUrl +  (tailApiUrl.indexOf('?')>=0 ?'&':'?') + "access_token=" + oauthAccessToken;
-      }
-
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
                 return new URL(GITHUB_URL + tailApiUrl);
@@ -309,7 +316,7 @@ public class GitHub {
      *
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *
-     * @see http://developer.github.com/v3/oauth/#create-a-new-authorization
+     * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
 	public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
 		Requester requester = new Requester(this)

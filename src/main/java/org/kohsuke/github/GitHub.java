@@ -75,6 +75,25 @@ public class GitHub {
     }
 
     /**
+     * Creates a client API root object.
+     *
+     * <p>
+     * Several different combinations of the login/oauthAccessToken/password parameters are allowed
+     * to represent different ways of authentication.
+     *
+     * <dl>
+     *     <dt>Loging anonymously
+     *     <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
+     *
+     *     <dt>Log in with password
+     *     <dd>Specify the login and password, then leave oauthAccessToken null.
+     *         This will use the HTTP BASIC auth with the GitHub API.
+     *
+     *     <dt>Log in with OAuth token
+     *     <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null.
+     *         This will send OAuth token to the GitHub API. If the login parameter is null,
+     *         The constructor makes an API call to figure out the user name that owns the token.
+     * </dl>
      *
      * @param apiUrl
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
@@ -82,8 +101,12 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      * @param login
-     *      The use ID on GitHub. Can be omitted if the OAuth token is provided, but specifying this would
-     *      save one API call.
+     *      The use ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
+     *      provided or if logging in anonymously. Specifying this would save one API call.
+     * @param oauthAccessToken
+     *      Secret OAuth token.
+     * @param password
+     *      User's password. Always used in conjunction with the {@code login} parameter
      */
     private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize

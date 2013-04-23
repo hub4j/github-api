@@ -63,7 +63,12 @@ public class GHPullRequest extends GHIssue {
         if (merged_by != null) merged_by.wrapUp(root);
         return this;
     }
-	
+
+    @Override
+    protected String getApiRoute() {
+        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/pulls/"+number;
+    }
+
     /**
      * The URL of the patch file.
      * like https://github.com/jenkinsci/jenkins/pull/100.patch

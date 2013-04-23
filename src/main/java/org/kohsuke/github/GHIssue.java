@@ -200,7 +200,7 @@ public class GHIssue {
         };
     }
 
-    private String getApiRoute() {
+    protected String getApiRoute() {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 

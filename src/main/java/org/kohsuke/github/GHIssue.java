@@ -201,7 +201,7 @@ public class GHIssue {
     }
 
     private String getApiRoute() {
-        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
+        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/pulls/"+number;
     }
 
 	public GHUser getAssignee() {

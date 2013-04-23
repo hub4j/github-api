@@ -81,6 +81,9 @@ public class GitHub {
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
+     * @param login
+     *      The use ID on GitHub. Can be omitted if the OAuth token is provided, but specifying this would
+     *      save one API call.
      */
     private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize

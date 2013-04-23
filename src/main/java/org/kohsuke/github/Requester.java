@@ -39,10 +39,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 import static org.kohsuke.github.GitHub.*;
@@ -343,5 +345,12 @@ class Requester {
         } finally {
             IOUtils.closeQuietly(es);
         }
+    }
+
+    private Set<String> toSet(String s) {
+        Set<String> r = new HashSet<String>();
+        for (String t : s.split(","))
+            r.add(t.trim());
+        return r;
     }
 }

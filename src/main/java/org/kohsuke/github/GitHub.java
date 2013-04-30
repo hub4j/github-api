@@ -193,7 +193,7 @@ public class GitHub {
     }
 
     /*package*/ void requireCredential() {
-        if (login==null || encodedAuthorization==null)
+        if (login==null && encodedAuthorization==null)
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 

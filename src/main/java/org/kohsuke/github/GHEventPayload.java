@@ -27,6 +27,7 @@ public abstract class GHEventPayload {
         private String action;
         private int number;
         private GHPullRequest pull_request;
+        private GHRepository repository;
 
         public String getAction() {
             return action;
@@ -41,10 +42,15 @@ public abstract class GHEventPayload {
             return pull_request;
         }
 
+        public GHRepository getRepository() {
+            return repository;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            pull_request.wrapUp(root);
+            repository.wrap(root);
+            pull_request.wrap(repository);
         }
     }
 

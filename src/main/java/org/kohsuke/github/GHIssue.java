@@ -138,7 +138,7 @@ public class GHIssue {
      * Updates the issue by adding a comment.
      */
     public void comment(String message) throws IOException {
-        new Requester(root).with("body",message).to(getApiRoute() + "/comments");
+        new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments");
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -190,7 +190,7 @@ public class GHIssue {
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
             public PagedIterator<GHIssueComment> iterator() {
-                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getApiRoute() + "/comments", GHIssueComment[].class)) {
+                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class)) {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);
@@ -201,6 +201,10 @@ public class GHIssue {
     }
 
     protected String getApiRoute() {
+        return getIssuesApiRoute();
+    }
+
+    private String getIssuesApiRoute() {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 

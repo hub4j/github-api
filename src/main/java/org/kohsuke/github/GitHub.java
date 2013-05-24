@@ -123,7 +123,7 @@ public class GitHub {
             }
         }
 
-        if (login==null)
+        if (login==null && encodedAuthorization!=null)
             login = getMyself().getLogin();
         this.login = login;
     }

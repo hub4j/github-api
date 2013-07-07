@@ -55,6 +55,25 @@ public abstract class GHPerson {
     }
 
     /**
+     * Lists up all the repositories.
+     *
+     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     */
+    public PagedIterable<GHRepository> listRepositories() {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/users/" + login + "/repos", GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Loads repository list in a pagenated fashion.
      * 
      * <p>
@@ -63,6 +82,9 @@ public abstract class GHPerson {
      * 
      * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
      * into {@link Error}.
+     *
+     * @deprecated
+     *      Use {@link #listRepositories()}
      */
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {

@@ -130,10 +130,13 @@ public class GHOrganization extends GHPerson {
 
     /**
      * List up repositories that has some open pull requests.
+     *
+     * This used to be an efficient method that didn't involve traversing every repository, but now
+     * it doesn't do any optimization.
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
-        for (GHRepository repository : root.retrieve().to("/orgs/" + login + "/repos", GHRepository[].class)) {
+        for (GHRepository repository : listRepositories()) {
             repository.wrap(root);
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {

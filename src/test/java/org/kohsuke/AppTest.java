@@ -33,8 +33,8 @@ import java.util.Set;
 import java.util.List;
 
 /**
- * Unit test for simple App.
- */
+* Unit test for simple App.
+*/
 public class AppTest extends TestCase {
 
     private GitHub gitHub;
@@ -219,48 +219,48 @@ public class AppTest extends TestCase {
     public void testApp() throws IOException {
         System.out.println(gitHub.getMyself().getEmails());
 
-//        GHRepository r = gitHub.getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
-//        r.fork();
+// GHRepository r = gitHub.getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
+// r.fork();
 
-//        tryDisablingIssueTrackers(gitHub);
+// tryDisablingIssueTrackers(gitHub);
 
-//        tryDisablingWiki(gitHub);
+// tryDisablingWiki(gitHub);
 
-//        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
-//        for (GHIssueComment c : i.getComments())
-//            System.out.println(c);
-//        System.out.println(i);
+// GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
+// for (GHIssueComment c : i.getComments())
+// System.out.println(c);
+// System.out.println(i);
 
-//        gitHub.getMyself().getRepository("perforce-plugin").setEmailServiceHook("kk@kohsuke.org");
+// gitHub.getMyself().getRepository("perforce-plugin").setEmailServiceHook("kk@kohsuke.org");
 
-//        tryRenaming(gitHub);
-//        tryOrgFork(gitHub);
+// tryRenaming(gitHub);
+// tryOrgFork(gitHub);
 
-//        testOrganization(gitHub);
-//        testPostCommitHook(gitHub);
+// testOrganization(gitHub);
+// testPostCommitHook(gitHub);
 
-//        tryTeamCreation(gitHub);
+// tryTeamCreation(gitHub);
 
-//        t.add(gitHub.getMyself());
-//        System.out.println(t.getMembers());
-//        t.remove(gitHub.getMyself());
-//        System.out.println(t.getMembers());
+// t.add(gitHub.getMyself());
+// System.out.println(t.getMembers());
+// t.remove(gitHub.getMyself());
+// System.out.println(t.getMembers());
 
-//        GHRepository r = gitHub.getOrganization("HudsonLabs").createRepository("auto-test", "some description", "http://kohsuke.org/", "Plugin Developers", true);
+// GHRepository r = gitHub.getOrganization("HudsonLabs").createRepository("auto-test", "some description", "http://kohsuke.org/", "Plugin Developers", true);
 
-//        r.
-//        GitHub hub = GitHub.connectAnonymously();
-////        hub.createRepository("test","test repository",null,true);
-////        hub.getUser("kohsuke").getRepository("test").delete();
+// r.
+// GitHub hub = GitHub.connectAnonymously();
+//// hub.createRepository("test","test repository",null,true);
+//// hub.getUser("kohsuke").getRepository("test").delete();
 //
-//        System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
+// System.out.println(hub.getUser("kohsuke").getRepository("hudson").getCollaborators());
     }
 
     private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasIssues()) {
                 if (r.getOpenIssueCount()==0) {
-                    System.out.println("DISABLED  "+r.getName());
+                    System.out.println("DISABLED "+r.getName());
                     r.enableIssueTracker(false);
                 } else {
                     System.out.println("UNTOUCHED "+r.getName());
@@ -272,7 +272,7 @@ public class AppTest extends TestCase {
     private void tryDisablingWiki(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasWiki()) {
-                System.out.println("DISABLED  "+r.getName());
+                System.out.println("DISABLED "+r.getName());
                 r.enableWiki(false);
             }
         }
@@ -318,19 +318,26 @@ public class AppTest extends TestCase {
 
         assertNotNull(j.getRepository("jenkins"));
 
-//        t.add(labs.getRepository("xyz"));
+// t.add(labs.getRepository("xyz"));
     }
 
     public void testCommitStatus() throws Exception {
         GHRepository r = gitHub.getUser("kohsuke").getRepository("test");
         GHCommitStatus state;
-//        state = r.createCommitStatus("edacdd76b06c5f3f0697a22ca75803169f25f296", GHCommitState.FAILURE, "http://jenkins-ci.org/", "oops!");
+// state = r.createCommitStatus("edacdd76b06c5f3f0697a22ca75803169f25f296", GHCommitState.FAILURE, "http://jenkins-ci.org/", "oops!");
 
         List<GHCommitStatus> lst = r.listCommitStatuses("edacdd76b06c5f3f0697a22ca75803169f25f296").asList();
         state = lst.get(0);
         System.out.println(state);
         assertEquals("oops!",state.getDescription());
         assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
+    }
+    
+    public void testCommitShortInfo() throws Exception {
+        GHCommit commit = gitHub.getUser("kohsuke").getRepository("test").getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
+        assertEquals(commit.getCommit().getAuthor().getName(), "Kohsuke Kawaguchi");
+        assertEquals(commit.getCommit().getMessage(), "Added a file");
+        
     }
 
     public void testPullRequestPopulate() throws Exception {

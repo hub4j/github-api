@@ -335,8 +335,8 @@ public class AppTest extends TestCase {
     
     public void testCommitShortInfo() throws Exception {
         GHCommit commit = gitHub.getUser("kohsuke").getRepository("test").getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
-        assertEquals(commit.getCommit().getAuthor().getName(), "Kohsuke Kawaguchi");
-        assertEquals(commit.getCommit().getMessage(), "Added a file");
+        assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
+        assertEquals(commit.getCommitShortInfo().getMessage(), "Added a file");
     }
 
     public void testPullRequestPopulate() throws Exception {

@@ -84,10 +84,10 @@ public class GHCompare {
      */
     public static class Commit extends GHCommit {
 
-        private InnerCommit innerCommit;
+        private InnerCommit commit;
 
-        public InnerCommit getInnerCommit() {
-            return innerCommit;
+        public InnerCommit getCommit() {
+            return commit;
         }
     }
 

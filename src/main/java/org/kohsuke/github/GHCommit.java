@@ -186,7 +186,7 @@ public class GHCommit {
     
     
 
-    public GHCommitShortInfo getCommit() {
+    public GHCommitShortInfo getCommitShortInfo() {
 		return commit;
 	}
 

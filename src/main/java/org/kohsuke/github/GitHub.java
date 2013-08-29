@@ -192,8 +192,16 @@ public class GitHub {
         return new GitHub(null,null,null);
     }
 
+    /**
+     * Is this an anonymous connection
+     * @return {@code true} if operations that require authentication will fail.
+     */
+    public boolean isAnonymous() {
+        return login==null && encodedAuthorization==null;
+    }
+
     /*package*/ void requireCredential() {
-        if (login==null && encodedAuthorization==null)
+        if (isAnonymous())
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 

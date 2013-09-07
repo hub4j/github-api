@@ -16,6 +16,79 @@ import java.util.List;
  */
 public class GHCommit {
     private GHRepository owner;
+    
+    private GHCommitShortInfo commit;
+    
+    public static class GHCommitShortInfo {
+        private GHAuthor author;
+        
+        private GHAuthor committer;
+        
+        private String message;
+        
+        private int comment_count;
+
+    	public GHAuthor getAuthor() {
+    		return author;
+    	}
+
+    	public void setAuthor(GHAuthor author) {
+    		this.author = author;
+    	}
+
+		public GHAuthor getCommitter() {
+			return committer;
+		}
+
+		public void setCommitter(GHAuthor committer) {
+			this.committer = committer;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
+		}
+
+		public int getComment_count() {
+			return comment_count;
+		}
+
+		public void setComment_count(int comment_count) {
+			this.comment_count = comment_count;
+		}
+    }
+    
+    public static class GHAuthor {
+    	private String name,email,date;
+
+    	public String getName() {
+    		return name;
+    	}
+
+    	public void setName(String name) {
+    		this.name = name;
+    	}
+
+    	public String getEmail() {
+    		return email;
+    	}
+
+    	public void setEmail(String email) {
+    		this.email = email;
+    	}
+
+    	public String getDate() {
+    		return date;
+    	}
+
+    	public void setDate(String date) {
+    		this.date = date;
+    	}
+
+    }
 
     public static class Stats {
         int total,additions,deletions;
@@ -110,8 +183,18 @@ public class GHCommit {
     Stats stats;
     List<Parent> parents;
     User author,committer;
+    
+    
 
-    /**
+    public GHCommitShortInfo getCommitShortInfo() {
+		return commit;
+	}
+
+	public void setCommit(GHCommitShortInfo commit) {
+		this.commit = commit;
+	}
+
+	/**
      * The repository that contains the commit.
      */
     public GHRepository getOwner() {

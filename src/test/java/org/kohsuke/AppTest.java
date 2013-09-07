@@ -332,6 +332,12 @@ public class AppTest extends TestCase {
         assertEquals("oops!",state.getDescription());
         assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
     }
+    
+    public void testCommitShortInfo() throws Exception {
+        GHCommit commit = gitHub.getUser("kohsuke").getRepository("test").getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
+        assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
+        assertEquals(commit.getCommitShortInfo().getMessage(), "Added a file");
+    }
 
     public void testPullRequestPopulate() throws Exception {
         GHRepository r = gitHub.getUser("kohsuke").getRepository("github-api");

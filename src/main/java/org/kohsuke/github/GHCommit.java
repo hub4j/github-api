@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,11 +18,13 @@ import java.util.List;
 public class GHCommit {
     private GHRepository owner;
     
-    private GHCommitShortInfo commit;
-    
-    public static class GHCommitShortInfo {
+    private ShortInfo commit;
+
+    /**
+     * Short summary of this commit.
+     */
+    public static class ShortInfo {
         private GHAuthor author;
-        
         private GHAuthor committer;
         
         private String message;
@@ -32,32 +35,19 @@ public class GHCommit {
     		return author;
     	}
 
-    	public void setAuthor(GHAuthor author) {
-    		this.author = author;
-    	}
-
 		public GHAuthor getCommitter() {
 			return committer;
 		}
 
-		public void setCommitter(GHAuthor committer) {
-			this.committer = committer;
-		}
-
+        /**
+         * Commit message.
+         */
 		public String getMessage() {
 			return message;
 		}
 
-		public void setMessage(String message) {
-			this.message = message;
-		}
-
-		public int getComment_count() {
+		public int getCommentCount() {
 			return comment_count;
-		}
-
-		public void setComment_count(int comment_count) {
-			this.comment_count = comment_count;
 		}
     }
     
@@ -68,26 +58,13 @@ public class GHCommit {
     		return name;
     	}
 
-    	public void setName(String name) {
-    		this.name = name;
-    	}
-
     	public String getEmail() {
     		return email;
     	}
 
-    	public void setEmail(String email) {
-    		this.email = email;
-    	}
-
-    	public String getDate() {
-    		return date;
-    	}
-
-    	public void setDate(String date) {
-    		this.date = date;
-    	}
-
+        public Date getDate() {
+            return GitHub.parseDate(date);
+        }
     }
 
     public static class Stats {
@@ -186,12 +163,8 @@ public class GHCommit {
     
     
 
-    public GHCommitShortInfo getCommitShortInfo() {
+    public ShortInfo getCommitShortInfo() {
 		return commit;
-	}
-
-	public void setCommit(GHCommitShortInfo commit) {
-		this.commit = commit;
 	}
 
 	/**

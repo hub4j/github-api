@@ -733,7 +733,21 @@ public class GHRepository {
 		}
 		return m;
 	}
-	
+
+    public GHContent getFileContent(String path) throws IOException {
+        return root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent.class);
+    }
+
+    public List<GHContent> getDirectoryContent(String path) throws IOException {
+        GHContent[] files = root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent[].class);
+
+        return Arrays.asList(files);
+    }
+
+    public GHContent getReadme() throws Exception {
+        return getFileContent("readme");
+    }
+
 	public GHMilestone createMilestone(String title, String description) throws IOException {
         return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);

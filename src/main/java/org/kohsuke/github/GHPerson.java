@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * 
  * @author Kohsuke Kawaguchi
  */
-public abstract class GHPerson {
+public class GHPerson {
     /*package almost final*/ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)

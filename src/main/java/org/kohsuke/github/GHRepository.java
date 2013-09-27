@@ -379,6 +379,17 @@ public class GHRepository {
     }
 
     /**
+     * Retrieves all the pull requests of a particular state by knowing organisation and repository
+     */
+    public static PagedIterable<GHPullRequest> listPullRequests(final GitHub root, final GHPerson owner, final String repositoryName, final GHIssueState state) {
+      GHRepository repo = new GHRepository();
+      repo.root = root;
+      repo.name = repositoryName;
+      repo.owner = owner;
+      return repo.listPullRequests(state);
+    }
+
+    /**
      * Retrieves the currently configured hooks.
      */
     public List<GHHook> getHooks() throws IOException {

@@ -23,12 +23,7 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.introspect.VisibilityChecker.Std;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,7 +42,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 /**
  * Root of the GitHub API.
@@ -397,7 +398,7 @@ public class GitHub {
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.getDeserializationConfig().set(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private static final String GITHUB_URL = "https://api.github.com";

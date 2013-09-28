@@ -49,7 +49,7 @@ public class GHIssue {
     protected String closed_at;
     protected int comments;
     protected String body;
-    protected List<String> labels;
+    protected List<Label> labels;
     protected GHUser user;
     protected String title, created_at, html_url;
     protected GHIssue.PullRequest pull_request;
@@ -58,6 +58,24 @@ public class GHIssue {
     protected int id;
     protected GHUser closed_by;
 
+    public static class Label {
+        private String url;
+        private String name;
+        private String color;
+		
+        public String getUrl() {
+			return url;
+		}
+		
+        public String getName() {
+			return name;
+		}
+		
+        public String getColor() {
+			return color;
+		}
+    }
+    
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
@@ -111,7 +129,7 @@ public class GHIssue {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
-    public Collection<String> getLabels() {
+    public Collection<Label> getLabels() {
         if(labels == null){
             return Collections.EMPTY_LIST;
         }

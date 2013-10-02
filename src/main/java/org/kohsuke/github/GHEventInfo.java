@@ -1,9 +1,9 @@
 package org.kohsuke.github;
 
-import org.codehaus.jackson.node.ObjectNode;
-
 import java.io.IOException;
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Represents an event.

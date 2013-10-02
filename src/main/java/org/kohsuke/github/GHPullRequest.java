@@ -118,7 +118,7 @@ public class GHPullRequest extends GHIssue {
     }
 
 	@Override
-	public Collection<String> getLabels() {
+	public Collection<Label> getLabels() {
 		return super.getLabels();
 	}
 

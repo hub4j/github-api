@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A pull request.
@@ -186,4 +187,22 @@ public class GHPullRequest extends GHIssue {
 
         root.retrieve().to(url, this);
     }
+
+    /**
+     * Retrieves all the commits associated to this pull request.
+     */
+  public PagedIterable<GHPullRequestCommitDetail> listCommits() {
+    return new PagedIterable<GHPullRequestCommitDetail>() {
+      public PagedIterator<GHPullRequestCommitDetail> iterator() {
+        return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
+            String.format("%s/commits", getApiURL().getPath()),
+            GHPullRequestCommitDetail[].class)) {
+          @Override
+          protected void wrapUp(GHPullRequestCommitDetail[] page) {
+          }
+        };
+      }
+    };
+  }
+
 }

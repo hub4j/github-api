@@ -57,7 +57,7 @@ public class GHRepository {
     private String description, homepage, name;
     private String url; // this is the API url
     private String html_url;    // this is the UI
-    private GHPerson owner;   // not fully populated. beware.
+    private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, _private, has_downloads;
     private int watchers,forks,open_issues,size;
     private String created_at, pushed_at;
@@ -376,17 +376,6 @@ public class GHRepository {
                 };
             }
         };
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state by knowing organisation and repository
-     */
-    public static PagedIterable<GHPullRequest> listPullRequests(final GitHub root, final GHPerson owner, final String repositoryName, final GHIssueState state) {
-      GHRepository repo = new GHRepository();
-      repo.root = root;
-      repo.name = repositoryName;
-      repo.owner = owner;
-      return repo.listPullRequests(state);
     }
 
     /**

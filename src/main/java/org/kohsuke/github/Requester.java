@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +48,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
-import static org.kohsuke.github.GitHub.*;
+import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -62,6 +63,8 @@ class Requester {
      * Request method.
      */
     private String method = "POST";
+    private String contentType = "application/x-www-form-urlencoded";
+    private InputStream body;
 
     private static class Entry {
         String key;
@@ -113,6 +116,11 @@ class Requester {
         return _with(key, value);
     }
 
+    public Requester with(InputStream body) {
+        this.body = body;
+        return this;
+    }
+
     public Requester _with(String key, Object value) {
         if (value!=null) {
             args.add(new Entry(key,value));
@@ -122,6 +130,11 @@ class Requester {
 
     public Requester method(String method) {
         this.method = method;
+        return this;
+    }
+
+    public Requester contentType(String contentType) {
+        this.contentType = contentType;
         return this;
     }
 
@@ -162,13 +175,25 @@ class Requester {
 
             if (!method.equals("GET")) {
                 uc.setDoOutput(true);
-                uc.setRequestProperty("Content-type","application/x-www-form-urlencoded");
+                uc.setRequestProperty("Content-type", contentType);
 
-                Map json = new HashMap();
-                for (Entry e : args) {
-                    json.put(e.key, e.value);
+                if (body == null) {
+                    Map json = new HashMap();
+                    for (Entry e : args) {
+                        json.put(e.key, e.value);
+                    }
+                    MAPPER.writeValue(uc.getOutputStream(), json);
+                } else {
+                    try {
+                        byte[] bytes = new byte[32768];
+                        int read = 0;
+                        while ((read = body.read(bytes)) != -1) {
+                            uc.getOutputStream().write(bytes, 0, read);
+                        }
+                    } finally {
+                        body.close();
+                    }
                 }
-                MAPPER.writeValue(uc.getOutputStream(),json);
             }
 
             try {
@@ -269,7 +294,7 @@ class Requester {
 
 
     private HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection uc = (HttpsURLConnection) url.openConnection();
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)

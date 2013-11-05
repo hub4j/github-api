@@ -146,6 +146,15 @@ public class GHRepository {
         return Arrays.asList(GHIssue.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
     }
 
+    public GHReleaseBuilder createRelease(String tag) {
+        return new GHReleaseBuilder(this,tag);
+    }
+
+    public List<GHRelease> getReleases() throws IOException {
+        return Arrays.asList(GHRelease.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/releases",
+                GHRelease[].class), this));
+    }
+
     protected String getOwnerName() {
         return owner.login;
     }

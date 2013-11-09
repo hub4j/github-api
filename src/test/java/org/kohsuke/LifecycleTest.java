@@ -121,7 +121,7 @@ public class LifecycleTest extends TestCase {
         } finally {
             IOUtils.closeQuietly(in);
         }
-        return new UsernamePasswordCredentialsProvider(props.getProperty("login"), props.getProperty("password"));
+        return new UsernamePasswordCredentialsProvider(props.getProperty("login"), props.getProperty("oauth"));
     }
 
     private void delete(File toDelete) {

@@ -3,10 +3,18 @@ package org.kohsuke.github;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static java.lang.String.format;
 
+/**
+ * Release in a github repository.
+ *
+ * @see GHRepository#getReleases()
+ * @see GHRepository#createRelease(String)
+ */
 public class GHRelease {
     GitHub root;
     GHRepository owner;
@@ -176,12 +184,12 @@ public class GHRelease {
                 .to(url, GHAsset.class).wrap(this);
     }
 
-    public GHAsset[] getAssets() throws IOException {
+    public List<GHAsset> getAssets() throws IOException {
         Requester builder = new Requester(owner.root);
 
-        GHAsset[] assets = (GHAsset[]) builder
+        GHAsset[] assets = builder
                 .method("GET")
                 .to(owner.getApiTailUrl(format("releases/%d/assets", id)), GHAsset[].class);
-        return GHAsset.wrap(assets, this);
+        return Arrays.asList(GHAsset.wrap(assets, this));
     }
 }

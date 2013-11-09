@@ -3,6 +3,11 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * Asset in a release.
+ *
+ * @see GHRelease#getAssets()
+ */
 public class GHAsset {
     GitHub root;
     GHRepository owner;

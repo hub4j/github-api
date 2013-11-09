@@ -2,6 +2,11 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
+/**
+ * Builder pattern for creating a {@link GHRelease}
+ *
+ * @see GHRepository#createRelease(String)
+ */
 public class GHReleaseBuilder {
     private final GHRepository repo;
     private final Requester builder;

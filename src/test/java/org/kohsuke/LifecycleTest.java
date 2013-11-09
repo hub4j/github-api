@@ -75,20 +75,20 @@ public class LifecycleTest extends TestCase {
 
     private void updateAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.setLabel("test label");
-        assertEquals("test label", release.getAssets()[0].getLabel());
+        assertEquals("test label", release.getAssets().get(0).getLabel());
     }
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertEquals(0, release.getAssets().length);
+        assertEquals(0, release.getAssets().size());
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("pom.xml"), "application/text");
         assertNotNull(asset);
-        GHAsset[] assets = release.getAssets();
-        assertEquals(1, assets.length);
-        assertEquals("pom.xml", assets[0].getName());
+        List<GHAsset> assets = release.getAssets();
+        assertEquals(1, assets.size());
+        assertEquals("pom.xml", assets.get(0).getName());
 
         return asset;
     }

@@ -528,6 +528,22 @@ public class GHRepository {
                 .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
     }
 
+    /**
+     * Lists repository events.
+     */
+    public PagedIterable<GHEventInfo> listEvents() throws IOException {
+        return new PagedIterable<GHEventInfo>() {
+            public PagedIterator<GHEventInfo> iterator() {
+                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/repos/%s/%s/events", owner.login, name), GHEventInfo[].class)) {
+                    @Override
+                    protected void wrapUp(GHEventInfo[] page) {
+                        for (GHEventInfo c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
 
     /**
      * 

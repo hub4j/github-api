@@ -156,4 +156,21 @@ public class GHOrganization extends GHPerson {
         }
         return all;
     }
+
+    /**
+     * Lists events performed by a user (this includes private events if the caller is authenticated.
+     */
+    public PagedIterable<GHEventInfo> listEvents() throws IOException {
+        return new PagedIterable<GHEventInfo>() {
+            public PagedIterator<GHEventInfo> iterator() {
+                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/orgs/%s/events", login), GHEventInfo[].class)) {
+                    @Override
+                    protected void wrapUp(GHEventInfo[] page) {
+                        for (GHEventInfo c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
 }

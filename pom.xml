@@ -34,7 +34,7 @@
       <plugin>
         <groupId>com.infradna.tool</groupId>
         <artifactId>bridge-method-injector</artifactId>
-        <version>1.2</version>
+        <version>1.8</version>
         <executions>
           <execution>
             <goals>
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.4</version>
+      <version>1.8</version>
       <optional>true</optional>
     </dependency>
     <dependency>

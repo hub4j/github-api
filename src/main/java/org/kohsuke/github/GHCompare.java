@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.net.URL;
 import java.util.Date;
 
@@ -109,11 +111,13 @@ public class GHCompare {
             return message;
         }
 
-        public User getAuthor() {
+        @WithBridgeMethods(value=User.class,castRequired=true)
+        public GitUser getAuthor() {
             return author;
         }
 
-        public User getCommitter() {
+        @WithBridgeMethods(value=User.class,castRequired=true)
+        public GitUser getCommitter() {
             return committer;
         }
 
@@ -134,23 +138,13 @@ public class GHCompare {
         }
     }
 
-    public static class User {
-        private String name, email, date;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public Date getDate() {
-            return GitHub.parseDate(date);
-        }
+    /**
+     * @deprecated use {@link GitUser} instead.
+     */
+    public static class User extends GitUser {
     }
 
     public static enum Status {
-        behind, ahead, identical;
+        behind, ahead, identical
     }
 }

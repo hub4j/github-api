@@ -1,11 +1,12 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,11 +32,13 @@ public class GHCommit {
         
         private int comment_count;
 
-    	public GHAuthor getAuthor() {
+        @WithBridgeMethods(value=GHAuthor.class,castRequired=true)
+    	public GitUser getAuthor() {
     		return author;
     	}
 
-		public GHAuthor getCommitter() {
+        @WithBridgeMethods(value=GHAuthor.class,castRequired=true)
+		public GitUser getCommitter() {
 			return committer;
 		}
 
@@ -50,21 +53,11 @@ public class GHCommit {
 			return comment_count;
 		}
     }
-    
-    public static class GHAuthor {
-    	private String name,email,date;
 
-    	public String getName() {
-    		return name;
-    	}
-
-    	public String getEmail() {
-    		return email;
-    	}
-
-        public Date getDate() {
-            return GitHub.parseDate(date);
-        }
+    /**
+     * @deprecated Use {@link GitUser} instead.
+     */
+    public static class GHAuthor extends GitUser {
     }
 
     public static class Stats {

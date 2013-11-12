@@ -23,8 +23,9 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.net.URL;
-import java.util.Date;
 
 /**
  * Commit detail inside a {@link GHPullRequest}.
@@ -33,25 +34,12 @@ import java.util.Date;
  */
 public class GHPullRequestCommitDetail {
 
-  public static class Authorship {
-    String name;
-    String email;
-    String date;
+    /**
+     * @deprecated Use {@link GitUser}
+     */
+    public static class Authorship extends GitUser {}
 
-    public String getName() {
-      return name;
-    }
-
-    public String getEmail() {
-      return email;
-    }
-
-    public Date getDate() {
-      return GitHub.parseDate(date);
-    }
-  }
-
-  public static class Tree {
+    public static class Tree {
     String sha;
     String url;
 
@@ -72,11 +60,13 @@ public class GHPullRequestCommitDetail {
     String url;
     int comment_count;
 
-    public Authorship getAuthor() {
+    @WithBridgeMethods(value=Authorship.class,castRequired=true)
+    public GitUser getAuthor() {
       return author;
     }
 
-    public Authorship getCommitter() {
+    @WithBridgeMethods(value=Authorship.class,castRequired=true)
+    public GitUser getCommitter() {
       return committer;
     }
 

@@ -31,11 +31,11 @@ package org.kohsuke.github;
 public class GHCommitPointer {
     private String ref, sha, label;
     private GHUser user;
-    private GHRepository repository/*V2*/,repo/*V3*/;
+    private GHRepository repo;
 
     /**
      * This points to the user who owns
-     * the {@link #repository}.
+     * the {@link #getRepository()}.
      */
     public GHUser getUser() {
         return user;
@@ -45,7 +45,7 @@ public class GHCommitPointer {
      * The repository that contains the commit.
      */
     public GHRepository getRepository() {
-        return repo!=null ? repo : repository;
+        return repo;
     }
 
     /**
@@ -72,6 +72,5 @@ public class GHCommitPointer {
     void wrapUp(GitHub root) {
         if (user!=null) user.root = root;
         if (repo!=null) repo.wrap(root);
-        if (repository!=null) repository.wrap(root);
     }
 }

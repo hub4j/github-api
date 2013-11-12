@@ -131,7 +131,7 @@ public abstract class GHEventPayload {
          * before the push.
          */
         public String getBefore() {
-            return head;
+            return before;
         }
 
         /**

@@ -63,6 +63,13 @@ public class GHEventInfo {
         return root.getUser(actor.getLogin());
     }
 
+    /**
+     * Quick way to just get the actor of the login.
+     */
+    public String getActorLogin() throws IOException {
+        return actor.getLogin();
+    }
+
     public GHOrganization getOrganization() throws IOException {
         return (org==null || org.getLogin()==null) ? null : root.getOrganization(org.getLogin());
     }

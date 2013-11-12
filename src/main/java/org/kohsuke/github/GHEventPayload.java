@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.Reader;
+import java.util.List;
 
 /**
  * Base type for types used in databinding of the event payload.
@@ -8,6 +9,7 @@ import java.io.Reader;
  * @see GitHub#parseEventPayload(Reader, Class)
  * @see GHEventInfo#getPayload(Class)
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class GHEventPayload {
     protected GitHub root;
 
@@ -21,7 +23,7 @@ public abstract class GHEventPayload {
     /**
      * A pull request status has changed.
      *
-     * @see http://developer.github.com/v3/activity/events/types/#pullrequestevent
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#pullrequestevent">authoritative source</a>
      */
     public static class PullRequest extends GHEventPayload {
         private String action;
@@ -61,7 +63,7 @@ public abstract class GHEventPayload {
     /**
      * A comment was added to an issue
      *
-     * @see http://developer.github.com/v3/activity/events/types/#issuecommentevent
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>
      */
     public static class IssueComment extends GHEventPayload {
         private String action;
@@ -103,6 +105,82 @@ public abstract class GHEventPayload {
             repository.wrap(root);
             issue.wrap(repository);
             comment.wrapUp(issue);
+        }
+    }
+
+    /**
+     * A commit was pushed.
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
+     */
+    public static class Push extends GHEventPayload {
+        private String head;
+        String ref;
+        int size;
+        List<PushCommit> commits;
+
+        /**
+         * The SHA of the HEAD commit on the repository
+         */
+        public String getHead() {
+            return head;
+        }
+
+        /**
+         * The full Git ref that was pushed. Example: “refs/heads/master”
+         */
+        public String getRef() {
+            return ref;
+        }
+
+        /**
+         * The number of commits in the push.
+         * Is this always the same as {@code getCommits().size()}?
+         */
+        public int getSize() {
+            return size;
+        }
+
+        /**
+         * The list of pushed commits.
+         */
+        public List<PushCommit> getCommits() {
+            return commits;
+        }
+
+        /**
+         * Commit in a push
+         */
+        public static class PushCommit {
+            private GitUser author;
+            private String url, sha, message;
+            private boolean distinct;
+
+            public GitUser getAuthor() {
+                return author;
+            }
+
+            /**
+             * Points to the commit API resource.
+             */
+            public String getUrl() {
+                return url;
+            }
+
+            public String getSha() {
+                return sha;
+            }
+
+            public String getMessage() {
+                return message;
+            }
+
+            /**
+             * Whether this commit is distinct from any that have been pushed before.
+             */
+            public boolean isDistinct() {
+                return distinct;
+            }
         }
     }
 }

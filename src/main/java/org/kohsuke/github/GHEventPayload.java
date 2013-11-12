@@ -114,15 +114,23 @@ public abstract class GHEventPayload {
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
      */
     public static class Push extends GHEventPayload {
-        private String head;
-        String ref;
-        int size;
-        List<PushCommit> commits;
+        private String head, before;
+        private String ref;
+        private int size;
+        private List<PushCommit> commits;
 
         /**
          * The SHA of the HEAD commit on the repository
          */
         public String getHead() {
+            return head;
+        }
+
+        /**
+         * This is undocumented, but it looks like this captures the commit that the ref was pointing to
+         * before the push.
+         */
+        public String getBefore() {
             return head;
         }
 

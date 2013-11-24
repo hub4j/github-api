@@ -143,7 +143,24 @@ public class GHRepository {
     }
 
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-        return Arrays.asList(GHIssue.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues?state=" + state.toString().toLowerCase(), GHIssue[].class), this));
+        return listIssues(state).asList();
+    }
+
+    /**
+     * Lists up all the issues in this repository.
+     */
+    public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
+        return new PagedIterable<GHIssue>() {
+            public PagedIterator<GHIssue> iterator() {
+                return new PagedIterator<GHIssue>(root.retrieve().asIterator(getApiTailUrl("issues?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHIssue[].class)) {
+                    @Override
+                    protected void wrapUp(GHIssue[] page) {
+                        for (GHIssue c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
     public GHReleaseBuilder createRelease(String tag) {

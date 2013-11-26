@@ -22,6 +22,7 @@ public enum GHEvent {
     MEMBER,
     PUBLIC,
     PULL_REQUEST,
+    PULL_REQUEST_REVIEW_COMMENT,
     PUSH,
     TEAM_ADD,
     WATCH

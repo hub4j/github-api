@@ -79,6 +79,12 @@ public class AppTest extends TestCase {
         o.close();
     }
 
+    public void testGetIssues() throws Exception {
+        List<GHIssue> closedIssues = gitHub.getUser("kohsuke").getRepository("github-api").getIssues(GHIssueState.CLOSED);
+        // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
+        assertTrue(closedIssues.size() > 30);
+    }
+
     public void testRateLimit() throws IOException {
         System.out.println(gitHub.getRateLimit());
     }

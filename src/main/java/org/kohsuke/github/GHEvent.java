@@ -6,6 +6,7 @@ package org.kohsuke.github;
  * See http://developer.github.com/v3/events/types/
  *
  * @author Kohsuke Kawaguchi
+ * @see GHEventInfo
  */
 public enum GHEvent {
     COMMIT_COMMENT,

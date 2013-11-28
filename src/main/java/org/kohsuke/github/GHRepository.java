@@ -736,11 +736,31 @@ public class GHRepository {
 	}
 
     public GHContent getFileContent(String path) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent.class).wrap(this);
+        return getFileContent(path, null);
+    }
+
+    public GHContent getFileContent(String path, String ref) throws IOException {
+        Requester requester = root.retrieve();
+        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+
+        if (ref != null)
+            target = target + "?ref=" + ref;
+
+        return requester.to(target, GHContent.class).wrap(this);
     }
 
     public List<GHContent> getDirectoryContent(String path) throws IOException {
-        GHContent[] files = root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent[].class);
+        return getDirectoryContent(path, null);
+    }
+
+    public List<GHContent> getDirectoryContent(String path, String ref) throws IOException {
+        Requester requester = root.retrieve();
+        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+
+        if (ref != null)
+            target = target + "?ref=" + ref;
+
+        GHContent[] files = requester.to(target, GHContent[].class);
 
         GHContent.wrap(files, this);
 

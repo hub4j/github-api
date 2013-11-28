@@ -1,5 +1,9 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
+
+import javax.xml.bind.DatatypeConverter;
+
 /**
  * A Content of a repository.
  *
@@ -48,7 +52,7 @@ public final class GHContent {
     }
 
     public String getContent() {
-        return new String(javax.xml.bind.DatatypeConverter.parseBase64Binary(getEncodedContent()));
+        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
     }
 
     public String getEncodedContent() {
@@ -73,5 +77,26 @@ public final class GHContent {
 
     public boolean isDirectory() {
         return "dir".equals(type);
+    }
+
+    public void update(String newContent, String commitMessage) throws IOException {
+        new Requester(owner.root)
+            .with("path", path)
+            .with("message", commitMessage)
+            .with("sha", sha)
+            .with("content", DatatypeConverter.printBase64Binary(newContent.getBytes()))
+            .method("PUT")
+            .to(getApiRoute());
+
+        this.content = newContent;
+    }
+
+    private String getApiRoute() {
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/contents/" + path;
+    }
+
+    GHContent wrap(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

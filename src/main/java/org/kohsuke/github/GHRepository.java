@@ -735,7 +735,7 @@ public class GHRepository {
 	}
 
     public GHContent getFileContent(String path) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent.class);
+        return root.retrieve().to(String.format("/repos/%s/%s/contents/%s", owner.login, name, path), GHContent.class).wrap(this);
     }
 
     public List<GHContent> getDirectoryContent(String path) throws IOException {

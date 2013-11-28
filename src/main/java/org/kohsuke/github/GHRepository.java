@@ -750,12 +750,21 @@ public class GHRepository {
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        GHContentUpdateResponse response = new Requester(root)
+        return createContent(content, commitMessage, path, null);
+    }
+
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
+        Requester requester = new Requester(root)
             .with("path", path)
             .with("message", commitMessage)
             .with("content", DatatypeConverter.printBase64Binary(content.getBytes()))
-            .method("PUT")
-            .to(getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
+            .method("PUT");
+
+        if (branch != null) {
+            requester.with("branch", branch);
+        }
+
+        GHContentUpdateResponse response = requester.to(getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
 
         response.getContent().wrap(this);
         response.getCommit().wrapUp(this);

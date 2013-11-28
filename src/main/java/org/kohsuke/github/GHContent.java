@@ -80,13 +80,22 @@ public final class GHContent {
     }
 
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-        GHContentUpdateResponse response = new Requester(owner.root)
+        return update(newContent, commitMessage, null);
+    }
+
+    public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
+        Requester requester = new Requester(owner.root)
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
             .with("content", DatatypeConverter.printBase64Binary(newContent.getBytes()))
-            .method("PUT")
-            .to(getApiRoute(), GHContentUpdateResponse.class);
+            .method("PUT");
+
+        if (branch != null) {
+            requester.with("branch", branch);
+        }
+
+        GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
 
         response.getContent().wrap(owner);
         response.getCommit().wrapUp(owner);

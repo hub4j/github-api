@@ -51,11 +51,37 @@ public final class GHContent {
         return path;
     }
 
-    public String getContent() {
+    /**
+     * Retrieve the decoded content that is stored at this location.
+     *
+     * Due to the nature of GitHub's API, you're not guaranteed that
+     * the content will already be populated, so this may trigger
+     * network activity, and can throw an IOException.
+    **/
+    public String getContent() throws IOException {
         return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
     }
 
-    public String getEncodedContent() {
+    /**
+     * Retrieve the raw content that is stored at this location.
+     *
+     * Due to the nature of GitHub's API, you're not guaranteed that
+     * the content will already be populated, so this may trigger
+     * network activity, and can throw an IOException.
+    **/
+    public String getEncodedContent() throws IOException {
+        if (content != null)
+            return content;
+
+        GHContent retrievedContent = owner.getFileContent(path);
+
+        this.size = retrievedContent.size;
+        this.sha = retrievedContent.sha;
+        this.content = retrievedContent.content;
+        this.url = retrievedContent.url;
+        this.git_url = retrievedContent.git_url;
+        this.html_url = retrievedContent.html_url;
+
         return content;
     }
 

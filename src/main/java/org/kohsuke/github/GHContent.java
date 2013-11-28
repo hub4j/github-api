@@ -112,4 +112,11 @@ public final class GHContent {
         this.owner = owner;
         return this;
     }
+
+    public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
+        for (GHContent unwrappedContent : contents) {
+            unwrappedContent.wrap(repository);
+        }
+        return contents;
+    }
 }

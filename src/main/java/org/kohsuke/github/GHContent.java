@@ -79,16 +79,20 @@ public final class GHContent {
         return "dir".equals(type);
     }
 
-    public void update(String newContent, String commitMessage) throws IOException {
-        new Requester(owner.root)
+    public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
+        GHContentUpdateResponse response = new Requester(owner.root)
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
             .with("content", DatatypeConverter.printBase64Binary(newContent.getBytes()))
             .method("PUT")
-            .to(getApiRoute());
+            .to(getApiRoute(), GHContentUpdateResponse.class);
+
+        response.getContent().wrap(owner);
+        response.getCommit().wrapUp(owner);
 
         this.content = newContent;
+        return response;
     }
 
     private String getApiRoute() {

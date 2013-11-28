@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.DatatypeConverter;
 
 import static java.util.Arrays.*;
 
@@ -746,6 +747,20 @@ public class GHRepository {
 
     public GHContent getReadme() throws Exception {
         return getFileContent("readme");
+    }
+
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
+        GHContentUpdateResponse response = new Requester(root)
+            .with("path", path)
+            .with("message", commitMessage)
+            .with("content", DatatypeConverter.printBase64Binary(content.getBytes()))
+            .method("PUT")
+            .to(getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
+
+        response.getContent().wrap(this);
+        response.getCommit().wrapUp(this);
+
+        return response;
     }
 
 	public GHMilestone createMilestone(String title, String description) throws IOException {

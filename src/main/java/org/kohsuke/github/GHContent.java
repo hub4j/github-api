@@ -11,6 +11,7 @@ public final class GHContent {
     private String type;
     private String encoding;
     private long size;
+    private String sha;
     private String name;
     private String path;
     private String content;
@@ -32,6 +33,10 @@ public final class GHContent {
 
     public long getSize() {
         return size;
+    }
+
+    public String getSha() {
+        return sha;
     }
 
     public String getName() {

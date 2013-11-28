@@ -110,11 +110,13 @@ public final class GHContent {
     }
 
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
+        String encodedContent = DatatypeConverter.printBase64Binary(newContent.getBytes());
+
         Requester requester = new Requester(owner.root)
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
-            .with("content", DatatypeConverter.printBase64Binary(newContent.getBytes()))
+            .with("content", encodedContent)
             .method("PUT");
 
         if (branch != null) {
@@ -126,7 +128,7 @@ public final class GHContent {
         response.getContent().wrap(owner);
         response.getCommit().wrapUp(owner);
 
-        this.content = newContent;
+        this.content = encodedContent;
         return response;
     }
 

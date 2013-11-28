@@ -104,6 +104,27 @@ public final class GHContent {
         return response;
     }
 
+    public GHContentUpdateResponse delete(String message) throws IOException {
+        return delete(message, null);
+    }
+
+    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
+        Requester requester = new Requester(owner.root)
+            .with("path", path)
+            .with("message", commitMessage)
+            .with("sha", sha)
+            .method("DELETE");
+
+        if (branch != null) {
+            requester.with("branch", branch);
+        }
+
+        GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
+
+        response.getCommit().wrapUp(owner);
+        return response;
+    }
+
     private String getApiRoute() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/contents/" + path;
     }

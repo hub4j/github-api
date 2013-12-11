@@ -34,12 +34,30 @@ public class GHMyself extends GHUser {
     /**
      * Returns the read-only list of all the pulic keys of the current user.
      *
+     * NOTE: When using OAuth authenticaiton, the READ/WRITE User scope is
+     * required by the GitHub APIs, otherwise you will get a 404 NOT FOUND.
+     *
      * @return
      *      Always non-null.
      */
     public List<GHKey> getPublicKeys() throws IOException {
         return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/user/keys", GHKey[].class)));
     }
+
+    /**
+     * Returns the read-only list of all the pulic verified keys of the current user.
+     *
+     * Differently from the getPublicKeys() method, the retrieval of the user's
+     * verified public keys does not require any READ/WRITE OAuth Scope to the
+     * user's profile.
+     *
+     * @return
+     *      Always non-null.
+     */
+  public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
+    return Collections.unmodifiableList(Arrays.asList(root.retrieve().to(
+        "/users/" + getLogin() + "/keys", GHVerifiedKey[].class)));
+  }
 
     /**
      * Gets the organization that this user belongs to.

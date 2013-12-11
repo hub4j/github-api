@@ -10,9 +10,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class GHKey {
     /*package almost final*/ GitHub root;
 
-    private String url, key, title;
-    private boolean verified;
-    private int id;
+    protected String url, key, title;
+    protected boolean verified;
+    protected int id;
 
     public int getId() {
         return id;

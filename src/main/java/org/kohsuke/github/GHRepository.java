@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.DatatypeConverter;
 
 import static java.util.Arrays.*;
 
@@ -733,7 +734,66 @@ public class GHRepository {
 		}
 		return m;
 	}
-	
+
+    public GHContent getFileContent(String path) throws IOException {
+        return getFileContent(path, null);
+    }
+
+    public GHContent getFileContent(String path, String ref) throws IOException {
+        Requester requester = root.retrieve();
+        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+
+        if (ref != null)
+            target = target + "?ref=" + ref;
+
+        return requester.to(target, GHContent.class).wrap(this);
+    }
+
+    public List<GHContent> getDirectoryContent(String path) throws IOException {
+        return getDirectoryContent(path, null);
+    }
+
+    public List<GHContent> getDirectoryContent(String path, String ref) throws IOException {
+        Requester requester = root.retrieve();
+        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+
+        if (ref != null)
+            target = target + "?ref=" + ref;
+
+        GHContent[] files = requester.to(target, GHContent[].class);
+
+        GHContent.wrap(files, this);
+
+        return Arrays.asList(files);
+    }
+
+    public GHContent getReadme() throws Exception {
+        return getFileContent("readme");
+    }
+
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
+        return createContent(content, commitMessage, path, null);
+    }
+
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
+        Requester requester = new Requester(root)
+            .with("path", path)
+            .with("message", commitMessage)
+            .with("content", DatatypeConverter.printBase64Binary(content.getBytes()))
+            .method("PUT");
+
+        if (branch != null) {
+            requester.with("branch", branch);
+        }
+
+        GHContentUpdateResponse response = requester.to(getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
+
+        response.getContent().wrap(this);
+        response.getCommit().wrapUp(this);
+
+        return response;
+    }
+
 	public GHMilestone createMilestone(String title, String description) throws IOException {
         return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);

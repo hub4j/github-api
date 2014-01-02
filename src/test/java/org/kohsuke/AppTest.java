@@ -46,6 +46,9 @@ public class AppTest extends TestCase {
     }
 
     public void testRepoCRUD() throws Exception {
+        GHRepository existing = gitHub.getMyself().getRepository("github-api-test");
+        if (existing!=null)
+            existing.delete();
         GHRepository r = gitHub.createRepository("github-api-test", "a test repository", "http://github-api.kohsuke.org/", true);
         r.enableIssueTracker(false);
         r.enableDownloads(false);

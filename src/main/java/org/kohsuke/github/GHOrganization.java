@@ -80,24 +80,14 @@ public class GHOrganization extends GHPerson {
     /**
      * All the members of this organization.
      */
-    public List<GHUser> getMembers() throws IOException {
-        return new AbstractList<GHUser>() {
-            // these are shallow objects with only some limited values filled out
-            // TODO: it's better to allow objects to fill themselves in later when missing values are requested
-            final GHUser[] shallow = root.retrieve().to("/orgs/" + login + "/members", GHUser[].class);
-
-            @Override
-            public GHUser get(int index) {
-                try {
-                    return root.getUser(shallow[index].getLogin());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            @Override
-            public int size() {
-                return shallow.length;
+    public PagedIterable<GHUser> getMembers() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/members", login), GHUser[].class)) {
+                    @Override
+                    protected void wrapUp(GHUser[] page) {
+                    }
+                };
             }
         };
     }

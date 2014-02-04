@@ -43,8 +43,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import static java.lang.String.format;
-import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
 /**
@@ -150,7 +148,7 @@ public class GHRepository {
 
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
-                .to(format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
+                .to(String.format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
                         state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
                         GHIssue[].class), this));
     }
@@ -272,7 +270,7 @@ public class GHRepository {
         Map<String, String> config = new HashMap<String, String>();
         config.put("address", address);
         new Requester(root).method("POST").with("name", "email").with("config", config).with("active", "true")
-                .to(format("/repos/%s/%s/hooks", owner.login, name));
+                .to(String.format("/repos/%s/%s/hooks", owner.login, name));
     }
 
     private void edit(String key, String value) throws IOException {
@@ -286,18 +284,18 @@ public class GHRepository {
      * Enables or disables the issue tracker for this repository.
      */
     public void enableIssueTracker(boolean v) throws IOException {
-        edit("has_issues", valueOf(v));
+        edit("has_issues", String.valueOf(v));
     }
 
     /**
      * Enables or disables Wiki for this repository.
      */
     public void enableWiki(boolean v) throws IOException {
-        edit("has_wiki", valueOf(v));
+        edit("has_wiki", String.valueOf(v));
     }
 
     public void enableDownloads(boolean v) throws IOException {
-        edit("has_downloads", valueOf(v));
+        edit("has_downloads", String.valueOf(v));
     }
 
     /**
@@ -339,7 +337,7 @@ public class GHRepository {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Requester(root).to(format("/repos/%s/%s/forks?org=%s", owner.login, name, org.getLogin()));
+        new Requester(root).to(String.format("/repos/%s/%s/forks?org=%s", owner.login, name, org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -376,7 +374,7 @@ public class GHRepository {
     public PagedIterable<GHPullRequest> listPullRequests(final GHIssueState state) {
         return new PagedIterable<GHPullRequest>() {
             public PagedIterator<GHPullRequest> iterator() {
-                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(format("/repos/%s/%s/pulls?state=%s", owner.login, name, state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
+                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(String.format("/repos/%s/%s/pulls?state=%s", owner.login, name, state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
                     @Override
                     protected void wrapUp(GHPullRequest[] page) {
                         for (GHPullRequest pr : page)
@@ -392,14 +390,14 @@ public class GHRepository {
      */
     public List<GHHook> getHooks() throws IOException {
         List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieve().to(format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
+                root.retrieve().to(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
         for (GHHook h : list)
             h.wrap(this);
         return list;
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieve().to(format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
+        return root.retrieve().to(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
     }
 
     /**
@@ -411,7 +409,7 @@ public class GHRepository {
      * @throws IOException on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-        GHCompare compare = root.retrieve().to(format("/repos/%s/%s/compare/%s...%s", owner.login, name, id1, id2), GHCompare.class);
+        GHCompare compare = root.retrieve().to(String.format("/repos/%s/%s/compare/%s...%s", owner.login, name, id1, id2), GHCompare.class);
         return compare.wrap(this);
     }
 
@@ -429,7 +427,7 @@ public class GHRepository {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return root.retrieve().to(format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
+       return root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
     }
 
     /**
@@ -439,7 +437,7 @@ public class GHRepository {
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return root.retrieve().to(format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
+        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
     }
 
     /**
@@ -448,7 +446,7 @@ public class GHRepository {
     public GHCommit getCommit(String sha1) throws IOException {
         GHCommit c = commits.get(sha1);
         if (c==null) {
-            c = root.retrieve().to(format("/repos/%s/%s/commits/%s", owner.login, name, sha1), GHCommit.class).wrapUp(this);
+            c = root.retrieve().to(String.format("/repos/%s/%s/commits/%s", owner.login, name, sha1), GHCommit.class).wrapUp(this);
             commits.put(sha1,c);
         }
         return c;
@@ -460,7 +458,7 @@ public class GHRepository {
     public PagedIterable<GHCommit> listCommits() {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(format("/repos/%s/%s/commits", owner.login, name), GHCommit[].class)) {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits", owner.login, name), GHCommit[].class)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(GHRepository.this);
@@ -476,7 +474,7 @@ public class GHRepository {
     public PagedIterable<GHCommitComment> listCommitComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(format("/repos/%s/%s/comments", owner.login, name), GHCommitComment[].class)) {
+                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(String.format("/repos/%s/%s/comments", owner.login, name), GHCommitComment[].class)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -493,7 +491,7 @@ public class GHRepository {
     public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
         return new PagedIterable<GHCommitStatus>() {
             public PagedIterator<GHCommitStatus> iterator() {
-                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus[].class)) {
+                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus[].class)) {
                     @Override
                     protected void wrapUp(GHCommitStatus[] page) {
                         for (GHCommitStatus c : page)
@@ -525,7 +523,7 @@ public class GHRepository {
                 .with("state", state.name().toLowerCase(Locale.ENGLISH))
                 .with("target_url", targetUrl)
                 .with("description", description)
-                .to(format("/repos/%s/%s/statuses/%s", owner.login, this.name, sha1),GHCommitStatus.class).wrapUp(root);
+                .to(String.format("/repos/%s/%s/statuses/%s", owner.login, this.name, sha1),GHCommitStatus.class).wrapUp(root);
     }
 
 
@@ -554,7 +552,7 @@ public class GHRepository {
                 .with("active", active)
                 ._with("config", config)
                 ._with("events",ea)
-                .to(format("/repos/%s/%s/hooks", owner.login, this.name),GHHook.class).wrap(this);
+                .to(String.format("/repos/%s/%s/hooks", owner.login, this.name),GHHook.class).wrap(this);
     }
 
     public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {

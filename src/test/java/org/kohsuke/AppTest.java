@@ -1,6 +1,7 @@
 package org.kohsuke;
 
 import junit.framework.TestCase;
+import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
@@ -9,7 +10,6 @@ import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHHook;
-import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueComment;
 import org.kohsuke.github.GHIssueState;
@@ -28,9 +28,9 @@ import org.kohsuke.github.PagedIterable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
 
 /**
  * Unit test for simple App.
@@ -43,6 +43,16 @@ public class AppTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
         gitHub = GitHub.connect();
+        GHRepository repository = gitHub.getMyself().getRepository("github-api-test");
+        if (repository == null) {
+            GHRepository test = gitHub.createRepository(gitHub.getMyself().getLogin() + "/github-api-test", "A test repository for testing" +
+                    "the github-api project", "http://github-api.kohsuke.org/", true);
+        }
+        PagedIterable<GHMilestone> milestones = repository.listMilestones(GHIssueState.CLOSED);
+        if(!milestones.iterator().hasNext()) {
+            repository.createMilestone("Test Milestone", "Just for unit testing").close();
+        }
+
     }
 
     public void testRepoCRUD() throws Exception {
@@ -71,12 +81,50 @@ public class AppTest extends TestCase {
     }
 
     public void testCreateIssue() throws IOException {
-        GHUser u = gitHub.getUser("kohsuke");
-        GHRepository r = u.getRepository("test");
+        GHUser u = getUser();
+        GHRepository r = getTestRepository();
         GHMilestone someMilestone = r.listMilestones(GHIssueState.CLOSED).iterator().next();
         GHIssue o = r.createIssue("testing").body("this is body").assignee(u).label("bug").label("question").milestone(someMilestone).create();
         System.out.println(o.getUrl());
         o.close();
+    }
+
+    private GHRepository getTestRepository() throws IOException {
+        return getUser().getRepository("github-api-test");
+    }
+
+    private GHUser getUser() throws IOException {
+        return gitHub.getMyself();
+    }
+
+    public void testListIssues() throws IOException {
+        GHUser u = getUser();
+        GHRepository repository = getTestRepository();
+        GHMilestone milestone = repository.listMilestones(GHIssueState.CLOSED).iterator().next();
+        GHIssue unhomed = null;
+        GHIssue homed = null;
+        try {
+            unhomed = repository.createIssue("testing").body("this is body")
+                    .assignee(u)
+                    .label("bug")
+                    .label("question")
+                    .create();
+            assertEquals(unhomed.getNumber(), repository.getIssues(GHIssueState.OPEN, null).get(0).getNumber());
+            homed = repository.createIssue("testing").body("this is body")
+                    .assignee(u)
+                    .label("bug")
+                    .label("question")
+                    .milestone(milestone)
+                    .create();
+            assertEquals(homed.getNumber(), repository.getIssues(GHIssueState.OPEN, milestone).get(0).getNumber());
+        } finally {
+            if (unhomed != null) {
+                unhomed.close();
+            }
+            if (homed != null) {
+                homed.close();
+            }
+        }
     }
 
     public void testRateLimit() throws IOException {
@@ -91,7 +139,7 @@ public class AppTest extends TestCase {
 
     public void testFetchPullRequest() throws Exception {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("jenkins");
-        assertEquals("master",r.getMasterBranch());
+        assertEquals("master", r.getMasterBranch());
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
     }
@@ -112,7 +160,7 @@ public class AppTest extends TestCase {
         r = gitHub.getOrganization("github").getRepository("tire");
         assertFalse(r.hasAdminAccess());
     }
-    
+
     public void testGetMyself() throws Exception {
         GHMyself me = gitHub.getMyself();
         System.out.println(me);
@@ -143,7 +191,7 @@ public class AppTest extends TestCase {
         Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
-    
+
     public void testMemberOrgs() throws Exception {
         Set<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         System.out.println(o);
@@ -153,11 +201,11 @@ public class AppTest extends TestCase {
         GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         System.out.println(commit);
         assertEquals(1, commit.getParents().size());
-        assertEquals(1,commit.getFiles().size());
+        assertEquals(1, commit.getFiles().size());
 
         File f = commit.getFiles().get(0);
-        assertEquals(48,f.getLinesChanged());
-        assertEquals("modified",f.getStatus());
+        assertEquals(48, f.getLinesChanged());
+        assertEquals("modified", f.getStatus());
         assertEquals("changelog.html", f.getFileName());
     }
 
@@ -167,12 +215,12 @@ public class AppTest extends TestCase {
             System.out.println(c.getSHA1());
             sha1.add(c.getSHA1());
         }
-        assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7",sha1.get(0));
-        assertEquals(1,sha1.size());
+        assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7", sha1.get(0));
+        assertEquals(1, sha1.size());
     }
 
     public void testBranches() throws Exception {
-        Map<String,GHBranch> b =
+        Map<String, GHBranch> b =
                 gitHub.getUser("jenkinsci").getRepository("jenkins").getBranches();
         System.out.println(b);
     }
@@ -204,11 +252,11 @@ public class AppTest extends TestCase {
         for (GHHook h : r.getHooks())
             h.delete();
     }
-    
+
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
             System.out.println(ev);
-            if (ev.getType()==GHEvent.PULL_REQUEST) {
+            if (ev.getType() == GHEvent.PULL_REQUEST) {
                 GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
                 System.out.println(pr.getNumber());
                 System.out.println(pr.getPullRequest());
@@ -259,11 +307,11 @@ public class AppTest extends TestCase {
     private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasIssues()) {
-                if (r.getOpenIssueCount()==0) {
-                    System.out.println("DISABLED  "+r.getName());
+                if (r.getOpenIssueCount() == 0) {
+                    System.out.println("DISABLED  " + r.getName());
                     r.enableIssueTracker(false);
                 } else {
-                    System.out.println("UNTOUCHED "+r.getName());
+                    System.out.println("UNTOUCHED " + r.getName());
                 }
             }
         }
@@ -272,7 +320,7 @@ public class AppTest extends TestCase {
     private void tryDisablingWiki(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasWiki()) {
-                System.out.println("DISABLED  "+r.getName());
+                System.out.println("DISABLED  " + r.getName());
                 r.enableWiki(false);
             }
         }
@@ -286,7 +334,7 @@ public class AppTest extends TestCase {
     }
 
     private void tryRenaming(GitHub gitHub) throws IOException {
-        gitHub.getUser("kohsuke").getRepository("test").renameTo("test2");
+        getTestRepository().renameTo("test2");
     }
 
     private void tryTeamCreation(GitHub gitHub) throws IOException {
@@ -309,9 +357,9 @@ public class AppTest extends TestCase {
         long start = System.currentTimeMillis();
         Map<String, GHRepository> repos = j.getRepositories();
         long end = System.currentTimeMillis();
-        System.out.printf("%d repositories in %dms\n",repos.size(),end-start);
+        System.out.printf("%d repositories in %dms\n", repos.size(), end - start);
     }
-    
+
     public void testOrganization() throws IOException {
         GHOrganization j = gitHub.getOrganization("jenkinsci");
         GHTeam t = j.getTeams().get("Core Developers");
@@ -322,19 +370,19 @@ public class AppTest extends TestCase {
     }
 
     public void testCommitStatus() throws Exception {
-        GHRepository r = gitHub.getUser("kohsuke").getRepository("test");
+        GHRepository r = getTestRepository();
         GHCommitStatus state;
 //        state = r.createCommitStatus("edacdd76b06c5f3f0697a22ca75803169f25f296", GHCommitState.FAILURE, "http://jenkins-ci.org/", "oops!");
 
         List<GHCommitStatus> lst = r.listCommitStatuses("edacdd76b06c5f3f0697a22ca75803169f25f296").asList();
         state = lst.get(0);
         System.out.println(state);
-        assertEquals("oops!",state.getDescription());
-        assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
+        assertEquals("oops!", state.getDescription());
+        assertEquals("http://jenkins-ci.org/", state.getTargetUrl());
     }
-    
+
     public void testCommitShortInfo() throws Exception {
-        GHCommit commit = gitHub.getUser("kohsuke").getRepository("test").getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
+        GHCommit commit = getTestRepository().getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
         assertEquals(commit.getCommitShortInfo().getMessage(), "Added a file");
     }
@@ -348,7 +396,7 @@ public class AppTest extends TestCase {
 
     public void testCheckMembership() throws Exception {
         GHOrganization j = gitHub.getOrganization("jenkinsci");
-        GHUser kohsuke = gitHub.getUser("kohsuke");
+        GHUser kohsuke = getUser();
         GHUser a = gitHub.getUser("a");
 
         assertTrue(j.hasMember(kohsuke));

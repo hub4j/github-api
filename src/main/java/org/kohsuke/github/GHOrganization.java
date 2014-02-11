@@ -81,9 +81,15 @@ public class GHOrganization extends GHPerson {
      * All the members of this organization.
      */
     public PagedIterable<GHUser> getMembers() throws IOException {
+        return getMembersWithFilter(null);
+    }
+
+    public PagedIterable<GHUser> getMembersWithFilter(final String filter) throws IOException {
+
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> iterator() {
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/members", login), GHUser[].class)) {
+                String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/members%s", login, filterParams), GHUser[].class)) {
                     @Override
                     protected void wrapUp(GHUser[] page) {
                     }
@@ -91,7 +97,6 @@ public class GHOrganization extends GHPerson {
             }
         };
     }
-
     /**
      * Conceals the membership.
      */

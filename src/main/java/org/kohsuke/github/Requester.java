@@ -322,6 +322,8 @@ class Requester {
         try {
             r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
+            // private is a Java keyword, JavaBeans use _private for catching the 'private' JSON field
+            data = data.replace("\"private\":", "\"_private\":");
             if (type!=null)
                 return MAPPER.readValue(data,type);
             if (instance!=null)

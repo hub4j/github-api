@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Returns the read-only list of all the pulic verified keys of the current user.
+     * Returns the read-only list of all the public verified keys of the current user.
      *
      * Differently from the getPublicKeys() method, the retrieval of the user's
      * verified public keys does not require any READ/WRITE OAuth Scope to the

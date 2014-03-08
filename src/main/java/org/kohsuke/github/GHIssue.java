@@ -190,7 +190,7 @@ public class GHIssue {
     }
 
     public void setLabels(String... labels) throws IOException {
-        edit("assignee",labels);
+        edit("labels",labels);
     }
 
     /**

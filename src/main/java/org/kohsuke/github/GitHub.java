@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -71,7 +72,7 @@ public class GitHub {
     /**
      * Connects to GitHub.com
      */
-    private GitHub(String login, String oauthAccessToken, String password) throws IOException {
+    protected GitHub(String login, String oauthAccessToken, String password) throws IOException {
       this (GITHUB_URL, login, oauthAccessToken, password);
     }
 
@@ -109,7 +110,7 @@ public class GitHub {
      * @param password
      *      User's password. Always used in conjunction with the {@code login} parameter
      */
-    private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
+    protected GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
 
@@ -402,4 +403,12 @@ public class GitHub {
     }
 
     private static final String GITHUB_URL = "https://api.github.com";
+
+    /**
+     * This method can be overriden to use an alternative HTTP client implementation,
+     * eg OkHttp
+     */
+    protected URLConnection open(URL url) throws IOException {
+        return url.openConnection();
+    }
 }

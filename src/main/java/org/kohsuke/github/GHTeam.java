@@ -49,6 +49,18 @@ public class GHTeam {
         return new HashSet<GHUser>(Arrays.asList(GHUser.wrap(org.root.retrieve().to(api("/members"), GHUser[].class), org.root)));
     }
 
+    /**
+     * Checks if this team has the specified user as a member.
+     */
+    public boolean hasMember(GHUser user) {
+        try {
+            org.root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            return true;
+        } catch (IOException ignore) {
+            return false;
+        }
+    }
+
     public Map<String,GHRepository> getRepositories() throws IOException {
         GHRepository[] repos = org.root.retrieve().to(api("/repos"), GHRepository[].class);
         Map<String,GHRepository> m = new TreeMap<String, GHRepository>();

@@ -77,6 +77,13 @@ public class GHUser extends GHPerson {
     }
 
     /**
+     * Returns true if this user belongs to the specified team.
+     */
+    public boolean isMemberOf(GHTeam team) {
+        return team.hasMember(this);
+    }
+
+    /**
      * Returns true if this user belongs to the specified organization as a public member.
      */
     public boolean isPublicMemberOf(GHOrganization org) {

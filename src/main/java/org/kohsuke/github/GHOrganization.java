@@ -105,7 +105,8 @@ public class GHOrganization extends GHPerson {
                 String filterParams = (filter == null) ? "" : ("?filter=" + filter);
                 return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class)) {
                     @Override
-                    protected void wrapUp(GHUser[] page) {
+                    protected void wrapUp(GHUser[] users) {
+                        GHUser.wrap(users, root);
                     }
                 };
             }

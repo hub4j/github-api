@@ -34,7 +34,7 @@ public final class GHHook {
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
         for (String e : events)
-            Enum.valueOf(GHEvent.class,e.toUpperCase(Locale.ENGLISH));
+            s.add(Enum.valueOf(GHEvent.class,e.toUpperCase(Locale.ENGLISH)));
         return s;
     }
 

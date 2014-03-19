@@ -176,7 +176,7 @@ public class GHOrganization extends GHPerson {
     
     /**
      * Lists up all the repositories of an organization using the specified page size. (this
-     * includes private organizations if the caller is authenticated accordingly)
+     * includes private repos if the caller is authenticated accordingly)
      *
      * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
      *

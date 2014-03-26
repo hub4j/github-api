@@ -173,4 +173,25 @@ public class GHOrganization extends GHPerson {
             }
         };
     }
+    
+    /**
+     * Lists up all the repositories of an organization using the specified page size. (this
+     * includes private repos if the caller is authenticated accordingly)
+     *
+     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
+     *
+     */
+    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos?per_page=" + pageSize, GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
 }

@@ -487,6 +487,68 @@ public class GHRepository {
             }
         };
     }
+    
+    /**
+     * Lists all the commit by author
+     */
+    public PagedIterable<GHCommit> listCommitsByAuthor(final String author) {
+        return new PagedIterable<GHCommit>() {
+            public PagedIterator<GHCommit> iterator() {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author), GHCommit[].class)) {
+                    protected void wrapUp(GHCommit[] page) {
+                        for (GHCommit c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+    
+    /**
+     * Lists all the commit by author for the given branch from the startCommitSha (startCommitSha is optional)
+     */
+    public PagedIterable<GHCommit> listCommitsByAuthorAndBranch(final String author, final String branch, final String startCommitSha) {
+        String url =String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author);
+        url = url + String.format("&sha=%s", branch);
+        if (startCommitSha != null && !startCommitSha.isEmpty()) {
+            url = url + String.format("&sha=%s", startCommitSha);
+        }
+        final String finalUrl = url;
+        return new PagedIterable<GHCommit>() {
+            public PagedIterator<GHCommit> iterator() {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(finalUrl, GHCommit[].class)) {
+                    protected void wrapUp(GHCommit[] page) {
+                        for (GHCommit c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+    
+    /**
+     * Lists all the commit by author for the given branch from the startCommitSha (startCommitSha is optional)
+     */
+    public PagedIterable<GHCommit> listCommitsByAuthorAndBranch(final String author, final String branch, 
+            final String startCommitSha, int pageSize) {
+        String url =String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author);
+        url = url + String.format("&sha=%s", branch);
+        if (startCommitSha != null && !startCommitSha.isEmpty()) {
+            url = url + String.format("&sha=%s", startCommitSha);
+        }
+        url = url + String.format("&per_page=%s", pageSize);
+        final String finalUrl = url;
+        return new PagedIterable<GHCommit>() {
+            public PagedIterator<GHCommit> iterator() {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(finalUrl, GHCommit[].class)) {
+                    protected void wrapUp(GHCommit[] page) {
+                        for (GHCommit c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
 
     /**
      * Lists up all the commit comments in this repository.

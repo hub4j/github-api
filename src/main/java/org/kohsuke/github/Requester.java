@@ -23,9 +23,8 @@
  */
 package org.kohsuke.github;
 
-import org.apache.commons.io.IOUtils;
+import static org.kohsuke.github.GitHub.MAPPER;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +47,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
-import static org.kohsuke.github.GitHub.MAPPER;
+import org.apache.commons.io.IOUtils;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -294,7 +293,7 @@ class Requester {
 
 
     private HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpsURLConnection uc = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)

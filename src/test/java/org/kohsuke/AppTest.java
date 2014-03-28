@@ -478,13 +478,13 @@ public class AppTest {
         kohsuke();
         GHOrganization j = gitHub.getOrganization("jenkinsci");
         GHUser kohsuke = gitHub.getUser("kohsuke");
-        GHUser a = gitHub.getUser("a");
+        GHUser b = gitHub.getUser("b");
 
         assertTrue(j.hasMember(kohsuke));
-        assertFalse(j.hasMember(a));
+        assertFalse(j.hasMember(b));
 
         assertTrue(j.hasPublicMember(kohsuke));
-        assertFalse(j.hasPublicMember(a));
+        assertFalse(j.hasPublicMember(b));
     }
 
     private void kohsuke() {

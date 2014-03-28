@@ -244,7 +244,7 @@ public class AppTest {
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertFalse(gitHub.getOrganization("jenkinsci").getRepository("rubywm").getTeams().isEmpty());
+        assertEquals(1,gitHub.getOrganization("stapler").getRepository("stapler").getTeams().size());
     }
 
     @Test

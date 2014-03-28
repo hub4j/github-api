@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -78,26 +77,44 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * All the members of this organization.
+     * @deprecated use {@link #listMembers()}
      */
     public List<GHUser> getMembers() throws IOException {
-        return new AbstractList<GHUser>() {
-            // these are shallow objects with only some limited values filled out
-            // TODO: it's better to allow objects to fill themselves in later when missing values are requested
-            final GHUser[] shallow = root.retrieve().to("/orgs/" + login + "/members", GHUser[].class);
+        return listMembers().asList();
+    }
 
-            @Override
-            public GHUser get(int index) {
-                try {
-                    return root.getUser(shallow[index].getLogin());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    /**
+     * All the members of this organization.
+     */
+    public PagedIterable<GHUser> listMembers() throws IOException {
+        return listMembers("members");
+    }
 
-            @Override
-            public int size() {
-                return shallow.length;
+    /**
+     * All the public members of this organization.
+     */
+    public PagedIterable<GHUser> listPublicMembers() throws IOException {
+        return listMembers("public_members");
+    }
+
+    private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
+        return listMembers(suffix, null);
+    }
+
+    public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
+        return listMembers("members", filter);
+    }
+
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class)) {
+                    @Override
+                    protected void wrapUp(GHUser[] users) {
+                        GHUser.wrap(users, root);
+                    }
+                };
             }
         };
     }

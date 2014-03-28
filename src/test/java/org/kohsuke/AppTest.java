@@ -216,7 +216,7 @@ public class AppTest {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("jenkins");
         assertTrue(r.hasPullAccess());
 
-        r = gitHub.getOrganization("github").getRepository("tire");
+        r = gitHub.getOrganization("github").getRepository("hub");
         assertFalse(r.hasAdminAccess());
     }
     

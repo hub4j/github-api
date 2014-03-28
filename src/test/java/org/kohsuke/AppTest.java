@@ -19,6 +19,7 @@ import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
+import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHCommitStatus;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
@@ -445,16 +446,17 @@ public class AppTest {
 
     @Test
     public void testCommitStatus() throws Exception {
-        kohsuke();
-        GHRepository r = getTestRepository();
-        GHCommitStatus state;
-//        state = r.createCommitStatus("edacdd76b06c5f3f0697a22ca75803169f25f296", GHCommitState.FAILURE, "http://jenkins-ci.org/", "oops!");
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
 
-        List<GHCommitStatus> lst = r.listCommitStatuses("edacdd76b06c5f3f0697a22ca75803169f25f296").asList();
+        GHCommitStatus state;
+
+//        state = r.createCommitStatus("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396", GHCommitState.FAILURE, "http://kohsuke.org/", "testing!");
+
+        List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").asList();
         state = lst.get(0);
         System.out.println(state);
-        assertEquals("oops!",state.getDescription());
-        assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
+        assertEquals("testing!",state.getDescription());
+        assertEquals("http://kohsuke.org/",state.getTargetUrl());
     }
     
     @Test

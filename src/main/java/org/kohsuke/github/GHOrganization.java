@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -78,28 +77,35 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * @deprecated use {@link #listMembers()}
+     */
+    public List<GHUser> getMembers() throws IOException {
+        return listMembers().asList();
+    }
+
+    /**
      * All the members of this organization.
      */
-    public PagedIterable<GHUser> getMembers() throws IOException {
-        return getMembers("members");
+    public PagedIterable<GHUser> listMembers() throws IOException {
+        return listMembers("members");
     }
 
     /**
      * All the public members of this organization.
      */
-    public PagedIterable<GHUser> getPublicMembers() throws IOException {
-        return getMembers("public_members");
+    public PagedIterable<GHUser> listPublicMembers() throws IOException {
+        return listMembers("public_members");
     }
 
-    private PagedIterable<GHUser> getMembers(String suffix) throws IOException {
-        return getMembers(suffix, null);
+    private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
+        return listMembers(suffix, null);
     }
 
-    public PagedIterable<GHUser> getMembersWithFilter(String filter) throws IOException {
-        return getMembers("members", filter);
+    public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
+        return listMembers("members", filter);
     }
 
-    private PagedIterable<GHUser> getMembers(final String suffix, final String filter) throws IOException {
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> iterator() {
                 String filterParams = (filter == null) ? "" : ("?filter=" + filter);

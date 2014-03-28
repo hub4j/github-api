@@ -150,6 +150,13 @@ public class GHRepository {
         return listIssues(state).asList();
     }
 
+    public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
+        return Arrays.asList(GHIssue.wrap(root.retrieve()
+                .to(String.format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
+                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
+                        GHIssue[].class), this));
+    }
+
     /**
      * Lists up all the issues in this repository.
      */

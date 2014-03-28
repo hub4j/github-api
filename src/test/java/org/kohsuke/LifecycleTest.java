@@ -31,11 +31,12 @@ public class LifecycleTest extends TestCase {
         gitHub = GitHub.connect();
     }
 
-    public void testCreateRepository() throws IOException, GitAPIException {
+    public void testCreateRepository() throws IOException, GitAPIException, InterruptedException {
         GHMyself myself = gitHub.getMyself();
         GHRepository repository = myself.getRepository("github-api-test");
         if (repository != null) {
             repository.delete();
+            Thread.sleep(1000);
         }
         repository = gitHub.createRepository("github-api-test",
                 "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/", true);

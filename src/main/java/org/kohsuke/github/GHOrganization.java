@@ -80,24 +80,35 @@ public class GHOrganization extends GHPerson {
     /**
      * All the members of this organization.
      */
-    public List<GHUser> getMembers() throws IOException {
-        return new AbstractList<GHUser>() {
-            // these are shallow objects with only some limited values filled out
-            // TODO: it's better to allow objects to fill themselves in later when missing values are requested
-            final GHUser[] shallow = root.retrieve().to("/orgs/" + login + "/members", GHUser[].class);
+    public PagedIterable<GHUser> getMembers() throws IOException {
+        return getMembers("members");
+    }
 
-            @Override
-            public GHUser get(int index) {
-                try {
-                    return root.getUser(shallow[index].getLogin());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    /**
+     * All the public members of this organization.
+     */
+    public PagedIterable<GHUser> getPublicMembers() throws IOException {
+        return getMembers("public_members");
+    }
 
-            @Override
-            public int size() {
-                return shallow.length;
+    private PagedIterable<GHUser> getMembers(String suffix) throws IOException {
+        return getMembers(suffix, null);
+    }
+
+    public PagedIterable<GHUser> getMembersWithFilter(String filter) throws IOException {
+        return getMembers("members", filter);
+    }
+
+    private PagedIterable<GHUser> getMembers(final String suffix, final String filter) throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class)) {
+                    @Override
+                    protected void wrapUp(GHUser[] users) {
+                        GHUser.wrap(users, root);
+                    }
+                };
             }
         };
     }

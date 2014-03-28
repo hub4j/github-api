@@ -191,18 +191,30 @@ public class GHPullRequest extends GHIssue {
     /**
      * Retrieves all the commits associated to this pull request.
      */
-  public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-    return new PagedIterable<GHPullRequestCommitDetail>() {
-      public PagedIterator<GHPullRequestCommitDetail> iterator() {
-        return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-            String.format("%s/commits", getApiURL().getPath()),
-            GHPullRequestCommitDetail[].class)) {
-          @Override
-          protected void wrapUp(GHPullRequestCommitDetail[] page) {
-          }
+    public PagedIterable<GHPullRequestCommitDetail> listCommits() {
+        return new PagedIterable<GHPullRequestCommitDetail>() {
+            public PagedIterator<GHPullRequestCommitDetail> iterator() {
+                return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
+                        String.format("%s/commits", getApiURL().getPath()),
+                        GHPullRequestCommitDetail[].class)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestCommitDetail[] page) {
+                    }
+                };
+            }
         };
-      }
-    };
-  }
+    }
+
+    /**
+     * Merge this pull request.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     */
+    public void merge(String msg) throws IOException {
+        new Requester(root).method("PUT").with("commit_message",msg).to(getApiRoute()+"/merge");
+    }
 
 }

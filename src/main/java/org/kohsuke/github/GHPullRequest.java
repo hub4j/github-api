@@ -191,18 +191,18 @@ public class GHPullRequest extends GHIssue {
     /**
      * Retrieves all the commits associated to this pull request.
      */
-  public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-    return new PagedIterable<GHPullRequestCommitDetail>() {
-      public PagedIterator<GHPullRequestCommitDetail> iterator() {
-        return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-            String.format("%s/commits", getApiURL().getPath()),
-            GHPullRequestCommitDetail[].class)) {
-          @Override
-          protected void wrapUp(GHPullRequestCommitDetail[] page) {
-          }
+    public PagedIterable<GHPullRequestCommitDetail> listCommits() {
+        return new PagedIterable<GHPullRequestCommitDetail>() {
+            public PagedIterator<GHPullRequestCommitDetail> iterator() {
+                return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
+                        String.format("%s/commits", getApiURL().getPath()),
+                        GHPullRequestCommitDetail[].class)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestCommitDetail[] page) {
+                    }
+                };
+            }
         };
-      }
-    };
-  }
+    }
 
 }

@@ -205,4 +205,16 @@ public class GHPullRequest extends GHIssue {
         };
     }
 
+    /**
+     * Merge this pull request.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     */
+    public void merge(String msg) throws IOException {
+        new Requester(root).method("PUT").with("commit_message",msg).to(getApiRoute()+"/merge");
+    }
+
 }

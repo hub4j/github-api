@@ -822,15 +822,4 @@ public class GHRepository {
     String getApiTailUrl(String tail) {
         return "/repos/" + owner.login + "/" + name +'/'+tail;
     }
-
-    /**
-     * Merge a pull request(Automating the Merge button).
-     *
-     * @return
-     *      Merged repository that belong to you.
-     */
-    public GHRepository mergePullRequest(int id) throws IOException {
-
-        return new Requester(root).method("PUT").to("/repos/" + owner.login + "/" + name +"/"+ id+ "/merge", GHRepository.class).wrap(root);
-    }
 }

@@ -9,7 +9,7 @@ import javax.xml.bind.DatatypeConverter;
  *
  * @author Alexandre COLLIGNON
  */
-public final class GHContent {
+public class GHContent {
     private GHRepository owner;
 
     private String type;

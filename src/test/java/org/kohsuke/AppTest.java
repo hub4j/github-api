@@ -461,10 +461,10 @@ public class AppTest {
     
     @Test
     public void testCommitShortInfo() throws Exception {
-        kohsuke();
-        GHCommit commit = getTestRepository().getCommit("c77360d6f2ff2c2e6dd11828ad5dccf72419fa1b");
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f23");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
-        assertEquals(commit.getCommitShortInfo().getMessage(), "Added a file");
+        assertEquals(commit.getCommitShortInfo().getMessage(), "doc");
     }
 
     @Test

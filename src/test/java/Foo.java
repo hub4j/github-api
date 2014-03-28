@@ -7,7 +7,6 @@ import java.util.Arrays;
  */
 public class Foo {
     public static void main(String[] args) throws Exception {
-        System.out.println(GitHub.connect().createToken(
-                Arrays.asList("user", "repo", "delete_repo", "notifications", "gist"), "GitHub API", null).getToken());
+        System.out.println(GitHub.connect().getOrganization("cloudbees").getRepository("grandcentral").isPrivate());
     }
 }

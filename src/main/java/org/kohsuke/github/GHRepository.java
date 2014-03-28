@@ -23,8 +23,10 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.URL;
@@ -42,7 +44,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.xml.bind.DatatypeConverter;
 
 import static java.util.Arrays.*;
 
@@ -59,7 +60,9 @@ public class GHRepository {
     private String url; // this is the API url
     private String html_url;    // this is the UI
     private GHUser owner;   // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, _private, has_downloads;
+    private boolean has_issues, has_wiki, fork, has_downloads;
+    @JsonProperty("private")
+    private boolean _private;
     private int watchers,forks,open_issues,size;
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();

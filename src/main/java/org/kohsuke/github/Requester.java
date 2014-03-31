@@ -294,7 +294,7 @@ class Requester {
 
 
     private HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpsURLConnection uc = (HttpsURLConnection) url.openConnection();
+        HttpsURLConnection uc = (HttpsURLConnection) root.open(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)

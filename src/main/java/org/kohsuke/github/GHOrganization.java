@@ -58,6 +58,14 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Remove a member of the organisation - which will remove them from
+     * all teams, and remove their access to the organization’s repositories.
+     */
+    public void remove(GHUser user) throws IOException {
+        root.retrieve().method("DELETE").to("/orgs/" + login + "/members/"  + user.getLogin());
+    }
+
+    /**
      * Checks if this organization has the specified user as a public member.
      */
     public boolean hasPublicMember(GHUser user) {

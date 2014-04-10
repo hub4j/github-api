@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -294,7 +293,7 @@ class Requester {
 
 
     private HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpsURLConnection uc = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)

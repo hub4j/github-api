@@ -92,6 +92,12 @@
       <version>3.1.0.201310021548-r</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>1.5.3</version>
+      <scope>optional</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>

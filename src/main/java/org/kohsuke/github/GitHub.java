@@ -68,6 +68,8 @@ public class GitHub {
 
     private final String apiUrl;
 
+    private HttpConnector connector = HttpConnector.DEFAULT;
+
     /**
      * Connects to GitHub.com
      */
@@ -199,6 +201,17 @@ public class GitHub {
      */
     public boolean isAnonymous() {
         return login==null && encodedAuthorization==null;
+    }
+
+    public HttpConnector getConnector() {
+        return connector;
+    }
+
+    /**
+     * Sets the custom connector used to make requests to GitHub.
+     */
+    public void setConnector(HttpConnector connector) {
+        this.connector = connector;
     }
 
     /*package*/ void requireCredential() {

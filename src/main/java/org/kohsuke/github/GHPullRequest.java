@@ -33,6 +33,7 @@ import java.util.Locale;
  * A pull request.
  * 
  * @author Kohsuke Kawaguchi
+ * @see GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHPullRequest extends GHIssue {

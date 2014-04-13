@@ -5,6 +5,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
+ * Pluggability for customizing HTTP request behaviors or using altogether different library.
+ *
+ * <p>
+ * For example, you can implement this to st custom timeouts.
+ *
  * @author Kohsuke Kawaguchi
  */
 public interface HttpConnector {

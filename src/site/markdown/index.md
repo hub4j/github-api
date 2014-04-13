@@ -7,6 +7,8 @@ operations that act on them as defined as methods (such as `GHUser.follow()`), a
 are used in favor of using string handle (such as `GHUser.isMemberOf(GHOrganization)` instead of
 `GHUser.isMemberOf(String)`)
 
+The library supports both github.com and GitHub Enterprise.
+
 There are some corners of the GitHub API that's not yet implemented, but
 the library is implemented with the right abstractions and libraries to make it very easy to improve the coverage.
 
@@ -34,3 +36,10 @@ Alternatively, you can have just the OAuth token in this file:
 
     oauth=4d98173f7c075527cb64878561d1fe70
 
+OkHttp
+----
+This library comes with a pluggable connector to use different HTTP client implementations
+through `HttpConnector`. In particular, this means you can use [OkHttp](http://square.github.io/okhttp/),
+so we can make use of it's HTTP response cache.
+Making a conditional request against the GitHub API and receiving a 304 response
+[does not count against the rate limit](http://developer.github.com/v3/#conditional-requests).

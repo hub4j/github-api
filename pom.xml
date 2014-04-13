@@ -96,7 +96,7 @@
       <groupId>com.squareup.okhttp</groupId>
       <artifactId>okhttp</artifactId>
       <version>1.5.3</version>
-      <scope>optional</scope>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <repositories>

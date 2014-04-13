@@ -180,6 +180,8 @@ operations that act on them as defined as methods (such as <code>GHUser.follow()
 are used in favor of using string handle (such as <code>GHUser.isMemberOf(GHOrganization)</code> instead of
 <code>GHUser.isMemberOf(String)</code>)</p>
 
+<p>The library supports both github.com and GitHub Enterprise.</p>
+
 <p>There are some corners of the GitHub API that's not yet implemented, but
 the library is implemented with the right abstractions and libraries to make it very easy to improve the coverage.</p>
 
@@ -208,6 +210,14 @@ password=012345678
 <pre><code>oauth=4d98173f7c075527cb64878561d1fe70
 </code></pre>
 
+<h2>OkHttp</h2>
+
+<p>This library comes with a pluggable connector to use different HTTP client implementations
+through <code>HttpConnector</code>. In particular, this means you can use <a href="http://square.github.io/okhttp/">OkHttp</a>,
+so we can make use of it's HTTP response cache.
+Making a conditional request against the GitHub API and receiving a 304 response
+<a href="http://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
+
       </div>
     </div>
     <div id="footer">
@@ -220,8 +230,8 @@ password=012345678
 
   
   
-  &nbsp;| Last Published: 03/28/2014
-  &nbsp;| Version: 1.50
+  &nbsp;| Last Published: 04/13/2014
+  &nbsp;| Version: 1.51
 </div>
       <div class="clear">
         <hr/>

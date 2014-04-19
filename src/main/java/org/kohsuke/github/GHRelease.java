@@ -32,6 +32,8 @@ public class GHRelease {
     private boolean prerelease;
     private Date created_at;
     private Date published_at;
+    private String tarball_url;
+    private String zipball_url;
 
     public String getAssetsUrl() {
         return assets_url;
@@ -151,6 +153,22 @@ public class GHRelease {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getZipballUrl() {
+        return zipball_url;
+    }
+
+    public void setZipballUrl(String zipballUrl) {
+        this.zipball_url = zipballUrl;
+    }
+
+    public String getTarballUrl() {
+        return tarball_url;
+    }
+
+    public void setTarballUrl(String tarballUrl) {
+        this.tarball_url = tarballUrl;
     }
 
     GHRelease wrap(GHRepository owner) {

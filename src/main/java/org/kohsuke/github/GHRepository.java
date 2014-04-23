@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -488,55 +489,60 @@ public class GHRepository {
         };
     }
     
-    /**
-     * Lists all the commit by author
-     */
-    public PagedIterable<GHCommit> listCommitsByAuthor(final String author) {
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author), GHCommit[].class)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(GHRepository.this);
-                    }
-                };
-            }
-        };
+    public static class GHCommitBuilder {
+        String author;
+        String branch;
+        String startCommitSha;
+        Integer pageSize;
+        
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+        
+        public void setBranch(String branch) {
+            this.branch = branch;
+        }
+        
+        public void setStartCommitSha(String startCommitSha) {
+            this.startCommitSha = startCommitSha;
+        }
+        
+        public void setPageSize(int pageSize) {
+            this.pageSize = pageSize;
+        }
     }
     
     /**
-     * Lists all the commit by author for the given branch from the startCommitSha (startCommitSha is optional)
+     * Lists all the commit by different builder options
      */
-    public PagedIterable<GHCommit> listCommitsByAuthorAndBranch(final String author, final String branch, final String startCommitSha) {
-        String url =String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author);
-        url = url + String.format("&sha=%s", branch);
-        if (startCommitSha != null && !startCommitSha.isEmpty()) {
-            url = url + String.format("&sha=%s", startCommitSha);
+    public PagedIterable<GHCommit> listCommits(GHCommitBuilder builder) {
+        String url = String.format("/repos/%s/%s/commits", owner.login, name);
+        
+        List<String> params = new LinkedList<String>();
+        if (builder.author != null) {
+            params.add(String.format("author=%s", builder.author));
         }
-        final String finalUrl = url;
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(finalUrl, GHCommit[].class)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(GHRepository.this);
-                    }
-                };
-            }
-        };
-    }
-    
-    /**
-     * Lists all the commit by author for the given branch from the startCommitSha (startCommitSha is optional)
-     */
-    public PagedIterable<GHCommit> listCommitsByAuthorAndBranch(final String author, final String branch, 
-            final String startCommitSha, int pageSize) {
-        String url =String.format("/repos/%s/%s/commits?author=%s", owner.login, name, author);
-        url = url + String.format("&sha=%s", branch);
-        if (startCommitSha != null && !startCommitSha.isEmpty()) {
-            url = url + String.format("&sha=%s", startCommitSha);
+        if (builder.branch != null) {
+            params.add(String.format("sha=%s", builder.branch));
         }
-        url = url + String.format("&per_page=%s", pageSize);
+        if (builder.startCommitSha != null) {
+            params.add(String.format("sha=%s", builder.startCommitSha));
+        }
+        if (builder.pageSize != null && builder.pageSize > 0) {
+            params.add(String.format("per_page=%d",builder.pageSize));
+        }
+        
+        if (params.size() > 0) {
+            url = url + "?";
+        }
+        for(String p: params) {
+            url = url + p + "&";
+        }
+        if (params.size() > 0) {
+            // trimming off the last extra ampersand
+            url = url.substring(0, url.length() - 1);
+        }
+        
         final String finalUrl = url;
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {

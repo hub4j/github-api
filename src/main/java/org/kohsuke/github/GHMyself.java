@@ -26,8 +26,8 @@ public class GHMyself extends GHUser {
      * @return
      *      Always non-null.
      */
-    public List<String> getEmails() throws IOException {
-        String[] addresses = root.retrieve().to("/user/emails", String[].class);
+    public List<GHEmail> getEmails() throws IOException {
+        GHEmail[] addresses = root.retrieve().to("/user/emails", GHEmail[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 

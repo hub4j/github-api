@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +37,9 @@ import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRefBuilder;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHTag;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
@@ -523,6 +528,38 @@ public class AppTest {
 
         assertTrue(j.hasPublicMember(kohsuke));
         assertFalse(j.hasPublicMember(b));
+    }
+
+    @Test
+    public void testCreateRelease() throws Exception {
+
+       String tagName = UUID.randomUUID().toString();
+        String releaseName = "release-" + tagName;
+       String repo = "fanfansama/github-api-test-1";
+
+
+        gitHub.getRepository(repo)
+                 .createRelease(tagName)
+                 .name(releaseName)
+                 .prerelease(false)
+                 .create();
+
+        for(GHTag tag : gitHub.getRepository(repo).getTags()){
+            if(tagName.equals(tag.getName())){
+                String ash = tag.getCommit().getSHA1();
+                new GHRefBuilder(gitHub.getRepository(repo), releaseName, ash ).create();  // create a release branch
+
+                for (Map.Entry<String, GHBranch> entry : gitHub.getRepository(repo).getBranches().entrySet())
+                {
+                    System.out.println(entry.getKey() + "/" + entry.getValue());
+                    if(releaseName.equals(entry.getValue().getName())){
+                        return;
+                    }
+                }
+                fail("banch not found");
+            }
+        }
+        fail("release creation failed ! tag not found");
     }
 
     private void kohsuke() {

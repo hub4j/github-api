@@ -184,6 +184,11 @@ public class GHRepository {
                 GHRelease[].class), this));
     }
 
+    public List<GHTag> getTags() throws IOException {
+        return Arrays.asList(GHTag.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/tags",
+                GHTag[].class), this));
+    }
+
     protected String getOwnerName() {
         return owner.login;
     }
@@ -498,6 +503,21 @@ public class GHRepository {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> iterator() {
                 return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits", owner.login, name), GHCommit[].class)) {
+                    protected void wrapUp(GHCommit[] page) {
+                        for (GHCommit c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    private String sha;
+    public PagedIterable<GHCommit> listCommitsSinceSha(String pSha) {
+        sha=pSha;
+        return new PagedIterable<GHCommit>() {
+            public PagedIterator<GHCommit> iterator() {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits?sha=%s", owner.login, name, sha), GHCommit[].class)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(GHRepository.this);

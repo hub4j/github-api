@@ -59,6 +59,7 @@ public class GHRepository {
     private String description, homepage, name;
     private String url; // this is the API url
     private String html_url;    // this is the UI
+    private String git_url, ssh_url, clone_url, svn_url;
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, has_downloads;
     @JsonProperty("private")
@@ -97,7 +98,7 @@ public class GHRepository {
      * This URL is read-only.
      */
     public String getGitTransportUrl() {
-        return "git://github.com/"+getOwnerName()+"/"+name+".git";
+        return git_url;
     }
 
     /**
@@ -105,7 +106,21 @@ public class GHRepository {
      * This URL is read-only.
      */
     public String gitHttpTransportUrl() {
-        return "https://github.com/"+getOwnerName()+"/"+name+".git";
+        return clone_url;
+    }
+
+    /**
+     * Gets the Subversion URL to access this repository: https://github.com/rails/rails
+     */
+    public String getSvnUrl() {
+        return svn_url;
+    }
+
+    /**
+     * Gets the SSH URL to access this repository, such as git@github.com:rails/rails.git
+     */
+    public String getSshUrl() {
+        return ssh_url;
     }
 
     /**

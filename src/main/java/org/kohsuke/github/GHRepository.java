@@ -178,9 +178,26 @@ public class GHRepository {
         return new GHReleaseBuilder(this,tag);
     }
 
+    /**
+     * @deprecated
+     *      use {@link #listReleases()}
+     */
     public List<GHRelease> getReleases() throws IOException {
-        return Arrays.asList(GHRelease.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/releases",
-                GHRelease[].class), this));
+        return listReleases().asList();
+    }
+
+    public PagedIterable<GHRelease> listReleases() throws IOException {
+        return new PagedIterable<GHRelease>() {
+            public PagedIterator<GHRelease> iterator() {
+                return new PagedIterator<GHRelease>(root.retrieve().asIterator(getApiTailUrl("releases"), GHRelease[].class)) {
+                    @Override
+                    protected void wrapUp(GHRelease[] page) {
+                        for (GHRelease c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
     public PagedIterable<GHTag> listTags() throws IOException {

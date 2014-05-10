@@ -51,6 +51,23 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * List up all the teams.
+     */
+    public PagedIterable<GHTeam> listTeams() throws IOException {
+        return new PagedIterable<GHTeam>() {
+            public PagedIterator<GHTeam> iterator() {
+                return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class)) {
+                    @Override
+                    protected void wrapUp(GHTeam[] page) {
+                        for (GHTeam c : page)
+                            c.wrapUp(GHOrganization.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Checks if this organization has the specified user as a member.
      */
     public boolean hasMember(GHUser user) {

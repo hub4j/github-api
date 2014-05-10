@@ -1,28 +1,26 @@
 package org.kohsuke.github;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Integration test for {@link GHContent}.
  */
-public class GHContentIntegrationTest extends TestCase {
+public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
 
-    private GitHub gitHub;
     private GHRepository repo;
-    private String createdFilename;
+    private String createdFilename = rnd.next();
 
+    @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
-        gitHub = GitHub.connect();
-        repo = gitHub.getRepository("acollign/github-api-test").fork();
-        createdFilename = UUID.randomUUID().toString();
+        repo = gitHub.getRepository("github-api-test-org/github-api-test").fork();
     }
 
+    @Test
     public void testGetFileContent() throws Exception {
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
@@ -30,6 +28,7 @@ public class GHContentIntegrationTest extends TestCase {
         assertEquals("thanks for reading me\n", content.getContent());
     }
 
+    @Test
     public void testGetEmptyFileContent() throws Exception {
         GHContent content = repo.getFileContent("ghcontent-ro/an-empty-file");
 
@@ -37,12 +36,14 @@ public class GHContentIntegrationTest extends TestCase {
         assertEquals("", content.getContent());
     }
 
+    @Test
     public void testGetDirectoryContent() throws Exception {
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries");
 
         assertTrue(entries.size() == 3);
     }
 
+    @Test
     public void testCRUDContent() throws Exception {
         GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename);
         GHContent createdContent = created.getContent();

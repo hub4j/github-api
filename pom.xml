@@ -97,6 +97,12 @@
       <version>1.5.3</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>org.kohsuke</groupId>
+      <artifactId>wordnet-random-name</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>

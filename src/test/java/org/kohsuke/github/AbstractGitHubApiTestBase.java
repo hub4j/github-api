@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
-import org.kohsuke.github.GitHub;
+import org.kohsuke.randname.RandomNameGenerator;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -31,4 +31,6 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
             gitHub = GitHub.connect();
         }
     }
+
+    protected static final RandomNameGenerator rnd = new RandomNameGenerator();
 }

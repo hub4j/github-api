@@ -153,7 +153,7 @@ public class GHRepository {
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
                 .to(String.format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
-                                state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
+                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
                         GHIssue[].class
                 ), this));
     }
@@ -470,6 +470,29 @@ public class GHRepository {
     }
 
     /**
+     * Creates a new pull request.
+     *
+     * @param title
+     *      Required. The title of the pull request.
+     * @param head
+     *      Required. The name of the branch where your changes are implemented.
+     *      For cross-repository pull requests in the same network,
+     *      namespace head with a user like this: username:branch.
+     * @param base
+     *      Required. The name of the branch you want your changes pulled into.
+     *      This should be an existing branch on the current repository.
+     * @param body
+     *      The contents of the pull request. This is the markdown description
+     *      of a pull request.
+     */
+    public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
+        return new Requester(root).with("title",title)
+                .with("head",head)
+                .with("base",base)
+                .with("body",body).to(getApiTailUrl("pulls"),GHPullRequest.class).wrapUp(this);
+    }
+
+    /**
      * Retrieves the currently configured hooks.
      */
     public List<GHHook> getHooks() throws IOException {
@@ -498,7 +521,7 @@ public class GHRepository {
     }
 
     public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
-        return getCompare(id1.getSHA1(),id2.getSHA1());
+        return getCompare(id1.getSHA1(), id2.getSHA1());
     }
 
     public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {

@@ -3,7 +3,11 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Gist
@@ -27,6 +31,8 @@ public final class GHGist {
     private int comments;
 
     private String comments_url;
+
+    private Map<String,GHGistFile> files = new HashMap<String, GHGistFile>();
 
     /**
      * User that owns this Gist.
@@ -99,9 +105,18 @@ public final class GHGist {
         return comments_url;
     }
 
+    public GHGistFile getFile(String name) {
+        return files.get(name);
+    }
+
+    public Map<String,GHGistFile> getFiles() {
+        return Collections.unmodifiableMap(files);
+    }
+
     /*package*/ GHGist wrapUp(GHUser owner) {
         this.owner = owner;
         this.root = owner.root;
+        wrapUp();
         return this;
     }
 
@@ -112,9 +127,15 @@ public final class GHGist {
     /*package*/ GHGist wrapUp(GitHub root) throws IOException {
         this.owner = root.getUser(owner);
         this.root = root;
+        wrapUp();
         return this;
     }
 
+    private void wrapUp() {
+        for (Entry<String, GHGistFile> e : files.entrySet()) {
+            e.getValue().fileName = e.getKey();
+        }
+    }
     String getApiTailUrl(String tail) {
         return "/gists/" + id + '/' + tail;
     }

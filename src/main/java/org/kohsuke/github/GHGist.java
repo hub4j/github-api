@@ -11,6 +11,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  * @see GHUser#listGists()
  * @see GitHub#getGist(String)
+ * @see GitHub#createGist()
  */
 public final class GHGist {
     /*package almost final*/ GHUser owner;

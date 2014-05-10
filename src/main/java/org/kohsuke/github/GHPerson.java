@@ -43,13 +43,16 @@ public abstract class GHPerson {
     }
 
     /**
-     * Gets the repositories this user owns.
+     * Gets the public repositories this user owns.
+     *
+     * <p>
+     * To list your own repositories, including private repositories,
+     * use {@link GHMyself#listRepositories()}
      */
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (List<GHRepository> batch : iterateRepositories(100)) {
-            for (GHRepository r : batch)
-                repositories.put(r.getName(),r);
+        for (GHRepository r : listRepositories()) {
+            repositories.put(r.getName(),r);
         }
         return Collections.unmodifiableMap(repositories);
     }

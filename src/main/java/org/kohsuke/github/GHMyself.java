@@ -102,7 +102,8 @@ public class GHMyself extends GHUser {
      *
      * Unlike {@link #getAllRepositories()}, this does not wait until all the repositories are returned.
      */
-    public PagedIterable<GHRepository> listAllRepositories() {
+    @Override
+    public PagedIterable<GHRepository> listRepositories() {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
                 return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos", GHRepository[].class)) {
@@ -114,6 +115,14 @@ public class GHMyself extends GHUser {
                 };
             }
         };
+    }
+
+    /**
+     * @deprecated
+     *      Use {@link #listRepositories()}
+     */
+    public PagedIterable<GHRepository> listAllRepositories() {
+        return listRepositories();
     }
 
 //    public void addEmails(Collection<String> emails) throws IOException {

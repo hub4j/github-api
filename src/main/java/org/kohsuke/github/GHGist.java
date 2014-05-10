@@ -115,7 +115,7 @@ public final class GHGist {
     }
 
     String getApiTailUrl(String tail) {
-        return "/gist/" + id + '/' + tail;
+        return "/gists/" + id + '/' + tail;
     }
 
     public void star() throws IOException {
@@ -159,6 +159,20 @@ public final class GHGist {
      * Deletes this gist.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to("/gist/" + id);
+        new Requester(root).method("DELETE").to("/gists/" + id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GHGist ghGist = (GHGist) o;
+        return id.equals(ghGist.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

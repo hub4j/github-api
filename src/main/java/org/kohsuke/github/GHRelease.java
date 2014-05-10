@@ -207,7 +207,18 @@ public class GHRelease {
 
         GHAsset[] assets = builder
                 .method("GET")
-                .to(owner.getApiTailUrl(format("releases/%d/assets", id)), GHAsset[].class);
+                .to(getApiTailUrl("assets"), GHAsset[].class);
         return Arrays.asList(GHAsset.wrap(assets, this));
+    }
+
+    /**
+     * Deletes this release.
+     */
+    public void delete() throws IOException {
+        new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+    }
+
+    private String getApiTailUrl(String end) {
+        return owner.getApiTailUrl(format("releases/%s/%s",id,end));
     }
 }

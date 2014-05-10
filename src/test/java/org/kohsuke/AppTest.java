@@ -1,10 +1,12 @@
 package org.kohsuke;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,6 +17,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +40,7 @@ import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRef;
+import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTag;
 import org.kohsuke.github.GHTeam;
@@ -53,7 +57,19 @@ public class AppTest {
 
     @Before
     public void setUp() throws Exception {
-        gitHub = GitHub.connect();
+        Properties props = new Properties();
+        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github.kohsuke2");
+        if (f.exists()) {
+            FileInputStream in = new FileInputStream(f);
+            try {
+                props.load(in);
+                gitHub = GitHub.connect(props.getProperty("login"),props.getProperty("oauth"));
+            } finally {
+                IOUtils.closeQuietly(in);
+            }
+        } else {
+            gitHub = GitHub.connect();
+        }
     }
 
     private String getTestRepositoryName() throws IOException {
@@ -495,16 +511,19 @@ public class AppTest {
 
     @Test
     public void testCreateRelease() throws Exception {
-        GHRepository r = gitHub.createRepository("github-api-testCreateRelease", "for testing", null, true);
+        kohsuke();
+
+        GHRepository r = gitHub.getRepository("kohsuke2/testCreateRelease");
+
+        String tagName = UUID.randomUUID().toString();
+        String releaseName = "release-" + tagName;
+
+        GHRelease rel = r.createRelease(tagName)
+                .name(releaseName)
+                .prerelease(false)
+                .create();
 
         try {
-            String tagName = UUID.randomUUID().toString();
-            String releaseName = "release-" + tagName;
-
-            r.createRelease(tagName)
-                    .name(releaseName)
-                    .prerelease(false)
-                    .create();
 
             for (GHTag tag : r.listTags()) {
                 if (tagName.equals(tag.getName())) {
@@ -523,11 +542,12 @@ public class AppTest {
             }
             fail("release creation failed! tag not found");
         } finally {
-            r.delete();
+            rel.delete();
         }
     }
 
     private void kohsuke() {
-        Assume.assumeTrue(getUser().getLogin().equals("kohsuke"));
+        String login = getUser().getLogin();
+        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 }

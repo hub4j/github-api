@@ -206,6 +206,10 @@ public abstract class GHPerson {
         return blog;
     }
 
+    public String getHtmlUrl() {
+        return html_url;
+    }
+
     /**
      * Gets the e-mail address of the user.
      */

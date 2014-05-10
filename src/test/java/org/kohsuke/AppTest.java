@@ -22,7 +22,6 @@ import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
-import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHCommitStatus;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
@@ -37,7 +36,7 @@ import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHPullRequest;
-import org.kohsuke.github.GHRefBuilder;
+import org.kohsuke.github.GHRef;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTag;
 import org.kohsuke.github.GHTeam;
@@ -496,34 +495,36 @@ public class AppTest {
 
     @Test
     public void testCreateRelease() throws Exception {
+        GHRepository r = gitHub.createRepository("github-api-testCreateRelease", "for testing", null, true);
 
-       String tagName = UUID.randomUUID().toString();
-        String releaseName = "release-" + tagName;
-       String repo = "fanfansama/github-api-test-1";
+        try {
+            String tagName = UUID.randomUUID().toString();
+            String releaseName = "release-" + tagName;
 
+            r.createRelease(tagName)
+                    .name(releaseName)
+                    .prerelease(false)
+                    .create();
 
-        gitHub.getRepository(repo)
-                 .createRelease(tagName)
-                 .name(releaseName)
-                 .prerelease(false)
-                 .create();
+            for (GHTag tag : r.listTags()) {
+                if (tagName.equals(tag.getName())) {
+                    String ash = tag.getCommit().getSHA1();
+                    GHRef ref = r.createRef("refs/heads/"+releaseName, ash);
+                    assertEquals(ref.getRef(),"refs/heads/"+releaseName);
 
-        for(GHTag tag : gitHub.getRepository(repo).getTags()){
-            if(tagName.equals(tag.getName())){
-                String ash = tag.getCommit().getSHA1();
-                new GHRefBuilder(gitHub.getRepository(repo), releaseName, ash ).create();  // create a release branch
-
-                for (Map.Entry<String, GHBranch> entry : gitHub.getRepository(repo).getBranches().entrySet())
-                {
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-                    if(releaseName.equals(entry.getValue().getName())){
-                        return;
+                    for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
+                        System.out.println(entry.getKey() + "/" + entry.getValue());
+                        if (releaseName.equals(entry.getValue().getName())) {
+                            return;
+                        }
                     }
+                    fail("branch not found");
                 }
-                fail("banch not found");
             }
+            fail("release creation failed! tag not found");
+        } finally {
+            r.delete();
         }
-        fail("release creation failed ! tag not found");
     }
 
     private void kohsuke() {

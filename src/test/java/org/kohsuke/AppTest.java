@@ -1,17 +1,23 @@
 package org.kohsuke;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.apache.commons.io.IOUtils;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +25,6 @@ import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHCommitComment;
-import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHCommitStatus;
 import org.kohsuke.github.GHEvent;
 import org.kohsuke.github.GHEventInfo;
@@ -34,7 +39,10 @@ import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRef;
+import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHTag;
 import org.kohsuke.github.GHTeam;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
@@ -57,7 +65,19 @@ public class AppTest {
 
     @Before
     public void setUp() throws Exception {
-        gitHub = GitHub.connect();
+        Properties props = new Properties();
+        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github.kohsuke2");
+        if (f.exists()) {
+            FileInputStream in = new FileInputStream(f);
+            try {
+                props.load(in);
+                gitHub = GitHub.connect(props.getProperty("login"),props.getProperty("oauth"));
+            } finally {
+                IOUtils.closeQuietly(in);
+            }
+        } else {
+            gitHub = GitHub.connect();
+        }
     }
 
     private String getTestRepositoryName() throws IOException {
@@ -246,13 +266,13 @@ public class AppTest {
     @Test
     public void testOrgFork() throws Exception {
         kohsuke();
-        getUser().getRepository("rubywm").forkTo(gitHub.getOrganization("jenkinsci"));
+        gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization("github-api-test-org"));
     }
 
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertEquals(1,gitHub.getOrganization("stapler").getRepository("stapler").getTeams().size());
+        assertEquals(1,gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
     @Test
@@ -472,7 +492,7 @@ public class AppTest {
     @Test
     public void testOrganization() throws IOException {
         kohsuke();
-        GHOrganization j = gitHub.getOrganization("jenkinsci");
+        GHOrganization j = gitHub.getOrganization("github-api-test-org");
         GHTeam t = j.getTeams().get("Core Developers");
 
         assertNotNull(j.getRepository("jenkins"));
@@ -525,7 +545,45 @@ public class AppTest {
         assertFalse(j.hasPublicMember(b));
     }
 
+    @Test
+    public void testCreateRelease() throws Exception {
+        kohsuke();
+
+        GHRepository r = gitHub.getRepository("kohsuke2/testCreateRelease");
+
+        String tagName = UUID.randomUUID().toString();
+        String releaseName = "release-" + tagName;
+
+        GHRelease rel = r.createRelease(tagName)
+                .name(releaseName)
+                .prerelease(false)
+                .create();
+
+        try {
+
+            for (GHTag tag : r.listTags()) {
+                if (tagName.equals(tag.getName())) {
+                    String ash = tag.getCommit().getSHA1();
+                    GHRef ref = r.createRef("refs/heads/"+releaseName, ash);
+                    assertEquals(ref.getRef(),"refs/heads/"+releaseName);
+
+                    for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
+                        System.out.println(entry.getKey() + "/" + entry.getValue());
+                        if (releaseName.equals(entry.getValue().getName())) {
+                            return;
+                        }
+                    }
+                    fail("branch not found");
+                }
+            }
+            fail("release creation failed! tag not found");
+        } finally {
+            rel.delete();
+        }
+    }
+
     private void kohsuke() {
-        Assume.assumeTrue(getUser().getLogin().equals("kohsuke"));
+        String login = getUser().getLogin();
+        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 }

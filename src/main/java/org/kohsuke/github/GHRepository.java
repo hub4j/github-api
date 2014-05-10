@@ -179,9 +179,54 @@ public class GHRepository {
         return new GHReleaseBuilder(this,tag);
     }
 
+    /**
+     * Creates a named ref, such as tag, branch, etc.
+     *
+     * @param name
+     *      The name of the fully qualified reference (ie: refs/heads/master).
+     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
+     * @param sha
+     *      The SHA1 value to set this reference to
+     */
+    public GHRef createRef(String name, String sha) throws IOException {
+        return new Requester(root)
+                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class);
+    }
+
+    /**
+     * @deprecated
+     *      use {@link #listReleases()}
+     */
     public List<GHRelease> getReleases() throws IOException {
-        return Arrays.asList(GHRelease.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/releases",
-                GHRelease[].class), this));
+        return listReleases().asList();
+    }
+
+    public PagedIterable<GHRelease> listReleases() throws IOException {
+        return new PagedIterable<GHRelease>() {
+            public PagedIterator<GHRelease> iterator() {
+                return new PagedIterator<GHRelease>(root.retrieve().asIterator(getApiTailUrl("releases"), GHRelease[].class)) {
+                    @Override
+                    protected void wrapUp(GHRelease[] page) {
+                        for (GHRelease c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    public PagedIterable<GHTag> listTags() throws IOException {
+        return new PagedIterable<GHTag>() {
+            public PagedIterator<GHTag> iterator() {
+                return new PagedIterator<GHTag>(root.retrieve().asIterator(getApiTailUrl("tags"), GHTag[].class)) {
+                    @Override
+                    protected void wrapUp(GHTag[] page) {
+                        for (GHTag c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
     protected String getOwnerName() {

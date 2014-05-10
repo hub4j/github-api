@@ -41,7 +41,7 @@ public class LifecycleTest extends AbstractGitHubApiTestBase {
             delete(repoDir);
             Git origin = Git.cloneRepository()
                     .setBare(false)
-                    .setURI(repository.gitHttpTransportUrl())
+                    .setURI(repository.getSshUrl())
                     .setDirectory(repoDir)
                     .setCredentialsProvider(getCredentialsProvider(myself))
                     .call();

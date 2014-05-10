@@ -17,7 +17,7 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        repo = gitHub.getRepository("github-api-test-org/github-api-test").fork();
+        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest").fork();
     }
 
     @Test

@@ -366,6 +366,9 @@ public class GitHub {
     /**
      * Creates a new repository.
      *
+     * To create a repository in an organization, see
+     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
+     *
      * @return
      *      Newly created repository.
      */

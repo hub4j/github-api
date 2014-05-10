@@ -179,6 +179,20 @@ public class GHRepository {
     }
 
     /**
+     * Creates a named ref, such as tag, branch, etc.
+     *
+     * @param name
+     *      The name of the fully qualified reference (ie: refs/heads/master).
+     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
+     * @param sha
+     *      The SHA1 value to set this reference to
+     */
+    public GHRef createRef(String name, String sha) throws IOException {
+        return new Requester(root)
+                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class);
+    }
+
+    /**
      * @deprecated
      *      use {@link #listReleases()}
      */

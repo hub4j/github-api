@@ -1,4 +1,4 @@
-package org.kohsuke;
+package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.Git;
@@ -6,12 +6,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.junit.Test;
-import org.kohsuke.github.GHAsset;
-import org.kohsuke.github.GHIssue;
-import org.kohsuke.github.GHMilestone;
-import org.kohsuke.github.GHMyself;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
 
 import java.io.File;
 import java.io.FileInputStream;

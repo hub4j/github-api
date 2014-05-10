@@ -1,12 +1,10 @@
-package org.kohsuke;
+package org.kohsuke.github;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,44 +15,12 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github.GHBranch;
-import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHCommit.File;
-import org.kohsuke.github.GHCommitComment;
-import org.kohsuke.github.GHCommitStatus;
-import org.kohsuke.github.GHEvent;
-import org.kohsuke.github.GHEventInfo;
-import org.kohsuke.github.GHEventPayload;
-import org.kohsuke.github.GHHook;
-import org.kohsuke.github.GHIssue;
-import org.kohsuke.github.GHIssueComment;
-import org.kohsuke.github.GHIssueState;
-import org.kohsuke.github.GHKey;
-import org.kohsuke.github.GHMilestone;
-import org.kohsuke.github.GHMyself;
-import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHOrganization.Permission;
-import org.kohsuke.github.GHPullRequest;
-import org.kohsuke.github.GHRef;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GHTag;
-import org.kohsuke.github.GHTeam;
-import org.kohsuke.github.GHUser;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.PagedIterable;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
 
 /**
  * Unit test for simple App.

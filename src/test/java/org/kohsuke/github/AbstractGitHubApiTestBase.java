@@ -1,4 +1,4 @@
-package org.kohsuke;
+package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;

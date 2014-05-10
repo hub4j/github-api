@@ -183,9 +183,18 @@ public class GHRepository {
                 GHRelease[].class), this));
     }
 
-    public List<GHTag> getTags() throws IOException {
-        return Arrays.asList(GHTag.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/tags",
-                GHTag[].class), this));
+    public PagedIterable<GHTag> listTags() throws IOException {
+        return new PagedIterable<GHTag>() {
+            public PagedIterator<GHTag> iterator() {
+                return new PagedIterator<GHTag>(root.retrieve().asIterator(getApiTailUrl("tags"), GHTag[].class)) {
+                    @Override
+                    protected void wrapUp(GHTag[] page) {
+                        for (GHTag c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
     }
 
     protected String getOwnerName() {

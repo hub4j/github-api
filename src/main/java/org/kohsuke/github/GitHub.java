@@ -27,6 +27,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
@@ -239,7 +240,16 @@ public class GitHub {
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
-        return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+        try {
+            return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+        } catch (FileNotFoundException e) {
+            // GitHub Enterprise doesn't have the rate limit, so in that case
+            // return some big number that's not too big.
+            // see issue #78
+            GHRateLimit r = new GHRateLimit();
+            r.limit = r.remaining = 1000000;
+            return r;
+        }
     }
 
     /**

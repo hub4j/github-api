@@ -55,4 +55,19 @@ public class GistTest extends AbstractGitHubApiTestBase {
             newGist.delete();
         }
     }
+
+    @Test
+    public void gistFile() throws Exception {
+        GHGist gist = gitHub.getGist("9903708");
+
+        assertTrue(gist.isPublic());
+
+        assertEquals(1,gist.getFiles().size());
+        GHGistFile f = gist.getFile("keybase.md");
+
+        assertEquals("text/plain", f.getType());
+        assertEquals("Markdown", f.getLanguage());
+        assertTrue(f.getContent().contains("### Keybase proof"));
+        assertNotNull(f.getContent());
+    }
 }

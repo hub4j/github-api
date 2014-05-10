@@ -4,6 +4,8 @@ package org.kohsuke.github;
  * A file inside {@link GHGist}
  *
  * @author Kohsuke Kawaguchi
+ * @see GHGist#getFile(String)
+ * @see GHGist#getFiles()
  */
 public class GHGistFile {
     /*package almost final*/ String fileName;

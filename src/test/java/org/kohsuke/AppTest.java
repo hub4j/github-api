@@ -59,27 +59,7 @@ import java.util.List;
 /**
  * Unit test for simple App.
  */
-public class AppTest {
-
-    private GitHub gitHub;
-
-    @Before
-    public void setUp() throws Exception {
-        Properties props = new Properties();
-        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github.kohsuke2");
-        if (f.exists()) {
-            FileInputStream in = new FileInputStream(f);
-            try {
-                props.load(in);
-                gitHub = GitHub.connect(props.getProperty("login"),props.getProperty("oauth"));
-            } finally {
-                IOUtils.closeQuietly(in);
-            }
-        } else {
-            gitHub = GitHub.connect();
-        }
-    }
-
+public class AppTest extends AbstractGitHubApiTestBase {
     private String getTestRepositoryName() throws IOException {
         return getUser().getLogin() + "/github-api-test";
     }

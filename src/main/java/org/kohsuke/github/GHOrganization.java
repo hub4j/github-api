@@ -23,10 +23,15 @@ public class GHOrganization extends GHPerson {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic) throws IOException {
-        return createRepository(name,description,homepage,getTeams().get(team),isPublic);
+        GHTeam t = getTeams().get(team);
+        if (t==null)
+            throw new IllegalArgumentException("No such team: "+team);
+        return createRepository(name,description,homepage,t,isPublic);
     }
 
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
+        if (team==null)
+            throw new IllegalArgumentException("Invalid team");
         // such API doesn't exist, so fall back to HTML scraping
         return new Requester(root)
                 .with("name", name).with("description", description).with("homepage", homepage)

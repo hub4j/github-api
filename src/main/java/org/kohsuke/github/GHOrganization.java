@@ -42,10 +42,9 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      */
     public Map<String,GHTeam> getTeams() throws IOException {
-        GHTeam[] teams = root.retrieve().to("/orgs/" + login + "/teams", GHTeam[].class);
         Map<String,GHTeam> r = new TreeMap<String, GHTeam>();
-        for (GHTeam t : teams) {
-            r.put(t.getName(),t.wrapUp(this));
+        for (GHTeam t : listTeams()) {
+            r.put(t.getName(),t);
         }
         return r;
     }
@@ -65,6 +64,17 @@ public class GHOrganization extends GHPerson {
                 };
             }
         };
+    }
+
+    /**
+     * Finds a team that has the given name in its {@link GHTeam#getName()}
+     */
+    public GHTeam getTeamByName(String name) throws IOException {
+        for (GHTeam t : listTeams()) {
+            if(t.getName().equals(name))
+                return t;
+        }
+        return null;
     }
 
     /**

@@ -39,7 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class GHRepository {
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
-    private String master_branch,language;
+    private String default_branch,language;
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
     private GHRepoPermission permissions;
@@ -154,8 +153,9 @@ public class GHRepository {
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
                 .to(String.format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
-                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
-                        GHIssue[].class), this));
+                                state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
+                        GHIssue[].class
+                ), this));
     }
 
     /**
@@ -240,7 +240,7 @@ public class GHRepository {
      *      This field is null until the user explicitly configures the master branch.
      */
     public String getMasterBranch() {
-        return master_branch;
+        return default_branch;
     }
 
     public int getSize() {

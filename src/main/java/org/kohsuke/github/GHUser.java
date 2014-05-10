@@ -127,6 +127,23 @@ public class GHUser extends GHPerson {
         };
     }
 
+    /**
+     * Lists Gists created by this user.
+     */
+    public PagedIterable<GHGist> listGists() throws IOException {
+        return new PagedIterable<GHGist>() {
+            public PagedIterator<GHGist> iterator() {
+                return new PagedIterator<GHGist>(root.retrieve().asIterator(String.format("/users/%s/gists", login), GHGist[].class)) {
+                    @Override
+                    protected void wrapUp(GHGist[] page) {
+                        for (GHGist c : page)
+                            c.wrapUp(GHUser.this);
+                    }
+                };
+            }
+        };
+    }
+
     @Override
     public String toString() {
         return "User:"+login;

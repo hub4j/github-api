@@ -174,33 +174,54 @@ class Requester {
         while (true) {// loop while API rate limit is hit
             HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
 
-            if (!method.equals("GET")) {
-                uc.setDoOutput(true);
-                uc.setRequestProperty("Content-type", contentType);
-
-                if (body == null) {
-                    Map json = new HashMap();
-                    for (Entry e : args) {
-                        json.put(e.key, e.value);
-                    }
-                    MAPPER.writeValue(uc.getOutputStream(), json);
-                } else {
-                    try {
-                        byte[] bytes = new byte[32768];
-                        int read = 0;
-                        while ((read = body.read(bytes)) != -1) {
-                            uc.getOutputStream().write(bytes, 0, read);
-                        }
-                    } finally {
-                        body.close();
-                    }
-                }
-            }
+            buildRequest(uc);
 
             try {
                 return parse(uc,type,instance);
             } catch (IOException e) {
                 handleApiError(e,uc);
+            }
+        }
+    }
+
+    /**
+     * Makes a request and just obtains the HTTP status code.
+     */
+    public int asHttpStatusCode(String tailApiUrl) throws IOException {
+        while (true) {// loop while API rate limit is hit
+            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
+
+            buildRequest(uc);
+
+            try {
+                return uc.getResponseCode();
+            } catch (IOException e) {
+                handleApiError(e,uc);
+            }
+        }
+    }
+
+    private void buildRequest(HttpURLConnection uc) throws IOException {
+        if (!method.equals("GET")) {
+            uc.setDoOutput(true);
+            uc.setRequestProperty("Content-type", contentType);
+
+            if (body == null) {
+                Map json = new HashMap();
+                for (Entry e : args) {
+                    json.put(e.key, e.value);
+                }
+                MAPPER.writeValue(uc.getOutputStream(), json);
+            } else {
+                try {
+                    byte[] bytes = new byte[32768];
+                    int read = 0;
+                    while ((read = body.read(bytes)) != -1) {
+                        uc.getOutputStream().write(bytes, 0, read);
+                    }
+                } finally {
+                    body.close();
+                }
             }
         }
     }

@@ -330,6 +330,17 @@ public class GitHub {
     }
 
     /**
+     * Gets a sigle gist by ID.
+     */
+    public GHGist getGist(String id) throws IOException {
+        return retrieve().to("/gists/"+id,GHGist.class).wrapUp(this);
+    }
+
+    public GHGistBuilder createGist() {
+        return new GHGistBuilder(this);
+    }
+
+    /**
      * Parses the GitHub event object.
      *
      * This is primarily intended for receiving a POST HTTP call from a hook.

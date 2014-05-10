@@ -405,6 +405,10 @@ public class GitHub {
         throw new IllegalStateException("Unable to parse the timestamp: "+timestamp);
     }
 
+    /*package*/ static String printDate(Date dt) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(dt);
+    }
+
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ","yyyy-MM-dd'T'HH:mm:ss'Z'"};

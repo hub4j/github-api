@@ -39,6 +39,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -496,6 +497,13 @@ public class GHRepository {
                 };
             }
         };
+    }
+
+    /**
+     * Search commits by specifying filters through a builder pattern.
+     */
+    public GHCommitQueryBuilder queryCommits() {
+        return new GHCommitQueryBuilder(this);
     }
 
     /**

@@ -26,6 +26,7 @@ public class LifecycleTest extends AbstractGitHubApiTestBase {
         }
         repository = gitHub.createRepository("github-api-test",
                 "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/", true);
+        Thread.sleep(1000); // wait for the repository to become ready
 
         assertTrue(repository.getReleases().isEmpty());
         try {

@@ -63,7 +63,7 @@ public class GHRepository {
     private boolean has_issues, has_wiki, fork, has_downloads;
     @JsonProperty("private")
     private boolean _private;
-    private int watchers,forks,open_issues,size;
+    private int watchers,forks,open_issues,size,network_count,subscribers_count;
     private String created_at, pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
@@ -218,6 +218,14 @@ public class GHRepository {
 
     public int getOpenIssueCount() {
         return open_issues;
+    }
+
+    public int getNetworkCount() {
+        return network_count;
+    }
+
+    public int getSubscribersCount() {
+        return subscribers_count;
     }
 
     /**

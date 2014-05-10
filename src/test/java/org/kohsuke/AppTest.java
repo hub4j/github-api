@@ -261,12 +261,19 @@ public class AppTest {
 
     @Test
     public void testOrgTeams() throws Exception {
+        kohsuke();
         int sz=0;
         for (GHTeam t : gitHub.getOrganization("jenkinsci").listTeams()) {
             assertNotNull(t.getName());
             sz++;
         }
         assertTrue(sz>1000);
+    }
+
+    public void testOrgTeamByName() throws Exception {
+        kohsuke();
+        GHTeam e = gitHub.getOrganization("jenkinsci").getTeamByName("Everyone");
+        assertNotNull(e);
     }
 
     @Test

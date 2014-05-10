@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -17,17 +18,30 @@ import java.util.TreeMap;
  */
 public class GHMyself extends GHUser {
     /**
+     * @deprecated
+     *      Use {@link #getEmails2()}
+     */
+    public List<String> getEmails() throws IOException {
+        List<GHEmail> src = getEmails2();
+        List<String> r = new ArrayList<String>(src.size());
+        for (GHEmail e : src) {
+            r.add(e.getEmail());
+        }
+        return r;
+    }
+
+    /**
      * Returns the read-only list of e-mail addresses configured for you.
      *
      * This corresponds to the stuff you configure in https://github.com/settings/emails,
      * and not to be confused with {@link #getEmail()} that shows your public e-mail address
      * set in https://github.com/settings/profile
-     * 
+     *
      * @return
      *      Always non-null.
      */
-    public List<String> getEmails() throws IOException {
-        String[] addresses = root.retrieve().to("/user/emails", String[].class);
+    public List<GHEmail> getEmails2() throws IOException {
+        GHEmail[] addresses = root.retrieve().to("/user/emails", GHEmail[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 

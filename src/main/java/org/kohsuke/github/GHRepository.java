@@ -503,21 +503,6 @@ public class GHRepository {
         };
     }
 
-    private String sha;
-    public PagedIterable<GHCommit> listCommitsSinceSha(String pSha) {
-        sha=pSha;
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits?sha=%s", owner.login, name, sha), GHCommit[].class)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(GHRepository.this);
-                    }
-                };
-            }
-        };
-    }
-
     /**
      * Lists up all the commit comments in this repository.
      */

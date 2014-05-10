@@ -258,13 +258,13 @@ public class AppTest {
     @Test
     public void testOrgFork() throws Exception {
         kohsuke();
-        getUser().getRepository("rubywm").forkTo(gitHub.getOrganization("jenkinsci"));
+        gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization("github-api-test-org"));
     }
 
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertEquals(1,gitHub.getOrganization("stapler").getRepository("stapler").getTeams().size());
+        assertEquals(1,gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
     @Test
@@ -456,7 +456,7 @@ public class AppTest {
     @Test
     public void testOrganization() throws IOException {
         kohsuke();
-        GHOrganization j = gitHub.getOrganization("jenkinsci");
+        GHOrganization j = gitHub.getOrganization("github-api-test-org");
         GHTeam t = j.getTeams().get("Core Developers");
 
         assertNotNull(j.getRepository("jenkins"));

@@ -31,11 +31,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -208,9 +210,23 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> Iterator<T> asIterator(final String tailApiUrl, final Class<T> type) {
+    /*package*/ <T> Iterator<T> asIterator(String _tailApiUrl, final Class<T> type) {
         method("GET");
-        if (!args.isEmpty())    throw new IllegalStateException();
+
+        if (!args.isEmpty()) {
+            boolean first=true;
+            try {
+                for (Entry a : args) {
+                    _tailApiUrl += first ? '?' : '&';
+                    first = false;
+                    _tailApiUrl += URLEncoder.encode(a.key,"UTF-8")+'='+URLEncoder.encode(a.value.toString(),"UTF-8");
+                }
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError(e);    // UTF-8 is mandatory
+            }
+        }
+
+        final String tailApiUrl = _tailApiUrl;
 
         return new Iterator<T>() {
             /**

@@ -435,7 +435,7 @@ public class GHRepository {
     }
 
     public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
-        return getCompare(id1.getSHA1(),id2.getSHA1());
+        return getCompare(id1.getSHA1(), id2.getSHA1());
     }
 
     public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {
@@ -488,72 +488,12 @@ public class GHRepository {
             }
         };
     }
-    
-    public static class GHCommitBuilder {
-        String author;
-        String branch;
-        String startCommitSha;
-        Integer pageSize;
-        
-        public void setAuthor(String author) {
-            this.author = author;
-        }
-        
-        public void setBranch(String branch) {
-            this.branch = branch;
-        }
-        
-        public void setStartCommitSha(String startCommitSha) {
-            this.startCommitSha = startCommitSha;
-        }
-        
-        public void setPageSize(int pageSize) {
-            this.pageSize = pageSize;
-        }
-    }
-    
+
     /**
-     * Lists all the commit by different builder options
+     * Search commits by specifying filters through a builder pattern.
      */
-    public PagedIterable<GHCommit> listCommits(GHCommitBuilder builder) {
-        String url = String.format("/repos/%s/%s/commits", owner.login, name);
-        
-        List<String> params = new LinkedList<String>();
-        if (builder.author != null) {
-            params.add(String.format("author=%s", builder.author));
-        }
-        if (builder.branch != null) {
-            params.add(String.format("sha=%s", builder.branch));
-        }
-        if (builder.startCommitSha != null) {
-            params.add(String.format("sha=%s", builder.startCommitSha));
-        }
-        if (builder.pageSize != null && builder.pageSize > 0) {
-            params.add(String.format("per_page=%d",builder.pageSize));
-        }
-        
-        if (params.size() > 0) {
-            url = url + "?";
-        }
-        for(String p: params) {
-            url = url + p + "&";
-        }
-        if (params.size() > 0) {
-            // trimming off the last extra ampersand
-            url = url.substring(0, url.length() - 1);
-        }
-        
-        final String finalUrl = url;
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(finalUrl, GHCommit[].class)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(GHRepository.this);
-                    }
-                };
-            }
-        };
+    public GHCommitQueryBuilder queryCommits() {
+        return new GHCommitQueryBuilder(this);
     }
 
     /**

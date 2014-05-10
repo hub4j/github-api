@@ -28,6 +28,7 @@ import org.kohsuke.github.PagedIterable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -152,7 +153,7 @@ public class AppTest extends TestCase {
         Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
-    
+
     public void testMemberOrgs() throws Exception {
         Set<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         System.out.println(o);
@@ -176,8 +177,19 @@ public class AppTest extends TestCase {
             System.out.println(c.getSHA1());
             sha1.add(c.getSHA1());
         }
-        assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7",sha1.get(0));
-        assertEquals(1,sha1.size());
+        assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7", sha1.get(0));
+        assertEquals(1, sha1.size());
+    }
+
+    public void testQueryCommits() throws Exception {
+        List<String> sha1 = new ArrayList<String>();
+        for (GHCommit c : gitHub.getUser("jenkinsci").getRepository("jenkins").queryCommits()
+                .since(new Date(1199174400000L)).until(1201852800000L).path("pom.xml").list()) {
+            System.out.println(c.getSHA1());
+            sha1.add(c.getSHA1());
+        }
+        assertEquals("1cccddb22e305397151b2b7b87b4b47d74ca337b",sha1.get(0));
+        assertEquals(29,sha1.size());
     }
 
     public void testBranches() throws Exception {
@@ -339,7 +351,7 @@ public class AppTest extends TestCase {
         state = lst.get(0);
         System.out.println(state);
         assertEquals("oops!",state.getDescription());
-        assertEquals("http://jenkins-ci.org/",state.getTargetUrl());
+        assertEquals("http://jenkins-ci.org/", state.getTargetUrl());
     }
     
     public void testCommitShortInfo() throws Exception {

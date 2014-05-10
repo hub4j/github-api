@@ -260,6 +260,16 @@ public class AppTest {
     }
 
     @Test
+    public void testOrgTeams() throws Exception {
+        int sz=0;
+        for (GHTeam t : gitHub.getOrganization("jenkinsci").listTeams()) {
+            assertNotNull(t.getName());
+            sz++;
+        }
+        assertTrue(sz>1000);
+    }
+
+    @Test
     public void testCommit() throws Exception {
         GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         System.out.println(commit);

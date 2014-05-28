@@ -8,7 +8,9 @@ import javax.xml.bind.DatatypeConverter;
  * A Content of a repository.
  *
  * @author Alexandre COLLIGNON
+ * @see GHRepository#getFileContent(String)
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class GHContent {
     private GHRepository owner;
 

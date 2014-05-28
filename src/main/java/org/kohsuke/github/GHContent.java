@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -105,6 +107,25 @@ public class GHContent {
 
     public boolean isDirectory() {
         return "dir".equals(type);
+    }
+
+    /**
+     * List immediate children of this directory.
+     */
+    public PagedIterable<GHContent> listDirectoryContent() throws IOException {
+        if (!isDirectory())
+            throw new IllegalStateException(path+" is not a directory");
+
+        return new PagedIterable<GHContent>() {
+            public PagedIterator<GHContent> iterator() {
+                return new PagedIterator<GHContent>(owner.root.retrieve().asIterator(url, GHContent[].class)) {
+                    @Override
+                    protected void wrapUp(GHContent[] page) {
+                        GHContent.wrap(page,owner);
+                    }
+                };
+            }
+        };
     }
 
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {

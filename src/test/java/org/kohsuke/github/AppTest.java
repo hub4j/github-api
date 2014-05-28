@@ -529,6 +529,19 @@ public class AppTest extends AbstractGitHubApiTestBase {
         }
     }
 
+    @Test
+    public void directoryListing() throws IOException {
+        List<GHContent> children = gitHub.getRepository("jenkinsci/jenkins").getDirectoryContent("core");
+        for (GHContent c : children) {
+            System.out.println(c.getName());
+            if (c.isDirectory()) {
+                for (GHContent d : c.listDirectoryContent()) {
+                    System.out.println("  "+d.getName());
+                }
+            }
+        }
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

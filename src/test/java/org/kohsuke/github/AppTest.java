@@ -530,6 +530,12 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+	public void testRef() throws IOException {
+		GHRef masterRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
+		assertEquals("https://api.github.com/repos/jenkinsci/jenkins/git/refs/heads/master", masterRef.getUrl().toString());
+	}
+
+    @Test
     public void directoryListing() throws IOException {
         List<GHContent> children = gitHub.getRepository("jenkinsci/jenkins").getDirectoryContent("core");
         for (GHContent c : children) {

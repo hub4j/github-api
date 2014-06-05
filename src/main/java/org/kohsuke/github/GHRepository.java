@@ -919,6 +919,22 @@ public class GHRepository {
         return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
 	}
+	
+	public GHDeployKey addDeployKey(String title,String key) throws IOException {
+		 return new Requester(root)
+         .with("title", title).with("key", key).method("POST").to(getApiTailUrl("keys"), GHDeployKey.class).wrap(this);
+		
+	}
+	
+	public List<GHDeployKey> getDeployKeys() throws IOException{
+		 List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(
+	                root.retrieve().to(String.format("/repos/%s/%s/keys", owner.login, name), GHDeployKey[].class)));
+	        for (GHDeployKey h : list)
+	            h.wrap(this);
+	        return list;	
+	}
+	
+	
 
     @Override
     public String toString() {

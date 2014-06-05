@@ -561,7 +561,19 @@ public class GHRepository {
     public GHRef[] getRefs(String refType) throws IOException {
         return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
     }
-
+    /**
+	 * Retrive a ref of the given type for the current GitHub repository.
+	 * 
+	 * @param refName
+	 *            eg: heads/branch
+	 * @return refs matching the request type
+	 * @throws IOException
+	 *             on failure communicating with GitHub, potentially due to an
+	 *             invalid ref type being requested
+	 */
+	public GHRef getRef(String refName) throws IOException {
+		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class);
+	}
     /**
      * Gets a commit object in this repository.
      */

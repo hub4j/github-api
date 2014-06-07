@@ -658,6 +658,8 @@ public class GHRepository {
      *      Optional parameter that points to the URL that has more details.
      * @param description
      *      Optional short description.
+     *  @param context
+     *      Optinal commit status context.    
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description, String context) throws IOException {
         return new Requester(root)
@@ -666,6 +668,13 @@ public class GHRepository {
                 .with("description", description)
                 .with("context", context)
                 .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
+    }
+    
+    /**
+     *  @see {@link #createCommitStatus(String, GHCommitState,String,String,String) createCommitStatus} 
+     */
+    public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
+    	return createCommitStatus(sha1, state, targetUrl, description,null);
     }
 
     /**

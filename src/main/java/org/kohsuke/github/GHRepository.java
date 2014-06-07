@@ -659,11 +659,12 @@ public class GHRepository {
      * @param description
      *      Optional short description.
      */
-    public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
+    public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description, String context) throws IOException {
         return new Requester(root)
                 .with("state", state.name().toLowerCase(Locale.ENGLISH))
                 .with("target_url", targetUrl)
                 .with("description", description)
+                .with("context", context)
                 .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
     }
 

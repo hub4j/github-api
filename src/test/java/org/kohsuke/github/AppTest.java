@@ -556,19 +556,23 @@ public class AppTest extends AbstractGitHubApiTestBase {
     public void testAddDeployKey() throws IOException {
     	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
     	final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC55wA5wHqTFMk3OkyHqtmgSAmIanREVP4ukMrPZFzYfRBaKYPCbBRxu7ddzF3oZ+i6ZV8+rH8hvhQTYl5LtOIxLUppsVVNSB9YKXQv37LLaWul9WoJPdXHGWfR3wlhRXsg1sMPpbgu60lXAl7xvx729FEjKEEHRMGkPbcIeHkov/tlEg9oQdqFC1Pqnv/lCsZ5UKRPLHY3V9pmSaEplwmwb//HppNtEYr9t6VNvOMjqbUrbhsilKu0t6qa3G7Kb47kvfJwMn+DKD2XJMYHYHMyHtHcFK8RIOSX8I+Bu4yeVmvcooSL65FBCIrmVoejkI7gZWDfgWVRboQ9RyB+VeXL example@example.com");
-    	assertNotNull(newDeployKey.getId());
-    	
-    	Iterables.find( myRepository.getDeployKeys(),new Predicate<GHDeployKey>() {
-    		 public boolean apply(GHDeployKey deployKey) {
-    			  return newDeployKey.getId() == deployKey.getId() ;
-    		  }
-		});
-    	newDeployKey.delete();
+        try {
+            assertNotNull(newDeployKey.getId());
+
+            GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
+                public boolean apply(GHDeployKey deployKey) {
+                    return newDeployKey.getId() == deployKey.getId();
+                }
+            });
+            assertNotNull(k);
+        } finally {
+            newDeployKey.delete();
+        }
     }
     
     @Test
     public void testCommitStatusContext() throws IOException {
-    	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
+    	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(), 0);
     	GHRef masterRef = myRepository.getRef("heads/master");
     	GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
     	assertEquals("test/context", commitStatus.getContext());

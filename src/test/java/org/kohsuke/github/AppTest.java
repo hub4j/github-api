@@ -555,7 +555,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     @Test
     public void testAddDeployKey() throws IOException {
     	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
-    	final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC55wA5wHqTFMk3OkyHqtmgSAmIanREVP4ukMrPZFzYfRBaKYPCbBRxu7ddzF3oZ+i6ZV8+rH8hvhQTYl5LtOIxLUppsVVNSB9YKXQv37LLaWul9WoJPdXHGWfR3wlhRXsg1sMPpbgu60lXAl7xvx729FEjKEEHRMGkPbcIeHkov/tlEg9oQdqFC1Pqnv/lCsZ5UKRPLHY3V9pmSaEplwmwb//HppNtEYr9t6VNvOMjqbUrbhsilKu0t6qa3G7Kb47kvfJwMn+DKD2XJMYHYHMyHtHcFK8RIOSX8I+Bu4yeVmvcooSL65FBCIrmVoejkI7gZWDfgWVRboQ9RyB+VeXL example@example.com");
+    	final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
         try {
             assertNotNull(newDeployKey.getId());
 

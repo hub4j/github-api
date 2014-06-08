@@ -16,6 +16,7 @@ public class GHCommitStatus {
     String target_url,description;
     int id;
     String url;
+    String context;
     GHUser creator;
 
     private GitHub root;
@@ -69,4 +70,8 @@ public class GHCommitStatus {
     public GHUser getCreator() {
         return creator;
     }
+
+	public String getContext() {
+		return context;
+	}
 }

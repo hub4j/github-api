@@ -565,6 +565,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
 		});
     	newDeployKey.delete();
     }
+    
+    @Test
+    public void testCommitStatusContext() throws IOException {
+    	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
+    	GHRef masterRef = myRepository.getRef("heads/master");
+    	GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
+    	assertEquals("test/context", commitStatus.getContext());
+    	 
+    }
 
     private void kohsuke() {
         String login = getUser().getLogin();

@@ -12,7 +12,7 @@ import java.util.Iterator;
 import static org.mockito.Mockito.when;
 
 /**
- * @author Luciano P. Sabenca (luciano.sabenca [at] movile [com] | lucianosabenca [at] gmail [dot] com
+ * @author Luciano P. Sabenca (luciano.sabenca [at] movile [dot] com | lucianosabenca [at] gmail [dot] com)
  */
 public class RepositoryTest {
 
@@ -57,13 +57,14 @@ public class RepositoryTest {
         PagedIterator<GHUser> userPagedIterator = new PagedIterator<GHUser>(iterator) {
             @Override
             protected void wrapUp(GHUser[] page) {
-
+                // Do nothing
             }
         };
+
         PagedIterator<GHUser> userPagedIterator2 = new PagedIterator<GHUser>(iterator) {
             @Override
             protected void wrapUp(GHUser[] page) {
-
+                // Do nothing
             }
         };
 

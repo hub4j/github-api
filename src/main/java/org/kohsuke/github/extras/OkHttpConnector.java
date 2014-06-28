@@ -1,6 +1,7 @@
 package org.kohsuke.github.extras;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 import org.kohsuke.github.HttpConnector;
 
 import java.io.IOException;
@@ -19,13 +20,13 @@ import java.net.URL;
  * @author Kohsuke Kawaguchi
  */
 public class OkHttpConnector implements HttpConnector {
-    private final OkHttpClient client;
+    private final OkUrlFactory urlFactory;
 
-    public OkHttpConnector(OkHttpClient client) {
-        this.client = client;
+    public OkHttpConnector(OkUrlFactory urlFactory) {
+        this.urlFactory = urlFactory;
     }
 
     public HttpURLConnection connect(URL url) throws IOException {
-        return client.open(url);
+        return urlFactory.open(url);
     }
 }

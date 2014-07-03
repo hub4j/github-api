@@ -17,7 +17,7 @@ import java.util.Map.Entry;
  * @see GitHub#getGist(String)
  * @see GitHub#createGist()
  */
-public final class GHGist {
+public class GHGist {
     /*package almost final*/ GHUser owner;
     /*package almost final*/ GitHub root;
 

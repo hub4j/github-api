@@ -9,7 +9,7 @@ import java.util.HashSet;
  * 
  * @author Kohsuke Kawaguchi
  */
-public final class GHPersonSet<T extends GHPerson> extends HashSet<T> {
+public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
     public GHPersonSet() {
     }
 

@@ -4,7 +4,7 @@ package org.kohsuke.github;
  * The response that is returned when updating
  * repository content.
 **/
-public final class GHContentUpdateResponse {
+public class GHContentUpdateResponse {
     private GHContent content;
     private GHCommit commit;
 

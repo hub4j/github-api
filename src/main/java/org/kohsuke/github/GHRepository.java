@@ -317,20 +317,21 @@ public class GHRepository {
     }
 
     /**
-     * Gets the collaborators on this repository limit to 30.
+     * Gets the collaborators on this repository.
      * This set always appear to include the owner.
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(GHUser.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root));
+        return new GHPersonSet<GHUser>(listCollaborators().asList());
     }
 
     /**
-     * Gets all collaborators using PagedIterable
+     * Lists up the collaborators on this repository.
+     *
      * @return Users
      * @throws IOException
      */
-    public PagedIterable<GHUser> getAllCollaborators() throws IOException {
+    public PagedIterable<GHUser> listCollaborators() throws IOException {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> iterator() {
 

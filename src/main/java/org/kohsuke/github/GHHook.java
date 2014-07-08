@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-public final class GHHook {
+public class GHHook {
     /**
      * Repository that the hook belongs to.
      */

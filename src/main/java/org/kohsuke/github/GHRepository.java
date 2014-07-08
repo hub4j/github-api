@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import java.io.FileNotFoundException;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
@@ -321,7 +322,32 @@ public class GHRepository {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(GHUser.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root));
+        return new GHPersonSet<GHUser>(listCollaborators().asList());
+    }
+
+    /**
+     * Lists up the collaborators on this repository.
+     *
+     * @return Users
+     * @throws IOException
+     */
+    public PagedIterable<GHUser> listCollaborators() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+
+                return new PagedIterator<GHUser>(root.retrieve().asIterator("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class)) {
+
+                    @Override
+                    protected void wrapUp(GHUser[] users) {
+                        for (GHUser user : users) {
+                            user.wrapUp(root);
+                        }
+                    }
+                };
+
+            }
+        };
+
     }
 
     /**
@@ -416,7 +442,11 @@ public class GHRepository {
      * Deletes this repository.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to("/repos/" + owner.login + "/" + name);
+        try {
+            new Requester(root).method("DELETE").to("/repos/" + owner.login + "/" + name);
+        } catch (FileNotFoundException x) {
+            throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + owner.login + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
+        }
     }
 
     /**

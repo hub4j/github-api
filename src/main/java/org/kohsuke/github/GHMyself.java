@@ -101,12 +101,24 @@ public class GHMyself extends GHUser {
      * Lists up all repositories this user owns (public and private).
      *
      * Unlike {@link #getAllRepositories()}, this does not wait until all the repositories are returned.
+     * Repositories are returned by GitHub API with a 30 items per page.
      */
     @Override
     public PagedIterable<GHRepository> listRepositories() {
+      return listRepositories(30);
+    }
+
+    /**
+     * Lists up all the repositories this user owns (public and private) using the specified page size.
+     *
+     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
+     *
+     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     */
+    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos", GHRepository[].class)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize, GHRepository[].class)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

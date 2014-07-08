@@ -280,6 +280,15 @@ public class GitHub {
 		return u;
 	}
 
+
+    /**
+     * clears all cached data in order for external changes (modifications and del
+     */
+    public void refreshCache() {
+        users.clear();
+        orgs.clear();
+    }
+
     /**
      * Interns the given {@link GHUser}.
      */
@@ -332,7 +341,6 @@ public class GitHub {
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        // TODO: pagination
         GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);

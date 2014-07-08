@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -47,9 +48,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -177,7 +182,26 @@ class Requester {
             buildRequest(uc);
 
             try {
-                return parse(uc,type,instance);
+                T result = parse(uc, type, instance);
+                if (type != null && type.isArray()) { // we might have to loop for pagination - done through recursion
+                    final String links = uc.getHeaderField("link");
+                    if (links != null && links.contains("rel=\"next\"")) {
+                        Pattern nextLinkPattern = Pattern.compile(".*<(.*)>; rel=\"next\"");
+                        Matcher nextLinkMatcher = nextLinkPattern.matcher(links);
+                        if (nextLinkMatcher.find()) {
+                            final String link = nextLinkMatcher.group(1);
+                            T nextResult = _to(link, type, instance);
+
+                            final int resultLength = Array.getLength(result);
+                            final int nextResultLength = Array.getLength(nextResult);
+                            T concatResult = (T) Array.newInstance(type.getComponentType(), resultLength + nextResultLength);
+                            System.arraycopy(result, 0, concatResult, 0, resultLength);
+                            System.arraycopy(nextResult, 0, concatResult, resultLength, nextResultLength);
+                            result = concatResult;
+                        }
+                    }
+                }
+                return result;
             } catch (IOException e) {
                 handleApiError(e,uc);
             }

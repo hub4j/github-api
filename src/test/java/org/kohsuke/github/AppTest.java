@@ -3,18 +3,12 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Assume;
 import org.junit.Test;
@@ -23,8 +17,6 @@ import org.kohsuke.github.GHOrganization.Permission;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-
-import java.util.Date;
 
 /**
  * Unit test for simple App.
@@ -168,6 +160,35 @@ public class AppTest extends AbstractGitHubApiTestBase {
         Map<String, GHOrganization> org = gitHub.getMyOrganizations();
         assertFalse(org.keySet().contains(null));
         System.out.println(org);
+    }
+
+    @Test
+    public void testMyTeamsContainsAllMyOrganizations() throws IOException {
+      Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
+      Map<String, GHOrganization> myOrganizations = gitHub.getMyOrganizations();
+      assertEquals(teams.keySet(), myOrganizations.keySet());
+    }
+    
+    @Test
+    public void testMyTeamsShouldIncludeMyself() throws IOException {
+      Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
+      for (Entry<String, Set<GHTeam>> teamsPerOrg : teams.entrySet()) {
+        String organizationName = teamsPerOrg.getKey();
+        for (GHTeam team : teamsPerOrg.getValue()) {
+          String teamName = team.getName();
+        assertTrue("Team " + teamName + " in organization " + organizationName
+            + " does not contain myself",
+            shouldBelongToTeam(organizationName, teamName));
+        }
+      }
+    }
+
+    private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
+      GHOrganization org = gitHub.getOrganization(organizationName);
+      assertNotNull(org);
+      GHTeam team = org.getTeamByName(teamName);
+      assertNotNull(team);
+      return team.hasMember(gitHub.getMyself());
     }
 
     @Test

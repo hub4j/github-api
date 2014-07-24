@@ -23,7 +23,8 @@
  */
 package org.kohsuke.github;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,9 +39,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Base64;
@@ -327,6 +330,28 @@ public class GitHub {
         }
         return r;
     }
+
+  /**
+   * Gets complete map of organizations/teams that current user belongs to.
+   *
+   * Leverages the new GitHub API /user/teams made available recently to
+   * get in a single call the complete set of organizations, teams and permissions
+   * in a single call.
+   */
+  public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
+    Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
+    for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+      team.wrapUp(this);
+      String orgLogin = team.getOrganization().getLogin();
+      Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
+      if (teamsPerOrg == null) {
+        teamsPerOrg = new HashSet<GHTeam>();
+      }
+      teamsPerOrg.add(team);
+      allMyTeams.put(orgLogin, teamsPerOrg);
+    }
+    return allMyTeams;
+  }
 
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/

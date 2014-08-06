@@ -57,7 +57,7 @@ import static java.util.Arrays.*;
 public class GHRepository {
     /*package almost final*/ GitHub root;
 
-    private String description, homepage, name;
+    private String description, homepage, name, full_name;
     private String url; // this is the API url
     private String html_url;    // this is the UI
     private String git_url, ssh_url, clone_url, svn_url;
@@ -129,6 +129,13 @@ public class GHRepository {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Full repository name including the owner or organization. For example 'jenkinsci/jenkins' in case of http://github.com/jenkinsci/jenkins
+     */
+    public String getFullName() {
+        return full_name;
     }
 
     public boolean hasPullAccess() {

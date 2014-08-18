@@ -12,6 +12,8 @@ public enum GHEvent {
     COMMIT_COMMENT,
     CREATE,
     DELETE,
+    DEPLOYMENT,
+    DEPLOYMENT_STATUS,
     DOWNLOAD,
     FOLLOW,
     FORK,
@@ -25,6 +27,8 @@ public enum GHEvent {
     PULL_REQUEST,
     PULL_REQUEST_REVIEW_COMMENT,
     PUSH,
+    RELEASE,
+    STATUS,
     TEAM_ADD,
     WATCH
 }

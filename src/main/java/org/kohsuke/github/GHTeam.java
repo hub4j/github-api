@@ -15,12 +15,18 @@ import java.util.TreeMap;
 public class GHTeam {
     private String name,permission;
     private int id;
+    private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     protected /*final*/ GHOrganization org;
 
     /*package*/ GHTeam wrapUp(GHOrganization owner) {
         this.org = owner;
         return this;
+    }
+
+    /*package*/ GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
+      this.organization.wrapUp(root);
+      return wrapUp(organization);
     }
 
     /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
@@ -94,5 +100,9 @@ public class GHTeam {
 
     private String api(String tail) {
         return "/teams/"+id+tail;
+    }
+
+    public GHOrganization getOrganization() {
+      return org;
     }
 }

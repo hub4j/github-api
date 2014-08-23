@@ -210,6 +210,35 @@ public class GHRepository {
     }
 
     /**
+     * Updates a named ref, such as a tag, branch, etc.
+     *
+     * @param name
+     *      The name of the fully qualified reference (ie: refs/heads/master).
+     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
+     * @param sha
+     *      The SHA1 value to set this reference to
+     */
+    public GHRef updateRef(String name, String sha) throws IOException {
+      return updateRef(name, sha, false);
+    }
+
+    /**
+     * Updates a named ref, such as a tag, branch, etc.
+     *
+     * @param name
+     *      The name of the fully qualified reference (ie: refs/heads/master).
+     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
+     * @param sha
+     *      The SHA1 value to set this reference to
+     * @param force
+     *      Whether or not to force this ref update.
+     */
+    public GHRef updateRef(String name, String sha, Boolean force) throws IOException {
+      return new Requester(root)
+          .with("sha", sha).with("force", force).method("PATCH").to(getApiTailUrl("git/" + name), GHRef.class);
+    }
+
+    /**
      * @deprecated
      *      use {@link #listReleases()}
      */

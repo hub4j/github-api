@@ -239,6 +239,17 @@ public class GHRepository {
     }
 
     /**
+     * Deletes a particular ref from the repository using the GitHub API.
+     *
+     * @param name
+     *      The name of the fully qualified reference (ie: refs/heads/master).
+     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
+     */
+    public void deleteRef(String name) throws IOException {
+      new Requester(root).method("DELETE").to(getApiTailUrl("git/" + name));
+    }
+
+    /**
      * @deprecated
      *      use {@link #listReleases()}
      */

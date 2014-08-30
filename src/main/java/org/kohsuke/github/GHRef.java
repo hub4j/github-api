@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -8,6 +9,7 @@ import java.net.URL;
  * @author Michael Clarke
  */
 public class GHRef {
+    /*package almost final*/ GitHub root;
 
     private String ref, url;
     private GHObject object;
@@ -31,6 +33,48 @@ public class GHRef {
      */
     public GHObject getObject() {
         return object;
+    }
+
+    /**
+     * Updates this ref to the specified commit.
+     *
+     * @param sha
+     *      The SHA1 value to set this reference to
+     */
+    public void updateTo(String sha) throws IOException {
+      updateTo(sha, false);
+    }
+
+    /**
+     * Updates this ref to the specified commit.
+     *
+     * @param sha
+     *      The SHA1 value to set this reference to
+     * @param force
+     *      Whether or not to force this ref update.
+     */
+    public void updateTo(String sha, Boolean force) throws IOException {
+      new Requester(root)
+          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(root);
+    }
+
+    /**
+     * Deletes this ref from the repository using the GitHub API.
+     */
+    public void delete() throws IOException {
+      new Requester(root).method("DELETE").to(url);
+    }
+
+    /*package*/ GHRef wrap(GitHub root) {
+        this.root = root;
+        return this;
+    }
+
+    /*package*/ static GHRef[] wrap(GHRef[] in, GitHub root) {
+        for (GHRef r : in) {
+            r.wrap(root);
+        }
+        return in;
     }
 
 

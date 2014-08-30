@@ -206,47 +206,7 @@ public class GHRepository {
      */
     public GHRef createRef(String name, String sha) throws IOException {
         return new Requester(root)
-                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class);
-    }
-
-    /**
-     * Updates a named ref, such as a tag, branch, etc.
-     *
-     * @param name
-     *      The name of the fully qualified reference (ie: refs/heads/master).
-     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
-     * @param sha
-     *      The SHA1 value to set this reference to
-     */
-    public GHRef updateRef(String name, String sha) throws IOException {
-      return updateRef(name, sha, false);
-    }
-
-    /**
-     * Updates a named ref, such as a tag, branch, etc.
-     *
-     * @param name
-     *      The name of the fully qualified reference (ie: refs/heads/master).
-     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
-     * @param sha
-     *      The SHA1 value to set this reference to
-     * @param force
-     *      Whether or not to force this ref update.
-     */
-    public GHRef updateRef(String name, String sha, Boolean force) throws IOException {
-      return new Requester(root)
-          .with("sha", sha).with("force", force).method("PATCH").to(getApiTailUrl("git/" + name), GHRef.class);
-    }
-
-    /**
-     * Deletes a particular ref from the repository using the GitHub API.
-     *
-     * @param name
-     *      The name of the fully qualified reference (ie: refs/heads/master).
-     *      If it doesn't start with 'refs' and have at least two slashes, it will be rejected.
-     */
-    public void deleteRef(String name) throws IOException {
-      new Requester(root).method("DELETE").to(getApiTailUrl("git/" + name));
+                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class).wrap(root);
     }
 
     /**
@@ -619,17 +579,17 @@ public class GHRepository {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
+       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class),root);
     }
 
     /**
-     * Retrienved all refs of the given type for the current GitHub repository.
+     * Retrieves all refs of the given type for the current GitHub repository.
      * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
      * @return an array of all refs matching the request type
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
+        return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class),root);
     }
     /**
 	 * Retrive a ref of the given type for the current GitHub repository.
@@ -642,7 +602,7 @@ public class GHRepository {
 	 *             invalid ref type being requested
 	 */
 	public GHRef getRef(String refName) throws IOException {
-		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class);
+		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
 	}
     /**
      * Gets a commit object in this repository.

@@ -213,7 +213,7 @@ public class GHRepository {
      */
     public GHRef createRef(String name, String sha) throws IOException {
         return new Requester(root)
-                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class);
+                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class).wrap(root);
     }
 
     /**
@@ -586,17 +586,17 @@ public class GHRepository {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class);
+       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class),root);
     }
 
     /**
-     * Retrienved all refs of the given type for the current GitHub repository.
+     * Retrieves all refs of the given type for the current GitHub repository.
      * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
      * @return an array of all refs matching the request type
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class);
+        return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class),root);
     }
     /**
 	 * Retrive a ref of the given type for the current GitHub repository.
@@ -609,7 +609,7 @@ public class GHRepository {
 	 *             invalid ref type being requested
 	 */
 	public GHRef getRef(String refName) throws IOException {
-		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class);
+		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
 	}
     /**
      * Gets a commit object in this repository.

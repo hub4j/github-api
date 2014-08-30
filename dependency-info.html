@@ -26,7 +26,7 @@
       <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
 		
             <h1 id="bannerLeft">
-          <a href="">
+          <a href="./">
     
             GitHub API for Java
     
@@ -109,15 +109,7 @@
         </li>
                   
     <li class="none">
-              <a href="integration.html">Continuous Integration</a>
-        </li>
-                  
-    <li class="none">
-              <a href="dependencies.html">Dependencies</a>
-        </li>
-                  
-    <li class="none">
-              <strong>Dependency Information</strong>
+              <a href="plugin-management.html">Plugin Management</a>
         </li>
                   
     <li class="none">
@@ -125,7 +117,11 @@
         </li>
                   
     <li class="none">
-              <a href="issue-tracking.html">Issue Tracking</a>
+              <strong>Dependency Information</strong>
+        </li>
+                  
+    <li class="none">
+              <a href="source-repository.html">Source Repository</a>
         </li>
                   
     <li class="none">
@@ -133,11 +129,11 @@
         </li>
                   
     <li class="none">
-              <a href="plugin-management.html">Plugin Management</a>
+              <a href="issue-tracking.html">Issue Tracking</a>
         </li>
                   
     <li class="none">
-              <a href="license.html">Project License</a>
+              <a href="integration.html">Continuous Integration</a>
         </li>
                   
     <li class="none">
@@ -145,7 +141,7 @@
         </li>
                   
     <li class="none">
-              <a href="project-summary.html">Project Summary</a>
+              <a href="license.html">Project License</a>
         </li>
                   
     <li class="none">
@@ -153,7 +149,11 @@
         </li>
                   
     <li class="none">
-              <a href="source-repository.html">Source Repository</a>
+              <a href="project-summary.html">Project Summary</a>
+        </li>
+                  
+    <li class="none">
+              <a href="dependencies.html">Dependencies</a>
         </li>
               </ul>
         </li>
@@ -172,15 +172,44 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <div class="section"><h2>Dependency Information<a name="Dependency_Information"></a></h2><a name="Dependency_Information"></a><div class="section"><h3>Apache Maven<a name="Apache_Maven"></a></h3><a name="Apache_Maven"></a><div class="source"><pre>&lt;dependency&gt;
+        <div class="section">
+<h2>Dependency Information<a name="Dependency_Information"></a></h2><a name="Dependency_Information"></a>
+<div class="section">
+<h3>Apache Maven<a name="Apache_Maven"></a></h3><a name="Apache_Maven"></a>
+<div class="source">
+<pre>&lt;dependency&gt;
   &lt;groupId&gt;org.kohsuke&lt;/groupId&gt;
   &lt;artifactId&gt;github-api&lt;/artifactId&gt;
-  &lt;version&gt;1.55&lt;/version&gt;
-&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Apache Buildr<a name="Apache_Buildr"></a></h3><a name="Apache_Buildr"></a><div class="source"><pre>'org.kohsuke:github-api:jar:1.55'</pre></div></div><div class="section"><h3>Apache Ant<a name="Apache_Ant"></a></h3><a name="Apache_Ant"></a><div class="source"><pre>&lt;dependency org=&quot;org.kohsuke&quot; name=&quot;github-api&quot; rev=&quot;1.55&quot;&gt;
+  &lt;version&gt;1.58&lt;/version&gt;
+&lt;/dependency&gt;</pre></div></div>
+<div class="section">
+<h3>Apache Buildr<a name="Apache_Buildr"></a></h3><a name="Apache_Buildr"></a>
+<div class="source">
+<pre>'org.kohsuke:github-api:jar:1.58'</pre></div></div>
+<div class="section">
+<h3>Apache Ant<a name="Apache_Ant"></a></h3><a name="Apache_Ant"></a>
+<div class="source">
+<pre>&lt;dependency org=&quot;org.kohsuke&quot; name=&quot;github-api&quot; rev=&quot;1.58&quot;&gt;
   &lt;artifact name=&quot;github-api&quot; type=&quot;jar&quot; /&gt;
-&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Groovy Grape<a name="Groovy_Grape"></a></h3><a name="Groovy_Grape"></a><div class="source"><pre>@Grapes(
-@Grab(group='org.kohsuke', module='github-api', version='1.55')
-)</pre></div></div><div class="section"><h3>Grails<a name="Grails"></a></h3><a name="Grails"></a><div class="source"><pre>compile 'org.kohsuke:github-api:1.55'</pre></div></div><div class="section"><h3>Leiningen<a name="Leiningen"></a></h3><a name="Leiningen"></a><div class="source"><pre>[org.kohsuke/github-api &quot;1.55&quot;]</pre></div></div><div class="section"><h3>SBT<a name="SBT"></a></h3><a name="SBT"></a><div class="source"><pre>libraryDependencies += &quot;org.kohsuke&quot; %% &quot;github-api&quot; % &quot;1.55&quot;</pre></div></div></div>
+&lt;/dependency&gt;</pre></div></div>
+<div class="section">
+<h3>Groovy Grape<a name="Groovy_Grape"></a></h3><a name="Groovy_Grape"></a>
+<div class="source">
+<pre>@Grapes(
+@Grab(group='org.kohsuke', module='github-api', version='1.58')
+)</pre></div></div>
+<div class="section">
+<h3>Grails<a name="Grails"></a></h3><a name="Grails"></a>
+<div class="source">
+<pre>compile 'org.kohsuke:github-api:1.58'</pre></div></div>
+<div class="section">
+<h3>Leiningen<a name="Leiningen"></a></h3><a name="Leiningen"></a>
+<div class="source">
+<pre>[org.kohsuke/github-api &quot;1.58&quot;]</pre></div></div>
+<div class="section">
+<h3>SBT<a name="SBT"></a></h3><a name="SBT"></a>
+<div class="source">
+<pre>libraryDependencies += &quot;org.kohsuke&quot; %% &quot;github-api&quot; % &quot;1.58&quot;</pre></div></div></div>
       </div>
     </div>
     <div id="footer">
@@ -193,8 +222,8 @@
 
   
   
-  &nbsp;| Last Published: 06/08/2014
-  &nbsp;| Version: 1.55
+  &nbsp;| Last Published: 2014-08-30
+  &nbsp;| Version: 1.58
 </div>
       <div class="clear">
         <hr/>

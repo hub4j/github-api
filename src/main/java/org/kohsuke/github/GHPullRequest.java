@@ -196,7 +196,7 @@ public class GHPullRequest extends GHIssue {
         return new PagedIterable<GHPullRequestCommitDetail>() {
             public PagedIterator<GHPullRequestCommitDetail> iterator() {
                 return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-                        String.format("%s/commits", getApiURL().getPath()),
+                        String.format("%s/commits", getApiURL()),
                         GHPullRequestCommitDetail[].class)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {

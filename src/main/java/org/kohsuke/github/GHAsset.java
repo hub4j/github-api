@@ -21,6 +21,7 @@ public class GHAsset {
     private long download_count;
     private Date created_at;
     private Date updated_at;
+    private String browser_download_url;
 
     public String getContentType() {
         return content_type;
@@ -78,6 +79,10 @@ public class GHAsset {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getBrowserDownloadUrl() {
+        return browser_download_url;
     }
 
     private void edit(String key, Object value) throws IOException {

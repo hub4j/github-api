@@ -163,6 +163,10 @@ public class GHIssue {
         new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
     }
 
+    private void editIssue(String key, Object value) throws IOException {
+        new Requester(root)._with(key, value).method("PATCH").to(getIssuesApiRoute());
+    }
+
     /**
      * Closes this issue.
      */
@@ -186,11 +190,11 @@ public class GHIssue {
     }
 
     public void assignTo(GHUser user) throws IOException {
-        edit("assignee",user.getLogin());
+        editIssue("assignee",user.getLogin());
     }
 
     public void setLabels(String... labels) throws IOException {
-        edit("labels",labels);
+        editIssue("labels",labels);
     }
 
     /**
@@ -222,7 +226,7 @@ public class GHIssue {
         return getIssuesApiRoute();
     }
 
-    private String getIssuesApiRoute() {
+    protected String getIssuesApiRoute() {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 

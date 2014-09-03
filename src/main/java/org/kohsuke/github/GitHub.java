@@ -80,6 +80,9 @@ public class GitHub {
     private GitHub(String login, String oauthAccessToken, String password) throws IOException {
       this (GITHUB_URL, login, oauthAccessToken, password);
     }
+    private GitHub(String login, String oauthAccessToken, String password, HttpConnector connector) throws IOException {
+        this (GITHUB_URL, login, oauthAccessToken, password, connector);
+    }
 
     /**
      * Creates a client API root object.
@@ -116,8 +119,13 @@ public class GitHub {
      *      User's password. Always used in conjunction with the {@code login} parameter
      */
     private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
+        this(apiUrl, login, oauthAccessToken, password, null);
+    }
+
+    private GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
+        if (null != connector) this.connector = connector;
 
         if (oauthAccessToken!=null) {
             encodedAuthorization = "token "+oauthAccessToken;
@@ -139,6 +147,9 @@ public class GitHub {
      * Obtains the credential from "~/.github"
      */
     public static GitHub connect() throws IOException {
+        return connect(null);
+    }
+    public static GitHub connect(HttpConnector connector) throws IOException {
         Properties props = new Properties();
         File homeDir = new File(System.getProperty("user.home"));
         FileInputStream in = new FileInputStream(new File(homeDir, ".github"));
@@ -147,7 +158,7 @@ public class GitHub {
         } finally {
             IOUtils.closeQuietly(in);
         }
-        return new GitHub(GITHUB_URL,props.getProperty("login"), props.getProperty("oauth"),props.getProperty("password"));
+        return new GitHub(GITHUB_URL,props.getProperty("login"), props.getProperty("oauth"),props.getProperty("password"), connector);
     }
 
     /**
@@ -167,7 +178,11 @@ public class GitHub {
     }
 
     public static GitHub connect(String login, String oauthAccessToken) throws IOException {
-        return new GitHub(login,oauthAccessToken,null);
+        return connect(login,oauthAccessToken,(HttpConnector)null);
+    }
+
+    public static GitHub connect(String login, String oauthAccessToken, HttpConnector connector) throws IOException {
+        return new GitHub(login,oauthAccessToken,null, connector);
     }
 
     /**
@@ -180,15 +195,27 @@ public class GitHub {
     }
 
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
-        return new GitHub(login,null,password);
+        return connectUsingPassword(login, password, null);
+    }
+
+    public static GitHub connectUsingPassword(String login, String password, HttpConnector connector) throws IOException {
+        return new GitHub(login,null,password, connector);
     }
 
     public static GitHub connectUsingOAuth(String oauthAccessToken) throws IOException {
-    	return new GitHub(null, oauthAccessToken, null);
+        return connectUsingOAuth(GITHUB_URL, oauthAccessToken, null);
+    }
+
+    public static GitHub connectUsingOAuth(String oauthAccessToken, HttpConnector connector) throws IOException {
+        return connectUsingOAuth(GITHUB_URL, oauthAccessToken, connector);
     }
 
     public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
-    	return new GitHub(githubServer,null, oauthAccessToken,null);
+        return connectUsingOAuth(githubServer, oauthAccessToken, null);
+    }
+
+    public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken, HttpConnector connector) throws IOException {
+        return new GitHub(githubServer,null, oauthAccessToken,null, connector);
     }
     /**
      * Connects to GitHub anonymously.

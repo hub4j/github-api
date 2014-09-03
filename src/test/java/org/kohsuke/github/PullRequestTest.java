@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -13,6 +14,12 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         GHPullRequest p = j.createPullRequest(name, "stable", "master", "## test");
         System.out.println(p.getUrl());
         assertEquals(name, p.getTitle());
-        p.close();
+    }
+
+    @After
+    public void cleanUp() throws Exception {
+        for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
+            pr.close();
+        }
     }
 }

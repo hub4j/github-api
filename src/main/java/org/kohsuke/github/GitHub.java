@@ -103,10 +103,13 @@ public class GitHub {
      *      Secret OAuth token.
      * @param password
      *      User's password. Always used in conjunction with the {@code login} parameter
+     * @param connector
+     *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
+        if (null != connector) this.connector = connector;
 
         if (oauthAccessToken!=null) {
             encodedAuthorization = "token "+oauthAccessToken;

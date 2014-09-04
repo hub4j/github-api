@@ -15,6 +15,7 @@ public class GitHubBuilder {
     private String user;
     private String password;
     private String oauthToken;
+    private HttpConnector connector;
 
     public GitHubBuilder() {
     }
@@ -56,8 +57,12 @@ public class GitHubBuilder {
         this.user = user;
         return this;
     }
+    public GitHubBuilder withConnector(HttpConnector connector) {
+        this.connector = connector;
+        return this;
+    }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password);
+        return new GitHub(endpoint, user, oauthToken, password, connector);
     }
 }

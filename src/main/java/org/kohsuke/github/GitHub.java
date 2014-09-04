@@ -35,8 +35,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +71,9 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
+    private List<GHUser> allUsers = null;
+    private List<GHOrganization> allOrganizations = null;
+    private List<GHPerson> allPersons = null;
 
     private final String apiUrl;
 
@@ -285,11 +290,14 @@ public class GitHub {
 
 
     /**
-     * clears all cached data in order for external changes (modifications and del
+     * clears all cached data in order for external changes (modifications and deletes)
      */
     public void refreshCache() {
         users.clear();
         orgs.clear();
+        allPersons = null;
+        allOrganizations = null;
+        allUsers = null;
     }
 
     /**
@@ -312,6 +320,43 @@ public class GitHub {
             orgs.put(name,o);
         }
         return o;
+    }
+
+    public List<GHOrganization> getAllOrganizations() throws IOException {
+        if (allOrganizations == null) {
+            getAllOrganizationsAndUsers();
+        }
+        return allOrganizations;
+    }
+
+    public List<GHUser> getAllUsers() throws IOException {
+        if (allUsers == null) {
+            getAllOrganizationsAndUsers();
+        }
+        return allUsers;
+    }
+
+    public synchronized List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
+        if (allPersons == null) {
+            ArrayList<GHPerson> personsTemp = new ArrayList<GHPerson>();
+            ArrayList<GHUser> usersTemp = new ArrayList<GHUser>();
+            ArrayList<GHOrganization> orgsTemp = new ArrayList<GHOrganization>();
+            GHPerson[] persons = retrieve().to("/users", GHPerson[].class);
+            for (GHPerson person : persons) {
+                person.wrapUp(this);
+                personsTemp.add(person);
+                if (person instanceof GHUser) {
+                    usersTemp.add((GHUser) person);
+                } else if (person instanceof GHOrganization) {
+                    orgsTemp.add((GHOrganization) person);
+                }
+
+            }
+            allPersons = Collections.unmodifiableList(personsTemp);
+            allOrganizations = Collections.unmodifiableList(orgsTemp);
+            allUsers = Collections.unmodifiableList(usersTemp);
+        }
+        return allPersons;
     }
 
     /**

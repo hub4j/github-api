@@ -26,8 +26,6 @@ package org.kohsuke.github;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
@@ -42,12 +40,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,13 +69,6 @@ public class GitHub {
     private final String apiUrl;
 
     private HttpConnector connector = HttpConnector.DEFAULT;
-
-    /**
-     * Connects to GitHub.com
-     */
-    private GitHub(String login, String oauthAccessToken, String password) throws IOException {
-      this (GITHUB_URL, login, oauthAccessToken, password);
-    }
 
     /**
      * Creates a client API root object.
@@ -114,10 +103,13 @@ public class GitHub {
      *      Secret OAuth token.
      * @param password
      *      User's password. Always used in conjunction with the {@code login} parameter
+     * @param connector
+     *      HttpConnector to use. Pass null to use default connector.
      */
-    private GitHub(String apiUrl, String login, String oauthAccessToken, String password) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
+        if (null != connector) this.connector = connector;
 
         if (oauthAccessToken!=null) {
             encodedAuthorization = "token "+oauthAccessToken;
@@ -139,15 +131,7 @@ public class GitHub {
      * Obtains the credential from "~/.github"
      */
     public static GitHub connect() throws IOException {
-        Properties props = new Properties();
-        File homeDir = new File(System.getProperty("user.home"));
-        FileInputStream in = new FileInputStream(new File(homeDir, ".github"));
-        try {
-            props.load(in);
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-        return new GitHub(GITHUB_URL,props.getProperty("login"), props.getProperty("oauth"),props.getProperty("password"));
+        return GitHubBuilder.fromPropertyFile().build();
     }
 
     /**
@@ -159,15 +143,15 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-        return connectUsingOAuth(apiUrl, oauthAccessToken);
+        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
     }
 
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
-        return new GitHub(apiUrl, login, null, password);
+        return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
 
     public static GitHub connect(String login, String oauthAccessToken) throws IOException {
-        return new GitHub(login,oauthAccessToken,null);
+        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).build();
     }
 
     /**
@@ -176,19 +160,19 @@ public class GitHub {
      *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
-        return new GitHub(login,oauthAccessToken,password);
+        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
     }
 
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
-        return new GitHub(login,null,password);
+        return new GitHubBuilder().withPassword(login, password).build();
     }
 
     public static GitHub connectUsingOAuth(String oauthAccessToken) throws IOException {
-    	return new GitHub(null, oauthAccessToken, null);
+        return new GitHubBuilder().withOAuthToken(oauthAccessToken).build();
     }
 
     public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
-    	return new GitHub(githubServer,null, oauthAccessToken,null);
+        return new GitHubBuilder().withEndpoint(githubServer).withOAuthToken(oauthAccessToken).build();
     }
     /**
      * Connects to GitHub anonymously.
@@ -196,7 +180,7 @@ public class GitHub {
      * All operations that requires authentication will fail.
      */
     public static GitHub connectAnonymously() throws IOException {
-        return new GitHub(null,null,null);
+        return new GitHubBuilder().build();
     }
 
     /**
@@ -475,5 +459,5 @@ public class GitHub {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private static final String GITHUB_URL = "https://api.github.com";
+    /* package */ static final String GITHUB_URL = "https://api.github.com";
 }

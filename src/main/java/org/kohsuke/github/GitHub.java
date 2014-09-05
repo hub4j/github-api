@@ -67,9 +67,7 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
-    private List<GHUser> allUsers = null;
-    private List<GHOrganization> allOrganizations = null;
-    private List<GHPerson> allPersons = null;
+    private boolean allOrgsUsersRetrieved = false;
 
     private final String apiUrl;
 
@@ -279,9 +277,7 @@ public class GitHub {
     public void refreshCache() {
         users.clear();
         orgs.clear();
-        allPersons = null;
-        allOrganizations = null;
-        allUsers = null;
+        allOrgsUsersRetrieved = false;
     }
 
     /**
@@ -307,40 +303,47 @@ public class GitHub {
     }
 
     public List<GHOrganization> getAllOrganizations() throws IOException {
-        if (allOrganizations == null) {
-            getAllOrganizationsAndUsers();
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
         }
-        return allOrganizations;
+        return new ArrayList(orgs.values());
     }
 
     public List<GHUser> getAllUsers() throws IOException {
-        if (allUsers == null) {
-            getAllOrganizationsAndUsers();
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
         }
-        return allUsers;
+        return new ArrayList(users.values());
     }
 
-    public synchronized List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
-        if (allPersons == null) {
-            ArrayList<GHPerson> personsTemp = new ArrayList<GHPerson>();
-            ArrayList<GHUser> usersTemp = new ArrayList<GHUser>();
-            ArrayList<GHOrganization> orgsTemp = new ArrayList<GHOrganization>();
+    public List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
+        final List<GHOrganization> allOrganizations = getAllOrganizations();
+        final List<GHUser> allUsers = getAllUsers();
+        final ArrayList<GHPerson> allPersons = new ArrayList<GHPerson>(allOrganizations.size() + allUsers.size());
+        allPersons.addAll(allOrganizations);
+        allPersons.addAll(allUsers);
+        return allPersons;
+    }
+
+    synchronized void retrieveAllOrganizationsAndUsers() throws IOException {
+        if (!allOrgsUsersRetrieved) {
             GHPerson[] persons = retrieve().to("/users", GHPerson[].class);
             for (GHPerson person : persons) {
-                person.wrapUp(this);
-                personsTemp.add(person);
                 if (person instanceof GHUser) {
-                    usersTemp.add((GHUser) person);
+                    person.wrapUp(this);
+                    // users and orgs if they do not yet exist in the cache
+                    if (!users.containsKey(person.getLogin())) {
+                        users.put(person.getLogin(), (GHUser) person);
+                    }
                 } else if (person instanceof GHOrganization) {
-                    orgsTemp.add((GHOrganization) person);
+                    person.wrapUp(this);
+                    if (!orgs.containsKey(person.getName())) {
+                        orgs.put(person.getName(), (GHOrganization) person);
+                    }
                 }
-
+                allOrgsUsersRetrieved = true;
             }
-            allPersons = Collections.unmodifiableList(personsTemp);
-            allOrganizations = Collections.unmodifiableList(orgsTemp);
-            allUsers = Collections.unmodifiableList(usersTemp);
         }
-        return allPersons;
     }
 
     /**

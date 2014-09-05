@@ -33,8 +33,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,6 +67,7 @@ public class GitHub {
 
     private final Map<String,GHUser> users = new HashMap<String, GHUser>();
     private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
+    private boolean allOrgsUsersRetrieved = false;
 
     private final String apiUrl;
 
@@ -269,11 +272,12 @@ public class GitHub {
 
 
     /**
-     * clears all cached data in order for external changes (modifications and del
+     * clears all cached data in order for external changes (modifications and deletes)
      */
     public void refreshCache() {
         users.clear();
         orgs.clear();
+        allOrgsUsersRetrieved = false;
     }
 
     /**
@@ -296,6 +300,50 @@ public class GitHub {
             orgs.put(name,o);
         }
         return o;
+    }
+
+    public List<GHOrganization> getAllOrganizations() throws IOException {
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
+        }
+        return new ArrayList(orgs.values());
+    }
+
+    public List<GHUser> getAllUsers() throws IOException {
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
+        }
+        return new ArrayList(users.values());
+    }
+
+    public List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
+        final List<GHOrganization> allOrganizations = getAllOrganizations();
+        final List<GHUser> allUsers = getAllUsers();
+        final ArrayList<GHPerson> allPersons = new ArrayList<GHPerson>(allOrganizations.size() + allUsers.size());
+        allPersons.addAll(allOrganizations);
+        allPersons.addAll(allUsers);
+        return allPersons;
+    }
+
+    synchronized void retrieveAllOrganizationsAndUsers() throws IOException {
+        if (!allOrgsUsersRetrieved) {
+            GHPerson[] persons = retrieve().to("/users", GHPerson[].class);
+            for (GHPerson person : persons) {
+                if (person instanceof GHUser) {
+                    person.wrapUp(this);
+                    // users and orgs if they do not yet exist in the cache
+                    if (!users.containsKey(person.getLogin())) {
+                        users.put(person.getLogin(), (GHUser) person);
+                    }
+                } else if (person instanceof GHOrganization) {
+                    person.wrapUp(this);
+                    if (!orgs.containsKey(person.getName())) {
+                        orgs.put(person.getName(), (GHOrganization) person);
+                    }
+                }
+                allOrgsUsersRetrieved = true;
+            }
+        }
     }
 
     /**

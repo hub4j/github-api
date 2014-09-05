@@ -61,7 +61,7 @@ public class GHRepository {
     private String url; // this is the API url
     private String html_url;    // this is the UI
     private String git_url, ssh_url, clone_url, svn_url;
-    private GHUser owner;   // not fully populated. beware.
+    private GHPerson owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, has_downloads;
     @JsonProperty("private")
     private boolean _private;
@@ -157,8 +157,8 @@ public class GHRepository {
         return language;
     }
 
-    public GHUser getOwner() throws IOException {
-        return root.getUser(owner.login);   // because 'owner' isn't fully populated
+    public GHPerson getOwner() throws IOException {
+        return root.getPerson(owner.login);   // because 'owner' isn't fully populated
     }
 
     public GHIssue getIssue(int id) throws IOException {

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.*;
         @JsonSubTypes.Type(value=GHOrganization.class, name="Organization"),
 })
 public abstract class GHPerson {
-//    enum GHPersonType {User, Organization};
+    public enum GHPersonType {User, Organization};
     /*package almost final*/ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
@@ -246,6 +246,8 @@ public abstract class GHPerson {
         populate();
         return following;
     }
+
+    public abstract GHPersonType getType();
 
     /**
      * What appears to be a GitHub internal unique number that identifies this user.

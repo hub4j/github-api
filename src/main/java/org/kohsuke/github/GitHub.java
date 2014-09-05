@@ -23,8 +23,13 @@
  */
 package org.kohsuke.github;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,12 +49,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.codec.binary.Base64;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 /**
  * Root of the GitHub API.
@@ -65,11 +65,8 @@ public class GitHub {
      */
     /*package*/ final String encodedAuthorization;
 
-    private final Map<String,GHUser> users = new HashMap<String, GHUser>();
-    private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
-    private List<GHUser> allUsers = null;
-    private List<GHOrganization> allOrganizations = null;
-    private List<GHPerson> allPersons = null;
+    private final Map<String, GHPerson> persons = new HashMap<String, GHPerson>();
+    private boolean allOrgsUsersRetrieved = false;
 
     private final String apiUrl;
 
@@ -77,57 +74,52 @@ public class GitHub {
 
     /**
      * Creates a client API root object.
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * Several different combinations of the login/oauthAccessToken/password parameters are allowed
      * to represent different ways of authentication.
-     *
+     * <p/>
      * <dl>
-     *     <dt>Loging anonymously
-     *     <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
-     *
-     *     <dt>Log in with password
-     *     <dd>Specify the login and password, then leave oauthAccessToken null.
-     *         This will use the HTTP BASIC auth with the GitHub API.
-     *
-     *     <dt>Log in with OAuth token
-     *     <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null.
-     *         This will send OAuth token to the GitHub API. If the login parameter is null,
-     *         The constructor makes an API call to figure out the user name that owns the token.
+     * <dt>Loging anonymously
+     * <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
+     * <p/>
+     * <dt>Log in with password
+     * <dd>Specify the login and password, then leave oauthAccessToken null.
+     * This will use the HTTP BASIC auth with the GitHub API.
+     * <p/>
+     * <dt>Log in with OAuth token
+     * <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null.
+     * This will send OAuth token to the GitHub API. If the login parameter is null,
+     * The constructor makes an API call to figure out the user name that owns the token.
      * </dl>
      *
-     * @param apiUrl
-     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
-     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
-     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
-     *      Password is also considered deprecated as it is no longer required for api usage.
-     * @param login
-     *      The use ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
-     *      provided or if logging in anonymously. Specifying this would save one API call.
-     * @param oauthAccessToken
-     *      Secret OAuth token.
-     * @param password
-     *      User's password. Always used in conjunction with the {@code login} parameter
-     * @param connector
-     *      HttpConnector to use. Pass null to use default connector.
+     * @param apiUrl           The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *                         "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *                         For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     *                         Password is also considered deprecated as it is no longer required for api usage.
+     * @param login            The use ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
+     *                         provided or if logging in anonymously. Specifying this would save one API call.
+     * @param oauthAccessToken Secret OAuth token.
+     * @param password         User's password. Always used in conjunction with the {@code login} parameter
+     * @param connector        HttpConnector to use. Pass null to use default connector.
      */
     /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector) throws IOException {
-        if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
+        if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
 
-        if (oauthAccessToken!=null) {
-            encodedAuthorization = "token "+oauthAccessToken;
+        if (oauthAccessToken != null) {
+            encodedAuthorization = "token " + oauthAccessToken;
         } else {
-            if (password!=null) {
+            if (password != null) {
                 String authorization = (login + ':' + password);
-                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes()));
+                encodedAuthorization = "Basic " + new String(Base64.encodeBase64(authorization.getBytes()));
             } else {// anonymous access
                 encodedAuthorization = null;
             }
         }
 
-        if (login==null && encodedAuthorization!=null)
+        if (login == null && encodedAuthorization != null)
             login = getMyself().getLogin();
         this.login = login;
     }
@@ -142,10 +134,9 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
-     * @param apiUrl
-     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
-     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
-     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     * @param apiUrl The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *               "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *               For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
@@ -160,9 +151,8 @@ public class GitHub {
     }
 
     /**
-     * @deprecated
-     *      Either OAuth token or password is sufficient, so there's no point in passing both.
-     *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
+     * @deprecated Either OAuth token or password is sufficient, so there's no point in passing both.
+     * Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
@@ -179,9 +169,10 @@ public class GitHub {
     public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withEndpoint(githubServer).withOAuthToken(oauthAccessToken).build();
     }
+
     /**
      * Connects to GitHub anonymously.
-     *
+     * <p/>
      * All operations that requires authentication will fail.
      */
     public static GitHub connectAnonymously() throws IOException {
@@ -190,10 +181,11 @@ public class GitHub {
 
     /**
      * Is this an anonymous connection
+     *
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login==null && encodedAuthorization==null;
+        return login == null && encodedAuthorization == null;
     }
 
     public HttpConnector getConnector() {
@@ -245,102 +237,111 @@ public class GitHub {
     }
 
     /**
-	 * Gets the {@link GHUser} that represents yourself.
-	 */
+     * Gets the {@link GHUser} that represents yourself.
+     */
     @WithBridgeMethods(GHUser.class)
-	public GHMyself getMyself() throws IOException {
-		requireCredential();
+    public GHMyself getMyself() throws IOException {
+        requireCredential();
 
         GHMyself u = retrieve().to("/user", GHMyself.class);
 
         u.root = this;
-        users.put(u.getLogin(), u);
+        persons.put(u.getLogin(), u);
 
         return u;
-	}
+    }
 
-	/**
-	 * Obtains the object that represents the named user.
-	 */
-	public GHUser getUser(String login) throws IOException {
-		GHUser u = users.get(login);
-		if (u == null) {
+    /**
+     * Obtains the object that represents the named user.
+     */
+    public GHUser getUser(String login) throws IOException {
+        GHUser u = (GHUser) persons.get(login);
+        if (u == null) {
             u = retrieve().to("/users/" + login, GHUser.class);
             u.root = this;
-            users.put(u.getLogin(), u);
-		}
-		return u;
-	}
+            persons.put(u.getLogin(), u);
+        }
+        return u;
+    }
+
+
+    /**
+     * Obtains the object that represents the named user.
+     */
+    public GHPerson getPerson(String login) throws IOException {
+        GHPerson p = persons.get(login);
+        if (p == null) {
+            p = retrieve().to("/users/" + login, GHPerson.class);
+            p.root = this;
+            persons.put(p.getLogin(), p);
+        }
+        return p;
+    }
 
 
     /**
      * clears all cached data in order for external changes (modifications and deletes)
      */
     public void refreshCache() {
-        users.clear();
-        orgs.clear();
-        allPersons = null;
-        allOrganizations = null;
-        allUsers = null;
+        persons.clear();
+        allOrgsUsersRetrieved = false;
     }
 
     /**
      * Interns the given {@link GHUser}.
      */
     protected GHUser getUser(GHUser orig) throws IOException {
-        GHUser u = users.get(orig.getLogin());
-        if (u==null) {
+        GHUser u = (GHUser) persons.get(orig.getLogin());
+        if (u == null) {
             orig.root = this;
-            users.put(login,orig);
+            persons.put(orig.getLogin(), orig);
             return orig;
         }
         return u;
     }
 
     public GHOrganization getOrganization(String name) throws IOException {
-        GHOrganization o = orgs.get(name);
-        if (o==null) {
+        GHOrganization o = (GHOrganization) persons.get(name);
+        if (o == null) {
             o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
-            orgs.put(name,o);
+            persons.put(name, o);
         }
         return o;
     }
 
     public List<GHOrganization> getAllOrganizations() throws IOException {
-        if (allOrganizations == null) {
-            getAllOrganizationsAndUsers();
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
         }
-        return allOrganizations;
+
+        return Lists.newArrayList(Iterables.filter(persons.values(), GHOrganization.class));
     }
 
     public List<GHUser> getAllUsers() throws IOException {
-        if (allUsers == null) {
-            getAllOrganizationsAndUsers();
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
         }
-        return allUsers;
+        return Lists.newArrayList(Iterables.filter(persons.values(), GHUser.class));
     }
 
-    public synchronized List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
-        if (allPersons == null) {
-            ArrayList<GHPerson> personsTemp = new ArrayList<GHPerson>();
-            ArrayList<GHUser> usersTemp = new ArrayList<GHUser>();
-            ArrayList<GHOrganization> orgsTemp = new ArrayList<GHOrganization>();
-            GHPerson[] persons = retrieve().to("/users", GHPerson[].class);
-            for (GHPerson person : persons) {
-                person.wrapUp(this);
-                personsTemp.add(person);
-                if (person instanceof GHUser) {
-                    usersTemp.add((GHUser) person);
-                } else if (person instanceof GHOrganization) {
-                    orgsTemp.add((GHOrganization) person);
-                }
-
-            }
-            allPersons = Collections.unmodifiableList(personsTemp);
-            allOrganizations = Collections.unmodifiableList(orgsTemp);
-            allUsers = Collections.unmodifiableList(usersTemp);
+    public List<GHPerson> getAllOrganizationsAndUsers() throws IOException {
+        if (!allOrgsUsersRetrieved) {
+            retrieveAllOrganizationsAndUsers();
         }
-        return allPersons;
+        return new ArrayList(persons.values());
+    }
+
+    synchronized void retrieveAllOrganizationsAndUsers() throws IOException {
+        if (!allOrgsUsersRetrieved) {
+            GHPerson[] orgsUsers = retrieve().to("/users", GHPerson[].class);
+            for (GHPerson person : orgsUsers) {
+                if (!persons.containsKey(person.getLogin())) {
+                    person.wrapUp(this);
+                    persons.put(person.getLogin(), person);
+                }
+                allOrgsUsersRetrieved = true;
+            }
+        }
     }
 
     /**
@@ -355,7 +356,7 @@ public class GitHub {
 
     /**
      * This method returns a shallowly populated organizations.
-     *
+     * <p/>
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}
      * TODO: make this automatic.
      */
@@ -364,32 +365,32 @@ public class GitHub {
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(),o.wrapUp(this));
+            r.put(o.getLogin(), o.wrapUp(this));
         }
         return r;
     }
 
-  /**
-   * Gets complete map of organizations/teams that current user belongs to.
-   *
-   * Leverages the new GitHub API /user/teams made available recently to
-   * get in a single call the complete set of organizations, teams and permissions
-   * in a single call.
-   */
-  public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
-    Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-    for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
-      team.wrapUp(this);
-      String orgLogin = team.getOrganization().getLogin();
-      Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
-      if (teamsPerOrg == null) {
-        teamsPerOrg = new HashSet<GHTeam>();
-      }
-      teamsPerOrg.add(team);
-      allMyTeams.put(orgLogin, teamsPerOrg);
+    /**
+     * Gets complete map of organizations/teams that current user belongs to.
+     * <p/>
+     * Leverages the new GitHub API /user/teams made available recently to
+     * get in a single call the complete set of organizations, teams and permissions
+     * in a single call.
+     */
+    public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
+        Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
+        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+            team.wrapUp(this);
+            String orgLogin = team.getOrganization().getLogin();
+            Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
+            if (teamsPerOrg == null) {
+                teamsPerOrg = new HashSet<GHTeam>();
+            }
+            teamsPerOrg.add(team);
+            allMyTeams.put(orgLogin, teamsPerOrg);
+        }
+        return allMyTeams;
     }
-    return allMyTeams;
-  }
 
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
@@ -405,7 +406,7 @@ public class GitHub {
      * Gets a sigle gist by ID.
      */
     public GHGist getGist(String id) throws IOException {
-        return retrieve().to("/gists/"+id,GHGist.class).wrapUp(this);
+        return retrieve().to("/gists/" + id, GHGist.class).wrapUp(this);
     }
 
     public GHGistBuilder createGist() {
@@ -414,7 +415,7 @@ public class GitHub {
 
     /**
      * Parses the GitHub event object.
-     *
+     * <p/>
      * This is primarily intended for receiving a POST HTTP call from a hook.
      * Unfortunately, hook script payloads aren't self-descriptive, so you need
      * to know the type of the payload you are expecting.
@@ -427,12 +428,11 @@ public class GitHub {
 
     /**
      * Creates a new repository.
-     *
+     * <p/>
      * To create a repository in an organization, see
      * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
      *
-     * @return
-     *      Newly created repository.
+     * @return Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
         Requester requester = new Requester(this)
@@ -443,19 +443,19 @@ public class GitHub {
 
     /**
      * Creates a new authorization.
-     *
+     * <p/>
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
-	public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
-		Requester requester = new Requester(this)
-				.with("scopes", scope)
-				.with("note", note)
-				.with("note_url", noteUrl);
+    public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
+        Requester requester = new Requester(this)
+                .with("scopes", scope)
+                .with("note", note)
+                .with("note_url", noteUrl);
 
-		return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
-	}
+        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+    }
 
     /**
      * Ensures that the credential is valid.
@@ -469,16 +469,18 @@ public class GitHub {
         }
     }
 
-    /*package*/ static URL parseURL(String s) {
+    /*package*/
+    static URL parseURL(String s) {
         try {
-            return s==null ? null : new URL(s);
+            return s == null ? null : new URL(s);
         } catch (MalformedURLException e) {
-            throw new IllegalStateException("Invalid URL: "+s);
+            throw new IllegalStateException("Invalid URL: " + s);
         }
     }
 
-    /*package*/ static Date parseDate(String timestamp) {
-        if (timestamp==null)    return null;
+    /*package*/
+    static Date parseDate(String timestamp) {
+        if (timestamp == null) return null;
         for (String f : TIME_FORMATS) {
             try {
                 SimpleDateFormat df = new SimpleDateFormat(f);
@@ -488,16 +490,17 @@ public class GitHub {
                 // try next
             }
         }
-        throw new IllegalStateException("Unable to parse the timestamp: "+timestamp);
+        throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
     }
 
-    /*package*/ static String printDate(Date dt) {
+    /*package*/
+    static String printDate(Date dt) {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(dt);
     }
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ","yyyy-MM-dd'T'HH:mm:ss'Z'"};
+    private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'"};
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));

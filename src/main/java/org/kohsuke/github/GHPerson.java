@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.*;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME,
         include=JsonTypeInfo.As.PROPERTY,
-        property="type")
+        property="type", defaultImpl = GHOrganization.class)
 @JsonSubTypes({
         @JsonSubTypes.Type(value=GHUser.class, name="User"),
         @JsonSubTypes.Type(value=GHOrganization.class, name="Organization"),

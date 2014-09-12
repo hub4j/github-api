@@ -22,6 +22,15 @@ public class GHAuthorization {
 	public static final String DELETE_REPO = "delete_repo";
 	public static final String NOTIFICATIONS = "notifications";
 	public static final String GIST = "gist";
+	public static final String READ_HOOK = "read:repo_hook";
+	public static final String WRITE_HOOK = "write:repo_hook";
+	public static final String AMIN_HOOK = "admin:repo_hook";
+	public static final String READ_ORG = "read:org";
+	public static final String WRITE_ORG = "write:org";
+	public static final String ADMIN_ORG = "admin:org";
+	public static final String READ_KEY = "read:public_key";
+	public static final String WRITE_KEY = "write:public_key";
+	public static final String ADMIN_KEY = "admin:public_key";
 
 	private GitHub root;
 	private int id;

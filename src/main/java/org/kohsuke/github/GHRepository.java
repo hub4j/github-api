@@ -514,7 +514,7 @@ public class GHRepository {
                     @Override
                     protected void wrapUp(GHPullRequest[] page) {
                         for (GHPullRequest pr : page)
-                            pr.wrap(GHRepository.this);
+                            pr.wrapUp(GHRepository.this);
                     }
                 };
             }

@@ -8,13 +8,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import com.fasterxml.jackson.annotation.*;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
  * 
  * @author Kohsuke Kawaguchi
  */
+
+
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME,
+        include=JsonTypeInfo.As.PROPERTY,
+        property="type", defaultImpl = GHOrganization.class)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value=GHUser.class, name="User"),
+        @JsonSubTypes.Type(value=GHOrganization.class, name="Organization"),
+})
 public abstract class GHPerson {
+    public enum GHPersonType {User, Organization};
     /*package almost final*/ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
@@ -235,6 +246,8 @@ public abstract class GHPerson {
         populate();
         return following;
     }
+
+    public abstract GHPersonType getType();
 
     /**
      * What appears to be a GitHub internal unique number that identifies this user.

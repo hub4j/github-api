@@ -37,6 +37,18 @@ import java.util.Set;
  */
 public class GHUser extends GHPerson {
 
+    protected String suspended_at;
+
+    public String getSuspendedAt() throws IOException {
+        populate();
+        return suspended_at;
+    }
+
+    @Override
+    public GHPersonType getType() {
+        return GHPersonType.User;
+    }
+
     /**
      * Follow this user.
      */

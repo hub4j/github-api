@@ -16,6 +16,12 @@ public class GHOrganization extends GHPerson {
         return (GHOrganization)super.wrapUp(root);
     }
 
+
+    @Override
+    public GHPersonType getType() {
+        return GHPersonType.Organization;
+    }
+
     /**
      * Creates a new repository.
      *

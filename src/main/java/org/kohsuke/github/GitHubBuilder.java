@@ -30,11 +30,11 @@ public class GitHubBuilder {
      * 
      * If no user is specified it means there is no configuration present so check the environment instead.
      * 
-     * the system properties for the login, password or oauth environment variables.
+     * If there is still no user it means there are no credentials defined and throw an IOException.
      * 
      * @return the configured Builder from credentials defined on the system or in the environment.
      * 
-     * @throws IOException
+     * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
     public static GitHubBuilder fromCredentials() throws IOException {
     	
@@ -44,11 +44,25 @@ public class GitHubBuilder {
 			
 			if (builder.user != null)
 	    		return builder;
-	    	else
-	    		return fromEnvironment();
+	    	else {
+	    		
+	    		// this is the case where the ~/.github file exists but has no content.
+	    		
+	    		builder = fromEnvironment();
+	    		
+	    		if (builder.user != null)
+	    			return builder;
+	    		else
+	    			throw new IOException("Failed to resolve credentials from ~/.github or the environment.");
+	    	}
 	    	
 		} catch (FileNotFoundException e) {
-			return fromEnvironment();
+			builder = fromEnvironment();
+			
+			if (builder.user != null)
+				return builder;
+			else
+				throw new IOException("Failed to resolve credentials from ~/.github or the environment.", e);
 		}
     
     }

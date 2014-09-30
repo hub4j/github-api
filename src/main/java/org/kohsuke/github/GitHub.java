@@ -128,10 +128,10 @@ public class GitHub {
     }
 
     /**
-     * Obtains the credential from "~/.github"
+     * Obtains the credential from "~/.github" or from the System Environment Properties.
      */
     public static GitHub connect() throws IOException {
-        return GitHubBuilder.fromPropertyFile().build();
+        return GitHubBuilder.fromCredentials().build();
     }
 
     /**

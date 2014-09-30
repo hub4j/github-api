@@ -68,9 +68,12 @@ public class GHCompare {
     public Commit[] getCommits() {
         return commits;
     }
+    
+    public GHCommit.File[] getFiles() {
+		return files;
+	}
 
-
-    public GHCompare wrap(GHRepository owner) {
+	public GHCompare wrap(GHRepository owner) {
         this.owner = owner;
         for (Commit commit : commits) {
             commit.wrapUp(owner);

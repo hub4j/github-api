@@ -29,20 +29,6 @@ public class GitHubTest extends TestCase {
         assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
     }
     
-    public void testGitHubFromEnvironment() throws IOException {
-    	
-    	Map<String, String>props = new HashMap<String, String>();
-    	
-    	props.put("login", "bogus");
-    	
-    	setupEnvironment(props);
-    	
-    	GitHub hub = GitHub.connect();
-    	
-    	assertEquals("bogus", hub.login);
-    	
-    }
-    
     public void testGitHubBuilderFromEnvironment() throws IOException {
     	
     	Map<String, String>props = new HashMap<String, String>();

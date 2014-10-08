@@ -78,9 +78,13 @@ public class GHTeam {
 
     /**
      * Adds a member to the team.
+     *
+     * The user will be invited to the organization if required.
+     *
+     * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        org.root.retrieve().method("PUT").to(api("/members/" + u.getLogin()), null);
+        org.root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**

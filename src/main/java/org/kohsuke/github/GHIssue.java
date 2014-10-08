@@ -129,7 +129,7 @@ public class GHIssue {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
-    public Collection<Label> getLabels() {
+    public Collection<Label> getLabels() throws IOException {
         if(labels == null){
             return Collections.EMPTY_LIST;
         }

@@ -52,6 +52,13 @@ public class GHPullRequest extends GHIssue {
    	private String mergeable_state;
    	private int changed_files;
 
+    /**
+     * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
+     * route as opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route
+     * on this object to fill in those missing details
+     */
+    private transient boolean fetchedIssueDetails;
+
 
 	GHPullRequest wrapUp(GHRepository owner) {
 		this.wrap(owner);
@@ -120,11 +127,12 @@ public class GHPullRequest extends GHIssue {
     }
 
 	@Override
-	public Collection<Label> getLabels() {
+	public Collection<Label> getLabels() throws IOException {
+        fetchIssue();
 		return super.getLabels();
 	}
 
-	@Override
+    @Override
 	public GHUser getClosedBy() {
 		return null;
 	}
@@ -218,4 +226,10 @@ public class GHPullRequest extends GHIssue {
         new Requester(root).method("PUT").with("commit_message",msg).to(getApiRoute()+"/merge");
     }
 
+    private void fetchIssue() throws IOException {
+        if (!fetchedIssueDetails) {
+            new Requester(root).to(getIssuesApiRoute(), this);
+            fetchedIssueDetails = true;
+        }
+    }
 }

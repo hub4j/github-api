@@ -78,9 +78,20 @@ public class GHTeam {
 
     /**
      * Adds a member to the team.
+     * A user must be a member of on of organizations inside the group.
      */
     public void add(GHUser u) throws IOException {
         org.root.retrieve().method("PUT").to(api("/members/" + u.getLogin()), null);
+    }
+    
+    /**
+     * Adds a member to the team.
+     * The method is similar to {@link #add(org.kohsuke.github.GHUser)}, but
+     * the user will be invited to the organization if required.
+     * @since TODO: define a version
+     */
+    public void addMembership(GHUser u) throws IOException {
+        org.root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**

@@ -148,6 +148,6 @@ public class GHCompare {
     }
 
     public static enum Status {
-        behind, ahead, identical
+        behind, ahead, identical, diverged
     }
 }

@@ -132,13 +132,13 @@ public class GHContent {
         return update(newContent.getBytes(), commitMessage, null);
     }
 
-	public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-		return update(newContent.getBytes(), commitMessage, branch);
-	}
+    public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
+        return update(newContent.getBytes(), commitMessage, branch);
+    }
 
-	public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
-		return update(newContentBytes, commitMessage, null);
-	}
+    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
+        return update(newContentBytes, commitMessage, null);
+    }
 
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = DatatypeConverter.printBase64Binary(newContentBytes);

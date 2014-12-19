@@ -939,14 +939,13 @@ public class GHRepository {
         return getFileContent("readme");
     }
 
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
+        return createContent(content.getBytes(), commitMessage, path, null);
+    }
 
-	public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-		return createContent(content.getBytes(), commitMessage, path, null);
-	}
-
-	public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
-		return createContent(content.getBytes(), commitMessage, path, branch);
-	}
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
+        return createContent(content.getBytes(), commitMessage, path, branch);
+    }
 
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
         return createContent(contentBytes, commitMessage, path, null);

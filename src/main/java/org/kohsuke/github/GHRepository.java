@@ -25,28 +25,15 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import java.io.FileNotFoundException;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.URL;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 /**
  * A repository on GitHub.
@@ -73,6 +60,10 @@ public class GHRepository {
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
     private GHRepoPermission permissions;
+
+    public GHDeploymentBuilder createDeployment() {
+        return new GHDeploymentBuilder(this);
+    }
 
     private static class GHRepoPermission {
         boolean pull,push,admin;

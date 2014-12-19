@@ -1,22 +1,16 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Unit test for simple App.
@@ -80,6 +74,19 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .create();
         assertNotNull(o);
         o.close();
+    }
+
+    @Test
+    public void testCreateDeployment() throws IOException {
+        GHUser u = getUser();
+        GHRepository repository = getTestRepository();
+        //GHMilestone milestone = repository.createMilestone(System.currentTimeMillis() + "", "Test Milestone");
+        GHDeployment o = repository.createDeployment()
+                .ref("master")
+                .payload("{\"user\":\"atmos\",\"room_id\":123456}")
+                .description("question")
+                .create();
+        assertNotNull(o);
     }
 
     @Test

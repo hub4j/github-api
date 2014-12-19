@@ -68,12 +68,25 @@ public class GHTeam {
     }
 
     public Map<String,GHRepository> getRepositories() throws IOException {
-        GHRepository[] repos = org.root.retrieve().to(api("/repos"), GHRepository[].class);
         Map<String,GHRepository> m = new TreeMap<String, GHRepository>();
-        for (GHRepository r : repos) {
-            m.put(r.getName(),r.wrap(org.root));
+        for (GHRepository r : listRepositories()) {
+            m.put(r.getName(), r);
         }
         return m;
+    }
+
+    public PagedIterable<GHRepository> listRepositories() {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(org.root.retrieve().asIterator(api("/repos"), GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository r : page)
+                            r.wrap(org.root);
+                    }
+                };
+            }
+        };
     }
 
     /**

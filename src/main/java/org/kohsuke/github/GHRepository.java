@@ -61,8 +61,8 @@ public class GHRepository {
 
     private GHRepoPermission permissions;
 
-    public GHDeploymentBuilder createDeployment() {
-        return new GHDeploymentBuilder(this);
+    public GHDeploymentBuilder createDeployment(String ref) {
+        return new GHDeploymentBuilder(this,ref);
     }
 
     private static class GHRepoPermission {

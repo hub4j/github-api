@@ -78,15 +78,13 @@ public class AppTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testCreateDeployment() throws IOException {
-        GHUser u = getUser();
         GHRepository repository = getTestRepository();
-        //GHMilestone milestone = repository.createMilestone(System.currentTimeMillis() + "", "Test Milestone");
-        GHDeployment o = repository.createDeployment()
-                .ref("master")
+        GHDeployment deployment = repository.createDeployment("master")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .description("question")
                 .create();
-        assertNotNull(o);
+        assertNotNull(deployment.getCreator());
+        assertNotNull(deployment.getId());
     }
 
     @Test

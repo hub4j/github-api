@@ -65,6 +65,24 @@ public class GHRepository {
         return new GHDeploymentBuilder(this,ref);
     }
 
+    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) {
+        return new PagedIterable<GHDeploymentStatus>() {
+            public PagedIterator<GHDeploymentStatus> iterator() {
+                return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(getApiTailUrl("deployments")+"/"+id+"/statuses", GHDeploymentStatus[].class)) {
+                    @Override
+                    protected void wrapUp(GHDeploymentStatus[] page) {
+                        for (GHDeploymentStatus c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
+        return new GHDeploymentStatusBuilder(this,deploymentId,ghDeploymentState);
+    }
+
     private static class GHRepoPermission {
         boolean pull,push,admin;
     }

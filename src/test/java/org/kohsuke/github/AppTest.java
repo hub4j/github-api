@@ -88,6 +88,22 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testGetDeploymentStatuses() throws IOException {
+        GHRepository repository = getTestRepository();
+        GHDeployment deployment = repository.createDeployment("master")
+                .description("question")
+                .payload("{\"user\":\"atmos\",\"room_id\":123456}")
+                .create();
+       GHDeploymentStatus ghDeploymentStatus = repository.createDeployStatus(deployment.getId(), GHDeploymentState.SUCCESS)
+                                     .description("success")
+                                     .targetUrl("http://www.github.com").create();
+        Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
+        assertNotNull(deploymentStatuses);
+        assertEquals(1,Iterables.size(deploymentStatuses));
+        assertEquals(ghDeploymentStatus.getId(),Iterables.get(deploymentStatuses,0).getId());
+    }
+
+    @Test
     public void testGetIssues() throws Exception {
         List<GHIssue> closedIssues = gitHub.getUser("kohsuke").getRepository("github-api").getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues

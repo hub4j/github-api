@@ -2,14 +2,14 @@ package org.kohsuke.github;
 
 
 import java.net.URL;
-import java.util.Date;
 
 public class GHDeployment extends Identifiable {
     private GHRepository owner;
     private GitHub root;
     protected String sha;
+    protected String ref;
     protected String task;
-    protected String payload;
+    protected Object payload;
     protected String environment;
     protected String description;
     protected String statuses_url;
@@ -32,8 +32,22 @@ public class GHDeployment extends Identifiable {
         return GitHub.parseURL(repository_url);
     }
 
+    public String getTask() {
+        return task;
+    }
+    public String getPayload() {
+        return (String) payload;
+    }
+    public String getEnvironment() {
+        return environment;
+    }
     public GHUser getCreator() {
         return creator;
     }
-
+    public String getRef() {
+        return ref;
+    }
+    public String getSha(){
+        return sha;
+    }
 }

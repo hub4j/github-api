@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
@@ -88,6 +89,24 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testListDeployments() throws IOException {
+        GHRepository repository = getTestRepository();
+        GHDeployment deployment = repository.createDeployment("master")
+                .payload("{\"user\":\"atmos\",\"room_id\":123456}")
+                .description("question")
+                .environment("unittest")
+                .create();
+        assertNotNull(deployment.getCreator());
+        assertNotNull(deployment.getId());
+        ArrayList<GHDeployment> deployments = Lists.newArrayList(repository.listDeployments(null, "master", null, "unittest"));
+        assertNotNull(deployments);
+        assertFalse(Iterables.isEmpty(deployments));
+        GHDeployment unitTestDeployment = deployments.get(0);
+        assertEquals("unittest",unitTestDeployment.getEnvironment());
+        assertEquals("master",unitTestDeployment.getRef());
+    }
+
+    @Test
     public void testGetDeploymentStatuses() throws IOException {
         GHRepository repository = getTestRepository();
         GHDeployment deployment = repository.createDeployment("master")
@@ -100,7 +119,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
         assertNotNull(deploymentStatuses);
         assertEquals(1,Iterables.size(deploymentStatuses));
-        assertEquals(ghDeploymentStatus.getId(),Iterables.get(deploymentStatuses,0).getId());
+        assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
     }
 
     @Test

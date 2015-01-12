@@ -28,8 +28,8 @@ public class GHDeploymentStatus extends Identifiable {
     public URL getRepositoryUrl() {
         return GitHub.parseURL(repository_url);
     }
-    public GHCommitState getState() {
-        return GHCommitState.valueOf(state.toUpperCase());
+    public GHDeploymentState getState() {
+        return GHDeploymentState.valueOf(state.toUpperCase());
     }
 
 

@@ -103,7 +103,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
         assertEquals("unittest",unitTestDeployment.getEnvironment());
-        assertEquals("master",unitTestDeployment.getRef());
+        assertEquals("master", unitTestDeployment.getRef());
     }
 
     @Test
@@ -283,7 +283,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertEquals(1,gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
+        assertEquals(1, gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
     @Test
@@ -306,7 +306,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertNotNull(t.getName());
             sz++;
         }
-        assertTrue(sz<100);
+        assertTrue(sz < 100);
     }
 
     @Test
@@ -498,7 +498,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         long start = System.currentTimeMillis();
         Map<String, GHRepository> repos = j.getRepositories();
         long end = System.currentTimeMillis();
-        System.out.printf("%d repositories in %dms\n",repos.size(),end-start);
+        System.out.printf("%d repositories in %dms\n", repos.size(), end - start);
     }
     
     @Test
@@ -524,7 +524,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         state = lst.get(0);
         System.out.println(state);
         assertEquals("testing!",state.getDescription());
-        assertEquals("http://kohsuke.org/",state.getTargetUrl());
+        assertEquals("http://kohsuke.org/", state.getTargetUrl());
     }
     
     @Test
@@ -648,6 +648,14 @@ public class AppTest extends AbstractGitHubApiTestBase {
             all.add(u);
         }
         assertFalse(all.isEmpty());
+    }
+
+    @Test
+    public void testIssueSearch() throws IOException {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
+        for (GHIssue i : r) {
+            System.out.println(i.getTitle());
+        }
     }
 
     private void kohsuke() {

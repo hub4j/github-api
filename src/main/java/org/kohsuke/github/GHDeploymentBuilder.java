@@ -8,9 +8,13 @@ public class GHDeploymentBuilder {
     private final GHRepository repo;
     private final Requester builder;
 
-    public GHDeploymentBuilder(GHRepository repo, String ref) {
+    public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
         this.builder = new Requester(repo.root);
+    }
+
+    public GHDeploymentBuilder(GHRepository repo, String ref) {
+        this(repo);
         ref(ref);
     }
 

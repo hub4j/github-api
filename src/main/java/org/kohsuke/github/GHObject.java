@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -18,15 +21,19 @@ public abstract class GHObject {
     /**
      * When was this resource created?
      */
-    public Date getCreatedAt() {
+    @WithBridgeMethods(value=String.class, adapterMethod="createdAtStr")
+    public Date getCreatedAt() throws IOException {
         return GitHub.parseDate(created_at);
+    }
+
+    private Object createdAtStr(Date id, Class type) {
+        return created_at;
     }
 
     /**
      * API URL of this object.
-     *
-     * TODO: need to also return String
      */
+    @WithBridgeMethods(value=String.class, adapterMethod="urlToString")
     public URL getUrl() {
         return GitHub.parseURL(url);
     }
@@ -34,16 +41,23 @@ public abstract class GHObject {
     /**
      * When was this resource last updated?
      */
-    public Date getUpdatedAt() {
+    public Date getUpdatedAt() throws IOException {
         return GitHub.parseDate(updated_at);
     }
 
     /**
      * Unique ID number of this resource.
-     *
-     * TODO: need to also return String
      */
+    @WithBridgeMethods(value=String.class, adapterMethod="intToString")
     public int getId() {
         return id;
+    }
+
+    private Object intToString(int id, Class type) {
+        return String.valueOf(id);
+    }
+
+    private Object urlToString(URL url, Class type) {
+        return url==null ? null : url.toString();
     }
 }

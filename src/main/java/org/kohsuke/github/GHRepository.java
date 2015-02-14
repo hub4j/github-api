@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.FileNotFoundException;
@@ -61,8 +62,57 @@ public class GHRepository {
 
     private GHRepoPermission permissions;
 
-    public GHDeploymentBuilder createDeployment() {
-        return new GHDeploymentBuilder(this);
+    public GHDeploymentBuilder createDeployment(String ref) {
+        return new GHDeploymentBuilder(this,ref);
+    }
+
+    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) {
+        return new PagedIterable<GHDeploymentStatus>() {
+            public PagedIterator<GHDeploymentStatus> iterator() {
+                return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(getApiTailUrl("deployments")+"/"+id+"/statuses", GHDeploymentStatus[].class)) {
+                    @Override
+                    protected void wrapUp(GHDeploymentStatus[] page) {
+                        for (GHDeploymentStatus c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    public PagedIterable<GHDeployment> listDeployments(String sha,String ref,String task,String environment){
+        List<String> params = Arrays.asList(getParam("sha", sha), getParam("ref", ref), getParam("task", task), getParam("environment", environment));
+        final String deploymentsUrl = getApiTailUrl("deployments") + "?"+ join(params,"&");
+        return new PagedIterable<GHDeployment>() {
+            public PagedIterator<GHDeployment> iterator() {
+                return new PagedIterator<GHDeployment>(root.retrieve().asIterator(deploymentsUrl, GHDeployment[].class)) {
+                    @Override
+                    protected void wrapUp(GHDeployment[] page) {
+                        for (GHDeployment c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
+
+    }
+
+    private String join(List<String> params, String joinStr) {
+        StringBuilder output = new StringBuilder();
+        for(String param: params){
+            if(param != null){
+               output.append(param+joinStr);
+            }
+        }
+        return output.toString();
+    }
+
+    private String getParam(String name, String value) {
+        return StringUtils.trimToNull(value)== null? null: name+"="+value;
+    }
+
+    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
+        return new GHDeploymentStatusBuilder(this,deploymentId,ghDeploymentState);
     }
 
     private static class GHRepoPermission {

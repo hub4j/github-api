@@ -9,12 +9,12 @@ import java.util.Locale;
  * @author Yusuke Kokubo
  *
  */
-public class GHMilestone {
+public class GHMilestone extends GHObject {
     GitHub root;
 	GHRepository owner;
 
 	GHUser creator;
-	private String state, due_on, title, url, created_at, description;
+	private String state, due_on, title, description;
 	private int closed_issues, open_issues, number;
 
 	public GitHub getRoot() {
@@ -36,14 +36,6 @@ public class GHMilestone {
 	
 	public String getTitle() {
 		return title;
-	}
-	
-	public String getUrl() {
-		return url;
-	}
-	
-	public Date getCreatedAt() {
-		return GitHub.parseDate(created_at);
 	}
 	
 	public String getDescription() {

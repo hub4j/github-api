@@ -38,7 +38,7 @@ import java.util.Locale;
  * @author Eric Maupin
  * @author Kohsuke Kawaguchi
  */
-public class GHIssue {
+public class GHIssue extends GHObject {
     GitHub root;
     GHRepository owner;
 	
@@ -51,11 +51,9 @@ public class GHIssue {
     protected String body;
     protected List<Label> labels;
     protected GHUser user;
-    protected String title, created_at, html_url;
+    protected String title, html_url;
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
-	protected String url, updated_at;
-    protected int id;
     protected GHUser closed_by;
 
     public static class Label {
@@ -117,7 +115,7 @@ public class GHIssue {
      * The HTML page of this issue,
      * like https://github.com/jenkinsci/jenkins/issues/100
      */
-    public URL getUrl() {
+    public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
 
@@ -134,14 +132,6 @@ public class GHIssue {
             return Collections.EMPTY_LIST;
         }
         return Collections.unmodifiableList(labels);
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
     }
 
     public Date getClosedAt() {

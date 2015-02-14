@@ -15,22 +15,19 @@ import static java.lang.String.format;
  * @see GHRepository#getReleases()
  * @see GHRepository#createRelease(String)
  */
-public class GHRelease {
+public class GHRelease extends GHObject {
     GitHub root;
     GHRepository owner;
 
-    private String url;
     private String html_url;
     private String assets_url;
     private String upload_url;
-    private long id;
     private String tag_name;
     private String target_commitish;
     private String name;
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Date created_at;
     private Date published_at;
     private String tarball_url;
     private String zipball_url;
@@ -51,14 +48,6 @@ public class GHRelease {
         this.body = body;
     }
 
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(Date created_at) {
-        this.created_at = created_at;
-    }
-
     public boolean isDraft() {
         return draft;
     }
@@ -73,14 +62,6 @@ public class GHRelease {
 
     public void setHtmlUrl(String html_url) {
         this.html_url = html_url;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -145,14 +126,6 @@ public class GHRelease {
 
     public void setUploadUrl(String upload_url) {
         this.upload_url = upload_url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getZipballUrl() {

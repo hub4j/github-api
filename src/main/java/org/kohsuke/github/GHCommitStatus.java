@@ -10,12 +10,9 @@ import java.util.Date;
  * @see GHRepository#getCommitStatus(String)
  * @see GHCommit#getStatus()
  */
-public class GHCommitStatus {
-    String created_at, updated_at;
+public class GHCommitStatus extends GHObject {
     String state;
     String target_url,description;
-    int id;
-    String url;
     String context;
     GHUser creator;
 
@@ -25,14 +22,6 @@ public class GHCommitStatus {
         if (creator!=null)  creator.wrapUp(root);
         this.root = root;
         return this;
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
     }
 
     public GHCommitState getState() {
@@ -54,17 +43,6 @@ public class GHCommitStatus {
 
     public String getDescription() {
         return description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * API URL of this commit status.
-     */
-    public String getUrl() {
-        return url;
     }
 
     public GHUser getCreator() {

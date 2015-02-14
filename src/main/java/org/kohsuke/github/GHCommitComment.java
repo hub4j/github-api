@@ -12,13 +12,11 @@ import java.util.Date;
  * @see GHCommit#listComments()
  * @see GHCommit#createComment(String, String, Integer, Integer)
  */
-public class GHCommitComment {
+public class GHCommitComment extends GHObject {
     private GHRepository owner;
 
-    String updated_at, created_at;
-    String body, url, html_url, commit_id;
+    String body, html_url, commit_id;
     Integer line;
-    int id;
     String path;
     User user;
 
@@ -30,14 +28,6 @@ public class GHCommitComment {
 
     public GHRepository getOwner() {
         return owner;
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
     }
 
     /**
@@ -73,10 +63,6 @@ public class GHCommitComment {
      */
     public int getLine() {
         return line!=null ? line : -1;
-    }
-
-    public int getId() {
-        return id;
     }
 
     /**

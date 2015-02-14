@@ -57,14 +57,23 @@ public class GHIssueSearchBuilder {
 
     public enum Sort { COMMENTS, CREATED, UPDATED }
 
+    private static class IssueSearchResult extends SearchResult<GHIssue> {
+        private GHIssue[] items;
+
+        @Override
+        public GHIssue[] getItems() {
+            return items;
+        }
+    }
+
     /**
      * Lists up the issues with the criteria built so far.
      */
-    public PagedIterable<GHIssue> list() {
-        return new PagedIterable<GHIssue>() {
+    public PagedSearchIterable<GHIssue> list() {
+        return new PagedSearchIterable<GHIssue>() {
             public PagedIterator<GHIssue> iterator() {
                 req.set("q", StringUtils.join(terms," "));
-                return new PagedIterator<GHIssue>(req.asIterator("/search/issues", GHIssue[].class)) {
+                return new PagedIterator<GHIssue>(adapt(req.asIterator("/search/issues", IssueSearchResult.class))) {
                     protected void wrapUp(GHIssue[] page) {
                         for (GHIssue c : page)
                             c.wrap(root);

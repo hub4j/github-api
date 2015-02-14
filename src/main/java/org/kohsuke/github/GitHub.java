@@ -424,6 +424,14 @@ public class GitHub {
         }
     }
 
+    /**
+     * Search issues.
+     */
+    public GHIssueSearchBuilder searchIssues() {
+        return new GHIssueSearchBuilder(this);
+    }
+
+
     /*package*/ static URL parseURL(String s) {
         try {
             return s==null ? null : new URL(s);

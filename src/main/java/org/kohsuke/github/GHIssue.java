@@ -37,6 +37,9 @@ import java.util.Locale;
  *
  * @author Eric Maupin
  * @author Kohsuke Kawaguchi
+ * @see GHRepository#getIssue(int)
+ * @see GitHub#searchIssues()
+ * @see GHIssueSearchBuilder
  */
 public class GHIssue extends GHObject {
     GitHub root;
@@ -76,8 +79,12 @@ public class GHIssue extends GHObject {
     
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
-		if(milestone != null) milestone.wrap(owner);
+        if(milestone != null) milestone.wrap(owner);
+        return wrap(owner.root);
+    }
+
+    /*package*/ GHIssue wrap(GitHub root) {
+        this.root = root;
 		if(assignee != null) assignee.wrapUp(root);
 		if(user != null) user.wrapUp(root);
 		if(closed_by != null) closed_by.wrapUp(root);

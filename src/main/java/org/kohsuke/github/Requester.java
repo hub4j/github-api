@@ -134,6 +134,19 @@ class Requester {
         return this;
     }
 
+    /**
+     * Unlike {@link #with(String, String)}, overrides the existing value
+     */
+    public Requester set(String key, Object value) {
+        for (Entry e : args) {
+            if (e.key.equals(key)) {
+                e.value = value;
+                return this;
+            }
+        }
+        return _with(key,value);
+    }
+
     public Requester method(String method) {
         this.method = method;
         return this;

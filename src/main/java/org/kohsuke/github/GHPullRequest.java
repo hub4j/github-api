@@ -110,7 +110,7 @@ public class GHPullRequest extends GHIssue {
     }
 
 	@Deprecated
-    public Date getIssueUpdatedAt() {
+    public Date getIssueUpdatedAt() throws IOException {
         return super.getUpdatedAt();
     }
 

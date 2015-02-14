@@ -1,26 +1,21 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Asset in a release.
  *
  * @see GHRelease#getAssets()
  */
-public class GHAsset {
+public class GHAsset extends GHObject {
     GitHub root;
     GHRepository owner;
-    private String url;
-    private String id;
     private String name;
     private String label;
     private String state;
     private String content_type;
     private long size;
     private long download_count;
-    private Date created_at;
-    private Date updated_at;
     private String browser_download_url;
 
     public String getContentType() {
@@ -32,16 +27,8 @@ public class GHAsset {
         this.content_type = contentType;
     }
 
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
     public long getDownloadCount() {
         return download_count;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getLabel() {
@@ -71,14 +58,6 @@ public class GHAsset {
 
     public String getState() {
         return state;
-    }
-
-    public Date getUpdatedAt() {
-        return updated_at;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getBrowserDownloadUrl() {

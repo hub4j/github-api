@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import java.net.URL;
 
-public class GHDeploymentStatus extends Identifiable {
+public class GHDeploymentStatus extends GHObject {
     private GHRepository owner;
     private GitHub root;
     protected GHUser creator;

@@ -969,14 +969,22 @@ public class GHRepository extends GHObject {
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent(content, commitMessage, path, null);
+        return createContent(content.getBytes(), commitMessage, path, null);
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
+        return createContent(content.getBytes(), commitMessage, path, branch);
+    }
+
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
+        return createContent(contentBytes, commitMessage, path, null);
+    }
+
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch) throws IOException {
         Requester requester = new Requester(root)
             .with("path", path)
             .with("message", commitMessage)
-            .with("content", DatatypeConverter.printBase64Binary(content.getBytes()))
+            .with("content", DatatypeConverter.printBase64Binary(contentBytes))
             .method("PUT");
 
         if (branch != null) {

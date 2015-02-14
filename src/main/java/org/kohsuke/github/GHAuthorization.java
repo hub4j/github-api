@@ -12,7 +12,7 @@ import java.util.List;
  * @see GitHub#createToken(Collection, String, String)
  * @see http://developer.github.com/v3/oauth/#create-a-new-authorization
  */
-public class GHAuthorization {
+public class GHAuthorization extends GHObject {
 	public static final String USER = "user";
 	public static final String USER_EMAIL = "user:email";
 	public static final String USER_FOLLOW = "user:follow";
@@ -33,23 +33,15 @@ public class GHAuthorization {
 	public static final String ADMIN_KEY = "admin:public_key";
 
 	private GitHub root;
-	private int id;
-	private String url;
 	private List<String> scopes;
 	private String token;
 	private App app;
 	private String note;
 	private String note_url;
-	private String updated_at;
-	private String created_at;
 
     public GitHub getRoot() {
         return root;
     }
-
-	public int getId() {
-		return id;
-	}
 
 	public List<String> getScopes() {
 		return scopes;
@@ -78,14 +70,6 @@ public class GHAuthorization {
 	public URL getNoteUrl(){
         return GitHub.parseURL(note_url);
 	}
-	
-	public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
-    }
 
 	/*package*/ GHAuthorization wrap(GitHub root) {
 		this.root = root;

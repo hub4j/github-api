@@ -32,12 +32,10 @@ import java.util.Date;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHIssueComment {
+public class GHIssueComment extends GHObject {
     GHIssue owner;
 
-    private String body, gravatar_id, created_at, updated_at;
-    private URL url;
-    private int id;
+    private String body, gravatar_id;
     private GHUser user;
 
     /*package*/ GHIssueComment wrapUp(GHIssue owner) {
@@ -57,22 +55,6 @@ public class GHIssueComment {
      */
     public String getBody() {
         return body;
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
-    }
-
-    public Date getUpdatedAt() {
-        return GitHub.parseDate(updated_at);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public URL getUrl() {
-        return url;
     }
 
     /**

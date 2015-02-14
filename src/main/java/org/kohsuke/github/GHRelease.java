@@ -15,22 +15,19 @@ import static java.lang.String.format;
  * @see GHRepository#getReleases()
  * @see GHRepository#createRelease(String)
  */
-public class GHRelease {
+public class GHRelease extends GHObject {
     GitHub root;
     GHRepository owner;
 
-    private String url;
     private String html_url;
     private String assets_url;
     private String upload_url;
-    private long id;
     private String tag_name;
     private String target_commitish;
     private String name;
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Date created_at;
     private Date published_at;
     private String tarball_url;
     private String zipball_url;
@@ -39,48 +36,16 @@ public class GHRelease {
         return assets_url;
     }
 
-    public void setAssetsUrl(String assets_url) {
-        this.assets_url = assets_url;
-    }
-
     public String getBody() {
         return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(Date created_at) {
-        this.created_at = created_at;
     }
 
     public boolean isDraft() {
         return draft;
     }
 
-    public void setDraft(boolean draft) {
-        this.draft = draft;
-    }
-
     public String getHtmlUrl() {
         return html_url;
-    }
-
-    public void setHtmlUrl(String html_url) {
-        this.html_url = html_url;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -103,72 +68,32 @@ public class GHRelease {
         return prerelease;
     }
 
-    public void setPrerelease(boolean prerelease) {
-        this.prerelease = prerelease;
-    }
-
     public Date getPublished_at() {
         return published_at;
-    }
-
-    public void setPublished_at(Date published_at) {
-        this.published_at = published_at;
     }
 
     public GitHub getRoot() {
         return root;
     }
 
-    public void setRoot(GitHub root) {
-        this.root = root;
-    }
-
     public String getTagName() {
         return tag_name;
-    }
-
-    public void setTagName(String tag_name) {
-        this.tag_name = tag_name;
     }
 
     public String getTargetCommitish() {
         return target_commitish;
     }
 
-    public void setTargetCommitish(String target_commitish) {
-        this.target_commitish = target_commitish;
-    }
-
     public String getUploadUrl() {
         return upload_url;
-    }
-
-    public void setUploadUrl(String upload_url) {
-        this.upload_url = upload_url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getZipballUrl() {
         return zipball_url;
     }
 
-    public void setZipballUrl(String zipballUrl) {
-        this.zipball_url = zipballUrl;
-    }
-
     public String getTarballUrl() {
         return tarball_url;
-    }
-
-    public void setTarballUrl(String tarballUrl) {
-        this.tarball_url = tarballUrl;
     }
 
     GHRelease wrap(GHRepository owner) {

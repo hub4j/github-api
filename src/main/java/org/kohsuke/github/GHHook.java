@@ -10,18 +10,17 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GHHook {
+public class GHHook extends GHObject {
     /**
      * Repository that the hook belongs to.
      */
     /*package*/ transient GHRepository repository;
     
-    String created_at, updated_at, name;
+    String name;
     List<String> events;
     boolean active;
     Map<String,String> config;
-    int id;
-    
+
     /*package*/ GHHook wrap(GHRepository owner) {
         this.repository = owner;
         return this;
@@ -44,10 +43,6 @@ public class GHHook {
 
     public Map<String, String> getConfig() {
         return Collections.unmodifiableMap(config);
-    }
-
-    public int getId() {
-        return id;
     }
 
     /**

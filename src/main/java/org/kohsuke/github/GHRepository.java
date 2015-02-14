@@ -42,11 +42,10 @@ import static java.util.Arrays.asList;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHRepository {
+public class GHRepository extends GHObject {
     /*package almost final*/ GitHub root;
 
     private String description, homepage, name, full_name;
-    private String url; // this is the API url
     private String html_url;    // this is the UI
     private String git_url, ssh_url, clone_url, svn_url;
     private GHUser owner;   // not fully populated. beware.
@@ -54,7 +53,7 @@ public class GHRepository {
     @JsonProperty("private")
     private boolean _private;
     private int watchers,forks,open_issues,size,network_count,subscribers_count;
-    private String created_at, pushed_at;
+    private String pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
     
     private String default_branch,language;
@@ -126,13 +125,6 @@ public class GHRepository {
 
     public String getHomepage() {
         return homepage;
-    }
-
-    /**
-     * URL of this repository, like 'http://github.com/kohsuke/jenkins'
-     */
-    public String getUrl() {
-        return html_url;
     }
 
     /**
@@ -344,10 +336,6 @@ public class GHRepository {
      */
     public Date getPushedAt() {
         return GitHub.parseDate(pushed_at);
-    }
-
-    public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
     }
 
     /**

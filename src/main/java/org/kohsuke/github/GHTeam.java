@@ -1,15 +1,10 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * A team in GitHub organization.
@@ -55,23 +50,21 @@ public class GHTeam {
 	/**
 	 * Retrieves the current members.
 	 */
-	public Set<GHUser> getMembers() throws IOException {
+	public PagedIterable<GHUser> listMembers() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                return new PagedIterator<GHUser>(org.root.retrieve().asIterator(api("/members"), GHUser[].class)) {
+                    @Override
+                    protected void wrapUp(GHUser[] page) {
+                        GHUser.wrap(page, org.root);
+                    }
+                };
+            }
+        };
+    }
 
-		Set<GHUser> members = new LinkedHashSet<GHUser>();
-		
-		Iterator<GHUser[]> pageIterator = org.root.retrieve().asIterator(api("/members"),
-				GHUser[].class);
-		while (pageIterator != null && pageIterator.hasNext()) {
-			GHUser[] users = pageIterator.next();
-			if (users != null) {
-				GHUser.wrap(users, org.root); 
-				for (GHUser user : users) {					
-					members.add(user);				
-				}
-			}
-		}
-		
-		return Collections.unmodifiableSet(members);
+    public Set<GHUser> getMembers() throws IOException {
+		return Collections.unmodifiableSet(listMembers().asSet());
 	}
 
     /**

@@ -607,6 +607,16 @@ public class AppTest extends AbstractGitHubApiTestBase {
     	 
     }
 
+    @Test
+    public void testMemberPagenation() throws IOException {
+        Set<GHUser> all = new HashSet<GHUser>();
+        for (GHUser u : gitHub.getOrganization("github-api-test-org").getTeamByName("Core Developers").listMembers()) {
+            System.out.println(u.getLogin());
+            all.add(u);
+        }
+        assertFalse(all.isEmpty());
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

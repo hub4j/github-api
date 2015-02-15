@@ -195,7 +195,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHIssue getIssue(int id) throws IOException {
-        return root.retrieve().to("/repos/" + owner.login + "/" + name + "/issues/" + id, GHIssue.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("issues/" + id), GHIssue.class).wrap(this);
     }
 
     public GHIssueBuilder createIssue(String title) {
@@ -208,8 +208,8 @@ public class GHRepository extends GHObject {
 
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
-                .to(String.format("/repos/%s/%s/issues?state=%s&milestone=%s", owner.login, name,
-                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber()),
+                .to(getApiTailUrl(String.format("issues?state=%s&milestone=%s",
+                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber())),
                         GHIssue[].class
                 ), this));
     }
@@ -371,7 +371,7 @@ public class GHRepository extends GHObject {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> iterator() {
 
-                return new PagedIterator<GHUser>(root.retrieve().asIterator("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class)) {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl("collaborators"), GHUser[].class)) {
 
                     @Override
                     protected void wrapUp(GHUser[] users) {
@@ -392,7 +392,7 @@ public class GHRepository extends GHObject {
      */
     public Set<String> getCollaboratorNames() throws IOException {
         Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(root.retrieve().to("/repos/" + owner.login + "/" + name + "/collaborators", GHUser[].class),root))
+        for (GHUser u : GHUser.wrap(root.retrieve().to(getApiTailUrl("collaborators"), GHUser[].class),root))
             r.add(u.login);
         return r;
     }
@@ -401,7 +401,7 @@ public class GHRepository extends GHObject {
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().to("/repos/" + owner.login + "/" + name + "/teams", GHTeam[].class), root.getOrganization(owner.login)))));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().to(getApiTailUrl("teams"), GHTeam[].class), root.getOrganization(owner.login)))));
     }
 
     public void addCollaborators(GHUser... users) throws IOException {
@@ -423,7 +423,7 @@ public class GHRepository extends GHObject {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         verifyMine();
         for (GHUser user : users) {
-            new Requester(root).method(method).to("/repos/" + owner.login + "/" + name + "/collaborators/" + user.getLogin());
+            new Requester(root).method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
         }
     }
 
@@ -431,14 +431,14 @@ public class GHRepository extends GHObject {
         Map<String, String> config = new HashMap<String, String>();
         config.put("address", address);
         new Requester(root).method("POST").with("name", "email").with("config", config).with("active", "true")
-                .to(String.format("/repos/%s/%s/hooks", owner.login, name));
+                .to(getApiTailUrl("hooks"));
     }
 
     private void edit(String key, String value) throws IOException {
         Requester requester = new Requester(root);
         if (!key.equals("name"))
             requester.with("name", name);   // even when we don't change the name, we need to send it in
-        requester.with(key, value).method("PATCH").to("/repos/" + owner.login + "/" + name);
+        requester.with(key, value).method("PATCH").to(getApiTailUrl(""));
     }
 
     /**
@@ -479,7 +479,7 @@ public class GHRepository extends GHObject {
      */
     public void delete() throws IOException {
         try {
-            new Requester(root).method("DELETE").to("/repos/" + owner.login + "/" + name);
+            new Requester(root).method("DELETE").to(getApiTailUrl(""));
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + owner.login + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
         }
@@ -492,7 +492,7 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Requester(root).method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
+        return new Requester(root).method("POST").to(getApiTailUrl("forks"), GHRepository.class).wrap(root);
     }
 
     /**
@@ -502,7 +502,7 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Requester(root).to(String.format("/repos/%s/%s/forks?org=%s", owner.login, name, org.getLogin()));
+        new Requester(root).to(getApiTailUrl("forks?org="+org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -521,7 +521,7 @@ public class GHRepository extends GHObject {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieve().to("/repos/" + owner.login + '/' + name + "/pulls/" + i, GHPullRequest.class).wrapUp(this);
+        return root.retrieve().to(getApiTailUrl("pulls/" + i), GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -539,7 +539,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHPullRequest> listPullRequests(final GHIssueState state) {
         return new PagedIterable<GHPullRequest>() {
             public PagedIterator<GHPullRequest> iterator() {
-                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(String.format("/repos/%s/%s/pulls?state=%s", owner.login, name, state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
+                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(getApiTailUrl("pulls?state="+state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class)) {
                     @Override
                     protected void wrapUp(GHPullRequest[] page) {
                         for (GHPullRequest pr : page)
@@ -578,14 +578,14 @@ public class GHRepository extends GHObject {
      */
     public List<GHHook> getHooks() throws IOException {
         List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieve().to(String.format("/repos/%s/%s/hooks", owner.login, name), GHHook[].class)));
+                root.retrieve().to(getApiTailUrl("hooks"), GHHook[].class)));
         for (GHHook h : list)
             h.wrap(this);
         return list;
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/hooks/%d", owner.login, name, id), GHHook.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("hooks/"+id), GHHook.class).wrap(this);
     }
 
     /**
@@ -597,7 +597,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-        GHCompare compare = root.retrieve().to(String.format("/repos/%s/%s/compare/%s...%s", owner.login, name, id1, id2), GHCompare.class);
+        GHCompare compare = root.retrieve().to(getApiTailUrl(String.format("compare/%s...%s", id1, id2)), GHCompare.class);
         return compare.wrap(this);
     }
 
@@ -968,7 +968,7 @@ public class GHRepository extends GHObject {
 
     public GHContent getFileContent(String path, String ref) throws IOException {
         Requester requester = root.retrieve();
-        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+        String target = getApiTailUrl("contents/"+path);
 
         if (ref != null)
             target = target + "?ref=" + ref;
@@ -982,7 +982,7 @@ public class GHRepository extends GHObject {
 
     public List<GHContent> getDirectoryContent(String path, String ref) throws IOException {
         Requester requester = root.retrieve();
-        String target = String.format("/repos/%s/%s/contents/%s", owner.login, name, path);
+        String target = getApiTailUrl("contents/"+path);
 
         if (ref != null)
             target = target + "?ref=" + ref;
@@ -1046,7 +1046,7 @@ public class GHRepository extends GHObject {
 	
 	public List<GHDeployKey> getDeployKeys() throws IOException{
 		 List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(
-	                root.retrieve().to(String.format("/repos/%s/%s/keys", owner.login, name), GHDeployKey[].class)));
+	                root.retrieve().to(getApiTailUrl("keys"), GHDeployKey[].class)));
 	        for (GHDeployKey h : list)
 	            h.wrap(this);
 	        return list;	
@@ -1075,6 +1075,7 @@ public class GHRepository extends GHObject {
     }
 
     String getApiTailUrl(String tail) {
-        return "/repos/" + owner.login + "/" + name +'/'+tail;
+        if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
+        return "/repos/" + owner.login + "/" + name +tail;
     }
 }

@@ -1093,6 +1093,27 @@ public class GHRepository extends GHObject {
         }
     }
 
+    public PagedIterable<Contributor> listContributors() throws IOException {
+        return new PagedIterable<Contributor>() {
+            public PagedIterator<Contributor> iterator() {
+                return new PagedIterator<Contributor>(root.retrieve().asIterator(getApiTailUrl("contributors"), Contributor[].class)) {
+                    @Override
+                    protected void wrapUp(Contributor[] page) {
+                        for (Contributor c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
+
+    public static class Contributor extends GHUser {
+        private int contributions;
+
+        public int getContributions() {
+            return contributions;
+        }
+    }
 	
 	
 

@@ -964,8 +964,12 @@ public class GHRepository extends GHObject {
         return Arrays.asList(files);
     }
 
-    public GHContent getReadme() throws Exception {
-        return getFileContent("readme");
+    /**
+     * https://developer.github.com/v3/repos/contents/#get-the-readme
+     */
+    public GHContent getReadme() throws IOException {
+        Requester requester = root.retrieve();
+        return requester.to(getApiTailUrl("readme"), GHContent.class).wrap(this);
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {

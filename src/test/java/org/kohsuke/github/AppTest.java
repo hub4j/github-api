@@ -658,6 +658,13 @@ public class AppTest extends AbstractGitHubApiTestBase {
         }
     }
 
+    @Test   // issue #99
+    public void testReadme() throws IOException {
+        GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();
+        assertEquals(readme.getName(),"README.md");
+        assertEquals(readme.getContent(),"This is a markdown readme.\n");
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

@@ -15,6 +15,7 @@ import java.util.Map.Entry;
  * @see GHUser#listGists()
  * @see GitHub#getGist(String)
  * @see GitHub#createGist()
+ * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
 public class GHGist extends GHObject {
     /*package almost final*/ GHUser owner;

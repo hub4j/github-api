@@ -246,9 +246,16 @@ public class GHIssue extends GHObject {
 		return comments;
 	}
 
+    /**
+     * Returns non-null if this issue is a shadow of a pull request.
+     */
 	public PullRequest getPullRequest() {
 		return pull_request;
 	}
+
+    public boolean isPullRequest() {
+        return pull_request!=null;
+    }
 
 	public GHMilestone getMilestone() {
 		return milestone;

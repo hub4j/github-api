@@ -120,6 +120,7 @@ public abstract class GHEventPayload {
         private String ref;
         private int size;
         private List<PushCommit> commits;
+        private GHRepository repository;
 
         /**
          * The SHA of the HEAD commit on the repository
@@ -156,6 +157,16 @@ public abstract class GHEventPayload {
          */
         public List<PushCommit> getCommits() {
             return commits;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            if (repository!=null)
+                repository.wrap(root);
         }
 
         /**

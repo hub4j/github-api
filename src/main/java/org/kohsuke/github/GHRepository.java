@@ -585,7 +585,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieve().to(getApiTailUrl("hooks/"+id), GHHook.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("hooks/" + id), GHHook.class).wrap(this);
     }
 
     /**
@@ -791,6 +791,24 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists all the subscribers (aka watchers.)
+     *
+     * https://developer.github.com/v3/activity/watching/
+     */
+    public PagedIterable<GHUser> listSubscribers() {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl("subscribers"), GHUser[].class)) {
+                    protected void wrapUp(GHUser[] page) {
+                        for (GHUser c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * 
      * See https://api.github.com/hooks for possible names and their configuration scheme.
      * TODO: produce type-safe binding
@@ -968,7 +986,7 @@ public class GHRepository extends GHObject {
 
     public GHContent getFileContent(String path, String ref) throws IOException {
         Requester requester = root.retrieve();
-        String target = getApiTailUrl("contents/"+path);
+        String target = getApiTailUrl("contents/" + path);
 
         if (ref != null)
             target = target + "?ref=" + ref;
@@ -982,7 +1000,7 @@ public class GHRepository extends GHObject {
 
     public List<GHContent> getDirectoryContent(String path, String ref) throws IOException {
         Requester requester = root.retrieve();
-        String target = getApiTailUrl("contents/"+path);
+        String target = getApiTailUrl("contents/" + path);
 
         if (ref != null)
             target = target + "?ref=" + ref;

@@ -690,6 +690,25 @@ public class AppTest extends AbstractGitHubApiTestBase {
         }
     }
 
+    @Test
+    public void testSubscribers() throws IOException {
+        boolean kohsuke = false;
+        GHRepository mr = gitHub.getRepository("kohsuke/github-api");
+        for (GHUser u : mr.listSubscribers()) {
+            System.out.println(u.getLogin());
+            kohsuke |= u.getLogin().equals("kohsuke");
+        }
+        assertTrue(kohsuke);
+        System.out.println("---");
+
+        boolean githubApi = false;
+        for (GHRepository r : gitHub.getUser("kohsuke").listRepositories()) {
+            System.out.println(r.getName());
+            githubApi |= r.equals(mr);
+        }
+        assertTrue(githubApi);
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

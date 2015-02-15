@@ -70,6 +70,24 @@ public class GHUser extends GHPerson {
     }
 
     /**
+     * Lists all the subscribed (aka watched) repositories.
+     *
+     * https://developer.github.com/v3/activity/watching/
+     */
+    public PagedIterable<GHRepository> listSubscriptions() {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("subscriptions"), GHRepository[].class)) {
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Returns true if this user belongs to the specified organization.
      */
     public boolean isMemberOf(GHOrganization org) {
@@ -161,5 +179,10 @@ public class GHUser extends GHPerson {
             return this.login.equals(that.login);
         }
         return false;
+    }
+
+    String getApiTailUrl(String tail) {
+        if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
+        return "/users/" + login + tail;
     }
 }

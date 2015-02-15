@@ -85,7 +85,5 @@ public class RepositoryTest {
         Assert.assertTrue(returnIterator2.hasNext());
         user = returnIterator1.next();
         Assert.assertEquals(user, user2);
-
-
     }
 }

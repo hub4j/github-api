@@ -1069,6 +1069,30 @@ public class GHRepository extends GHObject {
 	            h.wrap(this);
 	        return list;	
 	}
+
+    /**
+     * Subscribes to this repository to get notifications.
+     */
+    public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
+        return new Requester(root)
+            .with("subscribed", subscribed)
+            .with("ignored", ignored)
+            .method("PUT").to(getApiTailUrl("subscription"), GHSubscription.class).wrapUp(this);
+    }
+
+    /**
+     * Returns the current subscription.
+     *
+     * @return null if no subscription exists.
+     */
+    public GHSubscription getSubscription() throws IOException {
+        try {
+            return new Requester(root).to(getApiTailUrl("subscription"), GHSubscription.class).wrapUp(this);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
 	
 	
 

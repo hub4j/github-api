@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
+import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
@@ -151,6 +154,19 @@ public class GitHubBuilder {
     public GitHubBuilder withConnector(HttpConnector connector) {
         this.connector = connector;
         return this;
+    }
+
+    /**
+     * Configures {@linkplain #withConnector(HttpConnector) connector}
+     * that uses HTTP library in JRE but use a specific proxy, instead of
+     * the system default one.
+     */
+    public GitHubBuilder withProxy(final Proxy p) {
+        return withConnector(new HttpConnector() {
+            public HttpURLConnection connect(URL url) throws IOException {
+                return (HttpURLConnection) url.openConnection(p);
+            }
+        });
     }
 
     public GitHub build() throws IOException {

@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +54,12 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 /**
  * Root of the GitHub API.
  *
+ * <h2>Thread safety</h2>
+ * <p>
+ * This library aims to be safe for use by multiple threads concurrently, although
+ * the library itself makes no attempt to control/serialize potentially conflicting
+ * operations to GitHub, such as updating & deleting a repository at the same time.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GitHub {
@@ -63,8 +70,8 @@ public class GitHub {
      */
     /*package*/ final String encodedAuthorization;
 
-    private final Map<String,GHUser> users = new HashMap<String, GHUser>();
-    private final Map<String,GHOrganization> orgs = new HashMap<String, GHOrganization>();
+    private final Map<String,GHUser> users = new Hashtable<String, GHUser>();
+    private final Map<String,GHOrganization> orgs = new Hashtable<String, GHOrganization>();
 
     private final String apiUrl;
 

@@ -52,29 +52,17 @@ public class GHIssue extends GHObject {
     protected String closed_at;
     protected int comments;
     protected String body;
-    protected List<Label> labels;
+    protected List<GHLabel> labels;
     protected GHUser user;
     protected String title, html_url;
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
 
-    public static class Label {
-        private String url;
-        private String name;
-        private String color;
-		
-        public String getUrl() {
-			return url;
-		}
-		
-        public String getName() {
-			return name;
-		}
-		
-        public String getColor() {
-			return color;
-		}
+    /**
+     * @deprecated use {@link GHLabel}
+     */
+    public static class Label extends GHLabel {
     }
     
     /*package*/ GHIssue wrap(GHRepository owner) {
@@ -134,9 +122,9 @@ public class GHIssue extends GHObject {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
-    public Collection<Label> getLabels() throws IOException {
+    public Collection<GHLabel> getLabels() throws IOException {
         if(labels == null){
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return Collections.unmodifiableList(labels);
     }

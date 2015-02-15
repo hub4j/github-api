@@ -127,7 +127,7 @@ public class GHPullRequest extends GHIssue {
     }
 
 	@Override
-	public Collection<Label> getLabels() throws IOException {
+	public Collection<GHLabel> getLabels() throws IOException {
         fetchIssue();
 		return super.getLabels();
 	}

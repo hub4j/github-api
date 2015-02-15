@@ -761,6 +761,36 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists labels in this repository.
+     *
+     * https://developer.github.com/v3/issues/labels/#list-all-labels-for-this-repository
+     */
+    public PagedIterable<GHLabel> listLabels() throws IOException {
+        return new PagedIterable<GHLabel>() {
+            public PagedIterator<GHLabel> iterator() {
+                return new PagedIterator<GHLabel>(root.retrieve().asIterator(getApiTailUrl("labels"), GHLabel[].class)) {
+                    @Override
+                    protected void wrapUp(GHLabel[] page) {
+                        for (GHLabel c : page)
+                            c.wrapUp(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    public GHLabel getLabel(String name) throws IOException {
+        return root.retrieve().to(getApiTailUrl("labels/"+name), GHLabel.class).wrapUp(this);
+    }
+
+    public GHLabel createLabel(String name, String color) throws IOException {
+        return root.retrieve().method("POST")
+                .with("name",name)
+                .with("color",color)
+                .to(getApiTailUrl("labels"), GHLabel.class).wrapUp(this);
+    }
+
+    /**
      * 
      * See https://api.github.com/hooks for possible names and their configuration scheme.
      * TODO: produce type-safe binding

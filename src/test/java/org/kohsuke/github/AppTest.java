@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 /**
  * Unit test for simple App.
@@ -663,6 +664,30 @@ public class AppTest extends AbstractGitHubApiTestBase {
         GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();
         assertEquals(readme.getName(),"README.md");
         assertEquals(readme.getContent(),"This is a markdown readme.\n");
+    }
+
+    @Test
+    public void testRepoLabel() throws IOException {
+        GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
+        List<GHLabel> lst = r.listLabels().asList();
+        for (GHLabel l : lst) {
+            System.out.println(l.getName());
+        }
+        assertTrue(lst.size() > 5);
+        GHLabel e = r.getLabel("enhancement");
+        assertEquals("enhancement",e.getName());
+        assertNotNull(e.getUrl());
+        assertTrue(Pattern.matches("[0-9a-fA-F]{6}",e.getColor()));
+
+        {// CRUD
+            GHLabel t = r.createLabel("test", "123456");
+            GHLabel t2 = r.getLabel("test");
+            assertEquals(t.getName(), t2.getName());
+            assertEquals(t.getColor(), "123456");
+            assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getUrl(), t2.getUrl());
+            t.delete();
+        }
     }
 
     private void kohsuke() {

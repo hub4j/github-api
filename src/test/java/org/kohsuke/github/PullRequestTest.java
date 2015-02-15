@@ -24,7 +24,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         String label = rnd.next();
         p.setLabels(label);
 
-        Collection<GHIssue.Label> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
+        Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
         assertEquals(label, labels.iterator().next().getName());
     }

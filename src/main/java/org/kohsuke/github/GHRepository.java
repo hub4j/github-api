@@ -285,7 +285,7 @@ public class GHRepository extends GHObject {
         };
     }
 
-    protected String getOwnerName() {
+    public String getOwnerName() {
         return owner.login;
     }
 

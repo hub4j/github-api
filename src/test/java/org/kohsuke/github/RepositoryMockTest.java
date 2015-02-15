@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Luciano P. Sabenca (luciano.sabenca [at] movile [com] | lucianosabenca [at] gmail [dot] com
  */
-public class RepositoryTest {
+public class RepositoryMockTest {
 
     @Mock
     GitHub mockGitHub;

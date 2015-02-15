@@ -225,7 +225,15 @@ public class GHIssue extends GHObject {
 	public GHUser getUser() {
         return user;
 	}
-	
+
+    /**
+     * Reports who has closed the issue.
+     *
+     * <p>
+     * Note that GitHub doesn't always seem to report this information
+     * even for an issue that's already closed. See
+     * https://github.com/kohsuke/github-api/issues/60.
+     */
 	public GHUser getClosedBy() {
 		if(!"closed".equals(state)) return null;
 		if(closed_by != null) return closed_by;

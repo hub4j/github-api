@@ -38,6 +38,22 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertEquals(user, getRepository().getPullRequest(p.getNumber()).getAssignee());
     }
 
+    @Test
+    public void testGetUser() throws IOException {
+        GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
+        GHPullRequest prSingle = getRepository().getPullRequest(p.getNumber());
+        assertNotNull(prSingle.getUser().root);
+        prSingle.getMergeable();
+        assertNotNull(prSingle.getUser().root);
+
+        PagedIterable<GHPullRequest> ghPullRequests = getRepository().listPullRequests(GHIssueState.OPEN);
+        for (GHPullRequest pr : ghPullRequests) {
+            assertNotNull(pr.getUser().root);
+            assertFalse(pr.getMergeable());
+            assertNotNull(pr.getUser().root);
+        }
+    }
+
     @After
     public void cleanUp() throws Exception {
         for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {

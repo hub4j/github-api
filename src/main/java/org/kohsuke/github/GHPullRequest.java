@@ -194,7 +194,7 @@ public class GHPullRequest extends GHIssue {
     private void populate() throws IOException {
         if (merged_by!=null)    return; // already populated
 
-        root.retrieve().to(url, this);
+        root.retrieve().to(url, this).wrapUp(owner);
     }
 
     /**

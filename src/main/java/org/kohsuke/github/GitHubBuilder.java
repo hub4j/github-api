@@ -16,9 +16,9 @@ import java.util.Properties;
  * @since 1.59
  */
 public class GitHubBuilder {
-    private String endpoint = GitHub.GITHUB_URL;
-    
+
     // default scoped so unit tests can read them.
+    /* private */ String endpoint = GitHub.GITHUB_URL;
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
@@ -70,7 +70,7 @@ public class GitHubBuilder {
     
     }
     
-    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
+    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
     	
     	
     	Properties env = new Properties();
@@ -89,7 +89,11 @@ public class GitHubBuilder {
     	
     	if (oauthValue != null)
     		env.put("oauth", oauthValue);
-    	
+
+        Object endPoint = System.getenv(endpointVariableName);
+        if (endPoint != null)
+            env.put("endpoint", endPoint);
+
     	return fromProperties(env);
 
     }
@@ -131,6 +135,7 @@ public class GitHubBuilder {
         GitHubBuilder self = new GitHubBuilder();
         self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
         self.withPassword(props.getProperty("login"), props.getProperty("password"));
+        self.withEndpoint(props.getProperty("endpoint", GitHub.GITHUB_URL));
         return self;
     }
 

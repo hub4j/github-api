@@ -98,15 +98,16 @@ public class GitHubTest extends TestCase {
     	props.put("customLogin", "bogusLogin");
     	props.put("customOauth", "bogusOauth");
     	props.put("customPassword", "bogusPassword");
-    	
+       props.put("customEndpoint", "bogusEndpoint");
+
     	setupEnvironment(props);
     	
-    	GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth");
+       GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
     	
     	assertEquals("bogusLogin", builder.user);
     	assertEquals("bogusOauth", builder.oauthToken);
     	assertEquals("bogusPassword", builder.password);
-    	
+       assertEquals("bogusEndpoint", builder.endpoint);
     }
     
 }

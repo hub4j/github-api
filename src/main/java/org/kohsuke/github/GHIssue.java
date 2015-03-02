@@ -52,7 +52,8 @@ public class GHIssue extends GHObject {
     protected String closed_at;
     protected int comments;
     protected String body;
-    protected List<GHLabel> labels;
+    // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
+    protected List<Label> labels;
     protected GHUser user;
     protected String title, html_url;
     protected GHIssue.PullRequest pull_request;
@@ -126,7 +127,7 @@ public class GHIssue extends GHObject {
         if(labels == null){
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(labels);
+        return Collections.<GHLabel>unmodifiableList(labels);
     }
 
     public Date getClosedAt() {

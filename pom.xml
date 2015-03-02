@@ -139,4 +139,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <mailingLists>
+    <mailingList>
+      <name>User List</name>
+      <post>github-api@googlegroups.com</post>
+      <archive>https://groups.google.com/forum/#!forum/github-api</archive>
+    </mailingList>
+  </mailingLists>
 </project>

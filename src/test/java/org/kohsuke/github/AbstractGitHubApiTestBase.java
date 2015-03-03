@@ -18,7 +18,7 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
     @Before
     public void setUp() throws Exception {
         Properties props = new Properties();
-        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github.kohsuke2");
+        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github");
         if (f.exists()) {
             FileInputStream in = new FileInputStream(f);
             try {

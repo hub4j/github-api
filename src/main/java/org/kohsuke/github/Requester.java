@@ -421,15 +421,18 @@ class Requester {
      * Otherwise throw an exception reporting an error.
      */
     /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
-        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            // API limit reached. wait 10 secs and return normally
-            try {
-                Thread.sleep(10000);
-                return;
-            } catch (InterruptedException _) {
-                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
-            }
-        }
+        // Disable this check, because it causes "infinite" thread usage when:
+        // 1) set bad password you can't apply changed without interrupting thread
+        // 2) exhausted limit will cause lock upto 1h until reset time
+//        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
+//            // API limit reached. wait 10 secs and return normally
+//            try {
+//                Thread.sleep(10000);
+//                return;
+//            } catch (InterruptedException _) {
+//                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
+//            }
+//        }
 
         if (e instanceof FileNotFoundException)
             throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently

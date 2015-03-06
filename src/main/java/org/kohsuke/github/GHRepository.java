@@ -293,7 +293,7 @@ public class GHRepository extends GHObject {
          "Python": 7769
        }
      */
-    public Map<String,Integer> listLanguages() throws IOException {
+    public Map<String,Long> listLanguages() throws IOException {
         return root.retrieve().to(getApiTailUrl("languages"), HashMap.class);
     }
 

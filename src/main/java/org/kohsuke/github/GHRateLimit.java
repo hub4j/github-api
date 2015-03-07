@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import java.util.Date;
+
 /**
  * Rate limit.
  * @author Kohsuke Kawaguchi
@@ -10,12 +12,28 @@ public class GHRateLimit {
      */
     public int remaining;
     /**
-     * Alotted API call per hour.
+     * Allotted API call per hour.
      */
     public int limit;
 
+    /**
+     * The time at which the current rate limit window resets in UTC epoch seconds.
+     */
+    public Date reset;
+
+    /**
+     * Non-epoch date
+     */
+    public Date getResetDate() {
+        return new Date(reset.getTime() * 1000);
+    }
+
     @Override
     public String toString() {
-        return remaining+"/"+limit;
+        return "GHRateLimit{" +
+                "remaining=" + remaining +
+                ", limit=" + limit +
+                ", resetDate=" + getResetDate() +
+                '}';
     }
 }

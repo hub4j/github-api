@@ -56,7 +56,7 @@ public class GHBranch {
      * 
      * @throws IOException
      */
-    public void merge() throws IOException {
+    public void delete() throws IOException {
         new Requester(root).method("DELETE").to(getApiRoute());
     }
 

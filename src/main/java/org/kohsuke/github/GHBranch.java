@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
+
 /**
  * A branch in a repository.
  * 
@@ -41,6 +43,21 @@ public class GHBranch {
     @Override
     public String toString() {
         return "Branch:" + name + " in " + owner.getUrl();
+    }
+    
+    protected String getApiRoute() {
+        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/git/refs/heads/" + name;
+    }
+    
+    /**
+     * Delete a branch
+     * 
+     * Tells github to delete the branch from the repository.
+     * 
+     * @throws IOException
+     */
+    public void delete() throws IOException {
+        new Requester(root).method("DELETE").to(getApiRoute());
     }
 
     /*package*/ GHBranch wrap(GHRepository repo) {

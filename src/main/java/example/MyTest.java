@@ -1,9 +1,6 @@
 package example;
 
-import org.kohsuke.github.GHCommit;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.PagedIterable;
+import org.kohsuke.github.*;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -14,7 +11,8 @@ import java.util.Iterator;
 public class MyTest {
     public static void main(String[] args){
         try {
-            GitHub gitHub = GitHub.connectAnonymously();//GitHub.connectUsingPassword("xwuguo@gmail.com","1314woaini");//GitHub.connect();
+            GitHub gitHub = GitHub.connectAnonymously();
+//            GitHub gitHub=  GitHub.connectUsingPassword("45408735@qq.com","1ujunlin@github");//GitHub.connect();
 //            GHRepository repo = gitHub.createRepository("new-repository","this is my new repository",
 //                    "http://www.kohsuke.org/",true/*public*/);
 //            repo.addCollaborators(gitHub.getUser("abayer"),gitHub.getUser("rtyler"));
@@ -32,7 +30,13 @@ public class MyTest {
             Iterator<GHCommit> iterator = commitsList.iterator();
             while(iterator.hasNext()){
                GHCommit each =  iterator.next();
-                
+                //提交人的信息
+                GHUser user = each.getAuthor();
+                System.out.println("提交人:"+user.getName());
+                System.out.println( "Email:"+user.getEmail());
+                //此次提交干的事情
+                GHCommit.ShortInfo shortInfo = each.getCommitShortInfo();
+                System.out.println("Message:"+shortInfo.getMessage());
             }
         } catch (IOException e) {
             e.printStackTrace();

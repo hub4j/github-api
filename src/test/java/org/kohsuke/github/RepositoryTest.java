@@ -43,4 +43,11 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
     private GHRepository getRepository() throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");
     }
+
+    @Test
+    public void listLanguages() throws IOException {
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        String mainLanguage = r.getLanguage();
+        assertTrue(r.listLanguages().containsKey(mainLanguage));
+    }
 }

@@ -285,6 +285,18 @@ public class GHRepository extends GHObject {
         };
     }
 
+    /**
+     * List languages for the specified repository.
+     * The value on the right of a language is the number of bytes of code written in that language.
+     * {
+         "C": 78769,
+         "Python": 7769
+       }
+     */
+    public Map<String,Long> listLanguages() throws IOException {
+        return root.retrieve().to(getApiTailUrl("languages"), HashMap.class);
+    }
+
     public String getOwnerName() {
         return owner.login;
     }

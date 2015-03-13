@@ -94,9 +94,10 @@ public class GitHubBuilder {
     	if (oauthValue != null)
     		env.put("oauth", oauthValue);
 
-        Object endPoint = System.getenv(endpointVariableName);
-        if (endPoint != null)
-            env.put("endpoint", endPoint);
+    	Object endPoint = System.getenv(endpointVariableName);
+
+    	if (endPoint != null)
+    		env.put("endpoint", endPoint);
 
     	return fromProperties(env);
 

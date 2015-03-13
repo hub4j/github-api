@@ -69,6 +69,10 @@ public class GitHubBuilder {
 		}
     
     }
+
+    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
+        return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, "");
+    }
     
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
     	

@@ -8,7 +8,6 @@ import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
-import org.kohsuke.github.GHTree.GHTreeEntry;
 
 import java.io.IOException;
 import java.net.URL;

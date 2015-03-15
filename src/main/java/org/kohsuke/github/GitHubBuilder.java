@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,43 +29,35 @@ public class GitHubBuilder {
 
     /**
      * First check if the credentials are configured using the ~/.github properties file.
-     * 
+     *
      * If no user is specified it means there is no configuration present so check the environment instead.
-     * 
+     *
      * If there is still no user it means there are no credentials defined and throw an IOException.
-     * 
+     *
      * @return the configured Builder from credentials defined on the system or in the environment.
-     * 
+     *
      * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
     public static GitHubBuilder fromCredentials() throws IOException {
-    	
+    	Exception cause = null;
     	GitHubBuilder builder;
+
 		try {
 			builder = fromPropertyFile();
-			
+
 			if (builder.user != null)
 	    		return builder;
-	    	else {
-	    		
-	    		// this is the case where the ~/.github file exists but has no content.
-	    		
-	    		builder = fromEnvironment();
-	    		
-	    		if (builder.user != null)
-	    			return builder;
-	    		else
-	    			throw new IOException("Failed to resolve credentials from ~/.github or the environment.");
-	    	}
-	    	
 		} catch (FileNotFoundException e) {
-			builder = fromEnvironment();
-			
-			if (builder.user != null)
-				return builder;
-			else
-				throw new IOException("Failed to resolve credentials from ~/.github or the environment.", e);
+            // fall through
+            cause = e;
 		}
+
+        builder = fromEnvironment();
+
+        if (builder.user != null)
+            return builder;
+        else
+            throw new IOException("Failed to resolve credentials from ~/.github or the environment.", cause);
     }
 
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
@@ -99,7 +90,7 @@ public class GitHubBuilder {
         File propertyFile = new File(homeDir, ".github");
         return fromPropertyFile(propertyFile.getPath());
     }
-    
+
     public static GitHubBuilder fromPropertyFile(String propertyFileName) throws IOException {
         Properties props = new Properties();
         FileInputStream in = null;

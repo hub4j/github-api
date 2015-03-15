@@ -9,9 +9,13 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
+import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
+ *
+ *
  * @since 1.59
  */
 public class GitHubBuilder {
@@ -60,6 +64,11 @@ public class GitHubBuilder {
             throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that
+     *      different clients of this library will all recognize one consistent set of coordinates.
+     */
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
         return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, "");
     }
@@ -70,6 +79,11 @@ public class GitHubBuilder {
        		p.put(propName, v);
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that
+     *      different clients of this library will all recognize one consistent set of coordinates.
+     */
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
     	Properties env = new Properties();
     	loadIfSet(loginVariableName,env,"login");
@@ -78,10 +92,34 @@ public class GitHubBuilder {
         loadIfSet(endpointVariableName,env,"endpoint");
     	return fromProperties(env);
     }
-    
+
+    /**
+     * Creates {@link GitHubBuilder} by picking up coordinates from environment variables.
+     *
+     * <p>
+     * The following environment variables are recognized:
+     *
+     * <ul>
+     *     <li>GITHUB_LOGIN: username like 'kohsuke'
+     *     <li>GITHUB_PASSWORD: raw password
+     *     <li>GITHUB_OAUTH: OAuth token to login
+     *     <li>GITHUB_ENDPOINT: URL of the API endpoint
+     * </ul>
+     *
+     * <p>
+     * See class javadoc for the relationship between these coordinates.
+     *
+     * <p>
+     * For backward compatibility, the following environment variables are recognized but discouraged:
+     * login, password, oauth
+     */
     public static GitHubBuilder fromEnvironment() throws IOException {
     	Properties props = new Properties();
-    	props.putAll(System.getenv());
+        for (Entry<String, String> e : System.getenv().entrySet()) {
+            String name = e.getKey().toLowerCase(Locale.ENGLISH);
+            if (name.startsWith("github_")) name=name.substring(7);
+            props.put(name,e.getValue());
+        }
         return fromProperties(props);
     }
     

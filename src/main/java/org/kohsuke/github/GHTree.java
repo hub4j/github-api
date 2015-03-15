@@ -1,6 +1,9 @@
 package org.kohsuke.github;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Provides information for Git Trees
@@ -26,8 +29,8 @@ public class GHTree {
 	 * Return an array of entries of the trees
 	 * @return
 	 */
-	public GHTreeEntry[] getTree() {
-		return tree;
+	public List<GHTreeEntry> getTree() {
+		return Collections.unmodifiableList(Arrays.asList(tree));
 	}
 
 	/**

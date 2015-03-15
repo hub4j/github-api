@@ -67,40 +67,25 @@ public class GitHubBuilder {
 			else
 				throw new IOException("Failed to resolve credentials from ~/.github or the environment.", e);
 		}
-    
     }
 
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
         return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, "");
     }
-    
+
+    private static void loadIfSet(String envName, Properties p, String propName) {
+        String v = System.getenv(envName);
+       	if (v != null)
+       		p.put(propName, v);
+    }
+
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
-    	
-    	
     	Properties env = new Properties();
-    	
-    	Object loginValue = System.getenv(loginVariableName);
-    	
-    	if (loginValue != null)
-    		env.put("login", loginValue);
-    	
-    	Object passwordValue = System.getenv(passwordVariableName);
-    	
-    	if (passwordValue != null)
-    		env.put("password", passwordValue);
-
-    	Object oauthValue = System.getenv(oauthVariableName);
-    	
-    	if (oauthValue != null)
-    		env.put("oauth", oauthValue);
-
-    	Object endPoint = System.getenv(endpointVariableName);
-
-    	if (endPoint != null)
-    		env.put("endpoint", endPoint);
-
+    	loadIfSet(loginVariableName,env,"login");
+        loadIfSet(passwordVariableName,env,"password");
+        loadIfSet(oauthVariableName,env,"oauth");
+        loadIfSet(endpointVariableName,env,"endpoint");
     	return fromProperties(env);
-
     }
     
     public static GitHubBuilder fromEnvironment() throws IOException {

@@ -89,16 +89,8 @@ public class GitHubBuilder {
     }
     
     public static GitHubBuilder fromEnvironment() throws IOException {
-    	
     	Properties props = new Properties();
-    	
-    	Map<String, String> env = System.getenv();
-    	
-    	for (Map.Entry<String, String> element : env.entrySet()) {
-			
-    		props.put(element.getKey(), element.getValue());
-		}
-    	
+    	props.putAll(System.getenv());
         return fromProperties(props);
     }
     

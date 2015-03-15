@@ -57,7 +57,7 @@ public class GitHubBuilder {
         if (builder.user != null)
             return builder;
         else
-            throw new IOException("Failed to resolve credentials from ~/.github or the environment.", cause);
+            throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {

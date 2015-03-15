@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
@@ -664,6 +665,33 @@ public class AppTest extends AbstractGitHubApiTestBase {
         GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();
         assertEquals(readme.getName(),"README.md");
         assertEquals(readme.getContent(),"This is a markdown readme.\n");
+    }
+    
+    
+    @Test
+    public void testTrees() throws IOException {
+    	GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTree("master");
+    	boolean foundReadme = false;
+    	for(GHTreeEntry e : masterTree.getTree()){ 
+    		if("readme".equalsIgnoreCase(e.getPath().replaceAll(".md", ""))){
+    			foundReadme = true;
+    			break;
+    		}
+    	}
+    	assertTrue(foundReadme);
+    }
+    
+    @Test
+    public void testTreesRecursive() throws IOException {
+    	GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTreeRecursive("master", 1);
+    	boolean foundThisFile = false;
+    	for(GHTreeEntry e : masterTree.getTree()){ 
+    		if(e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")){
+    			foundThisFile = true;
+    			break;
+    		}
+    	}
+    	assertTrue(foundThisFile);
     }
 
     @Test

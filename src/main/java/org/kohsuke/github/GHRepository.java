@@ -653,6 +653,35 @@ public class GHRepository extends GHObject {
 		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
 	}
     /**
+	 * Retrive a tree of the given type for the current GitHub repository.
+	 * 
+	 * @param sha - sha number or branch name ex: "master"
+	 * @return refs matching the request type
+	 * @throws IOException
+	 *             on failure communicating with GitHub, potentially due to an
+	 *             invalid tree type being requested
+	 */
+	public GHTree getTree(String sha) throws IOException {
+		String url = String.format("/repos/%s/%s/git/trees/%s", owner.login, name, sha);
+		return root.retrieve().to(url, GHTree.class).wrap(root);
+	}
+	
+	/**
+	 * Retrieves the tree for the current GitHub repository, recursively as described in here:
+	 * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
+	 * 
+	 * @param sha - sha number or branch name ex: "master"
+	 * @param recursive use 1
+	 * @throws IOException
+	 *             on failure communicating with GitHub, potentially due to an
+	 *             invalid tree type being requested
+	 */
+	public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
+		String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", owner.login, name, sha, recursive);
+		return root.retrieve().to(url, GHTree.class).wrap(root);
+	}
+
+	/**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {

@@ -28,6 +28,8 @@ public class GitHubBuilder {
     
     private HttpConnector connector;
 
+    private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
+
     public GitHubBuilder() {
     }
 
@@ -171,6 +173,10 @@ public class GitHubBuilder {
         this.connector = connector;
         return this;
     }
+    public GitHubBuilder withRateLimitHandler(RateLimitHandler handler) {
+        this.rateLimitHandler = handler;
+        return this;
+    }
 
     /**
      * Configures {@linkplain #withConnector(HttpConnector) connector}
@@ -186,6 +192,6 @@ public class GitHubBuilder {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector);
+        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler);
     }
 }

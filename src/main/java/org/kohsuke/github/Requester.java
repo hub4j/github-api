@@ -417,18 +417,11 @@ class Requester {
     }
 
     /**
-     * If the error is because of the API limit, wait 10 sec and return normally.
-     * Otherwise throw an exception reporting an error.
+     * Handle API error by either throwing it or by returning normally to retry.
      */
     /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            // API limit reached. wait 10 secs and return normally
-            try {
-                Thread.sleep(10000);
-                return;
-            } catch (InterruptedException _) {
-                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
-            }
+            root.rateLimitHandler.onError(e,uc);
         }
 
         if (e instanceof FileNotFoundException)

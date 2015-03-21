@@ -441,6 +441,34 @@ public class GitHub {
         return new GHIssueSearchBuilder(this);
     }
 
+    /**
+     * This provides a dump of every public repository, in the order that they were created.
+     * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
+     */
+    public PagedIterable<GHRepository> listAllPublicRepositories() {
+        return listAllPublicRepositories(null);
+    }
+
+    /**
+     * This provides a dump of every public repository, in the order that they were created.
+     *
+     * @param since
+     *      The integer ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
+     * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
+     */
+    public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page)
+                            c.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
 
     /*package*/ static URL parseURL(String s) {
         try {

@@ -737,6 +737,18 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(githubApi);
     }
 
+    @Test
+    public void testListAllRepositories() throws Exception {
+        Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
+        for (int i=0; i<30; i++) {
+            assertTrue(itr.hasNext());
+            GHRepository r = itr.next();
+            System.out.println(r.getFullName());
+            assertNotNull(r.getUrl());
+            assertNotEquals(0,r.getId());
+        }
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

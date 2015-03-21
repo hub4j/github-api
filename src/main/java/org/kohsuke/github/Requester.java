@@ -52,6 +52,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -396,7 +397,11 @@ class Requester {
             r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
             if (type!=null)
-                return MAPPER.readValue(data,type);
+                try {
+                    return MAPPER.readValue(data,type);
+                } catch (JsonMappingException e) {
+                    throw (IOException)new IOException("Failed to deserialize "+data).initCause(e);
+                }
             if (instance!=null)
                 return MAPPER.readerForUpdating(instance).<T>readValue(data);
             return null;

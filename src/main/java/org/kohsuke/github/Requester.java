@@ -191,6 +191,14 @@ class Requester {
 
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         while (true) {// loop while API rate limit is hit
+            if (method.equals("GET") && !args.isEmpty()) {
+                StringBuilder qs=new StringBuilder();
+                for (Entry arg : args) {
+                    qs.append(qs.length()==0 ? '?' : '&');
+                    qs.append(arg.key).append('=').append(URLEncoder.encode(arg.value.toString(),"UTF-8"));
+                }
+                tailApiUrl += qs.toString();
+            }
             HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
 
             buildRequest(uc);

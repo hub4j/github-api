@@ -1029,10 +1029,7 @@ public class GHRepository extends GHObject {
         Requester requester = root.retrieve();
         String target = getApiTailUrl("contents/" + path);
 
-        if (ref != null)
-            target = target + "?ref=" + ref;
-
-        return requester.to(target, GHContent.class).wrap(this);
+        return requester.with("ref",ref).to(target, GHContent.class).wrap(this);
     }
 
     public List<GHContent> getDirectoryContent(String path) throws IOException {
@@ -1043,10 +1040,7 @@ public class GHRepository extends GHObject {
         Requester requester = root.retrieve();
         String target = getApiTailUrl("contents/" + path);
 
-        if (ref != null)
-            target = target + "?ref=" + ref;
-
-        GHContent[] files = requester.to(target, GHContent[].class);
+        GHContent[] files = requester.with("ref",ref).to(target, GHContent[].class);
 
         GHContent.wrap(files, this);
 

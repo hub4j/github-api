@@ -141,7 +141,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
                             long nt = n.getUpdatedAt().getTime();
                             if (nt >= lastUpdated) {
                                 lastUpdated = nt;
-                                return n;
+                                return n.wrap(root);
                             }
                         }
 

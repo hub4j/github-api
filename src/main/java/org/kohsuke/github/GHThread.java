@@ -1,20 +1,23 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
  * A conversation in the notification API.
  *
- *
  * @see <a href="https://developer.github.com/v3/activity/notifications/">documentation</a>
+ * @see GHNotificationStream
  * @author Kohsuke Kawaguchi
  */
 public class GHThread extends GHObject {
+    private GitHub root;
     private GHRepository repository;
     private Subject subject;
     private String reason;
     private boolean unread;
     private String last_read_at;
+    private String url;
 
     static class Subject {
         String title;
@@ -53,5 +56,19 @@ public class GHThread extends GHObject {
 
     public String getType() {
         return subject.type;
+    }
+
+    /*package*/ GHThread wrap(GitHub root) {
+        this.root = root;
+        if (this.repository!=null)
+            this.repository.wrap(root);
+        return this;
+    }
+
+    /**
+     * Marks this thread as read.
+     */
+    public void markAsRead() throws IOException {
+        new Requester(root).method("PATCH").to(url);
     }
 }

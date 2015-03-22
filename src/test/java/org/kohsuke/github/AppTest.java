@@ -811,7 +811,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
     public void notifications() throws Exception {
         boolean found=false;
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
-            found = true;
+            if (!found) {
+                found = true;
+                t.markAsRead(); // test this by calling it once on old nofication
+            }
             assertNotNull(t.getTitle());
             assertNotNull(t.getReason());
 

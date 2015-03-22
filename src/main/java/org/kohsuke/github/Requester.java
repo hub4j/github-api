@@ -70,6 +70,11 @@ class Requester {
     private String contentType = "application/x-www-form-urlencoded";
     private InputStream body;
 
+    /**
+     * Current connection.
+     */
+    private HttpURLConnection uc;
+
     private static class Entry {
         String key;
         Object value;
@@ -200,12 +205,12 @@ class Requester {
                 }
                 tailApiUrl += qs.toString();
             }
-            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(root.getApiURL(tailApiUrl));
 
-            buildRequest(uc);
+            buildRequest();
 
             try {
-                T result = parse(uc, type, instance);
+                T result = parse(type, instance);
                 if (type != null && type.isArray()) { // we might have to loop for pagination - done through recursion
                     final String links = uc.getHeaderField("link");
                     if (links != null && links.contains("rel=\"next\"")) {
@@ -226,7 +231,7 @@ class Requester {
                 }
                 return result;
             } catch (IOException e) {
-                handleApiError(e,uc);
+                handleApiError(e);
             }
         }
     }
@@ -236,33 +241,36 @@ class Requester {
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(root.getApiURL(tailApiUrl));
 
-            buildRequest(uc);
+            buildRequest();
 
             try {
                 return uc.getResponseCode();
             } catch (IOException e) {
-                handleApiError(e,uc);
+                handleApiError(e);
             }
         }
     }
 
     public InputStream read(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
-            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(root.getApiURL(tailApiUrl));
 
-            buildRequest(uc);
+            buildRequest();
 
             try {
-                return wrapStream(uc, uc.getInputStream());
+                return wrapStream(uc.getInputStream());
             } catch (IOException e) {
-                handleApiError(e,uc);
+                handleApiError(e);
             }
         }
     }
 
-    private void buildRequest(HttpURLConnection uc) throws IOException {
+    /**
+     * Set up the request parameters or POST payload.
+     */
+    private void buildRequest() throws IOException {
         if (!method.equals("GET")) {
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-type", contentType);
@@ -351,14 +359,14 @@ class Requester {
 
                 try {
                     while (true) {// loop while API rate limit is hit
-                        HttpURLConnection uc = setupConnection(url);
+                        setupConnection(url);
                         try {
-                            next = parse(uc,type,null);
+                            next = parse(type,null);
                             assert next!=null;
-                            findNextURL(uc);
+                            findNextURL();
                             return;
                         } catch (IOException e) {
-                            handleApiError(e,uc);
+                            handleApiError(e);
                         }
                     }
                 } catch (IOException e) {
@@ -369,7 +377,7 @@ class Requester {
             /**
              * Locate the next page from the pagination "Link" tag.
              */
-            private void findNextURL(HttpURLConnection uc) throws MalformedURLException {
+            private void findNextURL() throws MalformedURLException {
                 url = null; // start defensively
                 String link = uc.getHeaderField("Link");
                 if (link==null) return;
@@ -390,8 +398,8 @@ class Requester {
     }
 
 
-    private HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpURLConnection uc = root.getConnector().connect(url);
+    private void setupConnection(URL url) throws IOException {
+        uc = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
@@ -411,13 +419,12 @@ class Requester {
             }
         }
         uc.setRequestProperty("Accept-Encoding", "gzip");
-        return uc;
     }
 
-    private <T> T parse(HttpURLConnection uc, Class<T> type, T instance) throws IOException {
+    private <T> T parse(Class<T> type, T instance) throws IOException {
         InputStreamReader r = null;
         try {
-            r = new InputStreamReader(wrapStream(uc, uc.getInputStream()), "UTF-8");
+            r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
@@ -436,7 +443,7 @@ class Requester {
     /**
      * Handles the "Content-Encoding" header.
      */
-    private InputStream wrapStream(HttpURLConnection uc, InputStream in) throws IOException {
+    private InputStream wrapStream(InputStream in) throws IOException {
         String encoding = uc.getContentEncoding();
         if (encoding==null || in==null) return in;
         if (encoding.equals("gzip"))    return new GZIPInputStream(in);
@@ -447,12 +454,12 @@ class Requester {
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    /*package*/ void handleApiError(IOException e, HttpURLConnection uc) throws IOException {
+    /*package*/ void handleApiError(IOException e) throws IOException {
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
             root.rateLimitHandler.onError(e,uc);
         }
 
-        InputStream es = wrapStream(uc, uc.getErrorStream());
+        InputStream es = wrapStream(uc.getErrorStream());
         try {
             if (es!=null) {
                 if (e instanceof FileNotFoundException) {

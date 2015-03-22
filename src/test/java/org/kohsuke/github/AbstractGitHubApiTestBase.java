@@ -1,12 +1,10 @@
 package org.kohsuke.github;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.kohsuke.randname.RandomNameGenerator;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.io.File;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -17,16 +15,11 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
 
     @Before
     public void setUp() throws Exception {
-        Properties props = new Properties();
-        java.io.File f = new java.io.File(System.getProperty("user.home"), ".github.kohsuke2");
+        File f = new File(System.getProperty("user.home"), ".github.kohsuke2");
         if (f.exists()) {
-            FileInputStream in = new FileInputStream(f);
-            try {
-                props.load(in);
-                gitHub = GitHub.connect(props.getProperty("login"),props.getProperty("oauth"));
-            } finally {
-                IOUtils.closeQuietly(in);
-            }
+            // use the non-standard credential preferentially, so that developers of this library do not have
+            // to clutter their event stream.
+            gitHub = GitHubBuilder.fromPropertyFile(f.getPath()).build();
         } else {
             gitHub = GitHub.connect();
         }

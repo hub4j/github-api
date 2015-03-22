@@ -1,6 +1,10 @@
 package org.kohsuke.github;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -57,35 +61,34 @@ public class GHContent {
     /**
      * Retrieve the decoded content that is stored at this location.
      *
+     * <p>
      * Due to the nature of GitHub's API, you're not guaranteed that
      * the content will already be populated, so this may trigger
      * network activity, and can throw an IOException.
-    **/
+     *
+     * @deprecated
+     *      Use {@link #read()}
+     */
     public String getContent() throws IOException {
         return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
     }
 
     /**
-     * Retrieve the raw content that is stored at this location.
+     * Retrieve the base64-encoded content that is stored at this location.
      *
+     * <p>
      * Due to the nature of GitHub's API, you're not guaranteed that
      * the content will already be populated, so this may trigger
      * network activity, and can throw an IOException.
-    **/
+     *
+     * @deprecated
+     *      Use {@link #read()}
+     */
     public String getEncodedContent() throws IOException {
-        if (content != null)
+        if (content!=null)
             return content;
-
-        GHContent retrievedContent = owner.getFileContent(path);
-
-        this.size = retrievedContent.size;
-        this.sha = retrievedContent.sha;
-        this.content = retrievedContent.content;
-        this.url = retrievedContent.url;
-        this.git_url = retrievedContent.git_url;
-        this.html_url = retrievedContent.html_url;
-
-        return content;
+        else
+            return Base64.encodeBase64String(IOUtils.toByteArray(read()));
     }
 
     public String getUrl() {
@@ -98,6 +101,13 @@ public class GHContent {
 
     public String getHtmlUrl() {
         return html_url;
+    }
+
+    /**
+     * Retrieves the actual content stored here.
+     */
+    public InputStream read() throws IOException {
+        return new Requester(owner.root).read(getDownloadUrl());
     }
 
     /**

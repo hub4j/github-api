@@ -479,6 +479,9 @@ class Requester {
      * Handle API error by either throwing it or by returning normally to retry.
      */
     /*package*/ void handleApiError(IOException e) throws IOException {
+        if (uc.getResponseCode() == 401) // Unauthorized == bad creds
+            throw e;
+
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
             root.rateLimitHandler.onError(e,uc);
         }

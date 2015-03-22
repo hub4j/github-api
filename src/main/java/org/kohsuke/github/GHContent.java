@@ -1,8 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -26,6 +24,7 @@ public class GHContent {
     private String url; // this is the API url
     private String git_url;    // this is the Blob url
     private String html_url;    // this is the UI
+    private String download_url;
 
     public GHRepository getOwner() {
         return owner;
@@ -100,6 +99,11 @@ public class GHContent {
     public String getHtmlUrl() {
         return html_url;
     }
+
+    /**
+     * URL to retrieve the raw content of the file. Null if this is a directory.
+     */
+    public String getDownloadUrl() { return download_url; }
 
     public boolean isFile() {
         return "file".equals(type);

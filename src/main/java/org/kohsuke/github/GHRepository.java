@@ -30,7 +30,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.xml.bind.DatatypeConverter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
+import java.io.Reader;
 import java.net.URL;
 import java.util.*;
 
@@ -1149,7 +1151,25 @@ public class GHRepository extends GHObject {
             return contributions;
         }
     }
-	
+
+    /**
+     * Render a Markdown document.
+     *
+     * In {@linkplain MarkdownMode#GFM GFM mode}, issue numbers and user mentions
+     * are linked accordingly.
+     *
+     * @see GitHub#renderMarkdown(String)
+     */
+    public Reader renderMarkdown(String text, MarkdownMode mode) throws IOException {
+        return new InputStreamReader(
+            new Requester(root)
+                    .with("text", text)
+                    .with("mode",mode==null?null:mode.toString())
+                    .with("context", getFullName())
+                    .read("/markdown"),
+            "UTF-8");
+    }
+
 	
 
     @Override

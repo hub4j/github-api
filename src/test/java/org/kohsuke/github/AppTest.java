@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
@@ -758,9 +759,22 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 String content1 = content.getContent();
                 String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
                 System.out.println(content.getPath());
-                assertEquals(content1,content2);
+                assertEquals(content1, content2);
             }
         }
+    }
+
+    @Test
+    public void markDown() throws Exception {
+        assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
+
+        String actual = IOUtils.toString(gitHub.getRepository("kohsuke/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
+        System.out.println(actual);
+        assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
+        assertTrue(actual.contains("href=\"https://github.com/kohsuke/github-api/pull/1\""));
+        assertTrue(actual.contains("class=\"user-mention\""));
+        assertTrue(actual.contains("class=\"issue-link\""));
+        assertTrue(actual.contains("to fix issue"));
     }
 
     private void kohsuke() {

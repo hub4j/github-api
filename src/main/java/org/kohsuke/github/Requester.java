@@ -251,7 +251,7 @@ class Requester {
             buildRequest(uc);
 
             try {
-                return uc.getInputStream();
+                return wrapStream(uc,uc.getInputStream());
             } catch (IOException e) {
                 handleApiError(e,uc);
             }

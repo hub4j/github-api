@@ -26,8 +26,10 @@ package org.kohsuke.github;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -468,6 +470,25 @@ public class GitHub {
                 };
             }
         };
+    }
+
+    /**
+     * Render a Markdown document in raw mode.
+     *
+     * <p>
+     * It takes a Markdown document as plaintext and renders it as plain Markdown
+     * without a repository context (just like a README.md file is rendered – this
+     * is the simplest way to preview a readme online).
+     *
+     * @see GHRepository#renderMarkdown(String, MarkdownMode)
+     */
+    public Reader renderMarkdown(String text) throws IOException {
+        return new InputStreamReader(
+            new Requester(this)
+                    .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
+                    .contentType("text/plain;charset=UTF-8")
+                    .read("/markdown/raw"),
+            "UTF-8");
     }
 
     /*package*/ static URL parseURL(String s) {

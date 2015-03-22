@@ -107,6 +107,10 @@ class Requester {
     public Requester with(String key, boolean value) {
         return _with(key, value);
     }
+    public Requester with(String key, Boolean value) {
+        return _with(key, value);
+    }
+
 
     public Requester with(String key, String value) {
         return _with(key, value);
@@ -251,7 +255,7 @@ class Requester {
             buildRequest(uc);
 
             try {
-                return wrapStream(uc,uc.getInputStream());
+                return wrapStream(uc, uc.getInputStream());
             } catch (IOException e) {
                 handleApiError(e,uc);
             }
@@ -448,14 +452,15 @@ class Requester {
             root.rateLimitHandler.onError(e,uc);
         }
 
-        if (e instanceof FileNotFoundException)
-            throw e;    // pass through 404 Not Found to allow the caller to handle it intelligently
-
         InputStream es = wrapStream(uc, uc.getErrorStream());
         try {
-            if (es!=null)
-                throw (IOException)new IOException(IOUtils.toString(es,"UTF-8")).initCause(e);
-            else
+            if (es!=null) {
+                if (e instanceof FileNotFoundException) {
+                    // pass through 404 Not Found to allow the caller to handle it intelligently
+                    throw (IOException) new FileNotFoundException(IOUtils.toString(es, "UTF-8")).initCause(e);
+                } else
+                    throw (IOException) new IOException(IOUtils.toString(es, "UTF-8")).initCause(e);
+            } else
                 throw e;
         } finally {
             IOUtils.closeQuietly(es);

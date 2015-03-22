@@ -777,6 +777,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(actual.contains("to fix issue"));
     }
 
+    @Test
+    public void searchUsers() throws Exception {
+        PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
+        GHUser u = r.iterator().next();
+        System.out.println(u.getName());
+        assertNotNull(u.getId());
+        assertTrue(r.getTotalCount() > 0);
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

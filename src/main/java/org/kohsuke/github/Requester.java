@@ -43,8 +43,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -62,6 +64,7 @@ import org.apache.commons.io.IOUtils;
 class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
+    private final Map<String,String> headers = new LinkedHashMap<String, String>();
 
     /**
      * Request method.
@@ -87,6 +90,15 @@ class Requester {
 
     Requester(GitHub root) {
         this.root = root;
+    }
+
+    /**
+     * Sets the request HTTP header.
+     *
+     * If a header of the same name is already set, this method overrides it.
+     */
+    public void setHeader(String name, String value) {
+        headers.put(name,value);
     }
 
     /**
@@ -267,6 +279,11 @@ class Requester {
         }
     }
 
+    public String getResponseHeader(String header) {
+        return uc.getHeaderField(header);
+    }
+
+
     /**
      * Set up the request parameters or POST payload.
      */
@@ -406,6 +423,12 @@ class Requester {
         if (root.encodedAuthorization!=null)
             uc.setRequestProperty("Authorization", root.encodedAuthorization);
 
+        for (Map.Entry<String, String> e : headers.entrySet()) {
+            String v = e.getValue();
+            if (v!=null)
+                uc.setRequestProperty(e.getKey(), v);
+        }
+
         try {
             uc.setRequestMethod(method);
         } catch (ProtocolException e) {
@@ -422,6 +445,8 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
+        if (uc.getResponseCode()==304)
+            return null;    // special case handling for 304 unmodified, as the content will be ""
         InputStreamReader r = null;
         try {
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");

@@ -465,6 +465,13 @@ public class GitHub {
     }
 
     /**
+     * List all the notifications.
+     */
+    public GHNotificationStream listNotifications() {
+        return new GHNotificationStream(this,"/notifications");
+    }
+
+    /**
      * This provides a dump of every public repository, in the order that they were created.
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */

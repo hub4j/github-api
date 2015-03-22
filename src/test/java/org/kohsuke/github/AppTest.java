@@ -807,6 +807,22 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(r.getTotalCount() > 0);
     }
 
+    @Test
+    public void notifications() throws Exception {
+        boolean found=false;
+        for (GHThread t : gitHub.listNotifications().nonBlocking(true)) {
+            found = true;
+            assertNotNull(t.getTitle());
+            assertNotNull(t.getReason());
+
+            System.out.println(t.getTitle());
+            System.out.println(t.getLastReadAt());
+            System.out.println(t.getType());
+            System.out.println();
+        }
+        assertTrue(found);
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

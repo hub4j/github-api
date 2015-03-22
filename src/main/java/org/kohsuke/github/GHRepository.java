@@ -1170,7 +1170,13 @@ public class GHRepository extends GHObject {
             "UTF-8");
     }
 
-	
+    /**
+     * List all the notifications in a repository for the current user.
+     */
+    public GHNotificationStream listNotifications() {
+        return new GHNotificationStream(root,getApiTailUrl("/notifications"));
+    }
+
 
     @Override
     public String toString() {

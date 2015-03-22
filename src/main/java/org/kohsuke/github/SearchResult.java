@@ -9,5 +9,8 @@ abstract class SearchResult<T> {
     int total_count;
     boolean incomplete_results;
 
-    public abstract T[] getItems();
+    /**
+     * Wraps up the retrieved object and return them. Only called once.
+     */
+    /*package*/ abstract T[] getItems(GitHub root);
 }

@@ -1,9 +1,5 @@
 package org.kohsuke.github;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -12,21 +8,16 @@ import java.util.Locale;
  * @author Kohsuke Kawaguchi
  * @see GitHub#searchIssues()
  */
-public class GHIssueSearchBuilder {
-    private final GitHub root;
-    private final Requester req;
-    private final List<String> terms = new ArrayList<String>();
-
+public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     /*package*/ GHIssueSearchBuilder(GitHub root) {
-        this.root = root;
-        req = root.retrieve();
+        super(root,IssueSearchResult.class);
     }
 
     /**
      * Search terms.
      */
     public GHIssueSearchBuilder q(String term) {
-        terms.add(term);
+        super.q(term);
         return this;
     }
 
@@ -61,25 +52,15 @@ public class GHIssueSearchBuilder {
         private GHIssue[] items;
 
         @Override
-        public GHIssue[] getItems() {
+        /*package*/ GHIssue[] getItems(GitHub root) {
+            for (GHIssue i : items)
+                i.wrap(root);
             return items;
         }
     }
 
-    /**
-     * Lists up the issues with the criteria built so far.
-     */
-    public PagedSearchIterable<GHIssue> list() {
-        return new PagedSearchIterable<GHIssue>() {
-            public PagedIterator<GHIssue> iterator() {
-                req.set("q", StringUtils.join(terms," "));
-                return new PagedIterator<GHIssue>(adapt(req.asIterator("/search/issues", IssueSearchResult.class))) {
-                    protected void wrapUp(GHIssue[] page) {
-                        for (GHIssue c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        };
+    @Override
+    protected String getApiUrl() {
+        return "/search/issues";
     }
 }

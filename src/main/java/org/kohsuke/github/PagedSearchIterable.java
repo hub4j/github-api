@@ -8,10 +8,16 @@ import java.util.Iterator;
  * @author Kohsuke Kawaguchi
  */
 public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
+    private final GitHub root;
+
     /**
      * As soon as we have any result fetched, it's set here so that we can report the total count.
      */
     private SearchResult<T> result;
+
+    /*package*/ PagedSearchIterable(GitHub root) {
+        this.root = root;
+    }
 
     /**
      * Returns the total number of hit, including the results that's not yet fetched.
@@ -43,7 +49,7 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
             public T[] next() {
                 SearchResult<T> v = base.next();
                 if (result==null)   result = v;
-                return v.getItems();
+                return v.getItems(root);
             }
 
             public void remove() {

@@ -451,6 +451,13 @@ public class GitHub {
     }
 
     /**
+     * Search repositories.
+     */
+    public GHRepositorySearchBuilder searchRepositories() {
+        return new GHRepositorySearchBuilder(this);
+    }
+
+    /**
      * This provides a dump of every public repository, in the order that they were created.
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */

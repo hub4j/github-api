@@ -786,6 +786,16 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(r.getTotalCount() > 0);
     }
 
+    @Test
+    public void searchRepositories() throws Exception {
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        GHRepository u = r.iterator().next();
+        System.out.println(u.getName());
+        assertNotNull(u.getId());
+        assertEquals("Assembly",u.getLanguage());
+        assertTrue(r.getTotalCount() > 0);
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

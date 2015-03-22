@@ -515,7 +515,7 @@ public class GitHub {
             new Requester(this)
                     .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
                     .contentType("text/plain;charset=UTF-8")
-                    .read("/markdown/raw"),
+                    .asStream("/markdown/raw"),
             "UTF-8");
     }
 

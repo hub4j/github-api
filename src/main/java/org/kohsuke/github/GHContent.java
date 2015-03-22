@@ -113,7 +113,7 @@ public class GHContent {
      * Retrieves the actual content stored here.
      */
     public InputStream read() throws IOException {
-        return new Requester(root).read(getDownloadUrl());
+        return new Requester(root).asStream(getDownloadUrl());
     }
 
     /**

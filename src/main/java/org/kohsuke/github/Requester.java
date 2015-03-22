@@ -23,7 +23,8 @@
  */
 package org.kohsuke.github;
 
-import static org.kohsuke.github.GitHub.MAPPER;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,15 +47,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import org.apache.commons.io.IOUtils;
+import static org.kohsuke.github.GitHub.*;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -265,7 +264,7 @@ class Requester {
         }
     }
 
-    public InputStream read(String tailApiUrl) throws IOException {
+    public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 

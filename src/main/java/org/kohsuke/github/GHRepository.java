@@ -1166,7 +1166,7 @@ public class GHRepository extends GHObject {
                     .with("text", text)
                     .with("mode",mode==null?null:mode.toString())
                     .with("context", getFullName())
-                    .read("/markdown"),
+                    .asStream("/markdown"),
             "UTF-8");
     }
 

@@ -792,7 +792,18 @@ public class AppTest extends AbstractGitHubApiTestBase {
         GHRepository u = r.iterator().next();
         System.out.println(u.getName());
         assertNotNull(u.getId());
-        assertEquals("Assembly",u.getLanguage());
+        assertEquals("Assembly", u.getLanguage());
+        assertTrue(r.getTotalCount() > 0);
+    }
+
+    @Test
+    public void searchContent() throws Exception {
+        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
+        GHContent c = r.iterator().next();
+        System.out.println(c.getName());
+        assertNotNull(c.getDownloadUrl());
+        assertNotNull(c.getOwner());
+        assertEquals("jquery/jquery",c.getOwner().getFullName());
         assertTrue(r.getTotalCount() > 0);
     }
 

@@ -16,7 +16,13 @@ import javax.xml.bind.DatatypeConverter;
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHContent {
-    private GHRepository owner;
+    /*
+        In normal use of this class, repository field is set via wrap(),
+        but in the code search API, there's a nested 'repository' field that gets populated from JSON.
+     */
+    private GHRepository repository;
+
+    private GitHub root;
 
     private String type;
     private String encoding;
@@ -31,7 +37,7 @@ public class GHContent {
     private String download_url;
 
     public GHRepository getOwner() {
-        return owner;
+        return repository;
     }
 
     public String getType() {
@@ -107,13 +113,16 @@ public class GHContent {
      * Retrieves the actual content stored here.
      */
     public InputStream read() throws IOException {
-        return new Requester(owner.root).read(getDownloadUrl());
+        return new Requester(root).read(getDownloadUrl());
     }
 
     /**
      * URL to retrieve the raw content of the file. Null if this is a directory.
      */
-    public String getDownloadUrl() { return download_url; }
+    public String getDownloadUrl() throws IOException {
+        populate();
+        return download_url;
+    }
 
     public boolean isFile() {
         return "file".equals(type);
@@ -121,6 +130,16 @@ public class GHContent {
 
     public boolean isDirectory() {
         return "dir".equals(type);
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    protected synchronized void populate() throws IOException {
+        if (download_url!=null)    return; // already populated
+        root.retrieve().to(url, this);
     }
 
     /**
@@ -132,10 +151,10 @@ public class GHContent {
 
         return new PagedIterable<GHContent>() {
             public PagedIterator<GHContent> iterator() {
-                return new PagedIterator<GHContent>(owner.root.retrieve().asIterator(url, GHContent[].class)) {
+                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class)) {
                     @Override
                     protected void wrapUp(GHContent[] page) {
-                        GHContent.wrap(page,owner);
+                        GHContent.wrap(page, repository);
                     }
                 };
             }
@@ -157,7 +176,7 @@ public class GHContent {
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = DatatypeConverter.printBase64Binary(newContentBytes);
 
-        Requester requester = new Requester(owner.root)
+        Requester requester = new Requester(root)
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -170,8 +189,8 @@ public class GHContent {
 
         GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
 
-        response.getContent().wrap(owner);
-        response.getCommit().wrapUp(owner);
+        response.getContent().wrap(repository);
+        response.getCommit().wrapUp(repository);
 
         this.content = encodedContent;
         return response;
@@ -182,7 +201,7 @@ public class GHContent {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(owner.root)
+        Requester requester = new Requester(root)
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -194,18 +213,26 @@ public class GHContent {
 
         GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
 
-        response.getCommit().wrapUp(owner);
+        response.getCommit().wrapUp(repository);
         return response;
     }
 
     private String getApiRoute() {
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/contents/" + path;
+        return "/repos/" + repository.getOwnerName() + "/" + repository.getName() + "/contents/" + path;
     }
 
     GHContent wrap(GHRepository owner) {
-        this.owner = owner;
+        this.repository = owner;
+        this.root = owner.root;
         return this;
     }
+    GHContent wrap(GitHub root) {
+        this.root = root;
+        if (repository!=null)
+            repository.wrap(root);
+        return this;
+    }
+
 
     public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
         for (GHContent unwrappedContent : contents) {

@@ -189,5 +189,19 @@ public class GHNotificationStream implements Iterable<GHThread> {
         };
     }
 
+    public void markAsRead() throws IOException {
+        markAsRead(-1);
+    }
+
+    /**
+     * Marks all the notifications as read.
+     */
+    public void markAsRead(long timestamp) throws IOException {
+        final Requester req = new Requester(root).method("PUT");
+        if (timestamp>=0)
+            req.with("last_read_at", GitHub.printDate(new Date(timestamp)));
+        req.asHttpStatusCode(apiUrl);
+    }
+
     private static final GHThread[] EMPTY_ARRAY = new GHThread[0];
 }

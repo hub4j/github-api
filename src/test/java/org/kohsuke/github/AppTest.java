@@ -810,7 +810,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     @Test
     public void notifications() throws Exception {
         boolean found=false;
-        for (GHThread t : gitHub.listNotifications().nonBlocking(true)) {
+        for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
             found = true;
             assertNotNull(t.getTitle());
             assertNotNull(t.getReason());
@@ -821,6 +821,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             System.out.println();
         }
         assertTrue(found);
+        gitHub.listNotifications().markAsRead();
     }
 
     private void kohsuke() {

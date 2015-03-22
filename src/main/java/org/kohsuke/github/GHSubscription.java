@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Represents your subscribing to a repository.
+ * Represents your subscribing to a repository / conversation thread..
  *
  * @author Kohsuke Kawaguchi
+ * @see GHRepository#getSubscription()
+ * @see GHThread#getSubscription()
  */
 public class GHSubscription {
     private String created_at, url, repository_url, reason;

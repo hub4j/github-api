@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -17,7 +18,7 @@ public class GHThread extends GHObject {
     private String reason;
     private boolean unread;
     private String last_read_at;
-    private String url;
+    private String url,subscription_url;
 
     static class Subject {
         String title;
@@ -70,5 +71,28 @@ public class GHThread extends GHObject {
      */
     public void markAsRead() throws IOException {
         new Requester(root).method("PATCH").to(url);
+    }
+
+    /**
+     * Subscribes to this conversation to get notifications.
+     */
+    public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
+        return new Requester(root)
+            .with("subscribed", subscribed)
+            .with("ignored", ignored)
+            .method("PUT").to(subscription_url, GHSubscription.class).wrapUp(root);
+    }
+
+    /**
+     * Returns the current subscription for this thread.
+     *
+     * @return null if no subscription exists.
+     */
+    public GHSubscription getSubscription() throws IOException {
+        try {
+            return new Requester(root).to(subscription_url, GHSubscription.class).wrapUp(root);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 }

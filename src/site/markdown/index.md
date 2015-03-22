@@ -9,8 +9,7 @@ are used in favor of using string handle (such as `GHUser.isMemberOf(GHOrganizat
 
 The library supports both github.com and GitHub Enterprise.
 
-There are some corners of the GitHub API that's not yet implemented, but
-the library is implemented with the right abstractions and libraries to make it very easy to improve the coverage.
+Most of the GitHub APIs are covered, although there are some corners that are still not yet implemented.
 
 Sample Usage
 -----

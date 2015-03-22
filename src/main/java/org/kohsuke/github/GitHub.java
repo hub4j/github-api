@@ -336,27 +336,27 @@ public class GitHub {
         return r;
     }
 
-  /**
-   * Gets complete map of organizations/teams that current user belongs to.
-   *
-   * Leverages the new GitHub API /user/teams made available recently to
-   * get in a single call the complete set of organizations, teams and permissions
-   * in a single call.
-   */
-  public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
-    Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-    for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
-      team.wrapUp(this);
-      String orgLogin = team.getOrganization().getLogin();
-      Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
-      if (teamsPerOrg == null) {
-        teamsPerOrg = new HashSet<GHTeam>();
-      }
-      teamsPerOrg.add(team);
-      allMyTeams.put(orgLogin, teamsPerOrg);
+    /**
+     * Gets complete map of organizations/teams that current user belongs to.
+     *
+     * Leverages the new GitHub API /user/teams made available recently to
+     * get in a single call the complete set of organizations, teams and permissions
+     * in a single call.
+     */
+    public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
+        Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
+        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+            team.wrapUp(this);
+            String orgLogin = team.getOrganization().getLogin();
+            Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
+            if (teamsPerOrg == null) {
+                teamsPerOrg = new HashSet<GHTeam>();
+            }
+            teamsPerOrg.add(team);
+            allMyTeams.put(orgLogin, teamsPerOrg);
+        }
+        return allMyTeams;
     }
-    return allMyTeams;
-  }
 
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/

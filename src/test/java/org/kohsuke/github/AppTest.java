@@ -207,31 +207,31 @@ public class AppTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testMyTeamsContainsAllMyOrganizations() throws IOException {
-      Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
-      Map<String, GHOrganization> myOrganizations = gitHub.getMyOrganizations();
-      assertEquals(teams.keySet(), myOrganizations.keySet());
+        Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
+        Map<String, GHOrganization> myOrganizations = gitHub.getMyOrganizations();
+        assertEquals(teams.keySet(), myOrganizations.keySet());
     }
     
     @Test
     public void testMyTeamsShouldIncludeMyself() throws IOException {
-      Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
-      for (Entry<String, Set<GHTeam>> teamsPerOrg : teams.entrySet()) {
-        String organizationName = teamsPerOrg.getKey();
-        for (GHTeam team : teamsPerOrg.getValue()) {
-          String teamName = team.getName();
-        assertTrue("Team " + teamName + " in organization " + organizationName
-            + " does not contain myself",
-            shouldBelongToTeam(organizationName, teamName));
+        Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
+        for (Entry<String, Set<GHTeam>> teamsPerOrg : teams.entrySet()) {
+            String organizationName = teamsPerOrg.getKey();
+            for (GHTeam team : teamsPerOrg.getValue()) {
+                String teamName = team.getName();
+                assertTrue("Team " + teamName + " in organization " + organizationName
+                                + " does not contain myself",
+                        shouldBelongToTeam(organizationName, teamName));
+            }
         }
-      }
     }
 
     private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
-      GHOrganization org = gitHub.getOrganization(organizationName);
-      assertNotNull(org);
-      GHTeam team = org.getTeamByName(teamName);
-      assertNotNull(team);
-      return team.hasMember(gitHub.getMyself());
+        GHOrganization org = gitHub.getOrganization(organizationName);
+        assertNotNull(org);
+        GHTeam team = org.getTeamByName(teamName);
+        assertNotNull(team);
+        return team.hasMember(gitHub.getMyself());
     }
 
     @Test

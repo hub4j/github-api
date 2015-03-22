@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -54,8 +53,6 @@ import java.util.zip.GZIPInputStream;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -241,6 +238,20 @@ class Requester {
 
             try {
                 return uc.getResponseCode();
+            } catch (IOException e) {
+                handleApiError(e,uc);
+            }
+        }
+    }
+
+    public InputStream read(String tailApiUrl) throws IOException {
+        while (true) {// loop while API rate limit is hit
+            HttpURLConnection uc = setupConnection(root.getApiURL(tailApiUrl));
+
+            buildRequest(uc);
+
+            try {
+                return uc.getInputStream();
             } catch (IOException e) {
                 handleApiError(e,uc);
             }

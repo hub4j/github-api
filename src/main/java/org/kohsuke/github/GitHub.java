@@ -293,7 +293,7 @@ public class GitHub {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
             orig.root = this;
-            users.put(login,orig);
+            users.put(orig.getLogin(),orig);
             return orig;
         }
         return u;

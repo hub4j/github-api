@@ -749,6 +749,20 @@ public class AppTest extends AbstractGitHubApiTestBase {
         }
     }
 
+    @Test // issue #162
+    public void testIssue162() throws Exception {
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        List<GHContent> contents = r.getDirectoryContent("", "gh-pages");
+        for (GHContent content : contents) {
+            if (content.isFile()) {
+                String content1 = content.getContent();
+                String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
+                System.out.println(content.getPath());
+                assertEquals(content1,content2);
+            }
+        }
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

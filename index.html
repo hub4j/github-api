@@ -215,6 +215,14 @@ so we can make use of it's HTTP response cache.
 Making a conditional request against the GitHub API and receiving a 304 response
 <a href="http://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
 
+<p>The following code shows an example of how to set up persistent cache on the disk:</p>
+
+<pre><code>Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
+GitHub gitHub = GitHubBuilder.fromCredentials()
+    .withConnector(new OkHttpConnector(new OkUrlFactory(new OkHttpClient().setCache(cache))))
+    .build();
+</code></pre>
+
       </div>
     </div>
     <div id="footer">
@@ -227,8 +235,8 @@ Making a conditional request against the GitHub API and receiving a 304 response
 
   
   
-  &nbsp;| Last Published: 2015-03-22
-  &nbsp;| Version: 1.64-SNAPSHOT
+  &nbsp;| Last Published: 2015-03-24
+  &nbsp;| Version: 1.66
 </div>
       <div class="clear">
         <hr/>

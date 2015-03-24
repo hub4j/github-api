@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author janinko
  * @see GitHub#createToken(Collection, String, String)
- * @see http://developer.github.com/v3/oauth/#create-a-new-authorization
+ * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">API documentation</a>
  */
 public class GHAuthorization extends GHObject {
 	public static final String USER = "user";

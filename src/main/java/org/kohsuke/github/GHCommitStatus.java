@@ -7,8 +7,8 @@ import java.util.Date;
  * Represents a status of a commit.
  *
  * @author Kohsuke Kawaguchi
- * @see GHRepository#getCommitStatus(String)
- * @see GHCommit#getStatus()
+ * @see GHRepository#getLastCommitStatus(String)
+ * @see GHCommit#getLastStatus()
  */
 public class GHCommitStatus extends GHObject {
     String state;

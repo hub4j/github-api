@@ -353,7 +353,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Returns the primary branch you'll configure in the "Admin > Options" config page.
+     * Returns the primary branch you'll configure in the "Admin &gt; Options" config page.
      *
      * @return
      *      This field is null until the user explicitly configures the master branch.
@@ -780,7 +780,7 @@ public class GHRepository extends GHObject {
     }
     
     /**
-     *  @see {@link #createCommitStatus(String, GHCommitState,String,String,String) createCommitStatus} 
+     *  @see #createCommitStatus(String, GHCommitState,String,String,String)
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
     	return createCommitStatus(sha1, state, targetUrl, description,null);

@@ -60,7 +60,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
  * <p>
  * This library aims to be safe for use by multiple threads concurrently, although
  * the library itself makes no attempt to control/serialize potentially conflicting
- * operations to GitHub, such as updating & deleting a repository at the same time.
+ * operations to GitHub, such as updating &amp; deleting a repository at the same time.
  *
  * @author Kohsuke Kawaguchi
  */

@@ -63,6 +63,8 @@ public class GHRepository extends GHObject {
 
     private GHRepoPermission permissions;
 
+    private GHRepository source;
+    
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this,ref);
     }
@@ -1107,6 +1109,16 @@ public class GHRepository extends GHObject {
 	        return list;	
 	}
 
+  /**
+   * Forked repositories have a 'source' attribute that specifies the repository they were forked
+   * from.
+   * @return The GHRepository instance from the fork source, or null if this
+   * GHRepository isn't a fork.
+   */
+  public GHRepository getSource() {
+      return source;
+  }
+  
     /**
      * Subscribes to this repository to get notifications.
      */

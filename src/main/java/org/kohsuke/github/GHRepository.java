@@ -1109,16 +1109,20 @@ public class GHRepository extends GHObject {
 	        return list;	
 	}
 
-  /**
-   * Forked repositories have a 'source' attribute that specifies the repository they were forked
-   * from.
-   * @return The GHRepository instance from the fork source, or null if this
-   * GHRepository isn't a fork.
-   */
-  public GHRepository getSource() {
-      return source;
-  }
-  
+    /**
+     * Forked repositories have a 'source' attribute that specifies the ultimate source of the forking chain.
+     *
+     * @return
+     *      {@link GHRepository} that points to the root repository where this repository is forked
+     *      (indirectly or directly) from. Otherwise null.
+     */
+    public GHRepository getSource() throws IOException {
+        if (source == null) return null;
+        if (source.root == null)
+            source = root.getRepository(source.getFullName());
+        return source;
+    }
+
     /**
      * Subscribes to this repository to get notifications.
      */

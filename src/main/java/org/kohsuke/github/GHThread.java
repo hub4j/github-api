@@ -59,6 +59,26 @@ public class GHThread extends GHObject {
         return subject.type;
     }
 
+    public GHIssue getBoundIssue() throws IOException {
+        if (!"Issue".equals(subject.type))
+            throw new IllegalStateException("Notification doesn't point to Issue");
+        return repository.getIssue(
+                Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+    }
+
+    public GHPullRequest getBoundPullRequest() throws IOException {
+        if (!"PullRequest".equals(subject.type))
+            throw new IllegalStateException("Notification doesn't point to PullRequest");
+        return repository.getPullRequest(
+                Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+    }
+
+    public GHCommit getBoundCommit() throws IOException {
+        if (!"Commit".equals(subject.type))
+            throw new IllegalStateException("Notification doesn't point to Commit");
+        return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
+    }
+
     /*package*/ GHThread wrap(GitHub root) {
         this.root = root;
         if (this.repository!=null)

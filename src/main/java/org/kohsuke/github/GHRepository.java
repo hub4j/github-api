@@ -63,7 +63,7 @@ public class GHRepository extends GHObject {
 
     private GHRepoPermission permissions;
 
-    private GHRepository source;
+    private GHRepository source, parent;
     
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this,ref);
@@ -1115,6 +1115,7 @@ public class GHRepository extends GHObject {
      * @return
      *      {@link GHRepository} that points to the root repository where this repository is forked
      *      (indirectly or directly) from. Otherwise null.
+     * @see #getParent()       
      */
     public GHRepository getSource() throws IOException {
         if (source == null) return null;
@@ -1123,6 +1124,23 @@ public class GHRepository extends GHObject {
         return source;
     }
 
+    /**
+     * Forked repositories have a 'parent' attribute that specifies the repository this repository
+     * is directly forked from. If we keep traversing {@link #getParent()} until it returns null, that
+     * is {@link #getSource()}.
+     *
+     * @return
+     *      {@link GHRepository} that points to the repository where this repository is forked
+     *      directly from. Otherwise null.
+     * @see #getSource()      
+     */
+    public GHRepository getParent() throws IOException {
+        if (parent == null) return null;
+        if (parent.root == null)
+            parent = root.getRepository(parent.getFullName());
+        return parent;
+    }
+    
     /**
      * Subscribes to this repository to get notifications.
      */

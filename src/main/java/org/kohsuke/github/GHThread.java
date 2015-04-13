@@ -59,23 +59,38 @@ public class GHThread extends GHObject {
         return subject.type;
     }
 
+    /**
+     * If this thread is about an issue, return that issue.
+     * 
+     * @return null if this thread is not about an issue.
+     */
     public GHIssue getBoundIssue() throws IOException {
-        if (!"Issue".equals(subject.type))
-            throw new IllegalStateException("Notification doesn't point to Issue");
+        if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
+            return null;
         return repository.getIssue(
                 Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
     }
 
+    /**
+     * If this thread is about a pull request, return that pull request.
+     *
+     * @return null if this thread is not about a pull request.
+     */
     public GHPullRequest getBoundPullRequest() throws IOException {
         if (!"PullRequest".equals(subject.type))
-            throw new IllegalStateException("Notification doesn't point to PullRequest");
+            return null;
         return repository.getPullRequest(
                 Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
     }
 
+    /**
+     * If this thread is about a commit, return that commit.
+     *
+     * @return null if this thread is not about a commit.
+     */
     public GHCommit getBoundCommit() throws IOException {
         if (!"Commit".equals(subject.type))
-            throw new IllegalStateException("Notification doesn't point to Commit");
+            return null;
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
     }
 

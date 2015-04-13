@@ -673,8 +673,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
     public void testTrees() throws IOException {
     	GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTree("master");
     	boolean foundReadme = false;
-    	for(GHTreeEntry e : masterTree.getTree()){ 
-    		if("readme".equalsIgnoreCase(e.getPath().replaceAll(".md", ""))){
+    	for(GHTreeEntry e : masterTree.getTree()){
+    		if("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))){
     			foundReadme = true;
     			break;
     		}

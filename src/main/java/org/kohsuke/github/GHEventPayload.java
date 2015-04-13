@@ -165,6 +165,7 @@ public abstract class GHEventPayload {
 
         @Override
         void wrapUp(GitHub root) {
+            super.wrapUp(root);
             if (repository!=null)
                 repository.wrap(root);
         }

@@ -19,9 +19,9 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
         if (f.exists()) {
             // use the non-standard credential preferentially, so that developers of this library do not have
             // to clutter their event stream.
-            gitHub = GitHubBuilder.fromPropertyFile(f.getPath()).build();
+            gitHub = GitHubBuilder.fromPropertyFile(f.getPath()).withRateLimitHandler(RateLimitHandler.FAIL).build();
         } else {
-            gitHub = GitHub.connect();
+            gitHub = GitHubBuilder.fromCredentials().withRateLimitHandler(RateLimitHandler.FAIL).build();
         }
     }
 

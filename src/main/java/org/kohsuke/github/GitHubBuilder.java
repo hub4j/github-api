@@ -45,18 +45,18 @@ public class GitHubBuilder {
      * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
     public static GitHubBuilder fromCredentials() throws IOException {
-    	Exception cause = null;
-    	GitHubBuilder builder;
+        Exception cause = null;
+        GitHubBuilder builder;
 
-		try {
-			builder = fromPropertyFile();
+        try {
+            builder = fromPropertyFile();
 
-			if (builder.user != null)
-	    		return builder;
-		} catch (FileNotFoundException e) {
+            if (builder.user != null)
+                return builder;
+        } catch (FileNotFoundException e) {
             // fall through
             cause = e;
-		}
+        }
 
         builder = fromEnvironment();
 
@@ -77,8 +77,8 @@ public class GitHubBuilder {
 
     private static void loadIfSet(String envName, Properties p, String propName) {
         String v = System.getenv(envName);
-       	if (v != null)
-       		p.put(propName, v);
+           if (v != null)
+               p.put(propName, v);
     }
 
     /**
@@ -87,12 +87,12 @@ public class GitHubBuilder {
      *      different clients of this library will all recognize one consistent set of coordinates.
      */
     public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
-    	Properties env = new Properties();
-    	loadIfSet(loginVariableName,env,"login");
+        Properties env = new Properties();
+        loadIfSet(loginVariableName,env,"login");
         loadIfSet(passwordVariableName,env,"password");
         loadIfSet(oauthVariableName,env,"oauth");
         loadIfSet(endpointVariableName,env,"endpoint");
-    	return fromProperties(env);
+        return fromProperties(env);
     }
 
     /**
@@ -116,7 +116,7 @@ public class GitHubBuilder {
      * login, password, oauth
      */
     public static GitHubBuilder fromEnvironment() throws IOException {
-    	Properties props = new Properties();
+        Properties props = new Properties();
         for (Entry<String, String> e : System.getenv().entrySet()) {
             String name = e.getKey().toLowerCase(Locale.ENGLISH);
             if (name.startsWith("github_")) name=name.substring(7);

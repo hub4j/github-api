@@ -44,8 +44,8 @@ import java.util.Locale;
 public class GHIssue extends GHObject {
     GitHub root;
     GHRepository owner;
-	
-	// API v3
+    
+    // API v3
     protected GHUser assignee;
     protected String state;
     protected int number;
@@ -74,9 +74,9 @@ public class GHIssue extends GHObject {
 
     /*package*/ GHIssue wrap(GitHub root) {
         this.root = root;
-		if(assignee != null) assignee.wrapUp(root);
-		if(user != null) user.wrapUp(root);
-		if(closed_by != null) closed_by.wrapUp(root);
+        if(assignee != null) assignee.wrapUp(root);
+        if(user != null) user.wrapUp(root);
+        if(closed_by != null) closed_by.wrapUp(root);
         return this;
     }
 
@@ -134,9 +134,9 @@ public class GHIssue extends GHObject {
         return GitHub.parseDate(closed_at);
     }
 
-	public URL getApiURL(){
+    public URL getApiURL(){
         return GitHub.parseURL(url);
-	}
+    }
 
     /**
      * Updates the issue by adding a comment.
@@ -185,16 +185,16 @@ public class GHIssue extends GHObject {
 
     /**
      * Obtains all the comments associated with this issue.
-	 * 
-	 * @see #listComments() 
+     * 
+     * @see #listComments() 
      */
-	public List<GHIssueComment> getComments() throws IOException {
-		return listComments().asList();
-	}
-	
-	/**
-	 * Obtains all the comments associated with this issue.
-	 */
+    public List<GHIssueComment> getComments() throws IOException {
+        return listComments().asList();
+    }
+    
+    /**
+     * Obtains all the comments associated with this issue.
+     */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
             public PagedIterator<GHIssueComment> iterator() {
@@ -216,16 +216,16 @@ public class GHIssue extends GHObject {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-	public GHUser getAssignee() {
-		return assignee;
-	}
-	
+    public GHUser getAssignee() {
+        return assignee;
+    }
+    
     /**
      * User who submitted the issue.
      */
-	public GHUser getUser() {
+    public GHUser getUser() {
         return user;
-	}
+    }
 
     /**
      * Reports who has closed the issue.
@@ -235,46 +235,46 @@ public class GHIssue extends GHObject {
      * even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
-	public GHUser getClosedBy() {
-		if(!"closed".equals(state)) return null;
-		if(closed_by != null) return closed_by;
-		
-		//TODO closed_by = owner.getIssue(number).getClosed_by();
-		return closed_by;
-	}
-	
-	public int getCommentsCount(){
-		return comments;
-	}
+    public GHUser getClosedBy() {
+        if(!"closed".equals(state)) return null;
+        if(closed_by != null) return closed_by;
+        
+        //TODO closed_by = owner.getIssue(number).getClosed_by();
+        return closed_by;
+    }
+    
+    public int getCommentsCount(){
+        return comments;
+    }
 
     /**
      * Returns non-null if this issue is a shadow of a pull request.
      */
-	public PullRequest getPullRequest() {
-		return pull_request;
-	}
+    public PullRequest getPullRequest() {
+        return pull_request;
+    }
 
     public boolean isPullRequest() {
         return pull_request!=null;
     }
 
-	public GHMilestone getMilestone() {
-		return milestone;
-	}
+    public GHMilestone getMilestone() {
+        return milestone;
+    }
 
-	public static class PullRequest{
-		private String diff_url, patch_url, html_url;
-		
-		public URL getDiffUrl() {
-			return GitHub.parseURL(diff_url);
-		}
-		
-		public URL getPatchUrl() {
-			return GitHub.parseURL(patch_url);
-		}
-		
-		public URL getUrl() {
-			return GitHub.parseURL(html_url);
-		}
-	}
+    public static class PullRequest{
+        private String diff_url, patch_url, html_url;
+        
+        public URL getDiffUrl() {
+            return GitHub.parseURL(diff_url);
+        }
+        
+        public URL getPatchUrl() {
+            return GitHub.parseURL(patch_url);
+        }
+        
+        public URL getUrl() {
+            return GitHub.parseURL(html_url);
+        }
+    }
 }

@@ -50,9 +50,9 @@ public class GHCommitStatus extends GHObject {
         return creator;
     }
 
-	public String getContext() {
-		return context;
-	}
+    public String getContext() {
+        return context;
+    }
 
     /**
      * @deprecated This object has no HTML URL.

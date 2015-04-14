@@ -9,7 +9,7 @@ public class GHDeployKey {
     protected String url, key, title;
     protected boolean verified;
     protected int id;
-	private GHRepository owner;
+    private GHRepository owner;
 
     public int getId() {
         return id;
@@ -31,10 +31,10 @@ public class GHDeployKey {
         return verified;
     }
 
-	public GHDeployKey wrap(GHRepository repo) {
-		this.owner = repo;
-		return this;
-	}
+    public GHDeployKey wrap(GHRepository repo) {
+        this.owner = repo;
+        return this;
+    }
 
     public String toString() {
         return new ToStringBuilder(this).append("title",title).append("id",id).append("key",key).toString();

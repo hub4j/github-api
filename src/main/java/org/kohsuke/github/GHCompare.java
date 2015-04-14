@@ -70,10 +70,10 @@ public class GHCompare {
     }
     
     public GHCommit.File[] getFiles() {
-		return files;
-	}
+        return files;
+    }
 
-	public GHCompare wrap(GHRepository owner) {
+    public GHCompare wrap(GHRepository owner) {
         this.owner = owner;
         for (Commit commit : commits) {
             commit.wrapUp(owner);

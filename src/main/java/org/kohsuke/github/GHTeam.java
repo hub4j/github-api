@@ -47,10 +47,10 @@ public class GHTeam {
         return id;
     }
 
-	/**
-	 * Retrieves the current members.
-	 */
-	public PagedIterable<GHUser> listMembers() throws IOException {
+    /**
+     * Retrieves the current members.
+     */
+    public PagedIterable<GHUser> listMembers() throws IOException {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> iterator() {
                 return new PagedIterator<GHUser>(org.root.retrieve().asIterator(api("/members"), GHUser[].class)) {
@@ -64,8 +64,8 @@ public class GHTeam {
     }
 
     public Set<GHUser> getMembers() throws IOException {
-		return Collections.unmodifiableSet(listMembers().asSet());
-	}
+        return Collections.unmodifiableSet(listMembers().asSet());
+    }
 
     /**
      * Checks if this team has the specified user as a member.

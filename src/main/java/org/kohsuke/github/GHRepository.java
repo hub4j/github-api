@@ -648,48 +648,48 @@ public class GHRepository extends GHObject {
         return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class),root);
     }
     /**
-	 * Retrive a ref of the given type for the current GitHub repository.
-	 * 
-	 * @param refName
-	 *            eg: heads/branch
-	 * @return refs matching the request type
-	 * @throws IOException
-	 *             on failure communicating with GitHub, potentially due to an
-	 *             invalid ref type being requested
-	 */
-	public GHRef getRef(String refName) throws IOException {
-		return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
-	}
+     * Retrive a ref of the given type for the current GitHub repository.
+     * 
+     * @param refName
+     *            eg: heads/branch
+     * @return refs matching the request type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an
+     *             invalid ref type being requested
+     */
+    public GHRef getRef(String refName) throws IOException {
+        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
+    }
     /**
-	 * Retrive a tree of the given type for the current GitHub repository.
-	 * 
-	 * @param sha - sha number or branch name ex: "master"
-	 * @return refs matching the request type
-	 * @throws IOException
-	 *             on failure communicating with GitHub, potentially due to an
-	 *             invalid tree type being requested
-	 */
-	public GHTree getTree(String sha) throws IOException {
-		String url = String.format("/repos/%s/%s/git/trees/%s", owner.login, name, sha);
-		return root.retrieve().to(url, GHTree.class).wrap(root);
-	}
-	
-	/**
-	 * Retrieves the tree for the current GitHub repository, recursively as described in here:
-	 * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
-	 * 
-	 * @param sha - sha number or branch name ex: "master"
-	 * @param recursive use 1
-	 * @throws IOException
-	 *             on failure communicating with GitHub, potentially due to an
-	 *             invalid tree type being requested
-	 */
-	public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
-		String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", owner.login, name, sha, recursive);
-		return root.retrieve().to(url, GHTree.class).wrap(root);
-	}
+     * Retrive a tree of the given type for the current GitHub repository.
+     * 
+     * @param sha - sha number or branch name ex: "master"
+     * @return refs matching the request type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an
+     *             invalid tree type being requested
+     */
+    public GHTree getTree(String sha) throws IOException {
+        String url = String.format("/repos/%s/%s/git/trees/%s", owner.login, name, sha);
+        return root.retrieve().to(url, GHTree.class).wrap(root);
+    }
+    
+    /**
+     * Retrieves the tree for the current GitHub repository, recursively as described in here:
+     * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
+     * 
+     * @param sha - sha number or branch name ex: "master"
+     * @param recursive use 1
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an
+     *             invalid tree type being requested
+     */
+    public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
+        String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", owner.login, name, sha, recursive);
+        return root.retrieve().to(url, GHTree.class).wrap(root);
+    }
 
-	/**
+    /**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {
@@ -789,7 +789,7 @@ public class GHRepository extends GHObject {
      *  @see #createCommitStatus(String, GHCommitState,String,String,String)
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
-    	return createCommitStatus(sha1, state, targetUrl, description,null);
+        return createCommitStatus(sha1, state, targetUrl, description,null);
     }
 
     /**
@@ -995,10 +995,10 @@ public class GHRepository extends GHObject {
      */
     public Map<Integer, GHMilestone> getMilestones() throws IOException {
         Map<Integer,GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
-    	for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {
-    		milestones.put(m.getNumber(), m);
-    	}
-    	return milestones;
+        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {
+            milestones.put(m.getNumber(), m);
+        }
+        return milestones;
     }
 
     /**
@@ -1018,16 +1018,16 @@ public class GHRepository extends GHObject {
         };
     }
 
-	public GHMilestone getMilestone(int number) throws IOException {
-		GHMilestone m = milestones.get(number);
-		if (m == null) {
+    public GHMilestone getMilestone(int number) throws IOException {
+        GHMilestone m = milestones.get(number);
+        if (m == null) {
             m = root.retrieve().to(getApiTailUrl("milestones/" + number), GHMilestone.class);
-    		m.owner = this;
-    		m.root = root;
-			milestones.put(m.getNumber(), m);
-		}
-		return m;
-	}
+            m.owner = this;
+            m.root = root;
+            milestones.put(m.getNumber(), m);
+        }
+        return m;
+    }
 
     public GHContent getFileContent(String path) throws IOException {
         return getFileContent(path, null);
@@ -1094,24 +1094,24 @@ public class GHRepository extends GHObject {
         return response;
     }
 
-	public GHMilestone createMilestone(String title, String description) throws IOException {
+    public GHMilestone createMilestone(String title, String description) throws IOException {
         return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
-	}
-	
-	public GHDeployKey addDeployKey(String title,String key) throws IOException {
-		 return new Requester(root)
+    }
+    
+    public GHDeployKey addDeployKey(String title,String key) throws IOException {
+         return new Requester(root)
          .with("title", title).with("key", key).method("POST").to(getApiTailUrl("keys"), GHDeployKey.class).wrap(this);
-		
-	}
-	
-	public List<GHDeployKey> getDeployKeys() throws IOException{
-		 List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(
-	                root.retrieve().to(getApiTailUrl("keys"), GHDeployKey[].class)));
-	        for (GHDeployKey h : list)
-	            h.wrap(this);
-	        return list;	
-	}
+        
+    }
+    
+    public List<GHDeployKey> getDeployKeys() throws IOException{
+         List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(
+                    root.retrieve().to(getApiTailUrl("keys"), GHDeployKey[].class)));
+            for (GHDeployKey h : list)
+                h.wrap(this);
+            return list;    
+    }
 
     /**
      * Forked repositories have a 'source' attribute that specifies the ultimate source of the forking chain.

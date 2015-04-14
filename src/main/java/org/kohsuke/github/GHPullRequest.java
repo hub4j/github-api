@@ -37,20 +37,20 @@ import java.util.Locale;
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHPullRequest extends GHIssue {
-	
-	private String patch_url, diff_url, issue_url;
-	private GHCommitPointer base;
-	private String merged_at;
-	private GHCommitPointer head;
+
+    private String patch_url, diff_url, issue_url;
+    private GHCommitPointer base;
+    private String merged_at;
+    private GHCommitPointer head;
 
     // details that are only available when obtained from ID
     private GHUser merged_by;
-   	private int review_comments, additions;
-   	private boolean merged;
-   	private Boolean mergeable;
-   	private int deletions;
-   	private String mergeable_state;
-   	private int changed_files;
+    private int review_comments, additions;
+    private boolean merged;
+    private Boolean mergeable;
+    private int deletions;
+    private String mergeable_state;
+    private int changed_files;
 
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
@@ -60,15 +60,15 @@ public class GHPullRequest extends GHIssue {
     private transient boolean fetchedIssueDetails;
 
 
-	GHPullRequest wrapUp(GHRepository owner) {
-		this.wrap(owner);
+    GHPullRequest wrapUp(GHRepository owner) {
+        this.wrap(owner);
         return wrapUp(owner.root);
     }
-	
+
     GHPullRequest wrapUp(GitHub root) {
-        if (owner!=null)    owner.wrap(root);
-        if (base!=null)     base.wrapUp(root);
-        if (head!=null)     head.wrapUp(root);
+        if (owner != null) owner.wrap(root);
+        if (base != null) base.wrapUp(root);
+        if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
         return this;
     }
@@ -85,8 +85,8 @@ public class GHPullRequest extends GHIssue {
     public URL getPatchUrl() {
         return GitHub.parseURL(patch_url);
     }
-	
-	/**
+    
+    /**
      * The URL of the patch file.
      * like https://github.com/jenkinsci/jenkins/pull/100.patch
      */
@@ -108,8 +108,8 @@ public class GHPullRequest extends GHIssue {
     public GHCommitPointer getHead() {
         return head;
     }
-
-	@Deprecated
+    
+    @Deprecated
     public Date getIssueUpdatedAt() throws IOException {
         return super.getUpdatedAt();
     }
@@ -126,65 +126,65 @@ public class GHPullRequest extends GHIssue {
         return GitHub.parseDate(merged_at);
     }
 
-	@Override
-	public Collection<GHLabel> getLabels() throws IOException {
+    @Override
+    public Collection<GHLabel> getLabels() throws IOException {
         fetchIssue();
-		return super.getLabels();
-	}
+        return super.getLabels();
+    }
 
     @Override
-	public GHUser getClosedBy() {
-		return null;
-	}
+    public GHUser getClosedBy() {
+        return null;
+    }
 
-	@Override
-	public PullRequest getPullRequest() {
-		return null;
-	}
+    @Override
+    public PullRequest getPullRequest() {
+        return null;
+    }
 
-//
+    //
 // details that are only available via get with ID
 //
 //
     public GHUser getMergedBy() throws IOException {
         populate();
-   		return merged_by;
-   	}
+        return merged_by;
+    }
 
-   	public int getReviewComments() throws IOException {
+    public int getReviewComments() throws IOException {
         populate();
-   		return review_comments;
-   	}
+        return review_comments;
+    }
 
-   	public int getAdditions() throws IOException {
+    public int getAdditions() throws IOException {
         populate();
-   		return additions;
-   	}
+        return additions;
+    }
 
     public boolean isMerged() throws IOException {
         populate();
-   		return merged;
-   	}
+        return merged;
+    }
 
-   	public Boolean getMergeable() throws IOException {
+    public Boolean getMergeable() throws IOException {
         populate();
-   		return mergeable;
-   	}
+        return mergeable;
+    }
 
-   	public int getDeletions() throws IOException {
+    public int getDeletions() throws IOException {
         populate();
-   		return deletions;
-   	}
+        return deletions;
+    }
 
-   	public String getMergeableState() throws IOException {
+    public String getMergeableState() throws IOException {
         populate();
-   		return mergeable_state;
-   	}
+        return mergeable_state;
+    }
 
-   	public int getChangedFiles() throws IOException {
+    public int getChangedFiles() throws IOException {
         populate();
-   		return changed_files;
-   	}
+        return changed_files;
+    }
 
     /**
      * Fully populate the data by retrieving missing data.

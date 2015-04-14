@@ -32,26 +32,26 @@ public class GHCommit {
         
         private int comment_count;
 
-        @WithBridgeMethods(value=GHAuthor.class,castRequired=true)
-    	public GitUser getAuthor() {
-    		return author;
-    	}
+        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+        public GitUser getAuthor() {
+            return author;
+        }
 
-        @WithBridgeMethods(value=GHAuthor.class,castRequired=true)
-		public GitUser getCommitter() {
-			return committer;
-		}
+        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+        public GitUser getCommitter() {
+            return committer;
+        }
 
         /**
          * Commit message.
          */
-		public String getMessage() {
-			return message;
-		}
+        public String getMessage() {
+            return message;
+        }
 
-		public int getCommentCount() {
-			return comment_count;
-		}
+        public int getCommentCount() {
+            return comment_count;
+        }
     }
 
     /**
@@ -153,14 +153,13 @@ public class GHCommit {
     Stats stats;
     List<Parent> parents;
     User author,committer;
-    
-    
+
 
     public ShortInfo getCommitShortInfo() {
-		return commit;
-	}
+        return commit;
+    }
 
-	/**
+    /**
      * The repository that contains the commit.
      */
     public GHRepository getOwner() {

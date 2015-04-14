@@ -598,10 +598,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-	public void testRef() throws IOException {
-		GHRef masterRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
-		assertEquals("https://api.github.com/repos/jenkinsci/jenkins/git/refs/heads/master", masterRef.getUrl().toString());
-	}
+    public void testRef() throws IOException {
+        GHRef masterRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
+        assertEquals("https://api.github.com/repos/jenkinsci/jenkins/git/refs/heads/master", masterRef.getUrl().toString());
+    }
 
     @Test
     public void directoryListing() throws IOException {
@@ -618,8 +618,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testAddDeployKey() throws IOException {
-    	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
-    	final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
+        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
+        final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
         try {
             assertNotNull(newDeployKey.getId());
 
@@ -636,11 +636,11 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testCommitStatusContext() throws IOException {
-    	GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(), 0);
-    	GHRef masterRef = myRepository.getRef("heads/master");
-    	GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
-    	assertEquals("test/context", commitStatus.getContext());
-    	 
+        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(), 0);
+        GHRef masterRef = myRepository.getRef("heads/master");
+        GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
+        assertEquals("test/context", commitStatus.getContext());
+         
     }
 
     @Test
@@ -671,28 +671,28 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testTrees() throws IOException {
-    	GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTree("master");
-    	boolean foundReadme = false;
-    	for(GHTreeEntry e : masterTree.getTree()){
-    		if("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))){
-    			foundReadme = true;
-    			break;
-    		}
-    	}
-    	assertTrue(foundReadme);
+        GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTree("master");
+        boolean foundReadme = false;
+        for(GHTreeEntry e : masterTree.getTree()){
+            if("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))){
+                foundReadme = true;
+                break;
+            }
+        }
+        assertTrue(foundReadme);
     }
     
     @Test
     public void testTreesRecursive() throws IOException {
-    	GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTreeRecursive("master", 1);
-    	boolean foundThisFile = false;
-    	for(GHTreeEntry e : masterTree.getTree()){ 
-    		if(e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")){
-    			foundThisFile = true;
-    			break;
-    		}
-    	}
-    	assertTrue(foundThisFile);
+        GHTree masterTree = gitHub.getRepository("kohsuke/github-api").getTreeRecursive("master", 1);
+        boolean foundThisFile = false;
+        for(GHTreeEntry e : masterTree.getTree()){ 
+            if(e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")){
+                foundThisFile = true;
+                break;
+            }
+        }
+        assertTrue(foundThisFile);
     }
 
     @Test

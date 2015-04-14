@@ -252,11 +252,11 @@ public class GitHub {
     }
 
     /**
-	 * Gets the {@link GHUser} that represents yourself.
-	 */
+     * Gets the {@link GHUser} that represents yourself.
+     */
     @WithBridgeMethods(GHUser.class)
-	public GHMyself getMyself() throws IOException {
-		requireCredential();
+    public GHMyself getMyself() throws IOException {
+        requireCredential();
 
         GHMyself u = retrieve().to("/user", GHMyself.class);
 
@@ -264,20 +264,20 @@ public class GitHub {
         users.put(u.getLogin(), u);
 
         return u;
-	}
+    }
 
-	/**
-	 * Obtains the object that represents the named user.
-	 */
-	public GHUser getUser(String login) throws IOException {
-		GHUser u = users.get(login);
-		if (u == null) {
+    /**
+     * Obtains the object that represents the named user.
+     */
+    public GHUser getUser(String login) throws IOException {
+        GHUser u = users.get(login);
+        if (u == null) {
             u = retrieve().to("/users/" + login, GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
-		}
-		return u;
-	}
+        }
+        return u;
+    }
 
 
     /**
@@ -415,14 +415,14 @@ public class GitHub {
      *
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
-	public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
-		Requester requester = new Requester(this)
-				.with("scopes", scope)
-				.with("note", note)
-				.with("note_url", noteUrl);
+    public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
+        Requester requester = new Requester(this)
+                .with("scopes", scope)
+                .with("note", note)
+                .with("note_url", noteUrl);
 
-		return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
-	}
+        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+    }
 
     /**
      * Ensures that the credential is valid.

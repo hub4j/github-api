@@ -161,6 +161,10 @@ public class GHRepository extends GHObject {
         return ssh_url;
     }
 
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
+    }
+    
     /**
      * Short repository name without the owner. For example 'jenkins' in case of http://github.com/jenkinsci/jenkins
      */

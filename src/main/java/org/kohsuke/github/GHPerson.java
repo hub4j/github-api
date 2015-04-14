@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -214,8 +215,9 @@ public abstract class GHPerson extends GHObject {
         return blog;
     }
 
-    public String getHtmlUrl() {
-        return html_url;
+    @Override
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     /**

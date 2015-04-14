@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Asset in a release.
@@ -58,6 +59,14 @@ public class GHAsset extends GHObject {
 
     public String getState() {
         return state;
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
     }
 
     public String getBrowserDownloadUrl() {

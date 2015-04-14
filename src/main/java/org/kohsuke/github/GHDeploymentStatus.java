@@ -32,5 +32,11 @@ public class GHDeploymentStatus extends GHObject {
         return GHDeploymentState.valueOf(state.toUpperCase());
     }
 
-
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
+    }
 }

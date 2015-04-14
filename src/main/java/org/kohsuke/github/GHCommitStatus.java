@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -52,4 +53,12 @@ public class GHCommitStatus extends GHObject {
 	public String getContext() {
 		return context;
 	}
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
+    }
 }

@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -35,6 +36,14 @@ public class GHThread extends GHObject {
      */
     public Date getLastReadAt() {
         return GitHub.parseDate(last_read_at);
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
     }
 
     public String getReason() {

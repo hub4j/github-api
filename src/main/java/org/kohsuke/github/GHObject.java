@@ -39,6 +39,12 @@ public abstract class GHObject {
     }
 
     /**
+     * URL of this object for humans, which renders some HTML.
+     */
+    @WithBridgeMethods(value=String.class, adapterMethod="urlToString")
+    public abstract URL getHtmlUrl();
+
+    /**
      * When was this resource last updated?
      */
     public Date getUpdatedAt() throws IOException {

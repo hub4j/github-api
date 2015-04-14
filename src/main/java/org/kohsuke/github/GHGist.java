@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,8 +61,8 @@ public class GHGist extends GHObject {
         return git_push_url;
     }
 
-    public String getHtmlUrl() {
-        return html_url;
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     public boolean isPublic() {

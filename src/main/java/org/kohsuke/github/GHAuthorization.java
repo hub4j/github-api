@@ -63,6 +63,14 @@ public class GHAuthorization extends GHObject {
         return GitHub.parseURL(url);
 	}
 
+	/**
+	 * @deprecated This object has no HTML URL.
+	 */
+	@Override
+	public URL getHtmlUrl() {
+		return null;
+	}
+
 	public String getNote() {
 		return note;
 	}

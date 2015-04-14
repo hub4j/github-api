@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,8 @@ public class GHRelease extends GHObject {
         return draft;
     }
 
-    public String getHtmlUrl() {
-        return html_url;
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     public String getName() {

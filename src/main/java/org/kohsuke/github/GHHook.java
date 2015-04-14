@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -50,5 +51,13 @@ public class GHHook extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(repository.root).method("DELETE").to(String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id));
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
     }
 }

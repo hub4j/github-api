@@ -71,4 +71,12 @@ public class GHIssueComment extends GHObject {
     public GHUser getUser() throws IOException {
         return owner.root.getUser(user.getLogin());
     }
+    
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return null;
+    }
 }

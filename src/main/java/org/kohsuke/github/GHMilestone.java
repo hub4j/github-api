@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
@@ -14,7 +15,7 @@ public class GHMilestone extends GHObject {
 	GHRepository owner;
 
 	GHUser creator;
-	private String state, due_on, title, description;
+	private String state, due_on, title, description, html_url;
 	private int closed_issues, open_issues, number;
 
 	public GitHub getRoot() {
@@ -52,6 +53,10 @@ public class GHMilestone extends GHObject {
 	
 	public int getNumber() {
 		return number;
+	}
+
+	public URL getHtmlUrl() {
+		return GitHub.parseURL(html_url);
 	}
 	
 	public GHMilestoneState getState() {

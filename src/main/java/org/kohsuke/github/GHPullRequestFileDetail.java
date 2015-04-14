@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2013, Luca Milanesio
+ * Copyright (c) 2015, Julien Henry
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,54 +32,54 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
-  String sha;
-  String filename;
-  String status;
-  int additions;
-  int deletions;
-  int changes;
-  String blob_url;
-  String raw_url;
-  String contents_url;
-  String patch;
+    String sha;
+    String filename;
+    String status;
+    int additions;
+    int deletions;
+    int changes;
+    String blob_url;
+    String raw_url;
+    String contents_url;
+    String patch;
 
-  public String getSha() {
-    return sha;
-  }
+    public String getSha() {
+        return sha;
+    }
 
-  public String getFilename() {
-    return filename;
-  }
+    public String getFilename() {
+        return filename;
+    }
 
-  public String getStatus() {
-    return status;
-  }
+    public String getStatus() {
+        return status;
+    }
 
-  public int getAdditions() {
-    return additions;
-  }
+    public int getAdditions() {
+        return additions;
+    }
 
-  public int getDeletions() {
-    return deletions;
-  }
+    public int getDeletions() {
+        return deletions;
+    }
 
-  public int getChanges() {
-    return changes;
-  }
+    public int getChanges() {
+        return changes;
+    }
 
-  public URL getBlobUrl() {
-    return GitHub.parseURL(blob_url);
-  }
+    public URL getBlobUrl() {
+        return GitHub.parseURL(blob_url);
+    }
 
-  public URL getRawUrl() {
-    return GitHub.parseURL(raw_url);
-  }
+    public URL getRawUrl() {
+        return GitHub.parseURL(raw_url);
+    }
 
-  public URL getContentsUrl() {
-    return GitHub.parseURL(contents_url);
-  }
+    public URL getContentsUrl() {
+        return GitHub.parseURL(contents_url);
+    }
 
-  public String getPatch() {
-    return patch;
-  }
+    public String getPatch() {
+        return patch;
+    }
 }

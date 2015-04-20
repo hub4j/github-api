@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * A pull request.
@@ -200,6 +199,39 @@ public class GHPullRequest extends GHIssue {
     /**
      * Retrieves all the commits associated to this pull request.
      */
+    public PagedIterable<GHPullRequestFileDetail> listFiles() {
+        return new PagedIterable<GHPullRequestFileDetail>() {
+            public PagedIterator<GHPullRequestFileDetail> iterator() {
+                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiURL()),
+                        GHPullRequestFileDetail[].class)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestFileDetail[] page) {
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Obtains all the review comments associated with this pull request.
+     */
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+        return new PagedIterable<GHPullRequestReviewComment>() {
+            public PagedIterator<GHPullRequestReviewComment> iterator() {
+                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + "/comments",
+                        GHPullRequestReviewComment[].class)) {
+                    protected void wrapUp(GHPullRequestReviewComment[] page) {
+                        for (GHPullRequestReviewComment c : page)
+                            c.wrapUp(GHPullRequest.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Retrieves all the commits associated to this pull request.
+     */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
         return new PagedIterable<GHPullRequestCommitDetail>() {
             public PagedIterator<GHPullRequestCommitDetail> iterator() {
@@ -208,10 +240,21 @@ public class GHPullRequest extends GHIssue {
                         GHPullRequestCommitDetail[].class)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {
+                        for (GHPullRequestCommitDetail c : page)
+                            c.wrapUp(GHPullRequest.this);
                     }
                 };
             }
         };
+    }
+
+    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
+        return new Requester(root).method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                .with("path", path)
+                .with("position", position)
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class).wrapUp(this);
     }
 
     /**

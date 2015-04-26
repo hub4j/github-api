@@ -287,7 +287,7 @@ class Requester {
      * Set up the request parameters or POST payload.
      */
     private void buildRequest() throws IOException {
-        if (!method.equals("GET")) {
+        if (isMethodWithBody()) {
             uc.setDoOutput(true);
             uc.setRequestProperty("Content-type", contentType);
 
@@ -296,7 +296,6 @@ class Requester {
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
-                MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
                 try {
                     byte[] bytes = new byte[32768];
@@ -309,6 +308,12 @@ class Requester {
                 }
             }
         }
+    }
+
+    private boolean isMethodWithBody() {
+        if (method.equals("GET"))       return false;
+        if (method.equals("DELETE"))    return false;
+        return true;
     }
 
     /**

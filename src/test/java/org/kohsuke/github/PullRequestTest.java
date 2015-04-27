@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -18,7 +19,38 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertEquals(name, p.getTitle());
     }
 
-    @Test // Requires push access to the test repo to pass
+    @Test
+    public void createPullRequestComment() throws Exception {
+        String name = rnd.next();
+        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        p.comment("Some comment");
+    }
+
+    @Test
+    public void testPullRequestReviewComments() throws Exception {
+        String name = rnd.next();
+        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        System.out.println(p.getUrl());
+        assertTrue(p.listReviewComments().asList().isEmpty());
+        p.createReviewComment("Sample review comment", p.getHead().getSha(), "cli/pom.xml", 5);
+        List<GHPullRequestReviewComment> comments = p.listReviewComments().asList();
+        assertEquals(1, comments.size());
+        GHPullRequestReviewComment comment = comments.get(0);
+        assertEquals("Sample review comment", comment.getBody());
+
+        comment.update("Updated review comment");
+        comments = p.listReviewComments().asList();
+        assertEquals(1, comments.size());
+        comment = comments.get(0);
+        assertEquals("Updated review comment", comment.getBody());
+
+        comment.delete();
+        comments = p.listReviewComments().asList();
+        assertTrue(comments.isEmpty());
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
         GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
         String label = rnd.next();
@@ -29,7 +61,8 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertEquals(label, labels.iterator().next().getName());
     }
 
-    @Test // Requires push access to the test repo to pass
+    @Test
+    // Requires push access to the test repo to pass
     public void setAssignee() throws Exception {
         GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
         GHMyself user = gitHub.getMyself();

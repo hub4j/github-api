@@ -86,7 +86,7 @@ public class GHPullRequestReviewComment extends GHObject {
     }
 
     protected String getApiRoute() {
-        return "/repos/"+owner.getRepository().getFullName()+"/comments/"+id;
+        return "/repos/"+owner.getRepository().getFullName()+"/pulls/comments/"+id;
     }
 
     /**

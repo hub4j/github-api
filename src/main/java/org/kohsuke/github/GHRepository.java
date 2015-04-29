@@ -506,6 +506,35 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Sort orders for listing forks
+     */
+    public static enum Sort { NEWEST, OLDEST, STARGAZERS }
+
+    /**
+     * Lists all the forks of this repository.
+     */
+    public PagedIterable<GHRepository> listForks() {
+      return listForks(null);
+    }
+
+    /**
+     * Lists up all the forks of this repository, sorted by the given sort order.
+     */
+    public PagedIterable<GHRepository> listForks(final Sort sort) {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("forks" + ((sort == null)?"":("?sort="+sort.toString().toLowerCase(Locale.ENGLISH)))), GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Forks this repository as your repository.
      *
      * @return

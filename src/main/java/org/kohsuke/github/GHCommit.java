@@ -70,7 +70,8 @@ public class GHCommit {
     public static class File {
         String status;
         int changes,additions,deletions;
-        String raw_url, blob_url, filename, sha, patch;
+        String raw_url, blob_url, sha, patch;
+        String filename, previous_filename;
 
         /**
          * Number of lines added + removed.
@@ -101,10 +102,17 @@ public class GHCommit {
         }
 
         /**
-         * Just the base name and the extension without any directory name.
+         * Full path in the repository.
          */
         public String getFileName() {
             return filename;
+        }
+
+        /**
+         * Previous path, in case file has moved.
+         */
+        public String getPreviousFilename() {
+            return previous_filename;
         }
 
         /**

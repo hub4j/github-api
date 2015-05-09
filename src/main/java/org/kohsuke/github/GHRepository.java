@@ -494,6 +494,12 @@ public class GHRepository extends GHObject {
         edit("homepage",value);
     }
 
+    public void setMasterBranch(String value) throws IOException {
+        // This method might be more aptly named setDefaultBranch,
+        // but we'll use setMasterBranch for consistency with the existing getMasterBranch.
+        edit("default_branch", value);
+    }
+
     /**
      * Deletes this repository.
      */

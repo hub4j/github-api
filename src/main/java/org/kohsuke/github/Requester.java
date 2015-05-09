@@ -296,6 +296,7 @@ class Requester {
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
+                MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
                 try {
                     byte[] bytes = new byte[32768];

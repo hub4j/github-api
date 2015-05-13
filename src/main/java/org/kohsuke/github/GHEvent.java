@@ -28,6 +28,7 @@ public enum GHEvent {
     PULL_REQUEST_REVIEW_COMMENT,
     PUSH,
     RELEASE,
+    REPOSITORY, // only valid for org hooks
     STATUS,
     TEAM_ADD,
     WATCH

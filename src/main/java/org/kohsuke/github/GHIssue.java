@@ -141,8 +141,9 @@ public class GHIssue extends GHObject {
     /**
      * Updates the issue by adding a comment.
      */
-    public void comment(String message) throws IOException {
-        new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments");
+    public GHIssueComment comment(String message) throws IOException {
+        GHIssueComment r = new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+        return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {

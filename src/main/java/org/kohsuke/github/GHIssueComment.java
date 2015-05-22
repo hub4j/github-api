@@ -79,4 +79,23 @@ public class GHIssueComment extends GHObject {
     public URL getHtmlUrl() {
         return null;
     }
+    
+    /**
+     * Updates the body of the issue comment.
+     */
+    public void update(String body) throws IOException {
+        new Requester(owner.root).with("body", body).method("PATCH").to(getCommentApiTail(), GHIssueComment.class);
+        this.body = body;
+    }
+
+    /**
+     * Deletes this issue comment.
+     */
+    public void delete() throws IOException {
+        new Requester(owner.root).method("DELETE").to(getCommentApiTail());
+    }
+    
+    private String getCommentApiTail() {
+        return "/repos/"+owner.getRepository().getOwnerName()+"/"+owner.getRepository().getName()+"/issues/comments/" + id;
+    }
 }

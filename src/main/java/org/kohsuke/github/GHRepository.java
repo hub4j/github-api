@@ -321,6 +321,10 @@ public class GHRepository extends GHObject {
         return fork;
     }
 
+    /**
+     * Returns the number of all forks of this repository.
+     * This not only counts direct forks, but also forks of forks, and so on.
+     */
     public int getForks() {
         return forks;
     }
@@ -511,14 +515,15 @@ public class GHRepository extends GHObject {
     public static enum Sort { NEWEST, OLDEST, STARGAZERS }
 
     /**
-     * Lists all the forks of this repository.
+     * Lists all the direct forks of this repository, sorted by {@link Sort#NEWEST Sort.NEWEST}
      */
     public PagedIterable<GHRepository> listForks() {
       return listForks(null);
     }
 
     /**
-     * Lists up all the forks of this repository, sorted by the given sort order.
+     * Lists all the direct forks of this repository, sorted by the given sort order.
+     * @param sort the sort order. If null, defaults to {@link Sort#NEWEST Sort.NEWEST}.
      */
     public PagedIterable<GHRepository> listForks(final Sort sort) {
         return new PagedIterable<GHRepository>() {

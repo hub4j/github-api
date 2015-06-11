@@ -1,34 +1,40 @@
 package org.kohsuke.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
  */
-public class GitHubTest extends TestCase {
-
+public class GitHubTest {
+    @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus","bogus");
         assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
-
+    @Test
     public void testGitHubServerWithHttps() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus","bogus");
         assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
-
+    @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
         assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
     }
-    
+    @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
         
         Map<String, String>props = new HashMap<String, String>();
@@ -86,7 +92,7 @@ public class GitHubTest extends TestCase {
             e1.printStackTrace();
         }
     }
-
+    @Test
     public void testGitHubBuilderFromCustomEnvironment() throws IOException {
         Map<String, String> props = new HashMap<String, String>();
 
@@ -105,4 +111,12 @@ public class GitHubTest extends TestCase {
         assertEquals("bogusEndpoint", builder.endpoint);
     }
 
+    @Test
+    public void testGitHubEnterpriseDoesNotHaveRateLimit() throws IOException {
+        GitHub github = spy(new GitHubBuilder().build());
+        when(github.retrieve()).thenThrow(FileNotFoundException.class);
+
+        GHRateLimit rateLimit = github.getRateLimit();
+        assertThat(rateLimit.getResetDate(), notNullValue());
+    }
 }

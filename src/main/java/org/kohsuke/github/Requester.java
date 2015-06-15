@@ -53,6 +53,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import static java.util.Arrays.asList;
 import static org.kohsuke.github.GitHub.*;
 
 /**
@@ -61,6 +62,8 @@ import static org.kohsuke.github.GitHub.*;
  * @author Kohsuke Kawaguchi
  */
 class Requester {
+    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
+    
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
@@ -296,6 +299,7 @@ class Requester {
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
+                MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
                 try {
                     byte[] bytes = new byte[32768];
@@ -311,9 +315,7 @@ class Requester {
     }
 
     private boolean isMethodWithBody() {
-        if (method.equals("GET"))       return false;
-        if (method.equals("DELETE"))    return false;
-        return true;
+        return !METHODS_WITHOUT_BODY.contains(method);
     }
 
     /**

@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -292,20 +293,20 @@ class Requester {
             uc.setRequestProperty("Content-type", contentType);
 
             if (body == null) {
-                Map json = new HashMap();
+                Map<String, Object> json = new HashMap<String, Object>();
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
-            } else {
-                try {
-                    byte[] bytes = new byte[32768];
-                    int read = 0;
-                    while ((read = body.read(bytes)) != -1) {
-                        uc.getOutputStream().write(bytes, 0, read);
-                    }
-                } finally {
-                    body.close();
+                body = new ByteArrayInputStream(MAPPER.writeValueAsBytes(json));
+            }
+            try {
+                byte[] bytes = new byte[32768];
+                int read = 0;
+                while ((read = body.read(bytes)) != -1) {
+                    uc.getOutputStream().write(bytes, 0, read);
                 }
+            } finally {
+                body.close();
             }
         }
     }

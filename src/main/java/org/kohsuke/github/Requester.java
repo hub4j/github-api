@@ -211,7 +211,7 @@ class Requester {
 
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         while (true) {// loop while API rate limit is hit
-            if (method.equals("GET") && !args.isEmpty()) {
+            if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
                 StringBuilder qs=new StringBuilder();
                 for (Entry arg : args) {
                     qs.append(qs.length()==0 ? '?' : '&');

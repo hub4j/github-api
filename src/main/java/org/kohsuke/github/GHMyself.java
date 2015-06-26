@@ -17,6 +17,18 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
+
+    /**
+     * Type of repositories returned during listing.
+     */
+    public enum RepositoryType {
+        ALL,  // All public and private repositories that current user has access or collaborates to
+        OWNER, // Public and private repositories owned by current user
+        PUBLIC, // Public repositories that current user has access or collaborates to
+        PRIVATE, // Private repositories that current user has access or collaborates to
+        MEMBER; // Public and private repositories that current user is a member
+    }
+
     /**
      * @deprecated
      *      Use {@link #getEmails2()}
@@ -109,16 +121,31 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Lists up all the repositories this user owns (public and private) using the specified page size.
+     * List repositories that are accessible to the authenticated user (public and private) using the specified page size.
+     *
+     * This includes repositories owned by the authenticated user, repositories that belong to other users
+     * where the authenticated user is a collaborator, and other organizations' repositories that the authenticated
+     * user has access to through an organization membership.
      *
      * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
      *
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+        return listRepositories(pageSize, RepositoryType.ALL);
+    }
+
+    /**
+     * List repositories of a certain type that are accessible by current authenticated user using the specified page size.
+     *
+     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
+     * @param repoType type of repository returned in the listing
+     */
+    public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryType repoType) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize, GHRepository[].class)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize +
+                    "&type=" + repoType.name().toLowerCase(), GHRepository[].class)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

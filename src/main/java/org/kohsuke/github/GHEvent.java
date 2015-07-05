@@ -30,5 +30,6 @@ public enum GHEvent {
     RELEASE,
     STATUS,
     TEAM_ADD,
-    WATCH
+    WATCH,
+    PING
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +20,7 @@ public class GHMyself extends GHUser {
     /**
      * Type of repositories returned during listing.
      */
-    public enum RepositoryType {
+    public enum RepositoryListFilter {
         ALL,  // All public and private repositories that current user has access or collaborates to
         OWNER, // Public and private repositories owned by current user
         PUBLIC, // Public repositories that current user has access or collaborates to
@@ -132,7 +131,7 @@ public class GHMyself extends GHUser {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return listRepositories(pageSize, RepositoryType.ALL);
+        return listRepositories(pageSize, RepositoryListFilter.ALL);
     }
 
     /**
@@ -141,7 +140,7 @@ public class GHMyself extends GHUser {
      * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
      * @param repoType type of repository returned in the listing
      */
-    public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryType repoType) {
+    public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
                 return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize +

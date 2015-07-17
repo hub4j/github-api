@@ -12,12 +12,12 @@ class GHRepoHook extends GHHook {
     }
 
     @Override
-    GitHub root() {
+    GitHub getRoot() {
         return repository.root;
     }
 
     @Override
-    String path() {
+    String getApiRoute() {
         return String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id);
     }
 }

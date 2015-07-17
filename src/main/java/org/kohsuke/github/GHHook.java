@@ -40,7 +40,7 @@ public abstract class GHHook extends GHObject {
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Requester(root()).method("DELETE").to(path());
+        new Requester(getRoot()).method("DELETE").to(getApiRoute());
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class GHHook extends GHObject {
         return null;
     }
 
-    abstract GitHub root();
+    abstract GitHub getRoot();
 
-    abstract String path();
+    abstract String getApiRoute();
 }

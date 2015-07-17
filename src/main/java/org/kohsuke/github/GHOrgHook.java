@@ -16,12 +16,12 @@ class GHOrgHook extends GHHook {
     }
 
     @Override
-    GitHub root() {
+    GitHub getRoot() {
         return organization.root;
     }
 
     @Override
-    String path() {
+    String getApiRoute() {
         return String.format("/orgs/%s/hooks/%d", organization.getLogin(), id);
     }
 }

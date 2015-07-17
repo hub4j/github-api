@@ -321,6 +321,10 @@ public class GHRepository extends GHObject {
         return fork;
     }
 
+    /**
+     * Returns the number of all forks of this repository.
+     * This not only counts direct forks, but also forks of forks, and so on.
+     */
     public int getForks() {
         return forks;
     }
@@ -515,6 +519,43 @@ public class GHRepository extends GHObject {
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + owner.login + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
         }
+    }
+
+    /**
+     * Sort orders for listing forks
+     */
+    public static enum ForkSort { NEWEST, OLDEST, STARGAZERS }
+
+    /**
+     * Lists all the direct forks of this repository, sorted by
+     * github api default, currently {@link ForkSort#NEWEST ForkSort.NEWEST}.
+     */
+    public PagedIterable<GHRepository> listForks() {
+      return listForks(null);
+    }
+
+    /**
+     * Lists all the direct forks of this repository, sorted by the given sort order.
+     * @param sort the sort order. If null, defaults to github api default,
+     * currently {@link ForkSort#NEWEST ForkSort.NEWEST}.
+     */
+    public PagedIterable<GHRepository> listForks(final ForkSort sort) {
+        return new PagedIterable<GHRepository>() {
+            public PagedIterator<GHRepository> iterator() {
+                String sortParam = "";
+                if (sort != null) {
+                    sortParam = "?sort=" + sort.toString().toLowerCase(Locale.ENGLISH);
+                }
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("forks" + sortParam), GHRepository[].class)) {
+                    @Override
+                    protected void wrapUp(GHRepository[] page) {
+                        for (GHRepository c : page) {
+                            c.wrap(root);
+                        }
+                    }
+                };
+            }
+        };
     }
 
     /**

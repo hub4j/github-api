@@ -21,11 +21,26 @@ public class GHMyself extends GHUser {
      * Type of repositories returned during listing.
      */
     public enum RepositoryListFilter {
-        ALL,  // All public and private repositories that current user has access or collaborates to
-        OWNER, // Public and private repositories owned by current user
-        PUBLIC, // Public repositories that current user has access or collaborates to
-        PRIVATE, // Private repositories that current user has access or collaborates to
-        MEMBER; // Public and private repositories that current user is a member
+        /**
+         * All public and private repositories that current user has access or collaborates to
+         */
+        ALL,
+        /**
+         * Public and private repositories owned by current user
+         */
+        OWNER,
+        /**
+         * Public repositories that current user has access or collaborates to
+         */
+        PUBLIC,
+        /**
+         * Private repositories that current user has access or collaborates to
+         */
+        PRIVATE,
+        /**
+         * Public and private repositories that current user is a member
+         */
+        MEMBER;
     }
 
     /**

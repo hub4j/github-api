@@ -40,7 +40,8 @@ public class GHBranch {
 
     @Override
     public String toString() {
-        return "Branch:" + name + " in " + owner.getUrl();
+        final String url = owner != null ? owner.getUrl().toString() : "unknown";
+        return "Branch:" + name + " in " + url;
     }
 
     /*package*/ GHBranch wrap(GHRepository repo) {

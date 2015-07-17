@@ -1162,7 +1162,7 @@ public class GHRepository extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return new Requester(root).to(getApiTailUrl("subscription"), GHSubscription.class).wrapUp(this);
+            return root.retrieve().to(getApiTailUrl("subscription"), GHSubscription.class).wrapUp(this);
         } catch (FileNotFoundException e) {
             return null;
         }

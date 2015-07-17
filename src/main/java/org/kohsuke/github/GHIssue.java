@@ -24,6 +24,8 @@
 
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -140,7 +142,11 @@ public class GHIssue extends GHObject {
 
     /**
      * Updates the issue by adding a comment.
+     *
+     * @return
+     *      Newly posted comment.
      */
+    @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
         GHIssueComment r = new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
         return r.wrapUp(this);
@@ -177,7 +183,7 @@ public class GHIssue extends GHObject {
     }
 
     public void assignTo(GHUser user) throws IOException {
-        editIssue("assignee",user.getLogin());
+        editIssue("assignee", user.getLogin());
     }
 
     public void setLabels(String... labels) throws IOException {

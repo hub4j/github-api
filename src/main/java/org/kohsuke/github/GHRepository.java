@@ -40,7 +40,7 @@ import static java.util.Arrays.asList;
 
 /**
  * A repository on GitHub.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
@@ -57,14 +57,14 @@ public class GHRepository extends GHObject {
     private int watchers,forks,open_issues,size,network_count,subscribers_count;
     private String pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
-    
+
     private String default_branch,language;
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
-    
+
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this,ref);
     }
@@ -164,7 +164,7 @@ public class GHRepository extends GHObject {
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
-    
+
     /**
      * Short repository name without the owner. For example 'jenkins' in case of http://github.com/jenkinsci/jenkins
      */
@@ -650,15 +650,11 @@ public class GHRepository extends GHObject {
      * Retrieves the currently configured hooks.
      */
     public List<GHHook> getHooks() throws IOException {
-        List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieve().to(getApiTailUrl("hooks"), GHHook[].class)));
-        for (GHHook h : list)
-            h.wrap(this);
-        return list;
+        return GHHooks.repoContext(this, owner).getHooks();
     }
 
     public GHHook getHook(int id) throws IOException {
-        return root.retrieve().to(getApiTailUrl("hooks/" + id), GHHook.class).wrap(this);
+        return GHHooks.repoContext(this, owner).getHook(id);
     }
 
     /**
@@ -702,7 +698,7 @@ public class GHRepository extends GHObject {
     }
     /**
      * Retrive a ref of the given type for the current GitHub repository.
-     * 
+     *
      * @param refName
      *            eg: heads/branch
      * @return refs matching the request type
@@ -715,7 +711,7 @@ public class GHRepository extends GHObject {
     }
     /**
      * Retrive a tree of the given type for the current GitHub repository.
-     * 
+     *
      * @param sha - sha number or branch name ex: "master"
      * @return refs matching the request type
      * @throws IOException
@@ -726,11 +722,11 @@ public class GHRepository extends GHObject {
         String url = String.format("/repos/%s/%s/git/trees/%s", owner.login, name, sha);
         return root.retrieve().to(url, GHTree.class).wrap(root);
     }
-    
+
     /**
      * Retrieves the tree for the current GitHub repository, recursively as described in here:
      * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
-     * 
+     *
      * @param sha - sha number or branch name ex: "master"
      * @param recursive use 1
      * @throws IOException
@@ -827,7 +823,7 @@ public class GHRepository extends GHObject {
      * @param description
      *      Optional short description.
      *  @param context
-     *      Optinal commit status context.    
+     *      Optinal commit status context.
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description, String context) throws IOException {
         return new Requester(root)
@@ -837,7 +833,7 @@ public class GHRepository extends GHObject {
                 .with("context", context)
                 .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
     }
-    
+
     /**
      *  @see #createCommitStatus(String, GHCommitState,String,String,String)
      */
@@ -911,10 +907,10 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * 
+     *
      * See https://api.github.com/hooks for possible names and their configuration scheme.
      * TODO: produce type-safe binding
-     * 
+     *
      * @param name
      *      Type of the hook to be created. See https://api.github.com/hooks for possible names.
      * @param config
@@ -923,21 +919,9 @@ public class GHRepository extends GHObject {
      *      Can be null. Types of events to hook into.
      */
     public GHHook createHook(String name, Map<String,String> config, Collection<GHEvent> events, boolean active) throws IOException {
-        List<String> ea = null;
-        if (events!=null) {
-            ea = new ArrayList<String>();
-            for (GHEvent e : events)
-                ea.add(e.name().toLowerCase(Locale.ENGLISH));
-        }
-
-        return new Requester(root)
-                .with("name", name)
-                .with("active", active)
-                ._with("config", config)
-                ._with("events",ea)
-                .to(String.format("/repos/%s/%s/hooks",owner.login,this.name),GHHook.class).wrap(this);
+        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);
     }
-    
+
     public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {
         return createHook("web",Collections.singletonMap("url",url.toExternalForm()),events,true);
     }
@@ -962,8 +946,8 @@ public class GHRepository extends GHObject {
     /**
      * Returns a set that represents the post-commit hook URLs.
      * The returned set is live, and changes made to them are reflected to GitHub.
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      *      Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
     public Set<URL> getPostCommitHooks() {
@@ -1151,19 +1135,19 @@ public class GHRepository extends GHObject {
         return new Requester(root)
                 .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
     }
-    
+
     public GHDeployKey addDeployKey(String title,String key) throws IOException {
          return new Requester(root)
          .with("title", title).with("key", key).method("POST").to(getApiTailUrl("keys"), GHDeployKey.class).wrap(this);
-        
+
     }
-    
+
     public List<GHDeployKey> getDeployKeys() throws IOException{
          List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(
                     root.retrieve().to(getApiTailUrl("keys"), GHDeployKey[].class)));
             for (GHDeployKey h : list)
                 h.wrap(this);
-            return list;    
+            return list;
     }
 
     /**
@@ -1172,7 +1156,7 @@ public class GHRepository extends GHObject {
      * @return
      *      {@link GHRepository} that points to the root repository where this repository is forked
      *      (indirectly or directly) from. Otherwise null.
-     * @see #getParent()       
+     * @see #getParent()
      */
     public GHRepository getSource() throws IOException {
         if (source == null) return null;
@@ -1189,7 +1173,7 @@ public class GHRepository extends GHObject {
      * @return
      *      {@link GHRepository} that points to the repository where this repository is forked
      *      directly from. Otherwise null.
-     * @see #getSource()      
+     * @see #getSource()
      */
     public GHRepository getParent() throws IOException {
         if (parent == null) return null;
@@ -1197,7 +1181,7 @@ public class GHRepository extends GHObject {
             parent = root.getRepository(parent.getFullName());
         return parent;
     }
-    
+
     /**
      * Subscribes to this repository to get notifications.
      */

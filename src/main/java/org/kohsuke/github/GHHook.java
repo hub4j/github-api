@@ -11,21 +11,11 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GHHook extends GHObject {
-    /**
-     * Repository that the hook belongs to.
-     */
-    /*package*/ transient GHRepository repository;
-    
+public abstract class GHHook extends GHObject {
     String name;
     List<String> events;
     boolean active;
     Map<String,String> config;
-
-    /*package*/ GHHook wrap(GHRepository owner) {
-        this.repository = owner;
-        return this;
-    }
 
     public String getName() {
         return name;
@@ -50,7 +40,7 @@ public class GHHook extends GHObject {
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Requester(repository.root).method("DELETE").to(String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id));
+        new Requester(getRoot()).method("DELETE").to(getApiRoute());
     }
 
     /**
@@ -60,4 +50,8 @@ public class GHHook extends GHObject {
     public URL getHtmlUrl() {
         return null;
     }
+
+    abstract GitHub getRoot();
+
+    abstract String getApiRoute();
 }

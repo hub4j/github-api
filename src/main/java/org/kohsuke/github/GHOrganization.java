@@ -1,10 +1,13 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,7 +29,7 @@ public class GHOrganization extends GHPerson {
         GHTeam t = getTeams().get(team);
         if (t==null)
             throw new IllegalArgumentException("No such team: "+team);
-        return createRepository(name,description,homepage,t,isPublic);
+        return createRepository(name, description, homepage, t, isPublic);
     }
 
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
@@ -251,5 +254,40 @@ public class GHOrganization extends GHPerson {
                 };
             }
         };
+    }
+
+    /**
+     * Retrieves the currently configured hooks.
+     */
+    public List<GHHook> getHooks() throws IOException {
+        return GHHooks.orgContext(this).getHooks();
+    }
+
+    public GHHook getHook(int id) throws IOException {
+        return GHHooks.orgContext(this).getHook(id);
+    }
+
+    /**
+     *
+     * See https://api.github.com/hooks for possible names and their configuration scheme.
+     * TODO: produce type-safe binding
+     *
+     * @param name
+     *      Type of the hook to be created. See https://api.github.com/hooks for possible names.
+     * @param config
+     *      The configuration hash.
+     * @param events
+     *      Can be null. Types of events to hook into.
+     */
+    public GHHook createHook(String name, Map<String,String> config, Collection<GHEvent> events, boolean active) throws IOException {
+        return GHHooks.orgContext(this).createHook(name, config, events, active);
+    }
+
+    public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {
+        return createHook("web", Collections.singletonMap("url", url.toExternalForm()),events,true);
+    }
+
+    public GHHook createWebHook(URL url) throws IOException {
+        return createWebHook(url, null);
     }
 }

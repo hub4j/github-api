@@ -364,6 +364,14 @@ public class GHRepository extends GHObject {
      * @return
      *      This field is null until the user explicitly configures the master branch.
      */
+    public String getDefaultBranch() {
+        return default_branch;
+    }
+
+    /**
+     * @deprecated
+     *      Renamed to {@link #getDefaultBranch()}
+     */
     public String getMasterBranch() {
         return default_branch;
     }
@@ -494,9 +502,7 @@ public class GHRepository extends GHObject {
         edit("homepage",value);
     }
 
-    public void setMasterBranch(String value) throws IOException {
-        // This method might be more aptly named setDefaultBranch,
-        // but we'll use setMasterBranch for consistency with the existing getMasterBranch.
+    public void setDefaultBranch(String value) throws IOException {
         edit("default_branch", value);
     }
 

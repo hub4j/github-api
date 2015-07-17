@@ -351,7 +351,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             sha1.add(c.getSHA1());
         }
         assertEquals("1cccddb22e305397151b2b7b87b4b47d74ca337b",sha1.get(0));
-        assertEquals(29,sha1.size());
+        assertEquals(29, sha1.size());
     }
 
     @Test
@@ -618,7 +618,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testAddDeployKey() throws IOException {
-        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
+        GHRepository myRepository = getTestRepository();
         final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
         try {
             assertNotNull(newDeployKey.getId());
@@ -636,7 +636,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testCommitStatusContext() throws IOException {
-        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(), 0);
+        GHRepository myRepository = getTestRepository();
         GHRef masterRef = myRepository.getRef("heads/master");
         GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
         assertEquals("test/context", commitStatus.getContext());

@@ -94,6 +94,7 @@ public class GHPullRequestReviewComment extends GHObject {
      */
     public void update(String body) throws IOException {
         new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
+        this.body = body;
     }
 
     /**

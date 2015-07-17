@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 
 /**
  * Comment to the issue
@@ -78,5 +77,24 @@ public class GHIssueComment extends GHObject {
     @Override
     public URL getHtmlUrl() {
         return null;
+    }
+    
+    /**
+     * Updates the body of the issue comment.
+     */
+    public void update(String body) throws IOException {
+        new Requester(owner.root).with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        this.body = body;
+    }
+
+    /**
+     * Deletes this issue comment.
+     */
+    public void delete() throws IOException {
+        new Requester(owner.root).method("DELETE").to(getApiRoute());
+    }
+    
+    private String getApiRoute() {
+        return "/repos/"+owner.getRepository().getOwnerName()+"/"+owner.getRepository().getName()+"/issues/comments/" + id;
     }
 }

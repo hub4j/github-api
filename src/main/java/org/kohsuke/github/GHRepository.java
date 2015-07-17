@@ -37,7 +37,6 @@ import java.net.URL;
 import java.util.*;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang.ObjectUtils.defaultIfNull;
 
 /**
  * A repository on GitHub.

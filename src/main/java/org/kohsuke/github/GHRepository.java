@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.*;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang.ObjectUtils.defaultIfNull;
 
 /**
  * A repository on GitHub.
@@ -512,10 +513,11 @@ public class GHRepository extends GHObject {
     /**
      * Sort orders for listing forks
      */
-    public static enum Sort { NEWEST, OLDEST, STARGAZERS }
+    public static enum ForkSort { NEWEST, OLDEST, STARGAZERS }
 
     /**
-     * Lists all the direct forks of this repository, sorted by {@link Sort#NEWEST Sort.NEWEST}
+     * Lists all the direct forks of this repository, sorted by
+     * github api default, currently {@link ForkSort#NEWEST ForkSort.NEWEST}.
      */
     public PagedIterable<GHRepository> listForks() {
       return listForks(null);
@@ -523,16 +525,22 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all the direct forks of this repository, sorted by the given sort order.
-     * @param sort the sort order. If null, defaults to {@link Sort#NEWEST Sort.NEWEST}.
+     * @param sort the sort order. If null, defaults to github api default,
+     * currently {@link ForkSort#NEWEST ForkSort.NEWEST}.
      */
-    public PagedIterable<GHRepository> listForks(final Sort sort) {
+    public PagedIterable<GHRepository> listForks(final ForkSort sort) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("forks" + ((sort == null)?"":("?sort="+sort.toString().toLowerCase(Locale.ENGLISH)))), GHRepository[].class)) {
+                String sortParam = "";
+                if (sort != null) {
+                    sortParam = "?sort=" + sort.toString().toLowerCase(Locale.ENGLISH);
+                }
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("forks" + sortParam), GHRepository[].class)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
+                        for (GHRepository c : page) {
                             c.wrap(root);
+                        }
                     }
                 };
             }

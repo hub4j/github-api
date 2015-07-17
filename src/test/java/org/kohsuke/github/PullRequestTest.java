@@ -82,7 +82,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         PagedIterable<GHPullRequest> ghPullRequests = getRepository().listPullRequests(GHIssueState.OPEN);
         for (GHPullRequest pr : ghPullRequests) {
             assertNotNull(pr.getUser().root);
-            assertFalse(pr.getMergeable());
+            pr.getMergeable();
             assertNotNull(pr.getUser().root);
         }
     }

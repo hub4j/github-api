@@ -23,6 +23,7 @@ public enum GHEvent {
     ISSUE_COMMENT,
     ISSUES,
     MEMBER,
+    PAGE_BUILD,
     PUBLIC,
     PULL_REQUEST,
     PULL_REQUEST_REVIEW_COMMENT,

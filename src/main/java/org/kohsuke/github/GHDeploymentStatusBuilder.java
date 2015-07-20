@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
@@ -11,7 +12,7 @@ public class GHDeploymentStatusBuilder {
         this.repo = repo;
         this.deploymentId = deploymentId;
         this.builder = new Requester(repo.root);
-        this.builder.with("state",state.toString().toLowerCase());
+        this.builder.with("state",state.toString().toLowerCase(Locale.ENGLISH));
     }
 
     public GHDeploymentStatusBuilder description(String description) {

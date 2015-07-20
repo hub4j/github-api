@@ -76,7 +76,7 @@ public class GHContent {
      *      Use {@link #read()}
      */
     public String getContent() throws IOException {
-        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
+        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()), getEncoding());
     }
 
     /**
@@ -162,11 +162,11 @@ public class GHContent {
     }
 
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-        return update(newContent.getBytes(), commitMessage, null);
+        return update(newContent.getBytes(getEncoding()), commitMessage, null);
     }
 
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-        return update(newContent.getBytes(), commitMessage, branch);
+        return update(newContent.getBytes(getEncoding()), commitMessage, branch);
     }
 
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {

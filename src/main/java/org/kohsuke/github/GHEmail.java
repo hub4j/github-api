@@ -23,12 +23,16 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 
 /**
  * Represents an email of GitHub.
  *
  * @author Kelly Campbell
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD", "NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"}, justification = "JSON API")
 public class GHEmail {
 
     protected String email;

@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.DatatypeConverter;
@@ -33,7 +34,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import static java.util.Arrays.asList;
@@ -44,6 +47,8 @@ import static java.util.Arrays.asList;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHRepository extends GHObject {
     /*package almost final*/ GitHub root;
 
@@ -217,7 +222,8 @@ public class GHRepository extends GHObject {
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
                 .to(getApiTailUrl(String.format("issues?state=%s&milestone=%s",
-                        state.toString().toLowerCase(), milestone == null ? "none" : "" + milestone.getNumber())),
+                        state.toString().toLowerCase(Locale.ENGLISH), 
+                        milestone == null ? "none" : "" + milestone.getNumber())),
                         GHIssue[].class
                 ), this));
     }
@@ -383,7 +389,8 @@ public class GHRepository extends GHObject {
     public int getSize() {
         return size;
     }
-
+    
+   
     /**
      * Gets the collaborators on this repository.
      * This set always appear to include the owner.
@@ -950,6 +957,8 @@ public class GHRepository extends GHObject {
      * @deprecated
      *      Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
     }
@@ -957,6 +966,8 @@ public class GHRepository extends GHObject {
     /**
      * Live set view of the post-commit hook.
      */
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
         private List<URL> getPostCommitHooks() {
             try {
@@ -1101,11 +1112,17 @@ public class GHRepository extends GHObject {
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent(content.getBytes(), commitMessage, path, null);
+        return createContent(content, commitMessage, path, null);
     }
 
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
-        return createContent(content.getBytes(), commitMessage, path, branch);
+        final byte[] payload;
+        try {
+            payload = content.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw  new IOException("UTF-8 encoding is not supported", ex);
+        }
+        return createContent(payload, commitMessage, path, branch);
     }
 
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
@@ -1225,6 +1242,18 @@ public class GHRepository extends GHObject {
         public int getContributions() {
             return contributions;
         }
+
+        @Override
+        public int hashCode() {
+            // We ignore contributions in the calculation
+            return super.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            // We ignore contributions in the calculation
+            return super.equals(obj);
+        }   
     }
 
     /**

@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Represents an event.
  *
  * @author Kohsuke Kawaguchi
  */
+@SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHEventInfo {
     private GitHub root;
 
@@ -27,8 +29,12 @@ public class GHEventInfo {
     /**
      * Inside the event JSON model, GitHub uses a slightly different format.
      */
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "JSON API")
     public static class GHEventRepository {
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private int id;
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private String url;     // repository API URL
         private String name;    // owner/repo
     }
@@ -55,10 +61,14 @@ public class GHEventInfo {
     /**
      * Repository where the change was made.
      */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+            justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
         return root.getRepository(repo.name);
     }
     
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+            justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
         return root.getUser(actor.getLogin());
     }
@@ -70,6 +80,8 @@ public class GHEventInfo {
         return actor.getLogin();
     }
 
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+            justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
         return (org==null || org.getLogin()==null) ? null : root.getOrganization(org.getLogin());
     }

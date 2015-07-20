@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
@@ -9,6 +10,8 @@ import java.util.Date;
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public abstract class GHObject {
     protected String url;
     protected int id;
@@ -24,10 +27,6 @@ public abstract class GHObject {
     @WithBridgeMethods(value=String.class, adapterMethod="createdAtStr")
     public Date getCreatedAt() throws IOException {
         return GitHub.parseDate(created_at);
-    }
-
-    private Object createdAtStr(Date id, Class type) {
-        return created_at;
     }
 
     /**
@@ -57,13 +56,5 @@ public abstract class GHObject {
     @WithBridgeMethods(value=String.class, adapterMethod="intToString")
     public int getId() {
         return id;
-    }
-
-    private Object intToString(int id, Class type) {
-        return String.valueOf(id);
-    }
-
-    private Object urlToString(URL url, Class type) {
-        return url==null ? null : url.toString();
     }
 }

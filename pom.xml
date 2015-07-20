@@ -28,6 +28,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
+    <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
   </properties>
 
   <build>
@@ -47,11 +49,11 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>${findbugs-maven-plugin.version}</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
           <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-          <failOnError>false</failOnError>
+          <failOnError>${findbugs-maven-plugin.failOnError}</failOnError>
         </configuration>
         <executions>
           <execution>

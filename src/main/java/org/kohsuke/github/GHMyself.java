@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -159,7 +160,7 @@ public class GHMyself extends GHUser {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> iterator() {
                 return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize +
-                    "&type=" + repoType.name().toLowerCase(), GHRepository[].class)) {
+                    "&type=" + repoType.name().toLowerCase(Locale.ENGLISH), GHRepository[].class)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

@@ -24,8 +24,10 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * Commit detail inside a {@link GHPullRequest}.
@@ -33,6 +35,8 @@ import java.net.URL;
  * @author Luca Milanesio
  * @see GHPullRequest#listCommits()
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
 public class GHPullRequestCommitDetail {
     private GHPullRequest owner;
 
@@ -88,6 +92,10 @@ public class GHPullRequestCommitDetail {
         public int getComment_count() {
             return comment_count;
         }
+
+        public Tree getTree() {
+            return tree;
+        }
     }
 
     public static class CommitPointer {
@@ -136,6 +144,6 @@ public class GHPullRequestCommitDetail {
     }
 
     public CommitPointer[] getParents() {
-        return parents;
+        return Arrays.copyOf(parents, parents.length);
     }
 }

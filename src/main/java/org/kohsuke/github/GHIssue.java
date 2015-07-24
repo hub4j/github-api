@@ -25,6 +25,7 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
@@ -269,6 +270,8 @@ public class GHIssue extends GHObject {
         return milestone;
     }
 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+        justification = "JSON API")
     public static class PullRequest{
         private String diff_url, patch_url, html_url;
         

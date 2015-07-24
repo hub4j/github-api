@@ -1,10 +1,14 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * A branch in a repository.
  * 
  * @author Yusuke Kokubo
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHBranch {
     private GitHub root;
     private GHRepository owner;
@@ -13,7 +17,10 @@ public class GHBranch {
     private Commit commit;
 
     public static class Commit {
-        String sha,url;
+        String sha;
+        
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        String url;
     }
 
     public GitHub getRoot() {
@@ -37,7 +44,7 @@ public class GHBranch {
     public String getSHA1() {
         return commit.sha;
     }
-
+    
     @Override
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";

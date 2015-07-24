@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Date;
 
 /**
@@ -24,6 +25,8 @@ public class GHRateLimit {
     /**
      * Non-epoch date
      */
+    @SuppressFBWarnings(value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", 
+            justification = "The value comes from JSON deserialization")
     public Date getResetDate() {
         return new Date(reset.getTime() * 1000);
     }

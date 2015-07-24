@@ -119,7 +119,7 @@ class Requester {
 
     public Requester with(String key, Integer value) {
         if (value!=null)
-            _with(key, value.intValue());
+            _with(key, value);
         return this;
     }
 
@@ -323,23 +323,26 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> Iterator<T> asIterator(String _tailApiUrl, final Class<T> type) {
+    /*package*/ <T> Iterator<T> asIterator(final String _tailApiUrl, final Class<T> type) {
         method("GET");
 
+        final StringBuilder strBuilder = new StringBuilder(_tailApiUrl);
         if (!args.isEmpty()) {
             boolean first=true;
             try {
                 for (Entry a : args) {
-                    _tailApiUrl += first ? '?' : '&';
+                    strBuilder.append(first ? '?' : '&');
                     first = false;
-                    _tailApiUrl += URLEncoder.encode(a.key,"UTF-8")+'='+URLEncoder.encode(a.value.toString(),"UTF-8");
+                    strBuilder.append(URLEncoder.encode(a.key, "UTF-8"));
+                    strBuilder.append('=');
+                    strBuilder.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
                 }
             } catch (UnsupportedEncodingException e) {
                 throw new AssertionError(e);    // UTF-8 is mandatory
             }
         }
 
-        final String tailApiUrl = _tailApiUrl;
+        final String tailApiUrl = strBuilder.toString();
 
         return new Iterator<T>() {
             /**
@@ -506,12 +509,5 @@ class Requester {
         } finally {
             IOUtils.closeQuietly(es);
         }
-    }
-
-    private Set<String> toSet(String s) {
-        Set<String> r = new HashSet<String>();
-        for (String t : s.split(","))
-            r.add(t.trim());
-        return r;
     }
 }

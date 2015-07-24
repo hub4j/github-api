@@ -53,6 +53,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import java.nio.charset.Charset;
 
 /**
  * Root of the GitHub API.
@@ -128,7 +129,13 @@ public class GitHub {
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
-                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes()));
+                final Charset charset;
+                try {
+                    charset = Charset.forName("UTF-8");
+                } catch (Exception ex) {
+                    throw new IOException("UTF-8 encoding is not supported", ex);
+                }
+                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charset)), charset);
             } else {// anonymous access
                 encodedAuthorization = null;
             }

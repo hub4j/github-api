@@ -45,6 +45,12 @@ public class GHRelease extends GHObject {
         return draft;
     }
 
+    public GHRelease setDraft(boolean draft) throws IOException {
+      edit("draft", draft);
+      this.draft = draft;
+      return this;
+    }
+
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
@@ -147,6 +153,13 @@ public class GHRelease extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+    }
+
+    /**
+     * Edit this release.
+     */
+    private void edit(String key, Object value) throws IOException {
+        new Requester(root)._with(key, value).method("PATCH").to(owner.getApiTailUrl("releases/"+id));
     }
 
     private String getApiTailUrl(String end) {

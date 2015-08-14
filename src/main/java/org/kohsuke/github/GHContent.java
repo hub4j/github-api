@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -75,8 +76,9 @@ public class GHContent {
      * @deprecated
      *      Use {@link #read()}
      */
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()), getEncoding());
+        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
     }
 
     /**

@@ -163,12 +163,14 @@ public class GHContent {
         };
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-        return update(newContent.getBytes(getEncoding()), commitMessage, null);
+        return update(newContent.getBytes(), commitMessage, null);
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-        return update(newContent.getBytes(getEncoding()), commitMessage, branch);
+        return update(newContent.getBytes(), commitMessage, branch);
     }
 
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {

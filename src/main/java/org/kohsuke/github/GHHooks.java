@@ -21,8 +21,9 @@ class GHHooks {
         }
 
         public List<GHHook> getHooks() throws IOException {
-            List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(
-                root.retrieve().to(collection(), collectionClass())));
+        	
+            GHHook [] hookArray = root.retrieve().to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
+            List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
               wrap(h);
             return list;

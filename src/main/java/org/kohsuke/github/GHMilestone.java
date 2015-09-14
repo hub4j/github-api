@@ -17,6 +17,7 @@ public class GHMilestone extends GHObject {
     GHUser creator;
     private String state, due_on, title, description, html_url;
     private int closed_issues, open_issues, number;
+    protected String closed_at;
 
     public GitHub getRoot() {
         return root;
@@ -34,7 +35,14 @@ public class GHMilestone extends GHObject {
         if (due_on == null) return null;
         return GitHub.parseDate(due_on);
     }
-    
+
+    /**
+     * When was this milestone closed?
+     */
+    public Date getClosedAt() throws IOException {
+        return GitHub.parseDate(closed_at);
+    }
+
     public String getTitle() {
         return title;
     }

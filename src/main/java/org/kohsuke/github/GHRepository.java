@@ -1094,6 +1094,9 @@ public class GHRepository extends GHObject {
 
     public List<GHContent> getDirectoryContent(String path, String ref) throws IOException {
         Requester requester = root.retrieve();
+        while (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
         String target = getApiTailUrl("contents/" + path);
 
         GHContent[] files = requester.with("ref",ref).to(target, GHContent[].class);

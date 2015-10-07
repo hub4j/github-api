@@ -53,6 +53,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import javax.annotation.WillClose;
+
 import static java.util.Arrays.asList;
 import static org.kohsuke.github.GitHub.*;
 
@@ -143,7 +145,7 @@ class Requester {
         return _with(key, value);
     }
 
-    public Requester with(InputStream body) {
+    public Requester with(@WillClose/*later*/ InputStream body) {
         this.body = body;
         return this;
     }

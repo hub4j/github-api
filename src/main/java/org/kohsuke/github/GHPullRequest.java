@@ -50,6 +50,7 @@ public class GHPullRequest extends GHIssue {
     private int deletions;
     private String mergeable_state;
     private int changed_files;
+    private String merge_commit_sha;
 
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
@@ -142,9 +143,9 @@ public class GHPullRequest extends GHIssue {
     }
 
     //
-// details that are only available via get with ID
-//
-//
+    // details that are only available via get with ID
+    //
+
     public GHUser getMergedBy() throws IOException {
         populate();
         return merged_by;
@@ -183,6 +184,11 @@ public class GHPullRequest extends GHIssue {
     public int getChangedFiles() throws IOException {
         populate();
         return changed_files;
+    }
+
+    public String getMergeCommitSha() throws IOException {
+        populate();
+        return merge_commit_sha;
     }
 
     /**

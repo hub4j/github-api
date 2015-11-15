@@ -205,6 +205,15 @@ public class GitHub {
     }
 
     /**
+     * Connects to GitHub Enterprise anonymously.
+     *
+     * All operations that requires authentication will fail.
+     */
+    public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).build();
+    }
+
+    /**
      * Is this an anonymous connection
      * @return {@code true} if operations that require authentication will fail.
      */
@@ -441,6 +450,23 @@ public class GitHub {
         try {
             retrieve().to("/user", GHUser.class);
             return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Ensures that the API URL is valid.
+     */
+    public boolean isApiUrlValid() throws IOException {
+        try {
+            GHApiInfo apiInfo = retrieve().to("/", GHApiInfo.class);
+            try {
+                new URL(apiInfo.getRateLimitUrl());
+                return true;
+            } catch (MalformedURLException mue) {
+                return false;
+            }
         } catch (IOException e) {
             return false;
         }

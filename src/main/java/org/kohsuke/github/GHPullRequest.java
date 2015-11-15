@@ -50,6 +50,8 @@ public class GHPullRequest extends GHIssue {
     private int deletions;
     private String mergeable_state;
     private int changed_files;
+
+    @Deprecated
     private String merge_commit_sha;
 
     /**
@@ -186,6 +188,10 @@ public class GHPullRequest extends GHIssue {
         return changed_files;
     }
 
+    /**
+     * FYI: https://developer.github.com/changes/2013-04-25-deprecating-merge-commit-sha
+     */
+    @Deprecated
     public String getMergeCommitSha() throws IOException {
         populate();
         return merge_commit_sha;

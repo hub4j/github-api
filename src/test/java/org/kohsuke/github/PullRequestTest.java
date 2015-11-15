@@ -52,10 +52,10 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     @Test
     public void testMergeCommitSHA() throws Exception {
         String name = rnd.next();
-        GHRepository repo = gitHub.getMyself().getRepository("website");
-        GHPullRequest p = repo.createPullRequest(name, "feature5", "master", "## test");
-        GHRef ref = repo.getRef("pull/" + p.getNumber() + "/merge");
-        assertTrue(ref.getObject().getSha() == p.getMergeCommitSha());
+        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
+        GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
+        assertNotNull(commit);
     }
 
     @Test

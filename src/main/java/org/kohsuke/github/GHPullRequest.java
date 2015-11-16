@@ -189,7 +189,7 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
-     * FYI: https://developer.github.com/changes/2013-04-25-deprecating-merge-commit-sha
+     * See <a href="https://developer.github.com/changes/2013-04-25-deprecating-merge-commit-sha">GitHub blog post</a>
      */
     @Deprecated
     public String getMergeCommitSha() throws IOException {

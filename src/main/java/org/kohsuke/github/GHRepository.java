@@ -54,7 +54,7 @@ public class GHRepository extends GHObject {
 
     private String description, homepage, name, full_name;
     private String html_url;    // this is the UI
-    private String git_url, ssh_url, clone_url, svn_url;
+    private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, has_downloads;
     @JsonProperty("private")
@@ -157,6 +157,14 @@ public class GHRepository extends GHObject {
      */
     public String getSvnUrl() {
         return svn_url;
+    }
+
+    /**
+     * Gets the Mirror URL to access this repository: https://github.com/apache/tomee
+     * mirrored from git://git.apache.org/tomee.git
+     */
+    public String getMirrorUrl() {
+        return mirror_url;
     }
 
     /**

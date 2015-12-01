@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.extras.ImpatientHttpConnector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -184,14 +185,11 @@ public class GitHubBuilder {
      * the system default one.
      */
     public GitHubBuilder withProxy(final Proxy p) {
-        return withConnector(new HttpConnector() {
+        return withConnector(new ImpatientHttpConnector(new HttpConnector() {
             public HttpURLConnection connect(URL url) throws IOException {
-                HttpURLConnection con = (HttpURLConnection) url.openConnection(p);
-                con.setConnectTimeout(HttpConnector.HTTP_CONNECT_TIMEOUT);
-                con.setReadTimeout(HttpConnector.HTTP_READ_TIMEOUT);
-                return con;
+                return (HttpURLConnection) url.openConnection(p);
             }
-        });
+        }));
     }
 
     public GitHub build() throws IOException {

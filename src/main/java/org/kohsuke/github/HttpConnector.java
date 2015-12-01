@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.extras.ImpatientHttpConnector;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,15 +24,9 @@ public interface HttpConnector {
     /**
      * Default implementation that uses {@link URL#openConnection()}.
      */
-    HttpConnector DEFAULT = new HttpConnector() {
+    HttpConnector DEFAULT = new ImpatientHttpConnector(new HttpConnector() {
         public HttpURLConnection connect(URL url) throws IOException {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(HTTP_CONNECT_TIMEOUT);
-            con.setReadTimeout(HTTP_READ_TIMEOUT);
-            return con;
+            return (HttpURLConnection) url.openConnection();
         }
-    };
-
-    int HTTP_CONNECT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
-    int HTTP_READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
+    });
 }

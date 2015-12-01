@@ -44,6 +44,14 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testGetDirectoryContentTrailingSlash() throws Exception {
+        //Used to truncate the ?ref=master, see gh-224 https://github.com/kohsuke/github-api/pull/224
+        List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "master");
+
+        assertTrue(entries.get(0).getUrl().endsWith("?ref=master"));
+    }
+
+    @Test
     public void testCRUDContent() throws Exception {
         GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename);
         GHContent createdContent = created.getContent();

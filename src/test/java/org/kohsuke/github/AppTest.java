@@ -286,7 +286,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertEquals(1, gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
+        // 'Core Developers' and 'Owners'
+        assertEquals(2, gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
     @Test

@@ -259,6 +259,8 @@ class Requester {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 
+            uc.setRequestMethod("GET");
+
             buildRequest();
 
             try {
@@ -273,7 +275,6 @@ class Requester {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 
-           
             // if the download link is encoded with a token on the query string, the default behavior of POST will fail
             uc.setRequestMethod("GET");
             

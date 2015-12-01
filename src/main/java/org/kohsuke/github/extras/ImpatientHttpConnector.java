@@ -1,5 +1,6 @@
 package org.kohsuke.github.extras;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.HttpConnector;
 
 import java.io.IOException;
@@ -46,9 +47,12 @@ public class ImpatientHttpConnector implements HttpConnector {
     /**
      * Default connection timeout in milliseconds
      */
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static int CONNECT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
+
     /**
      * Default read timeout in milliseconds
      */
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static int READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
 }

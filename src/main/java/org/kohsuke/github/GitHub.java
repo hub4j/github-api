@@ -455,21 +455,27 @@ public class GitHub {
         }
     }
 
+    private static class GHApiInfo {
+        private String rate_limit_url;
+
+        void check(String apiUrl) throws IOException {
+            if (rate_limit_url==null)
+                throw new IOException(apiUrl+" doesn't look like GitHub API URL");
+
+            // make sure that the URL is legitimate
+            new URL(rate_limit_url);
+        }
+    }
+
     /**
      * Ensures that the API URL is valid.
+     *
+     * <p>
+     * This method returns normally if the endpoint is reachable and verified to be GitHub API URL.
+     * Otherwise this method throws {@link IOException} to indicate the problem.
      */
-    public boolean isApiUrlValid() throws IOException {
-        try {
-            GHApiInfo apiInfo = retrieve().to("/", GHApiInfo.class);
-            try {
-                new URL(apiInfo.getRateLimitUrl());
-                return true;
-            } catch (MalformedURLException mue) {
-                return false;
-            }
-        } catch (IOException e) {
-            return false;
-        }
+    public void checkApiUrlValidity() throws IOException {
+        retrieve().to("/", GHApiInfo.class).check(apiUrl);
     }
 
     /**

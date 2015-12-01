@@ -124,6 +124,6 @@ public class GitHubTest {
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         GitHub github = GitHub.connectAnonymously();
-        assertTrue(github.isApiUrlValid());
+        github.checkApiUrlValidity();
     }
 }

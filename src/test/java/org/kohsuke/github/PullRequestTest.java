@@ -52,10 +52,21 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     @Test
     public void testMergeCommitSHA() throws Exception {
         String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
-        GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
-        GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
-        assertNotNull(commit);
+        GHPullRequest p = getRepository().createPullRequest(name, "mergeable-branch", "master", "## test");
+        for (int i=0; i<100; i++) {
+            GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
+            if (updated.getMergeCommitSha()!=null) {
+                // make sure commit exists
+                GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
+                assertNotNull(commit);
+                return;
+            }
+
+            // mergeability computation takes time. give it more chance
+            Thread.sleep(100);
+        }
+        // hmm?
+        fail();
     }
 
     @Test

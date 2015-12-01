@@ -29,6 +29,11 @@ public abstract class GHObject {
         return GitHub.parseDate(created_at);
     }
 
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getCreatedAt")
+    private Object createdAtStr(Date id, Class type) {
+        return created_at;
+    }
+
     /**
      * API URL of this object.
      */
@@ -56,5 +61,15 @@ public abstract class GHObject {
     @WithBridgeMethods(value=String.class, adapterMethod="intToString")
     public int getId() {
         return id;
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getId")
+    private Object intToString(int id, Class type) {
+        return String.valueOf(id);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getHtmlUrl")
+    private Object urlToString(URL url, Class type) {
+        return url==null ? null : url.toString();
     }
 }

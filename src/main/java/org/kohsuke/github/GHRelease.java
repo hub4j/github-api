@@ -129,14 +129,9 @@ public class GHRelease extends GHObject {
 
         String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
                 owner.getApiTailUrl(""), getId(), file.getName());
-        FileInputStream istream = new FileInputStream(file);
-        try {
-            return builder.contentType(contentType)
-                .with(istream)
+        return builder.contentType(contentType)
+                .with(new FileInputStream(file))
                 .to(url, GHAsset.class).wrap(this);
-        } finally {
-            istream.close();
-        }
     }
 
     public List<GHAsset> getAssets() throws IOException {

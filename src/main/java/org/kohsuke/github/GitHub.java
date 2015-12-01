@@ -47,6 +47,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -129,12 +130,7 @@ public class GitHub {
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
-                final Charset charset;
-                try {
-                    charset = Charset.forName("UTF-8");
-                } catch (Exception ex) {
-                    throw new IOException("UTF-8 encoding is not supported", ex);
-                }
+                Charset charset = Charsets.UTF_8;
                 encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charset)), charset);
             } else {// anonymous access
                 encodedAuthorization = null;

@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Pluggability for customizing HTTP request behaviors or using altogether different library.
@@ -23,7 +24,13 @@ public interface HttpConnector {
      */
     HttpConnector DEFAULT = new HttpConnector() {
         public HttpURLConnection connect(URL url) throws IOException {
-            return (HttpURLConnection) url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(HTTP_CONNECT_TIMEOUT);
+            con.setReadTimeout(HTTP_READ_TIMEOUT);
+            return con;
         }
     };
+
+    int HTTP_CONNECT_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
+    int HTTP_READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
 }

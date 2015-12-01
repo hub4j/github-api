@@ -186,7 +186,10 @@ public class GitHubBuilder {
     public GitHubBuilder withProxy(final Proxy p) {
         return withConnector(new HttpConnector() {
             public HttpURLConnection connect(URL url) throws IOException {
-                return (HttpURLConnection) url.openConnection(p);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection(p);
+                con.setConnectTimeout(HttpConnector.HTTP_CONNECT_TIMEOUT);
+                con.setReadTimeout(HttpConnector.HTTP_READ_TIMEOUT);
+                return con;
             }
         });
     }

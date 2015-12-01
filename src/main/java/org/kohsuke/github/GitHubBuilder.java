@@ -51,7 +51,7 @@ public class GitHubBuilder {
         try {
             builder = fromPropertyFile();
 
-            if (builder.user != null)
+            if (builder.oauthToken != null || builder.user != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -60,7 +60,7 @@ public class GitHubBuilder {
 
         builder = fromEnvironment();
 
-        if (builder.user != null)
+        if (builder.oauthToken != null || builder.user != null)
             return builder;
         else
             throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);

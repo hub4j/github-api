@@ -18,6 +18,7 @@ public class GHEventInfo {
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 
+    private long id;
     private String created_at;
     private String type;
 
@@ -52,6 +53,10 @@ public class GHEventInfo {
     /*package*/ GHEventInfo wrapUp(GitHub root) {
         this.root = root;
         return this;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public Date getCreatedAt() {

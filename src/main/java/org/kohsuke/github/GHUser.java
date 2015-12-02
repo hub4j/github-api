@@ -56,8 +56,14 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
-        GHUser[] followers = root.retrieve().to("/users/" + login + "/following", GHUser[].class);
-        return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
+        return new GHPersonSet<GHUser>(listFollows().asList());
+    }
+
+    /**
+     * Lists the users that this user is following
+     */
+    public PagedIterable<GHUser> listFollows() {
+        return listUser("following");
     }
 
     /**
@@ -65,8 +71,26 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollowers() throws IOException {
-        GHUser[] followers = root.retrieve().to("/users/" + login + "/followers", GHUser[].class);
-        return new GHPersonSet<GHUser>(Arrays.asList(wrap(followers,root)));
+        return new GHPersonSet<GHUser>(listFollowers().asList());
+    }
+
+    /**
+     * Lists the users who are following this user.
+     */
+    public PagedIterable<GHUser> listFollowers() {
+        return listUser("followers");
+    }
+
+    private PagedIterable<GHUser> listUser(final String suffix) {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> iterator() {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl(suffix), GHUser[].class)) {
+                    protected void wrapUp(GHUser[] page) {
+                        GHUser.wrap(page,root);
+                    }
+                };
+            }
+        };
     }
 
     /**

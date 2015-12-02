@@ -501,6 +501,7 @@ class Requester {
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
             root.rateLimitHandler.onError(e,uc);
+            return;
         }
 
         InputStream es = wrapStream(uc.getErrorStream());

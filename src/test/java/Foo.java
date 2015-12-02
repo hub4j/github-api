@@ -1,4 +1,5 @@
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 
 import java.util.Collection;
@@ -13,5 +14,12 @@ public class Foo {
             System.out.println(r.getName());
         }
         System.out.println(lst.size());
+    }
+
+    private static void testRateLimit() throws Exception {
+        GitHub g = GitHub.connectAnonymously();
+        for (GHUser u : g.getOrganization("jenkinsci").listMembers()) {
+            u.getFollowersCount();
+        }
     }
 }

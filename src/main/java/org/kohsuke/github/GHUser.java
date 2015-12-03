@@ -98,9 +98,20 @@ public class GHUser extends GHPerson {
      * https://developer.github.com/v3/activity/watching/
      */
     public PagedIterable<GHRepository> listSubscriptions() {
+        return listRepositories("subscriptions");
+    }
+
+    /**
+     * Lists all the repositories that this user has starred.
+     */
+    public PagedIterable<GHRepository> listStarredRepositories() {
+        return listRepositories("starred");
+    }
+
+    private PagedIterable<GHRepository> listRepositories(final String suffix) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("subscriptions"), GHRepository[].class, pageSize)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl(suffix), GHRepository[].class, pageSize)) {
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
                             c.wrap(root);

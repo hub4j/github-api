@@ -714,7 +714,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class),root);
+       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class), root);
     }
 
     /**
@@ -868,7 +868,7 @@ public class GHRepository extends GHObject {
      *  @see #createCommitStatus(String, GHCommitState,String,String,String)
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description) throws IOException {
-        return createCommitStatus(sha1, state, targetUrl, description,null);
+        return createCommitStatus(sha1, state, targetUrl, description, null);
     }
 
     /**
@@ -914,7 +914,7 @@ public class GHRepository extends GHObject {
     public GHLabel createLabel(String name, String color) throws IOException {
         return root.retrieve().method("POST")
                 .with("name",name)
-                .with("color",color)
+                .with("color", color)
                 .to(getApiTailUrl("labels"), GHLabel.class).wrapUp(this);
     }
 
@@ -924,9 +924,20 @@ public class GHRepository extends GHObject {
      * https://developer.github.com/v3/activity/watching/
      */
     public PagedIterable<GHUser> listSubscribers() {
+        return listUsers("subscribers");
+    }
+
+    /**
+     * Lists all the users who have starred this repo.
+     */
+    public PagedIterable<GHUser> listStargazers() {
+        return listUsers("stargazers");
+    }
+
+    private PagedIterable<GHUser> listUsers(final String suffix) {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl("subscribers"), GHUser[].class, pageSize)) {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl(suffix), GHUser[].class, pageSize)) {
                     protected void wrapUp(GHUser[] page) {
                         for (GHUser c : page)
                             c.wrapUp(root);

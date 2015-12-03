@@ -42,13 +42,11 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -330,104 +328,109 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> Iterator<T> asIterator(final String _tailApiUrl, final Class<T> type) {
+    /*package*/ <T> PagingIterator<T> asIterator(String tailApiUrl, Class<T> type) {
         method("GET");
 
-        final StringBuilder strBuilder = new StringBuilder(_tailApiUrl);
+        StringBuilder s = new StringBuilder(tailApiUrl);
         if (!args.isEmpty()) {
-            boolean first=true;
+            boolean first = true;
             try {
                 for (Entry a : args) {
-                    strBuilder.append(first ? '?' : '&');
+                    s.append(first ? '?' : '&');
                     first = false;
-                    strBuilder.append(URLEncoder.encode(a.key, "UTF-8"));
-                    strBuilder.append('=');
-                    strBuilder.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
+                    s.append(URLEncoder.encode(a.key, "UTF-8"));
+                    s.append('=');
+                    s.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
                 }
             } catch (UnsupportedEncodingException e) {
                 throw new AssertionError(e);    // UTF-8 is mandatory
             }
         }
 
-        final String tailApiUrl = strBuilder.toString();
+        try {
+            return new PagingIterator<T>(type, root.getApiURL(s.toString()));
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
 
-        return new Iterator<T>() {
-            /**
-             * The next batch to be returned from {@link #next()}.
-             */
-            T next;
-            /**
-             * URL of the next resource to be retrieved, or null if no more data is available.
-             */
-            URL url;
+    class PagingIterator<T> implements Iterator<T> {
 
-            {
-                try {
-                    url = root.getApiURL(tailApiUrl);
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
+        private final Class<T> type;
 
-            public boolean hasNext() {
-                fetch();
-                return next!=null;
-            }
+        /**
+         * The next batch to be returned from {@link #next()}.
+         */
+        private T next;
 
-            public T next() {
-                fetch();
-                T r = next;
-                if (r==null)    throw new NoSuchElementException();
-                next = null;
-                return r;
-            }
+        /**
+         * URL of the next resource to be retrieved, or null if no more data is available.
+         */
+        private URL url;
 
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
+        PagingIterator(Class<T> type, URL url) {
+            this.url = url;
+            this.type = type;
+        }
 
-            private void fetch() {
-                if (next!=null) return; // already fetched
-                if (url==null)  return; // no more data to fetch
+        public boolean hasNext() {
+            fetch();
+            return next!=null;
+        }
 
-                try {
-                    while (true) {// loop while API rate limit is hit
-                        setupConnection(url);
-                        try {
-                            next = parse(type,null);
-                            assert next!=null;
-                            findNextURL();
-                            return;
-                        } catch (IOException e) {
-                            handleApiError(e);
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            }
+        public T next() {
+            fetch();
+            T r = next;
+            if (r==null)    throw new NoSuchElementException();
+            next = null;
+            return r;
+        }
 
-            /**
-             * Locate the next page from the pagination "Link" tag.
-             */
-            private void findNextURL() throws MalformedURLException {
-                url = null; // start defensively
-                String link = uc.getHeaderField("Link");
-                if (link==null) return;
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
 
-                for (String token : link.split(", ")) {
-                    if (token.endsWith("rel=\"next\"")) {
-                        // found the next page. This should look something like
-                        // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
-                        int idx = token.indexOf('>');
-                        url = new URL(token.substring(1,idx));
+        private void fetch() {
+            if (next!=null) return; // already fetched
+            if (url==null)  return; // no more data to fetch
+
+            try {
+                while (true) {// loop while API rate limit is hit
+                    setupConnection(url);
+                    try {
+                        next = parse(type,null);
+                        assert next!=null;
+                        findNextURL();
                         return;
+                    } catch (IOException e) {
+                        handleApiError(e);
                     }
                 }
-
-                // no more "next" link. we are done.
+            } catch (IOException e) {
+                throw new Error(e);
             }
-        };
+        }
+
+        /**
+         * Locate the next page from the pagination "Link" tag.
+         */
+        private void findNextURL() throws MalformedURLException {
+            url = null; // start defensively
+            String link = uc.getHeaderField("Link");
+            if (link==null) return;
+
+            for (String token : link.split(", ")) {
+                if (token.endsWith("rel=\"next\"")) {
+                    // found the next page. This should look something like
+                    // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
+                    int idx = token.indexOf('>');
+                    url = new URL(token.substring(1,idx));
+                    return;
+                }
+            }
+
+            // no more "next" link. we are done.
+        }
     }
 
 

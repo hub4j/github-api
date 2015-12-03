@@ -158,9 +158,9 @@ public class GHMyself extends GHUser {
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
                 return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize +
-                    "&type=" + repoType.name().toLowerCase(Locale.ENGLISH), GHRepository[].class)) {
+                    "&type=" + repoType.name().toLowerCase(Locale.ENGLISH), GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

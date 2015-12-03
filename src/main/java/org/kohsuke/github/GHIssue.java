@@ -205,8 +205,8 @@ public class GHIssue extends GHObject {
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
-            public PagedIterator<GHIssueComment> iterator() {
-                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class)) {
+            public PagedIterator<GHIssueComment> _iterator(int pageSize) {
+                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class, pageSize)) {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);

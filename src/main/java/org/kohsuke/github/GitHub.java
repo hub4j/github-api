@@ -526,8 +526,8 @@ public class GitHub {
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

@@ -39,9 +39,9 @@ public abstract class GHSearchBuilder<T> {
      */
     public PagedSearchIterable<T> list() {
         return new PagedSearchIterable<T>(root) {
-            public PagedIterator<T> iterator() {
+            public PagedIterator<T> _iterator(int pageSize) {
                 req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.asIterator(getApiUrl(), receiverType))) {
+                return new PagedIterator<T>(adapt(req.asIterator(getApiUrl(), receiverType, pageSize))) {
                     protected void wrapUp(T[] page) {
                         // SearchResult.getItems() should do it
                     }

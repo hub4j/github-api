@@ -328,8 +328,11 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> PagingIterator<T> asIterator(String tailApiUrl, Class<T> type) {
+    /*package*/ <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
         method("GET");
+
+        if (pageSize!=0)
+            args.add(new Entry("per_page",pageSize));
 
         StringBuilder s = new StringBuilder(tailApiUrl);
         if (!args.isEmpty()) {

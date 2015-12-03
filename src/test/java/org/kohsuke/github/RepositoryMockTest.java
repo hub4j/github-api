@@ -48,7 +48,7 @@ public class RepositoryMockTest {
 
 
         when(requester.asIterator("/repos/*/*/collaborators",
-                GHUser[].class)).thenReturn(iterator, iterator);
+                GHUser[].class, 0)).thenReturn(iterator, iterator);
 
 
         PagedIterable<GHUser> pagedIterable = Mockito.mock(PagedIterable.class);

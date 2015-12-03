@@ -210,9 +210,9 @@ public class GHPullRequest extends GHIssue {
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return new PagedIterable<GHPullRequestFileDetail>() {
-            public PagedIterator<GHPullRequestFileDetail> iterator() {
+            public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiURL()),
-                        GHPullRequestFileDetail[].class)) {
+                        GHPullRequestFileDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestFileDetail[] page) {
                     }
@@ -226,9 +226,9 @@ public class GHPullRequest extends GHIssue {
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return new PagedIterable<GHPullRequestReviewComment>() {
-            public PagedIterator<GHPullRequestReviewComment> iterator() {
+            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + "/comments",
-                        GHPullRequestReviewComment[].class)) {
+                        GHPullRequestReviewComment[].class, pageSize)) {
                     protected void wrapUp(GHPullRequestReviewComment[] page) {
                         for (GHPullRequestReviewComment c : page)
                             c.wrapUp(GHPullRequest.this);
@@ -243,10 +243,10 @@ public class GHPullRequest extends GHIssue {
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
         return new PagedIterable<GHPullRequestCommitDetail>() {
-            public PagedIterator<GHPullRequestCommitDetail> iterator() {
+            public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
                         String.format("%s/commits", getApiURL()),
-                        GHPullRequestCommitDetail[].class)) {
+                        GHPullRequestCommitDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {
                         for (GHPullRequestCommitDetail c : page)

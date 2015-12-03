@@ -57,8 +57,8 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
         return new PagedIterable<GHTeam>() {
-            public PagedIterator<GHTeam> iterator() {
-                return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class)) {
+            public PagedIterator<GHTeam> _iterator(int pageSize) {
+                return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHTeam[] page) {
                         for (GHTeam c : page)
@@ -150,9 +150,9 @@ public class GHOrganization extends GHPerson {
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> iterator() {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
                 String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class)) {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHUser[] users) {
                         GHUser.wrap(users, root);
@@ -222,8 +222,8 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return new PagedIterable<GHEventInfo>() {
-            public PagedIterator<GHEventInfo> iterator() {
-                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/orgs/%s/events", login), GHEventInfo[].class)) {
+            public PagedIterator<GHEventInfo> _iterator(int pageSize) {
+                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/orgs/%s/events", login), GHEventInfo[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHEventInfo[] page) {
                         for (GHEventInfo c : page)
@@ -244,8 +244,8 @@ public class GHOrganization extends GHPerson {
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos?per_page=" + pageSize, GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos?per_page=" + pageSize, GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)

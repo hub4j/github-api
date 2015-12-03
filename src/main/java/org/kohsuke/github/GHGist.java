@@ -140,8 +140,8 @@ public class GHGist extends GHObject {
 
     public PagedIterable<GHGist> listForks() {
         return new PagedIterable<GHGist>() {
-            public PagedIterator<GHGist> iterator() {
-                return new PagedIterator<GHGist>(root.retrieve().asIterator(getApiTailUrl("forks"), GHGist[].class)) {
+            public PagedIterator<GHGist> _iterator(int pageSize) {
+                return new PagedIterator<GHGist>(root.retrieve().asIterator(getApiTailUrl("forks"), GHGist[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHGist[] page) {
                         try {

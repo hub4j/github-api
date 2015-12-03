@@ -152,8 +152,8 @@ public class GHContent {
             throw new IllegalStateException(path+" is not a directory");
 
         return new PagedIterable<GHContent>() {
-            public PagedIterator<GHContent> iterator() {
-                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class)) {
+            public PagedIterator<GHContent> _iterator(int pageSize) {
+                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHContent[] page) {
                         GHContent.wrap(page, repository);

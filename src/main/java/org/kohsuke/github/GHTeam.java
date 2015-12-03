@@ -52,8 +52,8 @@ public class GHTeam {
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
         return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> iterator() {
-                return new PagedIterator<GHUser>(org.root.retrieve().asIterator(api("/members"), GHUser[].class)) {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
+                return new PagedIterator<GHUser>(org.root.retrieve().asIterator(api("/members"), GHUser[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHUser[] page) {
                         GHUser.wrap(page, org.root);
@@ -89,8 +89,8 @@ public class GHTeam {
 
     public PagedIterable<GHRepository> listRepositories() {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(org.root.retrieve().asIterator(api("/repos"), GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(org.root.retrieve().asIterator(api("/repos"), GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository r : page)

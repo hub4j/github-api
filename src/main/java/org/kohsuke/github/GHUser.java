@@ -26,7 +26,6 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,8 +82,8 @@ public class GHUser extends GHPerson {
 
     private PagedIterable<GHUser> listUser(final String suffix) {
         return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> iterator() {
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl(suffix), GHUser[].class)) {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl(suffix), GHUser[].class, pageSize)) {
                     protected void wrapUp(GHUser[] page) {
                         GHUser.wrap(page,root);
                     }
@@ -100,8 +99,8 @@ public class GHUser extends GHPerson {
      */
     public PagedIterable<GHRepository> listSubscriptions() {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("subscriptions"), GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("subscriptions"), GHRepository[].class, pageSize)) {
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
                             c.wrap(root);
@@ -157,8 +156,8 @@ public class GHUser extends GHPerson {
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return new PagedIterable<GHEventInfo>() {
-            public PagedIterator<GHEventInfo> iterator() {
-                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/users/%s/events", login), GHEventInfo[].class)) {
+            public PagedIterator<GHEventInfo> _iterator(int pageSize) {
+                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/users/%s/events", login), GHEventInfo[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHEventInfo[] page) {
                         for (GHEventInfo c : page)
@@ -174,8 +173,8 @@ public class GHUser extends GHPerson {
      */
     public PagedIterable<GHGist> listGists() throws IOException {
         return new PagedIterable<GHGist>() {
-            public PagedIterator<GHGist> iterator() {
-                return new PagedIterator<GHGist>(root.retrieve().asIterator(String.format("/users/%s/gists", login), GHGist[].class)) {
+            public PagedIterator<GHGist> _iterator(int pageSize) {
+                return new PagedIterator<GHGist>(root.retrieve().asIterator(String.format("/users/%s/gists", login), GHGist[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHGist[] page) {
                         for (GHGist c : page)

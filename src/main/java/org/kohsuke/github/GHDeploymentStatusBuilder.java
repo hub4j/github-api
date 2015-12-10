@@ -12,7 +12,7 @@ public class GHDeploymentStatusBuilder {
         this.repo = repo;
         this.deploymentId = deploymentId;
         this.builder = new Requester(repo.root);
-        this.builder.with("state",state.toString().toLowerCase(Locale.ENGLISH));
+        this.builder.with("state",state);
     }
 
     public GHDeploymentStatusBuilder description(String description) {

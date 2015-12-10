@@ -42,7 +42,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     public GHIssueSearchBuilder sort(Sort sort) {
-        req.with("sort",sort.toString().toLowerCase(Locale.ENGLISH));
+        req.with("sort",sort);
         return this;
     }
 

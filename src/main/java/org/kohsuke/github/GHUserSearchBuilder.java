@@ -50,7 +50,7 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
     }
 
     public GHUserSearchBuilder sort(Sort sort) {
-        req.with("sort",sort.toString().toLowerCase(Locale.ENGLISH));
+        req.with("sort",sort);
         return this;
     }
 

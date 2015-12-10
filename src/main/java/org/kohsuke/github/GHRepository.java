@@ -228,11 +228,10 @@ public class GHRepository extends GHObject {
 
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return Arrays.asList(GHIssue.wrap(root.retrieve()
-                .to(getApiTailUrl(String.format("issues?state=%s&milestone=%s",
-                        state.toString().toLowerCase(Locale.ENGLISH), 
-                        milestone == null ? "none" : "" + milestone.getNumber())),
-                        GHIssue[].class
-                ), this));
+                .with("state", state)
+                .with("milestone", milestone == null ? "none" : "" + milestone.getNumber())
+                .to(getApiTailUrl("issues"),
+            GHIssue[].class), this));
     }
 
     /**
@@ -241,7 +240,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
         return new PagedIterable<GHIssue>() {
             public PagedIterator<GHIssue> _iterator(int pageSize) {
-                return new PagedIterator<GHIssue>(root.retrieve().asIterator(getApiTailUrl("issues?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHIssue[].class, pageSize)) {
+                return new PagedIterator<GHIssue>(root.retrieve().with("state",state).asIterator(getApiTailUrl("issues"), GHIssue[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHIssue[] page) {
                         for (GHIssue c : page)
@@ -538,7 +537,7 @@ public class GHRepository extends GHObject {
     /**
      * Sort orders for listing forks
      */
-    public static enum ForkSort { NEWEST, OLDEST, STARGAZERS }
+    public enum ForkSort { NEWEST, OLDEST, STARGAZERS }
 
     /**
      * Lists all the direct forks of this repository, sorted by
@@ -556,11 +555,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHRepository> listForks(final ForkSort sort) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> _iterator(int pageSize) {
-                String sortParam = "";
-                if (sort != null) {
-                    sortParam = "?sort=" + sort.toString().toLowerCase(Locale.ENGLISH);
-                }
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl("forks" + sortParam), GHRepository[].class, pageSize)) {
+                return new PagedIterator<GHRepository>(root.retrieve().with("sort",sort).asIterator(getApiTailUrl("forks"), GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page) {
@@ -857,7 +852,7 @@ public class GHRepository extends GHObject {
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description, String context) throws IOException {
         return new Requester(root)
-                .with("state", state.name().toLowerCase(Locale.ENGLISH))
+                .with("state", state)
                 .with("target_url", targetUrl)
                 .with("description", description)
                 .with("context", context)
@@ -1089,7 +1084,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHMilestone> listMilestones(final GHIssueState state) {
         return new PagedIterable<GHMilestone>() {
             public PagedIterator<GHMilestone> _iterator(int pageSize) {
-                return new PagedIterator<GHMilestone>(root.retrieve().asIterator(getApiTailUrl("milestones?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHMilestone[].class, pageSize)) {
+                return new PagedIterator<GHMilestone>(root.retrieve().with("state",state).asIterator(getApiTailUrl("milestones"), GHMilestone[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHMilestone[] page) {
                         for (GHMilestone c : page)

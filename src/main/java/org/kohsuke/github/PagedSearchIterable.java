@@ -25,7 +25,7 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     @Override
-    public PagedSearchIterable<T> withPageSize(int size) throws IOException {
+    public PagedSearchIterable<T> withPageSize(int size) {
         return (PagedSearchIterable<T>)super.withPageSize(size);
     }
 

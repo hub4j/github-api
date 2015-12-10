@@ -58,7 +58,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     public GHRepositorySearchBuilder sort(Sort sort) {
-        req.with("sort",sort.toString().toLowerCase(Locale.ENGLISH));
+        req.with("sort",sort);
         return this;
     }
 

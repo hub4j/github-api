@@ -7,7 +7,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @author Kohsuke Kawaguchi
  */
-
 abstract class SearchResult<T> {
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     int total_count;

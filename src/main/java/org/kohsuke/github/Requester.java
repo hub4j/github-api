@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -130,6 +131,14 @@ class Requester {
         return _with(key, value);
     }
 
+    public Requester with(String key, Enum e) {
+        if (e==null)    return _with(key, null);
+
+        // by convention Java constant names are upper cases, but github uses
+        // lower-case constants. GitHub also uses '-', which in Java we always
+        // replace by '_'
+        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_','-'));
+    }
 
     public Requester with(String key, String value) {
         return _with(key, value);

@@ -617,24 +617,24 @@ public class GHRepository extends GHObject {
      * @see #listPullRequests(GHIssueState)
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return listPullRequests(state).asList();
+        return queryPullRequests().state(state).list().asList();
     }
 
     /**
      * Retrieves all the pull requests of a particular state.
+     *
+     * @deprecated
+     *      Use {@link #queryPullRequests()}
      */
-    public PagedIterable<GHPullRequest> listPullRequests(final GHIssueState state) {
-        return new PagedIterable<GHPullRequest>() {
-            public PagedIterator<GHPullRequest> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequest>(root.retrieve().asIterator(getApiTailUrl("pulls?state="+state.name().toLowerCase(Locale.ENGLISH)), GHPullRequest[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequest[] page) {
-                        for (GHPullRequest pr : page)
-                            pr.wrapUp(GHRepository.this);
-                    }
-                };
-            }
-        };
+    public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
+        return queryPullRequests().state(state).list();
+    }
+
+    /**
+     * Retrieves pull requests.
+     */
+    public GHPullRequestQueryBuilder queryPullRequests() {
+        return new GHPullRequestQueryBuilder(this);
     }
 
     /**

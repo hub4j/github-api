@@ -23,8 +23,9 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * <p>
      * When set to non-zero, each API call will retrieve this many entries.
      */
-    void setPageSize(int size) throws IOException {
+    public PagedIterable<T> withPageSize(int size) throws IOException {
         this.size = size;
+        return this;
     }
 
     public final PagedIterator<T> iterator() {

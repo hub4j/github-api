@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -20,6 +22,11 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
 
     /*package*/ PagedSearchIterable(GitHub root) {
         this.root = root;
+    }
+
+    @Override
+    public PagedSearchIterable<T> withPageSize(int size) throws IOException {
+        return (PagedSearchIterable<T>)super.withPageSize(size);
     }
 
     /**

@@ -192,21 +192,24 @@ public class GHCommit {
     /**
      * Number of lines added + removed.
      */
-    public int getLinesChanged() {
+    public int getLinesChanged() throws IOException {
+        populate();
         return stats.total;
     }
 
     /**
      * Number of lines added.
      */
-    public int getLinesAdded() {
+    public int getLinesAdded() throws IOException {
+        populate();
         return stats.additions;
     }
 
     /**
      * Number of lines removed.
      */
-    public int getLinesDeleted() {
+    public int getLinesDeleted() throws IOException {
+        populate();
         return stats.deletions;
     }
 
@@ -223,7 +226,8 @@ public class GHCommit {
      * @return
      *      Can be empty but never null.
      */
-    public List<File> getFiles() {
+    public List<File> getFiles() throws IOException {
+        populate();
         return files!=null ? Collections.unmodifiableList(files) : Collections.<File>emptyList();
     }
 
@@ -301,7 +305,7 @@ public class GHCommit {
     }
 
     public GHCommitComment createComment(String body) throws IOException {
-        return createComment(body,null,null,null);
+        return createComment(body, null, null, null);
     }
 
     /**
@@ -316,6 +320,14 @@ public class GHCommit {
      */
     public GHCommitStatus getLastStatus() throws IOException {
         return owner.getLastCommitStatus(sha);
+    }
+
+    /**
+     * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
+     */
+    void populate() throws IOException {
+        if (files==null && stats==null)
+            owner.root.retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

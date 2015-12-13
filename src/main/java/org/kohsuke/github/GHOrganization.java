@@ -26,19 +26,27 @@ public class GHOrganization extends GHPerson {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic) throws IOException {
+        return createRepository(name, description, homepage, team, isPublic, false);
+    }
+
+    public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic, boolean autoInit) throws IOException {
         GHTeam t = getTeams().get(team);
         if (t==null)
             throw new IllegalArgumentException("No such team: "+team);
-        return createRepository(name, description, homepage, t, isPublic);
+        return createRepository(name, description, homepage, t, isPublic, autoInit);
     }
 
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
+        return createRepository(name, description, homepage, team, isPublic, false);
+    }
+
+    public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic, boolean autoInit) throws IOException {
         if (team==null)
             throw new IllegalArgumentException("Invalid team");
         // such API doesn't exist, so fall back to HTML scraping
         return new Requester(root)
-                .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
+            .with("name", name).with("description", description).with("homepage", homepage)
+            .with("public", isPublic).with("auto_init", autoInit).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
     }
 
     /**
@@ -185,7 +193,7 @@ public class GHOrganization extends GHPerson {
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
-        return createTeam(name,p, Arrays.asList(repositories));
+        return createTeam(name, p, Arrays.asList(repositories));
     }
 
     /**

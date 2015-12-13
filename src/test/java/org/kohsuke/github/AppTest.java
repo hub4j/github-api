@@ -38,6 +38,18 @@ public class AppTest extends AbstractGitHubApiTestBase {
         getUser().getRepository(targetName).delete();
     }
 
+    @Test
+    public void testRepositoryWithAutoInitializationCRUD() throws IOException {
+        String name = "github-api-test-autoinit";
+        deleteRepository(name);
+        GHRepository r = gitHub.createRepository(name, "a test repository for auto init", "http://github-api.kohsuke.org/", true, true);
+        r.enableIssueTracker(false);
+        r.enableDownloads(false);
+        r.enableWiki(false);
+        assertNotNull(r.getReadme());
+        getUser().getRepository(name).delete();
+    }
+
     private void deleteRepository(final String name) throws IOException {
         GHRepository repository = getUser().getRepository(name);
         if(repository != null) {

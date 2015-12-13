@@ -417,9 +417,23 @@ public class GitHub {
      *      Newly created repository.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
+        return createRepository(name, description, homepage, isPublic, false);
+    }
+
+    /**
+     * Creates a new repository.
+     *
+     * To create a repository in an organization, see
+     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean, boolean)}
+     *
+     * @return
+     *      Newly created repository.
+     */
+    public GHRepository createRepository(String name, String description, String homepage, boolean isPublic, boolean autoInit) throws IOException {
         Requester requester = new Requester(this)
-                .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0);
+            .with("name", name).with("description", description).with("homepage", homepage)
+            .with("public", isPublic ? 1 : 0)
+            .with("auto_init", autoInit);
         return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
     }
 

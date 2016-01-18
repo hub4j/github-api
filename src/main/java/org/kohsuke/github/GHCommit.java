@@ -102,7 +102,7 @@ public class GHCommit {
         }
 
         /**
-         * "modified", "added", or "deleted"
+         * "modified", "added", or "removed"
          */
         public String getStatus() {
             return status;

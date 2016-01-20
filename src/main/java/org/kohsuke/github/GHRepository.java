@@ -475,7 +475,7 @@ public class GHRepository extends GHObject {
     public void setEmailServiceHook(String address) throws IOException {
         Map<String, String> config = new HashMap<String, String>();
         config.put("address", address);
-        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", "true")
+        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", true)
                 .to(getApiTailUrl("hooks"));
     }
 

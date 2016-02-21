@@ -178,7 +178,8 @@ public class GHCommit {
     User author,committer;
 
 
-    public ShortInfo getCommitShortInfo() {
+    public ShortInfo getCommitShortInfo() throws IOException {
+        populate();
         return commit;
     }
 

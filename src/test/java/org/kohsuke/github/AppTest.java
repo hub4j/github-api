@@ -326,6 +326,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
         System.out.println(commit);
         assertEquals(1, commit.getParents().size());
         assertEquals(1,commit.getFiles().size());
+        assertEquals("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7",
+                commit.getHtmlUrl().toString());
 
         File f = commit.getFiles().get(0);
         assertEquals(48,f.getLinesChanged());

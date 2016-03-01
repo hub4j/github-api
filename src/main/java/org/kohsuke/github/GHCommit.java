@@ -171,7 +171,7 @@ public class GHCommit {
         String login;
     }
 
-    String url,sha;
+    String url,html_url,sha;
     List<File> files;
     Stats stats;
     List<Parent> parents;
@@ -212,6 +212,13 @@ public class GHCommit {
     public int getLinesDeleted() throws IOException {
         populate();
         return stats.deletions;
+    }
+
+    /**
+     *  URL of this commit like "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
+     */
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     /**

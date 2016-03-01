@@ -39,7 +39,7 @@ class GHHooks {
             if (events!=null) {
               ea = new ArrayList<String>();
               for (GHEvent e : events)
-                ea.add(e.name().toLowerCase(Locale.ENGLISH));
+                ea.add(e.symbol());
             }
 
             GHHook hook = new Requester(root)

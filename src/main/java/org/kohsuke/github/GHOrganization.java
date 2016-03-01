@@ -23,29 +23,35 @@ public class GHOrganization extends GHPerson {
      *
      * @return
      *      Newly created repository.
+     * @deprecated
+     *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
     public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic) throws IOException {
-        return createRepository(name, description, homepage, team, isPublic, false);
-    }
-
-    public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic, boolean autoInit) throws IOException {
         GHTeam t = getTeams().get(team);
         if (t==null)
             throw new IllegalArgumentException("No such team: "+team);
-        return createRepository(name, description, homepage, t, isPublic, autoInit);
+        return createRepository(name, description, homepage, t, isPublic);
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
+     */
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
-        return createRepository(name, description, homepage, team, isPublic, false);
-    }
-
-    public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic, boolean autoInit) throws IOException {
         if (team==null)
             throw new IllegalArgumentException("Invalid team");
-        // such API doesn't exist, so fall back to HTML scraping
-        return new Requester(root)
-            .with("name", name).with("description", description).with("homepage", homepage)
-            .with("public", isPublic).with("auto_init", autoInit).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
+        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).team(team).create();
+    }
+
+    /**
+     * Starts a builder that creates a new repository.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
+     * to finally createa repository.
+     */
+    public GHCreateRepositoryBuilder createRepository(String name) throws IOException {
+        return new GHCreateRepositoryBuilder(root,"/orgs/"+login+"/repos",name);
     }
 
     /**

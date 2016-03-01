@@ -42,7 +42,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
     public void testRepositoryWithAutoInitializationCRUD() throws IOException {
         String name = "github-api-test-autoinit";
         deleteRepository(name);
-        GHRepository r = gitHub.createRepository(name, "a test repository for auto init", "http://github-api.kohsuke.org/", true, true);
+        GHRepository r = gitHub.createRepository(name)
+                .description("a test repository for auto init")
+                .homepage("http://github-api.kohsuke.org/")
+                .autoInit(true).create();
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);

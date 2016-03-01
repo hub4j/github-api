@@ -791,7 +791,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
         assertTrue(actual.contains("href=\"https://github.com/kohsuke/github-api/pull/1\""));
         assertTrue(actual.contains("class=\"user-mention\""));
-        assertTrue(actual.contains("class=\"issue-link\""));
+        assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
     }
 

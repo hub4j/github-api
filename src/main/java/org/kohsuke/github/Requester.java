@@ -264,9 +264,8 @@ class Requester {
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
+            method("GET");
             setupConnection(root.getApiURL(tailApiUrl));
-
-            uc.setRequestMethod("GET");
 
             buildRequest();
 
@@ -280,12 +279,10 @@ class Requester {
 
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
+            method("GET");  // if the download link is encoded with a token on the query string, the default behavior of POST will fail
             setupConnection(root.getApiURL(tailApiUrl));
 
-            // if the download link is encoded with a token on the query string, the default behavior of POST will fail
-            uc.setRequestMethod("GET");
-            
-            buildRequest();        
+            buildRequest();
          
             try {
                 return wrapStream(uc.getInputStream());

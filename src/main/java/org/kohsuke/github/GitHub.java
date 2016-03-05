@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -482,7 +483,34 @@ public class GitHub {
      * Otherwise this method throws {@link IOException} to indicate the problem.
      */
     public void checkApiUrlValidity() throws IOException {
-        retrieve().to("/", GHApiInfo.class).check(apiUrl);
+        try {
+            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+        } catch (IOException ioe) {
+            if (isPrivateModeEnabled()) {
+                throw new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled");
+            }
+            throw ioe;
+        }
+    }
+
+    /**
+     * Ensures if a GitHub Enterprise server is configured in private mode.
+     *
+     * @return {@code true} if private mode is enabled. If it tries to use this method with GitHub, returns {@code
+     * false}.
+     */
+    private boolean isPrivateModeEnabled() {
+        try {
+            HttpURLConnection connect = getConnector().connect(getApiURL("/"));
+            if (connect.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED
+                    && connect.getHeaderField("Server") != null
+                    && connect.getHeaderField("Server").equals("GitHub.com")) {
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /**

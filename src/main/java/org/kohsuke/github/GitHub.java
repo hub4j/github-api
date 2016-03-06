@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -55,6 +56,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Root of the GitHub API.
@@ -68,6 +71,8 @@ import java.nio.charset.Charset;
  * @author Kohsuke Kawaguchi
  */
 public class GitHub {
+    protected final transient Logger logger = Logger.getLogger(getClass().getName());
+
     /*package*/ final String login;
 
     /**
@@ -458,6 +463,7 @@ public class GitHub {
             retrieve().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
+            logger.log(Level.FINEST, "Exception validating credentials on {0} with login {1}: {2}", new Object[]{this.apiUrl, this.login, e, e});
             return false;
         }
     }

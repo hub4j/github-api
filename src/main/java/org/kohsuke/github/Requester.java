@@ -473,21 +473,33 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
-        if (uc.getResponseCode()==304)
-            return null;    // special case handling for 304 unmodified, as the content will be ""
         InputStreamReader r = null;
+        int responseCode = -1;
+        String responseMessage = null;
         try {
+            responseCode = uc.getResponseCode();
+            responseMessage = uc.getResponseMessage();
+            if (responseCode == 304) {
+                return null;    // special case handling for 304 unmodified, as the content will be ""
+            }
+
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
                     return MAPPER.readValue(data,type);
                 } catch (JsonMappingException e) {
-                    throw (IOException)new IOException("Failed to deserialize "+data).initCause(e);
+                    throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
                 }
             if (instance!=null)
                 return MAPPER.readerForUpdating(instance).<T>readValue(data);
             return null;
+        } catch (FileNotFoundException e) {
+            // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in HttpException
+            // to preserve backward compatibility
+            throw e;
+        } catch (IOException e) {
+            throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
         }
@@ -508,7 +520,15 @@ class Requester {
      * Handle API error by either throwing it or by returning normally to retry.
      */
     /*package*/ void handleApiError(IOException e) throws IOException {
-        if (uc.getResponseCode() == 401) // Unauthorized == bad creds
+        int responseCode;
+        try {
+            responseCode = uc.getResponseCode();
+        } catch (IOException e2) {
+            // likely to be a network exception (e.g. SSLHandshakeException),
+            // uc.getResponseCode() and any other getter on the response will cause an exception
+            throw e;
+        }
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
             throw e;
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {

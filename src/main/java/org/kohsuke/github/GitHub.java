@@ -463,7 +463,8 @@ public class GitHub {
             retrieve().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
-            logger.log(Level.FINEST, "Exception validating credentials on {0} with login {1}: {2}", new Object[]{this.apiUrl, this.login, e, e});
+            if (logger.isLoggable(Level.FINE))
+                logger.log(Level.FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
             return false;
         }
     }

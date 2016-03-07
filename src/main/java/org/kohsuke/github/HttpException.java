@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.annotation.CheckForNull;
+
 /**
- * Http exception
+ * {@link IOException} for http exceptions because {@link HttpURLConnection} throws un-discerned
+ * {@link IOException} and it can help to know the http response code to decide how to handle an
+ * http exceptions.
  *
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
@@ -81,7 +85,7 @@ public class HttpException extends IOException {
      * @see HttpURLConnection#getResponseCode()
      * @see HttpURLConnection#getResponseMessage()
      */
-    public HttpException(int responseCode, String responseMessage, URL url, Throwable cause) {
+    public HttpException(int responseCode, String responseMessage, @CheckForNull URL url, Throwable cause) {
         this(responseCode, responseMessage, url == null ? null : url.toString(), cause);
     }
 
@@ -110,10 +114,5 @@ public class HttpException extends IOException {
      */
     public String getUrl() {
         return url;
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage();
     }
 }

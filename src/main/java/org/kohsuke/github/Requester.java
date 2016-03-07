@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -64,7 +66,9 @@ import static org.kohsuke.github.GitHub.*;
  */
 class Requester {
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
-    
+
+    protected final transient Logger logger = Logger.getLogger(getClass().getName());
+
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
@@ -526,6 +530,9 @@ class Requester {
         } catch (IOException e2) {
             // likely to be a network exception (e.g. SSLHandshakeException),
             // uc.getResponseCode() and any other getter on the response will cause an exception
+            if (logger.isLoggable(Level.FINE))
+                logger.log(Level.FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'" +
+                        " handling exception " + e, e);
             throw e;
         }
         if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds

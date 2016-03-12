@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,6 +56,7 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
 import static org.kohsuke.github.GitHub.*;
 
 /**
@@ -65,10 +65,6 @@ import static org.kohsuke.github.GitHub.*;
  * @author Kohsuke Kawaguchi
  */
 class Requester {
-    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
-
-    protected final transient Logger logger = Logger.getLogger(getClass().getName());
-
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
@@ -530,8 +526,8 @@ class Requester {
         } catch (IOException e2) {
             // likely to be a network exception (e.g. SSLHandshakeException),
             // uc.getResponseCode() and any other getter on the response will cause an exception
-            if (logger.isLoggable(Level.FINE))
-                logger.log(Level.FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'" +
+            if (LOGGER.isLoggable(FINE))
+                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'" +
                         " handling exception " + e, e);
             throw e;
         }
@@ -557,4 +553,7 @@ class Requester {
             IOUtils.closeQuietly(es);
         }
     }
+
+    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
+    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
 }

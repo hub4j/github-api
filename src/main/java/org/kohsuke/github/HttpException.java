@@ -49,7 +49,8 @@ public class HttpException extends IOException {
      * @see HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url, Throwable cause) {
-        super(message, cause);
+        super(message);
+        initCause(cause);
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
         this.url = url;
@@ -67,7 +68,8 @@ public class HttpException extends IOException {
      */
     public HttpException(int responseCode, String responseMessage, String url, Throwable cause) {
         super("Server returned HTTP response code: " + responseCode + ", message: '" + responseMessage + "'" +
-                " for URL: " + url, cause);
+                " for URL: " + url);
+        initCause(cause);
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
         this.url = url;

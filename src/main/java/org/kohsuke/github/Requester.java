@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -219,15 +220,19 @@ class Requester {
     }
 
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        while (true) {// loop while API rate limit is hit
-            if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
-                StringBuilder qs=new StringBuilder();
-                for (Entry arg : args) {
-                    qs.append(qs.length()==0 ? '?' : '&');
-                    qs.append(arg.key).append('=').append(URLEncoder.encode(arg.value.toString(),"UTF-8"));
+        if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
+            boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
+            tailApiUrl += questionMarkFound ? '&' : '?';
+            for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
+                Entry arg = it.next();
+                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(),"UTF-8");
+                if (it.hasNext()) {
+                    tailApiUrl += '&';
                 }
-                tailApiUrl += qs.toString();
             }
+        }
+
+        while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 
             buildRequest();

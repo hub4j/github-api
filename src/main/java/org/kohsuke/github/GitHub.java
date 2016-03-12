@@ -486,11 +486,11 @@ public class GitHub {
     public void checkApiUrlValidity() throws IOException {
         try {
             retrieve().to("/", GHApiInfo.class).check(apiUrl);
-        } catch (IOException ioe) {
+        } catch (IOException e) {
             if (isPrivateModeEnabled()) {
-                throw new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled");
+                throw (IOException)new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
             }
-            throw ioe;
+            throw e;
         }
     }
 

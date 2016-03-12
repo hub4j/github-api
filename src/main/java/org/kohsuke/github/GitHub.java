@@ -26,12 +26,14 @@ package org.kohsuke.github;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.util.logging.Level.FINE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -479,14 +481,59 @@ public class GitHub {
     }
 
     /**
-     * Ensures that the API URL is valid.
+     * Tests the connection.
+     *
+     * <p>
+     * Verify that the API URL and credentials are valid to access this GitHub.
      *
      * <p>
      * This method returns normally if the endpoint is reachable and verified to be GitHub API URL.
      * Otherwise this method throws {@link IOException} to indicate the problem.
      */
     public void checkApiUrlValidity() throws IOException {
-        retrieve().to("/", GHApiInfo.class).check(apiUrl);
+        try {
+            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+        } catch (IOException e) {
+            if (isPrivateModeEnabled()) {
+                throw (IOException)new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Ensures if a GitHub Enterprise server is configured in private mode.
+     *
+     * @return {@code true} if private mode is enabled. If it tries to use this method with GitHub, returns {@code
+     * false}.
+     */
+    private boolean isPrivateModeEnabled() {
+        try {
+            HttpURLConnection uc = getConnector().connect(getApiURL("/"));
+            /*
+                $ curl -i https://github.mycompany.com/api/v3/
+                HTTP/1.1 401 Unauthorized
+                Server: GitHub.com
+                Date: Sat, 05 Mar 2016 19:45:01 GMT
+                Content-Type: application/json; charset=utf-8
+                Content-Length: 130
+                Status: 401 Unauthorized
+                X-GitHub-Media-Type: github.v3
+                X-XSS-Protection: 1; mode=block
+                X-Frame-Options: deny
+                Content-Security-Policy: default-src 'none'
+                Access-Control-Allow-Credentials: true
+                Access-Control-Expose-Headers: ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+                Access-Control-Allow-Origin: *
+                X-GitHub-Request-Id: dbc70361-b11d-4131-9a7f-674b8edd0411
+                Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+                X-Content-Type-Options: nosniff
+             */
+            return uc.getResponseCode() == HTTP_UNAUTHORIZED
+                && uc.getHeaderField("X-GitHub-Media-Type") != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /**

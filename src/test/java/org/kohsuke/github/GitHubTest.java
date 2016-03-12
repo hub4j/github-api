@@ -124,6 +124,11 @@ public class GitHubTest {
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         GitHub github = GitHub.connectAnonymously();
-        github.checkApiUrlValidity();
+        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        try {
+            github.checkApiUrlValidity();
+        } catch (IOException ioe) {
+            assertTrue(ioe.getMessage().contains("private mode enabled"));
+        }
     }
 }

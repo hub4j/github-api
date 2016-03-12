@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
@@ -264,7 +263,8 @@ public class GitHub {
             // see issue #78
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
-            r.reset = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
+            long hours = 1000L * 60 * 60;
+            r.reset = new Date(System.currentTimeMillis() + 1 * hours );
             return r;
         }
     }

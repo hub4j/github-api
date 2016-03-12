@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -501,7 +502,7 @@ public class GitHub {
      */
     private boolean isPrivateModeEnabled() {
         try {
-            HttpURLConnection connect = getConnector().connect(getApiURL("/"));
+            HttpURLConnection uc = getConnector().connect(getApiURL("/"));
             /*
                 $ curl -i https://github.mycompany.com/api/v3/
                 HTTP/1.1 401 Unauthorized
@@ -521,12 +522,8 @@ public class GitHub {
                 Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
                 X-Content-Type-Options: nosniff
              */
-            if (connect.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED
-                    && connect.getHeaderField("Server") != null
-                    && connect.getHeaderField("Server").equals("GitHub.com")) {
-                return true;
-            }
-            return false;
+            return uc.getResponseCode() == HTTP_UNAUTHORIZED
+                && uc.getHeaderField("X-GitHub-Media-Type") != null;
         } catch (IOException e) {
             return false;
         }

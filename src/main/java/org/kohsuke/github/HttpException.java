@@ -56,8 +56,6 @@ public class HttpException extends IOException {
     }
 
     /**
-     * @param message         The detail message (which is saved for later retrieval
-     *                        by the {@link #getMessage()} method)
      * @param responseCode    Http response code. {@code -1} if no code can be discerned.
      * @param responseMessage Http response message
      * @param url             The url that was invoked

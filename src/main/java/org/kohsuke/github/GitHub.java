@@ -25,13 +25,13 @@ package org.kohsuke.github;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.util.logging.Level.FINE;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -56,7 +56,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -71,8 +70,6 @@ import java.util.logging.Logger;
  * @author Kohsuke Kawaguchi
  */
 public class GitHub {
-    protected final transient Logger logger = Logger.getLogger(getClass().getName());
-
     /*package*/ final String login;
 
     /**
@@ -463,8 +460,8 @@ public class GitHub {
             retrieve().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
-            if (logger.isLoggable(Level.FINE))
-                logger.log(Level.FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
+            if (LOGGER.isLoggable(FINE))
+                LOGGER.log(FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
             return false;
         }
     }
@@ -611,4 +608,6 @@ public class GitHub {
     }
 
     /* package */ static final String GITHUB_URL = "https://api.github.com";
+
+    private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
 }

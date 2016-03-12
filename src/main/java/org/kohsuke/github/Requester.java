@@ -284,7 +284,6 @@ class Requester {
 
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
-            method("GET");  // if the download link is encoded with a token on the query string, the default behavior of POST will fail
             setupConnection(root.getApiURL(tailApiUrl));
 
             buildRequest();

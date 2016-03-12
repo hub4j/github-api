@@ -115,7 +115,8 @@ public class GHContent {
      * Retrieves the actual content stored here.
      */
     public InputStream read() throws IOException {
-        return new Requester(root).asStream(getDownloadUrl());
+        // if the download link is encoded with a token on the query string, the default behavior of POST will fail
+        return new Requester(root).method("GET").asStream(getDownloadUrl());
     }
 
     /**

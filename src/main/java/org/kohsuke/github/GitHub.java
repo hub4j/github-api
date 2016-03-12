@@ -502,6 +502,25 @@ public class GitHub {
     private boolean isPrivateModeEnabled() {
         try {
             HttpURLConnection connect = getConnector().connect(getApiURL("/"));
+            /*
+                $ curl -i https://github.mycompany.com/api/v3/
+                HTTP/1.1 401 Unauthorized
+                Server: GitHub.com
+                Date: Sat, 05 Mar 2016 19:45:01 GMT
+                Content-Type: application/json; charset=utf-8
+                Content-Length: 130
+                Status: 401 Unauthorized
+                X-GitHub-Media-Type: github.v3
+                X-XSS-Protection: 1; mode=block
+                X-Frame-Options: deny
+                Content-Security-Policy: default-src 'none'
+                Access-Control-Allow-Credentials: true
+                Access-Control-Expose-Headers: ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+                Access-Control-Allow-Origin: *
+                X-GitHub-Request-Id: dbc70361-b11d-4131-9a7f-674b8edd0411
+                Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+                X-Content-Type-Options: nosniff
+             */
             if (connect.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED
                     && connect.getHeaderField("Server") != null
                     && connect.getHeaderField("Server").equals("GitHub.com")) {

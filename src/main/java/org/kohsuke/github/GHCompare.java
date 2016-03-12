@@ -4,8 +4,6 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
 
 /**
  * The model user for comparing 2 commits in the GitHub API.
@@ -72,7 +70,9 @@ public class GHCompare {
      * @return A copy of the array being stored in the class.
      */
     public Commit[] getCommits() {
-        return Arrays.copyOf(commits, commits.length);
+        Commit[] newValue = new Commit[commits.length];
+        System.arraycopy(commits, 0, newValue, 0, commits.length);
+        return newValue;
     }
     
     /**
@@ -80,7 +80,9 @@ public class GHCompare {
      * @return A copy of the array being stored in the class.
      */
     public GHCommit.File[] getFiles() {
-        return Arrays.copyOf(files, files.length);
+        GHCommit.File[] newValue = new GHCommit.File[files.length];
+        System.arraycopy(files, 0, newValue, 0, files.length);
+        return newValue;
     }
 
     public GHCompare wrap(GHRepository owner) {

@@ -57,7 +57,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 /**
@@ -134,8 +133,8 @@ public class GitHub {
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
-                Charset charset = Charsets.UTF_8;
-                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charset)), charset);
+                String charsetName = Charsets.UTF_8.name();
+                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
             } else {// anonymous access
                 encodedAuthorization = null;
             }

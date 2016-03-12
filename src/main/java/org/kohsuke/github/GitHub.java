@@ -477,7 +477,10 @@ public class GitHub {
     }
 
     /**
-     * Ensures that the API URL is valid.
+     * Tests the connection.
+     *
+     * <p>
+     * Verify that the API URL and credentials are valid to access this GitHub.
      *
      * <p>
      * This method returns normally if the endpoint is reachable and verified to be GitHub API URL.

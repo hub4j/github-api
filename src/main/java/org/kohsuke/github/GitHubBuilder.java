@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
- *
+ * Configures connection details and produces {@link GitHub}.
  *
  * @since 1.59
  */

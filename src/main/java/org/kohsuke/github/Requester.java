@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -138,7 +139,7 @@ class Requester {
         // by convention Java constant names are upper cases, but github uses
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace by '_'
-        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_','-'));
+        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_', '-'));
     }
 
     public Requester with(String key, String value) {
@@ -216,9 +217,10 @@ class Requester {
      */
     @Deprecated
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return method(method).to(tailApiUrl,type);
+        return method(method).to(tailApiUrl, type);
     }
 
+    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
             boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;

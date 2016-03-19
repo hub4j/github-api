@@ -27,7 +27,6 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
-import java.util.Arrays;
 
 /**
  * Commit detail inside a {@link GHPullRequest}.
@@ -144,6 +143,8 @@ public class GHPullRequestCommitDetail {
     }
 
     public CommitPointer[] getParents() {
-        return Arrays.copyOf(parents, parents.length);
+        CommitPointer[] newValue = new CommitPointer[parents.length];
+        System.arraycopy(parents, 0, newValue, 0, parents.length);
+        return newValue;
     }
 }

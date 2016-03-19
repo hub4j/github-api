@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
@@ -57,7 +56,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 /**
@@ -134,8 +132,8 @@ public class GitHub {
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
-                Charset charset = Charsets.UTF_8;
-                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charset)), charset);
+                String charsetName = Charsets.UTF_8.name();
+                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
             } else {// anonymous access
                 encodedAuthorization = null;
             }
@@ -265,7 +263,8 @@ public class GitHub {
             // see issue #78
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
-            r.reset = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
+            long hours = 1000L * 60 * 60;
+            r.reset = new Date(System.currentTimeMillis() + 1 * hours );
             return r;
         }
     }

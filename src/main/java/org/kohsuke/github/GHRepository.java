@@ -1152,7 +1152,7 @@ public class GHRepository extends GHObject {
         try {
             payload = content.getBytes("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            throw  new IOException("UTF-8 encoding is not supported", ex);
+            throw (IOException) new IOException("UTF-8 encoding is not supported").initCause(ex);
         }
         return createContent(payload, commitMessage, path, branch);
     }

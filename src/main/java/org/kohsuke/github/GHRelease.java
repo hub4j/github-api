@@ -122,17 +122,32 @@ public class GHRelease extends GHObject {
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
      * handling of the HTTP requests to github's API.
      *
+     * @param file file to upload
+     * @param contentType content type
+     * @param uploadUrlPrefix ULR prefix for uploading; for example, for github.com it's https://uploads.github.com
      * @throws IOException
      */
-    public GHAsset uploadAsset(File file, String contentType) throws IOException {
+    public GHAsset uploadAsset(File file, String contentType, String uploadUrlPrefix) throws IOException {
         Requester builder = new Requester(owner.root);
 
-        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""), getId(), file.getName());
+        String url = format("%s%s/releases/%d/assets?name=%s",
+                            uploadUrlPrefix, owner.getApiTailUrl(""), getId(), file.getName());
         return builder.contentType(contentType)
                 .with(new FileInputStream(file))
                 .to(url, GHAsset.class).wrap(this);
     }
+
+    /**
+     * upload the release to defaul upload URL on github.com
+     *
+     * @param file file to upload
+     * @param contentType content type
+     * @throws IOException
+     */
+    public GHAsset uploadAsset(File file, String contentType) throws IOException {
+        return this.uploadAsset(file, contentType, "https://uploads.github.com");
+    }
+
 
     public List<GHAsset> getAssets() throws IOException {
         Requester builder = new Requester(owner.root);

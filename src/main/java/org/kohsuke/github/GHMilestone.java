@@ -72,10 +72,17 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * Closes this issue.
+     * Closes this milestone.
      */
     public void close() throws IOException {
         edit("state", "closed");
+    }
+
+    /**
+     * Reopens this milestone.
+     */
+    public void reopen() throws IOException {
+        edit("state", "open");
     }
 
     private void edit(String key, Object value) throws IOException {

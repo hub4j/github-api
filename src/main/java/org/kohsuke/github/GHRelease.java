@@ -125,6 +125,8 @@ public class GHRelease extends GHObject {
      * @param file file to upload
      * @param contentType content type
      * @param uploadUrlPrefix ULR prefix for uploading; for example, for github.com it's https://uploads.github.com
+     * @return instance of GHAsset uploaded
+     * @since 1.75
      * @throws IOException
      */
     public GHAsset uploadAsset(File file, String contentType, String uploadUrlPrefix) throws IOException {
@@ -142,6 +144,7 @@ public class GHRelease extends GHObject {
      *
      * @param file file to upload
      * @param contentType content type
+     * @return instance of GHAsset uploaded
      * @throws IOException
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {

@@ -17,6 +17,10 @@ import static java.lang.String.format;
  * @see GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
+
+    /** github.com's default upload URL */
+    public final static String DEFAULT_UPLOAD_URL = "https://uploads.github.com";
+
     GitHub root;
     GHRepository owner;
 
@@ -148,7 +152,7 @@ public class GHRelease extends GHObject {
      * @throws IOException
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
-        return this.uploadAsset(file, contentType, "https://uploads.github.com");
+        return this.uploadAsset(file, contentType, DEFAULT_UPLOAD_URL);
     }
 
 

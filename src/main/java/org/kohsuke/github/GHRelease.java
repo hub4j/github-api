@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang.ObjectUtils.defaultIfNull;
 
 /**
  * Release in a github repository.
@@ -128,7 +129,7 @@ public class GHRelease extends GHObject {
      *
      * @param file file to upload
      * @param contentType content type
-     * @param uploadUrlPrefix URL prefix for uploading; for example, for github.com it's https://uploads.github.com
+     * @param uploadUrlPrefix URL prefix for uploading; if null {@link #DEFAULT_UPLOAD_URL} will be used
      * @return instance of GHAsset uploaded
      * @since 1.75
      * @throws IOException
@@ -137,7 +138,7 @@ public class GHRelease extends GHObject {
         Requester builder = new Requester(owner.root);
 
         String url = format("%s%s/releases/%d/assets?name=%s",
-                            uploadUrlPrefix, owner.getApiTailUrl(""), getId(), file.getName());
+                            defaultIfNull(uploadUrlPrefix, DEFAULT_UPLOAD_URL), owner.getApiTailUrl(""), getId(), file.getName());
         return builder.contentType(contentType)
                 .with(new FileInputStream(file))
                 .to(url, GHAsset.class).wrap(this);

@@ -126,6 +126,13 @@ public class GHTeam {
     public void remove(GHRepository r) throws IOException {
         org.root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
+    
+    /**
+     * Deletes this team.
+     */
+    public void delete() throws IOException {
+        org.root.retrieve().method("DELETE").to(api(""));
+    }
 
     private String api(String tail) {
         return "/teams/"+id+tail;

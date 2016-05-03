@@ -5,10 +5,9 @@ import java.util.Locale;
 /**
  * Hook event type.
  *
- * See http://developer.github.com/v3/events/types/
- *
  * @author Kohsuke Kawaguchi
  * @see GHEventInfo
+ * @see <a href="https://developer.github.com/v3/activity/events/types/">Event type reference</a>
  */
 public enum GHEvent {
     COMMIT_COMMENT,

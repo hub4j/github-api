@@ -94,6 +94,17 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
+     */
+    public GHTeam getTeamBySlug(String slug) throws IOException {
+        for (GHTeam t : listTeams()) {
+            if(t.getSlug().equals(slug))
+                return t;
+        }
+        return null;
+    }
+
+    /**
      * Checks if this organization has the specified user as a member.
      */
     public boolean hasMember(GHUser user) {

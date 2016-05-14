@@ -336,6 +336,13 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testOrgTeamBySlug() throws Exception {
+        kohsuke();
+        GHTeam e = gitHub.getOrganization("github-api-test-org").getTeamBySlug("core-developers");
+        assertNotNull(e);
+    }
+
+    @Test
     public void testCommit() throws Exception {
         GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         System.out.println(commit);

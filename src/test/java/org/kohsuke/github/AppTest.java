@@ -221,10 +221,12 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testMyTeamsContainsAllMyOrganizations() throws IOException {
+    public void testMyOrganizationsContainMyTeams() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
         Map<String, GHOrganization> myOrganizations = gitHub.getMyOrganizations();
-        assertEquals(teams.keySet(), myOrganizations.keySet());
+        //GitHub no longer has default 'owners' team, so there may be organization memberships without a team
+        //https://help.github.com/articles/about-improved-organization-permissions/
+        assertTrue(myOrganizations.keySet().containsAll(teams.keySet()));
     }
     
     @Test

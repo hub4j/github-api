@@ -200,7 +200,7 @@ public class GHPullRequest extends GHIssue {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-        if (merged_by!=null)    return; // already populated
+        if (mergeable_state != null)    return; // already populated by id
 
         root.retrieve().to(url, this).wrapUp(owner);
     }

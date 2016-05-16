@@ -225,15 +225,16 @@ public class GHIssue extends GHObject {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-    public GHUser getAssignee() {
+    public GHUser getAssignee() throws IOException {
+        if (assignee != null) return owner.root.getUser(assignee.getLogin());
         return assignee;
     }
     
     /**
      * User who submitted the issue.
      */
-    public GHUser getUser() {
-        return user;
+    public GHUser getUser() throws IOException {
+        return owner.root.getUser(user.getLogin());
     }
 
     /**
@@ -244,9 +245,9 @@ public class GHIssue extends GHObject {
      * even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
-    public GHUser getClosedBy() {
+    public GHUser getClosedBy() throws IOException {
         if(!"closed".equals(state)) return null;
-        if(closed_by != null) return closed_by;
+        if(closed_by != null) return owner.root.getUser(closed_by.getLogin());;
         
         //TODO closed_by = owner.getIssue(number).getClosed_by();
         return closed_by;

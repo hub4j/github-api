@@ -45,7 +45,8 @@ public class GHCommitStatus extends GHObject {
         return description;
     }
 
-    public GHUser getCreator() {
+    public GHUser getCreator() throws IOException {
+        if (creator != null) return creator.root.getUser(creator.getLogin());
         return creator;
     }
 

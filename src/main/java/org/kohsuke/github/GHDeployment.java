@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-
+import java.io.IOException;
 import java.net.URL;
 
 public class GHDeployment extends GHObject {
@@ -41,7 +41,8 @@ public class GHDeployment extends GHObject {
     public String getEnvironment() {
         return environment;
     }
-    public GHUser getCreator() {
+    public GHUser getCreator() throws IOException {
+        if(creator != null) return root.getUser(creator.getLogin());
         return creator;
     }
     public String getRef() {

@@ -9,7 +9,7 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  * @see GHBranch#disableProtection()
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
 class BranchProtection {
     boolean enabled;
     RequiredStatusChecks requiredStatusChecks;

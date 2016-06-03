@@ -13,7 +13,7 @@ import java.util.Collection;
  * @author Yusuke Kokubo
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+    "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
 public class GHBranch {
     private GitHub root;
     private GHRepository owner;

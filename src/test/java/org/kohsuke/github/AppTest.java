@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 /**
@@ -852,6 +853,18 @@ public class AppTest extends AbstractGitHubApiTestBase {
         }
         assertTrue(found);
         gitHub.listNotifications().markAsRead();
+    }
+
+    /**
+     * Just basic code coverage to make sure toString() doesn't blow up
+     */
+    @Test
+    public void checkToString() throws Exception {
+        GHUser u = gitHub.getUser("jenkinsci");
+        System.out.println(u);
+        GHRepository r = u.getRepository("jenkins");
+        System.out.println(r);
+        System.out.println(r.getIssue(1));
     }
 
     private void kohsuke() {

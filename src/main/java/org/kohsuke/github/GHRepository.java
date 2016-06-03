@@ -77,6 +77,7 @@ public class GHRepository extends GHObject {
     private String default_branch,language;
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
+    @SkipFromToString
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
@@ -1351,13 +1352,8 @@ public class GHRepository extends GHObject {
 
 
     @Override
-    public String toString() {
-        return "Repository:"+owner.login+":"+name;
-    }
-
-    @Override
     public int hashCode() {
-        return toString().hashCode();
+        return ("Repository:"+owner.login+":"+name).hashCode();
     }
 
     @Override

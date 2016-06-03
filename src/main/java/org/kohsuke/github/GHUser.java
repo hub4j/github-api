@@ -197,11 +197,6 @@ public class GHUser extends GHPerson {
     }
 
     @Override
-    public String toString() {
-        return "User:"+login;
-    }
-
-    @Override
     public int hashCode() {
         return login.hashCode();
     }

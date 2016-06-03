@@ -106,6 +106,11 @@ class Requester {
         headers.put(name,value);
     }
 
+    public Requester withHeader(String name, String value) {
+        setHeader(name,value);
+        return this;
+    }
+
     /**
      * Makes a request with authentication credential.
      */

@@ -8,6 +8,7 @@ import java.net.URL;
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getLastCommitStatus(String)
  * @see GHCommit#getLastStatus()
+ * @see GHRepository#createCommitStatus(String, GHCommitState, String, String)
  */
 public class GHCommitStatus extends GHObject {
     String state;

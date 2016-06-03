@@ -204,7 +204,7 @@ public abstract class GHPerson extends GHObject {
 
     public Date getUpdatedAt() throws IOException {
         populate();
-        return super.getCreatedAt();
+        return super.getUpdatedAt();
     }
 
     /**

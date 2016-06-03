@@ -936,7 +936,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all the users who have starred this repo based on the old version of the API. For
-     * additional information, like date when the repository was starred, see {@link #listExtendedStargazers()}
+     * additional information, like date when the repository was starred, see {@link #listStargazers2()}
      */
     public PagedIterable<GHUser> listStargazers() {
         return listUsers("stargazers");
@@ -947,7 +947,7 @@ public class GHRepository extends GHObject {
      * information like the time when the repository was starred. For compatibility with the old API
      * see {@link #listStargazers()}
      */
-    public PagedIterable<GHStargazer> listExtendedStargazers() {
+    public PagedIterable<GHStargazer> listStargazers2() {
         return new PagedIterable<GHStargazer>() {
             @Override
             public PagedIterator<GHStargazer> _iterator(int pageSize) {

@@ -40,7 +40,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testRepositoryWithAutoInitializationCRUD() throws IOException {
+    public void testRepositoryWithAutoInitializationCRUD() throws Exception {
         String name = "github-api-test-autoinit";
         deleteRepository(name);
         GHRepository r = gitHub.createRepository(name)
@@ -50,6 +50,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
+        Thread.sleep(3000);
         assertNotNull(r.getReadme());
         getUser().getRepository(name).delete();
     }
@@ -601,6 +602,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .name(releaseName)
                 .prerelease(false)
                 .create();
+
+        Thread.sleep(3000);
 
         try {
 

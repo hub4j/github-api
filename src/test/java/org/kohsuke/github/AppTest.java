@@ -860,9 +860,9 @@ public class AppTest extends AbstractGitHubApiTestBase {
      */
     @Test
     public void checkToString() throws Exception {
-        GHUser u = gitHub.getUser("jenkinsci");
+        GHUser u = gitHub.getUser("rails");
         System.out.println(u);
-        GHRepository r = u.getRepository("jenkins");
+        GHRepository r = u.getRepository("rails");
         System.out.println(r);
         System.out.println(r.getIssue(1));
     }

@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -468,6 +467,11 @@ class Requester {
                 uc.setRequestProperty(e.getKey(), v);
         }
 
+        setRequestMethod(uc);
+        uc.setRequestProperty("Accept-Encoding", "gzip");
+    }
+
+    private void setRequestMethod(HttpURLConnection uc) throws IOException {
         try {
             uc.setRequestMethod(method);
         } catch (ProtocolException e) {
@@ -479,8 +483,23 @@ class Requester {
             } catch (Exception x) {
                 throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
             }
+            // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
+            try {
+                Field $delegate = uc.getClass().getDeclaredField("delegate");
+                $delegate.setAccessible(true);
+                Object delegate = $delegate.get(uc);
+                if (delegate instanceof HttpURLConnection) {
+                    HttpURLConnection nested = (HttpURLConnection) delegate;
+                    setRequestMethod(nested);
+                }
+            } catch (NoSuchFieldException x) {
+                // no problem
+            } catch (IllegalAccessException x) {
+                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+            }
         }
-        uc.setRequestProperty("Accept-Encoding", "gzip");
+        if (!uc.getRequestMethod().equals(method))
+            throw new IllegalStateException("Failed to set the request method to "+method);
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {

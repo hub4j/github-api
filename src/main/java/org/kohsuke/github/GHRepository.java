@@ -587,7 +587,19 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Requester(root).method("POST").to(getApiTailUrl("forks"), GHRepository.class).wrap(root);
+        new Requester(root).method("POST").to(getApiTailUrl("forks"), null);
+
+        // this API is asynchronous. we need to wait for a bit
+        for (int i=0; i<10; i++) {
+            GHRepository r = root.getMyself().getRepository(name);
+            if (r!=null)    return r;
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw (IOException)new InterruptedIOException().initCause(e);
+            }
+        }
+        throw new IOException(this+" was forked but can't find the new repository");
     }
 
     /**

@@ -1,6 +1,11 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.BranchProtection.RequiredStatusChecks;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * A branch in a repository.
@@ -43,6 +48,43 @@ public class GHBranch {
      */
     public String getSHA1() {
         return commit.sha;
+    }
+
+    /**
+     * Disables branch protection and allows anyone with push access to push changes.
+     */
+    public void disableProtection() throws IOException {
+        BranchProtection bp = new BranchProtection();
+        bp.enabled = false;
+        setProtection(bp);
+    }
+
+    /**
+     * Enables branch protection to control what commit statuses are required to push.
+     *
+     * @see GHCommitStatus#getContext()
+     */
+    public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
+        BranchProtection bp = new BranchProtection();
+        bp.enabled = true;
+        bp.requiredStatusChecks = new RequiredStatusChecks();
+        bp.requiredStatusChecks.enforcement_level = level;
+        bp.requiredStatusChecks.contexts.addAll(contexts);
+        setProtection(bp);
+    }
+
+    public void enableProtection(EnforcementLevel level, String... contexts) throws IOException {
+        enableProtection(level, Arrays.asList(contexts));
+    }
+
+    private void setProtection(BranchProtection bp) throws IOException {
+        new Requester(root).method("PATCH")
+                .withHeader("Accept","application/vnd.github.loki-preview+json")
+                ._with("protection",bp).to(getApiRoute());
+    }
+
+    String getApiRoute() {
+        return owner.getApiTailUrl("/branches/"+name);
     }
     
     @Override

@@ -1103,6 +1103,10 @@ public class GHRepository extends GHObject {
         return r;
     }
 
+    public GHBranch getBranch(String name) throws IOException {
+        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
+    }
+
     /**
      * @deprecated
      *      Use {@link #listMilestones(GHIssueState)}

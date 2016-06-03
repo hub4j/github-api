@@ -935,10 +935,34 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Lists all the users who have starred this repo.
+     * Lists all the users who have starred this repo based on the old version of the API. For
+     * additional information, like date when the repository was starred, see {@link #listExtendedStargazers()}
      */
     public PagedIterable<GHUser> listStargazers() {
         return listUsers("stargazers");
+    }
+
+    /**
+     * Lists all the users who have starred this repo based on new version of the API, having extended
+     * information like the time when the repository was starred. For compatibility with the old API
+     * see {@link #listStargazers()}
+     */
+    public PagedIterable<GHStargazer> listExtendedStargazers() {
+        return new PagedIterable<GHStargazer>() {
+            @Override
+            public PagedIterator<GHStargazer> _iterator(int pageSize) {
+                Requester requester = root.retrieve();
+                requester.setHeader("Accept", "application/vnd.github.v3.star+json");
+                return new PagedIterator<GHStargazer>(requester.asIterator(getApiTailUrl("stargazers"), GHStargazer[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHStargazer[] page) {
+                        for (GHStargazer c : page) {
+                            c.wrapUp(GHRepository.this);
+                        }
+                    }
+                };
+            }
+        };
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {

@@ -124,7 +124,13 @@ public class GHTeam {
     }
 
     public void add(GHRepository r) throws IOException {
-        org.root.retrieve().method("PUT").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        add(r,null);
+    }
+
+    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+        org.root.retrieve().method("PUT")
+                .with("permission",permission)
+                .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {

@@ -512,6 +512,10 @@ class Requester {
             if (responseCode == 304) {
                 return null;    // special case handling for 304 unmodified, as the content will be ""
             }
+            if (responseCode == 204 && type.isArray()) {
+                // no content
+                return type.cast(Array.newInstance(type.getComponentType(),0));
+            }
 
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);

@@ -339,6 +339,20 @@ public class GitHub {
     }
 
     /**
+     * Returns a list of popular open source licenses
+     *
+     * WARNING: This uses a PREVIEW API - you must use the PreviewHttpConnector
+     *
+     * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
+     *
+     * @return a list of popular open source licenses
+     * @throws IOException
+     */
+    public List<GHLicense> listLicenses() throws IOException {
+        return Arrays.asList(retrieve().to("/licenses", GHLicense[].class));
+    }
+
+    /**
      * This method returns a shallowly populated organizations.
      *
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}

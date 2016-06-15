@@ -58,10 +58,10 @@ import static java.util.Arrays.asList;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHRepository extends GHObject {
-    /*package almost final*/ GitHub root;
+    GitHub root;
 
     private String description, homepage, name, full_name;
     private String html_url;    // this is the UI
@@ -81,6 +81,9 @@ public class GHRepository extends GHObject {
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
+
+    private GHLicenseBase license;
+    private GHLicense fullLicense = null;
 
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this,ref);
@@ -408,8 +411,8 @@ public class GHRepository extends GHObject {
     public int getSize() {
         return size;
     }
-    
-   
+
+
     /**
      * Gets the collaborators on this repository.
      * This set always appear to include the owner.
@@ -866,6 +869,28 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets the basic license details for the repository.
+     *
+     * Warning: Only returns the basic license details. Use {@link GitHub#getLicense(String)}
+     * to get the full license information (hint: pass it {@link GHLicenseBase#getKey()}).
+     */
+    public GHLicenseBase getLicense() {
+        return license;
+    }
+
+    /**
+     * Access the full license details
+     */
+    public GHLicense getFullLicense() throws IOException {
+        synchronized(this){
+            if (fullLicense == null) {
+                fullLicense = root.getLicense(license.getKey());
+            }
+        }
+        return fullLicense;
+    }
+
+    /**
      * Creates a commit status
      *
      * @param targetUrl
@@ -1035,7 +1060,7 @@ public class GHRepository extends GHObject {
      * @deprecated
      *      Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
@@ -1044,7 +1069,7 @@ public class GHRepository extends GHObject {
     /**
      * Live set view of the post-commit hook.
      */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @SkipFromToString
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
@@ -1339,7 +1364,7 @@ public class GHRepository extends GHObject {
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
             return super.equals(obj);
-        }   
+        }
     }
 
     /**

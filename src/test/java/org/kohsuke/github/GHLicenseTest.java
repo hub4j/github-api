@@ -16,14 +16,16 @@
 
 package org.kohsuke.github;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.extras.PreviewHttpConnector;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
-public class GHLicenseTest {
+public class GHLicenseTest extends Assert {
     private GitHub gitHub;
 
     @Before
@@ -36,15 +38,54 @@ public class GHLicenseTest {
 
     @Test
     public void listLicenses() throws IOException {
-        List<GHLicense> licenses = gitHub.listLicenses();
-        for (GHLicense lic : licenses) {
-            System.out.println(lic.toString());
+        List<GHLicenseBase> licenses = gitHub.listLicenses();
+        assertTrue(licenses.size() > 0);
+    }
+
+    @Test
+    public void listLicensesCheckIndividualLicense() throws IOException {
+        List<GHLicenseBase> licenses = gitHub.listLicenses();
+        for (GHLicenseBase lic: licenses) {
+            if (lic.getKey().equals("mit")) {
+                assertTrue(lic.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+                return;
+            }
         }
-        assert(true);
+        fail("The MIT license was not found");
+    }
+
+    @Test
+    public void getLicense() throws IOException {
+        String key = "mit";
+        GHLicense license = gitHub.getLicense(key);
+        assertNotNull(license);
+        assertTrue("The name is correct", license.getName().equals("MIT License"));
+        assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
 
     @Test(expected = IOException.class)
     public void ListLicensesWithoutPreviewConnection() throws IOException {
         GitHub.connect().listLicenses();
+    }
+
+    @Test
+    public void checkRepositoryLicense() throws IOException {
+        GHRepository repo = gitHub.getRepository("kohsuke/github-api");
+        GHLicenseBase license = repo.getLicense();
+        assertNotNull("The license is populated", license);
+        assertTrue("The key is correct", license.getKey().equals("mit"));
+        assertTrue("The name is correct", license.getName().equals("MIT License"));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+    }
+
+    @Test
+    public void checkRepositoryFullLicense() throws IOException {
+        GHRepository repo = gitHub.getRepository("kohsuke/github-api");
+        GHLicense license = repo.getFullLicense();
+        assertNotNull("The license is populated", license);
+        assertTrue("The key is correct", license.getKey().equals("mit"));
+        assertTrue("The name is correct", license.getName().equals("MIT License"));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+        assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
 }

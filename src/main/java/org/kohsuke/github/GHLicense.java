@@ -33,45 +33,16 @@ import java.util.List;
 /**
  * The GitHub Preview API's licenses
  */
-public class GHLicense {
+public class GHLicense extends GHLicenseBase{
 
-    protected String key, name, url, html_url, description, category, implementation, body;
-    protected Boolean featured;
+    protected String html_url, description, category, implementation, body;
+
     protected List<String> required = new ArrayList<>();
     protected List<String> permitted = new ArrayList<>();
     protected List<String> forbidden = new ArrayList<>();
 
-    /**
-     * @return a mnemonic for the license
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * @return the license name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * API URL of this object.
-     */
-    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
-    public URL getUrl() {
-        return GitHub.parseURL(url);
-    }
-
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
-    }
-
-    /**
-     * @return
-     */
-    public Boolean isFeatured() {
-        return featured;
     }
 
     public String getDescription() {
@@ -105,34 +76,15 @@ public class GHLicense {
     @Override
     public String toString() {
         return "GHLicense{" +
-                "key='" + key + '\'' +
-                ", name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", html_url='" + html_url + '\'' +
+                "html_url='" + html_url + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", implementation='" + implementation + '\'' +
                 ", body='" + body + '\'' +
-                ", featured=" + featured +
                 ", required=" + required +
                 ", permitted=" + permitted +
                 ", forbidden=" + forbidden +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GHLicense ghLicense = (GHLicense) o;
-
-        return getUrl().equals(ghLicense.getUrl());
-
-    }
-
-    @Override
-    public int hashCode() {
-        return getUrl().hashCode();
+                ", htmlUrl=" + getHtmlUrl() +
+                "} " + super.toString();
     }
 }

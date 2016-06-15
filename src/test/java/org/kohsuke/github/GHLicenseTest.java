@@ -88,4 +88,20 @@ public class GHLicenseTest extends Assert {
         assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
         assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
+
+    @Test
+    public void checkRepositoryLicenseContent() throws IOException {
+        GHRepository repo = gitHub.getRepository("kohsuke/github-api");
+        GHLicenseContent content = repo.getLicenseContent();
+        assertNotNull("The license content is populated", content);
+        assertTrue("The key is correct", content.getLicense().getKey().equals("mit"));
+        assertTrue("The type is 'file'", content.getType().equals("file"));
+        assertTrue("The license file is 'LICENSE.txt'", content.getName().equals("LICENSE.txt"));
+    }
+
+    @Test
+    public void checkRepositoryLicenseWithoutPreviewConnection() throws IOException {
+        GHRepository repo = GitHub.connect().getRepository("kohsuke/github-api");
+        assertNull(repo.getLicense());
+    }
 }

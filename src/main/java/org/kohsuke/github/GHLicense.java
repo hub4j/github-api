@@ -42,9 +42,9 @@ public class GHLicense extends GHLicenseBase {
 
     protected String html_url, description, category, implementation, body;
 
-    protected List<String> required = new ArrayList<>();
-    protected List<String> permitted = new ArrayList<>();
-    protected List<String> forbidden = new ArrayList<>();
+    protected List<String> required = new ArrayList<String>();
+    protected List<String> permitted = new ArrayList<String>();
+    protected List<String> forbidden = new ArrayList<String>();
 
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);

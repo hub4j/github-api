@@ -883,7 +883,6 @@ public class GHRepository extends GHObject {
      * @throws IOException as usual but also if you don't use the preview connector
      */
     public GHContent getLicenseContent() throws IOException {
-        Requester requester = root.retrieve();
         return root.retrieve().to(getApiTailUrl("license"), GHContent.class).wrap(this);
     }
 

@@ -25,6 +25,7 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
 
@@ -40,6 +41,9 @@ import java.net.URL;
  * @see GHRepository#getLicense()
  * @see GHLicense GHLicense subclass for the more comprehensive listing of properties
  */
+@SuppressWarnings({"UnusedDeclaration"})
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHLicenseBase {
 
     protected String key, name, url;
@@ -83,13 +87,12 @@ public class GHLicenseBase {
 
         GHLicenseBase that = (GHLicenseBase) o;
 
-        return getUrl().equals(that.getUrl());
-
+        return getUrl().toString().equals(that.getUrl().toString());
     }
 
     @Override
     public int hashCode() {
-        return getUrl().hashCode();
+        return getUrl().toString().hashCode();
     }
 
     @Override

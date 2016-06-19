@@ -24,6 +24,8 @@
 
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,9 @@ import java.util.List;
  * @see GHRepository#getFullLicense()
  * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>
  */
+@SuppressWarnings({"UnusedDeclaration"})
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHLicense extends GHLicenseBase {
 
     protected String html_url, description, category, implementation, body;
@@ -91,5 +96,15 @@ public class GHLicense extends GHLicenseBase {
                 ", forbidden=" + forbidden +
                 ", htmlUrl=" + getHtmlUrl() +
                 "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

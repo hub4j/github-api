@@ -63,5 +63,5 @@ public class PreviewHttpConnector implements HttpConnector {
     /**
      * Default connection timeout in milliseconds
      */
-    public static String PREVIEW_MEDIA_TYPE = "application/vnd.github.drax-preview+json";
+    public static final String PREVIEW_MEDIA_TYPE = "application/vnd.github.drax-preview+json";
 }

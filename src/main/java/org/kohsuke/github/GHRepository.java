@@ -70,10 +70,10 @@ public class GHRepository extends GHObject {
      *
      * See: https://developer.github.com/v3/licenses/
      */
+    /**
+     * The basic license details as returned from {@link GitHub#getRepository(String)}
+     */
     private GHLicenseBase license;
-    private GHLicense fullLicense = null;
-    private GHLicenseContent licenseContent;
-
 
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this, ref);
@@ -112,24 +112,24 @@ public class GHRepository extends GHObject {
 
     private String join(List<String> params, String joinStr) {
         StringBuilder output = new StringBuilder();
-        for(String param: params){
-            if(param != null){
-               output.append(param+joinStr);
+        for (String param : params) {
+            if (param != null) {
+                output.append(param + joinStr);
             }
         }
         return output.toString();
     }
 
     private String getParam(String name, String value) {
-        return StringUtils.trimToNull(value)== null? null: name+"="+value;
+        return StringUtils.trimToNull(value) == null ? null : name + "=" + value;
     }
 
     public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
-        return new GHDeploymentStatusBuilder(this,deploymentId,ghDeploymentState);
+        return new GHDeploymentStatusBuilder(this, deploymentId, ghDeploymentState);
     }
 
     private static class GHRepoPermission {
-        boolean pull,push,admin;
+        boolean pull, push, admin;
     }
 
 
@@ -863,38 +863,28 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Access the full license details
+     * Access the full license details - makes an additional API call
      * <p>
      * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
      *
+     * @return the license details
      * @throws IOException as usual but also if you don't use the preview connector
      */
     public GHLicense getFullLicense() throws IOException {
-        if (fullLicense != null) {
-            return fullLicense;
-        }
-        synchronized (this) {
-            fullLicense = root.getLicense(license.getKey());
-            return fullLicense;
-        }
+        return root.getLicense(license.getKey());
     }
 
     /**
-     * Retrieves the contents of the repository's license file
-     *
+     * Retrieves the contents of the repository's license file - makes an additional API call
+     * <p>
      * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
      *
-     * @return
+     * @return details regarding the license contents
      * @throws IOException as usual but also if you don't use the preview connector
      */
-    public GHLicenseContent getLicenseContent() throws IOException {
-        if (licenseContent != null) {
-            return licenseContent;
-        }
-        synchronized (this) {
-            licenseContent = root.retrieve().to(url + "/license", GHLicenseContent.class);
-            return licenseContent;
-        }
+    public GHContent getLicenseContent() throws IOException {
+        Requester requester = root.retrieve();
+        return root.retrieve().to(getApiTailUrl("license"), GHContent.class).wrap(this);
     }
 
     /**

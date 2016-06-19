@@ -24,16 +24,21 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The GitHub Preview API's licenses
+ * The GitHub Preview API's license information
+ * <p>
+ * WARNING: This uses a PREVIEW API - you must use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+ *
+ * @author Duncan Dickinson
+ * @see GitHub#getLicense(String)
+ * @see GHRepository#getFullLicense()
+ * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>
  */
-public class GHLicense extends GHLicenseBase{
+public class GHLicense extends GHLicenseBase {
 
     protected String html_url, description, category, implementation, body;
 

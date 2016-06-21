@@ -122,6 +122,8 @@ public class GHRelease extends GHObject {
     }
 
     /**
+     * upload the release using upload URL in {@link upload_url} field.
+     *
      * Because github relies on SNI (http://en.wikipedia.org/wiki/Server_Name_Indication) this method will only work on
      * Java 7 or greater.  Options for fixing this for earlier JVMs can be found here
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
@@ -129,33 +131,18 @@ public class GHRelease extends GHObject {
      *
      * @param file file to upload
      * @param contentType content type
-     * @param uploadUrlPrefix URL prefix for uploading; if null {@link #DEFAULT_UPLOAD_URL} will be used
-     * @return instance of GHAsset uploaded
-     * @since 1.75
-     * @throws IOException
-     */
-    public GHAsset uploadAsset(File file, String contentType, String uploadUrlPrefix) throws IOException {
-        Requester builder = new Requester(owner.root);
-
-        String url = format("%s%s/releases/%d/assets?name=%s",
-                            defaultIfNull(uploadUrlPrefix, DEFAULT_UPLOAD_URL), owner.getApiTailUrl(""), getId(), file.getName());
-        return builder.contentType(contentType)
-                .with(new FileInputStream(file))
-                .to(url, GHAsset.class).wrap(this);
-    }
-
-    /**
-     * upload the release to defaul upload URL on github.com
-     *
-     * @param file file to upload
-     * @param contentType content type
      * @return instance of GHAsset uploaded
      * @throws IOException
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
-        return this.uploadAsset(file, contentType, DEFAULT_UPLOAD_URL);
-    }
+        Requester builder = new Requester(owner.root);
 
+        String url = format(upload_url.replace("{?name}", "?name=%s"), file.getName());
+
+        return builder.contentType(contentType)
+                .with(new FileInputStream(file))
+                .to(url, GHAsset.class).wrap(this);
+    }
 
     public List<GHAsset> getAssets() throws IOException {
         Requester builder = new Requester(owner.root);

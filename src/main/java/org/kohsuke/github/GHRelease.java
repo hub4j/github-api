@@ -19,9 +19,6 @@ import static org.apache.commons.lang.ObjectUtils.defaultIfNull;
  */
 public class GHRelease extends GHObject {
 
-    /** github.com's default upload URL */
-    public final static String DEFAULT_UPLOAD_URL = "https://uploads.github.com";
-
     GitHub root;
     GHRepository owner;
 

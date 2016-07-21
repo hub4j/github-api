@@ -48,6 +48,27 @@ public abstract class RateLimitHandler {
             return Math.max(10000, Long.parseLong(v)*1000 - System.currentTimeMillis());
         }
     };
+    
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final RateLimitHandler ABUSE = new RateLimitHandler() {
+        @Override
+        public void onError(IOException e, HttpURLConnection uc) throws IOException {
+            try {
+                Thread.sleep(parseWaitTime(uc));
+            } catch (InterruptedException _) {
+                throw (InterruptedIOException)new InterruptedIOException().initCause(e);
+            }
+        }
+
+        private long parseWaitTime(HttpURLConnection uc) {
+            String v = uc.getHeaderField("Retry-After");
+            if (v==null)    return 60 * 1000;   // can't tell, return 1 min
+
+            return Math.max(1000, Long.parseLong(v)*1000);
+        }
+    };
 
     /**
      * Fail immediately.

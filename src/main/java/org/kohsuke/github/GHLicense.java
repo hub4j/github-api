@@ -24,8 +24,10 @@
 
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +35,25 @@ import java.util.List;
 /**
  * The GitHub Preview API's license information
  * <p>
- * WARNING: This uses a PREVIEW API - you must use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+ * WARNING: This uses a PREVIEW API - subject to change.
  *
  * @author Duncan Dickinson
  * @see GitHub#getLicense(String)
- * @see GHRepository#getFullLicense()
+ * @see GHRepository#getLicense()
  * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>
  */
+@Preview @Deprecated
 @SuppressWarnings({"UnusedDeclaration"})
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
         "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
-public class GHLicense extends GHLicenseBase {
+public class GHLicense extends GHObject {
+    /*package almost final*/ GitHub root;
+
+    // these fields are always present, even in the short form
+    protected String key, name;
+
+    // the rest is only after populated
+    protected Boolean featured;
 
     protected String html_url, description, category, implementation, body;
 
@@ -51,60 +61,101 @@ public class GHLicense extends GHLicenseBase {
     protected List<String> permitted = new ArrayList<String>();
     protected List<String> forbidden = new ArrayList<String>();
 
-    public URL getHtmlUrl() {
+    /**
+     * @return a mnemonic for the license
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * @return the license name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return API URL of this object.
+     */
+    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
+    public URL getUrl() {
+        return GitHub.parseURL(url);
+    }
+
+    /**
+     * Featured licenses are bold in the new repository drop-down
+     *
+     * @return True if the license is featured, false otherwise
+     */
+    public Boolean isFeatured() throws IOException {
+        populate();
+        return featured;
+    }
+
+    public URL getHtmlUrl() throws IOException {
+        populate();
         return GitHub.parseURL(html_url);
     }
 
-    public String getDescription() {
+    public String getDescription() throws IOException {
+        populate();
         return description;
     }
 
-    public String getCategory() {
+    public String getCategory() throws IOException {
+        populate();
         return category;
     }
 
-    public String getImplementation() {
+    public String getImplementation() throws IOException {
+        populate();
         return implementation;
     }
 
-    public List<String> getRequired() {
+    public List<String> getRequired() throws IOException {
+        populate();
         return required;
     }
 
-    public List<String> getPermitted() {
+    public List<String> getPermitted() throws IOException {
+        populate();
         return permitted;
     }
 
-    public List<String> getForbidden() {
+    public List<String> getForbidden() throws IOException {
+        populate();
         return forbidden;
     }
 
-    public String getBody() {
+    public String getBody() throws IOException {
+        populate();
         return body;
     }
 
-    @Override
-    public String toString() {
-        return "GHLicense{" +
-                "html_url='" + html_url + '\'' +
-                ", description='" + description + '\'' +
-                ", category='" + category + '\'' +
-                ", implementation='" + implementation + '\'' +
-                ", body='" + body + '\'' +
-                ", required=" + required +
-                ", permitted=" + permitted +
-                ", forbidden=" + forbidden +
-                ", htmlUrl=" + getHtmlUrl() +
-                "} " + super.toString();
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    protected synchronized void populate() throws IOException {
+        if (description!=null)    return; // already populated
+
+        root.retrieve().to(url, this);
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
+        if (this == o) return true;
+        if (!(o instanceof GHLicense)) return false;
+
+        GHLicense that = (GHLicense) o;
+        return this.url.equals(that.url);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return url.hashCode();
     }
+
 }

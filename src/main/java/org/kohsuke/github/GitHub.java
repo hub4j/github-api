@@ -340,28 +340,32 @@ public class GitHub {
         String[] tokens = name.split("/");
         return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
     }
+    /**
      * Returns a list of popular open source licenses
      *
-     * WARNING: This uses a PREVIEW API - you must use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     * WARNING: This uses a PREVIEW API.
      *
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      *
      * @return a list of popular open source licenses
      * @throws IOException if the HttpConnector doesn't pass in the preview header or other IO issue
      */
-    public List<GHLicenseBase> listLicenses() throws IOException {
-        return Arrays.asList(retrieve().to("/licenses", GHLicenseBase[].class));
+    @Preview @Deprecated
+    public List<GHLicense> listLicenses() throws IOException {
+        return Arrays.asList(retrieve().to("/licenses", GHLicense[].class));
     }
 
     /**
      * Returns the full details for a license
      *
-     * WARNING: This uses a PREVIEW API - you must use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     * WARNING: This uses a PREVIEW API.
      *
      * @param key The license key provided from the API
      * @return The license details
      * @throws IOException
+     * @see GHLicense#getKey()
      */
+    @Preview @Deprecated
     public GHLicense getLicense(String key) throws IOException {
         return retrieve().to("/licenses/" + key, GHLicense.class);
     }

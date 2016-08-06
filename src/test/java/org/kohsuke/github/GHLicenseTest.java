@@ -55,7 +55,7 @@ public class GHLicenseTest extends Assert {
      */
     @Test
     public void listLicenses() throws IOException {
-        List<GHLicenseBase> licenses = gitHub.listLicenses();
+        List<GHLicense> licenses = gitHub.listLicenses();
         assertTrue(licenses.size() > 0);
     }
 
@@ -67,8 +67,8 @@ public class GHLicenseTest extends Assert {
      */
     @Test
     public void listLicensesCheckIndividualLicense() throws IOException {
-        List<GHLicenseBase> licenses = gitHub.listLicenses();
-        for (GHLicenseBase lic : licenses) {
+        List<GHLicense> licenses = gitHub.listLicenses();
+        for (GHLicense lic : licenses) {
             if (lic.getKey().equals("mit")) {
                 assertTrue(lic.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
                 return;
@@ -111,7 +111,7 @@ public class GHLicenseTest extends Assert {
     @Test
     public void checkRepositoryLicense() throws IOException {
         GHRepository repo = gitHub.getRepository("kohsuke/github-api");
-        GHLicenseBase license = repo.getLicense();
+        GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
@@ -127,7 +127,7 @@ public class GHLicenseTest extends Assert {
     @Test
     public void checkRepositoryLicenseAtom() throws IOException {
         GHRepository repo = gitHub.getRepository("atom/atom");
-        GHLicenseBase license = repo.getLicense();
+        GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
@@ -143,7 +143,7 @@ public class GHLicenseTest extends Assert {
     @Test
     public void checkRepositoryLicensePomes() throws IOException {
         GHRepository repo = gitHub.getRepository("pomes/pomes");
-        GHLicenseBase license = repo.getLicense();
+        GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("apache-2.0"));
         assertTrue("The name is correct", license.getName().equals("Apache License 2.0"));
@@ -159,13 +159,13 @@ public class GHLicenseTest extends Assert {
     @Test
     public void checkRepositoryWithoutLicense() throws IOException {
         GHRepository repo = gitHub.getRepository("dedickinson/test-repo");
-        GHLicenseBase license = repo.getLicense();
+        GHLicense license = repo.getLicense();
         assertNull("There is no license", license);
     }
 
     /**
      * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)}
-     * and then calls {@link GHRepository#getFullLicense()} and checks that certain
+     * and then calls {@link GHRepository#getLicense()} and checks that certain
      * properties are correct
      *
      * @throws IOException
@@ -173,7 +173,7 @@ public class GHLicenseTest extends Assert {
     @Test
     public void checkRepositoryFullLicense() throws IOException {
         GHRepository repo = gitHub.getRepository("kohsuke/github-api");
-        GHLicense license = repo.getFullLicense();
+        GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));

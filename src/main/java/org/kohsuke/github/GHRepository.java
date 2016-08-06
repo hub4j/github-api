@@ -70,10 +70,7 @@ public class GHRepository extends GHObject {
      *
      * See: https://developer.github.com/v3/licenses/
      */
-    /**
-     * The basic license details as returned from {@link GitHub#getRepository(String)}
-     */
-    private GHLicenseBase license;
+    private GHLicense license;
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
@@ -849,6 +846,8 @@ public class GHRepository extends GHObject {
             }
         };
     }
+
+    /**
      * Gets the basic license details for the repository.
      * <p>
      * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
@@ -858,20 +857,12 @@ public class GHRepository extends GHObject {
      *
      * @throws IOException as usual but also if you don't use the preview connector
      */
-    public GHLicenseBase getLicense() {
-        return license;
-    }
-
-    /**
-     * Access the full license details - makes an additional API call
-     * <p>
-     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
-     *
-     * @return the license details
-     * @throws IOException as usual but also if you don't use the preview connector
-     */
-    public GHLicense getFullLicense() throws IOException {
-        return root.getLicense(license.getKey());
+    @Preview @Deprecated
+    public GHLicense getLicense() throws IOException{
+        return root.retrieve()
+                .withHeader("Accept","application/vnd.github.drax-preview+json")
+                .to(getApiTailUrl("license"), GHContentWithLicense.class)
+                .wrap(this).license;
     }
 
     /**

@@ -516,7 +516,7 @@ class Requester {
             if (responseCode == 304) {
                 return null;    // special case handling for 304 unmodified, as the content will be ""
             }
-            if (responseCode == 204 && type.isArray()) {
+            if (responseCode == 204 && type!=null && type.isArray()) {
                 // no content
                 return type.cast(Array.newInstance(type.getComponentType(),0));
             }

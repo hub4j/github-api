@@ -110,6 +110,10 @@ class Requester {
         return this;
     }
 
+    /*package*/ Requester withPreview(String name) {
+        return withHeader("Accept",name);
+    }
+
     /**
      * Makes a request with authentication credential.
      */

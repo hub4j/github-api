@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.kohsuke.github.Previews.LOKI;
+
 /**
  * A branch in a repository.
  * 
@@ -81,9 +83,7 @@ public class GHBranch {
     }
 
     private void setProtection(BranchProtection bp) throws IOException {
-        new Requester(root).method("PATCH")
-                .withHeader("Accept","application/vnd.github.loki-preview+json")
-                ._with("protection",bp).to(getApiRoute());
+        new Requester(root).method("PATCH").withPreview(LOKI)._with("protection",bp).to(getApiRoute());
     }
 
     String getApiRoute() {

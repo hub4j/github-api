@@ -32,6 +32,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.kohsuke.github.Previews.DRAX;
+
 /**
  * The GitHub Preview API's license information
  * <p>
@@ -141,9 +143,7 @@ public class GHLicense extends GHObject {
     protected synchronized void populate() throws IOException {
         if (description!=null)    return; // already populated
 
-        root.retrieve()
-                .withHeader("Accept","application/vnd.github.drax-preview+json")
-                .to(url, this);
+        root.retrieve().withPreview(DRAX).to(url, this);
     }
 
     @Override

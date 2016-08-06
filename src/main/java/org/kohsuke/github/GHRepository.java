@@ -51,6 +51,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import static java.util.Arrays.asList;
+import static org.kohsuke.github.Previews.DRAX;
 
 /**
  * A repository on GitHub.
@@ -878,7 +879,7 @@ public class GHRepository extends GHObject {
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
             return root.retrieve()
-                    .withHeader("Accept","application/vnd.github.drax-preview+json")
+                    .withPreview(DRAX)
                     .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
         } catch (FileNotFoundException e) {
             return null;

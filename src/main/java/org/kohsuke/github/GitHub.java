@@ -27,6 +27,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.util.logging.Level.FINE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static org.kohsuke.github.Previews.DRAX;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -353,9 +354,7 @@ public class GitHub {
     public PagedIterable<GHLicense> listLicenses() throws IOException {
         return new PagedIterable<GHLicense>() {
             public PagedIterator<GHLicense> _iterator(int pageSize) {
-                return new PagedIterator<GHLicense>(retrieve()
-                        .withHeader("Accept","application/vnd.github.drax-preview+json")
-                        .asIterator("/licenses", GHLicense[].class, pageSize)) {
+                return new PagedIterator<GHLicense>(retrieve().withPreview(DRAX).asIterator("/licenses", GHLicense[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHLicense[] page) {
                         for (GHLicense c : page)
@@ -378,9 +377,7 @@ public class GitHub {
      */
     @Preview @Deprecated
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve()
-                .withHeader("Accept","application/vnd.github.drax-preview+json")
-                .to("/licenses/" + key, GHLicense.class);
+        return retrieve().withPreview(DRAX).to("/licenses/" + key, GHLicense.class);
     }
 
     /**

@@ -44,7 +44,6 @@ public class GHLicenseTest extends Assert {
     public void setUp() throws Exception {
         gitHub = new GitHubBuilder()
                 .fromCredentials()
-                .withConnector(new PreviewHttpConnector())
                 .build();
     }
 
@@ -202,19 +201,5 @@ public class GHLicenseTest extends Assert {
         } else {
             fail("Expected the license to be Base64 encoded but instead it was " + content.getEncoding());
         }
-    }
-
-    /**
-     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)}
-     * but without using {@link PreviewHttpConnector} and ensures that the {@link GHRepository#getLicense()}
-     * call just returns null rather than raising an exception. This should indicate that
-     * non-preview connection requests aren't affected by the change in functionality
-     *
-     * @throws IOException
-     */
-    @Test
-    public void checkRepositoryLicenseWithoutPreviewConnection() throws IOException {
-        GHRepository repo = GitHub.connect().getRepository("kohsuke/github-api");
-        assertNull(repo.getLicense());
     }
 }

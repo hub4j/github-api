@@ -65,6 +65,16 @@ public class GHRepository extends GHObject {
 
     private String description, homepage, name, full_name;
     private String html_url;    // this is the UI
+    /*
+     * The license information makes use of the preview API.
+     *
+     * See: https://developer.github.com/v3/licenses/
+     */
+    /**
+     * The basic license details as returned from {@link GitHub#getRepository(String)}
+     */
+    private GHLicenseBase license;
+
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, has_downloads;
@@ -839,6 +849,44 @@ public class GHRepository extends GHObject {
             }
         };
     }
+     * Gets the basic license details for the repository.
+     * <p>
+     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     * <p>
+     * Warning: Only returns the basic license details. Use {@link GitHub#getLicense(String)}
+     * to get the full license information (hint: pass it {@link GHLicenseBase#getKey()}).
+     *
+     * @throws IOException as usual but also if you don't use the preview connector
+     */
+    public GHLicenseBase getLicense() {
+        return license;
+    }
+
+    /**
+     * Access the full license details - makes an additional API call
+     * <p>
+     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     *
+     * @return the license details
+     * @throws IOException as usual but also if you don't use the preview connector
+     */
+    public GHLicense getFullLicense() throws IOException {
+        return root.getLicense(license.getKey());
+    }
+
+    /**
+     * Retrieves the contents of the repository's license file - makes an additional API call
+     * <p>
+     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     *
+     * @return details regarding the license contents
+     * @throws IOException as usual but also if you don't use the preview connector
+     */
+    public GHContent getLicenseContent() throws IOException {
+        return root.retrieve().to(getApiTailUrl("license"), GHContent.class).wrap(this);
+    }
+
+    /**
 
     /**
      * Lists all the commit statues attached to the given commit, newer ones first.

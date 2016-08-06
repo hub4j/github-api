@@ -53,6 +53,7 @@ public class GHBranch {
     /**
      * Disables branch protection and allows anyone with push access to push changes.
      */
+    @Preview @Deprecated
     public void disableProtection() throws IOException {
         BranchProtection bp = new BranchProtection();
         bp.enabled = false;
@@ -64,6 +65,7 @@ public class GHBranch {
      *
      * @see GHCommitStatus#getContext()
      */
+    @Preview @Deprecated
     public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
         BranchProtection bp = new BranchProtection();
         bp.enabled = true;
@@ -73,6 +75,7 @@ public class GHBranch {
         setProtection(bp);
     }
 
+    @Preview @Deprecated
     public void enableProtection(EnforcementLevel level, String... contexts) throws IOException {
         enableProtection(level, Arrays.asList(contexts));
     }

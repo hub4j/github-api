@@ -850,10 +850,7 @@ public class GHRepository extends GHObject {
     /**
      * Gets the basic license details for the repository.
      * <p>
-     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
-     * <p>
-     * Warning: Only returns the basic license details. Use {@link GitHub#getLicense(String)}
-     * to get the full license information (hint: pass it {@link GHLicenseBase#getKey()}).
+     * This is a preview item and subject to change.
      *
      * @throws IOException as usual but also if you don't use the preview connector
      */
@@ -868,11 +865,12 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves the contents of the repository's license file - makes an additional API call
      * <p>
-     * This is a preview item and requires you to use {@link org.kohsuke.github.extras.PreviewHttpConnector}
+     * This is a preview item and subject to change.
      *
      * @return details regarding the license contents
      * @throws IOException as usual but also if you don't use the preview connector
      */
+    @Preview @Deprecated
     public GHContent getLicenseContent() throws IOException {
         return root.retrieve().to(getApiTailUrl("license"), GHContent.class).wrap(this);
     }

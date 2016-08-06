@@ -28,11 +28,9 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github.extras.PreviewHttpConnector;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 /**
  * @author Duncan Dickinson
@@ -54,8 +52,8 @@ public class GHLicenseTest extends Assert {
      */
     @Test
     public void listLicenses() throws IOException {
-        List<GHLicense> licenses = gitHub.listLicenses();
-        assertTrue(licenses.size() > 0);
+        Iterable<GHLicense> licenses = gitHub.listLicenses();
+        assertTrue(licenses.iterator().hasNext());
     }
 
     /**
@@ -66,7 +64,7 @@ public class GHLicenseTest extends Assert {
      */
     @Test
     public void listLicensesCheckIndividualLicense() throws IOException {
-        List<GHLicense> licenses = gitHub.listLicenses();
+        PagedIterable<GHLicense> licenses = gitHub.listLicenses();
         for (GHLicense lic : licenses) {
             if (lic.getKey().equals("mit")) {
                 assertTrue(lic.getUrl().equals(new URL("https://api.github.com/licenses/mit")));

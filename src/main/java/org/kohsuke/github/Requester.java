@@ -572,10 +572,9 @@ class Requester {
             root.rateLimitHandler.onError(e,uc);
             return;
         }
-        
-        // Check to see whether we hit a 403, and the Retry-After field is
-        // available.
-        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN && 
+
+        // Retry-After is not documented but apparently that field exists
+        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
             uc.getHeaderField("Retry-After") != null) {
             this.root.abuseLimitHandler.onError(e,uc);
             return;

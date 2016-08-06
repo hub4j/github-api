@@ -30,7 +30,7 @@ public class GitHubBuilder {
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
-    private RateLimitHandler abuseLimitHandler = RateLimitHandler.ABUSE;
+    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
 
     public GitHubBuilder() {
     }
@@ -177,6 +177,10 @@ public class GitHubBuilder {
     }
     public GitHubBuilder withRateLimitHandler(RateLimitHandler handler) {
         this.rateLimitHandler = handler;
+        return this;
+    }
+    public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
+        this.abuseLimitHandler = handler;
         return this;
     }
 

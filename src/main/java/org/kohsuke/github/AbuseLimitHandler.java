@@ -5,13 +5,14 @@ import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
 /**
- * Pluggable strategy to determine what to do when the API rate limit is reached.
+ * Pluggable strategy to determine what to do when the API abuse limit is hit.
  *
  * @author Kohsuke Kawaguchi
- * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler)
- * @see AbuseLimitHandler
+ * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler)
+ * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">documentation</a>
+ * @see RateLimitHandler
  */
-public abstract class RateLimitHandler {
+public abstract class AbuseLimitHandler {
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit is reached.
      *
@@ -30,9 +31,9 @@ public abstract class RateLimitHandler {
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 
     /**
-     * Block until the API rate limit is reset. Useful for long-running batch processing.
+     * Wait until the API abuse "wait time" is passed.
      */
-    public static final RateLimitHandler WAIT = new RateLimitHandler() {
+    public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
@@ -43,20 +44,20 @@ public abstract class RateLimitHandler {
         }
 
         private long parseWaitTime(HttpURLConnection uc) {
-            String v = uc.getHeaderField("X-RateLimit-Reset");
-            if (v==null)    return 10000;   // can't tell
+            String v = uc.getHeaderField("Retry-After");
+            if (v==null)    return 60 * 1000;   // can't tell, return 1 min
 
-            return Math.max(10000, Long.parseLong(v)*1000 - System.currentTimeMillis());
+            return Math.max(1000, Long.parseLong(v)*1000);
         }
     };
 
     /**
      * Fail immediately.
      */
-    public static final RateLimitHandler FAIL = new RateLimitHandler() {
+    public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-            throw (IOException)new IOException("API rate limit reached").initCause(e);
+            throw (IOException)new IOException("Abust limit reached").initCause(e);
         }
     };
 }

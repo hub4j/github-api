@@ -179,7 +179,8 @@ public class GHCommit {
 
 
     public ShortInfo getCommitShortInfo() throws IOException {
-        populate();
+        if (commit==null)
+            populate();
         return commit;
     }
 

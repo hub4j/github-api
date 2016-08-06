@@ -856,10 +856,7 @@ public class GHRepository extends GHObject {
      */
     @Preview @Deprecated
     public GHLicense getLicense() throws IOException{
-        return root.retrieve()
-                .withHeader("Accept","application/vnd.github.drax-preview+json")
-                .to(getApiTailUrl("license"), GHContentWithLicense.class)
-                .wrap(this).license;
+        return getLicenseContent_().license;
     }
 
     /**
@@ -872,7 +869,14 @@ public class GHRepository extends GHObject {
      */
     @Preview @Deprecated
     public GHContent getLicenseContent() throws IOException {
-        return root.retrieve().to(getApiTailUrl("license"), GHContent.class).wrap(this);
+        return getLicenseContent_();
+    }
+
+    @Preview @Deprecated
+    private GHContentWithLicense getLicenseContent_() throws IOException {
+        return root.retrieve()
+                .withHeader("Accept","application/vnd.github.drax-preview+json")
+                .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
     }
 
     /**

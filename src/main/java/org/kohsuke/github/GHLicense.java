@@ -141,7 +141,9 @@ public class GHLicense extends GHObject {
     protected synchronized void populate() throws IOException {
         if (description!=null)    return; // already populated
 
-        root.retrieve().to(url, this);
+        root.retrieve()
+                .withHeader("Accept","application/vnd.github.drax-preview+json")
+                .to(url, this);
     }
 
     @Override

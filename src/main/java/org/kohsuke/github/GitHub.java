@@ -353,7 +353,9 @@ public class GitHub {
     public PagedIterable<GHLicense> listLicenses() throws IOException {
         return new PagedIterable<GHLicense>() {
             public PagedIterator<GHLicense> _iterator(int pageSize) {
-                return new PagedIterator<GHLicense>(retrieve().asIterator("/licenses", GHLicense[].class, pageSize)) {
+                return new PagedIterator<GHLicense>(retrieve()
+                        .withHeader("Accept","application/vnd.github.drax-preview+json")
+                        .asIterator("/licenses", GHLicense[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHLicense[] page) {
                         for (GHLicense c : page)
@@ -376,7 +378,9 @@ public class GitHub {
      */
     @Preview @Deprecated
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve().to("/licenses/" + key, GHLicense.class);
+        return retrieve()
+                .withHeader("Accept","application/vnd.github.drax-preview+json")
+                .to("/licenses/" + key, GHLicense.class);
     }
 
     /**

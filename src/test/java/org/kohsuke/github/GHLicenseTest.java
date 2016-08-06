@@ -90,16 +90,6 @@ public class GHLicenseTest extends Assert {
     }
 
     /**
-     * Attempts to list the licenses with a non-preview connection
-     *
-     * @throws IOException is expected to be thrown
-     */
-    @Test(expected = IOException.class)
-    public void ListLicensesWithoutPreviewConnection() throws IOException {
-        GitHub.connect().listLicenses();
-    }
-
-    /**
      * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)}
      * and checks that the license is correct
      *

@@ -853,10 +853,12 @@ public class GHRepository extends GHObject {
      * This is a preview item and subject to change.
      *
      * @throws IOException as usual but also if you don't use the preview connector
+     * @return null if there's no license.
      */
     @Preview @Deprecated
     public GHLicense getLicense() throws IOException{
-        return getLicenseContent_().license;
+        GHContentWithLicense lic = getLicenseContent_();
+        return lic!=null ? lic.license : null;
     }
 
     /**
@@ -864,7 +866,7 @@ public class GHRepository extends GHObject {
      * <p>
      * This is a preview item and subject to change.
      *
-     * @return details regarding the license contents
+     * @return details regarding the license contents, or null if there's no license.
      * @throws IOException as usual but also if you don't use the preview connector
      */
     @Preview @Deprecated
@@ -874,9 +876,13 @@ public class GHRepository extends GHObject {
 
     @Preview @Deprecated
     private GHContentWithLicense getLicenseContent_() throws IOException {
-        return root.retrieve()
-                .withHeader("Accept","application/vnd.github.drax-preview+json")
-                .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
+        try {
+            return root.retrieve()
+                    .withHeader("Accept","application/vnd.github.drax-preview+json")
+                    .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     /**

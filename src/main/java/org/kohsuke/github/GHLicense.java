@@ -49,6 +49,7 @@ import static org.kohsuke.github.Previews.DRAX;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
         "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHLicense extends GHObject {
+    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC") // root is set before the object is returned to the app
     /*package almost final*/ GitHub root;
 
     // these fields are always present, even in the short form

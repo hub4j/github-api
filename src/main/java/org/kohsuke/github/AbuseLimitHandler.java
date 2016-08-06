@@ -14,14 +14,14 @@ import java.net.HttpURLConnection;
  */
 public abstract class AbuseLimitHandler {
     /**
-     * Called when the library encounters HTTP error indicating that the API rate limit is reached.
+     * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
      *
      * <p>
      * Any exception thrown from this method will cause the request to fail, and the caller of github-api
      * will receive an exception. If this method returns normally, another request will be attempted.
      * For that to make sense, the implementation needs to wait for some time.
      *
-     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
+     * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">API documentation from GitHub</a>
      * @param e
      *      Exception from Java I/O layer. If you decide to fail the processing, you can throw
      *      this exception (or wrap this exception into another exception and throw it.)

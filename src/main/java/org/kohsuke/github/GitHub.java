@@ -348,11 +348,20 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      *
      * @return a list of popular open source licenses
-     * @throws IOException if the HttpConnector doesn't pass in the preview header or other IO issue
      */
     @Preview @Deprecated
-    public List<GHLicense> listLicenses() throws IOException {
-        return Arrays.asList(retrieve().to("/licenses", GHLicense[].class));
+    public PagedIterable<GHLicense> listLicenses() throws IOException {
+        return new PagedIterable<GHLicense>() {
+            public PagedIterator<GHLicense> _iterator(int pageSize) {
+                return new PagedIterator<GHLicense>(retrieve().asIterator("/licenses", GHLicense[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHLicense[] page) {
+                        for (GHLicense c : page)
+                            c.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
     }
 
     /**

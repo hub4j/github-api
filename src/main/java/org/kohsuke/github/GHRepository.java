@@ -765,6 +765,8 @@ public class GHRepository extends GHObject {
      *             invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
+        // hashes in branch names must be replaced with the url encoded equivalent or this call will fail
+        refName = refName.replaceAll("#", "%23");
         return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
     }
     /**

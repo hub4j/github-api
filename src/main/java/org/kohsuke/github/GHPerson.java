@@ -52,7 +52,7 @@ public abstract class GHPerson extends GHObject {
      */
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listRepositories()) {
+        for (GHRepository r : listRepositories(100)) {
             repositories.put(r.getName(),r);
         }
         return Collections.unmodifiableMap(repositories);

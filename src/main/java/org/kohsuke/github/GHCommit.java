@@ -52,7 +52,7 @@ public class GHCommit {
         }
 
         public Date getCommitDate() {
-            return GitHub.parseDate(author.date);
+            return GitHub.parseDate(committer.date);
         }
 
         /**

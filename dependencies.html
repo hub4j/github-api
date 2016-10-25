@@ -498,7 +498,7 @@
 <div class="section">
 <h3>Dependency Tree<a name="Dependency_Tree"></a></h3>
 <ul>
-<li>org.kohsuke:github-api:jar:1.78 <img id="_img1" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep0', '_img1' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep0" style="display:none">
+<li>org.kohsuke:github-api:jar:1.79 <img id="_img1" src="./images/icon_info_sml.gif" alt="[Information]" onclick="toggleDependencyDetails( '_dep0', '_img1' );" style="cursor: pointer; vertical-align: text-bottom;"></img><div id="_dep0" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>GitHub API for Java</th></tr>
@@ -893,22 +893,22 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>Project Licenses: </b><a class="externalLink" href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser Public License</a></p></td></tr></table></div></li></ul></li></ul></div></div><a name="Licenses"></a>
 <div class="section">
 <h2>Licenses<a name="Licenses"></a></h2>
-<p><b>Apache 2: </b>JavaEWAH</p>
-<p><b>New BSD License: </b>Hamcrest Core</p>
-<p><b>Eclipse Public License - Version 1.0: </b>Jetty :: Continuation, Jetty :: Http Utility, Jetty :: IO Utility, Jetty :: Security, Jetty :: Server Core, Jetty :: Servlet Handling, Jetty :: Utilities</p>
-<p><b>Unknown: </b>Localizer, Type arithmetic library for Java5, commons-beanutils, servlet-api</p>
-<p><b>GNU Lesser General Public License, Version 2.1: </b>Jackson-annotations, Jackson-core, jackson-databind</p>
-<p><b>The Apache Software License, Version 2.0: </b>Collections, Commons Codec, Commons FileUpload, Commons IO, Commons Lang, Discovery, Guava (Google Common Libraries), Jackson-annotations, Jackson-core, Logging, ezmorph, jackson-databind, json-lib</p>
-<p><b>GNU Lesser Public License: </b>FindBugs-Annotations</p>
-<p><b>The MIT license: </b>GitHub API for Java</p>
-<p><b>Revised BSD: </b>JSch</p>
-<p><b>MIT license: </b>Stapler Jetty Runner, WordNet Random Name Generator</p>
 <p><b>Apache Software License - Version 2.0: </b>Jetty :: Continuation, Jetty :: Http Utility, Jetty :: IO Utility, Jetty :: Security, Jetty :: Server Core, Jetty :: Servlet Handling, Jetty :: Utilities</p>
-<p><b>Eclipse Distribution License (New BSD License): </b>JGit - Core</p>
+<p><b>GNU Lesser General Public License, Version 2.1: </b>Jackson-annotations, Jackson-core, jackson-databind</p>
 <p><b>Apache 2.0: </b>OkHttp, OkHttp URLConnection, Okio</p>
-<p><b>Common Public License Version 1.0: </b>JUnit</p>
 <p><b>MIT License: </b>Annotation Indexer, Bridge method injection annotations</p>
+<p><b>Revised BSD: </b>JSch</p>
+<p><b>Eclipse Distribution License (New BSD License): </b>JGit - Core</p>
+<p><b>New BSD License: </b>Hamcrest Core</p>
+<p><b>The MIT license: </b>GitHub API for Java</p>
+<p><b>GNU Lesser Public License: </b>FindBugs-Annotations</p>
+<p><b>Apache 2: </b>JavaEWAH</p>
+<p><b>Unknown: </b>Localizer, Type arithmetic library for Java5, commons-beanutils, servlet-api</p>
+<p><b>Eclipse Public License - Version 1.0: </b>Jetty :: Continuation, Jetty :: Http Utility, Jetty :: IO Utility, Jetty :: Security, Jetty :: Server Core, Jetty :: Servlet Handling, Jetty :: Utilities</p>
 <p><b>The MIT License: </b>Mockito</p>
+<p><b>MIT license: </b>Stapler Jetty Runner, WordNet Random Name Generator</p>
+<p><b>The Apache Software License, Version 2.0: </b>Collections, Commons Codec, Commons FileUpload, Commons IO, Commons Lang, Discovery, Guava (Google Common Libraries), Jackson-annotations, Jackson-core, Logging, ezmorph, jackson-databind, json-lib</p>
+<p><b>Common Public License Version 1.0: </b>JUnit</p>
 <p><b>2-clause BSD license: </b>Stapler</p></div><a name="Dependency_File_Details"></a>
 <div class="section">
 <h2>Dependency File Details<a name="Dependency_File_Details"></a></h2>
@@ -1283,97 +1283,145 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <th>Snapshot</th>
 <th>Blacklisted</th></tr>
 <tr class="b">
-<td>central</td>
-<td><a class="externalLink" href="https://repo.maven.apache.org/maven2">https://repo.maven.apache.org/maven2</a></td>
+<td>m.g.o-public</td>
+<td><a class="externalLink" href="http://maven.glassfish.org/content/groups/public/">http://maven.glassfish.org/content/groups/public/</a></td>
 <td>Yes</td>
-<td>No</td>
+<td>Yes</td>
+<td>No</td></tr>
+<tr class="a">
+<td>sonatype-nexus-snapshots<br />central</td>
+<td><a class="externalLink" href="https://oss.sonatype.org/content/repositories/snapshots">https://oss.sonatype.org/content/repositories/snapshots</a><br /><a class="externalLink" href="https://repo.maven.apache.org/maven2">https://repo.maven.apache.org/maven2</a></td>
+<td>Yes</td>
+<td>Yes</td>
 <td>Yes</td></tr></table>
 <p>Repository locations for each of the Dependencies.</p>
 <table border="0" class="bodyTable">
 <tr class="a">
-<th>Artifact</th></tr>
+<th>Artifact</th>
+<th>repo.jenkins-ci.org</th></tr>
 <tr class="b">
-<td>com.fasterxml.jackson.core:jackson-annotations:jar:2.2.3</td></tr>
+<td>com.fasterxml.jackson.core:jackson-annotations:jar:2.2.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/fasterxml/jackson/core/jackson-annotations/2.2.3/jackson-annotations-2.2.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>com.fasterxml.jackson.core:jackson-core:jar:2.2.3</td></tr>
+<td>com.fasterxml.jackson.core:jackson-core:jar:2.2.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/fasterxml/jackson/core/jackson-core/2.2.3/jackson-core-2.2.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>com.fasterxml.jackson.core:jackson-databind:jar:2.2.3</td></tr>
+<td>com.fasterxml.jackson.core:jackson-databind:jar:2.2.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/fasterxml/jackson/core/jackson-databind/2.2.3/jackson-databind-2.2.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>com.google.code.findbugs:annotations:jar:3.0.0</td></tr>
+<td>com.google.code.findbugs:annotations:jar:3.0.0</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>com.google.guava:guava:jar:r06</td></tr>
+<td>com.google.guava:guava:jar:r06</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/google/guava/guava/r06/guava-r06.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>com.googlecode.javaewah:JavaEWAH:jar:0.5.6</td></tr>
+<td>com.googlecode.javaewah:JavaEWAH:jar:0.5.6</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/googlecode/javaewah/JavaEWAH/0.5.6/JavaEWAH-0.5.6.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>com.infradna.tool:bridge-method-annotation:jar:1.14</td></tr>
+<td>com.infradna.tool:bridge-method-annotation:jar:1.14</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/infradna/tool/bridge-method-annotation/1.14/bridge-method-annotation-1.14.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>com.jcraft:jsch:jar:0.1.46</td></tr>
+<td>com.jcraft:jsch:jar:0.1.46</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/jcraft/jsch/0.1.46/jsch-0.1.46.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>commons-beanutils:commons-beanutils:jar:1.7.0</td></tr>
+<td>commons-beanutils:commons-beanutils:jar:1.7.0</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>commons-codec:commons-codec:jar:1.7</td></tr>
+<td>commons-codec:commons-codec:jar:1.7</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-codec/commons-codec/1.7/commons-codec-1.7.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>commons-collections:commons-collections:jar:3.2</td></tr>
+<td>commons-collections:commons-collections:jar:3.2</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-collections/commons-collections/3.2/commons-collections-3.2.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>commons-discovery:commons-discovery:jar:0.4</td></tr>
+<td>commons-discovery:commons-discovery:jar:0.4</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-discovery/commons-discovery/0.4/commons-discovery-0.4.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>commons-fileupload:commons-fileupload:jar:1.2.1</td></tr>
+<td>commons-fileupload:commons-fileupload:jar:1.2.1</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>commons-io:commons-io:jar:1.4</td></tr>
+<td>commons-io:commons-io:jar:1.4</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-io/commons-io/1.4/commons-io-1.4.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>commons-lang:commons-lang:jar:2.6</td></tr>
+<td>commons-lang:commons-lang:jar:2.6</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-lang/commons-lang/2.6/commons-lang-2.6.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>commons-logging:commons-logging:jar:1.0.4</td></tr>
+<td>commons-logging:commons-logging:jar:1.0.4</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>javax.servlet:servlet-api:jar:2.5</td></tr>
+<td>javax.servlet:servlet-api:jar:2.5</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>junit:junit:jar:4.11</td></tr>
+<td>junit:junit:jar:4.11</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//junit/junit/4.11/junit-4.11.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>net.sf.ezmorph:ezmorph:jar:1.0.3</td></tr>
+<td>net.sf.ezmorph:ezmorph:jar:1.0.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//net/sf/ezmorph/ezmorph/1.0.3/ezmorph-1.0.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.eclipse.jetty:jetty-continuation:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-continuation:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-continuation/7.5.4.v20111024/jetty-continuation-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.eclipse.jetty:jetty-http:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-http:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-http/7.5.4.v20111024/jetty-http-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.eclipse.jetty:jetty-io:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-io:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-io/7.5.4.v20111024/jetty-io-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.eclipse.jetty:jetty-security:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-security:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-security/7.5.4.v20111024/jetty-security-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.eclipse.jetty:jetty-server:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-server:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-server/7.5.4.v20111024/jetty-server-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.eclipse.jetty:jetty-servlet:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-servlet:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-servlet/7.5.4.v20111024/jetty-servlet-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.eclipse.jetty:jetty-util:jar:7.5.4.v20111024</td></tr>
+<td>org.eclipse.jetty:jetty-util:jar:7.5.4.v20111024</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jetty/jetty-util/7.5.4.v20111024/jetty-util-7.5.4.v20111024.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.eclipse.jgit:org.eclipse.jgit:jar:3.1.0.201310021548-r</td></tr>
+<td>org.eclipse.jgit:org.eclipse.jgit:jar:3.1.0.201310021548-r</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jgit/org.eclipse.jgit/3.1.0.201310021548-r/org.eclipse.jgit-3.1.0.201310021548-r.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.hamcrest:hamcrest-core:jar:1.3</td></tr>
+<td>org.hamcrest:hamcrest-core:jar:1.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.jenkins-ci:annotation-indexer:jar:1.4</td></tr>
+<td>org.jenkins-ci:annotation-indexer:jar:1.4</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jenkins-ci/annotation-indexer/1.4/annotation-indexer-1.4.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.jvnet:tiger-types:jar:1.3</td></tr>
+<td>org.jvnet:tiger-types:jar:1.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jvnet/tiger-types/1.3/tiger-types-1.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.jvnet.localizer:localizer:jar:1.7</td></tr>
+<td>org.jvnet.localizer:localizer:jar:1.7</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jvnet/localizer/localizer/1.7/localizer-1.7.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.kohsuke:wordnet-random-name:jar:1.2</td></tr>
+<td>org.kohsuke:wordnet-random-name:jar:1.2</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/wordnet-random-name/1.2/wordnet-random-name-1.2.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.kohsuke.stapler:json-lib:jar:2.1-rev6</td></tr>
+<td>org.kohsuke.stapler:json-lib:jar:2.1-rev6</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/json-lib/2.1-rev6/json-lib-2.1-rev6.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.kohsuke.stapler:stapler:jar:1.177</td></tr>
+<td>org.kohsuke.stapler:stapler:jar:1.177</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/stapler/1.177/stapler-1.177.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>org.kohsuke.stapler:stapler-jetty:jar:1.1</td></tr>
+<td>org.kohsuke.stapler:stapler-jetty:jar:1.1</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/stapler-jetty/1.1/stapler-jetty-1.1.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>org.mockito:mockito-all:jar:1.9.5</td></tr>
+<td>org.mockito:mockito-all:jar:1.9.5</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>com.squareup.okhttp:okhttp:jar:2.7.5</td></tr>
+<td>com.squareup.okhttp:okhttp:jar:2.7.5</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<td>com.squareup.okhttp:okhttp-urlconnection:jar:2.7.5</td></tr>
+<td>com.squareup.okhttp:okhttp-urlconnection:jar:2.7.5</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp/okhttp-urlconnection/2.7.5/okhttp-urlconnection-2.7.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
-<td>com.squareup.okio:okio:jar:1.6.0</td></tr>
+<td>com.squareup.okio:okio:jar:1.6.0</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okio/okio/1.6.0/okio-1.6.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
-<th>Total</th></tr>
+<th>Total</th>
+<th>repo.jenkins-ci.org</th></tr>
 <tr class="b">
-<td>39 (compile: 11, test: 27, provided: 1)</td></tr></table></div>
+<td>39 (compile: 11, test: 27, provided: 1)</td>
+<td>39</td></tr></table></div>
       </div>
     </div>
     <div id="footer">
@@ -1387,7 +1435,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
   
   
   &nbsp;| Last Published: 2016-10-24
-  &nbsp;| Version: 1.78
+  &nbsp;| Version: 1.79
 </div>
       <div class="clear">
         <hr/>

@@ -766,6 +766,8 @@ public class GHRepository extends GHObject {
      */
     public GHRef getRef(String refName) throws IOException {
         // hashes in branch names must be replaced with the url encoded equivalent or this call will fail
+        // FIXME: how about other URL unsafe characters, like space, @, : etc? do we need to be using URLEncoder.encode()?
+        // OTOH, '/' need no escaping
         refName = refName.replaceAll("#", "%23");
         return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
     }

@@ -75,10 +75,10 @@ public class GHRepository extends GHObject {
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, has_downloads;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages;
     @JsonProperty("private")
     private boolean _private;
-    private int watchers,forks,open_issues,size,network_count,subscribers_count;
+    private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
     private String pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
 
@@ -358,8 +358,12 @@ public class GHRepository extends GHObject {
      * Returns the number of all forks of this repository.
      * This not only counts direct forks, but also forks of forks, and so on.
      */
-    public int getForks() {
-        return forks;
+    public int getForksCount() {
+        return forks_count;
+    }
+
+    public int getStargazersCount() {
+        return stargazers_count;
     }
 
     public boolean isPrivate() {
@@ -370,16 +374,16 @@ public class GHRepository extends GHObject {
         return has_downloads;
     }
 
-    public int getWatchers() {
-        return watchers;
+    public boolean hasPages() {
+        return has_pages;
+    }
+
+    public int getWatchersCount() {
+        return watchers_count;
     }
 
     public int getOpenIssueCount() {
-        return open_issues;
-    }
-
-    public int getNetworkCount() {
-        return network_count;
+        return open_issues_count;
     }
 
     public int getSubscribersCount() {

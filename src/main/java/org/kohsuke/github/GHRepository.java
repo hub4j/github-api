@@ -232,7 +232,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHUser getOwner() throws IOException {
-        return root.getUser(owner.login);   // because 'owner' isn't fully populated
+        return root.isOffline() ? owner :  root.getUser(owner.login);   // because 'owner' isn't fully populated
     }
 
     public GHIssue getIssue(int id) throws IOException {
@@ -1153,6 +1153,9 @@ public class GHRepository extends GHObject {
 
     /*package*/ GHRepository wrap(GitHub root) {
         this.root = root;
+        if (root.isOffline()) {
+            owner.wrapUp(root);
+        }
         return this;
     }
 

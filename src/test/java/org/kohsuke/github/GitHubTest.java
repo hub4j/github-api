@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +21,19 @@ import static org.mockito.Mockito.when;
  * Unit test for {@link GitHub}.
  */
 public class GitHubTest {
+    @Test
+    public void testOffline() throws Exception {
+        GitHub hub = GitHub.offline();
+        assertEquals("https://api.github.invalid/test", hub.getApiURL("/test").toString());
+        assertTrue(hub.isAnonymous());
+        try {
+            hub.getRateLimit();
+            fail("Offline instance should always fail");
+        } catch (IOException e) {
+            assertEquals("Offline", e.getMessage());
+        }
+    }
+
     @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus","bogus");

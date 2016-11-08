@@ -23,16 +23,6 @@ public class GHCommitComment extends GHObject {
     String path;
     GHUser user;  // not fully populated. beware.
 
-    static class User {
-        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url,avatar_url,gravatar_id;
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        int id;
-        
-        String login;
-    }
-
     public GHRepository getOwner() {
         return owner;
     }

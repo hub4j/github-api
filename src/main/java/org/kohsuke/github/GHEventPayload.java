@@ -428,6 +428,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
      */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD"},
+                        justification = "Constructed by JSON deserialization")
     public static class Push extends GHEventPayload {
         private String head, before;
         private boolean created, deleted, forced;
@@ -553,6 +555,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>
      */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"},
+                        justification = "Constructed by JSON deserialization")
     public static class Repository extends GHEventPayload {
         private String action;
         private GHRepository repository;

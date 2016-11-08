@@ -399,6 +399,29 @@ public abstract class GHEventPayload {
     }
 
     /**
+     * A ping.
+     */
+    public static class Ping extends GHEventPayload {
+        private GHRepository repository;
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository!=null)
+                repository.wrap(root);
+        }
+
+    }
+
+    /**
      * A repository was made public.
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#publicevent">authoritative source</a>

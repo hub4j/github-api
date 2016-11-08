@@ -216,11 +216,11 @@ public class GitHub {
     }
 
     /**
-     * An off-line only {@link GitHub} useful for parsing event notification from an unknown source.
+     * An offline-only {@link GitHub} useful for parsing event notification from an unknown source.
      *
      * All operations that require a connection will fail.
      *
-     * @return An off-line only {@link GitHub}.
+     * @return An offline-only {@link GitHub}.
      */
     public static GitHub offline() {
         try {

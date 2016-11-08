@@ -213,6 +213,8 @@ public class GHEventPayloadTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getRepository().getUrl().toExternalForm(), is("https://github.com/baxterthehacker/public-repo"));
+        assertThat(event.getPusher().getName(), is("baxterthehacker"));
+        assertThat(event.getPusher().getEmail(), is("baxterthehacker@users.noreply.github.com"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 

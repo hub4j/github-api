@@ -437,6 +437,7 @@ public abstract class GHEventPayload {
         private int size;
         private List<PushCommit> commits;
         private GHRepository repository;
+        private Pusher pusher;
 
         /**
          * The SHA of the HEAD commit on the repository
@@ -484,11 +485,39 @@ public abstract class GHEventPayload {
             return repository;
         }
 
+        public Pusher getPusher() {
+            return pusher;
+        }
+
+        public void setPusher(Pusher pusher) {
+            this.pusher = pusher;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             if (repository!=null)
                 repository.wrap(root);
+        }
+
+        public static class Pusher {
+            private String name, email;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getEmail() {
+                return email;
+            }
+
+            public void setEmail(String email) {
+                this.email = email;
+            }
         }
 
         /**

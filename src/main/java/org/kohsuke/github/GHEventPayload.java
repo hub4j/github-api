@@ -403,6 +403,7 @@ public abstract class GHEventPayload {
      */
     public static class Ping extends GHEventPayload {
         private GHRepository repository;
+        private GHOrganization organization;
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
@@ -412,11 +413,22 @@ public abstract class GHEventPayload {
             return repository;
         }
 
+        public GHOrganization getOrganization() {
+            return organization;
+        }
+
+        public void setOrganization(GHOrganization organization) {
+            this.organization = organization;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             if (repository!=null)
                 repository.wrap(root);
+            if (organization != null) {
+                organization.wrapUp(root);
+            }
         }
 
     }

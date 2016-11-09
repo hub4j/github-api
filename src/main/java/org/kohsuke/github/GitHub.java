@@ -528,7 +528,7 @@ public class GitHub {
     }
 
     /**
-     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an authorization</a>
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an authorization</a>
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
         return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);

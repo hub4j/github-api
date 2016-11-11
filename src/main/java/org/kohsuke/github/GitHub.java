@@ -58,6 +58,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Logger;
 
 /**
@@ -495,6 +496,42 @@ public class GitHub {
                 .with("note_url", noteUrl);
 
         return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
+     */
+    public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
+                                           String note_url)
+            throws IOException {
+        Requester requester = new Requester(this)
+                .with("client_secret", clientSecret)
+                .with("scopes", scopes)
+                .with("note", note)
+                .with("note_url", note_url);
+
+        return requester.method("PUT").to("/authorizations/clients/" + clientId, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an authorization</a>
+     */
+    public void deleteAuth(long id) throws IOException {
+        retrieve().method("DELETE").to("/authorizations/" + id);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an authorization</a>
+     */
+    public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an authorization</a>
+     */
+    public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
     }
 
     /**

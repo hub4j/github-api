@@ -509,6 +509,18 @@ public abstract class GHEventPayload {
             return size;
         }
 
+        public boolean isCreated() {
+            return created;
+        }
+
+        public boolean isDeleted() {
+            return deleted;
+        }
+
+        public boolean isForced() {
+            return forced;
+        }
+
         /**
          * The list of pushed commits.
          */

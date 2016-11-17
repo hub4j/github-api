@@ -358,7 +358,7 @@ public class GHRepository extends GHObject {
      * Returns the number of all forks of this repository.
      * This not only counts direct forks, but also forks of forks, and so on.
      */
-    public int getForksCount() {
+    public int getForks() {
         return forks_count;
     }
 
@@ -378,12 +378,21 @@ public class GHRepository extends GHObject {
         return has_pages;
     }
 
-    public int getWatchersCount() {
+    public int getWatchers() {
         return watchers_count;
     }
 
     public int getOpenIssueCount() {
         return open_issues_count;
+    }
+
+    /**
+     * @deprecated
+     *      This no longer exists in the official API documentation.
+     *      Use {@link #getForks()}
+     */
+    public int getNetworkCount() {
+        return forks_count;
     }
 
     public int getSubscribersCount() {

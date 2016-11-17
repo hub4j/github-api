@@ -35,7 +35,7 @@ public class GHIssueComment extends GHObject {
     GHIssue owner;
 
     private String body, gravatar_id;
-    private GHUser user;
+    private GHUser user; // not fully populated. beware.
 
     /*package*/ GHIssueComment wrapUp(GHIssue owner) {
         this.owner = owner;
@@ -68,7 +68,7 @@ public class GHIssueComment extends GHObject {
      * Gets the user who posted this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
     
     /**

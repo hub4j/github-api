@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Reader;
 import java.util.List;
@@ -14,11 +16,28 @@ import java.util.List;
 public abstract class GHEventPayload {
     protected GitHub root;
 
+    private GHUser sender;
+
     /*package*/ GHEventPayload() {
+    }
+
+    /**
+     * Gets the sender or {@code null} if accessed via the events API.
+     * @return the sender or {@code null} if accessed via the events API.
+     */
+    public GHUser getSender() {
+        return sender;
+    }
+
+    public void setSender(GHUser sender) {
+        this.sender = sender;
     }
 
     /*package*/ void wrapUp(GitHub root) {
         this.root = root;
+        if (sender != null) {
+            sender.wrapUp(root);
+        }
     }
 
     /**
@@ -121,16 +140,339 @@ public abstract class GHEventPayload {
     }
 
     /**
+     * A comment was added to a commit
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#commitcommentevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class CommitComment extends GHEventPayload {
+        private String action;
+        private GHCommitComment comment;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getAction() {
+            return action;
+        }
+
+        public GHCommitComment getComment() {
+            return comment;
+        }
+
+        public void setComment(GHCommitComment comment) {
+            this.comment = comment;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+                comment.wrap(repository);
+            }
+        }
+    }
+
+    /**
+     * A repository, branch, or tag was created
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#createevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Create extends GHEventPayload {
+        private String ref;
+        @JsonProperty("ref_type")
+        private String refType;
+        @JsonProperty("master_branch")
+        private String masterBranch;
+        private String description;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getRef() {
+            return ref;
+        }
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getRefType() {
+            return refType;
+        }
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getMasterBranch() {
+            return masterBranch;
+        }
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getDescription() {
+            return description;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * A branch, or tag was deleted
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#deleteevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Delete extends GHEventPayload {
+        private String ref;
+        @JsonProperty("ref_type")
+        private String refType;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getRef() {
+            return ref;
+        }
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getRefType() {
+            return refType;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * A deployment
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Deployment extends GHEventPayload {
+        private GHDeployment deployment;
+        private GHRepository repository;
+
+        public GHDeployment getDeployment() {
+            return deployment;
+        }
+
+        public void setDeployment(GHDeployment deployment) {
+            this.deployment = deployment;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+                deployment.wrap(repository);
+            }
+        }
+    }
+
+    /**
+     * A deployment
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentstatusevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class DeploymentStatus extends GHEventPayload {
+        @JsonProperty("deployment_status")
+        private GHDeploymentStatus deploymentStatus;
+        private GHDeployment deployment;
+        private GHRepository repository;
+
+        public GHDeploymentStatus getDeploymentStatus() {
+            return deploymentStatus;
+        }
+
+        public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
+            this.deploymentStatus = deploymentStatus;
+        }
+
+        public GHDeployment getDeployment() {
+            return deployment;
+        }
+
+        public void setDeployment(GHDeployment deployment) {
+            this.deployment = deployment;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+                deployment.wrap(repository);
+                deploymentStatus.wrap(repository);
+            }
+        }
+    }
+
+    /**
+     * A user forked a repository
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#forkevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Fork extends GHEventPayload {
+        private GHRepository forkee;
+        private GHRepository repository;
+
+
+        public GHRepository getForkee() {
+            return forkee;
+        }
+
+        public void setForkee(GHRepository forkee) {
+            this.forkee = forkee;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            forkee.wrap(root);
+            if (repository != null) {
+                repository.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * A ping.
+     */
+    public static class Ping extends GHEventPayload {
+        private GHRepository repository;
+        private GHOrganization organization;
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public GHOrganization getOrganization() {
+            return organization;
+        }
+
+        public void setOrganization(GHOrganization organization) {
+            this.organization = organization;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository!=null)
+                repository.wrap(root);
+            if (organization != null) {
+                organization.wrapUp(root);
+            }
+        }
+
+    }
+
+    /**
+     * A repository was made public.
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#publicevent">authoritative source</a>
+     */
+    public static class Public extends GHEventPayload {
+        private GHRepository repository;
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository!=null)
+                repository.wrap(root);
+        }
+
+    }
+
+    /**
      * A commit was pushed.
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
      */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD"},
+                        justification = "Constructed by JSON deserialization")
     public static class Push extends GHEventPayload {
         private String head, before;
+        private boolean created, deleted, forced;
         private String ref;
         private int size;
         private List<PushCommit> commits;
         private GHRepository repository;
+        private Pusher pusher;
 
         /**
          * The SHA of the HEAD commit on the repository
@@ -145,6 +487,11 @@ public abstract class GHEventPayload {
          */
         public String getBefore() {
             return before;
+        }
+
+        @JsonSetter // alias
+        private void setAfter(String after) {
+            head = after;
         }
 
         /**
@@ -162,6 +509,18 @@ public abstract class GHEventPayload {
             return size;
         }
 
+        public boolean isCreated() {
+            return created;
+        }
+
+        public boolean isDeleted() {
+            return deleted;
+        }
+
+        public boolean isForced() {
+            return forced;
+        }
+
         /**
          * The list of pushed commits.
          */
@@ -173,6 +532,14 @@ public abstract class GHEventPayload {
             return repository;
         }
 
+        public Pusher getPusher() {
+            return pusher;
+        }
+
+        public void setPusher(Pusher pusher) {
+            this.pusher = pusher;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
@@ -180,16 +547,42 @@ public abstract class GHEventPayload {
                 repository.wrap(root);
         }
 
+        public static class Pusher {
+            private String name, email;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getEmail() {
+                return email;
+            }
+
+            public void setEmail(String email) {
+                this.email = email;
+            }
+        }
+
         /**
          * Commit in a push
          */
         public static class PushCommit {
             private GitUser author;
+            private GitUser committer;
             private String url, sha, message;
             private boolean distinct;
+            private List<String> added, removed, modified;
 
             public GitUser getAuthor() {
                 return author;
+            }
+
+            public GitUser getCommitter() {
+                return committer;
             }
 
             /**
@@ -203,6 +596,11 @@ public abstract class GHEventPayload {
                 return sha;
             }
 
+            @JsonSetter
+            private void setId(String id) {
+                sha = id;
+            }
+
             public String getMessage() {
                 return message;
             }
@@ -213,6 +611,61 @@ public abstract class GHEventPayload {
             public boolean isDistinct() {
                 return distinct;
             }
+
+            public List<String> getAdded() {
+                return added;
+            }
+
+            public List<String> getRemoved() {
+                return removed;
+            }
+
+            public List<String> getModified() {
+                return modified;
+            }
         }
+    }
+
+    /**
+     * A repository was created, deleted, made public, or made private.
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"},
+                        justification = "Constructed by JSON deserialization")
+    public static class Repository extends GHEventPayload {
+        private String action;
+        private GHRepository repository;
+        private GHOrganization organization;
+
+        public String getAction() {
+            return action;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public GHOrganization getOrganization() {
+            return organization;
+        }
+
+        public void setOrganization(GHOrganization organization) {
+            this.organization = organization;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            repository.wrap(root);
+            if (organization != null) {
+                organization.wrapUp(root);
+            }
+        }
+
     }
 }

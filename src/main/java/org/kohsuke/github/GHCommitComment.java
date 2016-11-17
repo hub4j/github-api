@@ -21,17 +21,7 @@ public class GHCommitComment extends GHObject {
     String body, html_url, commit_id;
     Integer line;
     String path;
-    User user;
-
-    static class User {
-        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url,avatar_url,gravatar_id;
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        int id;
-        
-        String login;
-    }
+    GHUser user;  // not fully populated. beware.
 
     public GHRepository getOwner() {
         return owner;
@@ -76,7 +66,7 @@ public class GHCommitComment extends GHObject {
      * Gets the user who put this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.login);
+        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.login);
     }
 
     /**
@@ -110,6 +100,9 @@ public class GHCommitComment extends GHObject {
 
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
+        if (owner.root.isOffline()) {
+            user.wrapUp(owner.root);
+        }
         return this;
     }
 }

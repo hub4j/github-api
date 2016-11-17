@@ -38,8 +38,12 @@ public abstract class GHPerson extends GHObject {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        if (created_at!=null)    return; // already populated
-
+        if (created_at!=null) {
+            return; // already populated
+        }
+        if (root.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
         root.retrieve().to(url, this);
     }
 

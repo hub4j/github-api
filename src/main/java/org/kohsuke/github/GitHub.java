@@ -217,11 +217,37 @@ public class GitHub {
     }
 
     /**
+     * An offline-only {@link GitHub} useful for parsing event notification from an unknown source.
+     *
+     * All operations that require a connection will fail.
+     *
+     * @return An offline-only {@link GitHub}.
+     */
+    public static GitHub offline() {
+        try {
+            return new GitHubBuilder()
+                    .withEndpoint("https://api.github.invalid")
+                    .withConnector(HttpConnector.OFFLINE)
+                    .build();
+        } catch (IOException e) {
+            throw new IllegalStateException("The offline implementation constructor should not connect", e);
+        }
+    }
+
+    /**
      * Is this an anonymous connection
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
         return login==null && encodedAuthorization==null;
+    }
+
+    /**
+     * Is this an always offline "connection".
+     * @return {@code true} if this is an always offline "connection".
+     */
+    public boolean isOffline() {
+        return connector == HttpConnector.OFFLINE;
     }
 
     public HttpConnector getConnector() {

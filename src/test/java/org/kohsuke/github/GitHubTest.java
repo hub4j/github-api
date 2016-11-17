@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -143,6 +145,15 @@ public class GitHubTest {
             github.checkApiUrlValidity();
         } catch (IOException ioe) {
             assertTrue(ioe.getMessage().contains("private mode enabled"));
+        }
+    }
+
+    @Test
+    public void listUsers() throws IOException {
+        GitHub hub = GitHub.connect();
+        for (GHUser u : Iterables.limit(hub.listUsers(),10)) {
+            assert u.getName()!=null;
+            System.out.println(u.getName());
         }
     }
 }

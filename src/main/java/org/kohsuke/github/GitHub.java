@@ -393,6 +393,23 @@ public class GitHub {
     }
 
     /**
+     * Returns a list of all users.
+     */
+    public PagedIterable<GHUser> listUsers() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
+                return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHUser[] page) {
+                        for (GHUser u : page)
+                            u.wrapUp(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Returns the full details for a license
      *
      * WARNING: This uses a PREVIEW API.

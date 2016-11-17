@@ -26,12 +26,14 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 /**
  * Comment to the issue
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHIssueComment extends GHObject {
+public class GHIssueComment extends GHObject implements Reactable {
     GHIssue owner;
 
     private String body, gravatar_id;
@@ -93,7 +95,30 @@ public class GHIssueComment extends GHObject {
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
     }
-    
+
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
+                    }
+                };
+            }
+        };
+    }
+
     private String getApiRoute() {
         return "/repos/"+owner.getRepository().getOwnerName()+"/"+owner.getRepository().getName()+"/issues/comments/" + id;
     }

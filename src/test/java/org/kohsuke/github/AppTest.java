@@ -870,6 +870,21 @@ public class AppTest extends AbstractGitHubApiTestBase {
         System.out.println(r.getIssue(1));
     }
 
+    @Test
+    public void reactions() throws Exception {
+        GHIssue i = gitHub.getRepository("kohsuke/github-api").getIssue(311);
+
+        // retrieval
+        GHReaction r = i.listReactions().iterator().next();
+        assert r.getUser().getName().equals("kohsuke");
+        assert r.getContent()==ReactionContent.HEART;
+
+        // CRUD
+        GHReaction a = i.createReaction(ReactionContent.HOORAY);
+        assert a.getUser().equals(gitHub.getMyself());
+        a.delete();
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

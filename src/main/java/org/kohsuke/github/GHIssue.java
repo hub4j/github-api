@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 /**
  * Represents an issue on GitHub.
  *
@@ -44,7 +46,7 @@ import java.util.Locale;
  * @see GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-public class GHIssue extends GHObject {
+public class GHIssue extends GHObject implements Reactable{
     GitHub root;
     GHRepository owner;
     
@@ -211,6 +213,29 @@ public class GHIssue extends GHObject {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);
+                    }
+                };
+            }
+        };
+    }
+
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
                     }
                 };
             }

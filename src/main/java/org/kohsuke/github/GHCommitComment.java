@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
  *
@@ -15,7 +17,7 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
-public class GHCommitComment extends GHObject {
+public class GHCommitComment extends GHObject implements Reactable {
     private GHRepository owner;
 
     String body, html_url, commit_id;
@@ -84,6 +86,29 @@ public class GHCommitComment extends GHObject {
                 .with("body", body)
                 .method("PATCH").to(getApiTail(), GHCommitComment.class);
         this.body = body;
+    }
+
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiTail()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
+                    }
+                };
+            }
+        };
     }
 
     /**

@@ -109,6 +109,6 @@ public class GHAuthorization extends GHObject {
     private static class App {
         private String url;
         private String name;
-        private String client_id;
+        // private String client_id; not yet used
     }
 }

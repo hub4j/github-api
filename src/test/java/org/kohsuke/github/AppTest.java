@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
@@ -16,6 +17,8 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Unit test for simple App.
@@ -876,12 +879,12 @@ public class AppTest extends AbstractGitHubApiTestBase {
 
         // retrieval
         GHReaction r = i.listReactions().iterator().next();
-        assert r.getUser().getName().equals("kohsuke");
-        assert r.getContent()==ReactionContent.HEART;
+        assertThat(r.getUser().getLogin(), is("kohsuke"));
+        assertThat(r.getContent(),is(ReactionContent.HEART));
 
         // CRUD
         GHReaction a = i.createReaction(ReactionContent.HOORAY);
-        assert a.getUser().equals(gitHub.getMyself());
+        assertThat(a.getUser().getLogin(),is(gitHub.getMyself().getLogin()));
         a.delete();
     }
 

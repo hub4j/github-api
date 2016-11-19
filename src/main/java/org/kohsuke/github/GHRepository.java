@@ -470,6 +470,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists all <a href="https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the available assignees</a>
+     * to which issues may be assigned.
+     */
+    public PagedIterable<GHUser> listAssignees() throws IOException {
+        return listUsers("assignees");
+    }
+
+    /**
+     * Checks if the given user is an assignee for this repository.
+     */
+    public boolean hasAssignee(GHUser u) throws IOException {
+        return root.retrieve().asHttpStatusCode(getApiTailUrl("assignees/" + u.getLogin()))/100==2;
+    }
+
+    /**
      * Gets the names of the collaborators on this repository.
      * This method deviates from the principle of this library but it works a lot faster than {@link #getCollaborators()}.
      */

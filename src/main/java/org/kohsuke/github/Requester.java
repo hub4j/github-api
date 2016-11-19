@@ -81,6 +81,7 @@ class Requester {
      * Current connection.
      */
     private HttpURLConnection uc;
+    private boolean forceBody;
 
     private static class Entry {
         String key;
@@ -197,6 +198,16 @@ class Requester {
         return this;
     }
 
+    /**
+     * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
+     * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use,
+     * but this method forces the parameters to be sent as a body.
+     */
+    /*package*/ Requester inBody() {
+        forceBody = true;
+        return this;
+    }
+
     public void to(String tailApiUrl) throws IOException {
         to(tailApiUrl,null);
     }
@@ -230,7 +241,7 @@ class Requester {
 
     @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
+        if (!isMethodWithBody() && !args.isEmpty()) {
             boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
             tailApiUrl += questionMarkFound ? '&' : '?';
             for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
@@ -340,7 +351,7 @@ class Requester {
     }
 
     private boolean isMethodWithBody() {
-        return !METHODS_WITHOUT_BODY.contains(method);
+        return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
     /**

@@ -29,13 +29,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Represents an issue on GitHub.
@@ -51,7 +53,8 @@ public class GHIssue extends GHObject implements Reactable{
     GHRepository owner;
     
     // API v3
-    protected GHUser assignee;
+    protected GHUser assignee;  // not sure what this field is now that 'assignees' exist
+    protected GHUser[] assignees;
     protected String state;
     protected int number;
     protected String closed_at;
@@ -81,6 +84,7 @@ public class GHIssue extends GHObject implements Reactable{
     /*package*/ GHIssue wrap(GitHub root) {
         this.root = root;
         if(assignee != null) assignee.wrapUp(root);
+        if(assignees!=null)    GHUser.wrap(assignees,root);
         if(user != null) user.wrapUp(root);
         if(closed_by != null) closed_by.wrapUp(root);
         return this;
@@ -187,7 +191,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void assignTo(GHUser user) throws IOException {
-        editIssue("assignee", user.getLogin());
+        setAssignees(user);
     }
 
     public void setLabels(String... labels) throws IOException {
@@ -242,6 +246,40 @@ public class GHIssue extends GHObject implements Reactable{
         };
     }
 
+    public void addAssignees(GHUser... assignees) throws IOException {
+        addAssignees(Arrays.asList(assignees));
+    }
+
+    public void addAssignees(Collection<GHUser> assignees) throws IOException {
+        List<String> names = toLogins(assignees);
+        root.retrieve().method("POST").with("assignees",names).to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    public void setAssignees(GHUser... assignees) throws IOException {
+        setAssignees(Arrays.asList(assignees));
+    }
+
+    public void setAssignees(Collection<GHUser> assignees) throws IOException {
+        editIssue("assignees",toLogins(assignees));
+    }
+
+    public void removeAssignees(GHUser... assignees) throws IOException {
+        removeAssignees(Arrays.asList(assignees));
+    }
+
+    public void removeAssignees(Collection<GHUser> assignees) throws IOException {
+        List<String> names = toLogins(assignees);
+        root.retrieve().method("DELETE").with("assignees",names).inBody().to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    private List<String> toLogins(Collection<GHUser> assignees) {
+        List<String> names = new ArrayList<String>(assignees.size());
+        for (GHUser a : assignees) {
+            names.add(a.getLogin());
+        }
+        return names;
+    }
+
     protected String getApiRoute() {
         return getIssuesApiRoute();
     }
@@ -253,7 +291,11 @@ public class GHIssue extends GHObject implements Reactable{
     public GHUser getAssignee() {
         return assignee;
     }
-    
+
+    public List<GHUser> getAssignees() {
+        return Collections.unmodifiableList(Arrays.asList(assignees));
+    }
+
     /**
      * User who submitted the issue.
      */

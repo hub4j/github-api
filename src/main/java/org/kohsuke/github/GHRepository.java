@@ -50,8 +50,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import static java.util.Arrays.asList;
-import static org.kohsuke.github.Previews.DRAX;
+import static java.util.Arrays.*;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * A repository on GitHub.
@@ -451,22 +451,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl("collaborators"), GHUser[].class, pageSize)) {
-
-                    @Override
-                    protected void wrapUp(GHUser[] users) {
-                        for (GHUser user : users) {
-                            user.wrapUp(root);
-                        }
-                    }
-                };
-
-            }
-        };
-
+        return listUsers("collaborators");
     }
 
     /**

@@ -214,4 +214,9 @@ public class GHUser extends GHPerson {
         if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
         return "/users/" + login + tail;
     }
+
+    /*package*/ GHUser wrapUp(GitHub root) {
+        super.wrapUp(root);
+        return this;
+    }
 }

@@ -178,6 +178,39 @@ public class GHMyself extends GHUser {
         return listRepositories();
     }
 
+    /**
+     * List your organization memberships
+     */
+    public PagedIterable<GHMembership> listOrgMemberships() {
+        return listOrgMemberships(null);
+    }
+
+    /**
+     * List your organization memberships
+     *
+     * @param state
+     *      Filter by a specific state
+     */
+    public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
+        return new PagedIterable<GHMembership>() {
+            public PagedIterator<GHMembership> _iterator(int pageSize) {
+                return new PagedIterator<GHMembership>(root.retrieve().with("state",state).asIterator("/user/memberships/orgs", GHMembership[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHMembership[] page) {
+                        GHMembership.wrap(page,root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Gets your membership in a specific organization.
+     */
+    public GHMembership getMembership(GHOrganization o) throws IOException {
+        return root.retrieve().to("/user/memberships/orgs/"+o.getLogin(),GHMembership.class).wrap(root);
+    }
+
 //    public void addEmails(Collection<String> emails) throws IOException {
 ////        new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
 //        root.retrieveWithAuth3()

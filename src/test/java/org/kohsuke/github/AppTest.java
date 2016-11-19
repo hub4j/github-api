@@ -888,6 +888,21 @@ public class AppTest extends AbstractGitHubApiTestBase {
         a.delete();
     }
 
+    @Test
+    public void listOrgMemberships() throws Exception {
+        GHMyself me = gitHub.getMyself();
+        for (GHMembership m : me.listOrgMemberships()) {
+            assertThat(m.getUser(), is((GHUser)me));
+            assertNotNull(m.getState());
+            assertNotNull(m.getRole());
+
+            System.out.printf("%s %s %s\n",
+                    m.getOrganization().getLogin(),
+                    m.getState(),
+                    m.getRole());
+        }
+    }
+
     private void kohsuke() {
         String login = getUser().getLogin();
         Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

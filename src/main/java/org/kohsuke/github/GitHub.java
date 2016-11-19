@@ -340,7 +340,7 @@ public class GitHub {
     /**
      * Interns the given {@link GHUser}.
      */
-    protected GHUser getUser(GHUser orig) throws IOException {
+    protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
             orig.root = this;

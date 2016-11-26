@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Iterator over a pagenated data source.
+ * Iterator over a paginated data source.
  *
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()}
  * that allows the caller to retrieve items per page.

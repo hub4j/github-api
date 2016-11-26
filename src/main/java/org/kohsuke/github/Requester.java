@@ -355,7 +355,7 @@ class Requester {
     }
 
     /**
-     * Loads pagenated resources.
+     * Loads paginated resources.
      *
      * Every iterator call reports a new batch.
      */

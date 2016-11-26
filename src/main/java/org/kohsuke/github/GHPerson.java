@@ -93,10 +93,10 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Loads repository list in a pagenated fashion.
+     * Loads repository list in a paginated fashion.
      * 
      * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a pagenated fashion.
+     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion.
      * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
      * 
      * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped

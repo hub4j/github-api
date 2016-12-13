@@ -818,6 +818,14 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
+     */
+    public GHBlob getBlob(String blobSha) throws IOException {
+        String target = getApiTailUrl("git/blobs/" + blobSha);
+        return root.retrieve().to(target, GHBlob.class);
+    }
+
+    /**
      * Gets a commit object in this repository.
      */
     public GHCommit getCommit(String sha1) throws IOException {

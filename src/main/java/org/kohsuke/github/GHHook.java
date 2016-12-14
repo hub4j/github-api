@@ -26,8 +26,10 @@ public abstract class GHHook extends GHObject {
 
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
-        for (String e : events)
-            s.add(Enum.valueOf(GHEvent.class,e.toUpperCase(Locale.ENGLISH)));
+        for (String e : events) {
+            if (e.equals("*"))  s.add(GHEvent.ALL);
+            else                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
+        }
         return s;
     }
 

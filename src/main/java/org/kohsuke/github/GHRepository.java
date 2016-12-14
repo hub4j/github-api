@@ -26,9 +26,9 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,9 +36,22 @@ import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * A repository on GitHub.
@@ -53,18 +66,26 @@ public class GHRepository extends GHObject {
 
     private String description, homepage, name, full_name;
     private String html_url;    // this is the UI
+    /*
+     * The license information makes use of the preview API.
+     *
+     * See: https://developer.github.com/v3/licenses/
+     */
+    private GHLicense license;
+
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, has_downloads;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages;
     @JsonProperty("private")
     private boolean _private;
-    private int watchers,forks,open_issues,size,network_count,subscribers_count;
+    private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
     private String pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
 
     private String default_branch,language;
     private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
 
+    @SkipFromToString
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
@@ -211,7 +232,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHUser getOwner() throws IOException {
-        return root.getUser(owner.login);   // because 'owner' isn't fully populated
+        return root.isOffline() ? owner :  root.getUser(getOwnerName());   // because 'owner' isn't fully populated
     }
 
     public GHIssue getIssue(int id) throws IOException {
@@ -318,7 +339,11 @@ public class GHRepository extends GHObject {
     }
 
     public String getOwnerName() {
-        return owner.login;
+        // consistency of the GitHub API is super... some serialized forms of GHRepository populate
+        // a full GHUser while others populate only the owner and email. This later form is super helpful
+        // in putting the login in owner.name not owner.login... thankfully we can easily identify this
+        // second set because owner.login will be null
+        return owner.login != null ? owner.login : owner.name;
     }
 
     public boolean hasIssues() {
@@ -338,7 +363,11 @@ public class GHRepository extends GHObject {
      * This not only counts direct forks, but also forks of forks, and so on.
      */
     public int getForks() {
-        return forks;
+        return forks_count;
+    }
+
+    public int getStargazersCount() {
+        return stargazers_count;
     }
 
     public boolean isPrivate() {
@@ -349,16 +378,25 @@ public class GHRepository extends GHObject {
         return has_downloads;
     }
 
+    public boolean hasPages() {
+        return has_pages;
+    }
+
     public int getWatchers() {
-        return watchers;
+        return watchers_count;
     }
 
     public int getOpenIssueCount() {
-        return open_issues;
+        return open_issues_count;
     }
 
+    /**
+     * @deprecated
+     *      This no longer exists in the official API documentation.
+     *      Use {@link #getForks()}
+     */
     public int getNetworkCount() {
-        return network_count;
+        return forks_count;
     }
 
     public int getSubscribersCount() {
@@ -413,22 +451,22 @@ public class GHRepository extends GHObject {
      * @throws IOException
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
+        return listUsers("collaborators");
+    }
 
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl("collaborators"), GHUser[].class, pageSize)) {
+    /**
+     * Lists all <a href="https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the available assignees</a>
+     * to which issues may be assigned.
+     */
+    public PagedIterable<GHUser> listAssignees() throws IOException {
+        return listUsers("assignees");
+    }
 
-                    @Override
-                    protected void wrapUp(GHUser[] users) {
-                        for (GHUser user : users) {
-                            user.wrapUp(root);
-                        }
-                    }
-                };
-
-            }
-        };
-
+    /**
+     * Checks if the given user is an assignee for this repository.
+     */
+    public boolean hasAssignee(GHUser u) throws IOException {
+        return root.retrieve().asHttpStatusCode(getApiTailUrl("assignees/" + u.getLogin()))/100==2;
     }
 
     /**
@@ -446,7 +484,7 @@ public class GHRepository extends GHObject {
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().to(getApiTailUrl("teams"), GHTeam[].class), root.getOrganization(owner.login)))));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(root.retrieve().to(getApiTailUrl("teams"), GHTeam[].class), root.getOrganization(getOwnerName())))));
     }
 
     public void addCollaborators(GHUser... users) throws IOException {
@@ -475,7 +513,7 @@ public class GHRepository extends GHObject {
     public void setEmailServiceHook(String address) throws IOException {
         Map<String, String> config = new HashMap<String, String>();
         config.put("address", address);
-        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", "true")
+        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", true)
                 .to(getApiTailUrl("hooks"));
     }
 
@@ -530,7 +568,7 @@ public class GHRepository extends GHObject {
         try {
             new Requester(root).method("DELETE").to(getApiTailUrl(""));
         } catch (FileNotFoundException x) {
-            throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + owner.login + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
+            throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
         }
     }
 
@@ -574,7 +612,19 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        return new Requester(root).method("POST").to(getApiTailUrl("forks"), GHRepository.class).wrap(root);
+        new Requester(root).method("POST").to(getApiTailUrl("forks"), null);
+
+        // this API is asynchronous. we need to wait for a bit
+        for (int i=0; i<10; i++) {
+            GHRepository r = root.getMyself().getRepository(name);
+            if (r!=null)    return r;
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw (IOException)new InterruptedIOException().initCause(e);
+            }
+        }
+        throw new IOException(this+" was forked but can't find the new repository");
     }
 
     /**
@@ -709,7 +759,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", owner.login, name), GHRef[].class), root);
+       return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", getOwnerName(), name), GHRef[].class), root);
     }
 
     /**
@@ -719,7 +769,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refType), GHRef[].class),root);
+        return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType), GHRef[].class),root);
     }
     /**
      * Retrive a ref of the given type for the current GitHub repository.
@@ -732,7 +782,11 @@ public class GHRepository extends GHObject {
      *             invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", owner.login, name, refName), GHRef.class).wrap(root);
+        // hashes in branch names must be replaced with the url encoded equivalent or this call will fail
+        // FIXME: how about other URL unsafe characters, like space, @, : etc? do we need to be using URLEncoder.encode()?
+        // OTOH, '/' need no escaping
+        refName = refName.replaceAll("#", "%23");
+        return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refName), GHRef.class).wrap(root);
     }
     /**
      * Retrive a tree of the given type for the current GitHub repository.
@@ -744,7 +798,7 @@ public class GHRepository extends GHObject {
      *             invalid tree type being requested
      */
     public GHTree getTree(String sha) throws IOException {
-        String url = String.format("/repos/%s/%s/git/trees/%s", owner.login, name, sha);
+        String url = String.format("/repos/%s/%s/git/trees/%s", getOwnerName(), name, sha);
         return root.retrieve().to(url, GHTree.class).wrap(root);
     }
 
@@ -759,7 +813,7 @@ public class GHRepository extends GHObject {
      *             invalid tree type being requested
      */
     public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
-        String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", owner.login, name, sha, recursive);
+        String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", getOwnerName(), name, sha, recursive);
         return root.retrieve().to(url, GHTree.class).wrap(root);
     }
 
@@ -769,7 +823,7 @@ public class GHRepository extends GHObject {
     public GHCommit getCommit(String sha1) throws IOException {
         GHCommit c = commits.get(sha1);
         if (c==null) {
-            c = root.retrieve().to(String.format("/repos/%s/%s/commits/%s", owner.login, name, sha1), GHCommit.class).wrapUp(this);
+            c = root.retrieve().to(String.format("/repos/%s/%s/commits/%s", getOwnerName(), name, sha1), GHCommit.class).wrapUp(this);
             commits.put(sha1,c);
         }
         return c;
@@ -781,7 +835,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHCommit> listCommits() {
         return new PagedIterable<GHCommit>() {
             public PagedIterator<GHCommit> _iterator(int pageSize) {
-                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits", owner.login, name), GHCommit[].class, pageSize)) {
+                return new PagedIterator<GHCommit>(root.retrieve().asIterator(String.format("/repos/%s/%s/commits", getOwnerName(), name), GHCommit[].class, pageSize)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(GHRepository.this);
@@ -804,7 +858,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHCommitComment> listCommitComments() {
         return new PagedIterable<GHCommitComment>() {
             public PagedIterator<GHCommitComment> _iterator(int pageSize) {
-                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(String.format("/repos/%s/%s/comments", owner.login, name), GHCommitComment[].class, pageSize)) {
+                return new PagedIterator<GHCommitComment>(root.retrieve().asIterator(String.format("/repos/%s/%s/comments", getOwnerName(), name), GHCommitComment[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -816,12 +870,52 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets the basic license details for the repository.
+     * <p>
+     * This is a preview item and subject to change.
+     *
+     * @throws IOException as usual but also if you don't use the preview connector
+     * @return null if there's no license.
+     */
+    @Preview @Deprecated
+    public GHLicense getLicense() throws IOException{
+        GHContentWithLicense lic = getLicenseContent_();
+        return lic!=null ? lic.license : null;
+    }
+
+    /**
+     * Retrieves the contents of the repository's license file - makes an additional API call
+     * <p>
+     * This is a preview item and subject to change.
+     *
+     * @return details regarding the license contents, or null if there's no license.
+     * @throws IOException as usual but also if you don't use the preview connector
+     */
+    @Preview @Deprecated
+    public GHContent getLicenseContent() throws IOException {
+        return getLicenseContent_();
+    }
+
+    @Preview @Deprecated
+    private GHContentWithLicense getLicenseContent_() throws IOException {
+        try {
+            return root.retrieve()
+                    .withPreview(DRAX)
+                    .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+
+    /**
      * Lists all the commit statues attached to the given commit, newer ones first.
      */
     public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
         return new PagedIterable<GHCommitStatus>() {
             public PagedIterator<GHCommitStatus> _iterator(int pageSize) {
-                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(String.format("/repos/%s/%s/statuses/%s", owner.login, name, sha1), GHCommitStatus[].class, pageSize)) {
+                return new PagedIterator<GHCommitStatus>(root.retrieve().asIterator(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1), GHCommitStatus[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHCommitStatus[] page) {
                         for (GHCommitStatus c : page)
@@ -856,7 +950,7 @@ public class GHRepository extends GHObject {
                 .with("target_url", targetUrl)
                 .with("description", description)
                 .with("context", context)
-                .to(String.format("/repos/%s/%s/statuses/%s",owner.login,this.name,sha1),GHCommitStatus.class).wrapUp(root);
+                .to(String.format("/repos/%s/%s/statuses/%s",getOwnerName(),this.name,sha1),GHCommitStatus.class).wrapUp(root);
     }
 
     /**
@@ -872,7 +966,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return new PagedIterable<GHEventInfo>() {
             public PagedIterator<GHEventInfo> _iterator(int pageSize) {
-                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/repos/%s/%s/events", owner.login, name), GHEventInfo[].class, pageSize)) {
+                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/repos/%s/%s/events", getOwnerName(), name), GHEventInfo[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHEventInfo[] page) {
                         for (GHEventInfo c : page)
@@ -923,10 +1017,34 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Lists all the users who have starred this repo.
+     * Lists all the users who have starred this repo based on the old version of the API. For
+     * additional information, like date when the repository was starred, see {@link #listStargazers2()}
      */
     public PagedIterable<GHUser> listStargazers() {
         return listUsers("stargazers");
+    }
+
+    /**
+     * Lists all the users who have starred this repo based on new version of the API, having extended
+     * information like the time when the repository was starred. For compatibility with the old API
+     * see {@link #listStargazers()}
+     */
+    public PagedIterable<GHStargazer> listStargazers2() {
+        return new PagedIterable<GHStargazer>() {
+            @Override
+            public PagedIterator<GHStargazer> _iterator(int pageSize) {
+                Requester requester = root.retrieve();
+                requester.setHeader("Accept", "application/vnd.github.v3.star+json");
+                return new PagedIterator<GHStargazer>(requester.asIterator(getApiTailUrl("stargazers"), GHStargazer[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHStargazer[] page) {
+                        for (GHStargazer c : page) {
+                            c.wrapUp(GHRepository.this);
+                        }
+                    }
+                };
+            }
+        };
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
@@ -975,8 +1093,8 @@ public class GHRepository extends GHObject {
 //    }
 
     private void verifyMine() throws IOException {
-        if (!root.login.equals(owner.login))
-            throw new IOException("Operation not applicable to a repository owned by someone else: "+owner.login);
+        if (!root.login.equals(getOwnerName()))
+            throw new IOException("Operation not applicable to a repository owned by someone else: " + getOwnerName());
     }
 
     /**
@@ -997,6 +1115,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
             justification = "It causes a performance degradation, but we have already exposed it to the API")
+    @SkipFromToString
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
         private List<URL> getPostCommitHooks() {
             try {
@@ -1051,6 +1170,9 @@ public class GHRepository extends GHObject {
 
     /*package*/ GHRepository wrap(GitHub root) {
         this.root = root;
+        if (root.isOffline()) {
+            owner.wrapUp(root);
+        }
         return this;
     }
 
@@ -1064,6 +1186,10 @@ public class GHRepository extends GHObject {
             r.put(p.getName(),p);
         }
         return r;
+    }
+
+    public GHBranch getBranch(String name) throws IOException {
+        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
     }
 
     /**
@@ -1152,7 +1278,7 @@ public class GHRepository extends GHObject {
         try {
             payload = content.getBytes("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            throw  new IOException("UTF-8 encoding is not supported", ex);
+            throw (IOException) new IOException("UTF-8 encoding is not supported").initCause(ex);
         }
         return createContent(payload, commitMessage, path, branch);
     }
@@ -1165,7 +1291,7 @@ public class GHRepository extends GHObject {
         Requester requester = new Requester(root)
             .with("path", path)
             .with("message", commitMessage)
-            .with("content", DatatypeConverter.printBase64Binary(contentBytes))
+            .with("content", Base64.encodeBase64String(contentBytes))
             .method("PUT");
 
         if (branch != null) {
@@ -1315,20 +1441,15 @@ public class GHRepository extends GHObject {
 
 
     @Override
-    public String toString() {
-        return "Repository:"+owner.login+":"+name;
-    }
-
-    @Override
     public int hashCode() {
-        return toString().hashCode();
+        return ("Repository:"+getOwnerName()+":"+name).hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GHRepository) {
             GHRepository that = (GHRepository) obj;
-            return this.owner.login.equals(that.owner.login)
+            return this.getOwnerName().equals(that.getOwnerName())
                 && this.name.equals(that.name);
         }
         return false;
@@ -1336,6 +1457,6 @@ public class GHRepository extends GHObject {
 
     String getApiTailUrl(String tail) {
         if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
-        return "/repos/" + owner.login + "/" + name +tail;
+        return "/repos/" + getOwnerName() + "/" + name +tail;
     }
 }

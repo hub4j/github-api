@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -55,6 +57,7 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
 import static org.kohsuke.github.GitHub.*;
 
 /**
@@ -63,8 +66,6 @@ import static org.kohsuke.github.GitHub.*;
  * @author Kohsuke Kawaguchi
  */
 class Requester {
-    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
-    
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
@@ -80,6 +81,7 @@ class Requester {
      * Current connection.
      */
     private HttpURLConnection uc;
+    private boolean forceBody;
 
     private static class Entry {
         String key;
@@ -102,6 +104,15 @@ class Requester {
      */
     public void setHeader(String name, String value) {
         headers.put(name,value);
+    }
+
+    public Requester withHeader(String name, String value) {
+        setHeader(name,value);
+        return this;
+    }
+
+    /*package*/ Requester withPreview(String name) {
+        return withHeader("Accept",name);
     }
 
     /**
@@ -137,7 +148,7 @@ class Requester {
         // by convention Java constant names are upper cases, but github uses
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace by '_'
-        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_','-'));
+        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_', '-'));
     }
 
     public Requester with(String key, String value) {
@@ -187,6 +198,16 @@ class Requester {
         return this;
     }
 
+    /**
+     * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
+     * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use,
+     * but this method forces the parameters to be sent as a body.
+     */
+    /*package*/ Requester inBody() {
+        forceBody = true;
+        return this;
+    }
+
     public void to(String tailApiUrl) throws IOException {
         to(tailApiUrl,null);
     }
@@ -215,19 +236,24 @@ class Requester {
      */
     @Deprecated
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return method(method).to(tailApiUrl,type);
+        return method(method).to(tailApiUrl, type);
     }
 
+    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        while (true) {// loop while API rate limit is hit
-            if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
-                StringBuilder qs=new StringBuilder();
-                for (Entry arg : args) {
-                    qs.append(qs.length()==0 ? '?' : '&');
-                    qs.append(arg.key).append('=').append(URLEncoder.encode(arg.value.toString(),"UTF-8"));
+        if (!isMethodWithBody() && !args.isEmpty()) {
+            boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
+            tailApiUrl += questionMarkFound ? '&' : '?';
+            for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
+                Entry arg = it.next();
+                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(),"UTF-8");
+                if (it.hasNext()) {
+                    tailApiUrl += '&';
                 }
-                tailApiUrl += qs.toString();
             }
+        }
+
+        while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 
             buildRequest();
@@ -264,9 +290,8 @@ class Requester {
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
+            method("GET");
             setupConnection(root.getApiURL(tailApiUrl));
-
-            uc.setRequestMethod("GET");
 
             buildRequest();
 
@@ -282,10 +307,7 @@ class Requester {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
 
-            // if the download link is encoded with a token on the query string, the default behavior of POST will fail
-            uc.setRequestMethod("GET");
-            
-            buildRequest();        
+            buildRequest();
          
             try {
                 return wrapStream(uc.getInputStream());
@@ -329,11 +351,11 @@ class Requester {
     }
 
     private boolean isMethodWithBody() {
-        return !METHODS_WITHOUT_BODY.contains(method);
+        return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
     /**
-     * Loads pagenated resources.
+     * Loads paginated resources.
      *
      * Every iterator call reports a new batch.
      */
@@ -460,6 +482,11 @@ class Requester {
                 uc.setRequestProperty(e.getKey(), v);
         }
 
+        setRequestMethod(uc);
+        uc.setRequestProperty("Accept-Encoding", "gzip");
+    }
+
+    private void setRequestMethod(HttpURLConnection uc) throws IOException {
         try {
             uc.setRequestMethod(method);
         } catch (ProtocolException e) {
@@ -471,26 +498,57 @@ class Requester {
             } catch (Exception x) {
                 throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
             }
+            // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
+            try {
+                Field $delegate = uc.getClass().getDeclaredField("delegate");
+                $delegate.setAccessible(true);
+                Object delegate = $delegate.get(uc);
+                if (delegate instanceof HttpURLConnection) {
+                    HttpURLConnection nested = (HttpURLConnection) delegate;
+                    setRequestMethod(nested);
+                }
+            } catch (NoSuchFieldException x) {
+                // no problem
+            } catch (IllegalAccessException x) {
+                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+            }
         }
-        uc.setRequestProperty("Accept-Encoding", "gzip");
+        if (!uc.getRequestMethod().equals(method))
+            throw new IllegalStateException("Failed to set the request method to "+method);
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
-        if (uc.getResponseCode()==304)
-            return null;    // special case handling for 304 unmodified, as the content will be ""
         InputStreamReader r = null;
+        int responseCode = -1;
+        String responseMessage = null;
         try {
+            responseCode = uc.getResponseCode();
+            responseMessage = uc.getResponseMessage();
+            if (responseCode == 304) {
+                return null;    // special case handling for 304 unmodified, as the content will be ""
+            }
+            if (responseCode == 204 && type!=null && type.isArray()) {
+                // no content
+                return type.cast(Array.newInstance(type.getComponentType(),0));
+            }
+
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
                     return MAPPER.readValue(data,type);
                 } catch (JsonMappingException e) {
-                    throw (IOException)new IOException("Failed to deserialize "+data).initCause(e);
+                    throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
                 }
             if (instance!=null)
                 return MAPPER.readerForUpdating(instance).<T>readValue(data);
             return null;
+        } catch (FileNotFoundException e) {
+            // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in HttpException
+            // to preserve backward compatibility
+            throw e;
+        } catch (IOException e) {
+            throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
         }
@@ -511,11 +569,29 @@ class Requester {
      * Handle API error by either throwing it or by returning normally to retry.
      */
     /*package*/ void handleApiError(IOException e) throws IOException {
-        if (uc.getResponseCode() == 401) // Unauthorized == bad creds
+        int responseCode;
+        try {
+            responseCode = uc.getResponseCode();
+        } catch (IOException e2) {
+            // likely to be a network exception (e.g. SSLHandshakeException),
+            // uc.getResponseCode() and any other getter on the response will cause an exception
+            if (LOGGER.isLoggable(FINE))
+                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'" +
+                        " handling exception " + e, e);
+            throw e;
+        }
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
             throw e;
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
             root.rateLimitHandler.onError(e,uc);
+            return;
+        }
+
+        // Retry-After is not documented but apparently that field exists
+        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
+            uc.getHeaderField("Retry-After") != null) {
+            this.root.abuseLimitHandler.onError(e,uc);
             return;
         }
 
@@ -533,4 +609,7 @@ class Requester {
             IOUtils.closeQuietly(es);
         }
     }
+
+    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
+    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
 }

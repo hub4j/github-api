@@ -50,4 +50,12 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
         String mainLanguage = r.getLanguage();
         assertTrue(r.listLanguages().containsKey(mainLanguage));
     }
+
+    @Test // Issue #261
+    public void listEmptyContributors() throws IOException {
+        GitHub gh = GitHub.connect();
+        for (Contributor c : gh.getRepository("github-api-test-org/empty").listContributors()) {
+            System.out.println(c);
+        }
+    }
 }

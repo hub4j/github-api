@@ -7,12 +7,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +23,19 @@ import static org.mockito.Mockito.when;
  * Unit test for {@link GitHub}.
  */
 public class GitHubTest {
+    @Test
+    public void testOffline() throws Exception {
+        GitHub hub = GitHub.offline();
+        assertEquals("https://api.github.invalid/test", hub.getApiURL("/test").toString());
+        assertTrue(hub.isAnonymous());
+        try {
+            hub.getRateLimit();
+            fail("Offline instance should always fail");
+        } catch (IOException e) {
+            assertEquals("Offline", e.getMessage());
+        }
+    }
+
     @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus","bogus");
@@ -124,6 +140,20 @@ public class GitHubTest {
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         GitHub github = GitHub.connectAnonymously();
-        github.checkApiUrlValidity();
+        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        try {
+            github.checkApiUrlValidity();
+        } catch (IOException ioe) {
+            assertTrue(ioe.getMessage().contains("private mode enabled"));
+        }
+    }
+
+    @Test
+    public void listUsers() throws IOException {
+        GitHub hub = GitHub.connect();
+        for (GHUser u : Iterables.limit(hub.listUsers(),10)) {
+            assert u.getName()!=null;
+            System.out.println(u.getName());
+        }
     }
 }

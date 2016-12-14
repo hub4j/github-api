@@ -12,7 +12,7 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam {
-    private String name,permission;
+    private String name,permission,slug;
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
@@ -41,6 +41,10 @@ public class GHTeam {
 
     public String getPermission() {
         return permission;
+    }
+
+    public String getSlug() {
+        return slug;
     }
 
     public int getId() {
@@ -120,11 +124,24 @@ public class GHTeam {
     }
 
     public void add(GHRepository r) throws IOException {
-        org.root.retrieve().method("PUT").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        add(r,null);
+    }
+
+    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+        org.root.retrieve().method("PUT")
+                .with("permission",permission)
+                .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
         org.root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+    }
+    
+    /**
+     * Deletes this team.
+     */
+    public void delete() throws IOException {
+        org.root.retrieve().method("DELETE").to(api(""));
     }
 
     private String api(String tail) {

@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
- *
+ * Configures connection details and produces {@link GitHub}.
  *
  * @since 1.59
  */
@@ -30,6 +30,7 @@ public class GitHubBuilder {
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
+    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
 
     public GitHubBuilder() {
     }
@@ -178,6 +179,10 @@ public class GitHubBuilder {
         this.rateLimitHandler = handler;
         return this;
     }
+    public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
+        this.abuseLimitHandler = handler;
+        return this;
+    }
 
     /**
      * Configures {@linkplain #withConnector(HttpConnector) connector}
@@ -193,6 +198,6 @@ public class GitHubBuilder {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
     }
 }

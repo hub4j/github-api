@@ -197,11 +197,6 @@ public class GHUser extends GHPerson {
     }
 
     @Override
-    public String toString() {
-        return "User:"+login;
-    }
-
-    @Override
     public int hashCode() {
         return login.hashCode();
     }
@@ -218,5 +213,10 @@ public class GHUser extends GHPerson {
     String getApiTailUrl(String tail) {
         if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
         return "/users/" + login + tail;
+    }
+
+    /*package*/ GHUser wrapUp(GitHub root) {
+        super.wrapUp(root);
+        return this;
     }
 }

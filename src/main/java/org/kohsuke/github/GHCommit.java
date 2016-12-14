@@ -2,12 +2,12 @@ package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,9 +42,17 @@ public class GHCommit {
             return author;
         }
 
+        public Date getAuthoredDate() {
+            return GitHub.parseDate(author.date);
+        }
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
+        }
+
+        public Date getCommitDate() {
+            return GitHub.parseDate(committer.date);
         }
 
         /**
@@ -63,6 +71,7 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
+        private String date;
     }
 
     public static class Stats {
@@ -102,7 +111,7 @@ public class GHCommit {
         }
 
         /**
-         * "modified", "added", or "deleted"
+         * "modified", "added", or "removed"
          */
         public String getStatus() {
             return status;
@@ -171,14 +180,16 @@ public class GHCommit {
         String login;
     }
 
-    String url,sha;
+    String url,html_url,sha;
     List<File> files;
     Stats stats;
     List<Parent> parents;
     User author,committer;
 
 
-    public ShortInfo getCommitShortInfo() {
+    public ShortInfo getCommitShortInfo() throws IOException {
+        if (commit==null)
+            populate();
         return commit;
     }
 
@@ -211,6 +222,13 @@ public class GHCommit {
     public int getLinesDeleted() throws IOException {
         populate();
         return stats.deletions;
+    }
+
+    /**
+     *  URL of this commit like "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
+     */
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     /**
@@ -263,8 +281,27 @@ public class GHCommit {
         return resolveUser(author);
     }
 
+    /**
+     * Gets the date the change was authored on.
+     * @return the date the change was authored on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getAuthoredDate() throws IOException {
+        return getCommitShortInfo().getAuthoredDate();
+    }
+
     public GHUser getCommitter() throws IOException {
         return resolveUser(committer);
+    }
+
+    /**
+     * Gets the date the change was committed on.
+     *
+     * @return the date the change was committed on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getCommitDate() throws IOException {
+        return getCommitShortInfo().getCommitDate();
     }
 
     private GHUser resolveUser(User author) throws IOException {

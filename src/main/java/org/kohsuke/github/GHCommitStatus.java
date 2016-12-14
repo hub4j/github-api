@@ -1,8 +1,6 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 
 /**
  * Represents a status of a commit.
@@ -10,6 +8,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getLastCommitStatus(String)
  * @see GHCommit#getLastStatus()
+ * @see GHRepository#createCommitStatus(String, GHCommitState, String, String)
  */
 public class GHCommitStatus extends GHObject {
     String state;

@@ -78,7 +78,7 @@ public class GHContent {
      */
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
+        return new String(Base64.decodeBase64(getEncodedContent()));
     }
 
     /**
@@ -115,7 +115,8 @@ public class GHContent {
      * Retrieves the actual content stored here.
      */
     public InputStream read() throws IOException {
-        return new Requester(root).asStream(getDownloadUrl());
+        // if the download link is encoded with a token on the query string, the default behavior of POST will fail
+        return new Requester(root).method("GET").asStream(getDownloadUrl());
     }
 
     /**
@@ -178,7 +179,7 @@ public class GHContent {
     }
 
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
-        String encodedContent = DatatypeConverter.printBase64Binary(newContentBytes);
+        String encodedContent = Base64.encodeBase64String(newContentBytes);
 
         Requester requester = new Requester(root)
             .with("path", path)

@@ -29,11 +29,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Represents an issue on GitHub.
@@ -44,16 +48,18 @@ import java.util.Locale;
  * @see GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-public class GHIssue extends GHObject {
+public class GHIssue extends GHObject implements Reactable{
     GitHub root;
     GHRepository owner;
     
     // API v3
-    protected GHUser assignee;
+    protected GHUser assignee;  // not sure what this field is now that 'assignees' exist
+    protected GHUser[] assignees;
     protected String state;
     protected int number;
     protected String closed_at;
     protected int comments;
+    @SkipFromToString
     protected String body;
     // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
     protected List<Label> labels;
@@ -78,6 +84,7 @@ public class GHIssue extends GHObject {
     /*package*/ GHIssue wrap(GitHub root) {
         this.root = root;
         if(assignee != null) assignee.wrapUp(root);
+        if(assignees!=null)    GHUser.wrap(assignees,root);
         if(user != null) user.wrapUp(root);
         if(closed_by != null) closed_by.wrapUp(root);
         return this;
@@ -184,7 +191,7 @@ public class GHIssue extends GHObject {
     }
 
     public void assignTo(GHUser user) throws IOException {
-        editIssue("assignee", user.getLogin());
+        setAssignees(user);
     }
 
     public void setLabels(String... labels) throws IOException {
@@ -216,6 +223,63 @@ public class GHIssue extends GHObject {
         };
     }
 
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
+                    }
+                };
+            }
+        };
+    }
+
+    public void addAssignees(GHUser... assignees) throws IOException {
+        addAssignees(Arrays.asList(assignees));
+    }
+
+    public void addAssignees(Collection<GHUser> assignees) throws IOException {
+        List<String> names = toLogins(assignees);
+        root.retrieve().method("POST").with("assignees",names).to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    public void setAssignees(GHUser... assignees) throws IOException {
+        setAssignees(Arrays.asList(assignees));
+    }
+
+    public void setAssignees(Collection<GHUser> assignees) throws IOException {
+        editIssue("assignees",toLogins(assignees));
+    }
+
+    public void removeAssignees(GHUser... assignees) throws IOException {
+        removeAssignees(Arrays.asList(assignees));
+    }
+
+    public void removeAssignees(Collection<GHUser> assignees) throws IOException {
+        List<String> names = toLogins(assignees);
+        root.retrieve().method("DELETE").with("assignees",names).inBody().to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    private List<String> toLogins(Collection<GHUser> assignees) {
+        List<String> names = new ArrayList<String>(assignees.size());
+        for (GHUser a : assignees) {
+            names.add(a.getLogin());
+        }
+        return names;
+    }
+
     protected String getApiRoute() {
         return getIssuesApiRoute();
     }
@@ -227,7 +291,11 @@ public class GHIssue extends GHObject {
     public GHUser getAssignee() {
         return assignee;
     }
-    
+
+    public List<GHUser> getAssignees() {
+        return Collections.unmodifiableList(Arrays.asList(assignees));
+    }
+
     /**
      * User who submitted the issue.
      */

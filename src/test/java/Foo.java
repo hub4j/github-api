@@ -1,4 +1,5 @@
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHRepository.Contributor;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 
@@ -9,11 +10,10 @@ import java.util.Collection;
  */
 public class Foo {
     public static void main(String[] args) throws Exception {
-        Collection<GHRepository> lst = GitHub.connect().getUser("kohsuke").getRepositories().values();
-        for (GHRepository r : lst) {
-            System.out.println(r.getName());
+        GitHub gh = GitHub.connect();
+        for (Contributor c : gh.getRepository("kohsuke/yo").listContributors()) {
+            System.out.println(c);
         }
-        System.out.println(lst.size());
     }
 
     private static void testRateLimit() throws Exception {

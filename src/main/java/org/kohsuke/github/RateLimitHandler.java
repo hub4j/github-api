@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
  *
  * @author Kohsuke Kawaguchi
  * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler)
+ * @see AbuseLimitHandler
  */
 public abstract class RateLimitHandler {
     /**

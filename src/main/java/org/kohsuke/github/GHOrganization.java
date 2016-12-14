@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -24,6 +23,8 @@ public class GHOrganization extends GHPerson {
      *
      * @return
      *      Newly created repository.
+     * @deprecated
+     *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
     public GHRepository createRepository(String name, String description, String homepage, String team, boolean isPublic) throws IOException {
         GHTeam t = getTeams().get(team);
@@ -32,13 +33,25 @@ public class GHOrganization extends GHPerson {
         return createRepository(name, description, homepage, t, isPublic);
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
+     */
     public GHRepository createRepository(String name, String description, String homepage, GHTeam team, boolean isPublic) throws IOException {
         if (team==null)
             throw new IllegalArgumentException("Invalid team");
-        // such API doesn't exist, so fall back to HTML scraping
-        return new Requester(root)
-                .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic).with("team_id",team.getId()).to("/orgs/"+login+"/repos", GHRepository.class).wrap(root);
+        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).team(team).create();
+    }
+
+    /**
+     * Starts a builder that creates a new repository.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
+     * to finally createa repository.
+     */
+    public GHCreateRepositoryBuilder createRepository(String name) throws IOException {
+        return new GHCreateRepositoryBuilder(root,"/orgs/"+login+"/repos",name);
     }
 
     /**
@@ -75,6 +88,17 @@ public class GHOrganization extends GHPerson {
     public GHTeam getTeamByName(String name) throws IOException {
         for (GHTeam t : listTeams()) {
             if(t.getName().equals(name))
+                return t;
+        }
+        return null;
+    }
+
+    /**
+     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
+     */
+    public GHTeam getTeamBySlug(String slug) throws IOException {
+        for (GHTeam t : listTeams()) {
+            if(t.getSlug().equals(slug))
                 return t;
         }
         return null;
@@ -185,7 +209,7 @@ public class GHOrganization extends GHPerson {
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
-        return createTeam(name,p, Arrays.asList(repositories));
+        return createTeam(name, p, Arrays.asList(repositories));
     }
 
     /**
@@ -196,7 +220,7 @@ public class GHOrganization extends GHPerson {
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
-        for (GHRepository repository : listRepositories()) {
+        for (GHRepository repository : listRepositories(100)) {
             repository.wrap(root);
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {

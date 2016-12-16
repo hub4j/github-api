@@ -2,8 +2,7 @@
   "action": "created",
   "milestone": {
     "url": "https://api.github.com/repos/baxterandthehackers/public-repo/milestones/3",
-    "html_url": "https://github.com/baxterandthehackers/public-repo/milestones/Test%20milestone%20creation%20webhook
-    %20from%20command%20line2",
+    "html_url": "https://github.com/baxterandthehackers/public-repo/milestones/Test%20milestone%20creation%20webhook%20from%20command%20line2",
     "labels_url": "https://api.github.com/repos/baxterandthehackers/public-repo/milestones/3/labels",
     "id": 2055681,
     "number": 3,
@@ -96,8 +95,7 @@
     "issues_url": "https://api.github.com/repos/baxterandthehackers/public-repo/issues{/number}",
     "pulls_url": "https://api.github.com/repos/baxterandthehackers/public-repo/pulls{/number}",
     "milestones_url": "https://api.github.com/repos/baxterandthehackers/public-repo/milestones{/number}",
-    "notifications_url": "https://api.github.com/repos/baxterandthehackers/public-repo/notifications{?since,all,
-    participating}",
+    "notifications_url": "https://api.github.com/repos/baxterandthehackers/public-repo/notifications{?since,all,participating}",
     "labels_url": "https://api.github.com/repos/baxterandthehackers/public-repo/labels{/name}",
     "releases_url": "https://api.github.com/repos/baxterandthehackers/public-repo/releases{/id}",
     "deployments_url": "https://api.github.com/repos/baxterandthehackers/public-repo/deployments",

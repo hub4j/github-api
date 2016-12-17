@@ -10,6 +10,7 @@ import java.util.List;
  * https://developer.github.com/v3/git/trees/
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
+ * @see GHCommit#getTree()
  * @see GHRepository#getTree(String)
  * @see GHTreeEntry#asTree()
  */
@@ -33,6 +34,19 @@ public class GHTree {
      */
     public List<GHTreeEntry> getTree() {
         return Collections.unmodifiableList(Arrays.asList(tree));
+    }
+
+    /**
+     * Finds a tree entry by its name.
+     *
+     * IOW, find a directory entry by a file name.
+     */
+    public GHTreeEntry getEntry(String path) {
+        for (GHTreeEntry e : tree) {
+            if (e.getPath().equals(path))
+                return e;
+        }
+        return null;
     }
 
     /**

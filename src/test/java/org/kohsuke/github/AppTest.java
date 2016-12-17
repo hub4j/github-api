@@ -363,6 +363,11 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertEquals(48,f.getLinesChanged());
         assertEquals("modified",f.getStatus());
         assertEquals("changelog.html", f.getFileName());
+
+        // walk the tree
+        GHTree t = commit.getTree();
+        assertThat(IOUtils.toString(t.getEntry("todo.txt").readAsBlob()), containsString("executor rendering"));
+        assertNotNull(t.getEntry("war").asTree());
     }
 
     @Test

@@ -37,6 +37,12 @@ public class GHCommit {
         
         private int comment_count;
 
+        static class Tree {
+            String sha;
+        }
+
+        private Tree tree;
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
@@ -222,6 +228,13 @@ public class GHCommit {
     public int getLinesDeleted() throws IOException {
         populate();
         return stats.deletions;
+    }
+
+    /**
+     * Use this method to walk the tree
+     */
+    public GHTree getTree() throws IOException {
+        return owner.getTree(getCommitShortInfo().tree.sha);
     }
 
     /**

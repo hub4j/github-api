@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
@@ -818,11 +819,28 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Obtains the metadata & the content of a blob.
+     *
+     * <p>
+     * This method retrieves the whole content in memory, so beware when you are dealing with large BLOB.
+     *
      * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
+     * @see #readBlob(String)
      */
     public GHBlob getBlob(String blobSha) throws IOException {
         String target = getApiTailUrl("git/blobs/" + blobSha);
         return root.retrieve().to(target, GHBlob.class);
+    }
+
+    /**
+     * Reads the content of a blob as a stream for better efficiency.
+     *
+     * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
+     * @see #getBlob(String)
+     */
+    public InputStream readBlob(String blobSha) throws IOException {
+        String target = getApiTailUrl("git/blobs/" + blobSha);
+        return root.retrieve().withHeader("Accept","application/vnd.github.VERSION.raw").asStream(target);
     }
 
     /**

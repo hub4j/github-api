@@ -213,7 +213,7 @@ public class GHPullRequest extends GHIssue {
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return new PagedIterable<GHPullRequestFileDetail>() {
             public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiURL()),
+                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiRoute()),
                         GHPullRequestFileDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestFileDetail[] page) {
@@ -247,7 +247,7 @@ public class GHPullRequest extends GHIssue {
         return new PagedIterable<GHPullRequestCommitDetail>() {
             public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-                        String.format("%s/commits", getApiURL()),
+                        String.format("%s/commits", getApiRoute()),
                         GHPullRequestCommitDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {

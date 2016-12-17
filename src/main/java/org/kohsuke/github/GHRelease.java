@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang.ObjectUtils.defaultIfNull;
 
 /**
  * Release in a github repository.
@@ -17,6 +18,7 @@ import static java.lang.String.format;
  * @see GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
+
     GitHub root;
     GHRepository owner;
 
@@ -117,18 +119,23 @@ public class GHRelease extends GHObject {
     }
 
     /**
+     * upload the release using upload URL in {@link upload_url} field.
+     *
      * Because github relies on SNI (http://en.wikipedia.org/wiki/Server_Name_Indication) this method will only work on
      * Java 7 or greater.  Options for fixing this for earlier JVMs can be found here
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
      * handling of the HTTP requests to github's API.
      *
+     * @param file file to upload
+     * @param contentType content type
+     * @return instance of GHAsset uploaded
      * @throws IOException
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 
-        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""), getId(), file.getName());
+        String url = format(upload_url.replace("{?name}", "?name=%s"), file.getName());
+
         return builder.contentType(contentType)
                 .with(new FileInputStream(file))
                 .to(url, GHAsset.class).wrap(this);

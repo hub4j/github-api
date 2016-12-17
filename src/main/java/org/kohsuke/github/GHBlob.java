@@ -10,6 +10,7 @@ import java.net.URL;
 /**
  * @author Kanstantsin Shautsou
  * @author Kohsuke Kawaguchi
+ * @see GHTreeEntry#asBlob()
  * @see GHRepository#getBlob(String)
  * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
  */

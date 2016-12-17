@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -69,5 +71,38 @@ public class GHTreeEntry {
      */
     public URL getUrl() {
         return GitHub.parseURL(url);
+    }
+
+    /**
+     * If this tree entry represents a file, then return its information.
+     * Otherwise null.
+     */
+    public GHBlob asBlob() throws IOException {
+        if (type.equals("blob"))
+            return tree.repo.getBlob(sha);
+        else
+            return null;
+    }
+
+    /**
+     * If this tree entry represents a file, then return its content.
+     * Otherwise null.
+     */
+    public InputStream readAsBlob() throws IOException {
+        if (type.equals("blob"))
+            return tree.repo.readBlob(sha);
+        else
+            return null;
+    }
+
+    /**
+     * If this tree entry represents a directory, then return it.
+     * Otherwise null.
+     */
+    public GHTree asTree() throws IOException {
+        if (type.equals("tree"))
+            return tree.repo.getTree(sha);
+        else
+            return null;
     }
 }

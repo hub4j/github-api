@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHRepository#getTree(String)
+ * @see GHTreeEntry#asTree()
  */
 public class GHTree {
     /* package almost final */GHRepository repo;

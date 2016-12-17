@@ -449,7 +449,6 @@ public class GHRepository extends GHObject {
      * Lists up the collaborators on this repository.
      *
      * @return Users
-     * @throws IOException
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
         return listUsers("collaborators");
@@ -818,7 +817,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Obtains the metadata & the content of a blob.
+     * Obtains the metadata &amp; the content of a blob.
      *
      * <p>
      * This method retrieves the whole content in memory, so beware when you are dealing with large BLOB.

@@ -33,7 +33,6 @@ public class GHReleaseBuilder {
      *
      * @param commitish Defaults to the repository’s default branch (usually "master"). Unused if the Git tag
      *                  already exists.
-     * @return
      */
     public GHReleaseBuilder commitish(String commitish) {
         if (commitish != null) {

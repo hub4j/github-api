@@ -416,7 +416,6 @@ public class GitHub {
      *
      * @param key The license key provided from the API
      * @return The license details
-     * @throws IOException
      * @see GHLicense#getKey()
      */
     @Preview @Deprecated

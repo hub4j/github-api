@@ -30,7 +30,6 @@ public class GHTree {
 
     /**
      * Return an array of entries of the trees
-     * @return
      */
     public List<GHTreeEntry> getTree() {
         return Collections.unmodifiableList(Arrays.asList(tree));

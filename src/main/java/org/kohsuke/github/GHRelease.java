@@ -121,9 +121,7 @@ public class GHRelease extends GHObject {
      * Java 7 or greater.  Options for fixing this for earlier JVMs can be found here
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
      * handling of the HTTP requests to github's API.
-     *
-     * @throws IOException
-     */
+         */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 

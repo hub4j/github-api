@@ -505,7 +505,6 @@ public class GHRepository extends GHObject {
     }
 
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
-        verifyMine();
         for (GHUser user : users) {
             new Requester(root).method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
         }
@@ -1117,11 +1116,6 @@ public class GHRepository extends GHObject {
 //    public List<GHPullRequest> getPullRequests() throws IOException {
 //        return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
 //    }
-
-    private void verifyMine() throws IOException {
-        if (!root.login.equals(getOwnerName()))
-            throw new IOException("Operation not applicable to a repository owned by someone else: " + getOwnerName());
-    }
 
     /**
      * Returns a set that represents the post-commit hook URLs.

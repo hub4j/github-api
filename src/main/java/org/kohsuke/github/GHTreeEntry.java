@@ -10,6 +10,8 @@ import java.net.URL;
  * @see GHTree
  */
 public class GHTreeEntry {
+    /* package almost final */GHTree tree;
+
     private String path, mode, type, sha, url;
     private long size;
 

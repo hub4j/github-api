@@ -13,7 +13,7 @@ import java.util.List;
  * @see GHRepository#getTree(String)
  */
 public class GHTree {
-    /* package almost final */GitHub root;
+    /* package almost final */GHRepository repo;
 
     private boolean truncated;
     private String sha, url;
@@ -50,8 +50,11 @@ public class GHTree {
         return GitHub.parseURL(url);
     }
 
-    /* package */GHTree wrap(GitHub root) {
-        this.root = root;
+    /* package */GHTree wrap(GHRepository repo) {
+        this.repo = repo;
+        for (GHTreeEntry e : tree) {
+            e.tree = this;
+        }
         return this;
     }
 

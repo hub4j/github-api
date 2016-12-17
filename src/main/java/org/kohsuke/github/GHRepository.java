@@ -800,7 +800,7 @@ public class GHRepository extends GHObject {
      */
     public GHTree getTree(String sha) throws IOException {
         String url = String.format("/repos/%s/%s/git/trees/%s", getOwnerName(), name, sha);
-        return root.retrieve().to(url, GHTree.class).wrap(root);
+        return root.retrieve().to(url, GHTree.class).wrap(this);
     }
 
     /**
@@ -815,7 +815,7 @@ public class GHRepository extends GHObject {
      */
     public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
         String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", getOwnerName(), name, sha, recursive);
-        return root.retrieve().to(url, GHTree.class).wrap(root);
+        return root.retrieve().to(url, GHTree.class).wrap(this);
     }
 
     /**

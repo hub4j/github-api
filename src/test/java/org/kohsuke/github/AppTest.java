@@ -12,6 +12,7 @@ import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
@@ -901,6 +902,26 @@ public class AppTest extends AbstractGitHubApiTestBase {
                     m.getState(),
                     m.getRole());
         }
+    }
+
+    @Test
+    public void blob() throws Exception {
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
+
+        assertBlobContent(r.readBlob(sha1));
+
+        GHBlob blob = r.getBlob(sha1);
+        assertBlobContent(blob.read());
+        assertThat(blob.getSha(),is("a12243f2fc5b8c2ba47dd677d0b0c7583539584d"));
+        assertThat(blob.getSize(),is(1104L));
+    }
+
+    private void assertBlobContent(InputStream is) throws Exception {
+        String content = new String(IOUtils.toByteArray(is),"UTF-8");
+        assertThat(content,containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
+        assertThat(content,containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
+        assertThat(content.length(),is(1104));
     }
 
     private void kohsuke() {

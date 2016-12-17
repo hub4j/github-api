@@ -54,14 +54,14 @@ public class GHTreeEntry {
 
 
     /**
-     * SHA1 of this object.
+     * SHA1 of this blob object.
      */
     public String getSha() {
         return sha;
     }
 
     /**
-     * API URL to this Git data, such as
+     * API URL to this Git blob data, such as
      * https://api.github.com/repos/jenkinsci
      * /jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
      */

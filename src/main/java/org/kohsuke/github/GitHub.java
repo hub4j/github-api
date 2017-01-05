@@ -259,6 +259,10 @@ public class GitHub {
         return connector;
     }
 
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
     /**
      * Sets the custom connector used to make requests to GitHub.
      */

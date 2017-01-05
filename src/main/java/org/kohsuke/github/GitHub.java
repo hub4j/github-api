@@ -50,6 +50,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import java.util.logging.Level;
+import javax.annotation.CheckForNull;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 
@@ -89,6 +91,9 @@ public class GitHub {
     /*package*/ final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector = HttpConnector.DEFAULT;
+
+    private final Object headerRateLimitLock = new Object();
+    private GHRateLimit headerRateLimit = null;
 
     /**
      * Creates a client API root object.
@@ -298,6 +303,28 @@ public class GitHub {
             r.reset = new Date(System.currentTimeMillis() + 1 * hours );
             return r;
         }
+    }
+
+    /*package*/ void updateRateLimit(@Nonnull GHRateLimit observed) {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit == null
+                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
+                    || headerRateLimit.remaining > observed.remaining) {
+                headerRateLimit = observed;
+                LOGGER.log(Level.INFO, "Rate limit now: {0}", headerRateLimit);
+            }
+        }
+    }
+
+    /**
+     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit
+     * (for example GitHub Enterprise) or if no requests have been made.
+     *
+     * @return the most recentlt observed rate limit data or {@code null}.
+     */
+    @CheckForNull
+    public GHRateLimit lastRateLimit() {
+        return headerRateLimit;
     }
 
     /**

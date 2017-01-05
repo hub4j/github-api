@@ -25,8 +25,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.io.IOUtils;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +40,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -49,16 +48,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-
 import javax.annotation.WillClose;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import static java.util.Arrays.asList;
 import static java.util.logging.Level.FINE;
-import static org.kohsuke.github.GitHub.*;
+import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -281,6 +282,8 @@ class Requester {
                 return result;
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
             }
         }
     }
@@ -299,6 +302,8 @@ class Requester {
                 return uc.getResponseCode();
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
             }
         }
     }
@@ -313,6 +318,59 @@ class Requester {
                 return wrapStream(uc.getInputStream());
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
+            }
+        }
+    }
+
+    private void noteRateLimit(String tailApiUrl) {
+        if ("/rate_limit".equals(tailApiUrl)) {
+            // the rate_limit API is "free"
+            return;
+        }
+        if (tailApiUrl.startsWith("/search")) {
+            // the search API uses a different rate limit
+            return;
+        }
+        String limit = uc.getHeaderField("X-RateLimit-Limit");
+        if (StringUtils.isBlank(limit)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        String remaining = uc.getHeaderField("X-RateLimit-Remaining");
+        if (StringUtils.isBlank(remaining)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        String reset = uc.getHeaderField("X-RateLimit-Reset");
+        if (StringUtils.isBlank(reset)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        GHRateLimit observed = new GHRateLimit();
+        try {
+            observed.limit = Integer.parseInt(limit);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
+            }
+            return;
+        }
+        try {
+            observed.remaining = Integer.parseInt(remaining);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
+            }
+            return;
+        }
+        try {
+            observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
+            root.updateRateLimit(observed);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
             }
         }
     }
@@ -382,7 +440,7 @@ class Requester {
         }
 
         try {
-            return new PagingIterator<T>(type, root.getApiURL(s.toString()));
+            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
         } catch (IOException e) {
             throw new Error(e);
         }
@@ -391,6 +449,7 @@ class Requester {
     class PagingIterator<T> implements Iterator<T> {
 
         private final Class<T> type;
+        private final String tailApiUrl;
 
         /**
          * The next batch to be returned from {@link #next()}.
@@ -402,9 +461,10 @@ class Requester {
          */
         private URL url;
 
-        PagingIterator(Class<T> type, URL url) {
-            this.url = url;
+        PagingIterator(Class<T> type, String tailApiUrl, URL url) {
             this.type = type;
+            this.tailApiUrl = tailApiUrl;
+            this.url = url;
         }
 
         public boolean hasNext() {
@@ -438,6 +498,8 @@ class Requester {
                         return;
                     } catch (IOException e) {
                         handleApiError(e);
+                    } finally {
+                        noteRateLimit(tailApiUrl);
                     }
                 }
             } catch (IOException e) {

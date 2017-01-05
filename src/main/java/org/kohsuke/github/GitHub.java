@@ -23,12 +23,10 @@
  */
 package org.kohsuke.github;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static java.util.logging.Level.FINE;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-import static org.kohsuke.github.Previews.DRAX;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,19 +47,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
-import javax.annotation.Nonnull;
-import java.util.logging.Logger;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.util.logging.Level.FINE;
+import static org.kohsuke.github.Previews.DRAX;
 
 /**
  * Root of the GitHub API.
@@ -94,6 +92,7 @@ public class GitHub {
 
     private final Object headerRateLimitLock = new Object();
     private GHRateLimit headerRateLimit = null;
+    private volatile GHRateLimit rateLimit = null;
 
     /**
      * Creates a client API root object.
@@ -296,16 +295,16 @@ public class GitHub {
      */
     public GHRateLimit getRateLimit() throws IOException {
         try {
-            return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
             // see issue #78
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
-            long hours = 1000L * 60 * 60;
-            r.reset = new Date(System.currentTimeMillis() + 1 * hours );
-            return r;
+            long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
+            r.reset = new Date((System.currentTimeMillis() + hour) / 1000L );
+            return rateLimit = r;
         }
     }
 
@@ -324,11 +323,33 @@ public class GitHub {
      * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit
      * (for example GitHub Enterprise) or if no requests have been made.
      *
-     * @return the most recentlt observed rate limit data or {@code null}.
+     * @return the most recently observed rate limit data or {@code null}.
      */
     @CheckForNull
     public GHRateLimit lastRateLimit() {
-        return headerRateLimit;
+        synchronized (headerRateLimitLock) {
+            return headerRateLimit;
+        }
+    }
+
+    /**
+     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     *
+     * @return the current rate limit data.
+     * @throws IOException if we couldn't get the current rate limit data.
+     */
+    @Nonnull
+    public GHRateLimit rateLimit() throws IOException {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit != null) {
+                return headerRateLimit;
+            }
+        }
+        GHRateLimit rateLimit = this.rateLimit;
+        if (rateLimit == null || rateLimit.getResetDate().getTime() < System.currentTimeMillis()) {
+            rateLimit = getRateLimit();
+        }
+        return rateLimit;
     }
 
     /**

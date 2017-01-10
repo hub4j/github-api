@@ -24,11 +24,13 @@
 
 package org.kohsuke.github;
 
+import java.util.Locale;
+
 /**
  * Permission for a user in a repository.
  * @see <a href="https://developer.github.com/v3/repos/collaborators/#review-a-users-permission-level">API</a>
  */
-public class GHPermission {
+/*package*/ class GHPermission {
 
     private String permission;
     private GHUser user;
@@ -38,6 +40,10 @@ public class GHPermission {
      */
     public String getPermission() {
         return permission;
+    }
+
+    public GHPermissionType getPermissionType() {
+        return Enum.valueOf(GHPermissionType.class, permission.toUpperCase(Locale.ENGLISH));
     }
 
     public GHUser getUser() {

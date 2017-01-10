@@ -1,13 +1,17 @@
 package org.kohsuke.github;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.BranchProtection.RequiredStatusChecks;
+import static org.kohsuke.github.Previews.LOKI;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.kohsuke.github.Previews.LOKI;
+import org.kohsuke.github.BranchProtection.RequiredStatusChecks;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A branch in a repository.
@@ -22,6 +26,10 @@ public class GHBranch {
 
     private String name;
     private Commit commit;
+    @JsonProperty("protected")
+    private boolean protection;
+    private String protection_url;
+
 
     public static class Commit {
         String sha;
@@ -44,6 +52,23 @@ public class GHBranch {
     public String getName() {
         return name;
     }
+
+    /**
+     * Returns true if the push to this branch is restricted via branch protection.
+     */
+    @Preview @Deprecated
+    public boolean isProtected() {
+        return protection;
+    }
+
+    /**
+     * Returns API URL that deals with the protection of this branch.
+     */
+    @Preview @Deprecated
+    public URL getProtectionUrl() {
+        return GitHub.parseURL(protection_url);
+    }
+
 
     /**
      * The commit that this branch currently points to.

@@ -660,11 +660,16 @@ class Requester {
         InputStream es = wrapStream(uc.getErrorStream());
         try {
             if (es!=null) {
+                String error = IOUtils.toString(es, "UTF-8");
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
-                    throw (IOException) new FileNotFoundException(IOUtils.toString(es, "UTF-8")).initCause(e);
-                } else
-                    throw (IOException) new IOException(IOUtils.toString(es, "UTF-8")).initCause(e);
+                    throw (IOException) new FileNotFoundException(error).initCause(e);
+                } else if (e instanceof HttpException) {
+                    HttpException http = (HttpException) e;
+                    throw (IOException) new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
+                } else {
+                    throw (IOException) new IOException(error).initCause(e);
+                }
             } else
                 throw e;
         } finally {

@@ -481,6 +481,29 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Obtain permission for a given user in this repository.
+     * @param user a {@link GHUser#getLogin}
+     * @throws FileNotFoundException under some conditions (e.g., private repo you can see but are not an admin of); treat as unknown
+     * @throws HttpException with a 403 under other conditions (e.g., public repo you have no special rights to); treat as unknown
+     */
+    @Deprecated @Preview
+    public GHPermissionType getPermission(String user) throws IOException {
+        GHPermission perm = root.retrieve().withPreview(KORRA).to(getApiTailUrl("collaborators/" + user + "/permission"), GHPermission.class);
+        perm.wrapUp(root);
+        return perm.getPermissionType();
+    }
+
+    /**
+     * Obtain permission for a given user in this repository.
+     * @throws FileNotFoundException under some conditions (e.g., private repo you can see but are not an admin of); treat as unknown
+     * @throws HttpException with a 403 under other conditions (e.g., public repo you have no special rights to); treat as unknown
+     */
+    @Deprecated @Preview
+    public GHPermissionType getPermission(GHUser u) throws IOException {
+        return getPermission(u.getLogin());
+    }
+
+    /**
      * If this repository belongs to an organization, return a set of teams.
      */
     public Set<GHTeam> getTeams() throws IOException {

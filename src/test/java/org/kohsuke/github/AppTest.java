@@ -173,14 +173,6 @@ public class AppTest extends AbstractGitHubApiTestBase {
         return repository;
     }
 
-    private GHUser getUser() {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
     @Test
     public void testListIssues() throws IOException {
         GHUser u = getUser();
@@ -927,10 +919,5 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertThat(content,containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
         assertThat(content,containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
         assertThat(content.length(),is(1104));
-    }
-
-    private void kohsuke() {
-        String login = getUser().getLogin();
-        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 }

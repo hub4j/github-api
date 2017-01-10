@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.kohsuke.randname.RandomNameGenerator;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -23,6 +25,19 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
         } else {
             gitHub = GitHubBuilder.fromCredentials().withRateLimitHandler(RateLimitHandler.FAIL).build();
         }
+    }
+
+    protected GHUser getUser() {
+        try {
+            return gitHub.getMyself();
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    protected void kohsuke() {
+        String login = getUser().getLogin();
+        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
     protected static final RandomNameGenerator rnd = new RandomNameGenerator();

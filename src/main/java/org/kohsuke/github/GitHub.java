@@ -314,7 +314,7 @@ public class GitHub {
                     || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
                     || headerRateLimit.remaining > observed.remaining) {
                 headerRateLimit = observed;
-                LOGGER.log(Level.INFO, "Rate limit now: {0}", headerRateLimit);
+                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }
         }
     }

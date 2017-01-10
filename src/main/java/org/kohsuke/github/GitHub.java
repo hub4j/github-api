@@ -303,7 +303,7 @@ public class GitHub {
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
             long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
-            r.reset = new Date((System.currentTimeMillis() + hour) / 1000L );
+            r.reset = new Date(System.currentTimeMillis() / 1000L + hour);
             return rateLimit = r;
         }
     }

@@ -58,7 +58,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import static java.util.Arrays.asList;
-import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.*;
 import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
@@ -352,16 +352,16 @@ class Requester {
         try {
             observed.limit = Integer.parseInt(limit);
         } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
             }
             return;
         }
         try {
             observed.remaining = Integer.parseInt(remaining);
         } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
             }
             return;
         }
@@ -369,8 +369,8 @@ class Requester {
             observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
             root.updateRateLimit(observed);
         } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
             }
         }
     }

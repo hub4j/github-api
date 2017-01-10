@@ -486,8 +486,9 @@ public class GHRepository extends GHObject {
      * @throws FileNotFoundException under some conditions (e.g., private repo you can see but are not an admin of); treat as unknown
      * @throws HttpException with a 403 under other conditions (e.g., public repo you have no special rights to); treat as unknown
      */
+    @Deprecated @Preview
     public GHPermissionType getPermission(String user) throws IOException {
-        GHPermission perm = root.retrieve().withHeader("Accept", "application/vnd.github.korra-preview").to(getApiTailUrl("collaborators/" + user + "/permission"), GHPermission.class);
+        GHPermission perm = root.retrieve().withPreview(KORRA).to(getApiTailUrl("collaborators/" + user + "/permission"), GHPermission.class);
         perm.wrapUp(root);
         return perm.getPermissionType();
     }
@@ -497,6 +498,7 @@ public class GHRepository extends GHObject {
      * @throws FileNotFoundException under some conditions (e.g., private repo you can see but are not an admin of); treat as unknown
      * @throws HttpException with a 403 under other conditions (e.g., public repo you have no special rights to); treat as unknown
      */
+    @Deprecated @Preview
     public GHPermissionType getPermission(GHUser u) throws IOException {
         return getPermission(u.getLogin());
     }

@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import static org.kohsuke.github.Previews.LOKI;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -51,13 +52,21 @@ public class GHBranch {
     public String getName() {
         return name;
     }
-    
+
+    /**
+     * Returns true if the push to this branch is restricted via branch protection.
+     */
+    @Preview @Deprecated
     public boolean isProtected() {
-      return protection;
+        return protection;
     }
 
-    public String getProtection_url() {
-      return protection_url;
+    /**
+     * Returns API URL that deals with the protection of this branch.
+     */
+    @Preview @Deprecated
+    public URL getProtectionUrl() {
+        return GitHub.parseURL(protection_url);
     }
 
 

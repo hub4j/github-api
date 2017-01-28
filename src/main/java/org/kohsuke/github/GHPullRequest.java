@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.POLARIS;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -277,7 +279,7 @@ public class GHPullRequest extends GHIssue {
      *      Commit message. If null, the default one will be used.
      */
     public void merge(String msg) throws IOException {
-        merge(msg,null);
+        merge(msg,(String)null);
     }
 
     /**
@@ -293,6 +295,27 @@ public class GHPullRequest extends GHIssue {
     public void merge(String msg, String sha) throws IOException {
         new Requester(root).method("PUT").with("commit_message",msg).with("sha",sha).to(getApiRoute()+"/merge");
     }
+
+    /**
+     * Merge this pull request, using the specified merge method.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     * @param method
+     *      SHA that pull request head must match to allow merge.
+     */
+    @Preview @Deprecated
+    public void merge(String msg, MergeMethod method) throws IOException {
+        new Requester(root).method("PUT")
+		.withPreview(POLARIS)
+		.with("commit_message",msg)
+		.with("merge_method",method)
+		.to(getApiRoute()+"/merge");
+    }
+
+    public enum MergeMethod{ MERGE, SQUASH, REBASE }
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {

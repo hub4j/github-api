@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;

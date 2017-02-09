@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**

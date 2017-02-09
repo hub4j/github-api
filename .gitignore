@@ -3,3 +3,6 @@ target
 *.iml
 *.ipr
 *.iws
+/.project
+/.classpath
+/.settings

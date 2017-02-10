@@ -3,14 +3,15 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.apache.commons.lang.reflect.FieldUtils;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
@@ -18,12 +19,20 @@ import java.util.Date;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public abstract class GHObject {
+    // not data but information related to data from responce
+    protected Map<String, List<String>> responseHeaderFields;
+
     protected String url;
     protected int id;
     protected String created_at;
     protected String updated_at;
 
     /*package*/ GHObject() {
+    }
+
+    @CheckForNull
+    public Map<String, List<String>> getResponseHeaderFields() {
+        return responseHeaderFields;
     }
 
     /**

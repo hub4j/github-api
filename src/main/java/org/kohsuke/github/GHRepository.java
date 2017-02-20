@@ -300,7 +300,11 @@ public class GHRepository extends GHObject {
     }
     
     public GHRelease getLatestRelease() throws IOException {
-		return root.retrieve().to(getApiTailUrl("releases/latest"), GHRelease.class).wrap(this);
+        try {
+            return root.retrieve().to(getApiTailUrl("releases/latest"), GHRelease.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null; // no latest release
+        }
     }
 
     public PagedIterable<GHRelease> listReleases() throws IOException {

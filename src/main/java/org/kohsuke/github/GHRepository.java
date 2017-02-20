@@ -299,9 +299,9 @@ public class GHRepository extends GHObject {
         return listReleases().asList();
     }
     
-	public GHRelease latestRelease() throws IOException {
+    public GHRelease getLatestRelease() throws IOException {
 		return root.retrieve().to(getApiTailUrl("releases/latest"), GHRelease.class).wrap(this);
-	}
+    }
 
     public PagedIterable<GHRelease> listReleases() throws IOException {
         return new PagedIterable<GHRelease>() {

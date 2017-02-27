@@ -47,13 +47,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
@@ -703,8 +702,18 @@ public class GitHub {
                 Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
                 X-Content-Type-Options: nosniff
              */
-            return uc.getResponseCode() == HTTP_UNAUTHORIZED
-                && uc.getHeaderField("X-GitHub-Media-Type") != null;
+            try {
+                return uc.getResponseCode() == HTTP_UNAUTHORIZED
+                        && uc.getHeaderField("X-GitHub-Media-Type") != null;
+            } finally {
+                // ensure that the connection opened by getResponseCode gets closed
+                try {
+                    IOUtils.closeQuietly(uc.getInputStream());
+                } catch (IOException ignore) {
+                    // ignore
+                }
+                IOUtils.closeQuietly(uc.getErrorStream());
+            }
         } catch (IOException e) {
             return false;
         }

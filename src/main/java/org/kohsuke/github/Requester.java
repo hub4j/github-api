@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -642,6 +641,24 @@ class Requester {
                         " handling exception " + e, e);
             throw e;
         }
+        InputStream es = wrapStream(uc.getErrorStream());
+        if (es != null) {
+            try {
+                String error = IOUtils.toString(es, "UTF-8");
+                if (e instanceof FileNotFoundException) {
+                    // pass through 404 Not Found to allow the caller to handle it intelligently
+                    e = (IOException) new FileNotFoundException(error).initCause(e);
+                } else if (e instanceof HttpException) {
+                    HttpException http = (HttpException) e;
+                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(),
+                            http.getUrl(), e);
+                } else {
+                    e = (IOException) new IOException(error).initCause(e);
+                }
+            } finally {
+                IOUtils.closeQuietly(es);
+            }
+        }
         if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
             throw e;
 
@@ -657,24 +674,7 @@ class Requester {
             return;
         }
 
-        InputStream es = wrapStream(uc.getErrorStream());
-        try {
-            if (es!=null) {
-                String error = IOUtils.toString(es, "UTF-8");
-                if (e instanceof FileNotFoundException) {
-                    // pass through 404 Not Found to allow the caller to handle it intelligently
-                    throw (IOException) new FileNotFoundException(error).initCause(e);
-                } else if (e instanceof HttpException) {
-                    HttpException http = (HttpException) e;
-                    throw (IOException) new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
-                } else {
-                    throw (IOException) new IOException(error).initCause(e);
-                }
-            } else
-                throw e;
-        } finally {
-            IOUtils.closeQuietly(es);
-        }
+        throw e;
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

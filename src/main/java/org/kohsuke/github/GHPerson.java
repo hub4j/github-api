@@ -26,6 +26,7 @@ public abstract class GHPerson extends GHObject {
     protected String location,blog,email,name,company;
     protected String html_url;
     protected int followers,following,public_repos,public_gists;
+    protected GHPermissions permissions;
 
     /*package*/ GHPerson wrapUp(GitHub root) {
         this.root = root;
@@ -250,5 +251,13 @@ public abstract class GHPerson extends GHObject {
     public int getFollowersCount() throws IOException {
         populate();
         return followers;
+    }
+
+    public GHPermissions getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(GHPermissions permissions) {
+        this.permissions = permissions;
     }
 }

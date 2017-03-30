@@ -44,6 +44,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private int position;
     private int originalPosition;
 
+    public static GHPullRequestReviewComment draft(String body, String path, int position) {
+        GHPullRequestReviewComment result = new GHPullRequestReviewComment();
+        result.body = body;
+        result.path = path;
+        result.position = position;
+        return result;
+    }
+
     /*package*/ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;

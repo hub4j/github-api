@@ -25,8 +25,12 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import javax.annotation.CheckForNull;
 
 /**
  * A pull request.
@@ -224,6 +228,27 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
+     * Retrieves all the reviews associated to this pull request.
+     */
+    public PagedIterable<GHPullRequestReview> listReviews() {
+        return new PagedIterable<GHPullRequestReview>() {
+            public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestReview>(root.retrieve()
+                        .withPreview("application/vnd.github.black-cat-preview+json")
+                        .asIterator(String.format("%s/reviews", getApiRoute()),
+                        GHPullRequestReview[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestReview[] page) {
+                        for (GHPullRequestReview r: page) {
+                            r.wrapUp(GHPullRequest.this);
+                        }
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
@@ -257,6 +282,34 @@ public class GHPullRequest extends GHIssue {
                 };
             }
         };
+    }
+
+    @Preview
+    @Deprecated
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            GHPullRequestReviewComment... comments)
+            throws IOException {
+        return createReview(body, event, Arrays.asList(comments));
+    }
+
+    @Preview
+    @Deprecated
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            List<GHPullRequestReviewComment> comments)
+            throws IOException {
+        if (event == null) {
+            event = GHPullRequestReviewState.PENDING;
+        }
+        List<DraftReviewComment> draftComments = new ArrayList<DraftReviewComment>(comments.size());
+        for (GHPullRequestReviewComment c : comments) {
+            draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), c.getPosition()));
+        }
+        return new Requester(root).method("POST")
+                .with("body", body)
+                //.with("event", event.name())
+                ._with("comments", draftComments)
+                .withPreview("application/vnd.github.black-cat-preview+json")
+                .to(getApiRoute() + "/reviews", GHPullRequestReview.class).wrapUp(this);
     }
 
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
@@ -298,6 +351,30 @@ public class GHPullRequest extends GHIssue {
         if (!fetchedIssueDetails) {
             new Requester(root).to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
+        }
+    }
+
+    private static class DraftReviewComment {
+        private String body;
+        private String path;
+        private int position;
+
+        public DraftReviewComment(String body, String path, int position) {
+            this.body = body;
+            this.path = path;
+            this.position = position;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public int getPosition() {
+            return position;
         }
     }
 }

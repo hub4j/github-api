@@ -720,6 +720,14 @@ public class GitHub {
     }
 
     /**
+     * Search commits.
+     */
+    @Preview @Deprecated
+    public GHCommitSearchBuilder searchCommits() {
+        return new GHCommitSearchBuilder(this);
+    }
+
+    /**
      * Search issues.
      */
     public GHIssueSearchBuilder searchIssues() {

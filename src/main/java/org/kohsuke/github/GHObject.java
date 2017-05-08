@@ -29,7 +29,7 @@ public abstract class GHObject {
     /**
      * When was this resource created?
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="createdAtStr")
+    //@WithBridgeMethods(value=String.class, adapterMethod="createdAtStr")
     public Date getCreatedAt() throws IOException {
         return GitHub.parseDate(created_at);
     }
@@ -42,7 +42,7 @@ public abstract class GHObject {
     /**
      * API URL of this object.
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="urlToString")
+    //@WithBridgeMethods(value=String.class, adapterMethod="urlToString")
     public URL getUrl() {
         return GitHub.parseURL(url);
     }
@@ -63,7 +63,7 @@ public abstract class GHObject {
     /**
      * Unique ID number of this resource.
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="intToString")
+    //@WithBridgeMethods(value=String.class, adapterMethod="intToString")
     public int getId() {
         return id;
     }

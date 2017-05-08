@@ -259,11 +259,29 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * {@inheritDoc}
+     * @deprecated Beware that this lists only <em>public</em> repositories. Probably you wanted to use {@link #listRepositories(int)} instead.
+     */
+    @Deprecated
+    @Override
+    public synchronized Map<String, GHRepository> getRepositories() throws IOException {
+        return super.getRepositories();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @deprecated Beware that this lists only <em>public</em> repositories. Probably you wanted to use {@link #listRepositories(int)} instead.
+     */
+    @Deprecated
+    @Override
+    public PagedIterable<GHRepository> listRepositories() {
+        return super.listRepositories();
+    }
+
+    /**
      * Lists up all the repositories using the specified page size.
      *
      * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
-     *
-     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {

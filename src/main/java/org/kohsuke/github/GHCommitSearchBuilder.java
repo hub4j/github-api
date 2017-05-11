@@ -1,6 +1,9 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Search commits.
@@ -104,8 +107,28 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
 
         @Override
         /*package*/ GHCommit[] getItems(GitHub root) {
+            for (GHCommit commit : items) {
+                String repoName = getRepoName(commit.url);
+                try {
+                    GHRepository repo = root.getRepository(repoName);
+                    commit.wrapUp(repo);
+                } catch (IOException ioe) {}
+            }
             return items;
         }
+    }
+    
+    /**
+     * @param commitUrl a commit URL
+     * @return the repo name ("username/reponame")
+     */
+    private static String getRepoName(String commitUrl) {
+        if (StringUtils.isBlank(commitUrl)) {
+            return null;
+        }
+        int indexOfUsername = (GitHub.GITHUB_URL + "/repos/").length();
+        String[] tokens = commitUrl.substring(indexOfUsername).split("/", 3);
+        return tokens[0] + '/' + tokens[1];
     }
 
     @Override

@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import static java.util.Arrays.asList;
+import java.util.logging.Level;
 import static java.util.logging.Level.*;
 import static org.kohsuke.github.GitHub.MAPPER;
 
@@ -579,6 +581,10 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
+        return parse(type, instance, 2);
+    }
+
+    private <T> T parse(Class<T> type, T instance, int timeouts) throws IOException {
         InputStreamReader r = null;
         int responseCode = -1;
         String responseMessage = null;
@@ -609,6 +615,10 @@ class Requester {
             // to preserve backward compatibility
             throw e;
         } catch (IOException e) {
+            if (e instanceof SocketTimeoutException && timeouts > 0) {
+                LOGGER.log(Level.INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
+                return parse(type, instance, timeouts - 1);
+            }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);

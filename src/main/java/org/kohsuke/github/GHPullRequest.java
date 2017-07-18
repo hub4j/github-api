@@ -23,8 +23,6 @@
  */
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.POLARIS;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -306,10 +304,8 @@ public class GHPullRequest extends GHIssue {
      * @param method
      *      SHA that pull request head must match to allow merge.
      */
-    @Preview @Deprecated
     public void merge(String msg, MergeMethod method) throws IOException {
         new Requester(root).method("PUT")
-		.withPreview(POLARIS)
 		.with("commit_message",msg)
 		.with("merge_method",method)
 		.to(getApiRoute()+"/merge");

@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,6 +58,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import static java.util.Arrays.asList;
+import java.util.logging.Level;
 import static java.util.logging.Level.*;
 import static org.kohsuke.github.GitHub.MAPPER;
 
@@ -580,6 +581,10 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
+        return parse(type, instance, 2);
+    }
+
+    private <T> T parse(Class<T> type, T instance, int timeouts) throws IOException {
         InputStreamReader r = null;
         int responseCode = -1;
         String responseMessage = null;
@@ -610,6 +615,10 @@ class Requester {
             // to preserve backward compatibility
             throw e;
         } catch (IOException e) {
+            if (e instanceof SocketTimeoutException && timeouts > 0) {
+                LOGGER.log(Level.INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
+                return parse(type, instance, timeouts - 1);
+            }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
@@ -642,6 +651,24 @@ class Requester {
                         " handling exception " + e, e);
             throw e;
         }
+        InputStream es = wrapStream(uc.getErrorStream());
+        if (es != null) {
+            try {
+                String error = IOUtils.toString(es, "UTF-8");
+                if (e instanceof FileNotFoundException) {
+                    // pass through 404 Not Found to allow the caller to handle it intelligently
+                    e = (IOException) new FileNotFoundException(error).initCause(e);
+                } else if (e instanceof HttpException) {
+                    HttpException http = (HttpException) e;
+                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(),
+                            http.getUrl(), e);
+                } else {
+                    e = (IOException) new IOException(error).initCause(e);
+                }
+            } finally {
+                IOUtils.closeQuietly(es);
+            }
+        }
         if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
             throw e;
 
@@ -657,24 +684,7 @@ class Requester {
             return;
         }
 
-        InputStream es = wrapStream(uc.getErrorStream());
-        try {
-            if (es!=null) {
-                String error = IOUtils.toString(es, "UTF-8");
-                if (e instanceof FileNotFoundException) {
-                    // pass through 404 Not Found to allow the caller to handle it intelligently
-                    throw (IOException) new FileNotFoundException(error).initCause(e);
-                } else if (e instanceof HttpException) {
-                    HttpException http = (HttpException) e;
-                    throw (IOException) new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
-                } else {
-                    throw (IOException) new IOException(error).initCause(e);
-                }
-            } else
-                throw e;
-        } finally {
-            IOUtils.closeQuietly(es);
-        }
+        throw e;
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

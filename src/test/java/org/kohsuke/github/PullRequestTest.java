@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +49,92 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         comment.delete();
         comments = p.listReviewComments().asList();
         assertTrue(comments.isEmpty());
+    }
+
+    @Test
+    public void testPullRequestReviews() throws Exception{
+        String name = rnd.next();
+        // Create PR
+        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        System.out.println(p.getUrl());
+        // At this present moment this should be empty
+        assertTrue(p.listReviews().asList().isEmpty());
+
+        // Create a review without any review comment
+        p.createReview(p.getHead().getSha(),"Sample review 1", GHPullRequestReviewEventType.COMMENT);
+        List<GHPullRequestReview> reviewList = p.listReviews().asList();
+        // At this moment, this should have 1 item
+        assertEquals(1, reviewList.size());
+
+        // Create a review with a review comment
+        GHPullRequestReviewComment reviewComment = new GHPullRequestReviewComment();
+        reviewComment.setBody("Sample review comment");
+        reviewComment.setPath("cli/pom.xml");
+        reviewComment.setPosition(5);
+
+        GHPullRequestReviewComment reviewComment2 = new GHPullRequestReviewComment();
+        reviewComment2.setBody("Sample review comment");
+        reviewComment2.setPath("cli/pom.xml");
+        reviewComment2.setPosition(6);
+
+        p.createReview(p.getHead().getSha(),"Sample review 2", GHPullRequestReviewEventType.COMMENT, Arrays.asList(reviewComment,reviewComment2));
+        // At this moment, this should have 2 items
+        List<GHPullRequestReview> reviewList2 = p.listReviews().asList();
+        assertEquals(2, reviewList2.size());
+
+
+        // Create a review with multiple comments
+        int numberOfComments = 4;
+        List<GHPullRequestReviewComment> reviewComments = new ArrayList<GHPullRequestReviewComment>();
+        for (int i=0; i < numberOfComments; i++){
+            GHPullRequestReviewComment rc = new GHPullRequestReviewComment();
+            rc.setBody("Sample review comment " + i);
+            rc.setPath("cli/pom.xml");
+            rc.setPosition(5 + i);
+            reviewComments.add(rc);
+        }
+        GHPullRequestReview review3 = p.createReview(p.getHead().getSha(), "Sample review 3", GHPullRequestReviewEventType.COMMENT, reviewComments);
+        // Test the listComments method form the GHPullRequestReview class
+        List<GHPullRequestReviewComment> requestReviewComments = review3.listComments().asList();
+        assertEquals(numberOfComments, requestReviewComments.size());
+        // At this moment, this should have 3 items
+        List<GHPullRequestReview> reviewList3 = p.listReviews().asList();
+        assertEquals(3, reviewList3.size());
+
+        /**
+         * Pull request authors can't request changes/approve on their own pull requests, hence they can't delete their
+         * reviews since it hasn't been set to pending state. To test this feature properly, you need to have multiple
+         * (at least 2) authenticated users with the right permissions to the repository where you're opening the PR.
+         *
+         * This is out of scope of this PR, however, I intent to submitting a new PR to refactor the test suite to
+         * allow a more comprehensive way to cover the majority of scenarios. For the time being, I will comment
+         * out some flows that can be used to test this feature locally.
+         *
+         */
+        /*
+            // Delete a review
+            review3.delete();
+            // At this moment, this should have 2 items
+            List<GHPullRequestReview> reviewList4 = p.listReviews().asList();
+            assertEquals(2, reviewList4.size());
+        */
+
+        /**
+         * The submit request can't be properly tested unless you have multiple github users with the right access to the
+         * github-api-test-org/jenkins repository as one can't approve his own pull request review.
+         *
+         * This is the error that you might receive if you try to run it using a single user for both creating the PR and approving it.
+         * "errors":["Could not approve pull request review."]
+         *
+         * This is out of scope of this PR, however, I intent to submitting a new PR to refactor the test suite to
+         * allow a more comprehensive way to cover the majority of scenarios. For the time being, I will comment
+         * out some flows that can be used to test this feature locally.
+         */
+        /*
+            // Approve a review
+            reviewList2.get(0).submit("Approving review",GHPullRequestReviewEventType.APPROVE);
+        */
+
     }
 
     @Test

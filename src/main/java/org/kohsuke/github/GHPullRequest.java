@@ -23,10 +23,16 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A pull request.
@@ -241,6 +247,23 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
+     * Obtains all the reviews associated with this pull request.
+     */
+    public PagedIterable<GHPullRequestReview> listReviews() throws IOException {
+        return new PagedIterable<GHPullRequestReview>() {
+            public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestReview>(root.retrieve().asIterator(getApiRoute() + "/reviews",
+                        GHPullRequestReview[].class, pageSize)) {
+                    protected void wrapUp(GHPullRequestReview[] page) {
+                        for (GHPullRequestReview c : page)
+                            c.wrapUp(GHPullRequest.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
@@ -266,6 +289,31 @@ public class GHPullRequest extends GHIssue {
                 .with("path", path)
                 .with("position", position)
                 .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class).wrapUp(this);
+    }
+
+    public GHPullRequestReview createReview(String sha, String body, GHPullRequestReviewEventType event) throws IOException{
+        return createReview(sha,body,event, new ArrayList<GHPullRequestReviewComment>(0));
+    }
+
+    public GHPullRequestReview createReview(String sha, String body, GHPullRequestReviewEventType event, List<GHPullRequestReviewComment> reviewComments) throws IOException{
+        Requester requester = new Requester(root).method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                ._with("event", event);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+
+        for (GHPullRequestReviewComment reviewComment : reviewComments) {
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            objectNode.put("path", reviewComment.getPath());
+            objectNode.put("position", reviewComment.getPosition());
+            objectNode.put("body", reviewComment.getBody());
+            arrayNode.add(objectNode);
+        }
+        requester._with("comments", arrayNode);
+
+        return requester.to(getApiRoute() + "/reviews", GHPullRequestReview.class).wrapUp(this);
     }
 
     /**

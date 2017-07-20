@@ -32,7 +32,6 @@ public enum GHEvent {
     RELEASE,
     REPOSITORY, // only valid for org hooks
     STATUS,
-    TEAM,
     TEAM_ADD,
     WATCH,
     PING,

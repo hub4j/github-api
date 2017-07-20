@@ -63,6 +63,9 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return body;
     }
 
+    public void setBody(String body){
+        this.body = body;
+    }
     /**
      * Gets the user who posted this comment.
      */
@@ -74,8 +77,16 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return path;
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public int getPosition() {
         return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getOriginalPosition() {
@@ -96,7 +107,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      */
     public void update(String body) throws IOException {
         new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
-        this.body = body;
+        setBody(body);
     }
 
     /**

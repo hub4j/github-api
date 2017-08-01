@@ -1481,6 +1481,12 @@ public class GHRepository extends GHObject {
         return new GHNotificationStream(root,getApiTailUrl("/notifications"));
     }
 
+    /**
+     * <a href="https://developer.github.com/v3/repos/traffic/#views">https://developer.github.com/v3/repos/traffic/#views</a>
+     */
+    public GHRepositoryViews getViews() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/views"), GHRepositoryViews.class);
+    }
 
     @Override
     public int hashCode() {

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.util.Date;
 import java.util.List;
 
 public class GHRepositoryViews{
@@ -29,11 +30,11 @@ public class GHRepositoryViews{
     }
 
     public static class DayViews {
-        private String timestamp;
+        private Date timestamp;
         private Integer count;
         private Integer uniques;
 
-        public String getTimestamp() {
+        public Date getTimestamp() {
             return timestamp;
         }
 
@@ -49,6 +50,12 @@ public class GHRepositoryViews{
         }
 
         public DayViews(String timestamp, Integer count, Integer uniques) {
+            this.timestamp = GitHub.parseDate(timestamp);
+            this.count = count;
+            this.uniques = uniques;
+        }
+
+        public DayViews(Date timestamp, Integer count, Integer uniques) {
             this.timestamp = timestamp;
             this.count = count;
             this.uniques = uniques;

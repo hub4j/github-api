@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 public class RepositoryTrafficMockTest {
     final private String login = "kohsuke", repositoryName = "github-api";
@@ -53,7 +56,11 @@ public class RepositoryTrafficMockTest {
                         new GHRepositoryViews.DayViews("2016-10-24T00:00:00Z", 614,237)
                 )
         );
-        String mockedGHRepositoryViewsResponse = GitHub.MAPPER.writeValueAsString(expectedResult);
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        ObjectMapper mapper = new ObjectMapper().setDateFormat(dateFormat);
+        String mockedGHRepositoryViewsResponse = mapper.writeValueAsString(expectedResult);
+
 
         GitHub gitHub = GitHub.connect(login, null);
         GitHub gitHubSpy = Mockito.spy(gitHub);

@@ -3,62 +3,31 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
-public class GHRepositoryViews{
-    private Integer count;
-    private Integer uniques;
+public class GHRepositoryViews extends GHRepositoryTrafficInfo {
     private List<DayViews> views;
 
     public GHRepositoryViews() {
     }
 
     public GHRepositoryViews(Integer count, Integer uniques, List<DayViews> views) {
-        this.count = count;
-        this.uniques = uniques;
+        super(count, uniques);
         this.views = views;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public Integer getUniques() {
-        return uniques;
     }
 
     public List<DayViews> getViews() {
         return views;
     }
 
-    public static class DayViews {
-        private Date timestamp;
-        private Integer count;
-        private Integer uniques;
-
-        public Date getTimestamp() {
-            return timestamp;
-        }
-
-        public Integer getCount() {
-            return count;
-        }
-
-        public Integer getUniques() {
-            return uniques;
-        }
-
+    public static class DayViews extends GHRepositoryTrafficInfo.DayInfo {
         public DayViews() {
         }
 
         public DayViews(String timestamp, Integer count, Integer uniques) {
-            this.timestamp = GitHub.parseDate(timestamp);
-            this.count = count;
-            this.uniques = uniques;
+            super(timestamp, count, uniques);
         }
 
         public DayViews(Date timestamp, Integer count, Integer uniques) {
-            this.timestamp = timestamp;
-            this.count = count;
-            this.uniques = uniques;
+            super(timestamp, count, uniques);
         }
     }
 }

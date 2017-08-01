@@ -1488,6 +1488,13 @@ public class GHRepository extends GHObject {
         return root.retrieve().to(getApiTailUrl("/traffic/views"), GHRepositoryViews.class);
     }
 
+    /**
+     * <a href="https://developer.github.com/v3/repos/traffic/#clones">https://developer.github.com/v3/repos/traffic/#clones</a>
+     */
+    public GHRepositoryClones getClones() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/clones"), GHRepositoryClones.class);
+    }
+
     @Override
     public int hashCode() {
         return ("Repository:"+getOwnerName()+":"+name).hashCode();

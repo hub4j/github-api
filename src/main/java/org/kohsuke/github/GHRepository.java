@@ -60,7 +60,7 @@ import static org.kohsuke.github.Previews.*;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({"UnusedDeclaration"})
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHRepository extends GHObject {
     /*package almost final*/ GitHub root;
@@ -434,8 +434,8 @@ public class GHRepository extends GHObject {
     public int getSize() {
         return size;
     }
-    
-   
+
+
     /**
      * Gets the collaborators on this repository.
      * This set always appear to include the owner.
@@ -1146,7 +1146,7 @@ public class GHRepository extends GHObject {
      * @deprecated
      *      Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
@@ -1155,7 +1155,7 @@ public class GHRepository extends GHObject {
     /**
      * Live set view of the post-commit hook.
      */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS", 
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @SkipFromToString
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
@@ -1223,7 +1223,7 @@ public class GHRepository extends GHObject {
      */
     public Map<String,GHBranch> getBranches() throws IOException {
         Map<String,GHBranch> r = new TreeMap<String,GHBranch>();
-        for (GHBranch p : root.retrieve().to(getApiTailUrl("branches"), GHBranch[].class)) {
+        for (GHBranch p : root.retrieve().withPreview(LOKI).to(getApiTailUrl("branches"), GHBranch[].class)) {
             p.wrap(this);
             r.put(p.getName(),p);
         }
@@ -1231,7 +1231,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHBranch getBranch(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
+        return root.retrieve().withPreview(LOKI).to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
     }
 
     /**
@@ -1453,7 +1453,7 @@ public class GHRepository extends GHObject {
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
             return super.equals(obj);
-        }   
+        }
     }
 
     /**

@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -241,8 +242,29 @@ class Requester {
         return method(method).to(tailApiUrl, type);
     }
 
-    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
+        int retries = 5;
+        while (true) {
+            try {
+                return __to(tailApiUrl, type, instance);
+            } catch (IOException e) {
+                retries--;
+                if (retries == 0) {
+                    throw e;
+                } else {
+                    LOGGER.log(Level.INFO, "Sleeping before retrying... (" + retries + ")");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException _) {
+                        throw (IOException)new InterruptedIOException().initCause(e);
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
+    private <T> T __to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         if (!isMethodWithBody() && !args.isEmpty()) {
             boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
             tailApiUrl += questionMarkFound ? '&' : '?';
@@ -581,10 +603,6 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
-        return parse(type, instance, 2);
-    }
-
-    private <T> T parse(Class<T> type, T instance, int timeouts) throws IOException {
         InputStreamReader r = null;
         int responseCode = -1;
         String responseMessage = null;
@@ -615,10 +633,6 @@ class Requester {
             // to preserve backward compatibility
             throw e;
         } catch (IOException e) {
-            if (e instanceof SocketTimeoutException && timeouts > 0) {
-                LOGGER.log(Level.INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
-                return parse(type, instance, timeouts - 1);
-            }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);

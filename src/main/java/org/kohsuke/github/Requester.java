@@ -37,6 +37,7 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -224,14 +225,14 @@ class Requester {
      *      {@link Reader} that reads the response.
      */
     public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
-        return _to(tailApiUrl, type, null);
+        return _to(tailApiUrl, type, null, 3);
     }
 
     /**
      * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
      */
     public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
-        return _to(tailApiUrl, null, existingInstance);
+        return _to(tailApiUrl, null, existingInstance, 3);
     }
 
     /**
@@ -242,17 +243,29 @@ class Requester {
         return method(method).to(tailApiUrl, type);
     }
 
-    private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        int retries = 5;
-        while (true) {
+    private <T> T _to(String tailApiUrl, Class<T> type, T instance, int retries) throws IOException {
+        while (retries > 0) {
             try {
-                return __to(tailApiUrl, type, instance);
+                return _to(tailApiUrl, type, instance);
             } catch (IOException e) {
+                if (e instanceof HttpException) {
+                    HttpException http = (HttpException) e;
+                    if (http.getResponseCode() >= 400) {
+                        // valid HTTP exception with error, re-throw it
+                        throw e;
+                    }
+                }
+
+                if (!(e instanceof SocketException)) {
+                    // we only retry socket exceptions, but catch IOException since HttpException descends from it
+                    throw e;
+                }
+
                 retries--;
                 if (retries == 0) {
                     throw e;
                 } else {
-                    LOGGER.log(Level.INFO, "Sleeping before retrying... (" + retries + ")");
+                    LOGGER.log(Level.INFO, "Retrying failed request to "  + tailApiUrl + ". Sleeping 5 seconds before retrying... (" + retries + " left after this one)", e);
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException _) {
@@ -261,10 +274,11 @@ class Requester {
                 }
             }
         }
+        return null;
     }
 
     @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
-    private <T> T __to(String tailApiUrl, Class<T> type, T instance) throws IOException {
+    private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         if (!isMethodWithBody() && !args.isEmpty()) {
             boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
             tailApiUrl += questionMarkFound ? '&' : '?';

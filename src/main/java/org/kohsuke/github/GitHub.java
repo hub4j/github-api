@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -147,8 +148,8 @@ public class GitHub {
             }
         }
 
-        users = new Hashtable<String, GHUser>();
-        orgs = new Hashtable<String, GHOrganization>();
+        users = new ConcurrentHashMap<String, GHUser>();
+        orgs = new ConcurrentHashMap<String, GHOrganization>();
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
@@ -360,12 +361,6 @@ public class GitHub {
     @WithBridgeMethods(GHUser.class)
     public GHMyself getMyself() throws IOException {
         requireCredential();
-
-        // This entire block is under synchronization to avoid the relatively common case
-        // where a bunch of threads try to enter this code simultaneously.  While we could
-        // scope the synchronization separately around the map retrieval and update (or use a concurrent hash)
-        // map, the point is to avoid making unnecessary GH API calls, which are expensive from
-        // an API rate standpoint
         synchronized (this) {
             if (this.myself != null) return myself;
             
@@ -381,20 +376,13 @@ public class GitHub {
      * Obtains the object that represents the named user.
      */
     public GHUser getUser(String login) throws IOException {
-        // This entire block is under synchronization to avoid the relatively common case
-        // where a bunch of threads try to enter this code simultaneously.  While we could
-        // scope the synchronization separately around the map retrieval and update (or use a concurrent hash
-        // map), the point is to avoid making unnecessary GH API calls, which are expensive from
-        // an API rate standpoint
-        synchronized (users) {
-            GHUser u = users.get(login);
-            if (u == null) {
-                u = retrieve().to("/users/" + login, GHUser.class);
-                u.root = this;
-                users.put(u.getLogin(), u);
-            }
-            return u;
+        GHUser u = users.get(login);
+        if (u == null) {
+            u = retrieve().to("/users/" + login, GHUser.class);
+            u.root = this;
+            users.put(u.getLogin(), u);
         }
+        return u;
     }
 
     
@@ -402,43 +390,30 @@ public class GitHub {
      * clears all cached data in order for external changes (modifications and del
      */
     public void refreshCache() {
-        synchronized (users) {
-            users.clear();
-        }
-        synchronized (orgs) {
-            orgs.clear();
-        }
+        users.clear();
+        orgs.clear();
     }
 
     /**
      * Interns the given {@link GHUser}.
      */
     protected GHUser getUser(GHUser orig) {
-        synchronized (users) {
-            GHUser u = users.get(orig.getLogin());
-            if (u==null) {
-                orig.root = this;
-                users.put(orig.getLogin(),orig);
-                return orig;
-            }
-            return u;
+        GHUser u = users.get(orig.getLogin());
+        if (u==null) {
+            orig.root = this;
+            users.put(orig.getLogin(),orig);
+            return orig;
         }
+        return u;
     }
 
     public GHOrganization getOrganization(String name) throws IOException {
-        // This entire block is under synchronization to avoid the relatively common case
-        // where a bunch of threads try to enter this code simultaneously.  While we could
-        // scope the synchronization separately around the map retrieval and update (or use a concurrent hash
-        // map), the point is to avoid making unnecessary GH API calls, which are expensive from
-        // an API rate standpoint
-        synchronized (orgs) {
-            GHOrganization o = orgs.get(name);
-            if (o==null) {
-                o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
-                orgs.put(name,o);
-            }
-            return o;
+        GHOrganization o = orgs.get(name);
+        if (o==null) {
+            o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
+            orgs.put(name,o);
         }
+        return o;
     }
 
     /**

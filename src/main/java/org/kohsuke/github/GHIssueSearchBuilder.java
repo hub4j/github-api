@@ -41,6 +41,11 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
         return q("is:merged");
     }
 
+    public GHIssueSearchBuilder order(GHDirection v) {
+        req.with("order",v);
+        return this;
+    }
+
     public GHIssueSearchBuilder sort(Sort sort) {
         req.with("sort",sort);
         return this;

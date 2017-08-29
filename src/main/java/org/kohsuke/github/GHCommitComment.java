@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
  *
@@ -15,23 +17,13 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
-public class GHCommitComment extends GHObject {
+public class GHCommitComment extends GHObject implements Reactable {
     private GHRepository owner;
 
     String body, html_url, commit_id;
     Integer line;
     String path;
-    User user;
-
-    static class User {
-        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url,avatar_url,gravatar_id;
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        int id;
-        
-        String login;
-    }
+    GHUser user;  // not fully populated. beware.
 
     public GHRepository getOwner() {
         return owner;
@@ -76,7 +68,7 @@ public class GHCommitComment extends GHObject {
      * Gets the user who put this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.login);
+        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.login);
     }
 
     /**
@@ -96,6 +88,29 @@ public class GHCommitComment extends GHObject {
         this.body = body;
     }
 
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiTail()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
+                    }
+                };
+            }
+        };
+    }
+
     /**
      * Deletes this comment.
      */
@@ -110,6 +125,9 @@ public class GHCommitComment extends GHObject {
 
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
+        if (owner.root.isOffline()) {
+            user.wrapUp(owner.root);
+        }
         return this;
     }
 }

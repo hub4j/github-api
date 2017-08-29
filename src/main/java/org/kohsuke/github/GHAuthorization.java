@@ -36,9 +36,14 @@ public class GHAuthorization extends GHObject {
     private GitHub root;
     private List<String> scopes;
     private String token;
+    private String token_last_eight;
+    private String hashed_token;
     private App app;
     private String note;
     private String note_url;
+    private String fingerprint;
+    //TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
+    //private GHUser user;
 
     public GitHub getRoot() {
         return root;
@@ -50,6 +55,14 @@ public class GHAuthorization extends GHObject {
 
     public String getToken() {
         return token;
+    }
+
+    public String getTokenLastEight() {
+        return token_last_eight;
+    }
+
+    public String getHashedToken() {
+        return hashed_token;
     }
 
     public URL getAppUrl() {
@@ -82,6 +95,10 @@ public class GHAuthorization extends GHObject {
         return GitHub.parseURL(note_url);
     }
 
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
     /*package*/ GHAuthorization wrap(GitHub root) {
         this.root = root;
         return this;
@@ -92,5 +109,6 @@ public class GHAuthorization extends GHObject {
     private static class App {
         private String url;
         private String name;
+        // private String client_id; not yet used
     }
 }

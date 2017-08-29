@@ -23,11 +23,10 @@
  */
 package org.kohsuke.github;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static java.util.logging.Level.FINE;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,15 +47,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
+import java.util.logging.Logger;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import java.util.logging.Logger;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.util.logging.Level.FINE;
+import static org.kohsuke.github.Previews.DRAX;
 
 /**
  * Root of the GitHub API.
@@ -84,8 +86,13 @@ public class GitHub {
     private final String apiUrl;
 
     /*package*/ final RateLimitHandler rateLimitHandler;
+    /*package*/ final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector = HttpConnector.DEFAULT;
+
+    private final Object headerRateLimitLock = new Object();
+    private GHRateLimit headerRateLimit = null;
+    private volatile GHRateLimit rateLimit = null;
 
     /**
      * Creates a client API root object.
@@ -123,7 +130,7 @@ public class GitHub {
      * @param connector
      *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
@@ -143,6 +150,7 @@ public class GitHub {
         users = new Hashtable<String, GHUser>();
         orgs = new Hashtable<String, GHOrganization>();
         this.rateLimitHandler = rateLimitHandler;
+        this.abuseLimitHandler = abuseLimitHandler;
 
         if (login==null && encodedAuthorization!=null)
             login = getMyself().getLogin();
@@ -215,6 +223,24 @@ public class GitHub {
     }
 
     /**
+     * An offline-only {@link GitHub} useful for parsing event notification from an unknown source.
+     *
+     * All operations that require a connection will fail.
+     *
+     * @return An offline-only {@link GitHub}.
+     */
+    public static GitHub offline() {
+        try {
+            return new GitHubBuilder()
+                    .withEndpoint("https://api.github.invalid")
+                    .withConnector(HttpConnector.OFFLINE)
+                    .build();
+        } catch (IOException e) {
+            throw new IllegalStateException("The offline implementation constructor should not connect", e);
+        }
+    }
+
+    /**
      * Is this an anonymous connection
      * @return {@code true} if operations that require authentication will fail.
      */
@@ -222,8 +248,20 @@ public class GitHub {
         return login==null && encodedAuthorization==null;
     }
 
+    /**
+     * Is this an always offline "connection".
+     * @return {@code true} if this is an always offline "connection".
+     */
+    public boolean isOffline() {
+        return connector == HttpConnector.OFFLINE;
+    }
+
     public HttpConnector getConnector() {
         return connector;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     /**
@@ -259,17 +297,61 @@ public class GitHub {
      */
     public GHRateLimit getRateLimit() throws IOException {
         try {
-            return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
             // see issue #78
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
-            long hours = 1000L * 60 * 60;
-            r.reset = new Date(System.currentTimeMillis() + 1 * hours );
-            return r;
+            long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
+            r.reset = new Date(System.currentTimeMillis() / 1000L + hour);
+            return rateLimit = r;
         }
+    }
+
+    /*package*/ void updateRateLimit(@Nonnull GHRateLimit observed) {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit == null
+                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
+                    || headerRateLimit.remaining > observed.remaining) {
+                headerRateLimit = observed;
+                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
+            }
+        }
+    }
+
+    /**
+     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit
+     * (for example GitHub Enterprise) or if no requests have been made.
+     *
+     * @return the most recently observed rate limit data or {@code null}.
+     */
+    @CheckForNull
+    public GHRateLimit lastRateLimit() {
+        synchronized (headerRateLimitLock) {
+            return headerRateLimit;
+        }
+    }
+
+    /**
+     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     *
+     * @return the current rate limit data.
+     * @throws IOException if we couldn't get the current rate limit data.
+     */
+    @Nonnull
+    public GHRateLimit rateLimit() throws IOException {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit != null) {
+                return headerRateLimit;
+            }
+        }
+        GHRateLimit rateLimit = this.rateLimit;
+        if (rateLimit == null || rateLimit.getResetDate().getTime() < System.currentTimeMillis()) {
+            rateLimit = getRateLimit();
+        }
+        return rateLimit;
     }
 
     /**
@@ -331,12 +413,7 @@ public class GitHub {
     /**
      * Interns the given {@link GHUser}.
      */
-    protected GHUser getUser(GHUser orig) throws IOException {
-        // This entire block is under synchronization to avoid the relatively common case
-        // where a bunch of threads try to enter this code simultaneously.  While we could
-        // scope the synchronization separately around the map retrieval and update (or use a concurrent hash
-        // map), the point is to avoid making unnecessary GH API calls, which are expensive from
-        // an API rate standpoint
+    protected GHUser getUser(GHUser orig) {
         synchronized (users) {
             GHUser u = users.get(orig.getLogin());
             if (u==null) {
@@ -373,6 +450,62 @@ public class GitHub {
         String[] tokens = name.split("/");
         return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
     }
+    /**
+     * Returns a list of popular open source licenses
+     *
+     * WARNING: This uses a PREVIEW API.
+     *
+     * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
+     *
+     * @return a list of popular open source licenses
+     */
+    @Preview @Deprecated
+    public PagedIterable<GHLicense> listLicenses() throws IOException {
+        return new PagedIterable<GHLicense>() {
+            public PagedIterator<GHLicense> _iterator(int pageSize) {
+                return new PagedIterator<GHLicense>(retrieve().withPreview(DRAX).asIterator("/licenses", GHLicense[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHLicense[] page) {
+                        for (GHLicense c : page)
+                            c.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns a list of all users.
+     */
+    public PagedIterable<GHUser> listUsers() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
+                return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHUser[] page) {
+                        for (GHUser u : page)
+                            u.wrapUp(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns the full details for a license
+     *
+     * WARNING: This uses a PREVIEW API.
+     *
+     * @param key The license key provided from the API
+     * @return The license details
+     * @see GHLicense#getKey()
+     */
+    @Preview @Deprecated
+    public GHLicense getLicense(String key) throws IOException {
+        return retrieve().withPreview(DRAX).to("/licenses/" + key, GHLicense.class);
+    }
+
+    /**
 
     /**
      * This method returns a shallowly populated organizations.
@@ -490,6 +623,42 @@ public class GitHub {
     }
 
     /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
+     */
+    public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
+                                           String note_url)
+            throws IOException {
+        Requester requester = new Requester(this)
+                .with("client_secret", clientSecret)
+                .with("scopes", scopes)
+                .with("note", note)
+                .with("note_url", note_url);
+
+        return requester.method("PUT").to("/authorizations/clients/" + clientId, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an authorization</a>
+     */
+    public void deleteAuth(long id) throws IOException {
+        retrieve().method("DELETE").to("/authorizations/" + id);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an authorization</a>
+     */
+    public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an authorization</a>
+     */
+    public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
      * Ensures that the credential is valid.
      */
     public boolean isCredentialValid() throws IOException {
@@ -564,8 +733,18 @@ public class GitHub {
                 Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
                 X-Content-Type-Options: nosniff
              */
-            return uc.getResponseCode() == HTTP_UNAUTHORIZED
-                && uc.getHeaderField("X-GitHub-Media-Type") != null;
+            try {
+                return uc.getResponseCode() == HTTP_UNAUTHORIZED
+                        && uc.getHeaderField("X-GitHub-Media-Type") != null;
+            } finally {
+                // ensure that the connection opened by getResponseCode gets closed
+                try {
+                    IOUtils.closeQuietly(uc.getInputStream());
+                } catch (IOException ignore) {
+                    // ignore
+                }
+                IOUtils.closeQuietly(uc.getErrorStream());
+            }
         } catch (IOException e) {
             return false;
         }

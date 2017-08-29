@@ -25,8 +25,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.io.IOUtils;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,10 +36,12 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -53,12 +53,14 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-
 import javax.annotation.WillClose;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import static java.util.Arrays.asList;
-import static java.util.logging.Level.FINE;
-import static org.kohsuke.github.GitHub.*;
+import java.util.logging.Level;
+import static java.util.logging.Level.*;
+import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -81,6 +83,7 @@ class Requester {
      * Current connection.
      */
     private HttpURLConnection uc;
+    private boolean forceBody;
 
     private static class Entry {
         String key;
@@ -108,6 +111,10 @@ class Requester {
     public Requester withHeader(String name, String value) {
         setHeader(name,value);
         return this;
+    }
+
+    /*package*/ Requester withPreview(String name) {
+        return withHeader("Accept",name);
     }
 
     /**
@@ -193,6 +200,16 @@ class Requester {
         return this;
     }
 
+    /**
+     * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
+     * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use,
+     * but this method forces the parameters to be sent as a body.
+     */
+    /*package*/ Requester inBody() {
+        forceBody = true;
+        return this;
+    }
+
     public void to(String tailApiUrl) throws IOException {
         to(tailApiUrl,null);
     }
@@ -226,7 +243,7 @@ class Requester {
 
     @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        if (METHODS_WITHOUT_BODY.contains(method) && !args.isEmpty()) {
+        if (!isMethodWithBody() && !args.isEmpty()) {
             boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
             tailApiUrl += questionMarkFound ? '&' : '?';
             for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
@@ -266,6 +283,8 @@ class Requester {
                 return result;
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
             }
         }
     }
@@ -284,6 +303,8 @@ class Requester {
                 return uc.getResponseCode();
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
             }
         }
     }
@@ -298,6 +319,59 @@ class Requester {
                 return wrapStream(uc.getInputStream());
             } catch (IOException e) {
                 handleApiError(e);
+            } finally {
+                noteRateLimit(tailApiUrl);
+            }
+        }
+    }
+
+    private void noteRateLimit(String tailApiUrl) {
+        if ("/rate_limit".equals(tailApiUrl)) {
+            // the rate_limit API is "free"
+            return;
+        }
+        if (tailApiUrl.startsWith("/search")) {
+            // the search API uses a different rate limit
+            return;
+        }
+        String limit = uc.getHeaderField("X-RateLimit-Limit");
+        if (StringUtils.isBlank(limit)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        String remaining = uc.getHeaderField("X-RateLimit-Remaining");
+        if (StringUtils.isBlank(remaining)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        String reset = uc.getHeaderField("X-RateLimit-Reset");
+        if (StringUtils.isBlank(reset)) {
+            // if we are missing a header, return fast
+            return;
+        }
+        GHRateLimit observed = new GHRateLimit();
+        try {
+            observed.limit = Integer.parseInt(limit);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
+            }
+            return;
+        }
+        try {
+            observed.remaining = Integer.parseInt(remaining);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
+            }
+            return;
+        }
+        try {
+            observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
+            root.updateRateLimit(observed);
+        } catch (NumberFormatException e) {
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
             }
         }
     }
@@ -336,11 +410,11 @@ class Requester {
     }
 
     private boolean isMethodWithBody() {
-        return !METHODS_WITHOUT_BODY.contains(method);
+        return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
     /**
-     * Loads pagenated resources.
+     * Loads paginated resources.
      *
      * Every iterator call reports a new batch.
      */
@@ -367,7 +441,7 @@ class Requester {
         }
 
         try {
-            return new PagingIterator<T>(type, root.getApiURL(s.toString()));
+            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
         } catch (IOException e) {
             throw new Error(e);
         }
@@ -376,6 +450,7 @@ class Requester {
     class PagingIterator<T> implements Iterator<T> {
 
         private final Class<T> type;
+        private final String tailApiUrl;
 
         /**
          * The next batch to be returned from {@link #next()}.
@@ -387,9 +462,10 @@ class Requester {
          */
         private URL url;
 
-        PagingIterator(Class<T> type, URL url) {
-            this.url = url;
+        PagingIterator(Class<T> type, String tailApiUrl, URL url) {
             this.type = type;
+            this.tailApiUrl = tailApiUrl;
+            this.url = url;
         }
 
         public boolean hasNext() {
@@ -423,6 +499,8 @@ class Requester {
                         return;
                     } catch (IOException e) {
                         handleApiError(e);
+                    } finally {
+                        noteRateLimit(tailApiUrl);
                     }
                 }
             } catch (IOException e) {
@@ -503,6 +581,10 @@ class Requester {
     }
 
     private <T> T parse(Class<T> type, T instance) throws IOException {
+        return parse(type, instance, 2);
+    }
+
+    private <T> T parse(Class<T> type, T instance, int timeouts) throws IOException {
         InputStreamReader r = null;
         int responseCode = -1;
         String responseMessage = null;
@@ -512,7 +594,7 @@ class Requester {
             if (responseCode == 304) {
                 return null;    // special case handling for 304 unmodified, as the content will be ""
             }
-            if (responseCode == 204 && type.isArray()) {
+            if (responseCode == 204 && type!=null && type.isArray()) {
                 // no content
                 return type.cast(Array.newInstance(type.getComponentType(),0));
             }
@@ -533,6 +615,10 @@ class Requester {
             // to preserve backward compatibility
             throw e;
         } catch (IOException e) {
+            if (e instanceof SocketTimeoutException && timeouts > 0) {
+                LOGGER.log(Level.INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
+                return parse(type, instance, timeouts - 1);
+            }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
@@ -565,6 +651,24 @@ class Requester {
                         " handling exception " + e, e);
             throw e;
         }
+        InputStream es = wrapStream(uc.getErrorStream());
+        if (es != null) {
+            try {
+                String error = IOUtils.toString(es, "UTF-8");
+                if (e instanceof FileNotFoundException) {
+                    // pass through 404 Not Found to allow the caller to handle it intelligently
+                    e = (IOException) new FileNotFoundException(error).initCause(e);
+                } else if (e instanceof HttpException) {
+                    HttpException http = (HttpException) e;
+                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(),
+                            http.getUrl(), e);
+                } else {
+                    e = (IOException) new IOException(error).initCause(e);
+                }
+            } finally {
+                IOUtils.closeQuietly(es);
+            }
+        }
         if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
             throw e;
 
@@ -573,19 +677,14 @@ class Requester {
             return;
         }
 
-        InputStream es = wrapStream(uc.getErrorStream());
-        try {
-            if (es!=null) {
-                if (e instanceof FileNotFoundException) {
-                    // pass through 404 Not Found to allow the caller to handle it intelligently
-                    throw (IOException) new FileNotFoundException(IOUtils.toString(es, "UTF-8")).initCause(e);
-                } else
-                    throw (IOException) new IOException(IOUtils.toString(es, "UTF-8")).initCause(e);
-            } else
-                throw e;
-        } finally {
-            IOUtils.closeQuietly(es);
+        // Retry-After is not documented but apparently that field exists
+        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
+            uc.getHeaderField("Retry-After") != null) {
+            this.root.abuseLimitHandler.onError(e,uc);
+            return;
         }
+
+        throw e;
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

@@ -3,11 +3,11 @@
   <parent>
     <groupId>org.kohsuke</groupId>
     <artifactId>pom</artifactId>
-    <version>14</version>
+    <version>17</version>
   </parent>
 
   <artifactId>github-api</artifactId>
-  <version>1.77-SNAPSHOT</version>
+  <version>1.87-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>http://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>

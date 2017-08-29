@@ -220,7 +220,7 @@ public class GHOrganization extends GHPerson {
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
-        for (GHRepository repository : listRepositories()) {
+        for (GHRepository repository : listRepositories(100)) {
             repository.wrap(root);
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {

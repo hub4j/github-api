@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Test;
 import org.kohsuke.github.GHRepository.Contributor;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,33 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
         }
 
         assertTrue(kohsuke);
+    }
+
+    @Test
+    public void getPermission() throws Exception {
+        kohsuke();
+        GHRepository r = gitHub.getRepository("github-api-test-org/test-permission");
+        assertEquals(GHPermissionType.ADMIN, r.getPermission("kohsuke"));
+        assertEquals(GHPermissionType.READ, r.getPermission("dude"));
+        r = gitHub.getOrganization("apache").getRepository("groovy");
+        try {
+            r.getPermission("jglick");
+            fail();
+        } catch (HttpException x) {
+            x.printStackTrace(); // good
+            assertEquals(403, x.getResponseCode());
+        }
+
+        if (false) {
+            // can't easily test this; there's no private repository visible to the test user
+            r = gitHub.getOrganization("cloudbees").getRepository("private-repo-not-writable-by-me");
+            try {
+                r.getPermission("jglick");
+                fail();
+            } catch (FileNotFoundException x) {
+                x.printStackTrace(); // good
+            }
+        }
     }
 
     private GHRepository getRepository() throws IOException {

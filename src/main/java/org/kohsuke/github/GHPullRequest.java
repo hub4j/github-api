@@ -200,8 +200,10 @@ public class GHPullRequest extends GHIssue {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-        if (mergeable_state != null)    return; // already populated by id
-
+        if (mergeable_state!=null)    return; // already populated
+        if (root.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
         root.retrieve().to(url, this).wrapUp(owner);
     }
 
@@ -211,7 +213,7 @@ public class GHPullRequest extends GHIssue {
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return new PagedIterable<GHPullRequestFileDetail>() {
             public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiURL()),
+                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiRoute()),
                         GHPullRequestFileDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestFileDetail[] page) {
@@ -245,7 +247,7 @@ public class GHPullRequest extends GHIssue {
         return new PagedIterable<GHPullRequestCommitDetail>() {
             public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-                        String.format("%s/commits", getApiURL()),
+                        String.format("%s/commits", getApiRoute()),
                         GHPullRequestCommitDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {

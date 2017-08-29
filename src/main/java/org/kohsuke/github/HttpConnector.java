@@ -29,4 +29,13 @@ public interface HttpConnector {
             return (HttpURLConnection) url.openConnection();
         }
     });
+
+    /**
+     * Stub implementation that is always off-line.
+     */
+    HttpConnector OFFLINE = new HttpConnector() {
+        public HttpURLConnection connect(URL url) throws IOException {
+            throw new IOException("Offline");
+        }
+    };
 }

@@ -5,17 +5,21 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Unit test for simple App.
@@ -167,14 +171,6 @@ public class AppTest extends AbstractGitHubApiTestBase {
             repository.enableWiki(true);
         }
         return repository;
-    }
-
-    private GHUser getUser() {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
     }
 
     @Test
@@ -359,6 +355,11 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertEquals(48,f.getLinesChanged());
         assertEquals("modified",f.getStatus());
         assertEquals("changelog.html", f.getFileName());
+
+        // walk the tree
+        GHTree t = commit.getTree();
+        assertThat(IOUtils.toString(t.getEntry("todo.txt").readAsBlob()), containsString("executor rendering"));
+        assertNotNull(t.getEntry("war").asTree());
     }
 
     @Test
@@ -870,8 +871,53 @@ public class AppTest extends AbstractGitHubApiTestBase {
         System.out.println(r.getIssue(1));
     }
 
-    private void kohsuke() {
-        String login = getUser().getLogin();
-        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+    @Test
+    public void reactions() throws Exception {
+        GHIssue i = gitHub.getRepository("kohsuke/github-api").getIssue(311);
+
+        // retrieval
+        GHReaction r = i.listReactions().iterator().next();
+        assertThat(r.getUser().getLogin(), is("kohsuke"));
+        assertThat(r.getContent(),is(ReactionContent.HEART));
+
+        // CRUD
+        GHReaction a = i.createReaction(ReactionContent.HOORAY);
+        assertThat(a.getUser().getLogin(),is(gitHub.getMyself().getLogin()));
+        a.delete();
+    }
+
+    @Test
+    public void listOrgMemberships() throws Exception {
+        GHMyself me = gitHub.getMyself();
+        for (GHMembership m : me.listOrgMemberships()) {
+            assertThat(m.getUser(), is((GHUser)me));
+            assertNotNull(m.getState());
+            assertNotNull(m.getRole());
+
+            System.out.printf("%s %s %s\n",
+                    m.getOrganization().getLogin(),
+                    m.getState(),
+                    m.getRole());
+        }
+    }
+
+    @Test
+    public void blob() throws Exception {
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
+
+        assertBlobContent(r.readBlob(sha1));
+
+        GHBlob blob = r.getBlob(sha1);
+        assertBlobContent(blob.read());
+        assertThat(blob.getSha(),is("a12243f2fc5b8c2ba47dd677d0b0c7583539584d"));
+        assertThat(blob.getSize(),is(1104L));
+    }
+
+    private void assertBlobContent(InputStream is) throws Exception {
+        String content = new String(IOUtils.toByteArray(is),"UTF-8");
+        assertThat(content,containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
+        assertThat(content,containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
+        assertThat(content.length(),is(1104));
     }
 }

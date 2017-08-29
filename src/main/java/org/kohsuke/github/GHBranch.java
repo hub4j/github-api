@@ -1,11 +1,17 @@
 package org.kohsuke.github;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.BranchProtection.RequiredStatusChecks;
+import static org.kohsuke.github.Previews.LOKI;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+
+import org.kohsuke.github.BranchProtection.RequiredStatusChecks;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A branch in a repository.
@@ -20,6 +26,10 @@ public class GHBranch {
 
     private String name;
     private Commit commit;
+    @JsonProperty("protected")
+    private boolean protection;
+    private String protection_url;
+
 
     public static class Commit {
         String sha;
@@ -44,6 +54,23 @@ public class GHBranch {
     }
 
     /**
+     * Returns true if the push to this branch is restricted via branch protection.
+     */
+    @Preview @Deprecated
+    public boolean isProtected() {
+        return protection;
+    }
+
+    /**
+     * Returns API URL that deals with the protection of this branch.
+     */
+    @Preview @Deprecated
+    public URL getProtectionUrl() {
+        return GitHub.parseURL(protection_url);
+    }
+
+
+    /**
      * The commit that this branch currently points to.
      */
     public String getSHA1() {
@@ -53,6 +80,7 @@ public class GHBranch {
     /**
      * Disables branch protection and allows anyone with push access to push changes.
      */
+    @Preview @Deprecated
     public void disableProtection() throws IOException {
         BranchProtection bp = new BranchProtection();
         bp.enabled = false;
@@ -64,6 +92,7 @@ public class GHBranch {
      *
      * @see GHCommitStatus#getContext()
      */
+    @Preview @Deprecated
     public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
         BranchProtection bp = new BranchProtection();
         bp.enabled = true;
@@ -73,14 +102,13 @@ public class GHBranch {
         setProtection(bp);
     }
 
+    @Preview @Deprecated
     public void enableProtection(EnforcementLevel level, String... contexts) throws IOException {
         enableProtection(level, Arrays.asList(contexts));
     }
 
     private void setProtection(BranchProtection bp) throws IOException {
-        new Requester(root).method("PATCH")
-                .withHeader("Accept","application/vnd.github.loki-preview+json")
-                ._with("protection",bp).to(getApiRoute());
+        new Requester(root).method("PATCH").withPreview(LOKI)._with("protection",bp).to(getApiRoute());
     }
 
     String getApiRoute() {

@@ -2,12 +2,12 @@ package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,14 +37,28 @@ public class GHCommit {
         
         private int comment_count;
 
+        static class Tree {
+            String sha;
+        }
+
+        private Tree tree;
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
 
+        public Date getAuthoredDate() {
+            return GitHub.parseDate(author.date);
+        }
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
+        }
+
+        public Date getCommitDate() {
+            return GitHub.parseDate(committer.date);
         }
 
         /**
@@ -63,6 +77,7 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
+        private String date;
     }
 
     public static class Stats {
@@ -179,7 +194,8 @@ public class GHCommit {
 
 
     public ShortInfo getCommitShortInfo() throws IOException {
-        populate();
+        if (commit==null)
+            populate();
         return commit;
     }
 
@@ -212,6 +228,13 @@ public class GHCommit {
     public int getLinesDeleted() throws IOException {
         populate();
         return stats.deletions;
+    }
+
+    /**
+     * Use this method to walk the tree
+     */
+    public GHTree getTree() throws IOException {
+        return owner.getTree(getCommitShortInfo().tree.sha);
     }
 
     /**
@@ -271,8 +294,27 @@ public class GHCommit {
         return resolveUser(author);
     }
 
+    /**
+     * Gets the date the change was authored on.
+     * @return the date the change was authored on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getAuthoredDate() throws IOException {
+        return getCommitShortInfo().getAuthoredDate();
+    }
+
     public GHUser getCommitter() throws IOException {
         return resolveUser(committer);
+    }
+
+    /**
+     * Gets the date the change was committed on.
+     *
+     * @return the date the change was committed on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getCommitDate() throws IOException {
+        return getCommitShortInfo().getCommitDate();
     }
 
     private GHUser resolveUser(User author) throws IOException {

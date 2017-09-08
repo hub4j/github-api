@@ -686,6 +686,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testCommitSearch() throws IOException {
+        PagedSearchIterable<GHCommit> r = gitHub.searchCommits().author("kohsuke").list();
+        assertTrue(r.getTotalCount() > 0);
+        
+        GHCommit firstCommit = r.iterator().next();
+        assertTrue(firstCommit.getFiles().size() > 0);
+    }
+
+    @Test
     public void testIssueSearch() throws IOException {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
         for (GHIssue i : r) {

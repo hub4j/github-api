@@ -212,7 +212,7 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
-     * Retrieves all the commits associated to this pull request.
+     * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return new PagedIterable<GHPullRequestFileDetail>() {

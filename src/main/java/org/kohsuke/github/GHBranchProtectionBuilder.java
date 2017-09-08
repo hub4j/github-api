@@ -14,6 +14,11 @@ import java.util.Set;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+/**
+ * Builder to configure the branch protection settings.
+ *
+ * @see GHBranch#enableProtection()
+ */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
         "URF_UNREAD_FIELD" }, justification = "JSON API")
 public class GHBranchProtectionBuilder {
@@ -53,17 +58,29 @@ public class GHBranchProtectionBuilder {
     }
 
     public GHBranchProtectionBuilder includeAdmins() {
-        enforceAdmins = true;
+        return includeAdmins(true);
+    }
+
+    public GHBranchProtectionBuilder includeAdmins(boolean v) {
+        enforceAdmins = v;
         return this;
     }
-    
+
     public GHBranchProtectionBuilder requireBranchIsUpToDate() {
-        getStatusChecks().strict = true;
+        return requireBranchIsUpToDate(true);
+    }
+
+    public GHBranchProtectionBuilder requireBranchIsUpToDate(boolean v) {
+        getStatusChecks().strict = v;
         return this;
     }
 
     public GHBranchProtectionBuilder requireCodeOwnReviews() {
-        getPrReviews().put("require_code_owner_reviews", true);
+        return requireCodeOwnReviews(true);
+    }
+
+    public GHBranchProtectionBuilder requireCodeOwnReviews(boolean v) {
+        getPrReviews().put("require_code_owner_reviews", v);
         return this;
     }
 

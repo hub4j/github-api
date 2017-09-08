@@ -4,6 +4,7 @@ import static org.kohsuke.github.Previews.LOKI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -93,6 +94,23 @@ public class GHBranch {
     @Preview @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
+    }
+
+    // backward compatibility with previous signature
+    @Deprecated
+    public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
+        switch (level) {
+        case OFF:
+            disableProtection();
+            break;
+        case NON_ADMINS:
+        case EVERYONE:
+            enableProtection()
+                .addRequiredChecks(contexts)
+                .includeAdmins(level==EnforcementLevel.EVERYONE)
+                .enable();
+            break;
+        }
     }
 
     String getApiRoute() {

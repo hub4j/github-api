@@ -3,6 +3,7 @@ target
 *.iml
 *.ipr
 *.iws
-/.project
-/.classpath
-/.settings
+.classpath
+.project
+.settings/
+.DS_Store

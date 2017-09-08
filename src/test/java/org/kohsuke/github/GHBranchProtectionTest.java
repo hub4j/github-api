@@ -6,6 +6,8 @@ import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
+import java.io.FileNotFoundException;
+
 public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
     private static final String BRANCH = "bp-test";
     private static final String BRANCH_REF = "heads/" + BRANCH;
@@ -21,7 +23,9 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
 
         repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest").fork();
 
-        if (repo.getRef(BRANCH_REF) == null) {
+        try {
+            repo.getRef(BRANCH_REF);
+        } catch (FileNotFoundException e) {
             repo.createRef("refs/" + BRANCH_REF, repo.getBranch("master").getSHA1());
         }
 

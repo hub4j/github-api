@@ -298,6 +298,14 @@ public class GHRepository extends GHObject {
     public List<GHRelease> getReleases() throws IOException {
         return listReleases().asList();
     }
+    
+    public GHRelease getLatestRelease() throws IOException {
+        try {
+            return root.retrieve().to(getApiTailUrl("releases/latest"), GHRelease.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null; // no latest release
+        }
+    }
 
     public PagedIterable<GHRelease> listReleases() throws IOException {
         return new PagedIterable<GHRelease>() {

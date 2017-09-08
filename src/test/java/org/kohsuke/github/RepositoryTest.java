@@ -67,6 +67,32 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
             }
         }
     }
+    
+    
+	
+	@Test
+	public void LatestRepositoryExist() {
+		try {
+			// add the repository that have latest release
+			GHRelease release = gitHub.getRepository("kamontat/CheckIDNumber").getLatestRelease();
+			assertEquals("v3.0", release.getTagName());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void LatestRepositoryNotExist() {
+		try {
+			// add the repository that `NOT` have latest release
+			GHRelease release = gitHub.getRepository("kamontat/Java8Example").getLatestRelease();
+			assertNull(release);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
 
     private GHRepository getRepository() throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");

@@ -790,6 +790,26 @@ public class GHRepository extends GHObject {
        return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs", getOwnerName(), name), GHRef[].class), root);
     }
 
+
+    /**
+     * Retrieves all refs for the github repository.
+     *
+     * @return paged iterable of all refs
+     * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public PagedIterable<GHRef> listRefs() throws IOException {
+        final String url = String.format("/repos/%s/%s/git/refs", getOwnerName(), name);
+        return new PagedIterable<GHRef>() {
+            public PagedIterator<GHRef> _iterator(int pageSize) {
+                return new PagedIterator<GHRef>(root.retrieve().asIterator(url, GHRef[].class, pageSize)) {
+                    protected void wrapUp(GHRef[] page) {
+                        // no-op
+                    }
+                };
+            }
+        };
+    }
+
     /**
      * Retrieves all refs of the given type for the current GitHub repository.
      * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
@@ -799,6 +819,27 @@ public class GHRepository extends GHObject {
     public GHRef[] getRefs(String refType) throws IOException {
         return GHRef.wrap(root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType), GHRef[].class),root);
     }
+
+    /**
+     * Retrieves all refs of the given type for the current GitHub repository.
+     *
+     * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
+     * @return paged iterable of all refs of the specified type
+     * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public PagedIterable<GHRef> listRefs(String refType) throws IOException {
+        final String url = String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType);
+        return new PagedIterable<GHRef>() {
+            public PagedIterator<GHRef> _iterator(int pageSize) {
+                return new PagedIterator<GHRef>(root.retrieve().asIterator(url, GHRef[].class, pageSize)) {
+                    protected void wrapUp(GHRef[] page) {
+                        // no-op
+                    }
+                };
+            }
+        };
+    }
+
     /**
      * Retrive a ref of the given type for the current GitHub repository.
      *
@@ -816,6 +857,18 @@ public class GHRepository extends GHObject {
         refName = refName.replaceAll("#", "%23");
         return root.retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refName), GHRef.class).wrap(root);
     }
+
+    /**
+     * Returns the <strong>annotated</strong> tag object. Only valid if the {@link GHRef#getObject()} has a
+     * {@link GHRef.GHObject#getType()} of {@code tag}.
+     *
+     * @param sha the sha of the tag object
+     * @return the annotated tag object
+     */
+    public GHTagObject getTagObject(String sha) throws IOException {
+        return root.retrieve().to(getApiTailUrl("git/tags/" + sha), GHTagObject.class).wrap(this);
+    }
+    
     /**
      * Retrive a tree of the given type for the current GitHub repository.
      *

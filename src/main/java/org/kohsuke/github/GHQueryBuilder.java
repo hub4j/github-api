@@ -7,7 +7,7 @@ package org.kohsuke.github;
  */
 public abstract class GHQueryBuilder<T> {
     protected final GitHub root;
-    protected Requester req;
+    protected final Requester req;
 
     /*package*/ GHQueryBuilder(GitHub root) {
         this.root = root;

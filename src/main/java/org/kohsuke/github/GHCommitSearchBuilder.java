@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -15,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     /*package*/ GHCommitSearchBuilder(GitHub root) {
         super(root,CommitSearchResult.class);
-        req = req.withPreview(Previews.CLOAK);
+        req.withPreview(Previews.CLOAK);
     }
 
     /**

@@ -12,7 +12,7 @@ public class GHBlobBuilder {
     private final GHRepository repo;
     private final Requester req;
 
-    public GHBlobBuilder(GHRepository repo) {
+    GHBlobBuilder(GHRepository repo) {
         this.repo = repo;
         req = new Requester(repo.root);
     }

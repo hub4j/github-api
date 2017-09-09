@@ -1,7 +1,7 @@
 package org.kohsuke.github.extras;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.OkUrlFactory;
 import org.kohsuke.github.HttpConnector;
 
 import java.io.IOException;

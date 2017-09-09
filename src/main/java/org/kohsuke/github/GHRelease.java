@@ -45,10 +45,12 @@ public class GHRelease extends GHObject {
         return draft;
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #update()}
+     */
     public GHRelease setDraft(boolean draft) throws IOException {
-      edit("draft", draft);
-      this.draft = draft;
-      return this;
+        return update().draft(draft).update();
     }
 
     public URL getHtmlUrl() {
@@ -149,10 +151,10 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Edit this release.
+     * Updates this release via a builder.
      */
-    private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(owner.getApiTailUrl("releases/"+id));
+    public GHReleaseUpdater update() {
+        return new GHReleaseUpdater(this);
     }
 
     private String getApiTailUrl(String end) {

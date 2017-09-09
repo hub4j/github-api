@@ -145,6 +145,12 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp-urlconnection</artifactId>
+      <version>3.4.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>wordnet-random-name</artifactId>
       <version>1.2</version>

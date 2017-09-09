@@ -28,6 +28,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.WillClose;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -277,7 +278,7 @@ class Requester {
                         if (nextLinkMatcher.find()) {
                             final String link = nextLinkMatcher.group(1);
                             T nextResult = _to(link, type, instance);
-
+                            setResponseHeaders(nextResult);
                             final int resultLength = Array.getLength(result);
                             final int nextResultLength = Array.getLength(nextResult);
                             T concatResult = (T) Array.newInstance(type.getComponentType(), resultLength + nextResultLength);
@@ -287,7 +288,7 @@ class Requester {
                         }
                     }
                 }
-                return result;
+                return setResponseHeaders(result);
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
@@ -588,6 +589,7 @@ class Requester {
             throw new IllegalStateException("Failed to set the request method to "+method);
     }
 
+    @CheckForNull
     private <T> T parse(Class<T> type, T instance) throws IOException {
         return parse(type, instance, 2);
     }
@@ -611,12 +613,13 @@ class Requester {
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
-                    return MAPPER.readValue(data,type);
+                    return setResponseHeaders(MAPPER.readValue(data, type));
                 } catch (JsonMappingException e) {
                     throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
                 }
-            if (instance!=null)
-                return MAPPER.readerForUpdating(instance).<T>readValue(data);
+            if (instance!=null) {
+                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
+            }
             return null;
         } catch (FileNotFoundException e) {
             // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in HttpException
@@ -624,13 +627,28 @@ class Requester {
             throw e;
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException && timeouts > 0) {
-                LOGGER.log(Level.INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
+                LOGGER.log(INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
                 return parse(type, instance, timeouts - 1);
             }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
         }
+    }
+
+    private <T> T setResponseHeaders(T readValue) {
+        if (readValue instanceof GHObject[]) {
+            for (GHObject ghObject : (GHObject[]) readValue) {
+                setResponseHeaders(ghObject);
+            }
+        } else if (readValue instanceof GHObject) {
+            setResponseHeaders((GHObject) readValue);
+        }
+        return readValue;
+    }
+
+    private void setResponseHeaders(GHObject readValue) {
+        readValue.responseHeaderFields = uc.getHeaderFields();
     }
 
     /**
@@ -665,13 +683,13 @@ class Requester {
                 String error = IOUtils.toString(es, "UTF-8");
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
-                    e = (IOException) new FileNotFoundException(error).initCause(e);
+                    e = (IOException) new GHFileNotFoundException(error).withResponseHeaderFields(uc).initCause(e);
                 } else if (e instanceof HttpException) {
                     HttpException http = (HttpException) e;
                     e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(),
                             http.getUrl(), e);
                 } else {
-                    e = (IOException) new IOException(error).initCause(e);
+                    e = (IOException) new GHIOException(error).withResponseHeaderFields(uc).initCause(e);
                 }
             } finally {
                 IOUtils.closeQuietly(es);

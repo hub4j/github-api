@@ -1540,6 +1540,19 @@ public class GHRepository extends GHObject {
         return new GHNotificationStream(root,getApiTailUrl("/notifications"));
     }
 
+    /**
+     * <a href="https://developer.github.com/v3/repos/traffic/#views">https://developer.github.com/v3/repos/traffic/#views</a>
+     */
+    public GHRepositoryViewTraffic getViewTraffic() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/views"), GHRepositoryViewTraffic.class);
+    }
+
+    /**
+     * <a href="https://developer.github.com/v3/repos/traffic/#clones">https://developer.github.com/v3/repos/traffic/#clones</a>
+     */
+    public GHRepositoryCloneTraffic getCloneTraffic() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/clones"), GHRepositoryCloneTraffic.class);
+    }
 
     @Override
     public int hashCode() {

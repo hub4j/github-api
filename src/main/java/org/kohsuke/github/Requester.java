@@ -60,6 +60,7 @@ import org.apache.commons.lang.StringUtils;
 import static java.util.Arrays.asList;
 import java.util.logging.Level;
 import static java.util.logging.Level.*;
+import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
@@ -76,7 +77,7 @@ class Requester {
      * Request method.
      */
     private String method = "POST";
-    private String contentType = "application/x-www-form-urlencoded";
+    private String contentType = null;
     private InputStream body;
 
     /**
@@ -392,18 +393,19 @@ class Requester {
     private void buildRequest() throws IOException {
         if (isMethodWithBody()) {
             uc.setDoOutput(true);
-            uc.setRequestProperty("Content-type", contentType);
 
             if (body == null) {
+                uc.setRequestProperty("Content-type", defaultString(contentType,"application/json"));
                 Map json = new HashMap();
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
                 MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
+                uc.setRequestProperty("Content-type", defaultString(contentType,"application/x-www-form-urlencoded"));
                 try {
                     byte[] bytes = new byte[32768];
-                    int read = 0;
+                    int read;
                     while ((read = body.read(bytes)) != -1) {
                         uc.getOutputStream().write(bytes, 0, read);
                     }

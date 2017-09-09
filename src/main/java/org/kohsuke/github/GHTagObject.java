@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Represents an annotated tag in a {@link GHRepository}
  *
- * @see GHRepository#getAnnotatedTag()
+ * @see GHRepository#getTagObject(String)
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")

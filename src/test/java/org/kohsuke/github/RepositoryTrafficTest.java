@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.kohsuke.github.GHRepositoryTrafficInfo.DayInfo;
+import org.kohsuke.github.GHRepositoryCloneTraffic.DayInfo;
+import org.kohsuke.github.GHRepositoryViewTraffic.Daily;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -25,18 +26,18 @@ public class RepositoryTrafficTest {
         Assert.assertEquals(expected.getCount(), actual.getCount());
         Assert.assertEquals(expected.getUniques(), actual.getUniques());
 
-        List<? extends DayInfo> expectedList = expected.getDailyInfo();
-        List<? extends DayInfo> actualList = actual.getDailyInfo();
-        Iterator<? extends DayInfo> expectedIt;
-        Iterator<? extends DayInfo> actualIt;
+        List<? extends GHRepositoryTrafficInfo.DayInfo> expectedList = expected.getDailyInfo();
+        List<? extends GHRepositoryTrafficInfo.DayInfo> actualList = actual.getDailyInfo();
+        Iterator<? extends GHRepositoryTrafficInfo.DayInfo> expectedIt;
+        Iterator<? extends GHRepositoryTrafficInfo.DayInfo> actualIt;
 
         Assert.assertEquals(expectedList.size(), actualList.size());
         expectedIt = expectedList.iterator();
         actualIt = actualList.iterator();
 
         while(expectedIt.hasNext() && actualIt.hasNext()) {
-            DayInfo expectedDayInfo = expectedIt.next();
-            DayInfo actualDayInfo = actualIt.next();
+            GHRepositoryTrafficInfo.DayInfo expectedDayInfo = expectedIt.next();
+            GHRepositoryTrafficInfo.DayInfo actualDayInfo = actualIt.next();
             Assert.assertEquals(expectedDayInfo.getCount(), actualDayInfo.getCount());
             Assert.assertEquals(expectedDayInfo.getUniques(), actualDayInfo.getUniques());
             Assert.assertEquals(expectedDayInfo.getTimestamp(), actualDayInfo.getTimestamp());
@@ -73,7 +74,7 @@ public class RepositoryTrafficTest {
         // this covers calls on "uc" in Requester.setupConnection and Requester.buildRequest
         URL trafficURL = new URL(
                 "https://api.github.com/repos/"+login+"/"+repositoryName+"/traffic/" +
-                ((expectedResult instanceof GHRepositoryViews) ? "views" : "clones")
+                ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones")
         );
         Mockito.doReturn(mockHttpURLConnection).when(connectorSpy).connect(Mockito.eq(trafficURL));
 
@@ -84,37 +85,37 @@ public class RepositoryTrafficTest {
         InputStream stubInputStream = IOUtils.toInputStream(mockedResponse, "UTF-8");
         Mockito.doReturn(stubInputStream).when(mockHttpURLConnection).getInputStream();
 
-        if(expectedResult instanceof GHRepositoryViews){
-            GHRepositoryViews views = repo.getViews();
+        if(expectedResult instanceof GHRepositoryViewTraffic){
+            GHRepositoryViewTraffic views = repo.getViewTraffic();
             checkResponse(expectedResult, views);
         }
-        else if(expectedResult instanceof GHRepositoryClones) {
-            GHRepositoryClones clones = repo.getClones();
+        else if(expectedResult instanceof GHRepositoryCloneTraffic) {
+            GHRepositoryCloneTraffic clones = repo.getCloneTraffic();
             checkResponse(expectedResult, clones);
         }
     }
 
     @Test
     public void testGetViews() throws IOException{
-        GHRepositoryViews expectedResult = new GHRepositoryViews(
+        GHRepositoryViewTraffic expectedResult = new GHRepositoryViewTraffic(
                 21523359,
                 65534,
                 Arrays.asList(
-                        new GHRepositoryViews.DayViews("2016-10-10T00:00:00Z", 3, 2),
-                        new GHRepositoryViews.DayViews("2016-10-11T00:00:00Z", 9, 4),
-                        new GHRepositoryViews.DayViews("2016-10-12T00:00:00Z", 27, 8),
-                        new GHRepositoryViews.DayViews("2016-10-13T00:00:00Z", 81, 16),
-                        new GHRepositoryViews.DayViews("2016-10-14T00:00:00Z", 243, 32),
-                        new GHRepositoryViews.DayViews("2016-10-15T00:00:00Z", 729, 64),
-                        new GHRepositoryViews.DayViews("2016-10-16T00:00:00Z", 2187, 128),
-                        new GHRepositoryViews.DayViews("2016-10-17T00:00:00Z", 6561, 256),
-                        new GHRepositoryViews.DayViews("2016-10-18T00:00:00Z", 19683, 512),
-                        new GHRepositoryViews.DayViews("2016-10-19T00:00:00Z", 59049, 1024),
-                        new GHRepositoryViews.DayViews("2016-10-20T00:00:00Z", 177147, 2048),
-                        new GHRepositoryViews.DayViews("2016-10-21T00:00:00Z", 531441, 4096),
-                        new GHRepositoryViews.DayViews("2016-10-22T00:00:00Z", 1594323, 8192),
-                        new GHRepositoryViews.DayViews("2016-10-23T00:00:00Z", 4782969, 16384),
-                        new GHRepositoryViews.DayViews("2016-10-24T00:00:00Z", 14348907, 32768)
+                        new Daily("2016-10-10T00:00:00Z", 3, 2),
+                        new Daily("2016-10-11T00:00:00Z", 9, 4),
+                        new Daily("2016-10-12T00:00:00Z", 27, 8),
+                        new Daily("2016-10-13T00:00:00Z", 81, 16),
+                        new Daily("2016-10-14T00:00:00Z", 243, 32),
+                        new Daily("2016-10-15T00:00:00Z", 729, 64),
+                        new Daily("2016-10-16T00:00:00Z", 2187, 128),
+                        new Daily("2016-10-17T00:00:00Z", 6561, 256),
+                        new Daily("2016-10-18T00:00:00Z", 19683, 512),
+                        new Daily("2016-10-19T00:00:00Z", 59049, 1024),
+                        new Daily("2016-10-20T00:00:00Z", 177147, 2048),
+                        new Daily("2016-10-21T00:00:00Z", 531441, 4096),
+                        new Daily("2016-10-22T00:00:00Z", 1594323, 8192),
+                        new Daily("2016-10-23T00:00:00Z", 4782969, 16384),
+                        new Daily("2016-10-24T00:00:00Z", 14348907, 32768)
                 )
         );
         testTraffic(expectedResult);
@@ -122,25 +123,25 @@ public class RepositoryTrafficTest {
 
     @Test
     public void testGetClones() throws IOException{
-        GHRepositoryClones expectedResult = new GHRepositoryClones(
+        GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(
                 1500,
                 455,
                 Arrays.asList(
-                        new GHRepositoryClones.DayClones("2016-10-10T00:00:00Z", 10,3),
-                        new GHRepositoryClones.DayClones("2016-10-11T00:00:00Z", 20,6),
-                        new GHRepositoryClones.DayClones("2016-10-12T00:00:00Z", 30,5),
-                        new GHRepositoryClones.DayClones("2016-10-13T00:00:00Z", 40,7),
-                        new GHRepositoryClones.DayClones("2016-10-14T00:00:00Z", 50,11),
-                        new GHRepositoryClones.DayClones("2016-10-15T00:00:00Z", 60,12),
-                        new GHRepositoryClones.DayClones("2016-10-16T00:00:00Z", 70,19),
-                        new GHRepositoryClones.DayClones("2016-10-17T00:00:00Z", 170,111),
-                        new GHRepositoryClones.DayClones("2016-10-18T00:00:00Z", 180,70),
-                        new GHRepositoryClones.DayClones("2016-10-19T00:00:00Z", 190,10),
-                        new GHRepositoryClones.DayClones("2016-10-20T00:00:00Z", 200,18),
-                        new GHRepositoryClones.DayClones("2016-10-21T00:00:00Z", 210,8),
-                        new GHRepositoryClones.DayClones("2016-10-22T00:00:00Z", 220,168),
-                        new GHRepositoryClones.DayClones("2016-10-23T00:00:00Z", 5,2),
-                        new GHRepositoryClones.DayClones("2016-10-24T00:00:00Z", 45,5)
+                        new DayInfo("2016-10-10T00:00:00Z", 10,3),
+                        new DayInfo("2016-10-11T00:00:00Z", 20,6),
+                        new DayInfo("2016-10-12T00:00:00Z", 30,5),
+                        new DayInfo("2016-10-13T00:00:00Z", 40,7),
+                        new DayInfo("2016-10-14T00:00:00Z", 50,11),
+                        new DayInfo("2016-10-15T00:00:00Z", 60,12),
+                        new DayInfo("2016-10-16T00:00:00Z", 70,19),
+                        new DayInfo("2016-10-17T00:00:00Z", 170,111),
+                        new DayInfo("2016-10-18T00:00:00Z", 180,70),
+                        new DayInfo("2016-10-19T00:00:00Z", 190,10),
+                        new DayInfo("2016-10-20T00:00:00Z", 200,18),
+                        new DayInfo("2016-10-21T00:00:00Z", 210,8),
+                        new DayInfo("2016-10-22T00:00:00Z", 220,168),
+                        new DayInfo("2016-10-23T00:00:00Z", 5,2),
+                        new DayInfo("2016-10-24T00:00:00Z", 45,5)
                 )
         );
         testTraffic(expectedResult);
@@ -152,13 +153,13 @@ public class RepositoryTrafficTest {
         GitHub gitHub = GitHub.connect(login, null);
         GHRepository repo = gitHub.getUser(login).getRepository(repositoryName);
         try {
-            repo.getViews();
+            repo.getViewTraffic();
             Assert.fail(errorMsg);
         }
         catch (HttpException ex){
         }
         try {
-            repo.getClones();
+            repo.getCloneTraffic();
             Assert.fail(errorMsg);
         }
         catch (HttpException ex){

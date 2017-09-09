@@ -1484,15 +1484,15 @@ public class GHRepository extends GHObject {
     /**
      * <a href="https://developer.github.com/v3/repos/traffic/#views">https://developer.github.com/v3/repos/traffic/#views</a>
      */
-    public GHRepositoryViews getViews() throws IOException{
-        return root.retrieve().to(getApiTailUrl("/traffic/views"), GHRepositoryViews.class);
+    public GHRepositoryViewTraffic getViewTraffic() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/views"), GHRepositoryViewTraffic.class);
     }
 
     /**
      * <a href="https://developer.github.com/v3/repos/traffic/#clones">https://developer.github.com/v3/repos/traffic/#clones</a>
      */
-    public GHRepositoryClones getClones() throws IOException{
-        return root.retrieve().to(getApiTailUrl("/traffic/clones"), GHRepositoryClones.class);
+    public GHRepositoryCloneTraffic getCloneTraffic() throws IOException{
+        return root.retrieve().to(getApiTailUrl("/traffic/clones"), GHRepositoryCloneTraffic.class);
     }
 
     @Override

@@ -41,12 +41,34 @@ public class GHRelease extends GHObject {
         return body;
     }
 
+    public void setTag_name(String tag_name) {
+      this.tag_name = tag_name;
+    }
+
+    public void setTarget_commitish(String target_commitish) {
+      this.target_commitish = target_commitish;
+    }
+
+    public void setBody(String body) {
+      this.body = body;
+    }
+
+    public void setPrerelease(boolean prerelease) {
+      this.prerelease = prerelease;
+    }
+
     public boolean isDraft() {
         return draft;
     }
 
     public GHRelease setDraft(boolean draft) throws IOException {
-      edit("draft", draft);
+      return setDraft(draft, true);
+    }
+    
+    public GHRelease setDraft(boolean draft, boolean edit) throws IOException {
+      if (edit) {
+        edit("draft", draft);
+      }
       this.draft = draft;
       return this;
     }
@@ -146,6 +168,21 @@ public class GHRelease extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+    }
+    
+    /**
+     * call to edit all editable fields
+     */
+    public void update() throws IOException {
+      new Requester(root)
+        // these are the editable fields
+        ._with("tag_name", tag_name)
+        ._with("target_commitish", target_commitish)
+        ._with("name", name)
+        ._with("body", body)
+        ._with("draft", draft)
+        ._with("prerelease", prerelease)
+        .method("PATCH").to(owner.getApiTailUrl("releases/"+id));
     }
 
     /**

@@ -392,15 +392,16 @@ class Requester {
     private void buildRequest() throws IOException {
         if (isMethodWithBody()) {
             uc.setDoOutput(true);
-            uc.setRequestProperty("Content-type", contentType);
 
             if (body == null) {
+                uc.setRequestProperty("Content-type", "application/json");
                 Map json = new HashMap();
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
                 MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
+                uc.setRequestProperty("Content-type", contentType);
                 try {
                     byte[] bytes = new byte[32768];
                     int read = 0;

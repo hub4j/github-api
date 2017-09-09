@@ -3,14 +3,14 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
-public abstract class GHRepositoryTrafficInfo implements TrafficInfo {
+public abstract class GHRepositoryTraffic implements TrafficInfo {
     private int count;
     private int uniques;
 
-    /*package*/ GHRepositoryTrafficInfo() {
+    /*package*/ GHRepositoryTraffic() {
     }
 
-    /*package*/ GHRepositoryTrafficInfo(int count, int uniques) {
+    /*package*/ GHRepositoryTraffic(int count, int uniques) {
         this.count = count;
         this.uniques = uniques;
     }
@@ -23,15 +23,15 @@ public abstract class GHRepositoryTrafficInfo implements TrafficInfo {
         return uniques;
     }
 
-    public abstract List<? extends DayInfo> getDailyInfo();
+    public abstract List<? extends DailyInfo> getDailyInfo();
 
-    public static abstract class DayInfo implements TrafficInfo {
-        private Date timestamp;
+    public static abstract class DailyInfo implements TrafficInfo {
+        private String timestamp;
         private int count;
         private int uniques;
 
         public Date getTimestamp() {
-            return timestamp;
+            return GitHub.parseDate(timestamp);
         }
 
         public int getCount() {
@@ -42,16 +42,10 @@ public abstract class GHRepositoryTrafficInfo implements TrafficInfo {
             return uniques;
         }
 
-        /*package*/ DayInfo() {
+        /*package*/ DailyInfo() {
         }
 
-        /*package*/ DayInfo(String timestamp, Integer count, Integer uniques) {
-            this.timestamp = GitHub.parseDate(timestamp);
-            this.count = count;
-            this.uniques = uniques;
-        }
-
-        /*package*/ DayInfo(Date timestamp, Integer count, Integer uniques) {
+        /*package*/ DailyInfo(String timestamp, Integer count, Integer uniques) {
             this.timestamp = timestamp;
             this.count = count;
             this.uniques = uniques;

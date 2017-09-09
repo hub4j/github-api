@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.kohsuke.github.GHRepositoryCloneTraffic.DayInfo;
-import org.kohsuke.github.GHRepositoryViewTraffic.Daily;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -22,29 +20,29 @@ public class RepositoryTrafficTest {
     final private String login = "kohsuke", repositoryName = "github-api";
 
     @SuppressWarnings("unchecked")
-    private <T extends GHRepositoryTrafficInfo> void checkResponse(T expected, T actual){
+    private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual){
         Assert.assertEquals(expected.getCount(), actual.getCount());
         Assert.assertEquals(expected.getUniques(), actual.getUniques());
 
-        List<? extends GHRepositoryTrafficInfo.DayInfo> expectedList = expected.getDailyInfo();
-        List<? extends GHRepositoryTrafficInfo.DayInfo> actualList = actual.getDailyInfo();
-        Iterator<? extends GHRepositoryTrafficInfo.DayInfo> expectedIt;
-        Iterator<? extends GHRepositoryTrafficInfo.DayInfo> actualIt;
+        List<? extends DailyInfo> expectedList = expected.getDailyInfo();
+        List<? extends DailyInfo> actualList = actual.getDailyInfo();
+        Iterator<? extends DailyInfo> expectedIt;
+        Iterator<? extends DailyInfo> actualIt;
 
         Assert.assertEquals(expectedList.size(), actualList.size());
         expectedIt = expectedList.iterator();
         actualIt = actualList.iterator();
 
         while(expectedIt.hasNext() && actualIt.hasNext()) {
-            GHRepositoryTrafficInfo.DayInfo expectedDayInfo = expectedIt.next();
-            GHRepositoryTrafficInfo.DayInfo actualDayInfo = actualIt.next();
-            Assert.assertEquals(expectedDayInfo.getCount(), actualDayInfo.getCount());
-            Assert.assertEquals(expectedDayInfo.getUniques(), actualDayInfo.getUniques());
-            Assert.assertEquals(expectedDayInfo.getTimestamp(), actualDayInfo.getTimestamp());
+            DailyInfo expectedDailyInfo = expectedIt.next();
+            DailyInfo actualDailyInfo = actualIt.next();
+            Assert.assertEquals(expectedDailyInfo.getCount(), actualDailyInfo.getCount());
+            Assert.assertEquals(expectedDailyInfo.getUniques(), actualDailyInfo.getUniques());
+            Assert.assertEquals(expectedDailyInfo.getTimestamp(), actualDailyInfo.getTimestamp());
         }
     }
 
-    private <T extends GHRepositoryTrafficInfo> void testTraffic(T expectedResult) throws IOException{
+    private <T extends GHRepositoryTraffic> void testTraffic(T expectedResult) throws IOException{
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         ObjectMapper mapper = new ObjectMapper().setDateFormat(dateFormat);
@@ -101,21 +99,21 @@ public class RepositoryTrafficTest {
                 21523359,
                 65534,
                 Arrays.asList(
-                        new Daily("2016-10-10T00:00:00Z", 3, 2),
-                        new Daily("2016-10-11T00:00:00Z", 9, 4),
-                        new Daily("2016-10-12T00:00:00Z", 27, 8),
-                        new Daily("2016-10-13T00:00:00Z", 81, 16),
-                        new Daily("2016-10-14T00:00:00Z", 243, 32),
-                        new Daily("2016-10-15T00:00:00Z", 729, 64),
-                        new Daily("2016-10-16T00:00:00Z", 2187, 128),
-                        new Daily("2016-10-17T00:00:00Z", 6561, 256),
-                        new Daily("2016-10-18T00:00:00Z", 19683, 512),
-                        new Daily("2016-10-19T00:00:00Z", 59049, 1024),
-                        new Daily("2016-10-20T00:00:00Z", 177147, 2048),
-                        new Daily("2016-10-21T00:00:00Z", 531441, 4096),
-                        new Daily("2016-10-22T00:00:00Z", 1594323, 8192),
-                        new Daily("2016-10-23T00:00:00Z", 4782969, 16384),
-                        new Daily("2016-10-24T00:00:00Z", 14348907, 32768)
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-10T00:00:00Z", 3, 2),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-11T00:00:00Z", 9, 4),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-12T00:00:00Z", 27, 8),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-13T00:00:00Z", 81, 16),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-14T00:00:00Z", 243, 32),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-15T00:00:00Z", 729, 64),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-16T00:00:00Z", 2187, 128),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-17T00:00:00Z", 6561, 256),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-18T00:00:00Z", 19683, 512),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-19T00:00:00Z", 59049, 1024),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-20T00:00:00Z", 177147, 2048),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-21T00:00:00Z", 531441, 4096),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-22T00:00:00Z", 1594323, 8192),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-23T00:00:00Z", 4782969, 16384),
+                        new GHRepositoryViewTraffic.DailyInfo("2016-10-24T00:00:00Z", 14348907, 32768)
                 )
         );
         testTraffic(expectedResult);
@@ -127,21 +125,21 @@ public class RepositoryTrafficTest {
                 1500,
                 455,
                 Arrays.asList(
-                        new DayInfo("2016-10-10T00:00:00Z", 10,3),
-                        new DayInfo("2016-10-11T00:00:00Z", 20,6),
-                        new DayInfo("2016-10-12T00:00:00Z", 30,5),
-                        new DayInfo("2016-10-13T00:00:00Z", 40,7),
-                        new DayInfo("2016-10-14T00:00:00Z", 50,11),
-                        new DayInfo("2016-10-15T00:00:00Z", 60,12),
-                        new DayInfo("2016-10-16T00:00:00Z", 70,19),
-                        new DayInfo("2016-10-17T00:00:00Z", 170,111),
-                        new DayInfo("2016-10-18T00:00:00Z", 180,70),
-                        new DayInfo("2016-10-19T00:00:00Z", 190,10),
-                        new DayInfo("2016-10-20T00:00:00Z", 200,18),
-                        new DayInfo("2016-10-21T00:00:00Z", 210,8),
-                        new DayInfo("2016-10-22T00:00:00Z", 220,168),
-                        new DayInfo("2016-10-23T00:00:00Z", 5,2),
-                        new DayInfo("2016-10-24T00:00:00Z", 45,5)
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-10T00:00:00Z", 10,3),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-11T00:00:00Z", 20,6),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-12T00:00:00Z", 30,5),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-13T00:00:00Z", 40,7),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-14T00:00:00Z", 50,11),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-15T00:00:00Z", 60,12),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-16T00:00:00Z", 70,19),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-17T00:00:00Z", 170,111),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-18T00:00:00Z", 180,70),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-19T00:00:00Z", 190,10),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-20T00:00:00Z", 200,18),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-21T00:00:00Z", 210,8),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-22T00:00:00Z", 220,168),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-23T00:00:00Z", 5,2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-24T00:00:00Z", 45,5)
                 )
         );
         testTraffic(expectedResult);

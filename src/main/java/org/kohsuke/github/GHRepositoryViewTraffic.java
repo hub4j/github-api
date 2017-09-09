@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -8,34 +7,30 @@ import java.util.List;
  *
  * @see GHRepository#getViewTraffic()
  */
-public class GHRepositoryViewTraffic extends GHRepositoryTrafficInfo {
-    private List<Daily> views;
+public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
+    private List<DailyInfo> views;
 
     /*package*/ GHRepositoryViewTraffic() {
     }
 
-    /*package*/ GHRepositoryViewTraffic(int count, int uniques, List<Daily> views) {
+    /*package*/ GHRepositoryViewTraffic(int count, int uniques, List<DailyInfo> views) {
         super(count, uniques);
         this.views = views;
     }
 
-    public List<Daily> getViews() {
+    public List<DailyInfo> getViews() {
         return views;
     }
 
-    public List<Daily> getDailyInfo() {
+    public List<DailyInfo> getDailyInfo() {
         return getViews();
     }
 
-    public static class Daily extends GHRepositoryTrafficInfo.DayInfo {
-        /*package*/ Daily() {
+    public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
+        /*package*/ DailyInfo() {
         }
 
-        /*package*/ Daily(String timestamp, int count, int uniques) {
-            super(timestamp, count, uniques);
-        }
-
-        /*package*/ Daily(Date timestamp, int count, int uniques) {
+        /*package*/ DailyInfo(String timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
     }

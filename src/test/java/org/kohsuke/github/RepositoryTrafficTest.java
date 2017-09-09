@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.kohsuke.github.GHRepositoryTraffic.DailyInfo;
 import org.mockito.Mockito;
 
 import java.io.IOException;

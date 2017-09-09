@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class GHTreeBuilder {
 
     private final List<TreeEntry> treeEntries = new ArrayList<TreeEntry>();
 
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     private static final class TreeEntry {
         private final String path;
         private final String mode;

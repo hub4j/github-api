@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
-public abstract class GHRepositoryTrafficInfo {
+public abstract class GHRepositoryTrafficInfo implements TrafficInfo {
     private int count;
     private int uniques;
 
@@ -25,7 +25,7 @@ public abstract class GHRepositoryTrafficInfo {
 
     public abstract List<? extends DayInfo> getDailyInfo();
 
-    public static abstract class DayInfo {
+    public static abstract class DayInfo implements TrafficInfo {
         private Date timestamp;
         private int count;
         private int uniques;

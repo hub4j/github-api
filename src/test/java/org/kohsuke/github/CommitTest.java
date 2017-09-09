@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import org.junit.Test;
 
 import java.io.IOException;

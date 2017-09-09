@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Locale;
-
 /**
  * Search repositories.
  *

@@ -5,8 +5,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -16,7 +14,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.*;

@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class GHDeploymentStatusBuilder {
     private final Requester builder;

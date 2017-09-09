@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.notNullValue;

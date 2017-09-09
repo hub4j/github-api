@@ -269,7 +269,7 @@ public class GitHub {
     /**
      * Sets the custom connector used to make requests to GitHub.
      */
-    public synchronized void setConnector(HttpConnector connector) {
+    public void setConnector(HttpConnector connector) {
         this.connector = connector;
     }
 

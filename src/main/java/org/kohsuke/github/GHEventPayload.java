@@ -78,7 +78,7 @@ public abstract class GHEventPayload {
                 throw new IllegalStateException("Expected pull_request payload, but got something else. Maybe we've got another type of event?");
             if (repository!=null) {
                 repository.wrap(root);
-                pull_request.wrap(repository);
+                pull_request.wrapUp(repository);
             } else {
                 pull_request.wrapUp(root);
             }

@@ -297,9 +297,9 @@ public class GHPullRequest extends GHIssue {
     public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
                                             List<GHPullRequestReviewComment> comments)
             throws IOException {
-        if (event == null) {
-            event = GHPullRequestReviewState.PENDING;
-        }
+//        if (event == null) {
+//            event = GHPullRequestReviewState.PENDING;
+//        }
         List<DraftReviewComment> draftComments = new ArrayList<DraftReviewComment>(comments.size());
         for (GHPullRequestReviewComment c : comments) {
             draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), c.getPosition()));

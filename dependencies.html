@@ -225,6 +225,13 @@
 <td>2.7.5</td>
 <td>jar</td>
 <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></td>
+<td>Yes</td></tr>
+<tr class="b">
+<td>com.squareup.okhttp3</td>
+<td><a class="externalLink" href="https://github.com/square/okhttp/okhttp-urlconnection">okhttp-urlconnection</a></td>
+<td>3.4.0</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></td>
 <td>Yes</td></tr></table></div><a name="Project_Dependencies_test"></a>
 <div class="section">
 <h3>test<a name="test"></a></h3>
@@ -249,18 +256,24 @@
 <td>jar</td>
 <td>Eclipse Distribution License (New BSD License)</td></tr>
 <tr class="b">
+<td>org.hamcrest</td>
+<td><a class="externalLink" href="https://github.com/hamcrest/JavaHamcrest/hamcrest-all">hamcrest-all</a></td>
+<td>1.3</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">New BSD License</a></td></tr>
+<tr class="a">
 <td>org.kohsuke</td>
 <td><a class="externalLink" href="http://github.com/kohsuke/wordnet-random-name/">wordnet-random-name</a></td>
 <td>1.2</td>
 <td>jar</td>
 <td><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT license</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.kohsuke.stapler</td>
 <td><a class="externalLink" href="http://kohsuke.org/stapler-jetty/">stapler-jetty</a></td>
 <td>1.1</td>
 <td>jar</td>
 <td><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT license</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>org.mockito</td>
 <td><a class="externalLink" href="http://www.mockito.org">mockito-all</a></td>
 <td>1.9.5</td>
@@ -325,6 +338,13 @@
 <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></td>
 <td>Yes</td></tr>
 <tr class="b">
+<td>com.squareup.okhttp3</td>
+<td><a class="externalLink" href="https://github.com/square/okhttp/okhttp">okhttp</a></td>
+<td>3.4.0</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></td>
+<td>Yes</td></tr>
+<tr class="a">
 <td>com.squareup.okio</td>
 <td><a class="externalLink" href="https://github.com/square/okio/okio">okio</a></td>
 <td>1.6.0</td>
@@ -495,7 +515,7 @@
 <div class="section">
 <h3>Dependency Tree<a name="Dependency_Tree"></a></h3>
 <ul>
-<li>org.kohsuke:github-api:jar:1.88 <img id="_img1" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep0', '_img1' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep0" style="display:none">
+<li>org.kohsuke:github-api:jar:1.89 <img id="_img1" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep0', '_img1' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep0" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>GitHub API for Java</th></tr>
@@ -548,7 +568,16 @@
 <p><b>Description: </b>This is the core API of hamcrest matcher framework to be used by third-party framework providers. This includes the a foundation set of matcher implementations for common operations.</p>
 <p><b>URL: </b><a class="externalLink" href="https://github.com/hamcrest/JavaHamcrest/hamcrest-core">https://github.com/hamcrest/JavaHamcrest/hamcrest-core</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">New BSD License</a></p></td></tr></table></div></li></ul></li>
-<li>com.fasterxml.jackson.core:jackson-databind:jar:2.2.3 (compile) <img id="_img11" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep10', '_img11' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep10" style="display:none">
+<li>org.hamcrest:hamcrest-all:jar:1.3 (test) <img id="_img11" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep10', '_img11' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep10" style="display:none">
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>Hamcrest All</th></tr>
+<tr class="b">
+<td>
+<p><b>Description: </b>A self-contained hamcrest jar containing all of the sub-modules in a single artifact.</p>
+<p><b>URL: </b><a class="externalLink" href="https://github.com/hamcrest/JavaHamcrest/hamcrest-all">https://github.com/hamcrest/JavaHamcrest/hamcrest-all</a></p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">New BSD License</a></p></td></tr></table></div></li>
+<li>com.fasterxml.jackson.core:jackson-databind:jar:2.2.3 (compile) <img id="_img13" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep12', '_img13' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep12" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>jackson-databind</th></tr>
@@ -558,7 +587,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://wiki.fasterxml.com/JacksonHome">http://wiki.fasterxml.com/JacksonHome</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a>, <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License, Version 2.1</a></p></td></tr></table></div>
 <ul>
-<li>com.fasterxml.jackson.core:jackson-annotations:jar:2.2.3 (compile) <img id="_img13" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep12', '_img13' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep12" style="display:none">
+<li>com.fasterxml.jackson.core:jackson-annotations:jar:2.2.3 (compile) <img id="_img15" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep14', '_img15' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep14" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jackson-annotations</th></tr>
@@ -567,7 +596,7 @@
 <p><b>Description: </b>Core annotations used for value types, used by Jackson data binding package.</p>
 <p><b>URL: </b><a class="externalLink" href="http://wiki.fasterxml.com/JacksonHome">http://wiki.fasterxml.com/JacksonHome</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a>, <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License, Version 2.1</a></p></td></tr></table></div></li>
-<li>com.fasterxml.jackson.core:jackson-core:jar:2.2.3 (compile) <img id="_img15" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep14', '_img15' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep14" style="display:none">
+<li>com.fasterxml.jackson.core:jackson-core:jar:2.2.3 (compile) <img id="_img17" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep16', '_img17' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep16" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jackson-core</th></tr>
@@ -576,7 +605,7 @@
 <p><b>Description: </b>Core Jackson abstractions, basic JSON streaming API implementation</p>
 <p><b>URL: </b><a class="externalLink" href="http://wiki.fasterxml.com/JacksonHome">http://wiki.fasterxml.com/JacksonHome</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a>, <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License, Version 2.1</a></p></td></tr></table></div></li></ul></li>
-<li>commons-io:commons-io:jar:1.4 (compile) <img id="_img17" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep16', '_img17' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep16" style="display:none">
+<li>commons-io:commons-io:jar:1.4 (compile) <img id="_img19" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep18', '_img19' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep18" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Commons IO</th></tr>
@@ -585,7 +614,7 @@
 <p><b>Description: </b>Commons-IO contains utility classes, stream implementations, file filters, file comparators and endian classes.</p>
 <p><b>URL: </b><a class="externalLink" href="http://commons.apache.org/io/">http://commons.apache.org/io/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li>
-<li>com.infradna.tool:bridge-method-annotation:jar:1.14 (compile) <img id="_img19" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep18', '_img19' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep18" style="display:none">
+<li>com.infradna.tool:bridge-method-annotation:jar:1.14 (compile) <img id="_img21" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep20', '_img21' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep20" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Bridge method injection annotations</th></tr>
@@ -595,7 +624,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://bridge-method-injector.infradna.com/bridge-method-annotation/">http://bridge-method-injector.infradna.com/bridge-method-annotation/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT License</a></p></td></tr></table></div>
 <ul>
-<li>org.jenkins-ci:annotation-indexer:jar:1.4 (compile) <img id="_img21" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep20', '_img21' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep20" style="display:none">
+<li>org.jenkins-ci:annotation-indexer:jar:1.4 (compile) <img id="_img23" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep22', '_img23' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep22" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Annotation Indexer</th></tr>
@@ -604,7 +633,7 @@
 <p><b>Description: </b>Creates index of annotations.</p>
 <p><b>URL: </b><a class="externalLink" href="http://jenkins-ci.org/annotation-indexer/">http://jenkins-ci.org/annotation-indexer/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://jenkins-ci.org/mit-license">MIT License</a></p></td></tr></table></div></li></ul></li>
-<li>org.kohsuke.stapler:stapler-jetty:jar:1.1 (test) <img id="_img23" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep22', '_img23' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep22" style="display:none">
+<li>org.kohsuke.stapler:stapler-jetty:jar:1.1 (test) <img id="_img25" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep24', '_img25' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep24" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Stapler Jetty Runner</th></tr>
@@ -614,7 +643,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://kohsuke.org/stapler-jetty/">http://kohsuke.org/stapler-jetty/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT license</a></p></td></tr></table></div>
 <ul>
-<li>org.kohsuke.stapler:stapler:jar:1.177 (test) <img id="_img25" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep24', '_img25' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep24" style="display:none">
+<li>org.kohsuke.stapler:stapler:jar:1.177 (test) <img id="_img27" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep26', '_img27' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep26" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Stapler</th></tr>
@@ -623,7 +652,7 @@
 <p><b>Description: </b>Stapler HTTP request handling engine</p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/bsd-license.php">2-clause BSD license</a></p></td></tr></table></div>
 <ul>
-<li>commons-discovery:commons-discovery:jar:0.4 (test) <img id="_img27" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep26', '_img27' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep26" style="display:none">
+<li>commons-discovery:commons-discovery:jar:0.4 (test) <img id="_img29" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep28', '_img29' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep28" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Discovery</th></tr>
@@ -633,7 +662,7 @@
 <p><b>URL: </b>http://jakarta.apache.org/commons/${pom.artifactId.substring(8)}/</p>
 <p><b>Project License: </b><a href="/LICENSE.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div>
 <ul>
-<li>commons-logging:commons-logging:jar:1.0.4 (test) <img id="_img29" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep28', '_img29' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep28" style="display:none">
+<li>commons-logging:commons-logging:jar:1.0.4 (test) <img id="_img31" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep30', '_img31' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep30" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Logging</th></tr>
@@ -643,7 +672,7 @@
     well known logging systems.</p>
 <p><b>URL: </b><a class="externalLink" href="http://jakarta.apache.org/commons/logging/">http://jakarta.apache.org/commons/logging/</a></p>
 <p><b>Project License: </b><a href="/LICENSE.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li></ul></li>
-<li>commons-beanutils:commons-beanutils:jar:1.7.0 (test) <img id="_img31" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep30', '_img31' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep30" style="display:none">
+<li>commons-beanutils:commons-beanutils:jar:1.7.0 (test) <img id="_img33" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep32', '_img33' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep32" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>commons-beanutils</th></tr>
@@ -651,7 +680,7 @@
 <td>
 <p><b>Description: </b>There is currently no description associated with this project.</p>
 <p><b>Project License: </b>No license is defined for this project.</p></td></tr></table></div></li>
-<li>org.jvnet.localizer:localizer:jar:1.7 (test) <img id="_img33" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep32', '_img33' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep32" style="display:none">
+<li>org.jvnet.localizer:localizer:jar:1.7 (test) <img id="_img35" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep34', '_img35' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep34" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Localizer</th></tr>
@@ -659,7 +688,7 @@
 <td>
 <p><b>Description: </b>There is currently no description associated with this project.</p>
 <p><b>Project License: </b>No license is defined for this project.</p></td></tr></table></div></li>
-<li>org.kohsuke.stapler:json-lib:jar:2.1-rev6 (test) <img id="_img35" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep34', '_img35' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep34" style="display:none">
+<li>org.kohsuke.stapler:json-lib:jar:2.1-rev6 (test) <img id="_img37" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep36', '_img37' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep36" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>json-lib</th></tr>
@@ -670,7 +699,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://json-lib.sourceforge.net">http://json-lib.sourceforge.net</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div>
 <ul>
-<li>commons-collections:commons-collections:jar:3.2 (test) <img id="_img37" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep36', '_img37' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep36" style="display:none">
+<li>commons-collections:commons-collections:jar:3.2 (test) <img id="_img39" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep38', '_img39' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep38" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Collections</th></tr>
@@ -679,7 +708,7 @@
 <p><b>Description: </b>Types that extend and augment the Java Collections Framework.</p>
 <p><b>URL: </b><a class="externalLink" href="http://jakarta.apache.org/commons/collections/">http://jakarta.apache.org/commons/collections/</a></p>
 <p><b>Project License: </b><a href="/LICENSE.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li>
-<li>net.sf.ezmorph:ezmorph:jar:1.0.3 (test) <img id="_img39" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep38', '_img39' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep38" style="display:none">
+<li>net.sf.ezmorph:ezmorph:jar:1.0.3 (test) <img id="_img41" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep40', '_img41' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep40" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>ezmorph</th></tr>
@@ -688,7 +717,7 @@
 <p><b>Description: </b>Simple java library for transforming an Object to another Object.</p>
 <p><b>URL: </b><a class="externalLink" href="http://ezmorph.sourceforge.net">http://ezmorph.sourceforge.net</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li></ul></li>
-<li>org.jvnet:tiger-types:jar:1.3 (test) <img id="_img41" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep40', '_img41' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep40" style="display:none">
+<li>org.jvnet:tiger-types:jar:1.3 (test) <img id="_img43" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep42', '_img43' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep42" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Type arithmetic library for Java5</th></tr>
@@ -696,7 +725,7 @@
 <td>
 <p><b>Description: </b>There is currently no description associated with this project.</p>
 <p><b>Project License: </b>No license is defined for this project.</p></td></tr></table></div></li>
-<li>com.google.guava:guava:jar:r06 (test) <img id="_img43" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep42', '_img43' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep42" style="display:none">
+<li>com.google.guava:guava:jar:r06 (test) <img id="_img45" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep44', '_img45' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep44" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Guava (Google Common Libraries)</th></tr>
@@ -714,7 +743,7 @@
     per the JSR-305 spec.</p>
 <p><b>URL: </b><a class="externalLink" href="http://code.google.com/p/guava-libraries">http://code.google.com/p/guava-libraries</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li>
-<li>commons-fileupload:commons-fileupload:jar:1.2.1 (test) <img id="_img45" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep44', '_img45' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep44" style="display:none">
+<li>commons-fileupload:commons-fileupload:jar:1.2.1 (test) <img id="_img47" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep46', '_img47' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep46" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Commons FileUpload</th></tr>
@@ -724,7 +753,7 @@
     file upload functionality to servlets and web applications.</p>
 <p><b>URL: </b><a class="externalLink" href="http://commons.apache.org/fileupload/">http://commons.apache.org/fileupload/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td></tr></table></div></li></ul></li>
-<li>org.eclipse.jetty:jetty-servlet:jar:7.5.4.v20111024 (test) <img id="_img47" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep46', '_img47' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep46" style="display:none">
+<li>org.eclipse.jetty:jetty-servlet:jar:7.5.4.v20111024 (test) <img id="_img49" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep48', '_img49' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep48" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Servlet Handling</th></tr>
@@ -734,7 +763,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-servlet">http://www.eclipse.org/jetty/jetty-servlet</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>org.eclipse.jetty:jetty-security:jar:7.5.4.v20111024 (test) <img id="_img49" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep48', '_img49' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep48" style="display:none">
+<li>org.eclipse.jetty:jetty-security:jar:7.5.4.v20111024 (test) <img id="_img51" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep50', '_img51' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep50" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Security</th></tr>
@@ -744,7 +773,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-security">http://www.eclipse.org/jetty/jetty-security</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>org.eclipse.jetty:jetty-server:jar:7.5.4.v20111024 (test) <img id="_img51" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep50', '_img51' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep50" style="display:none">
+<li>org.eclipse.jetty:jetty-server:jar:7.5.4.v20111024 (test) <img id="_img53" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep52', '_img53' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep52" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Server Core</th></tr>
@@ -754,7 +783,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty">http://www.eclipse.org/jetty</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>javax.servlet:servlet-api:jar:2.5 (test) <img id="_img53" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep52', '_img53' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep52" style="display:none">
+<li>javax.servlet:servlet-api:jar:2.5 (test) <img id="_img55" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep54', '_img55' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep54" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>servlet-api</th></tr>
@@ -762,7 +791,7 @@
 <td>
 <p><b>Description: </b>There is currently no description associated with this project.</p>
 <p><b>Project License: </b>No license is defined for this project.</p></td></tr></table></div></li>
-<li>org.eclipse.jetty:jetty-continuation:jar:7.5.4.v20111024 (test) <img id="_img55" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep54', '_img55' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep54" style="display:none">
+<li>org.eclipse.jetty:jetty-continuation:jar:7.5.4.v20111024 (test) <img id="_img57" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep56', '_img57' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep56" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Continuation</th></tr>
@@ -771,7 +800,7 @@
 <p><b>Description: </b>Asynchronous API</p>
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-continuation">http://www.eclipse.org/jetty/jetty-continuation</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div></li>
-<li>org.eclipse.jetty:jetty-http:jar:7.5.4.v20111024 (test) <img id="_img57" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep56', '_img57' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep56" style="display:none">
+<li>org.eclipse.jetty:jetty-http:jar:7.5.4.v20111024 (test) <img id="_img59" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep58', '_img59' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep58" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Http Utility</th></tr>
@@ -781,7 +810,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-http">http://www.eclipse.org/jetty/jetty-http</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>org.eclipse.jetty:jetty-io:jar:7.5.4.v20111024 (test) <img id="_img59" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep58', '_img59' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep58" style="display:none">
+<li>org.eclipse.jetty:jetty-io:jar:7.5.4.v20111024 (test) <img id="_img61" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep60', '_img61' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep60" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: IO Utility</th></tr>
@@ -791,7 +820,7 @@
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-io">http://www.eclipse.org/jetty/jetty-io</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div>
 <ul>
-<li>org.eclipse.jetty:jetty-util:jar:7.5.4.v20111024 (test) <img id="_img61" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep60', '_img61' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep60" style="display:none">
+<li>org.eclipse.jetty:jetty-util:jar:7.5.4.v20111024 (test) <img id="_img63" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep62', '_img63' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep62" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Jetty :: Utilities</th></tr>
@@ -800,7 +829,7 @@
 <p><b>Description: </b>Utility classes for Jetty</p>
 <p><b>URL: </b><a class="externalLink" href="http://www.eclipse.org/jetty/jetty-util">http://www.eclipse.org/jetty/jetty-util</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License - Version 2.0</a>, <a class="externalLink" href="http://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License - Version 1.0</a></p></td></tr></table></div></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li>
-<li>org.eclipse.jgit:org.eclipse.jgit:jar:3.1.0.201310021548-r (test) <img id="_img63" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep62', '_img63' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep62" style="display:none">
+<li>org.eclipse.jgit:org.eclipse.jgit:jar:3.1.0.201310021548-r (test) <img id="_img65" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep64', '_img65' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep64" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>JGit - Core</th></tr>
@@ -810,7 +839,7 @@
 <p><b>URL: </b>http://www.eclipse.org/jgit//org.eclipse.jgit</p>
 <p><b>Project License: </b>Eclipse Distribution License (New BSD License)</p></td></tr></table></div>
 <ul>
-<li>com.jcraft:jsch:jar:0.1.46 (test) <img id="_img65" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep64', '_img65' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep64" style="display:none">
+<li>com.jcraft:jsch:jar:0.1.46 (test) <img id="_img67" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep66', '_img67' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep66" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>JSch</th></tr>
@@ -819,7 +848,7 @@
 <p><b>Description: </b>JSch is a pure Java implementation of SSH2</p>
 <p><b>URL: </b><a class="externalLink" href="http://www.jcraft.com/jsch/">http://www.jcraft.com/jsch/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.jcraft.com/jsch/LICENSE.txt">Revised BSD</a></p></td></tr></table></div></li>
-<li>com.googlecode.javaewah:JavaEWAH:jar:0.5.6 (test) <img id="_img67" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep66', '_img67' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep66" style="display:none">
+<li>com.googlecode.javaewah:JavaEWAH:jar:0.5.6 (test) <img id="_img69" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep68', '_img69' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep68" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>JavaEWAH</th></tr>
@@ -832,7 +861,7 @@ JavaEWAH is a word-aligned compressed variant of the Java bitset class. It uses 
 The goal of word-aligned compression is not to achieve the best compression, but rather to improve query processing time. Hence, we try to save CPU cycles, maybe at the expense of storage. However, the EWAH scheme we implemented is always more efficient storage-wise than an uncompressed bitmap (implemented in Java as the BitSet class). Unlike some alternatives, javaewah does not rely on a patented scheme.</p>
 <p><b>URL: </b><a class="externalLink" href="http://code.google.com/p/javaewah/">http://code.google.com/p/javaewah/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></p></td></tr></table></div></li></ul></li>
-<li>com.squareup.okhttp:okhttp-urlconnection:jar:2.7.5 (compile) <img id="_img69" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep68', '_img69' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep68" style="display:none">
+<li>com.squareup.okhttp:okhttp-urlconnection:jar:2.7.5 (compile) <img id="_img71" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep70', '_img71' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep70" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>OkHttp URLConnection</th></tr>
@@ -842,7 +871,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>URL: </b><a class="externalLink" href="https://github.com/square/okhttp/okhttp-urlconnection">https://github.com/square/okhttp/okhttp-urlconnection</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td></tr></table></div>
 <ul>
-<li>com.squareup.okhttp:okhttp:jar:2.7.5 (compile) <img id="_img71" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep70', '_img71' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep70" style="display:none">
+<li>com.squareup.okhttp:okhttp:jar:2.7.5 (compile) <img id="_img73" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep72', '_img73' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep72" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>OkHttp</th></tr>
@@ -852,7 +881,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>URL: </b><a class="externalLink" href="https://github.com/square/okhttp/okhttp">https://github.com/square/okhttp/okhttp</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td></tr></table></div>
 <ul>
-<li>com.squareup.okio:okio:jar:1.6.0 (compile) <img id="_img73" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep72', '_img73' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep72" style="display:none">
+<li>com.squareup.okio:okio:jar:1.6.0 (compile) <img id="_img75" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep74', '_img75' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep74" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Okio</th></tr>
@@ -861,7 +890,26 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>Description: </b>A modern I/O API for Java</p>
 <p><b>URL: </b><a class="externalLink" href="https://github.com/square/okio/okio">https://github.com/square/okio/okio</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td></tr></table></div></li></ul></li></ul></li>
-<li>org.kohsuke:wordnet-random-name:jar:1.2 (test) <img id="_img75" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep74', '_img75' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep74" style="display:none">
+<li>com.squareup.okhttp3:okhttp-urlconnection:jar:3.4.0 (compile) <img id="_img77" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep76', '_img77' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep76" style="display:none">
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>OkHttp URLConnection</th></tr>
+<tr class="b">
+<td>
+<p><b>Description: </b>An HTTP+SPDY client for Android and Java applications</p>
+<p><b>URL: </b><a class="externalLink" href="https://github.com/square/okhttp/okhttp-urlconnection">https://github.com/square/okhttp/okhttp-urlconnection</a></p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td></tr></table></div>
+<ul>
+<li>com.squareup.okhttp3:okhttp:jar:3.4.0 (compile) <img id="_img79" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep78', '_img79' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep78" style="display:none">
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>OkHttp</th></tr>
+<tr class="b">
+<td>
+<p><b>Description: </b>An HTTP+SPDY client for Android and Java applications</p>
+<p><b>URL: </b><a class="externalLink" href="https://github.com/square/okhttp/okhttp">https://github.com/square/okhttp/okhttp</a></p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td></tr></table></div></li></ul></li>
+<li>org.kohsuke:wordnet-random-name:jar:1.2 (test) <img id="_img81" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep80', '_img81' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep80" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>WordNet Random Name Generator</th></tr>
@@ -870,7 +918,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>Description: </b>WordNet Random Name Generator</p>
 <p><b>URL: </b><a class="externalLink" href="http://github.com/kohsuke/wordnet-random-name/">http://github.com/kohsuke/wordnet-random-name/</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT license</a></p></td></tr></table></div></li>
-<li>org.mockito:mockito-all:jar:1.9.5 (test) <img id="_img77" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep76', '_img77' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep76" style="display:none">
+<li>org.mockito:mockito-all:jar:1.9.5 (test) <img id="_img83" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep82', '_img83' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep82" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Mockito</th></tr>
@@ -879,7 +927,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>Description: </b>Mock objects library for java</p>
 <p><b>URL: </b><a class="externalLink" href="http://www.mockito.org">http://www.mockito.org</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://code.google.com/p/mockito/wiki/License">The MIT License</a></p></td></tr></table></div></li>
-<li>com.google.code.findbugs:annotations:jar:3.0.0 (provided) <img id="_img79" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep78', '_img79' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep78" style="display:none">
+<li>com.google.code.findbugs:annotations:jar:3.0.0 (provided) <img id="_img85" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep84', '_img85' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep84" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>FindBugs-Annotations</th></tr>
@@ -896,7 +944,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <p><b>MIT License: </b>Annotation Indexer, Bridge method injection annotations</p>
 <p><b>Revised BSD: </b>JSch</p>
 <p><b>Eclipse Distribution License (New BSD License): </b>JGit - Core</p>
-<p><b>New BSD License: </b>Hamcrest Core</p>
+<p><b>New BSD License: </b>Hamcrest All, Hamcrest Core</p>
 <p><b>The MIT license: </b>GitHub API for Java</p>
 <p><b>GNU Lesser Public License: </b>FindBugs-Annotations</p>
 <p><b>Apache 2: </b>JavaEWAH</p>
@@ -1135,6 +1183,14 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1.5</td>
 <td>Yes</td></tr>
 <tr class="a">
+<td>hamcrest-all-1.3.jar</td>
+<td>306.58 kB</td>
+<td>249</td>
+<td>204</td>
+<td>23</td>
+<td>1.5</td>
+<td>Yes</td></tr>
+<tr class="b">
 <td>hamcrest-core-1.3.jar</td>
 <td>45.02 kB</td>
 <td>52</td>
@@ -1142,7 +1198,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>3</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="b">
+<tr class="a">
 <td>annotation-indexer-1.4.jar</td>
 <td>16.09 kB</td>
 <td>24</td>
@@ -1150,7 +1206,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <td>tiger-types-1.3.jar</td>
 <td>17.52 kB</td>
 <td>22</td>
@@ -1158,7 +1214,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="b">
+<tr class="a">
 <td>localizer-1.7.jar</td>
 <td>6.66 kB</td>
 <td>15</td>
@@ -1166,7 +1222,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <td>wordnet-random-name-1.2.jar</td>
 <td>17.10 kB</td>
 <td>15</td>
@@ -1174,7 +1230,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="b">
+<tr class="a">
 <td>json-lib-2.1-rev6.jar</td>
 <td>113.37 kB</td>
 <td>84</td>
@@ -1182,7 +1238,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>8</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <td>stapler-1.177.jar</td>
 <td>264.65 kB</td>
 <td>223</td>
@@ -1190,7 +1246,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>8</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="b">
+<tr class="a">
 <td>stapler-jetty-1.1.jar</td>
 <td>3.36 kB</td>
 <td>13</td>
@@ -1198,7 +1254,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <td>mockito-all-1.9.5.jar</td>
 <td>1.58 MB</td>
 <td>1372</td>
@@ -1206,7 +1262,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>74</td>
 <td>1.5</td>
 <td>Yes</td></tr>
-<tr class="b">
+<tr class="a">
 <td>okhttp-2.7.5.jar</td>
 <td>331.03 kB</td>
 <td>193</td>
@@ -1214,7 +1270,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>6</td>
 <td>1.6</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <td>okhttp-urlconnection-2.7.5.jar</td>
 <td>18.89 kB</td>
 <td>17</td>
@@ -1222,7 +1278,23 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>2</td>
 <td>1.6</td>
 <td>Yes</td></tr>
+<tr class="a">
+<td>okhttp-3.4.0.jar</td>
+<td>344.99 kB</td>
+<td>209</td>
+<td>193</td>
+<td>9</td>
+<td>1.6</td>
+<td>Yes</td></tr>
 <tr class="b">
+<td>okhttp-urlconnection-3.4.0.jar</td>
+<td>34.10 kB</td>
+<td>28</td>
+<td>18</td>
+<td>3</td>
+<td>1.6</td>
+<td>Yes</td></tr>
+<tr class="a">
 <td>okio-1.6.0.jar</td>
 <td>65.93 kB</td>
 <td>42</td>
@@ -1230,7 +1302,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>1</td>
 <td>1.6</td>
 <td>Yes</td></tr>
-<tr class="a">
+<tr class="b">
 <th>Total</th>
 <th>Size</th>
 <th>Entries</th>
@@ -1238,31 +1310,31 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <th>Packages</th>
 <th>Java Version</th>
 <th>Debug Information</th></tr>
-<tr class="b">
-<td>39</td>
-<td>9.63 MB</td>
-<td>7328</td>
-<td>5800</td>
-<td>307</td>
+<tr class="a">
+<td>42</td>
+<td>10.32 MB</td>
+<td>7814</td>
+<td>6215</td>
+<td>342</td>
 <td>1.6</td>
-<td>38</td></tr>
-<tr class="a">
-<td>compile: 11</td>
-<td>compile: 2.18 MB</td>
-<td>compile: 1520</td>
-<td>compile: 1212</td>
-<td>compile: 61</td>
-<td>-</td>
-<td>compile: 10</td></tr>
+<td>41</td></tr>
 <tr class="b">
-<td>test: 27</td>
-<td>test: 7.38 MB</td>
-<td>test: 5670</td>
-<td>test: 4524</td>
-<td>test: 241</td>
+<td>compile: 13</td>
+<td>compile: 2.56 MB</td>
+<td>compile: 1757</td>
+<td>compile: 1423</td>
+<td>compile: 73</td>
 <td>-</td>
-<td>test: 27</td></tr>
+<td>compile: 12</td></tr>
 <tr class="a">
+<td>test: 28</td>
+<td>test: 7.68 MB</td>
+<td>test: 5919</td>
+<td>test: 4728</td>
+<td>test: 264</td>
+<td>-</td>
+<td>test: 28</td></tr>
+<tr class="b">
 <td>provided: 1</td>
 <td>provided: 77.21 kB</td>
 <td>provided: 138</td>
@@ -1378,47 +1450,56 @@ The goal of word-aligned compression is not to achieve the best compression, but
 <td>org.eclipse.jgit:org.eclipse.jgit:jar:3.1.0.201310021548-r</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/eclipse/jgit/org.eclipse.jgit/3.1.0.201310021548-r/org.eclipse.jgit-3.1.0.201310021548-r.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="a">
+<td>org.hamcrest:hamcrest-all:jar:1.3</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
+<tr class="b">
 <td>org.hamcrest:hamcrest-core:jar:1.3</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>org.jenkins-ci:annotation-indexer:jar:1.4</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jenkins-ci/annotation-indexer/1.4/annotation-indexer-1.4.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.jvnet:tiger-types:jar:1.3</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jvnet/tiger-types/1.3/tiger-types-1.3.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>org.jvnet.localizer:localizer:jar:1.7</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/jvnet/localizer/localizer/1.7/localizer-1.7.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.kohsuke:wordnet-random-name:jar:1.2</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/wordnet-random-name/1.2/wordnet-random-name-1.2.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>org.kohsuke.stapler:json-lib:jar:2.1-rev6</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/json-lib/2.1-rev6/json-lib-2.1-rev6.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.kohsuke.stapler:stapler:jar:1.177</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/stapler/1.177/stapler-1.177.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>org.kohsuke.stapler:stapler-jetty:jar:1.1</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/kohsuke/stapler/stapler-jetty/1.1/stapler-jetty-1.1.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.mockito:mockito-all:jar:1.9.5</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.squareup.okhttp:okhttp:jar:2.7.5</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com.squareup.okhttp:okhttp-urlconnection:jar:2.7.5</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp/okhttp-urlconnection/2.7.5/okhttp-urlconnection-2.7.5.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
+<tr class="a">
+<td>com.squareup.okhttp3:okhttp:jar:3.4.0</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp3/okhttp/3.4.0/okhttp-3.4.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
 <tr class="b">
+<td>com.squareup.okhttp3:okhttp-urlconnection:jar:3.4.0</td>
+<td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okhttp3/okhttp-urlconnection/3.4.0/okhttp-urlconnection-3.4.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
+<tr class="a">
 <td>com.squareup.okio:okio:jar:1.6.0</td>
 <td><a class="externalLink" href="http://repo.jenkins-ci.org/public//com/squareup/okio/okio/1.6.0/okio-1.6.0.jar"><img alt="Found at http://repo.jenkins-ci.org/public/" src="images/icon_success_sml.gif" /></a></td></tr>
-<tr class="a">
+<tr class="b">
 <th>Total</th>
 <th>repo.jenkins-ci.org</th></tr>
-<tr class="b">
-<td>39 (compile: 11, test: 27, provided: 1)</td>
-<td>39</td></tr></table></div>
+<tr class="a">
+<td>42 (compile: 13, test: 28, provided: 1)</td>
+<td>42</td></tr></table></div>
       </div>
     </div>
     <div id="footer">
@@ -1432,7 +1513,7 @@ The goal of word-aligned compression is not to achieve the best compression, but
   
   
   &nbsp;| Last Published: 2017-09-09
-  &nbsp;| Version: 1.88
+  &nbsp;| Version: 1.89
 </div>
       <div class="clear">
         <hr/>

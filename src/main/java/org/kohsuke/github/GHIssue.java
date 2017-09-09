@@ -288,8 +288,8 @@ public class GHIssue extends GHObject implements Reactable{
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-    public GHUser getAssignee() {
-        return assignee;
+    public GHUser getAssignee() throws IOException {
+        return root.intern(assignee);
     }
 
     public List<GHUser> getAssignees() {
@@ -299,8 +299,8 @@ public class GHIssue extends GHObject implements Reactable{
     /**
      * User who submitted the issue.
      */
-    public GHUser getUser() {
-        return user;
+    public GHUser getUser() throws IOException {
+        return root.intern(user);
     }
 
     /**
@@ -311,12 +311,16 @@ public class GHIssue extends GHObject implements Reactable{
      * even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
-    public GHUser getClosedBy() {
+    public GHUser getClosedBy() throws IOException {
         if(!"closed".equals(state)) return null;
-        if(closed_by != null) return closed_by;
-        
-        //TODO closed_by = owner.getIssue(number).getClosed_by();
-        return closed_by;
+
+        //TODO
+        /*
+        if (closed_by==null) {
+            closed_by = owner.getIssue(number).getClosed_by();
+        }
+        */
+        return root.intern(closed_by);
     }
     
     public int getCommentsCount(){

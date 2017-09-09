@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
@@ -79,9 +81,10 @@ public class GitHub {
      */
     /*package*/ final String encodedAuthorization;
 
-    private final Map<String,GHUser> users = new Hashtable<String, GHUser>();
-    private final Map<String,GHOrganization> orgs = new Hashtable<String, GHOrganization>();
-
+    private final ConcurrentMap<String,GHUser> users;
+    private final ConcurrentMap<String,GHOrganization> orgs;
+    // Cache of myself object.
+    private GHMyself myself;
     private final String apiUrl;
 
     /*package*/ final RateLimitHandler rateLimitHandler;
@@ -146,6 +149,8 @@ public class GitHub {
             }
         }
 
+        users = new ConcurrentHashMap<String, GHUser>();
+        orgs = new ConcurrentHashMap<String, GHOrganization>();
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
@@ -264,7 +269,7 @@ public class GitHub {
     /**
      * Sets the custom connector used to make requests to GitHub.
      */
-    public void setConnector(HttpConnector connector) {
+    public synchronized void setConnector(HttpConnector connector) {
         this.connector = connector;
     }
 
@@ -357,13 +362,15 @@ public class GitHub {
     @WithBridgeMethods(GHUser.class)
     public GHMyself getMyself() throws IOException {
         requireCredential();
+        synchronized (this) {
+            if (this.myself != null) return myself;
+            
+            GHMyself u = retrieve().to("/user", GHMyself.class);
 
-        GHMyself u = retrieve().to("/user", GHMyself.class);
-
-        u.root = this;
-        users.put(u.getLogin(), u);
-
-        return u;
+            u.root = this;
+            this.myself = u;
+            return u;
+        }
     }
 
     /**
@@ -379,7 +386,7 @@ public class GitHub {
         return u;
     }
 
-
+    
     /**
      * clears all cached data in order for external changes (modifications and del
      */
@@ -639,6 +646,18 @@ public class GitHub {
                 LOGGER.log(FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
             return false;
         }
+    }
+
+    /*package*/ GHUser intern(GHUser user) throws IOException {
+        if (user==null) return user;
+
+        // if we already have this user in our map, use it
+        GHUser u = users.get(user.getLogin());
+        if (u!=null)    return u;
+
+        // if not, remember this new user
+        users.putIfAbsent(user.getLogin(),user);
+        return user;
     }
 
     private static class GHApiInfo {

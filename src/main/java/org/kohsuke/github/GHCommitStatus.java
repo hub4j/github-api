@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -45,8 +46,8 @@ public class GHCommitStatus extends GHObject {
         return description;
     }
 
-    public GHUser getCreator() {
-        return creator;
+    public GHUser getCreator() throws IOException {
+        return root.intern(creator);
     }
 
     public String getContext() {

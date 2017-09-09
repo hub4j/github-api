@@ -39,7 +39,8 @@ public class GHCommitPointer {
      * This points to the user who owns
      * the {@link #getRepository()}.
      */
-    public GHUser getUser() {
+    public GHUser getUser() throws IOException {
+        if (user != null) return user.root.intern(user);
         return user;
     }
 

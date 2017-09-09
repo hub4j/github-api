@@ -26,8 +26,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.exception.GHFileNotFoundException;
-import org.kohsuke.github.exception.GHIOException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -274,7 +272,7 @@ class Requester {
                         if (nextLinkMatcher.find()) {
                             final String link = nextLinkMatcher.group(1);
                             T nextResult = _to(link, type, instance);
-                            injectInResult(nextResult);
+                            setResponseHeaders(nextResult);
                             final int resultLength = Array.getLength(result);
                             final int nextResultLength = Array.getLength(nextResult);
                             T concatResult = (T) Array.newInstance(type.getComponentType(), resultLength + nextResultLength);
@@ -284,8 +282,7 @@ class Requester {
                         }
                     }
                 }
-                injectInResult(result);
-                return result;
+                return setResponseHeaders(result);
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
@@ -605,16 +602,12 @@ class Requester {
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
-                    final T readValue = MAPPER.readValue(data, type);
-                    injectInResult(readValue);
-                    return readValue;
+                    return setResponseHeaders(MAPPER.readValue(data, type));
                 } catch (JsonMappingException e) {
                     throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
                 }
             if (instance!=null) {
-                final T readValue = MAPPER.readerForUpdating(instance).<T>readValue(data);
-                injectInResult(readValue);
-                return readValue;
+                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
             }
             return null;
         } catch (FileNotFoundException e) {
@@ -628,24 +621,19 @@ class Requester {
         }
     }
 
-    private <T> void injectInResult(T readValue) {
+    private <T> T setResponseHeaders(T readValue) {
         if (readValue instanceof GHObject[]) {
             for (GHObject ghObject : (GHObject[]) readValue) {
-                injectInResult(ghObject);
+                setResponseHeaders(ghObject);
             }
         } else if (readValue instanceof GHObject) {
-            injectInResult((GHObject) readValue);
+            setResponseHeaders((GHObject) readValue);
         }
+        return readValue;
     }
 
-    private void injectInResult(GHObject readValue) {
-        try {
-            final Field field = GHObject.class.getDeclaredField("responseHeaderFields");
-            field.setAccessible(true);
-            field.set(readValue, uc.getHeaderFields());
-        } catch (NoSuchFieldException ignore) {
-        } catch (IllegalAccessException ignore) {
-        }
+    private void setResponseHeaders(GHObject readValue) {
+        readValue.responseHeaderFields = uc.getHeaderFields();
     }
 
     /**
@@ -700,7 +688,7 @@ class Requester {
                     HttpException http = (HttpException) e;
                     throw (IOException) new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
                 } else {
-                    throw (IOException) new GHIOException(error).withResponceHeaderFields(uc).initCause(e);
+                    throw (IOException) new GHIOException(error).withResponseHeaderFields(uc).initCause(e);
                 }
             } else {
                 throw e;

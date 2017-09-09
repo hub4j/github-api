@@ -1,7 +1,7 @@
-package org.kohsuke.github.exception;
+package org.kohsuke.github;
 
 import javax.annotation.CheckForNull;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +12,22 @@ import java.util.Map;
  *
  * @author Kanstantsin Shautsou
  */
-public class GHFileNotFoundException extends FileNotFoundException {
+public class GHIOException extends IOException {
     protected Map<String, List<String>> responseHeaderFields;
 
-    public GHFileNotFoundException() {
+    public GHIOException() {
     }
 
-    public GHFileNotFoundException(String s) {
-        super(s);
+    public GHIOException(String message) {
+        super(message);
+    }
+
+    public GHIOException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public GHIOException(Throwable cause) {
+        super(cause);
     }
 
     @CheckForNull
@@ -27,7 +35,7 @@ public class GHFileNotFoundException extends FileNotFoundException {
         return responseHeaderFields;
     }
 
-    public GHFileNotFoundException withResponseHeaderFields(HttpURLConnection urlConnection) {
+    GHIOException withResponseHeaderFields(HttpURLConnection urlConnection) {
         this.responseHeaderFields = urlConnection.getHeaderFields();
         return this;
     }

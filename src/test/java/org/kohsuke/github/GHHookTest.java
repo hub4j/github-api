@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.kohsuke.github.exception.GHFileNotFoundException;
 
 import java.io.IOException;
 import java.util.Arrays;

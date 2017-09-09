@@ -19,7 +19,9 @@ import java.util.Map;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public abstract class GHObject {
-    // not data but information related to data from responce
+    /**
+     * Capture response HTTP headers on the state object.
+     */
     protected Map<String, List<String>> responseHeaderFields;
 
     protected String url;
@@ -30,7 +32,17 @@ public abstract class GHObject {
     /*package*/ GHObject() {
     }
 
-    @CheckForNull
+    /**
+     * Returns the HTTP response headers given along with the state of this object.
+     *
+     * <p>
+     * Some of the HTTP headers have nothing to do with the object, for example "Cache-Control"
+     * and others are different depending on how this object was retrieved.
+     *
+     * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such.
+     * Use with caution. The method might be removed in the future.
+     */
+    @CheckForNull @Deprecated
     public Map<String, List<String>> getResponseHeaderFields() {
         return responseHeaderFields;
     }

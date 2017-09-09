@@ -26,6 +26,8 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.BLACK_CAT;
+
 /**
  * Review to the pull request
  *
@@ -105,7 +107,7 @@ public class GHPullRequestReview extends GHObject {
     @Deprecated
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE")
-                .withPreview("application/vnd.github.black-cat-preview+json")
+                .withPreview(BLACK_CAT)
                 .to(getApiRoute());
     }
 
@@ -117,7 +119,7 @@ public class GHPullRequestReview extends GHObject {
     public void dismiss(String message) throws IOException {
         new Requester(owner.root).method("PUT")
                 .with("message", message)
-                .withPreview("application/vnd.github.black-cat-preview+json")
+                .withPreview(BLACK_CAT)
                 .to(getApiRoute()+"/dismissals");
         state = GHPullRequestReviewState.DISMISSED;
     }
@@ -132,7 +134,7 @@ public class GHPullRequestReview extends GHObject {
             public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestReviewComment>(
                         owner.root.retrieve()
-                                .withPreview("application/vnd.github.black-cat-preview+json")
+                                .withPreview(BLACK_CAT)
                                 .asIterator(getApiRoute() + "/comments",
                                 GHPullRequestReviewComment[].class, pageSize)) {
                     protected void wrapUp(GHPullRequestReviewComment[] page) {

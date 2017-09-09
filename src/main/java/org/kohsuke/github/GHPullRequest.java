@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.CheckForNull;
 
+import static org.kohsuke.github.Previews.BLACK_CAT;
+
 /**
  * A pull request.
  * 
@@ -234,7 +236,7 @@ public class GHPullRequest extends GHIssue {
         return new PagedIterable<GHPullRequestReview>() {
             public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestReview>(root.retrieve()
-                        .withPreview("application/vnd.github.black-cat-preview+json")
+                        .withPreview(BLACK_CAT)
                         .asIterator(String.format("%s/reviews", getApiRoute()),
                         GHPullRequestReview[].class, pageSize)) {
                     @Override
@@ -308,7 +310,7 @@ public class GHPullRequest extends GHIssue {
                 .with("body", body)
                 //.with("event", event.name())
                 ._with("comments", draftComments)
-                .withPreview("application/vnd.github.black-cat-preview+json")
+                .withPreview(BLACK_CAT)
                 .to(getApiRoute() + "/reviews", GHPullRequestReview.class).wrapUp(this);
     }
 

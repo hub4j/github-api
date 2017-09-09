@@ -346,8 +346,28 @@ public class GHPullRequest extends GHIssue {
      *      SHA that pull request head must match to allow merge.
      */
     public void merge(String msg, String sha) throws IOException {
-        new Requester(root).method("PUT").with("commit_message",msg).with("sha",sha).to(getApiRoute()+"/merge");
+        merge(msg, sha, null);
     }
+
+    /**
+     * Merge this pull request, using the specified merge method.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     * @param method
+     *      SHA that pull request head must match to allow merge.
+     */
+    public void merge(String msg, String sha, MergeMethod method) throws IOException {
+        new Requester(root).method("PUT")
+                .with("commit_message",msg)
+                .with("sha",sha)
+                .with("merge_method",method)
+                .to(getApiRoute()+"/merge");
+    }
+
+    public enum MergeMethod{ MERGE, SQUASH, REBASE }
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {

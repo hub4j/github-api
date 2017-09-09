@@ -100,6 +100,19 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testSquashMerge() throws Exception {
+        String name = rnd.next();
+        GHRef masterRef = getRepository().getRef("heads/master");
+        GHRef branchRef = getRepository().createRef("refs/heads/" + name, masterRef.getObject().getSha());
+        getRepository().createContent(name, name, name, name);
+        Thread.sleep(1000);
+        GHPullRequest p = getRepository().createPullRequest(name, name, "master", "## test squash");
+        Thread.sleep(1000);
+        p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
+        branchRef.delete();
+    }
+
+    @Test
     // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
         GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");

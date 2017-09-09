@@ -27,7 +27,7 @@ public class GHTreeBuilder {
         }
     }
 
-    public GHTreeBuilder(GHRepository repo) {
+    GHTreeBuilder(GHRepository repo) {
         this.repo = repo;
         req = new Requester(repo.root);
     }

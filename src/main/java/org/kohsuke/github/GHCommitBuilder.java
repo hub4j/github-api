@@ -33,7 +33,7 @@ public class GHCommitBuilder {
         }
     }
 
-    public GHCommitBuilder(GHRepository repo) {
+    GHCommitBuilder(GHRepository repo) {
         this.repo = repo;
         req = new Requester(repo.root);
     }

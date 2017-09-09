@@ -824,6 +824,10 @@ public class GHRepository extends GHObject {
         return root.retrieve().to(url, GHTree.class).wrap(this);
     }
 
+    public GHTreeBuilder createTree() {
+        return new GHTreeBuilder(this);
+    }
+
     /**
      * Retrieves the tree for the current GitHub repository, recursively as described in here:
      * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
@@ -853,6 +857,10 @@ public class GHRepository extends GHObject {
         return root.retrieve().to(target, GHBlob.class);
     }
 
+    public GHBlobBuilder createBlob() {
+        return new GHBlobBuilder(this);
+    }
+
     /**
      * Reads the content of a blob as a stream for better efficiency.
      *
@@ -874,6 +882,10 @@ public class GHRepository extends GHObject {
             commits.put(sha1,c);
         }
         return c;
+    }
+
+    public GHCommitBuilder createCommit() {
+        return new GHCommitBuilder(this);
     }
 
     /**

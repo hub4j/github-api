@@ -1,54 +1,57 @@
 package org.kohsuke.github;
 
 import java.util.Date;
+import java.util.List;
 
 public abstract class GHRepositoryTrafficInfo {
-    private Integer count;
-    private Integer uniques;
+    private int count;
+    private int uniques;
 
-    public GHRepositoryTrafficInfo() {
+    /*package*/ GHRepositoryTrafficInfo() {
     }
 
-    public GHRepositoryTrafficInfo(Integer count, Integer uniques) {
+    /*package*/ GHRepositoryTrafficInfo(int count, int uniques) {
         this.count = count;
         this.uniques = uniques;
     }
 
-    public Integer getCount() {
+    public int getCount() {
         return count;
     }
 
-    public Integer getUniques() {
+    public int getUniques() {
         return uniques;
     }
 
+    public abstract List<? extends DayInfo> getDailyInfo();
+
     public static abstract class DayInfo {
         private Date timestamp;
-        private Integer count;
-        private Integer uniques;
+        private int count;
+        private int uniques;
 
         public Date getTimestamp() {
             return timestamp;
         }
 
-        public Integer getCount() {
+        public int getCount() {
             return count;
         }
 
-        public Integer getUniques() {
+        public int getUniques() {
             return uniques;
         }
 
-        public DayInfo() {
+        /*package*/ DayInfo() {
         }
 
-        public DayInfo(String timestamp, Integer count, Integer uniques) {
+        /*package*/ DayInfo(String timestamp, Integer count, Integer uniques) {
             this.timestamp = GitHub.parseDate(timestamp);
             this.count = count;
             this.uniques = uniques;
         }
 
-        public DayInfo(Date timestamp, Integer count, Integer uniques) {
+        /*package*/ DayInfo(Date timestamp, Integer count, Integer uniques) {
             this.timestamp = timestamp;
             this.count = count;
             this.uniques = uniques;

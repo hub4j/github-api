@@ -3,13 +3,18 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repository view statistics.
+ *
+ * @see GHRepository#getViews()
+ */
 public class GHRepositoryViews extends GHRepositoryTrafficInfo {
     private List<DayViews> views;
 
-    public GHRepositoryViews() {
+    /*package*/ GHRepositoryViews() {
     }
 
-    public GHRepositoryViews(Integer count, Integer uniques, List<DayViews> views) {
+    /*package*/ GHRepositoryViews(int count, int uniques, List<DayViews> views) {
         super(count, uniques);
         this.views = views;
     }
@@ -18,15 +23,19 @@ public class GHRepositoryViews extends GHRepositoryTrafficInfo {
         return views;
     }
 
+    public List<DayViews> getDailyInfo() {
+        return getViews();
+    }
+
     public static class DayViews extends GHRepositoryTrafficInfo.DayInfo {
-        public DayViews() {
+        /*package*/ DayViews() {
         }
 
-        public DayViews(String timestamp, Integer count, Integer uniques) {
+        /*package*/ DayViews(String timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
 
-        public DayViews(Date timestamp, Integer count, Integer uniques) {
+        /*package*/ DayViews(Date timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
     }

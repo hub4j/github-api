@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.kohsuke.github.GHRepositoryTrafficInfo.DayInfo;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -24,27 +25,18 @@ public class RepositoryTrafficTest {
         Assert.assertEquals(expected.getCount(), actual.getCount());
         Assert.assertEquals(expected.getUniques(), actual.getUniques());
 
-        List<T.DayInfo> expectedList = null;
-        List<T.DayInfo> actualList = null;
-        Iterator<T.DayInfo> expectedIt;
-        Iterator<T.DayInfo> actualIt;
-
-        if(expected instanceof GHRepositoryViews){
-            expectedList = (List<T.DayInfo>)((List<?>)((GHRepositoryViews) expected).getViews());
-            actualList = (List<T.DayInfo>)((List<?>)((GHRepositoryViews) actual).getViews());
-        }
-        else if(expected instanceof GHRepositoryClones){
-            expectedList = (List<T.DayInfo>)((List<?>)((GHRepositoryClones) expected).getClones());
-            actualList = (List<T.DayInfo>)((List<?>)((GHRepositoryClones) actual).getClones());
-        }
+        List<? extends DayInfo> expectedList = expected.getDailyInfo();
+        List<? extends DayInfo> actualList = actual.getDailyInfo();
+        Iterator<? extends DayInfo> expectedIt;
+        Iterator<? extends DayInfo> actualIt;
 
         Assert.assertEquals(expectedList.size(), actualList.size());
         expectedIt = expectedList.iterator();
         actualIt = actualList.iterator();
 
         while(expectedIt.hasNext() && actualIt.hasNext()) {
-            T.DayInfo expectedDayInfo = expectedIt.next();
-            T.DayInfo actualDayInfo = actualIt.next();
+            DayInfo expectedDayInfo = expectedIt.next();
+            DayInfo actualDayInfo = actualIt.next();
             Assert.assertEquals(expectedDayInfo.getCount(), actualDayInfo.getCount());
             Assert.assertEquals(expectedDayInfo.getUniques(), actualDayInfo.getUniques());
             Assert.assertEquals(expectedDayInfo.getTimestamp(), actualDayInfo.getTimestamp());

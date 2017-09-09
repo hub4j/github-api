@@ -3,13 +3,18 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repository clone statistics.
+ *
+ * @see GHRepository#getClones()
+ */
 public class GHRepositoryClones extends GHRepositoryTrafficInfo {
     private List<DayClones> clones;
 
-    public GHRepositoryClones() {
+    /*package*/ GHRepositoryClones() {
     }
 
-    public GHRepositoryClones(Integer count, Integer uniques, List<DayClones> clones) {
+    /*package*/ GHRepositoryClones(Integer count, Integer uniques, List<DayClones> clones) {
         super(count, uniques);
         this.clones = clones;
     }
@@ -18,15 +23,19 @@ public class GHRepositoryClones extends GHRepositoryTrafficInfo {
         return clones;
     }
 
+    public List<DayClones> getDailyInfo() {
+        return getClones();
+    }
+
     public static class DayClones extends GHRepositoryTrafficInfo.DayInfo {
-        public DayClones() {
+        /*package*/ DayClones() {
         }
 
-        public DayClones(String timestamp, Integer count, Integer uniques) {
+        /*package*/ DayClones(String timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
 
-        public DayClones(Date timestamp, Integer count, Integer uniques) {
+        /*package*/ DayClones(Date timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
     }

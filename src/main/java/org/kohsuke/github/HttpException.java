@@ -1,10 +1,9 @@
 package org.kohsuke.github;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import javax.annotation.CheckForNull;
 
 /**
  * {@link IOException} for http exceptions because {@link HttpURLConnection} throws un-discerned

@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
+import static org.kohsuke.github.Previews.*;
 
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)

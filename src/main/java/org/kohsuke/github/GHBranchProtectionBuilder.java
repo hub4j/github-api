@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.LOKI;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Builder to configure the branch protection settings.

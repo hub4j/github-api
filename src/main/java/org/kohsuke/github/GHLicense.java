@@ -32,7 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.kohsuke.github.Previews.DRAX;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * The GitHub Preview API's license information

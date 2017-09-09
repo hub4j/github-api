@@ -1,7 +1,8 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Builder pattern for creating a new tree.

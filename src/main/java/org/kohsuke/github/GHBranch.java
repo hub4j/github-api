@@ -1,14 +1,13 @@
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.LOKI;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * A branch in a repository.

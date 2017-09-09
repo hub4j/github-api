@@ -1,10 +1,9 @@
 package org.kohsuke.github;
 
-import java.util.Collection;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.Collection;
 
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
 		"URF_UNREAD_FIELD" }, justification = "JSON API")

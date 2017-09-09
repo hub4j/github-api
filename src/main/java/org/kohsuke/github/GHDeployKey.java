@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.IOException;
 
 public class GHDeployKey {
 

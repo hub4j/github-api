@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.io.IOException;
 
 /**
  * Search commits.

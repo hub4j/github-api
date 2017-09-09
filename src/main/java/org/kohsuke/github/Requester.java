@@ -25,6 +25,10 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+
+import javax.annotation.WillClose;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,19 +53,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-import javax.annotation.WillClose;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
-import static java.util.Arrays.asList;
-import java.util.logging.Level;
+import static java.util.Arrays.*;
 import static java.util.logging.Level.*;
-import static org.apache.commons.lang.StringUtils.defaultString;
-import static org.kohsuke.github.GitHub.MAPPER;
+import static org.apache.commons.lang.StringUtils.*;
+import static org.kohsuke.github.GitHub.*;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.

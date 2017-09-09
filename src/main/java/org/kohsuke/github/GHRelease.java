@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.format;
+import static java.lang.String.*;
 
 /**
  * Release in a github repository.

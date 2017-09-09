@@ -26,7 +26,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.BLACK_CAT;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Review to the pull request

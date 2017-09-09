@@ -1,10 +1,10 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-import java.util.Date;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * Represents an event.

@@ -78,7 +78,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         Thread.sleep(1000);
         GHPullRequest p = getRepository().createPullRequest(name, name, "master", "## test squash");
         Thread.sleep(1000);
-        p.merge("squash merge", GHPullRequest.MergeMethod.SQUASH);
+        p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
         branchRef.delete();
     }
 

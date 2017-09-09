@@ -277,7 +277,7 @@ public class GHPullRequest extends GHIssue {
      *      Commit message. If null, the default one will be used.
      */
     public void merge(String msg) throws IOException {
-        merge(msg,(String)null);
+        merge(msg,null);
     }
 
     /**
@@ -291,7 +291,7 @@ public class GHPullRequest extends GHIssue {
      *      SHA that pull request head must match to allow merge.
      */
     public void merge(String msg, String sha) throws IOException {
-        new Requester(root).method("PUT").with("commit_message",msg).with("sha",sha).to(getApiRoute()+"/merge");
+        merge(msg, sha, null);
     }
 
     /**
@@ -304,11 +304,12 @@ public class GHPullRequest extends GHIssue {
      * @param method
      *      SHA that pull request head must match to allow merge.
      */
-    public void merge(String msg, MergeMethod method) throws IOException {
+    public void merge(String msg, String sha, MergeMethod method) throws IOException {
         new Requester(root).method("PUT")
-		.with("commit_message",msg)
-		.with("merge_method",method)
-		.to(getApiRoute()+"/merge");
+                .with("commit_message",msg)
+                .with("sha",sha)
+                .with("merge_method",method)
+                .to(getApiRoute()+"/merge");
     }
 
     public enum MergeMethod{ MERGE, SQUASH, REBASE }

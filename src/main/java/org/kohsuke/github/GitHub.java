@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -80,8 +81,8 @@ public class GitHub {
      */
     /*package*/ final String encodedAuthorization;
 
-    private final Map<String,GHUser> users;
-    private final Map<String,GHOrganization> orgs;
+    private final ConcurrentMap<String,GHUser> users;
+    private final ConcurrentMap<String,GHOrganization> orgs;
     // Cache of myself object.
     private GHMyself myself;
     private final String apiUrl;
@@ -645,6 +646,18 @@ public class GitHub {
                 LOGGER.log(FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
             return false;
         }
+    }
+
+    /*package*/ GHUser intern(GHUser user) throws IOException {
+        if (user==null) return user;
+
+        // if we already have this user in our map, use it
+        GHUser u = users.get(user.getLogin());
+        if (u!=null)    return u;
+
+        // if not, remember this new user
+        users.putIfAbsent(user.getLogin(),user);
+        return user;
     }
 
     private static class GHApiInfo {

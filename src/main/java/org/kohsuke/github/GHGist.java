@@ -39,7 +39,7 @@ public class GHGist extends GHObject {
      * User that owns this Gist.
      */
     public GHUser getOwner() throws IOException {
-        return root.getUser(owner.getLogin());
+        return root.intern(owner);
     }
 
     public String getForksUrl() {

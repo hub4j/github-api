@@ -42,8 +42,7 @@ public class GHDeployment extends GHObject {
         return environment;
     }
     public GHUser getCreator() throws IOException {
-        if(creator != null) return root.getUser(creator.getLogin());
-        return creator;
+        return root.intern(creator);
     }
     public String getRef() {
         return ref;

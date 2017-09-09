@@ -289,8 +289,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public GHUser getAssignee() throws IOException {
-        if (assignee != null) return owner.root.getUser(assignee.getLogin());
-        return assignee;
+        return root.intern(assignee);
     }
 
     public List<GHUser> getAssignees() {
@@ -301,7 +300,7 @@ public class GHIssue extends GHObject implements Reactable{
      * User who submitted the issue.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        return root.intern(user);
     }
 
     /**
@@ -314,10 +313,14 @@ public class GHIssue extends GHObject implements Reactable{
      */
     public GHUser getClosedBy() throws IOException {
         if(!"closed".equals(state)) return null;
-        if(closed_by != null) return owner.root.getUser(closed_by.getLogin());;
-        
-        //TODO closed_by = owner.getIssue(number).getClosed_by();
-        return closed_by;
+
+        //TODO
+        /*
+        if (closed_by==null) {
+            closed_by = owner.getIssue(number).getClosed_by();
+        }
+        */
+        return root.intern(closed_by);
     }
     
     public int getCommentsCount(){

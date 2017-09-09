@@ -28,7 +28,7 @@ public class GHMilestone extends GHObject {
     }
     
     public GHUser getCreator() throws IOException {
-        return root.getUser(creator.getLogin());
+        return root.intern(creator);
     }
     
     public Date getDueOn() {

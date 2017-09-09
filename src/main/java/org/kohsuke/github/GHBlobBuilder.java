@@ -30,7 +30,6 @@ public class GHBlobBuilder {
      * Configures a blob with the specified binary {@code content}.
      */
     public GHBlobBuilder binaryContent(byte[] content) {
-        new String(content);
         String base64Content = Base64.encodeBase64String(content);
         req.with("content", base64Content);
         req.with("encoding", "base64");

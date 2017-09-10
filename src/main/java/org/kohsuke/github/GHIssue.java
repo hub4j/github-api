@@ -68,6 +68,7 @@ public class GHIssue extends GHObject implements Reactable{
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
+    protected boolean locked;
 
     /**
      * @deprecated use {@link GHLabel}
@@ -129,6 +130,10 @@ public class GHIssue extends GHObject implements Reactable{
         return title;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
     public GHIssueState getState() {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
@@ -146,6 +151,14 @@ public class GHIssue extends GHObject implements Reactable{
 
     public URL getApiURL(){
         return GitHub.parseURL(url);
+    }
+
+    public void lock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+    }
+
+    public void unlock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
     }
 
     /**

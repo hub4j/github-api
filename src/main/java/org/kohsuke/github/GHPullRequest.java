@@ -50,8 +50,8 @@ public class GHPullRequest extends GHIssue {
 
     // details that are only available when obtained from ID
     private GHUser merged_by;
-    private int review_comments, additions;
-    private boolean merged;
+    private int review_comments, additions, commits;
+    private boolean merged, maintainer_can_modify;
     private Boolean mergeable;
     private int deletions;
     private String mergeable_state;
@@ -167,9 +167,19 @@ public class GHPullRequest extends GHIssue {
         return additions;
     }
 
+    public int getCommits() throws IOException {
+        populate();
+        return commits;
+    }
+
     public boolean isMerged() throws IOException {
         populate();
         return merged;
+    }
+
+    public boolean canMaintainerModify() throws IOException {
+        populate();
+        return maintainer_can_modify;
     }
 
     public Boolean getMergeable() throws IOException {

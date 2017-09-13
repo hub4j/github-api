@@ -131,6 +131,7 @@
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
       <version>1.14</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>

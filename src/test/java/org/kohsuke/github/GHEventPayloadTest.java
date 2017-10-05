@@ -187,13 +187,61 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void pull_request_review() throws Exception {}
+    @Test
+    public void pull_request_review() throws Exception {
+        GHEventPayload.PullRequestReview event =
+                GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReview.class);
+        assertThat(event.getAction(), is("submitted"));
+        
+        assertThat(event.getReview().getId(), is(2626884));
+        assertThat(event.getReview().getBody(), is("Looks great!"));
+        assertThat(event.getReview().getState(), is(GHPullRequestReviewState.APPROVED));
+        
+        assertThat(event.getPullRequest().getNumber(), is(8));
+        assertThat(event.getPullRequest().getTitle(), is("Add a README description"));
+        assertThat(event.getPullRequest().getBody(), is("Just a few more details"));
+        assertThat(event.getPullRequest().getUser().getLogin(), is("skalnik"));
+        assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("skalnik"));
+        assertThat(event.getPullRequest().getHead().getRef(), is("patch-2"));
+        assertThat(event.getPullRequest().getHead().getLabel(), is("skalnik:patch-2"));
+        assertThat(event.getPullRequest().getHead().getSha(), is("b7a1f9c27caa4e03c14a88feb56e2d4f7500aa63"));
+        assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
+        
+        assertThat(event.getRepository().getName(), is("public-repo"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        
+        assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void pull_request_review_comment() throws Exception {}
+    @Test
+    public void pull_request_review_comment() throws Exception {
+        GHEventPayload.PullRequestReviewComment event =
+                GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReviewComment.class);
+        assertThat(event.getAction(), is("created"));
+        
+        assertThat(event.getComment().getBody(), is("Maybe you should use more emojji on this line."));
+        
+        assertThat(event.getPullRequest().getNumber(), is(1));
+        assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
+        assertThat(event.getPullRequest().getBody(), is("This is a pretty simple change that we need to pull into master."));
+        assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
+        assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
+        assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
+        assertThat(event.getPullRequest().getHead().getLabel(), is("baxterthehacker:changes"));
+        assertThat(event.getPullRequest().getHead().getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
+        assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
+        
+        assertThat(event.getRepository().getName(), is("public-repo"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        
+        assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    }
 
     @Test
     public void push() throws Exception {

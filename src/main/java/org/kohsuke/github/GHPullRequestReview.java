@@ -40,7 +40,7 @@ public class GHPullRequestReview extends GHObject {
     private String body;
     private GHUser user;
     private String commit_id;
-    private GHPullRequestReviewState state;
+    private String state;
 
     /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
@@ -73,7 +73,7 @@ public class GHPullRequestReview extends GHObject {
     }
 
     public GHPullRequestReviewState getState() {
-        return state;
+        return GHPullRequestReviewState.valueOf(state.toUpperCase());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GHPullRequestReview extends GHObject {
                 .withPreview("application/vnd.github.black-cat-preview+json")
                 .to(getApiRoute()+"/events",this);
         this.body = body;
-        this.state = event;
+        this.state = event.name();
     }
 
     /**
@@ -121,7 +121,7 @@ public class GHPullRequestReview extends GHObject {
                 .with("message", message)
                 .withPreview(BLACK_CAT)
                 .to(getApiRoute()+"/dismissals");
-        state = GHPullRequestReviewState.DISMISSED;
+        state = GHPullRequestReviewState.DISMISSED.name();
     }
 
     /**

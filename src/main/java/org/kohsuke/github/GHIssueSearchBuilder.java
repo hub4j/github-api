@@ -49,6 +49,12 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
         return this;
     }
 
+    public GHIssueSearchBuilder page(int startPage) {
+    	if(startPage>1)
+    		req.with("page",startPage);
+        return this;
+    }
+
     public enum Sort { COMMENTS, CREATED, UPDATED }
 
     private static class IssueSearchResult extends SearchResult<GHIssue> {

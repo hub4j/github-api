@@ -57,6 +57,12 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
         return this;
     }
 
+    public GHUserSearchBuilder page(int startPage) {
+    	if(startPage>1)
+    		req.with("page",startPage);
+        return this;
+    }
+
     public enum Sort { FOLLOWERS, REPOSITORIES, JOINED }
 
     private static class UserSearchResult extends SearchResult<GHUser> {

@@ -5,9 +5,9 @@ import java.io.IOException;
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
     private GHRepository repo;
-    private int deploymentId;
+    private long deploymentId;
 
-    public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
+    public GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
         this.builder = new Requester(repo.root);

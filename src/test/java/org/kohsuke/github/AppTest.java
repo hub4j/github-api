@@ -784,7 +784,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             GHRepository r = itr.next();
             System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
-            assertNotEquals(0,r.getId());
+            assertNotEquals(0L,r.getId());
         }
     }
 

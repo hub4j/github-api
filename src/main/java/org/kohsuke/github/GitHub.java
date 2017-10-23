@@ -793,7 +793,7 @@ public class GitHub {
      * This provides a dump of every public repository, in the order that they were created.
      *
      * @param since
-     *      The integer ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
+     *      The numeric ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {

@@ -178,7 +178,7 @@ public class GitHub {
         return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
     }
 
-    public static GitHub connectToEnterpriseWtihOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
+    public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
     }
 

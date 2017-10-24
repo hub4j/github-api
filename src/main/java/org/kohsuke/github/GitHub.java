@@ -178,6 +178,10 @@ public class GitHub {
         return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
     }
 
+    public static GitHub connectToEnterpriseWtihOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
+    }
+
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }

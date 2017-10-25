@@ -34,4 +34,8 @@ public class GHLabel {
     public void delete() throws IOException {
         repo.root.retrieve().method("DELETE").to(url);
     }
+
+    public void updateColor(String newColor) throws IOException {
+        repo.root.retrieve().method("PATCH").with("name", name).with("color", newColor).to(url);
+    }
 }

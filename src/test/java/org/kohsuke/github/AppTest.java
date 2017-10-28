@@ -754,7 +754,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getUrl(), t2.getUrl());
 
-            t.updateColor("000000");
+            t.setColor("000000");
             GHLabel t3 = r.getLabel("test");
             assertEquals(t3.getColor(), "000000");
             t.delete();

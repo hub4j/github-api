@@ -95,6 +95,14 @@ public class GHRepository extends GHObject {
         return new GHDeploymentBuilder(this,ref);
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #getDeploymentStatuses(long)}
+     */
+    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) {
+        return getDeploymentStatuses((long)id);
+    }
+
     public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final long id) {
         return new PagedIterable<GHDeploymentStatus>() {
             public PagedIterator<GHDeploymentStatus> _iterator(int pageSize) {
@@ -138,6 +146,14 @@ public class GHRepository extends GHObject {
 
     private String getParam(String name, String value) {
         return StringUtils.trimToNull(value)== null? null: name+"="+value;
+    }
+
+    /**
+     * @deprecated
+     *      Use {@link #createDeployStatus(long, GHDeploymentState)}
+     */
+    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
+        return createDeployStatus((long)deploymentId,ghDeploymentState);
     }
 
     public GHDeploymentStatusBuilder createDeployStatus(long deploymentId, GHDeploymentState ghDeploymentState) {

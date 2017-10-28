@@ -7,6 +7,14 @@ public class GHDeploymentStatusBuilder {
     private GHRepository repo;
     private long deploymentId;
 
+    /**
+     * @deprecated
+     *      ID is long now.
+     */
+    public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
+        this(repo,(long)deploymentId,state);
+    }
+
     public GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;

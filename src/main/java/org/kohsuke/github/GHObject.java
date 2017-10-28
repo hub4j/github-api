@@ -93,8 +93,9 @@ public abstract class GHObject {
     private Object longToStringOrInt(long id, Class type) {
         if (type==String.class)
             return String.valueOf(id);
-        else
+        if (type==int.class)
             return (int)id;
+        throw new AssertionError("Unexpected type: "+type);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getHtmlUrl")

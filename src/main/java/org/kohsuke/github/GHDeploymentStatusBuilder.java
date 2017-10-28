@@ -2,6 +2,12 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
+/**
+ * Creates a new deployment status.
+ *
+ * @see
+ *      GHDeployment#createStatus(GHDeploymentState)
+ */
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
     private GHRepository repo;
@@ -9,13 +15,13 @@ public class GHDeploymentStatusBuilder {
 
     /**
      * @deprecated
-     *      ID is long now.
+     *      Use {@link GHDeployment#createStatus(GHDeploymentState)}
      */
     public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
         this(repo,(long)deploymentId,state);
     }
 
-    public GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
+    /*package*/ GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
         this.builder = new Requester(repo.root);
@@ -33,6 +39,6 @@ public class GHDeploymentStatusBuilder {
     }
 
     public GHDeploymentStatus create() throws IOException {
-        return builder.to(repo.getApiTailUrl("deployments")+"/"+deploymentId+"/statuses",GHDeploymentStatus.class).wrap(repo);
+        return builder.to(repo.getApiTailUrl("deployments/"+deploymentId+"/statuses"),GHDeploymentStatus.class).wrap(repo);
     }
 }

@@ -134,10 +134,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .description("question")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .create();
-       GHDeploymentStatus ghDeploymentStatus = repository.createDeployStatus(deployment.getId(), GHDeploymentState.SUCCESS)
+        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
                                      .description("success")
                                      .targetUrl("http://www.github.com").create();
-        Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
+        Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1,Iterables.size(deploymentStatuses));
         assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());

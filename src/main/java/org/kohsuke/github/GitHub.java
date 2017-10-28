@@ -169,15 +169,31 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
+     * @deprecated
+     *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
+     */
+    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
+        return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
+    }
+
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
      * @param apiUrl
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
+    public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
     }
 
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
+     * @deprecated
+     *      Use with caution. Login with password is not a preferred method.
+     */
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }

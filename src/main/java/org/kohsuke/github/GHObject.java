@@ -25,7 +25,7 @@ public abstract class GHObject {
     protected Map<String, List<String>> responseHeaderFields;
 
     protected String url;
-    protected int id;
+    protected long id;
     protected String created_at;
     protected String updated_at;
 
@@ -84,14 +84,18 @@ public abstract class GHObject {
     /**
      * Unique ID number of this resource.
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="intToString")
-    public int getId() {
+    @WithBridgeMethods(value={String.class,int.class}, adapterMethod="longToStringOrInt")
+    public long getId() {
         return id;
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getId")
-    private Object intToString(int id, Class type) {
-        return String.valueOf(id);
+    private Object longToStringOrInt(long id, Class type) {
+        if (type==String.class)
+            return String.valueOf(id);
+        if (type==int.class)
+            return (int)id;
+        throw new AssertionError("Unexpected type: "+type);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getHtmlUrl")

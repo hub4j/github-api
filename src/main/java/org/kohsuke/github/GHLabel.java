@@ -34,4 +34,12 @@ public class GHLabel {
     public void delete() throws IOException {
         repo.root.retrieve().method("DELETE").to(url);
     }
+
+    /**
+     * @param newColor
+     *      6-letter hex color code, like "f29513"
+     */
+    public void setColor(String newColor) throws IOException {
+        repo.root.retrieve().method("PATCH").with("name", name).with("color", newColor).to(url);
+    }
 }

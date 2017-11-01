@@ -45,6 +45,15 @@ public class GHCommitPointer {
     }
 
     /**
+     * The username of the user who owns the {@link #getRepository()}.
+     * @return the {@link GHUser#getLogin()}.
+     */
+    public String getUserName() {
+        if (user != null) return user.login;
+        return null;
+    }
+
+    /**
      * The repository that contains the commit.
      */
     public GHRepository getRepository() {

@@ -317,6 +317,16 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     /**
+     * The username of the user submitted the issue.
+     *
+     * @return the {@link GHUser#getLogin()}.
+     */
+    public String getUserName() {
+        if (user != null) return user.login;
+        return null;
+    }
+
+    /**
      * Reports who has closed the issue.
      *
      * <p>

@@ -68,6 +68,16 @@ public class GHPullRequestReview extends GHObject {
         return owner.root.getUser(user.getLogin());
     }
 
+    /**
+     * The username of the user who posted this review.
+     *
+     * @return the {@link GHUser#getLogin()}.
+     */
+    public String getUserName() {
+        if (user != null) return user.login;
+        return null;
+    }
+
     public String getCommitId() {
         return commit_id;
     }

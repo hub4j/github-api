@@ -61,7 +61,6 @@ public class GHIssueComment extends GHObject implements Reactable {
     /**
      * Gets the ID of the user who posted this comment.
      */
-    @Deprecated
     public String getUserName() {
         return user.getLogin();
     }
@@ -72,7 +71,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     public GHUser getUser() throws IOException {
         return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
-    
+
     /**
      * @deprecated This object has no HTML URL.
      */

@@ -78,6 +78,16 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return owner.root.getUser(user.getLogin());
     }
 
+    /**
+     * The username of the user who posted this commment.
+     *
+     * @return the {@link GHUser#getLogin()}.
+     */
+    public String getUserName() {
+        if (user != null) return user.login;
+        return null;
+    }
+
     public String getPath() {
         return path;
     }

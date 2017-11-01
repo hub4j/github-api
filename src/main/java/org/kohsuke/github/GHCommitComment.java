@@ -72,6 +72,16 @@ public class GHCommitComment extends GHObject implements Reactable {
     }
 
     /**
+     * The username of the user who put this commment.
+     *
+     * @return the {@link GHUser#getLogin()}.
+     */
+    public String getUserName() {
+        if (user != null) return user.login;
+        return null;
+    }
+
+    /**
      * Gets the commit to which this comment is associated with.
      */
     public GHCommit getCommit() throws IOException {

@@ -41,7 +41,7 @@ public abstract class GHPerson extends GHObject {
         if (created_at!=null) {
             return; // already populated
         }
-        if (root.isOffline()) {
+        if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
         root.retrieve().to(url, this);

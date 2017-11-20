@@ -54,16 +54,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import static java.util.Arrays.*;
-import static java.util.logging.Level.*;
-import static org.apache.commons.lang.StringUtils.*;
-import static org.kohsuke.github.GitHub.*;
+import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.INFO;
+import static org.apache.commons.lang.StringUtils.defaultString;
+import static org.kohsuke.github.GitHub.MAPPER;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -451,8 +452,8 @@ class Requester {
 
         try {
             return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
-        } catch (IOException e) {
-            throw new Error(e);
+        } catch (MalformedURLException e) {
+            throw new GHException("Unable to build github Api URL",e);
         }
     }
 
@@ -513,7 +514,7 @@ class Requester {
                     }
                 }
             } catch (IOException e) {
-                throw new Error(e);
+                throw new GHException(e);
             }
         }
 

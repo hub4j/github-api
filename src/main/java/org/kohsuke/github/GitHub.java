@@ -48,7 +48,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,10 +56,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
-import static java.net.HttpURLConnection.*;
-import static java.util.logging.Level.*;
-import static org.kohsuke.github.Previews.*;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.util.logging.Level.FINE;
+import static org.kohsuke.github.Previews.DRAX;
 
 /**
  * Root of the GitHub API.
@@ -294,7 +294,7 @@ public class GitHub {
             throw new IllegalStateException("This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    /*package*/ URL getApiURL(String tailApiUrl) throws IOException {
+    /*package*/ URL getApiURL(String tailApiUrl) throws MalformedURLException {
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
                 return new URL(GITHUB_URL + tailApiUrl);

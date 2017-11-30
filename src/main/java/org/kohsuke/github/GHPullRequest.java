@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -298,23 +297,19 @@ public class GHPullRequest extends GHIssue {
 
     @Preview
     @Deprecated
-    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
-                                            GHPullRequestReviewComment... comments)
+    public GHPullRequestReview createReview(String body, GHPullRequestReviewComment... comments)
             throws IOException {
-        return createReview(body, event, Arrays.asList(comments));
+        return createReview(body, Arrays.asList(comments));
     }
 
     @Preview
     @Deprecated
-    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
-                                            List<GHPullRequestReviewComment> comments)
+    public GHPullRequestReview createReview(String body, List<GHPullRequestReviewComment> comments)
             throws IOException {
-//        if (event == null) {
-//            event = GHPullRequestReviewState.PENDING;
-//        }
         List<DraftReviewComment> draftComments = new ArrayList<DraftReviewComment>(comments.size());
         for (GHPullRequestReviewComment c : comments) {
-            draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), c.getPosition()));
+            Integer position = c.getPosition();
+            draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), position == null ? 0 : position /*FIXME do not use GHPullRequestReviewComment for new comments*/));
         }
         return new Requester(root).method("POST")
                 .with("body", body)

@@ -45,7 +45,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
-        review.submit("Some review comment", GHPullRequestReviewState.COMMENTED);
+        review.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
         List<GHPullRequestReviewComment> comments = review.listReviewComments().asList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);

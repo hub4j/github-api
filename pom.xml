@@ -6,25 +6,19 @@
     <version>17</version>
   </parent>
 
+  <groupId>org.sonarsource.github</groupId>
   <artifactId>github-api</artifactId>
   <version>1.91-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>http://github-api.kohsuke.org/</url>
-  <description>GitHub API for Java</description>
+  <description>SonarSource fork of GitHub API for Java</description>
 
   <scm>
-    <connection>scm:git:git@github.com/kohsuke/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kohsuke/${project.artifactId}.git</developerConnection>
-    <url>http://${project.artifactId}.kohsuke.org/</url>
+    <connection>scm:git:git@github.com:SonarSource/github-api.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:SonarSource/github-api.git</developerConnection>
+    <url>https://github.com/SonarSource/github-api.git</url>
     <tag>HEAD</tag>
   </scm>
-
-  <distributionManagement>
-    <site>
-      <id>github-pages</id>
-      <url>gitsite:git@github.com/kohsuke/${project.artifactId}.git</url>
-    </site>
-  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

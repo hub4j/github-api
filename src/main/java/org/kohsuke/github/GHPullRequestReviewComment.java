@@ -44,6 +44,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private String path;
     private int position = -1;
     private int original_position = -1;
+    private long in_reply_to_id = -1L;
+
 
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
@@ -89,8 +91,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     @CheckForNull
-    public int getOriginalPosition() {
+    public Integer getOriginalPosition() {
         return original_position == -1 ? null : original_position;
+    }
+
+    @CheckForNull
+    public Long getInReplyToId() {
+        return in_reply_to_id == -1 ? null : in_reply_to_id;
     }
 
     @Override
@@ -129,7 +136,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     public PagedIterable<GHReaction> listReactions() {
         return new PagedIterable<GHReaction>() {
             public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute() + "/reactions", GHReaction[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHReaction[] page) {
                         for (GHReaction c : page)

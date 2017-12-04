@@ -20,6 +20,7 @@
 package org.kohsuke.github;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -33,6 +34,20 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * @author Kohsuke Kawaguchi
  */
 public class PullRequestTest extends AbstractGitHubApiTestBase {
+
+    private static final Property ORGANIZATION_PROPERTY = new Property("github-api.organization", "github-api-test");
+    private static final Property REPOSITORY_PROPERTY = new Property("github-api.pr.repository", "jenkins");
+
+    public PullRequestTest() {
+        super(ORGANIZATION_PROPERTY, REPOSITORY_PROPERTY);
+    }
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+    }
+
     @Test
     public void createPullRequest() throws Exception {
         String name = rnd.next();
@@ -48,7 +63,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         p.comment("Some comment");
     }
 
-    @Test 
+    @Test
     public void testPullRequestReviews() throws Exception {
         String name = rnd.next();
         GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
@@ -102,9 +117,9 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     public void testMergeCommitSHA() throws Exception {
         String name = rnd.next();
         GHPullRequest p = getRepository().createPullRequest(name, "mergeable-branch", "master", "## test");
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
-            if (updated.getMergeCommitSha()!=null) {
+            if (updated.getMergeCommitSha() != null) {
                 // make sure commit exists
                 GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
                 assertNotNull(commit);
@@ -177,6 +192,14 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     }
 
     private GHRepository getRepository() throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");
+        return gitHub.getOrganization(getTestOrganizationSlug()).getRepository(getRepositorySlug());
+    }
+
+    private String getTestOrganizationSlug() {
+        return getValue(ORGANIZATION_PROPERTY);
+    }
+
+    private String getRepositorySlug() {
+        return getValue(REPOSITORY_PROPERTY);
     }
 }

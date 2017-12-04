@@ -19,6 +19,10 @@
  */
 package org.kohsuke.github;
 
+import com.google.common.collect.Iterables;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -26,20 +30,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.Iterables;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GitHubTest {
     @Test
     public void testOffline() throws Exception {

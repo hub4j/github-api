@@ -21,6 +21,7 @@ package org.kohsuke.github;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Luciano P. Sabenca (luciano.sabenca [at] movile [com] | lucianosabenca [at] gmail [dot] com
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class RepositoryMockTest {
 
     @Mock

@@ -20,6 +20,7 @@
 package org.kohsuke.github;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
@@ -27,6 +28,7 @@ import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
 import java.io.FileNotFoundException;
 
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
     private static final String BRANCH = "bp-test";
     private static final String BRANCH_REF = "heads/" + BRANCH;

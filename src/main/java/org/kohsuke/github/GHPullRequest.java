@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,12 +36,15 @@ import static org.kohsuke.github.Previews.*;
 
 /**
  * A pull request.
- * 
+ *
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHPullRequest extends GHIssue {
+
+    private static final String COMMENTS_ACTION = "/comments";
+    private static final String COMMIT_ID_FIELD = "commit_id";
 
     private String patch_url, diff_url, issue_url;
     private GHCommitPointer base;
@@ -245,7 +249,6 @@ public class GHPullRequest extends GHIssue {
         return new PagedIterable<GHPullRequestReview>() {
             public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestReview>(root.retrieve()
-                        .withPreview(BLACK_CAT)
                         .asIterator(String.format("%s/reviews", getApiRoute()),
                         GHPullRequestReview[].class, pageSize)) {
                     @Override
@@ -265,7 +268,7 @@ public class GHPullRequest extends GHIssue {
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return new PagedIterable<GHPullRequestReviewComment>() {
             public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + "/comments",
+                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + COMMENTS_ACTION,
                         GHPullRequestReviewComment[].class, pageSize)) {
                     protected void wrapUp(GHPullRequestReviewComment[] page) {
                         for (GHPullRequestReviewComment c : page)
@@ -295,37 +298,58 @@ public class GHPullRequest extends GHIssue {
         };
     }
 
-    @Preview
-    @Deprecated
-    public GHPullRequestReview createReview(String body, GHPullRequestReviewComment... comments)
-            throws IOException {
-        return createReview(body, Arrays.asList(comments));
+    public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
+                                            GHPullRequestReviewComment... comments) throws IOException {
+        return createReview(commitId, body, event, Arrays.asList(comments));
     }
 
-    @Preview
-    @Deprecated
-    public GHPullRequestReview createReview(String body, List<GHPullRequestReviewComment> comments)
+    public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
+                                            List<GHPullRequestReviewComment> comments) throws IOException {
+        List<DraftReviewComment> draftComments = toDraftReviewComments(comments);
+        return new Requester(root).method("POST")
+                .with(COMMIT_ID_FIELD, commitId)
+                .with("body", body)
+                .with("event", event.action())
+                ._with("comments", draftComments)
+                .to(getApiRoute() + "/reviews", GHPullRequestReview.class)
+                .wrapUp(this);
+    }
+
+    public GHPullRequestReviewDraft newDraftReview(@Nullable String commitId, String body, GHPullRequestReviewComment... comments)
             throws IOException {
+        return newDraftReview(commitId, body, Arrays.asList(comments));
+    }
+
+    public GHPullRequestReviewDraft newDraftReview(@Nullable String commitId, String body, List<GHPullRequestReviewComment> comments)
+            throws IOException {
+        List<DraftReviewComment> draftComments = toDraftReviewComments(comments);
+        return new Requester(root).method("POST")
+                .with(COMMIT_ID_FIELD, commitId)
+                .with("body", body)
+                ._with("comments", draftComments)
+                .to(getApiRoute() + "/reviews", GHPullRequestReviewDraft.class)
+                .wrapUp(this);
+    }
+
+    private static List<DraftReviewComment> toDraftReviewComments(List<GHPullRequestReviewComment> comments) {
         List<DraftReviewComment> draftComments = new ArrayList<DraftReviewComment>(comments.size());
         for (GHPullRequestReviewComment c : comments) {
             Integer position = c.getPosition();
-            draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), position == null ? 0 : position /*FIXME do not use GHPullRequestReviewComment for new comments*/));
+            if (position == null) {
+                throw new IllegalArgumentException("GHPullRequestReviewComment must have a position");
+            }
+            draftComments.add(new DraftReviewComment(c.getBody(), c.getPath(), position));
         }
-        return new Requester(root).method("POST")
-                .with("body", body)
-                //.with("event", event.name())
-                ._with("comments", draftComments)
-                .withPreview(BLACK_CAT)
-                .to(getApiRoute() + "/reviews", GHPullRequestReview.class).wrapUp(this);
+        return draftComments;
     }
 
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
         return new Requester(root).method("POST")
                 .with("body", body)
-                .with("commit_id", sha)
+                .with(COMMIT_ID_FIELD, sha)
                 .with("path", path)
                 .with("position", position)
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class).wrapUp(this);
+                .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class).wrapUp(this);
     }
 
     /**
@@ -335,7 +359,7 @@ public class GHPullRequest extends GHIssue {
         return new Requester(owner.root).method("POST")
                 .with("body", body)
                 .with("in_reply_to", comment.getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
+                .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class)
                 .wrapUp(this);
     }
 
@@ -377,10 +401,10 @@ public class GHPullRequest extends GHIssue {
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
         new Requester(root).method("PUT")
-                .with("commit_message",msg)
-                .with("sha",sha)
-                .with("merge_method",method)
-                .to(getApiRoute()+"/merge");
+                .with("commit_message", msg)
+                .with("sha", sha)
+                .with("merge_method", method)
+                .to(getApiRoute() + "/merge");
     }
 
     public enum MergeMethod{ MERGE, SQUASH, REBASE }

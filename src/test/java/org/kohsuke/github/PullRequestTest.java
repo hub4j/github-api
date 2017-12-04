@@ -33,7 +33,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     public void testPullRequestReviews() throws Exception {
         String name = rnd.next();
         GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
-        GHPullRequestReview draftReview = p.createReview("Some draft review", null,
+        GHPullRequestReviewDraft draftReview = p.newDraftReview(null, "Some draft review",
                 GHPullRequestReviewComment.draft("Some niggle", "changelog.html", 1)
         );
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
@@ -45,15 +45,15 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
-        review.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
+        draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
         List<GHPullRequestReviewComment> comments = review.listReviewComments().asList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Some niggle", comment.getBody());
-        review = p.createReview("Some new review", null,
+        draftReview = p.newDraftReview(null, "Some new review",
                 GHPullRequestReviewComment.draft("Some niggle", "changelog.html", 1)
         );
-        review.delete();
+        draftReview.delete();
     }
 
     @Test

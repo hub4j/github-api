@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2017, CloudBees, Inc.
+ * Copyright (c) 2011, Eric Maupin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,34 +24,30 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
- * Review to the pull request
+ * Draft of a Pull Request review.
  *
- * @see GHPullRequest#listReviews()
- * @see GHPullRequest#createReview(String, String, GHPullRequestReviewEvent, List)
+ * @see GHPullRequest#newDraftReview(String, String, GHPullRequestReviewComment...)
  */
-public class GHPullRequestReview extends GHPullRequestReviewAbstract {
-    private GHPullRequestReviewState state;
+public class GHPullRequestReviewDraft extends GHPullRequestReviewAbstract {
 
-    @Override
-    public GHPullRequestReviewState getState() {
-        return state;
-    }
-
-    GHPullRequestReview wrapUp(GHPullRequest owner) {
+    GHPullRequestReviewDraft wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
 
-    /**
-     * Dismisses this review.
-     */
-    public void dismiss(String message) throws IOException {
-        new Requester(owner.root).method("PUT")
-                .with("message", message)
-                .to(getApiRoute() + "/dismissals");
-        state = GHPullRequestReviewState.DISMISSED;
+    @Override
+    public GHPullRequestReviewState getState() {
+        return GHPullRequestReviewState.PENDING;
     }
+
+    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
+        new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("event", event.action())
+                .to(getApiRoute() + "/events", this);
+        this.body = body;
+    }
+
 }

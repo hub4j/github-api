@@ -12,4 +12,4 @@ configureTravis
 
 export DEPLOY_PULL_REQUEST=true
 
-regular_mvn_build_deploy_analyze
+regular_mvn_build_deploy_analyze -DargLine="-Dgithub-api.organization=sns-seb2-github-api-test -Dgithub-api.pr.repository=copy-of-jenkins"

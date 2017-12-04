@@ -12,4 +12,7 @@ configureTravis
 
 export DEPLOY_PULL_REQUEST=true
 
+export login=username
+export password=$GITHUB_UT_TOKEN
+
 regular_mvn_build_deploy_analyze -DargLine="-Dgithub-api.organization=sns-seb2-github-api-test -Dgithub-api.pr.repository=copy-of-jenkins"

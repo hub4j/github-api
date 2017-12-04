@@ -24,6 +24,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <findbugs-maven-plugin.version>3.0.2</findbugs-maven-plugin.version>
     <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
+    <gitRepositoryName>github-api</gitRepositoryName>
+    <artifactsToPublish>org.sonarsource.github:github-api:jar</artifactsToPublish>
   </properties>
 
   <build>

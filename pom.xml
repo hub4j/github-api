@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.kohsuke</groupId>
-    <artifactId>pom</artifactId>
-    <version>17</version>
+    <groupId>org.sonarsource.parent</groupId>
+    <artifactId>parent</artifactId>
+    <version>37</version>
   </parent>
 
   <groupId>org.sonarsource.github</groupId>
@@ -24,6 +24,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <findbugs-maven-plugin.version>3.0.2</findbugs-maven-plugin.version>
     <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
+    <gitRepositoryName>sonar-auth-github</gitRepositoryName>
+    <artifactsToPublish>org.sonarsource.github:github-api:jar</artifactsToPublish>
   </properties>
 
   <build>

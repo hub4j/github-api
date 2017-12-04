@@ -1,0 +1,20 @@
+language: java
+sudo: false
+install: true
+
+jdk:
+  - oraclejdk8
+
+script: ./travis.sh
+
+cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.sonar
+
+notifications:
+  email: false
+  webhooks:
+   # URL to QA hook, including credentials
+   - secure: "GZsS7WGwLuDzP9tUMofk8g/JAdI98ZUF/WX8FxaXFK+3NX/HblRW2ucwbJdcGxNpw4+AQ5zFcFbDeJ8HKuywL4DUWWiqjHqSbBh6PBof+MGosDRqYyaLy+M0le39saM7X5KLOlyuRV02CWFDRgH6VakiN2S/EjlsL0rwPWrpru6UUzKhy8LEIhyzVPpH/U6g9q59m6ivMHl86dR0HUvu6SLwNgNLeDhqNL0iTiAyyyPh51UuF8mk4xvr8TSjL2tQ5LFJ+v6dviMitzyFv00JGjybWzNaweeTZ0EsZ+KY6BJrlfRjv4/GnvdpIQvUozCfwPYoRpBFESyiuyG1wd65d3kmgkTPWD1iN7AeXHARxDgjxZ1qL0PHbcC4/Yy7vyHCM66eEc6FyOGdCI70qQ8sQvnizlJrPiIX9F4pBRDb1731tG8q1c3ifrZn6V8W7cczFZ1cLKCSs+3y1lI683NXl+VNWHitNvrnzgVpvYOS0oMDR2F7g2DsTB2zx7gXGM0L/xjhQ6Qzn3KKIL2/JVNeDpp0D+FnHKjCsbFAfBi9BLiKwagk/yUiavinawA8a9gv60jKHHg4TSN17n0hz8q8ug4K5QYvbx+Q0pNJiq+VXuzaWsKxJb+78OkQy3aflPpB++0sq/qXwc28tz6LYQHpuUXHe5ZjbqiIYs3fxbZgcNU="
+  on_start: always

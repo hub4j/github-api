@@ -10,6 +10,8 @@ function configureTravis {
 configureTravis
 . installJDK8
 
+cancel_branch_build_with_pr || if [[ $? -eq 1 ]]; then exit 0; fi
+
 export DEPLOY_PULL_REQUEST=true
 
 export login="username"

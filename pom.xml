@@ -31,12 +31,6 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <rerunFailingTestsCount>2</rerunFailingTestsCount>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
         <version>1.15</version>
@@ -80,14 +74,30 @@
         <executions>
           <execution>
             <id>run-findbugs</id>
-            <phase>verify</phase> 
+            <phase>verify</phase>
             <goals>
-              <goal>check</goal> 
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.9</version>
+          <configuration>
+            <includes>
+              <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
+              <include>org.kohsuke.github.*</include>
+            </includes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <dependencies>
@@ -107,12 +117,12 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-      <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-all</artifactId>
-        <version>1.3</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>

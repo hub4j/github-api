@@ -4,11 +4,12 @@ set -euo pipefail
 
 function configureTravis {
   mkdir -p ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v41 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v42 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 configureTravis
 . installJDK8
+. installMaven35 
 
 cancel_branch_build_with_pr || if [[ $? -eq 1 ]]; then exit 0; fi
 

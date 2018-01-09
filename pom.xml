@@ -25,7 +25,7 @@
     <findbugs-maven-plugin.version>3.0.2</findbugs-maven-plugin.version>
     <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
     <gitRepositoryName>github-api</gitRepositoryName>
-    <artifactsToPublish>org.sonarsource.github:github-api:jar</artifactsToPublish>
+    <artifactsToDownload>org.sonarsource.github:github-api:jar</artifactsToDownload>
     <license.skip>true</license.skip>
   </properties>
 

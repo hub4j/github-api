@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>41</version>
+    <version>43</version>
   </parent>
 
   <groupId>org.sonarsource.github</groupId>
@@ -26,6 +26,7 @@
     <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
     <gitRepositoryName>github-api</gitRepositoryName>
     <artifactsToPublish>org.sonarsource.github:github-api:jar</artifactsToPublish>
+    <license.skip>true</license.skip>
   </properties>
 
   <build>

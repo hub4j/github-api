@@ -85,6 +85,95 @@ public abstract class GHEventPayload {
         }
     }
 
+
+    /**
+     * A review was added to a pull request
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent">authoritative source</a>
+     */
+    public static class PullRequestReview extends GHEventPayload {
+        private String action;
+        private GHPullRequestReview review;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        public String getAction() {
+            return action;
+        }
+        
+        public GHPullRequestReview getReview() {
+            return review;
+        }
+
+        public GHPullRequest getPullRequest() {
+            return pull_request;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (review==null)
+                throw new IllegalStateException("Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
+            
+            review.wrapUp(pull_request);
+            
+            if (repository!=null) {
+                repository.wrap(root);
+                pull_request.wrapUp(repository);
+            } else {
+                pull_request.wrapUp(root);
+            }
+        }
+    }
+    
+    /**
+     * A review comment was added to a pull request
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent">authoritative source</a>
+     */
+    public static class PullRequestReviewComment extends GHEventPayload {
+        private String action;
+        private GHPullRequestReviewComment comment;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        public String getAction() {
+            return action;
+        }
+        
+        public GHPullRequestReviewComment getComment() {
+            return comment;
+        }
+
+        public GHPullRequest getPullRequest() {
+            return pull_request;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (comment==null)
+                throw new IllegalStateException("Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
+            
+            comment.wrapUp(pull_request);
+            
+            if (repository!=null) {
+                repository.wrap(root);
+                pull_request.wrapUp(repository);
+            } else {
+                pull_request.wrapUp(root);
+            }
+        }
+    }
+
     /**
      * A comment was added to an issue
      *

@@ -134,10 +134,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .description("question")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .create();
-       GHDeploymentStatus ghDeploymentStatus = repository.createDeployStatus(deployment.getId(), GHDeploymentState.SUCCESS)
+        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
                                      .description("success")
                                      .targetUrl("http://www.github.com").create();
-        Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
+        Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1,Iterables.size(deploymentStatuses));
         assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
@@ -753,6 +753,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getUrl(), t2.getUrl());
+
+            t.setColor("000000");
+            GHLabel t3 = r.getLabel("test");
+            assertEquals(t3.getColor(), "000000");
             t.delete();
         }
     }
@@ -784,7 +788,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             GHRepository r = itr.next();
             System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
-            assertNotEquals(0,r.getId());
+            assertNotEquals(0L,r.getId());
         }
     }
 

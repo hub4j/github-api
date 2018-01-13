@@ -48,7 +48,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -169,15 +168,31 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
+     * @deprecated
+     *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
+     */
+    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
+        return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
+    }
+
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
      * @param apiUrl
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
+    public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
     }
 
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
+     * @deprecated
+     *      Use with caution. Login with password is not a preferred method.
+     */
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
@@ -408,6 +423,9 @@ public class GitHub {
         return u;
     }
 
+    /**
+     * Gets {@link GHOrganization} specified by name.
+     */
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
@@ -415,6 +433,35 @@ public class GitHub {
             orgs.put(name,o);
         }
         return o;
+    }
+
+    /**
+     * Gets a list of all organizations.
+     */
+    public PagedIterable<GHOrganization> listOrganizations() {
+        return listOrganizations(null);
+    }
+
+    /**
+     * Gets a list of all organizations starting after the organization identifier specified by 'since'.
+     *
+     * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
+     */
+    public PagedIterable<GHOrganization> listOrganizations(final String since) {
+        return new PagedIterable<GHOrganization>() {
+            @Override
+            public PagedIterator<GHOrganization> _iterator(int pageSize) {
+                System.out.println("page size: " + pageSize);
+                return new PagedIterator<GHOrganization>(retrieve().with("since",since)
+                        .asIterator("/organizations", GHOrganization[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHOrganization[] page) {
+                        for (GHOrganization c : page)
+                            c.wrapUp(GitHub.this);
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -793,7 +840,7 @@ public class GitHub {
      * This provides a dump of every public repository, in the order that they were created.
      *
      * @param since
-     *      The integer ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
+     *      The numeric ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {

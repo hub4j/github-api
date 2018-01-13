@@ -95,18 +95,12 @@ public class GHRepository extends GHObject {
         return new GHDeploymentBuilder(this,ref);
     }
 
-    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) {
-        return new PagedIterable<GHDeploymentStatus>() {
-            public PagedIterator<GHDeploymentStatus> _iterator(int pageSize) {
-                return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(getApiTailUrl("deployments")+"/"+id+"/statuses", GHDeploymentStatus[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHDeploymentStatus[] page) {
-                        for (GHDeploymentStatus c : page)
-                            c.wrap(GHRepository.this);
-                    }
-                };
-            }
-        };
+    /**
+     * @deprecated
+     *      Use {@code getDeployment(id).listStatuses()}
+     */
+    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) throws IOException {
+        return getDeployment(id).listStatuses();
     }
 
     public PagedIterable<GHDeployment> listDeployments(String sha,String ref,String task,String environment){
@@ -123,7 +117,13 @@ public class GHRepository extends GHObject {
                 };
             }
         };
+    }
 
+    /**
+     * Obtains a single {@link GHDeployment} by its ID.
+     */
+    public GHDeployment getDeployment(long id) throws IOException {
+        return root.retrieve().to("deployments/" + id, GHDeployment.class).wrap(this);
     }
 
     private String join(List<String> params, String joinStr) {
@@ -140,8 +140,12 @@ public class GHRepository extends GHObject {
         return StringUtils.trimToNull(value)== null? null: name+"="+value;
     }
 
-    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
-        return new GHDeploymentStatusBuilder(this,deploymentId,ghDeploymentState);
+    /**
+     * @deprecated
+     *      Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
+     */
+    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) throws IOException {
+        return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
     private static class GHRepoPermission {

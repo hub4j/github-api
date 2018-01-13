@@ -203,6 +203,10 @@ public class GHIssue extends GHObject implements Reactable{
         edit("body",body);
     }
 
+    public void setMilestone(GHMilestone milestone) throws IOException {
+        edit("milestone",milestone.getNumber());
+    }
+
     public void assignTo(GHUser user) throws IOException {
         setAssignees(user);
     }

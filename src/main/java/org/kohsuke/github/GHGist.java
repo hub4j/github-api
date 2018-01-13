@@ -103,7 +103,7 @@ public class GHGist extends GHObject {
      * Used when caller obtains {@link GHGist} without knowing its owner.
      * A partially constructed owner object is interned.
      */
-    /*package*/ GHGist wrapUp(GitHub root) throws IOException {
+    /*package*/ GHGist wrapUp(GitHub root) {
         this.owner = root.getUser(owner);
         this.root = root;
         wrapUp();
@@ -144,12 +144,8 @@ public class GHGist extends GHObject {
                 return new PagedIterator<GHGist>(root.retrieve().asIterator(getApiTailUrl("forks"), GHGist[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHGist[] page) {
-                        try {
-                            for (GHGist c : page)
-                                c.wrapUp(root);
-                        } catch (IOException e) {
-                            throw new Error(e);
-                        }
+                        for (GHGist c : page)
+                            c.wrapUp(root);
                     }
                 };
             }

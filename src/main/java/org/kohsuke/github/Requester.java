@@ -452,7 +452,7 @@ class Requester {
 
         try {
             return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             throw new GHException("Unable to build github Api URL",e);
         }
     }
@@ -514,7 +514,7 @@ class Requester {
                     }
                 }
             } catch (IOException e) {
-                throw new GHException(e);
+                throw new GHException("Failed to retrieve "+url);
             }
         }
 

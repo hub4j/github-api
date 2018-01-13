@@ -23,10 +23,13 @@
  */
 package org.kohsuke.github;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A pull request.
@@ -305,6 +308,28 @@ public class GHPullRequest extends GHIssue {
                 };
             }
         };
+    }
+
+    /**
+     * @deprecated
+     *      Use {@link #createReview()}
+     */
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            GHPullRequestReviewComment... comments) throws IOException {
+        return createReview(body, event, Arrays.asList(comments));
+    }
+
+    /**
+     * @deprecated
+     *      Use {@link #createReview()}
+     */
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            List<GHPullRequestReviewComment> comments) throws IOException {
+        GHPullRequestReviewBuilder b = createReview().body(body);
+        for (GHPullRequestReviewComment c : comments) {
+            b.comment(c.getBody(), c.getPath(), c.getPosition());
+        }
+        return b.create();
     }
 
     public GHPullRequestReviewBuilder createReview() {

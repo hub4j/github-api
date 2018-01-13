@@ -47,6 +47,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private long in_reply_to_id = -1L;
 
 
+    /**
+     * @deprecated
+     *      You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
+     */
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
         result.body = body;
@@ -86,18 +90,17 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     @CheckForNull
-    public Integer getPosition() {
-        return position == -1 ? null : position;
+    public int getPosition() {
+        return position;
+    }
+
+    public int getOriginalPosition() {
+        return original_position;
     }
 
     @CheckForNull
-    public Integer getOriginalPosition() {
-        return original_position == -1 ? null : original_position;
-    }
-
-    @CheckForNull
-    public Long getInReplyToId() {
-        return in_reply_to_id == -1 ? null : in_reply_to_id;
+    public long getInReplyToId() {
+        return in_reply_to_id;
     }
 
     @Override

@@ -23,6 +23,10 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         return q("in:"+v);
     }
 
+    public GHRepositorySearchBuilder topic(String v) {
+        return q("topic:"+v);
+    }
+
     public GHRepositorySearchBuilder size(String v) {
         return q("size:"+v);
     }
@@ -62,6 +66,12 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
     public GHRepositorySearchBuilder sort(Sort sort) {
         req.with("sort",sort);
+        return this;
+    }
+
+    public GHRepositorySearchBuilder page(int startPage) {
+    	if(startPage>1)
+    		req.with("page",startPage);
         return this;
     }
 

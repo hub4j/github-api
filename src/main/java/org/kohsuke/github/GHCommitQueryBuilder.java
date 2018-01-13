@@ -57,6 +57,12 @@ public class GHCommitQueryBuilder {
         return this;
     }
 
+    public GHCommitQueryBuilder page(int startPage) {
+    	if(startPage>1)
+    		req.with("page",startPage);
+        return this;
+    }
+    
     /**
      * Only commits after this date will be returned
      */

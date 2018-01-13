@@ -135,6 +135,10 @@ class Requester {
         return _with(key, value);
     }
 
+    public Requester with(String key, long value) {
+        return _with(key, value);
+    }
+
     public Requester with(String key, Integer value) {
         if (value!=null)
             _with(key, value);

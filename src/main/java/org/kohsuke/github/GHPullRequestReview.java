@@ -23,17 +23,19 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.*;
-
 /**
- * Review to the pull request
+ * Review to a pull request.
  *
  * @see GHPullRequest#listReviews()
- * @see GHPullRequest#createReview(String, GHPullRequestReviewState, GHPullRequestReviewComment...)
+ * @see GHPullRequestReviewBuilder
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
     GHPullRequest owner;
 
@@ -72,6 +74,7 @@ public class GHPullRequestReview extends GHObject {
         return commit_id;
     }
 
+    @CheckForNull
     public GHPullRequestReviewState getState() {
         return state;
     }
@@ -86,40 +89,40 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
+     * @deprecated
+     *      Former preview method that changed when it got public. Left here for backward compatibility.
+     *      Use {@link #submit(String, GHPullRequestReviewEvent)}
+     */
+    public void submit(String body, GHPullRequestReviewState state) throws IOException {
+        submit(body,state.toEvent());
+    }
+
+    /**
      * Updates the comment.
      */
-    @Preview
-    @Deprecated
-    public void submit(String body, GHPullRequestReviewState event) throws IOException {
+    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
         new Requester(owner.root).method("POST")
                 .with("body", body)
                 .with("event", event.action())
-                .withPreview("application/vnd.github.black-cat-preview+json")
                 .to(getApiRoute()+"/events",this);
         this.body = body;
-        this.state = event;
+        this.state = event.toState();
     }
 
     /**
      * Deletes this review.
      */
-    @Preview
-    @Deprecated
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE")
-                .withPreview(BLACK_CAT)
                 .to(getApiRoute());
     }
 
     /**
      * Dismisses this review.
      */
-    @Preview
-    @Deprecated
     public void dismiss(String message) throws IOException {
         new Requester(owner.root).method("PUT")
                 .with("message", message)
-                .withPreview(BLACK_CAT)
                 .to(getApiRoute()+"/dismissals");
         state = GHPullRequestReviewState.DISMISSED;
     }
@@ -127,14 +130,11 @@ public class GHPullRequestReview extends GHObject {
     /**
      * Obtains all the review comments associated with this pull request review.
      */
-    @Preview
-    @Deprecated
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return new PagedIterable<GHPullRequestReviewComment>() {
             public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestReviewComment>(
                         owner.root.retrieve()
-                                .withPreview(BLACK_CAT)
                                 .asIterator(getApiRoute() + "/comments",
                                 GHPullRequestReviewComment[].class, pageSize)) {
                     protected void wrapUp(GHPullRequestReviewComment[] page) {
@@ -145,5 +145,4 @@ public class GHPullRequestReview extends GHObject {
             }
         };
     }
-
 }

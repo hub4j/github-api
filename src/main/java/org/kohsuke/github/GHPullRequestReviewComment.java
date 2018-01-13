@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
+import javax.annotation.CheckForNull;
 
 import static org.kohsuke.github.Previews.*;
 
@@ -41,8 +42,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private String body;
     private GHUser user;
     private String path;
-    private int position;
-    private int originalPosition;
+    private int position = -1;
+    private int original_position = -1;
+    private long in_reply_to_id = -1L;
+
 
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
@@ -82,12 +85,19 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return path;
     }
 
-    public int getPosition() {
-        return position;
+    @CheckForNull
+    public Integer getPosition() {
+        return position == -1 ? null : position;
     }
 
-    public int getOriginalPosition() {
-        return originalPosition;
+    @CheckForNull
+    public Integer getOriginalPosition() {
+        return original_position == -1 ? null : original_position;
+    }
+
+    @CheckForNull
+    public Long getInReplyToId() {
+        return in_reply_to_id == -1 ? null : in_reply_to_id;
     }
 
     @Override
@@ -114,6 +124,17 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
     }
 
+    /**
+     * Create a new comment that replies to this comment.
+     */
+    public GHPullRequestReviewComment reply(String body) throws IOException {
+        return new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("in_reply_to", getId())
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
+                .wrapUp(owner);
+    }
+
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return new Requester(owner.root)
@@ -126,7 +147,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     public PagedIterable<GHReaction> listReactions() {
         return new PagedIterable<GHReaction>() {
             public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute() + "/reactions", GHReaction[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHReaction[] page) {
                         for (GHReaction c : page)

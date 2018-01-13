@@ -187,10 +187,12 @@ public class GHPullRequest extends GHIssue {
      *
      * @return
      *      null if the state has not been determined yet, for example when a PR is newly created.
-     *      Use {@link #refresh()} after some interval to wait until the value is determined.
+     *      If this method is called on an instance whose mergeable state is not yet known,
+     *      API call is made to retrieve the latest state.
      */
     public Boolean getMergeable() throws IOException {
-        populate();
+        if (mergeable==null)
+            refresh();
         return mergeable;
     }
 

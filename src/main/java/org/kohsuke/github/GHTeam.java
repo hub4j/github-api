@@ -19,10 +19,16 @@ public class GHTeam {
     protected /*final*/ GHOrganization org;
 
     /** Member's role in a team */
-    public enum ROLE {
-        MEMBER, // A normal member of the team
-        MAINTAINER // Able to add/remove other team members, promote other team members to team maintainer, and edit the team's name and description.
-    };
+    public enum Role {
+        /**
+         * A normal member of the team
+         */
+        MEMBER,
+        /**
+         * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's name and description.
+         */
+        MAINTAINER
+    }
 
     /*package*/ GHTeam wrapUp(GHOrganization owner) {
         this.org = owner;
@@ -132,7 +138,7 @@ public class GHTeam {
      *
      * @throws IOException
      */
-    public void add(GHUser user, ROLE role) throws IOException {
+    public void add(GHUser user, Role role) throws IOException {
         org.root.retrieve().method("PUT")
                 .with("role", role.name())
                 .to(api("/memberships/" + user.getLogin()), null);

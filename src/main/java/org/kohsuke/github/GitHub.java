@@ -48,7 +48,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -439,8 +438,8 @@ public class GitHub {
     /**
      * Gets a list of all organizations.
      */
-    public PagedIterable<GHOrganization> getOrganizations() {
-        return getOrganizations(null);
+    public PagedIterable<GHOrganization> listOrganizations() {
+        return listOrganizations(null);
     }
 
     /**
@@ -448,7 +447,7 @@ public class GitHub {
      *
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
-    public PagedIterable<GHOrganization> getOrganizations(final String since) {
+    public PagedIterable<GHOrganization> listOrganizations(final String since) {
         return new PagedIterable<GHOrganization>() {
             @Override
             public PagedIterator<GHOrganization> _iterator(int pageSize) {

@@ -164,7 +164,7 @@ public class GitHubTest {
         GitHub hub = GitHub.connect();
         int iterations = 10;
         Set<Long> orgIds = new HashSet<Long>();
-        for (GHOrganization org : Iterables.limit(hub.getOrganizations().withPageSize(2), iterations)) {
+        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
             orgIds.add(org.getId());
             System.out.println(org.getName());
         }

@@ -18,6 +18,18 @@ public class GHTeam {
 
     protected /*final*/ GHOrganization org;
 
+    /** Member's role in a team */
+    public enum Role {
+        /**
+         * A normal member of the team
+         */
+        MEMBER,
+        /**
+         * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's name and description.
+         */
+        MAINTAINER
+    }
+
     /*package*/ GHTeam wrapUp(GHOrganization owner) {
         this.org = owner;
         return this;
@@ -117,6 +129,22 @@ public class GHTeam {
     }
 
     /**
+     * Adds a member to the team
+     *
+     * The user will be invited to the organization if required.
+     *
+     * @param user github user
+     * @param role role for the new member
+     *
+     * @throws IOException
+     */
+    public void add(GHUser user, Role role) throws IOException {
+        org.root.retrieve().method("PUT")
+                .with("role", role.name())
+                .to(api("/memberships/" + user.getLogin()), null);
+    }
+
+    /**
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
@@ -129,7 +157,7 @@ public class GHTeam {
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
         org.root.retrieve().method("PUT")
-                .with("permission",permission)
+                .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
@@ -145,7 +173,7 @@ public class GHTeam {
     }
 
     private String api(String tail) {
-        return "/teams/"+id+tail;
+        return "/teams/" + id + tail;
     }
 
     public GHOrganization getOrganization() {

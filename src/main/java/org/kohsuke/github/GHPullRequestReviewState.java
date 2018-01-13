@@ -3,7 +3,7 @@ package org.kohsuke.github;
 public enum GHPullRequestReviewState {
     PENDING(null),
     APPROVED("APPROVE"),
-    REQUEST_CHANGES("REQUEST_CHANGES"),
+    CHANGES_REQUESTED("REQUEST_CHANGES"),
     COMMENTED("COMMENT"),
     DISMISSED(null);
 

@@ -21,8 +21,8 @@ public class GHCreateRepositoryBuilder {
     }
 
     public GHCreateRepositoryBuilder description(String description) {
-      this.builder.with("description",description);
-      return this;
+        this.builder.with("description",description);
+        return this;
     }
 
     public GHCreateRepositoryBuilder homepage(URL homepage) {
@@ -71,6 +71,30 @@ public class GHCreateRepositoryBuilder {
      */
     public GHCreateRepositoryBuilder autoInit(boolean b) {
         this.builder.with("auto_init",b);
+        return this;
+    }
+
+    /**
+     * Allow or disallow squash-merging pull requests.
+     */
+    public GHCreateRepositoryBuilder allowSquashMerge(boolean b) {
+        this.builder.with("allow_squash_merge",b);
+        return this;
+    }
+
+    /**
+     * Allow or disallow merging pull requests with a merge commit.
+     */
+    public GHCreateRepositoryBuilder allowMergeCommit(boolean b) {
+        this.builder.with("allow_merge_commit",b);
+        return this;
+    }
+
+    /**
+     * Allow or disallow rebase-merging pull requests.
+     */
+    public GHCreateRepositoryBuilder allowRebaseMerge(boolean b) {
+        this.builder.with("allow_rebase_merge",b);
         return this;
     }
 

@@ -124,6 +124,17 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
     }
 
+    /**
+     * Create a new comment that replies to this comment.
+     */
+    public GHPullRequestReviewComment reply(String body) throws IOException {
+        return new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("in_reply_to", getId())
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
+                .wrapUp(owner);
+    }
+
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return new Requester(owner.root)

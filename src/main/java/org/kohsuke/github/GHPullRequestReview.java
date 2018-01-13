@@ -23,26 +23,98 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import javax.annotation.CheckForNull;
 import java.io.IOException;
-import java.util.List;
+import java.net.URL;
 
 /**
- * Review to the pull request
+ * Review to a pull request.
  *
  * @see GHPullRequest#listReviews()
- * @see GHPullRequest#createReview(String, String, GHPullRequestReviewEvent, List)
+ * @see GHPullRequestReviewBuilder
  */
-public class GHPullRequestReview extends GHPullRequestReviewAbstract {
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
+public class GHPullRequestReview extends GHObject {
+    GHPullRequest owner;
+
+    private String body;
+    private GHUser user;
+    private String commit_id;
     private GHPullRequestReviewState state;
 
-    @Override
+    /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
+        this.owner = owner;
+        return this;
+    }
+
+    /**
+     * Gets the pull request to which this review is associated.
+     */
+    public GHPullRequest getParent() {
+        return owner;
+    }
+
+    /**
+     * The comment itself.
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * Gets the user who posted this review.
+     */
+    public GHUser getUser() throws IOException {
+        return owner.root.getUser(user.getLogin());
+    }
+
+    public String getCommitId() {
+        return commit_id;
+    }
+
+    @CheckForNull
     public GHPullRequestReviewState getState() {
         return state;
     }
 
-    GHPullRequestReview wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-        return this;
+    @Override
+    public URL getHtmlUrl() {
+        return null;
+    }
+
+    protected String getApiRoute() {
+        return owner.getApiRoute()+"/reviews/"+id;
+    }
+
+    /**
+     * @deprecated
+     *      Former preview method that changed when it got public. Left here for backward compatibility.
+     *      Use {@link #submit(String, GHPullRequestReviewEvent)}
+     */
+    public void submit(String body, GHPullRequestReviewState state) throws IOException {
+        submit(body,state.toEvent());
+    }
+
+    /**
+     * Updates the comment.
+     */
+    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
+        new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("event", event.action())
+                .to(getApiRoute()+"/events",this);
+        this.body = body;
+        this.state = event.toState();
+    }
+
+    /**
+     * Deletes this review.
+     */
+    public void delete() throws IOException {
+        new Requester(owner.root).method("DELETE")
+                .to(getApiRoute());
     }
 
     /**
@@ -51,7 +123,26 @@ public class GHPullRequestReview extends GHPullRequestReviewAbstract {
     public void dismiss(String message) throws IOException {
         new Requester(owner.root).method("PUT")
                 .with("message", message)
-                .to(getApiRoute() + "/dismissals");
+                .to(getApiRoute()+"/dismissals");
         state = GHPullRequestReviewState.DISMISSED;
+    }
+
+    /**
+     * Obtains all the review comments associated with this pull request review.
+     */
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+        return new PagedIterable<GHPullRequestReviewComment>() {
+            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestReviewComment>(
+                        owner.root.retrieve()
+                                .asIterator(getApiRoute() + "/comments",
+                                GHPullRequestReviewComment[].class, pageSize)) {
+                    protected void wrapUp(GHPullRequestReviewComment[] page) {
+                        for (GHPullRequestReviewComment c : page)
+                            c.wrapUp(owner);
+                    }
+                };
+            }
+        };
     }
 }

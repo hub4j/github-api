@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -33,9 +32,10 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     public void testPullRequestReviews() throws Exception {
         String name = rnd.next();
         GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
-        GHPullRequestReviewDraft draftReview = p.newDraftReview(null, "Some draft review",
-                GHPullRequestReviewComment.draft("Some niggle", "changelog.html", 1)
-        );
+        GHPullRequestReview draftReview = p.createReview()
+            .body("Some draft review")
+            .comment("Some niggle", "changelog.html", 1)
+            .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
@@ -50,9 +50,10 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Some niggle", comment.getBody());
-        draftReview = p.newDraftReview(null, "Some new review",
-                GHPullRequestReviewComment.draft("Some niggle", "changelog.html", 1)
-        );
+        draftReview = p.createReview()
+            .body("Some new review")
+            .comment("Some niggle", "changelog.html", 1)
+            .create();
         draftReview.delete();
     }
 

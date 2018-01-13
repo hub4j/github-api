@@ -182,6 +182,13 @@ public class GHPullRequest extends GHIssue {
         return maintainer_can_modify;
     }
 
+    /**
+     * Is this PR mergeable?
+     *
+     * @return
+     *      null if the state has not been determined yet, for example when a PR is newly created.
+     *      Use {@link #refresh()} after some interval to wait until the value is determined.
+     */
     public Boolean getMergeable() throws IOException {
         populate();
         return mergeable;
@@ -217,6 +224,13 @@ public class GHPullRequest extends GHIssue {
      */
     private void populate() throws IOException {
         if (mergeable_state!=null)    return; // already populated
+        refresh();
+    }
+
+    /**
+     * Repopulates this object.
+     */
+    public void refresh() throws IOException {
         if (root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }

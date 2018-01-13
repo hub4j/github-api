@@ -193,8 +193,8 @@ public class GHEventPayloadTest {
                 GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReview.class);
         assertThat(event.getAction(), is("submitted"));
         
-        assertThat(event.getReview().getId(), is(2626884));
-        assertThat(event.getReview().getBody(), is("Looks great!"));
+        assertThat(event.getReview().getId(), is(2626884L));
+        assertThat(event.getReview().getBody(), is("Looks great!\n"));
         assertThat(event.getReview().getState(), is(GHPullRequestReviewState.APPROVED));
         
         assertThat(event.getPullRequest().getNumber(), is(8));

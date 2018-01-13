@@ -173,6 +173,14 @@ public class GHRepository extends GHObject {
      * Gets the HTTPS URL to this repository, such as "https://github.com/kohsuke/jenkins.git"
      * This URL is read-only.
      */
+    public String getHttpTransportUrl() {
+        return clone_url;
+    }
+
+    /**
+     * @deprecated
+     *      Typo of {@link #getHttpTransportUrl()}
+     */
     public String gitHttpTransportUrl() {
         return clone_url;
     }

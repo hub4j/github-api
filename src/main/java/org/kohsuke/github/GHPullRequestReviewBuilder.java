@@ -42,7 +42,7 @@ public class GHPullRequestReviewBuilder {
     /**
      * The review action you want to perform. The review actions include: APPROVE, REQUEST_CHANGES, or COMMENT.
      * By leaving this blank, you set the review action state to PENDING,
-     * which means you will need to {@linkplain GHPullRequestReview#submit() submit the pull request review} when you are ready.
+     * which means you will need to {@linkplain GHPullRequestReview#submit(String, GHPullRequestReviewEvent) submit the pull request review} when you are ready.
      */
     public GHPullRequestReviewBuilder event(GHPullRequestReviewEvent event) {
         builder.with("event",event.action());

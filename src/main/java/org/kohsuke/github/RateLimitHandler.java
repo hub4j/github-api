@@ -37,7 +37,7 @@ public abstract class RateLimitHandler {
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
-            } catch (InterruptedException _) {
+            } catch (InterruptedException x) {
                 throw (InterruptedIOException)new InterruptedIOException().initCause(e);
             }
         }

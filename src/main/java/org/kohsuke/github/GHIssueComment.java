@@ -36,7 +36,7 @@ import static org.kohsuke.github.Previews.*;
 public class GHIssueComment extends GHObject implements Reactable {
     GHIssue owner;
 
-    private String body, gravatar_id;
+    private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
     /*package*/ GHIssueComment wrapUp(GHIssue owner) {
@@ -73,12 +73,13 @@ public class GHIssueComment extends GHObject implements Reactable {
         return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
     
-    /**
-     * @deprecated This object has no HTML URL.
-     */
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHub.parseURL(html_url);
+    }
+
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return GHCommentAuthorAssociation.valueOf(author_association);
     }
     
     /**

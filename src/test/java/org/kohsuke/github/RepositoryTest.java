@@ -94,6 +94,36 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
 		}
 	}
 
+    @Test public void listReleases() throws IOException {
+        PagedIterable<GHRelease> releases = gitHub.getOrganization("github").getRepository("hub").listReleases();
+        assertTrue(releases.iterator().hasNext());
+    }
+
+    @Test
+    public void getReleaseExists() throws IOException {
+        GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(6839710);
+        assertEquals("v2.3.0-pre10", release.getTagName());
+    }
+
+    @Test
+    public void getReleaseDoesNotExist() throws IOException {
+        GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(Long.MAX_VALUE);
+        assertNull(release);
+    }
+
+    @Test
+    public void getReleaseByTagNameExists() throws IOException {
+        GHRelease release = gitHub.getOrganization("github").getRepository("hub").getReleaseByTagName("v2.3.0-pre10");
+        assertNotNull(release);
+        assertEquals("v2.3.0-pre10", release.getTagName());
+    }
+
+    @Test
+    public void getReleaseByTagNameDoesNotExist() throws IOException {
+        GHRelease release = getRepository().getReleaseByTagName("foo-bar-baz");
+        assertNull(release);
+    }
+
     private GHRepository getRepository() throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");
     }

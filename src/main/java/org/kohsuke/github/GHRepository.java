@@ -69,7 +69,7 @@ public class GHRepository extends GHObject {
         return new GHDeploymentBuilder(this,ref);
     }
 
-    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) {
+    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final long id) {
         return new PagedIterable<GHDeploymentStatus>() {
             public PagedIterator<GHDeploymentStatus> iterator() {
                 return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(getApiTailUrl("deployments")+"/"+id+"/statuses", GHDeploymentStatus[].class)) {
@@ -114,7 +114,7 @@ public class GHRepository extends GHObject {
         return StringUtils.trimToNull(value)== null? null: name+"="+value;
     }
 
-    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState) {
+    public GHDeploymentStatusBuilder createDeployStatus(long deploymentId, GHDeploymentState ghDeploymentState) {
         return new GHDeploymentStatusBuilder(this,deploymentId,ghDeploymentState);
     }
 

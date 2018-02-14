@@ -28,7 +28,7 @@ public class GHEventInfo {
      * Inside the event JSON model, GitHub uses a slightly different format.
      */
     public static class GHEventRepository {
-        private int id;
+        private long id;
         private String url;     // repository API URL
         private String name;    // owner/repo
     }

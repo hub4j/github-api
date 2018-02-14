@@ -8,10 +8,10 @@ public class GHDeployKey {
 
     protected String url, key, title;
     protected boolean verified;
-    protected int id;
+    protected long id;
     private GHRepository owner;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

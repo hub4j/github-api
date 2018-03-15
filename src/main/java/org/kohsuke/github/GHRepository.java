@@ -1394,27 +1394,29 @@ public class GHRepository extends GHObject {
         return requester.to(getApiTailUrl("readme"), GHContent.class).wrap(this);
     }
 
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent(content, commitMessage, path, null);
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path,String sha1) throws IOException {
+        return createContent(content, commitMessage, path, null,sha1);
     }
 
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch, String sha1) throws IOException {
         final byte[] payload;
         try {
             payload = content.getBytes("UTF-8");
         } catch (UnsupportedEncodingException ex) {
             throw (IOException) new IOException("UTF-8 encoding is not supported").initCause(ex);
         }
-        return createContent(payload, commitMessage, path, branch);
+        return createContent(payload, commitMessage, path, branch,sha1);
     }
 
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
-        return createContent(contentBytes, commitMessage, path, null);
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path,String sha1) throws IOException {
+        return createContent(contentBytes, commitMessage, path, null,sha1);
     }
 
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch) throws IOException {
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch,
+                                                 String sha1) throws IOException {
         Requester requester = new Requester(root)
             .with("path", path)
+                .with("sha", sha1)
             .with("message", commitMessage)
             .with("content", Base64.encodeBase64String(contentBytes))
             .method("PUT");

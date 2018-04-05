@@ -26,6 +26,8 @@ public class GitHubBuilder {
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
+    /* private */ String applicationToken;
+
     
     private HttpConnector connector;
 
@@ -177,6 +179,10 @@ public class GitHubBuilder {
         this.user = user;
         return this;
     }
+    public GitHubBuilder withApplicationToken(String applicationToken) {
+        this.applicationToken = applicationToken;
+        return this;
+    }
     public GitHubBuilder withConnector(HttpConnector connector) {
         this.connector = connector;
         return this;
@@ -204,6 +210,6 @@ public class GitHubBuilder {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, applicationToken, password, connector, rateLimitHandler, abuseLimitHandler);
     }
 }

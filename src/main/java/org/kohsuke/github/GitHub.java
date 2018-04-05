@@ -131,13 +131,15 @@ public class GitHub {
      * @param connector
      *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String applicationToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
 
         if (oauthAccessToken!=null) {
-            encodedAuthorization = "token "+oauthAccessToken;
+            encodedAuthorization = "token " + oauthAccessToken;
+        } else if (applicationToken != null) {
+            encodedAuthorization = "token " + applicationToken;
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
@@ -153,8 +155,9 @@ public class GitHub {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
-        if (login==null && encodedAuthorization!=null)
+        if (login==null && encodedAuthorization!=null && applicationToken == null) {
             login = getMyself().getLogin();
+        }
         this.login = login;
     }
 

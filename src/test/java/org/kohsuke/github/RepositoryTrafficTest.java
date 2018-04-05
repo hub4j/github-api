@@ -22,6 +22,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHRepositoryTraffic.DailyInfo;
 import org.mockito.Mockito;
@@ -36,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class RepositoryTrafficTest {
     final private String login = "kohsuke", repositoryName = "github-api";
 

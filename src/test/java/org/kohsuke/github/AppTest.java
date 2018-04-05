@@ -24,6 +24,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -40,6 +41,7 @@ import static org.hamcrest.CoreMatchers.*;
 /**
  * Unit test for simple App.
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class AppTest extends AbstractGitHubApiTestBase {
     private String getTestRepositoryName() throws IOException {
         return getUser().getLogin() + "/github-api-test";

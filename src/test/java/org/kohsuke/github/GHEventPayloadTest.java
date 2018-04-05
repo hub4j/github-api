@@ -19,6 +19,7 @@
  */
 package org.kohsuke.github;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GHEventPayloadTest {
 
     @Rule

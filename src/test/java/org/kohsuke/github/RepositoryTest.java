@@ -19,6 +19,7 @@
  */
 package org.kohsuke.github;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHRepository.Contributor;
 
@@ -28,6 +29,7 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class RepositoryTest extends AbstractGitHubApiTestBase {
     @Test
     public void subscription() throws Exception {

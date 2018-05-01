@@ -400,7 +400,7 @@ public class GHPullRequest extends GHIssue {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            new Requester(root).to(getIssuesApiRoute(), this);
+            new Requester(root).method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

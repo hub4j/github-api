@@ -347,9 +347,9 @@ public class GHPullRequest extends GHIssue {
     }
 
     public void requestReviewers(List<GHUser> reviewers) {
-        return new Requester(root).method("POST")
+        new Requester(root).method("POST")
                 .with("reviewers", toLogins(reviewers))
-                .to(getApiRoute() + REQUEST_REVIEWERS)
+                .to(getApiRoute() + REQUEST_REVIEWERS);
     }
     
     /**

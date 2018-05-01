@@ -304,7 +304,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testMembership() throws Exception {
-        Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
+        Set<String> members = gitHub.getOrganization("github-api-test-org").getRepository("jenkins").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
 

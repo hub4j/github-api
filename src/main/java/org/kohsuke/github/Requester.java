@@ -169,6 +169,14 @@ class Requester {
         return _with(key, value);
     }
 
+    public Requester withLogins(String key, Collection<GHUser> users) {
+        List<String> names = new ArrayList<String>(users.size());
+        for (GHUser a : users) {
+            names.add(a.getLogin());
+        }
+        return with(key,names);
+    }
+
     public Requester with(String key, Map<String, String> value) {
         return _with(key, value);
     }

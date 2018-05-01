@@ -29,7 +29,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +48,8 @@ import static org.kohsuke.github.Previews.*;
  * @see GHIssueSearchBuilder
  */
 public class GHIssue extends GHObject implements Reactable{
+    private static final String ASSIGNEES = "assignees";
+
     GitHub root;
     GHRepository owner;
     
@@ -268,8 +269,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        List<String> names = toLogins(assignees);
-        root.retrieve().method("POST").with("assignees",names).to(getIssuesApiRoute()+"/assignees",this);
+        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -277,7 +277,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        editIssue("assignees",toLogins(assignees));
+        new Requester(root).withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
     }
 
     public void removeAssignees(GHUser... assignees) throws IOException {
@@ -285,16 +285,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        List<String> names = toLogins(assignees);
-        root.retrieve().method("DELETE").with("assignees",names).inBody().to(getIssuesApiRoute()+"/assignees",this);
-    }
-
-    private List<String> toLogins(Collection<GHUser> assignees) {
-        List<String> names = new ArrayList<String>(assignees.size());
-        for (GHUser a : assignees) {
-            names.add(a.getLogin());
-        }
-        return names;
+        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected String getApiRoute() {

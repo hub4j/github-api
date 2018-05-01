@@ -41,6 +41,7 @@ import java.util.List;
 public class GHPullRequest extends GHIssue {
 
     private static final String COMMENTS_ACTION = "/comments";
+    private static final String REQUEST_REVIEWERS = "/requested_reviewers";
 
     private String patch_url, diff_url, issue_url;
     private GHCommitPointer base;
@@ -345,6 +346,12 @@ public class GHPullRequest extends GHIssue {
                 .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class).wrapUp(this);
     }
 
+    public void requestReviewers(List<GHUser> reviewers) {
+        return new Requester(root).method("POST")
+                .with("reviewers", toLogins(reviewers))
+                .to(getApiRoute() + REQUEST_REVIEWERS)
+    }
+    
     /**
      * Merge this pull request.
      *

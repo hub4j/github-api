@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class CommitTest extends AbstractGitHubApiTestBase {
     @Test // issue 152
     public void lastStatus() throws IOException {

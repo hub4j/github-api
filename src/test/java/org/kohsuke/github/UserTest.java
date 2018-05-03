@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.Set;
 /**
  * @author Kohsuke Kawaguchi
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class UserTest extends AbstractGitHubApiTestBase {
     @Test
     public void listFollowsAndFollowers() throws IOException {

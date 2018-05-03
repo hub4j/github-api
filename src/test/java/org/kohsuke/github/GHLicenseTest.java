@@ -27,6 +27,7 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ import java.net.URL;
 /**
  * @author Duncan Dickinson
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GHLicenseTest extends Assert {
     private GitHub gitHub;
 

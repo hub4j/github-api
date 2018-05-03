@@ -2,10 +2,12 @@ package org.kohsuke.github;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GHOrganizationTest extends AbstractGitHubApiTestBase {
 
     public static final String GITHUB_API_TEST = "github-api-test";

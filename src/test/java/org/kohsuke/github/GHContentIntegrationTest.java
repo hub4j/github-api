@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * Integration test for {@link GHContent}.
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
 
     private GHRepository repo;

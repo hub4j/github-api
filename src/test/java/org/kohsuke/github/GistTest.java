@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Kohsuke Kawaguchi
  */
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class GistTest extends AbstractGitHubApiTestBase {
     /**
      * CRUD operation.

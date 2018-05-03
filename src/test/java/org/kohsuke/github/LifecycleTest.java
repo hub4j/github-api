@@ -5,6 +5,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Properties;
 
+@Ignore("ignored as out of scope of SonarSource's fork's changes")
 public class LifecycleTest extends AbstractGitHubApiTestBase {
     @Test
     public void testCreateRepository() throws IOException, GitAPIException, InterruptedException {

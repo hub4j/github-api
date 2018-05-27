@@ -67,7 +67,7 @@ public class GHBranch {
 
     @Preview @Deprecated
     public GHBranchProtection getProtection() throws IOException {
-        return root.retrieve().withPreview(LOKI).to(protection_url, GHBranchProtection.class);
+        return root.retrieve().withPreview(LOKI).to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -82,7 +82,7 @@ public class GHBranch {
      */
     @Preview @Deprecated
     public void disableProtection() throws IOException {
-        new Requester(root).method("DELETE").withPreview(LOKI).to(protection_url);
+        new Requester(root).method("DELETE").to(protection_url);
     }
 
     /**

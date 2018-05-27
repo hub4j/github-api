@@ -3,13 +3,20 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import static org.kohsuke.github.Previews.ZZZAX;
+
+import java.io.IOException;
 import java.util.Collection;
 
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
 		"URF_UNREAD_FIELD" }, justification = "JSON API")
 public class GHBranchProtection {
+    private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
+
 	@JsonProperty("enforce_admins")
 	private EnforceAdmins enforceAdmins;
+
+	private GitHub root;
 
 	@JsonProperty("required_pull_request_reviews")
 	private RequiredReviews requiredReviews;
@@ -23,12 +30,30 @@ public class GHBranchProtection {
 	@JsonProperty
 	private String url;
 	
+	@Preview @Deprecated
+    public RequiredSignatures enabledSignedCommits() throws IOException {
+        return requester().method("POST")
+                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
+    }
+
+	@Preview @Deprecated
+    public void disableSignedCommits() throws IOException {
+        requester().method("DELETE")
+                .to(url + REQUIRE_SIGNATURES_URI);
+    }
+
 	public EnforceAdmins getEnforceAdmins() {
         return enforceAdmins;
     }
 
     public RequiredReviews getRequiredReviews() {
         return requiredReviews;
+    }
+
+    @Preview @Deprecated
+    public RequiredSignatures getRequiredSignatures() throws IOException {
+        return requester().method("GET")
+                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
     }
 
     public RequiredStatusChecks getRequiredStatusChecks() {
@@ -41,6 +66,15 @@ public class GHBranchProtection {
 
     public String getUrl() {
         return url;
+    }
+
+    GHBranchProtection wrap(GHBranch branch) {
+        this.root = branch.getRoot();
+        return this;
+    }
+
+    private Requester requester() {
+        return new Requester(root).withPreview(ZZZAX);
     }
 
     public static class EnforceAdmins {
@@ -69,6 +103,9 @@ public class GHBranchProtection {
 		@JsonProperty("require_code_owner_reviews")
 		private boolean requireCodeOwnerReviews;
 
+		@JsonProperty("required_approving_review_count")
+		private int requiredReviewers;
+
 		@JsonProperty
 		private String url;
 
@@ -86,6 +123,27 @@ public class GHBranchProtection {
 
         public boolean isRequireCodeOwnerReviews() {
             return requireCodeOwnerReviews;
+        }
+
+        public int getRequiredReviewers()
+        {
+            return requiredReviewers;
+        }
+	}
+
+	public static class RequiredSignatures {
+	    @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
         }
 	}
 

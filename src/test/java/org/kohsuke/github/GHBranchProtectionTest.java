@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
+import org.kohsuke.github.GHBranchProtection.RequiredSignatures;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
 import java.io.FileNotFoundException;
@@ -32,6 +33,12 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
         branch = repo.getBranch(BRANCH);
 
         if (branch.isProtected()) {
+            GHBranchProtection protection = branch.getProtection();
+            if (protection.getRequiredSignatures().isEnabled()) {
+                protection.disableSignedCommits();
+            }
+
+            assertFalse(protection.getRequiredSignatures().isEnabled());
             branch.disableProtection();
         }
 
@@ -47,6 +54,7 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
                 .requireBranchIsUpToDate()
                 .requireCodeOwnReviews()
                 .dismissStaleReviews()
+                .requiredReviewers(2)
                 .includeAdmins()
                 .enable();
 
@@ -59,6 +67,7 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
         assertNotNull(requiredReviews);
         assertTrue(requiredReviews.isDismissStaleReviews());
         assertTrue(requiredReviews.isRequireCodeOwnerReviews());
+        assertEquals(2, requiredReviews.getRequiredReviewers());
         
         EnforceAdmins enforceAdmins = protection.getEnforceAdmins();
         assertNotNull(enforceAdmins);
@@ -78,5 +87,23 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
                 .enable();
         
        assertNotNull(protection.getRequiredReviews());
+    }
+
+    @Test
+    public void testSignedCommits() throws Exception {
+        GHBranchProtection protection = branch.enableProtection().enable();
+
+        RequiredSignatures signatures = protection.getRequiredSignatures();
+        assertNotNull(signatures);
+        assertFalse(signatures.isEnabled());
+
+        signatures = protection.enabledSignedCommits();
+        assertNotNull(signatures);
+        assertTrue(signatures.isEnabled());
+
+        protection.disableSignedCommits();
+        signatures = protection.getRequiredSignatures();
+        assertNotNull(signatures);
+        assertFalse(signatures.isEnabled());
     }
 }

@@ -44,7 +44,12 @@ public class GHBranchProtectionBuilder {
     }
 
     public GHBranchProtectionBuilder dismissStaleReviews() {
-        getPrReviews().put("dismiss_stale_reviews", true);
+        dismissStaleReviews(true);
+        return this;
+    }
+
+    public GHBranchProtectionBuilder dismissStaleReviews(boolean v) {
+        getPrReviews().put("dismiss_stale_reviews", v);
         return this;
     }
 
@@ -54,7 +59,8 @@ public class GHBranchProtectionBuilder {
                 .withNullable("required_pull_request_reviews", prReviews)
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class);
+                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
+                .wrap(branch);
     }
 
     public GHBranchProtectionBuilder includeAdmins() {
@@ -63,6 +69,11 @@ public class GHBranchProtectionBuilder {
 
     public GHBranchProtectionBuilder includeAdmins(boolean v) {
         enforceAdmins = v;
+        return this;
+    }
+
+    public GHBranchProtectionBuilder requiredReviewers(int v) {
+        getPrReviews().put("required_approving_review_count", v);
         return this;
     }
 
@@ -86,6 +97,16 @@ public class GHBranchProtectionBuilder {
 
     public GHBranchProtectionBuilder requireReviews() {
         getPrReviews();
+        return this;
+    }
+
+    public GHBranchProtectionBuilder restrictReviewDismissals() {
+        getPrReviews();
+
+        if (!prReviews.containsKey("dismissal_restrictions")) {
+            prReviews.put("dismissal_restrictions", new Restrictions());
+        }
+
         return this;
     }
 
@@ -151,12 +172,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private void addReviewRestriction(String restriction, boolean isTeam) {
-        getPrReviews();
-        
-        if (!prReviews.containsKey("dismissal_restrictions")) {
-            prReviews.put("dismissal_restrictions", new Restrictions());
-        }
-        
+        restrictReviewDismissals();
         Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
         
         if (isTeam) {
@@ -188,7 +204,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return new Requester(branch.getRoot()).withPreview(LOKI);
+        return new Requester(branch.getRoot()).withPreview(LUKE_CAGE);
     }
 
     private static class Restrictions {

@@ -50,7 +50,7 @@ public class GHOrganization extends GHPerson {
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
      * to finally createa repository.
      */
-    public GHCreateRepositoryBuilder createRepository(String name) throws IOException {
+    public GHCreateRepositoryBuilder createRepository(String name) {
         return new GHCreateRepositoryBuilder(root,"/orgs/"+login+"/repos",name);
     }
 

@@ -1394,32 +1394,59 @@ public class GHRepository extends GHObject {
         return requester.to(getApiTailUrl("readme"), GHContent.class).wrap(this);
     }
 
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path,String sha1) throws IOException {
-        return createContent(content, commitMessage, path, null,sha1);
+    public GHContentUpdateResponse createContent(GHContentUpdateRequest updateRequest) throws IOException {
+        return createContent(updateRequest.getContent(), updateRequest.getCommitMessage(), updateRequest.getPath(), updateRequest.getBranch(), updateRequest.getSha());
     }
 
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch, String sha1) throws IOException {
+    /**
+     * Use {@link GHContentUpdateRequest}.
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
+        return createContent(content.getBytes(), commitMessage, path, null, null);
+    }
+
+    /**
+     * Use {@link GHContentUpdateRequest}.
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
         final byte[] payload;
         try {
             payload = content.getBytes("UTF-8");
         } catch (UnsupportedEncodingException ex) {
             throw (IOException) new IOException("UTF-8 encoding is not supported").initCause(ex);
         }
-        return createContent(payload, commitMessage, path, branch,sha1);
+        return createContent(payload, commitMessage, path, branch, null);
     }
 
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path,String sha1) throws IOException {
-        return createContent(contentBytes, commitMessage, path, null,sha1);
+    /**
+     * Use {@link GHContentUpdateRequest}.
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
+        return createContent(contentBytes, commitMessage, path, null, null);
     }
 
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch,
-                                                 String sha1) throws IOException {
+    /**
+     * Use {@link GHContentUpdateRequest}.
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch) throws IOException {
+        return createContent(contentBytes, commitMessage, path, branch, null);
+    }
+
+    private GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch, String sha1) throws IOException {
         Requester requester = new Requester(root)
-            .with("path", path)
-                .with("sha", sha1)
-            .with("message", commitMessage)
-            .with("content", Base64.encodeBase64String(contentBytes))
-            .method("PUT");
+                .with("path", path)
+                .with("message", commitMessage)
+                .with("content", Base64.encodeBase64String(contentBytes))
+                .method("PUT");
+
+        if (sha1 != null) {
+            requester.with("sha", sha1);
+        }
+
 
         if (branch != null) {
             requester.with("branch", branch);

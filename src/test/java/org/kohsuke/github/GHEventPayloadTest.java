@@ -120,9 +120,19 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void issues() throws Exception {}
+    @Test
+    public void issues() throws Exception {
+        GHEventPayload.Issue event = GitHub.offline().parseEventPayload(payload.asReader(),GHEventPayload.Issue.class);
+        assertThat(event.getAction(),is("opened"));
+        assertThat(event.getIssue().getNumber(), is(2));
+        assertThat(event.getIssue().getTitle(), is("Spelling error in the README file"));
+        assertThat(event.getIssue().getState(), is(GHIssueState.OPEN));
+        assertThat(event.getIssue().getLabels().size(), is(1));
+        assertThat(event.getIssue().getLabels().iterator().next().getName(), is("bug"));
+        assertThat(event.getRepository().getName(), is("public-repo"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    }
 
 // TODO implement support classes and write test
 //    @Test

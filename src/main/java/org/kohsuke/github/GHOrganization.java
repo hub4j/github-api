@@ -269,7 +269,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos?per_page=" + pageSize, GHRepository[].class, pageSize)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
@@ -277,7 +277,7 @@ public class GHOrganization extends GHPerson {
                     }
                 };
             }
-        };
+        }.withPageSize(pageSize);
     }
 
     /**

@@ -31,8 +31,8 @@ public class GHBranchProtection {
 	private String url;
 	
 	@Preview @Deprecated
-    public RequiredSignatures enabledSignedCommits() throws IOException {
-        return requester().method("POST")
+    public void enabledSignedCommits() throws IOException {
+        requester().method("POST")
                 .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
     }
 
@@ -51,9 +51,9 @@ public class GHBranchProtection {
     }
 
     @Preview @Deprecated
-    public RequiredSignatures getRequiredSignatures() throws IOException {
+    public boolean getRequiredSignatures() throws IOException {
         return requester().method("GET")
-                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
+                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class).enabled;
     }
 
     public RequiredStatusChecks getRequiredStatusChecks() {
@@ -131,7 +131,7 @@ public class GHBranchProtection {
         }
 	}
 
-	public static class RequiredSignatures {
+	private static class RequiredSignatures {
 	    @JsonProperty
         private boolean enabled;
 

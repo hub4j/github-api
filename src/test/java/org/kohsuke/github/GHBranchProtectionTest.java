@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
-import org.kohsuke.github.GHBranchProtection.RequiredSignatures;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
 import java.io.FileNotFoundException;
@@ -34,11 +33,11 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
 
         if (branch.isProtected()) {
             GHBranchProtection protection = branch.getProtection();
-            if (protection.getRequiredSignatures().isEnabled()) {
+            if (protection.getRequiredSignatures()) {
                 protection.disableSignedCommits();
             }
 
-            assertFalse(protection.getRequiredSignatures().isEnabled());
+            assertFalse(protection.getRequiredSignatures());
             branch.disableProtection();
         }
 
@@ -93,17 +92,12 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
     public void testSignedCommits() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
 
-        RequiredSignatures signatures = protection.getRequiredSignatures();
-        assertNotNull(signatures);
-        assertFalse(signatures.isEnabled());
+        assertFalse(protection.getRequiredSignatures());
 
-        signatures = protection.enabledSignedCommits();
-        assertNotNull(signatures);
-        assertTrue(signatures.isEnabled());
+        protection.enabledSignedCommits();
+        assertTrue(protection.getRequiredSignatures());
 
         protection.disableSignedCommits();
-        signatures = protection.getRequiredSignatures();
-        assertNotNull(signatures);
-        assertFalse(signatures.isEnabled());
+        assertFalse(protection.getRequiredSignatures());
     }
 }

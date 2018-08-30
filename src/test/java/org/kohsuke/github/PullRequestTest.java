@@ -122,14 +122,13 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         GHContentUpdateResponse response = getRepository().createContent(name, name, name, name);
         Thread.sleep(1000);
 
-        GHContentUpdateRequest updateRequest = GHContentUpdateRequest.getBuilder()
+        getRepository().createContent()
                 .content(name + name)
                 .path(name)
                 .branch(name)
-                .commitMessage(name)
+                .message(name)
                 .sha(response.getContent().getSha())
-                .build();
-        getRepository().createContent(updateRequest);
+                .commit();
         GHPullRequest p = getRepository().createPullRequest(name, name, "master", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);

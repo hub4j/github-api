@@ -26,7 +26,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
@@ -35,7 +34,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -1394,70 +1392,43 @@ public class GHRepository extends GHObject {
         return requester.to(getApiTailUrl("readme"), GHContent.class).wrap(this);
     }
 
-    public GHContentUpdateResponse createContent(GHContentUpdateRequest updateRequest) throws IOException {
-        return createContent(updateRequest.getContent(), updateRequest.getCommitMessage(), updateRequest.getPath(), updateRequest.getBranch(), updateRequest.getSha());
+    /**
+     * Creates a new content, or update an existing content.
+     */
+    public GHContentBuilder createContent() {
+        return new GHContentBuilder(this);
     }
 
     /**
-     * Use {@link GHContentUpdateRequest}.
+     * Use {@link #createContent()}.
      */
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent(content.getBytes(), commitMessage, path, null, null);
+        return createContent().content(content).message(commitMessage).path(path).commit();
     }
 
     /**
-     * Use {@link GHContentUpdateRequest}.
+     * Use {@link #createContent()}.
      */
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch) throws IOException {
-        final byte[] payload;
-        try {
-            payload = content.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw (IOException) new IOException("UTF-8 encoding is not supported").initCause(ex);
-        }
-        return createContent(payload, commitMessage, path, branch, null);
+        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();
     }
 
     /**
-     * Use {@link GHContentUpdateRequest}.
+     * Use {@link #createContent()}.
      */
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path) throws IOException {
-        return createContent(contentBytes, commitMessage, path, null, null);
+        return createContent().content(contentBytes).message(commitMessage).path(path).commit();
     }
 
     /**
-     * Use {@link GHContentUpdateRequest}.
+     * Use {@link #createContent()}.
      */
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch) throws IOException {
-        return createContent(contentBytes, commitMessage, path, branch, null);
-    }
-
-    private GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch, String sha1) throws IOException {
-        Requester requester = new Requester(root)
-                .with("path", path)
-                .with("message", commitMessage)
-                .with("content", Base64.encodeBase64String(contentBytes))
-                .method("PUT");
-
-        if (sha1 != null) {
-            requester.with("sha", sha1);
-        }
-
-
-        if (branch != null) {
-            requester.with("branch", branch);
-        }
-
-        GHContentUpdateResponse response = requester.to(getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
-
-        response.getContent().wrap(this);
-        response.getCommit().wrapUp(this);
-
-        return response;
+        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();
     }
 
     public GHMilestone createMilestone(String title, String description) throws IOException {

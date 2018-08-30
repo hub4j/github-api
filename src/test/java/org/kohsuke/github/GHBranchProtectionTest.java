@@ -32,6 +32,12 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
         branch = repo.getBranch(BRANCH);
 
         if (branch.isProtected()) {
+            GHBranchProtection protection = branch.getProtection();
+            if (protection.getRequiredSignatures()) {
+                protection.disableSignedCommits();
+            }
+
+            assertFalse(protection.getRequiredSignatures());
             branch.disableProtection();
         }
 
@@ -47,6 +53,7 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
                 .requireBranchIsUpToDate()
                 .requireCodeOwnReviews()
                 .dismissStaleReviews()
+                .requiredReviewers(2)
                 .includeAdmins()
                 .enable();
 
@@ -59,6 +66,7 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
         assertNotNull(requiredReviews);
         assertTrue(requiredReviews.isDismissStaleReviews());
         assertTrue(requiredReviews.isRequireCodeOwnerReviews());
+        assertEquals(2, requiredReviews.getRequiredReviewers());
         
         EnforceAdmins enforceAdmins = protection.getEnforceAdmins();
         assertNotNull(enforceAdmins);
@@ -78,5 +86,18 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
                 .enable();
         
        assertNotNull(protection.getRequiredReviews());
+    }
+
+    @Test
+    public void testSignedCommits() throws Exception {
+        GHBranchProtection protection = branch.enableProtection().enable();
+
+        assertFalse(protection.getRequiredSignatures());
+
+        protection.enabledSignedCommits();
+        assertTrue(protection.getRequiredSignatures());
+
+        protection.disableSignedCommits();
+        assertFalse(protection.getRequiredSignatures());
     }
 }

@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -7,6 +9,8 @@ import java.net.URL;
  * @see GitHub#getMyInvitations()
  * @see GHRepository#listInvitations()
  */
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHInvitation extends GHObject {
     /*package almost final*/ GitHub root;
 

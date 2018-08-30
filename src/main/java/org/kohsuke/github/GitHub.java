@@ -530,6 +530,15 @@ public class GitHub {
     }
 
     /**
+     * Gets complete list of open invitations for current user.
+     */
+    public List<GHInvitation> getMyInvitations() throws IOException {
+        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        for (GHInvitation i : invitations) {
+            i.wrapUp(this);
+        }
+        return Arrays.asList(invitations);
+    }
 
     /**
      * This method returns a shallowly populated organizations.

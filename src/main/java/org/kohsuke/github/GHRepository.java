@@ -1136,6 +1136,22 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists all the invitations.
+     */
+    public PagedIterable<GHInvitation> listInvitations() {
+        return new PagedIterable<GHInvitation>() {
+            public PagedIterator<GHInvitation> _iterator(int pageSize) {
+                return new PagedIterator<GHInvitation>(root.retrieve().asIterator(String.format("/repos/%s/%s/invitations", getOwnerName(), name), GHInvitation[].class, pageSize)) {
+                    protected void wrapUp(GHInvitation[] page) {
+                        for (GHInvitation c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Lists all the subscribers (aka watchers.)
      *
      * https://developer.github.com/v3/activity/watching/

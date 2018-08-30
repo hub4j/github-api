@@ -1306,7 +1306,7 @@ public class GHRepository extends GHObject {
      */
     public Map<String,GHBranch> getBranches() throws IOException {
         Map<String,GHBranch> r = new TreeMap<String,GHBranch>();
-        for (GHBranch p : root.retrieve().withPreview(LOKI).to(getApiTailUrl("branches"), GHBranch[].class)) {
+        for (GHBranch p : root.retrieve().to(getApiTailUrl("branches"), GHBranch[].class)) {
             p.wrap(this);
             r.put(p.getName(),p);
         }
@@ -1314,7 +1314,7 @@ public class GHRepository extends GHObject {
     }
 
     public GHBranch getBranch(String name) throws IOException {
-        return root.retrieve().withPreview(LOKI).to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
     }
 
     /**

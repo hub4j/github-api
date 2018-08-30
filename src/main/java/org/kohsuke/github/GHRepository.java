@@ -813,7 +813,9 @@ public class GHRepository extends GHObject {
             public PagedIterator<GHRef> _iterator(int pageSize) {
                 return new PagedIterator<GHRef>(root.retrieve().asIterator(url, GHRef[].class, pageSize)) {
                     protected void wrapUp(GHRef[] page) {
-                        // no-op
+                        for(GHRef p: page) {
+                            p.wrap(root);
+                        }
                     }
                 };
             }

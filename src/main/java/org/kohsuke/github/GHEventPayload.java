@@ -175,6 +175,51 @@ public abstract class GHEventPayload {
     }
 
     /**
+     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or reopened.
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#issueevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Issue extends GHEventPayload {
+        private String action;
+        private GHIssue issue;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getAction() {
+            return action;
+        }
+
+        public GHIssue getIssue() {
+            return issue;
+        }
+
+        public void setIssue(GHIssue issue) {
+            this.issue = issue;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+                issue.wrap(repository);
+            } else {
+                issue.wrap(root);
+            }
+        }
+    }
+
+    /**
      * A comment was added to an issue
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>

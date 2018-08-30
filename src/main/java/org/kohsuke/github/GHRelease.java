@@ -126,7 +126,12 @@ public class GHRelease extends GHObject {
      * handling of the HTTP requests to github's API.
          */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
-        return uploadAsset(file.getName(), new FileInputStream(file), contentType);
+        FileInputStream s = new FileInputStream(file);
+        try {
+            return uploadAsset(file.getName(), s, contentType);
+        } finally {
+            s.close();
+        }
     }
     
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {

@@ -8,6 +8,9 @@ import java.io.UnsupportedEncodingException;
 /**
  * Used to create/update content.
  *
+ * <p>
+ * Call various methods to build up parameters, then call {@link #commit()} to make the change effective.
+ *
  * @author Kohsuke Kawaguchi
  * @see GHRepository#createContent()
  */

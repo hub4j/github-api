@@ -308,6 +308,22 @@ public class GHRepository extends GHObject {
     public List<GHRelease> getReleases() throws IOException {
         return listReleases().asList();
     }
+
+    public GHRelease getRelease(long id) throws IOException {
+        try {
+            return root.retrieve().to(getApiTailUrl("releases/" + id), GHRelease.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null; // no release for this id
+        }
+    }
+
+    public GHRelease getReleaseByTagName(String tag) throws IOException {
+        try {
+            return root.retrieve().to(getApiTailUrl("releases/tags/" + tag), GHRelease.class).wrap(this);
+        } catch (FileNotFoundException e) {
+            return null; // no release for this tag
+        }
+    }
     
     public GHRelease getLatestRelease() throws IOException {
         try {

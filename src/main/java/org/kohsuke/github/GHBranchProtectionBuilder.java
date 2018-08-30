@@ -44,8 +44,7 @@ public class GHBranchProtectionBuilder {
     }
 
     public GHBranchProtectionBuilder dismissStaleReviews() {
-        dismissStaleReviews(true);
-        return this;
+        return dismissStaleReviews(true);
     }
 
     public GHBranchProtectionBuilder dismissStaleReviews(boolean v) {

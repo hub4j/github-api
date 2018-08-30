@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @see GitHub#getMyInvitations()
+ * @see GHRepository#listInvitations()
+ */
 public class GHInvitation extends GHObject {
     /*package almost final*/ GitHub root;
 

@@ -762,6 +762,48 @@ public abstract class GHEventPayload {
     }
 
     /**
+     * A release was added to the repo
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#releaseevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Release extends GHEventPayload {
+        private String action;
+        private GHRelease release;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getAction() {
+            return action;
+        }
+
+        public GHRelease getRelease() {
+            return release;
+        }
+
+        public void setRelease(GHRelease release) {
+            this.release = release;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+            }
+        }
+    }
+
+    /**
      * A repository was created, deleted, made public, or made private.
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>

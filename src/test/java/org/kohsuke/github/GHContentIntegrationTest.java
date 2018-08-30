@@ -53,10 +53,8 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testCRUDContent() throws Exception {
-       ;
         GHContentUpdateResponse created =
-                repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename,
-                        repo.getFileContent(createdFilename).getSha());
+                repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename);
         GHContent createdContent = created.getContent();
 
         assertNotNull(created.getCommit());

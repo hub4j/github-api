@@ -24,19 +24,20 @@
 
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-
-import static org.kohsuke.github.Previews.*;
+import java.util.Set;
 
 /**
  * Represents an issue on GitHub.
@@ -214,6 +215,73 @@ public class GHIssue extends GHObject implements Reactable{
 
     public void setLabels(String... labels) throws IOException {
         editIssue("labels",labels);
+    }
+
+    /**
+     * Adds a label to the issue. If it does not exist in the {@link GHRepository}, it will be
+     * created with the specified color. If either {@code name} or {@code color} is null, it will
+     * be a <a href="https://en.wikipedia.org/wiki/NOP">NOP</a>.
+     *
+     * @param name  Name of the label
+     * @param color Hex code of the label, without #
+     */
+    public void addLabel(String name, String color) throws IOException {
+      if (name != null && color != null) {
+        // All labels that we have seen
+        Set<String> repoLabels = new HashSet<String>();
+        Set<String> seenLabels = new HashSet<String>();
+
+        // Check if label already exists
+        for (GHLabel repoLabel : getRepository().listLabels().asSet()) {
+          repoLabels.add(repoLabel.getName());
+        }
+
+        // Label does not exist
+        if (!repoLabels.contains(name)) {
+          GHLabel newLabel = getRepository().createLabel(name, color);
+          repoLabels.add(newLabel.getName());
+          seenLabels.add(newLabel.getName());
+        }
+
+        // See if label exists on issue already
+        boolean foundInIssue = false;
+
+        for (GHLabel existingIssueLabel : getLabels()) {
+          if (existingIssueLabel.getName().equalsIgnoreCase(name)) {
+            foundInIssue = true;
+          }
+
+          seenLabels.add(existingIssueLabel.getName());
+        }
+
+        // If the label doesn't exist in the issue, add it
+        if (!foundInIssue) {
+          seenLabels.add(name);
+          setLabels(seenLabels.toArray(new String[0]));
+        }
+      }
+    }
+
+    /**
+     * @see #removeLabel(String)
+     */
+    public void removeLabel(Label label) throws IOException {
+      removeLabel(label.getName());
+    }
+
+    /**
+     * Remove a given label by name from this issue.
+     */
+    public void removeLabel(String name) throws IOException {
+      Set<String> newLabels = new HashSet<String>();
+
+      for (Label existingLabel : labels) {
+        if (!existingLabel.getName().equalsIgnoreCase(name)) {
+          newLabels.add(existingLabel.getName());
+        }
+      }
+
+      setLabels(newLabels.toArray(new String[0]));
     }
 
     /**

@@ -77,6 +77,7 @@ public class GHRepository extends GHObject {
     private boolean has_issues, has_wiki, fork, has_downloads, has_pages;
     @JsonProperty("private")
     private boolean _private;
+    private boolean archived;
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
     private String pushed_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
@@ -407,6 +408,10 @@ public class GHRepository extends GHObject {
 
     public boolean isPrivate() {
         return _private;
+    }
+    
+    public boolean isArchived() {
+        return archived;
     }
 
     public boolean hasDownloads() {

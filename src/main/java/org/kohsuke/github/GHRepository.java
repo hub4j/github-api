@@ -1014,6 +1014,13 @@ public class GHRepository extends GHObject {
             }
         };
     }
+    
+    /**
+     * Gets license key and name
+     */
+    public GHLicense getLicenseKey(){
+	return license;
+    }
 
     /**
      * Gets the basic license details for the repository.

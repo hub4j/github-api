@@ -208,6 +208,10 @@ public class GHRepository extends GHObject {
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
+	
+    public String getHtmlUrlString(){
+	return html_url;    
+    }
 
     /**
      * Short repository name without the owner. For example 'jenkins' in case of http://github.com/jenkinsci/jenkins

@@ -78,7 +78,7 @@ public class GHRepository extends GHObject {
     @JsonProperty("private")
     private boolean _private;
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
-    private String pushed_at;
+    private String pushed_at, updated_at, created_at;
     private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
 
     private String default_branch,language;
@@ -88,6 +88,8 @@ public class GHRepository extends GHObject {
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
+    //is filled when perform searching
+    private float score;
 
     public GHDeploymentBuilder createDeployment(String ref) {
         return new GHDeploymentBuilder(this,ref);
@@ -244,6 +246,13 @@ public class GHRepository extends GHObject {
      */
     public String getLanguage() {
         return language;
+    }
+
+    /**
+     * Score when performing search operations
+     */
+    public float getScore(){
+	return score;
     }
 
     public GHUser getOwner() throws IOException {
@@ -449,6 +458,14 @@ public class GHRepository extends GHObject {
      */
     public Date getPushedAt() {
         return GitHub.parseDate(pushed_at);
+    }
+
+    public Date getUpdatedAt(){
+	return GitHub.parseDate(updated_at);
+    }
+
+    public Date getCreationDate(){
+	return GitHub.parseDate(created_at);
     }
 
     /**

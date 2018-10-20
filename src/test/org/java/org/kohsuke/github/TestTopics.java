@@ -22,26 +22,42 @@
  * THE SOFTWARE.
  */
 package org.kohsuke.github;
+import org.junit.Test;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class GHTopics{
-    GitHub root;    
+public class TestTopics extends GHTopics{
+
+    private static GitHub account;
+    private static Properties object;//the repository object
+    private static ObjectMapper mapper;
+
+    //directory expected test results
+    private static final Path dir = FileSystems.getDefault().getPath("src", "test", "resources", "org", "kohsuke", "github", "RepositoryTest");
     
-    public GHTopics (GitHub root){
-	this.root = root;
+    @BeforeClass
+    public static void Setup()throws Exception{
+	account = GitHub.connect();
+	object = new Properties();
+	object.load(new BufferedInputStream(new FileInputStream(dir.resolve("repo.topics.properties").toFile())));
+	mapper = new ObjectMapper();
     }
-    /**
-     * Get's all topics for a specified repository as array list
-     * @param org the organization or user
-     * @param repoName the repository name (without organization, user)
-     */
-    @Preview
-    public ArrayList<String> getAll(String org, String repoName)throws IOException{
-	HashMap names = root.retrieve().withPreview(Previews.MERCY).to("/repos/"+ org + '/' + repoName + "/topics", HashMap.class);
-	return (ArrayList<String>)names.get("names");
+
+    public TestTopics(){
+	super(account);
+    }
+
+    @Test
+    public void get()throws Exception{
+	
+	ArrayList<String> expProp = mapper.readValue(dir.resolve("expTopics.json").toFile(), ArrayList.class);
+	Assert.assertEquals("topics not correct", expProp, getAll(object.getProperty("get.org"), object.getProperty("get.repoName")));
     }
     
 }

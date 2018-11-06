@@ -1,6 +1,9 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -41,5 +44,13 @@ public class GHLabel {
      */
     public void setColor(String newColor) throws IOException {
         repo.root.retrieve().method("PATCH").with("name", name).with("color", newColor).to(url);
+    }
+
+    /*package*/ static Collection<String> toNames(Collection<GHLabel> labels) {
+        List<String> r = new ArrayList<String>();
+        for (GHLabel l : labels) {
+            r.add(l.getName());
+        }
+        return r;
     }
 }

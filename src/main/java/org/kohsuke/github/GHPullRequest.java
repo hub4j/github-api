@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -223,9 +224,9 @@ public class GHPullRequest extends GHIssue {
         return merge_commit_sha;
     }
 
-    public GHUser[] getRequestedReviewers() throws IOException {
+    public List<GHUser> getRequestedReviewers() throws IOException {
         populate();
-        return requested_reviewers;
+        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
     }
 
     /**

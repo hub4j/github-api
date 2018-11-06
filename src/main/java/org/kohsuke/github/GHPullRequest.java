@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,9 @@ public class GHPullRequest extends GHIssue {
     private int changed_files;
     private String merge_commit_sha;
 
+    // pull request reviewers
+    private GHUser[] requested_reviewers;
+
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
      * route as opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route
@@ -76,6 +80,7 @@ public class GHPullRequest extends GHIssue {
         if (base != null) base.wrapUp(root);
         if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
+        if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
         return this;
     }
 
@@ -217,6 +222,11 @@ public class GHPullRequest extends GHIssue {
     public String getMergeCommitSha() throws IOException {
         populate();
         return merge_commit_sha;
+    }
+
+    public List<GHUser> getRequestedReviewers() throws IOException {
+        populate();
+        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
     }
 
     /**

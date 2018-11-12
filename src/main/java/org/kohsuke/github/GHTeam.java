@@ -12,7 +12,7 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam {
-    private String name,permission,slug;
+    private String name,permission,slug,description;
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
@@ -57,6 +57,10 @@ public class GHTeam {
 
     public String getSlug() {
         return slug;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public int getId() {

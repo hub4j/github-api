@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -157,6 +158,55 @@ public class GHGist extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to("/gists/" + id);
+    }
+
+    private String getApiRoute() {
+        return "/gists/" + id;
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
+    }
+
+    public void setDescription(String description) throws IOException {
+        edit("description",description);
+    }
+
+    /**
+     * Adds a file.
+     */
+    public void addFile(String fileName, String content) throws IOException
+    {
+        updateFile(fileName, content);
+    }
+
+//    /**
+//     * Deletes a file.
+//     */
+//    public void deleteFile(String fileName) throws IOException {
+//        LinkedHashMap<String,Object> filesMap = new LinkedHashMap<String, Object>();
+//        filesMap.put(fileName, Collections.singletonMap("filename", null));
+//        edit("files",filesMap);
+//    }
+
+    /**
+     * Replaces the content of a file.
+     */
+    public void updateFile(String fileName, String content) throws IOException
+    {
+        LinkedHashMap<String,Object> filesMap = new LinkedHashMap<String, Object>();
+        filesMap.put(fileName, Collections.singletonMap("content", content));
+        edit("files",filesMap);
+    }
+
+    /**
+     * Renames a file.
+     */
+    public void renameFile(String fileName, String newFileName) throws IOException
+    {
+        LinkedHashMap<String,Object> filesMap = new LinkedHashMap<String, Object>();
+        filesMap.put(fileName, Collections.singletonMap("filename", newFileName));
+        edit("files",filesMap);
     }
 
     @Override

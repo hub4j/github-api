@@ -632,6 +632,27 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Will archive and this repository as read-only. When a repository is archived, any operation
+     * that can change its state is forbidden. This applies symmetrically if trying to unarchive it.
+     *
+     * <p>When you try to do any operation that modifies a read-only repository, it returns the
+     * response:
+     *
+     * <pre>
+     * org.kohsuke.github.HttpException: {
+     *     "message":"Repository was archived so is read-only.",
+     *     "documentation_url":"https://developer.github.com/v3/repos/#edit"
+     * }
+     * </pre>
+     *
+     * @throws IOException In case of any networking error or error from the server.
+     */
+    public void doArchive() throws IOException {
+        edit("archived", "true");
+        archived = true;
+    }
+
+    /**
      * Sort orders for listing forks
      */
     public enum ForkSort { NEWEST, OLDEST, STARGAZERS }

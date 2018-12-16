@@ -9,4 +9,5 @@ package org.kohsuke.github;
     static final String SQUIRREL_GIRL = "application/vnd.github.squirrel-girl-preview";
     static final String CLOAK = "application/vnd.github.cloak-preview";
     static final String ZZZAX = "application/vnd.github.zzzax-preview+json";
+    static final String INERTIA = "application/vnd.github.inertia-preview+json";
 }

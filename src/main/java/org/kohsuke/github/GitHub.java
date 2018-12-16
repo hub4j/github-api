@@ -717,6 +717,10 @@ public class GitHub {
         return user;
     }
 
+    public GHProject getProject(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/"+id,GHProject.class).wrap(this);
+    }
+
     private static class GHApiInfo {
         private String rate_limit_url;
 

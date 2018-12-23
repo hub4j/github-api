@@ -452,7 +452,6 @@ public class GitHub {
         return new PagedIterable<GHOrganization>() {
             @Override
             public PagedIterator<GHOrganization> _iterator(int pageSize) {
-                System.out.println("page size: " + pageSize);
                 return new PagedIterator<GHOrganization>(retrieve().with("since",since)
                         .asIterator("/organizations", GHOrganization[].class, pageSize)) {
                     @Override

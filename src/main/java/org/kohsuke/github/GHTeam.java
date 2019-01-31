@@ -23,11 +23,11 @@ public class GHTeam {
         /**
          * A normal member of the team
          */
-        MEMBER,
+        member,
         /**
          * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's name and description.
          */
-        MAINTAINER
+        maintainer
     }
 
     /*package*/ GHTeam wrapUp(GHOrganization owner) {

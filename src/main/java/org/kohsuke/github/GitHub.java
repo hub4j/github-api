@@ -613,6 +613,24 @@ public class GitHub {
     }
 
     /**
+     *  Creates a new organization
+     * @param admin
+     * @param username
+     * @param organizationName
+     * @return
+     *      Newly created organization.
+     * @throws IOException
+     */
+    public GHOrganization createOrganization(String admin, String username, String organizationName) throws IOException {
+        Requester requester = new Requester(this)
+                .with("login",username )
+                .with("admin", admin)
+                .with("profile_name", organizationName);
+        return requester.method("POST").to("/admin/organizations" , GHOrganization.class);
+
+    }
+
+    /**
      * Creates a new repository.
      *
      * @return

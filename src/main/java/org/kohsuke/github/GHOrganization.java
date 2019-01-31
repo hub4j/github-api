@@ -213,6 +213,17 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Creates a new team
+     */
+    public GHTeam createTeam(String name, Permission p, List<String> maintainers) throws IOException {
+        Requester post = new Requester(root).
+                with("name", name).
+                with("permission", p).
+                with("maintainers",maintainers);
+        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
+    }
+
+    /**
      * List up repositories that has some open pull requests.
      *
      * This used to be an efficient method that didn't involve traversing every repository, but now

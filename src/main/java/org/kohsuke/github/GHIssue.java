@@ -180,8 +180,11 @@ public class GHIssue extends GHObject implements Reactable{
         new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
     }
 
-    private void editIssue(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getIssuesApiRoute());
+    /**
+     * @return the updated GHissue object.
+     */
+    private GHIssue editIssue(String key, Object value) throws IOException {
+        return new Requester(root)._with(key, value).method("PATCH").to(getIssuesApiRoute(), GHIssue.class);
     }
 
     /**
@@ -215,7 +218,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setLabels(String... labels) throws IOException {
-        editIssue("labels",labels);
+        GHIssue updatedIssue = editIssue("labels", labels);
+        this.labels = updatedIssue.labels;
     }
 
     /**

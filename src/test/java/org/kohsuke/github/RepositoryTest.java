@@ -24,6 +24,23 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testSetPublic() throws Exception {
+        kohsuke();
+        GHOrganization org = getOrganization();
+        String repoName = "test-repo-public";
+        GHRepository repo = org.createRepository(repoName).private_(false).create();
+        try {
+            assertFalse(repo.isPrivate());
+            repo.setPrivate(true);
+            assertTrue(org.getRepository(repoName).isPrivate());
+            repo.setPrivate(false);
+            assertFalse(org.getRepository(repoName).isPrivate());
+        } finally {
+            repo.delete();
+        }
+    }
+
+    @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("stapler").getRepository("stapler");
         int i=0;
@@ -125,7 +142,11 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
     }
 
     private GHRepository getRepository() throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");
+        return getOrganization().getRepository("jenkins");
+    }
+
+    private GHOrganization getOrganization() throws IOException {
+        return gitHub.getOrganization("github-api-test-org");
     }
 
     @Test

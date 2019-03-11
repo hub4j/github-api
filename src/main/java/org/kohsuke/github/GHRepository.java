@@ -624,6 +624,10 @@ public class GHRepository extends GHObject {
         edit("default_branch", value);
     }
 
+    public void setPrivate(boolean value) throws IOException {
+        edit("private", Boolean.toString(value));
+    }
+
     /**
      * Deletes this repository.
      */

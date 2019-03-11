@@ -51,6 +51,23 @@ public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
     }
 
     @Test
+    public void testSetPublic() throws Exception {
+        kohsuke();
+        GHUser myself = gitHub.getMyself();
+        String repoName = "test-repo-public";
+        GHRepository repo = gitHub.createRepository(repoName).private_(false).create();
+        try {
+            assertFalse(repo.isPrivate());
+            repo.setPrivate(true);
+            assertTrue(myself.getRepository(repoName).isPrivate());
+            repo.setPrivate(false);
+            assertFalse(myself.getRepository(repoName).isPrivate());
+        } finally {
+            repo.delete();
+        }
+    }
+
+    @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("github-api").getRepository("github-api");
         int i = 0;

@@ -579,6 +579,13 @@ public class GitHub {
     }
 
     /**
+     * Gets a sigle team by ID.
+     */
+    public GHTeam getTeam(int id) throws IOException {
+        return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
+    }
+    
+    /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
     public List<GHEventInfo> getEvents() throws IOException {

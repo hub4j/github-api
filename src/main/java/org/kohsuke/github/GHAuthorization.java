@@ -25,7 +25,7 @@ public class GHAuthorization extends GHObject {
     public static final String GIST = "gist";
     public static final String READ_HOOK = "read:repo_hook";
     public static final String WRITE_HOOK = "write:repo_hook";
-    public static final String AMIN_HOOK = "admin:repo_hook";
+    public static final String ADMIN_HOOK = "admin:repo_hook";
     public static final String READ_ORG = "read:org";
     public static final String WRITE_ORG = "write:org";
     public static final String ADMIN_ORG = "admin:org";
@@ -73,7 +73,7 @@ public class GHAuthorization extends GHObject {
         return app.name;
     }
 
-    @SuppressFBWarnings(value = "NM_CONFUSING", 
+    @SuppressFBWarnings(value = "NM_CONFUSING",
             justification = "It's a part of the library API, cannot be changed")
     public URL getApiURL() {
         return GitHub.parseURL(url);
@@ -104,7 +104,7 @@ public class GHAuthorization extends GHObject {
         return this;
     }
 
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"},
         justification = "JSON API")
     private static class App {
         private String url;

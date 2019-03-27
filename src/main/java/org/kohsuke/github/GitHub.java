@@ -172,6 +172,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
         return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
     }
@@ -194,6 +195,7 @@ public class GitHub {
      * @deprecated
      *      Use with caution. Login with password is not a preferred method.
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
@@ -207,6 +209,7 @@ public class GitHub {
      *      Either OAuth token or password is sufficient, so there's no point in passing both.
      *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
+    @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
     }
@@ -380,7 +383,7 @@ public class GitHub {
         requireCredential();
         synchronized (this) {
             if (this.myself != null) return myself;
-            
+
             GHMyself u = retrieve().to("/user", GHMyself.class);
 
             u.root = this;
@@ -402,7 +405,7 @@ public class GitHub {
         return u;
     }
 
-    
+
     /**
      * clears all cached data in order for external changes (modifications and del
      */
@@ -486,6 +489,7 @@ public class GitHub {
     @Preview @Deprecated
     public PagedIterable<GHLicense> listLicenses() throws IOException {
         return new PagedIterable<GHLicense>() {
+            @Override
             public PagedIterator<GHLicense> _iterator(int pageSize) {
                 return new PagedIterator<GHLicense>(retrieve().withPreview(DRAX).asIterator("/licenses", GHLicense[].class, pageSize)) {
                     @Override
@@ -503,6 +507,7 @@ public class GitHub {
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
         return new PagedIterable<GHUser>() {
+            @Override
             public PagedIterator<GHUser> _iterator(int pageSize) {
                 return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
                     @Override
@@ -620,6 +625,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
         return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();
     }
@@ -855,6 +861,7 @@ public class GitHub {
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
         return new PagedIterable<GHRepository>() {
+            @Override
             public PagedIterator<GHRepository> _iterator(int pageSize) {
                 return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class, pageSize)) {
                     @Override

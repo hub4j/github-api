@@ -474,6 +474,14 @@ public class GitHub {
         String[] tokens = name.split("/");
         return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
     }
+
+    /**
+     * Gets the repository object from its ID
+     */
+    public GHRepository getRepositoryById(String id) throws IOException {
+        return retrieve().to("/repositories/" + id, GHRepository.class).wrap(this);
+    }
+
     /**
      * Returns a list of popular open source licenses
      *

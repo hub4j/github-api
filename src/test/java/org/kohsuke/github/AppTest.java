@@ -747,12 +747,12 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(Pattern.matches("[0-9a-fA-F]{6}",e.getColor()));
 
         {// CRUD
-            GHLabel t = r.createLabel("test", "123456", "this is a test");
+            GHLabel t = r.createLabel("test", "123456");
             GHLabel t2 = r.getLabel("test");
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
-            assertEquals(t.getDescription(), "this is a test");
+            assertEquals(t.getDescription(), "");
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
 
@@ -762,6 +762,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertEquals(t3.getColor(), "000000");
             assertEquals(t3.getDescription(), "this is also a test");
             t.delete();
+            
+            t = r.createLabel("test2", "123457", "this is a different test");
+            t2 = r.getLabel("test2");
+            assertEquals(t.getName(), t2.getName());
+            assertEquals(t.getColor(), "123457");
+            assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getDescription(), "this is a different test");
+            assertEquals(t.getDescription(), t2.getDescription());
+            assertEquals(t.getUrl(), t2.getUrl());
         }
     }
 

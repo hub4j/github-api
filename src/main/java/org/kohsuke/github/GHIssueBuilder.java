@@ -11,6 +11,7 @@ public class GHIssueBuilder {
     private final GHRepository repo;
     private final Requester builder;
     private List<String> labels = new ArrayList<String>();
+    private List<String> assignees = new ArrayList<String>();
 
     GHIssueBuilder(GHRepository repo, String title) {
         this.repo = repo;
@@ -28,13 +29,13 @@ public class GHIssueBuilder {
 
     public GHIssueBuilder assignee(GHUser user) {
         if (user!=null)
-            builder.with("assignee",user.getLogin());
+            assignees.add(user.getLogin());
         return this;
     }
 
     public GHIssueBuilder assignee(String user) {
         if (user!=null)
-            builder.with("assignee",user);
+            assignees.add(user);
         return this;
     }
 
@@ -54,6 +55,6 @@ public class GHIssueBuilder {
      * Creates a new issue.
      */
     public GHIssue create() throws IOException {
-        return builder.with("labels",labels).to(repo.getApiTailUrl("issues"),GHIssue.class).wrap(repo);
+        return builder.with("labels",labels).with("assignees",assignees).to(repo.getApiTailUrl("issues"),GHIssue.class).wrap(repo);
     }
 }

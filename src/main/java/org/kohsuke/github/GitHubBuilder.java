@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.extras.ImpatientHttpConnector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +15,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
- *
+ * Configures connection details and produces {@link GitHub}.
  *
  * @since 1.59
  */
@@ -29,6 +30,7 @@ public class GitHubBuilder {
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
+    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
 
     public GitHubBuilder() {
     }
@@ -51,7 +53,7 @@ public class GitHubBuilder {
         try {
             builder = fromPropertyFile();
 
-            if (builder.user != null)
+            if (builder.oauthToken != null || builder.user != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -60,7 +62,7 @@ public class GitHubBuilder {
 
         builder = fromEnvironment();
 
-        if (builder.user != null)
+        if (builder.oauthToken != null || builder.user != null)
             return builder;
         else
             throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
@@ -152,6 +154,12 @@ public class GitHubBuilder {
         return self;
     }
 
+    /**
+     * @param endpoint
+     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     */
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
@@ -177,6 +185,10 @@ public class GitHubBuilder {
         this.rateLimitHandler = handler;
         return this;
     }
+    public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
+        this.abuseLimitHandler = handler;
+        return this;
+    }
 
     /**
      * Configures {@linkplain #withConnector(HttpConnector) connector}
@@ -184,14 +196,14 @@ public class GitHubBuilder {
      * the system default one.
      */
     public GitHubBuilder withProxy(final Proxy p) {
-        return withConnector(new HttpConnector() {
+        return withConnector(new ImpatientHttpConnector(new HttpConnector() {
             public HttpURLConnection connect(URL url) throws IOException {
                 return (HttpURLConnection) url.openConnection(p);
             }
-        });
+        }));
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
     }
 }

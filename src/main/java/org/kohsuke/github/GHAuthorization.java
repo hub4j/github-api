@@ -1,8 +1,9 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.net.URL;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +36,14 @@ public class GHAuthorization extends GHObject {
     private GitHub root;
     private List<String> scopes;
     private String token;
+    private String token_last_eight;
+    private String hashed_token;
     private App app;
     private String note;
     private String note_url;
+    private String fingerprint;
+    //TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
+    //private GHUser user;
 
     public GitHub getRoot() {
         return root;
@@ -51,6 +57,14 @@ public class GHAuthorization extends GHObject {
         return token;
     }
 
+    public String getTokenLastEight() {
+        return token_last_eight;
+    }
+
+    public String getHashedToken() {
+        return hashed_token;
+    }
+
     public URL getAppUrl() {
         return GitHub.parseURL(app.url);
     }
@@ -59,6 +73,8 @@ public class GHAuthorization extends GHObject {
         return app.name;
     }
 
+    @SuppressFBWarnings(value = "NM_CONFUSING", 
+            justification = "It's a part of the library API, cannot be changed")
     public URL getApiURL() {
         return GitHub.parseURL(url);
     }
@@ -79,14 +95,20 @@ public class GHAuthorization extends GHObject {
         return GitHub.parseURL(note_url);
     }
 
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
     /*package*/ GHAuthorization wrap(GitHub root) {
         this.root = root;
         return this;
     }
 
-
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+        justification = "JSON API")
     private static class App {
         private String url;
         private String name;
+        // private String client_id; not yet used
     }
 }

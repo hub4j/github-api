@@ -23,20 +23,26 @@
  */
 package org.kohsuke.github;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 /**
  * A pull request.
- * 
+ *
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class GHPullRequest extends GHIssue {
+
+    private static final String COMMENTS_ACTION = "/comments";
+    private static final String REQUEST_REVIEWERS = "/requested_reviewers";
 
     private String patch_url, diff_url, issue_url;
     private GHCommitPointer base;
@@ -45,12 +51,16 @@ public class GHPullRequest extends GHIssue {
 
     // details that are only available when obtained from ID
     private GHUser merged_by;
-    private int review_comments, additions;
-    private boolean merged;
+    private int review_comments, additions, commits;
+    private boolean merged, maintainer_can_modify;
     private Boolean mergeable;
     private int deletions;
     private String mergeable_state;
     private int changed_files;
+    private String merge_commit_sha;
+
+    // pull request reviewers
+    private GHUser[] requested_reviewers;
 
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
@@ -70,6 +80,7 @@ public class GHPullRequest extends GHIssue {
         if (base != null) base.wrapUp(root);
         if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
+        if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
         return this;
     }
 
@@ -85,7 +96,7 @@ public class GHPullRequest extends GHIssue {
     public URL getPatchUrl() {
         return GitHub.parseURL(patch_url);
     }
-    
+
     /**
      * The URL of the patch file.
      * like https://github.com/jenkinsci/jenkins/pull/100.patch
@@ -108,7 +119,7 @@ public class GHPullRequest extends GHIssue {
     public GHCommitPointer getHead() {
         return head;
     }
-    
+
     @Deprecated
     public Date getIssueUpdatedAt() throws IOException {
         return super.getUpdatedAt();
@@ -143,9 +154,9 @@ public class GHPullRequest extends GHIssue {
     }
 
     //
-// details that are only available via get with ID
-//
-//
+    // details that are only available via get with ID
+    //
+
     public GHUser getMergedBy() throws IOException {
         populate();
         return merged_by;
@@ -161,13 +172,32 @@ public class GHPullRequest extends GHIssue {
         return additions;
     }
 
+    public int getCommits() throws IOException {
+        populate();
+        return commits;
+    }
+
     public boolean isMerged() throws IOException {
         populate();
         return merged;
     }
 
-    public Boolean getMergeable() throws IOException {
+    public boolean canMaintainerModify() throws IOException {
         populate();
+        return maintainer_can_modify;
+    }
+
+    /**
+     * Is this PR mergeable?
+     *
+     * @return
+     *      null if the state has not been determined yet, for example when a PR is newly created.
+     *      If this method is called on an instance whose mergeable state is not yet known,
+     *      API call is made to retrieve the latest state.
+     */
+    public Boolean getMergeable() throws IOException {
+        if (mergeable==null)
+            refresh();
         return mergeable;
     }
 
@@ -187,14 +217,89 @@ public class GHPullRequest extends GHIssue {
     }
 
     /**
+     * See <a href="https://developer.github.com/changes/2013-04-25-deprecating-merge-commit-sha">GitHub blog post</a>
+     */
+    public String getMergeCommitSha() throws IOException {
+        populate();
+        return merge_commit_sha;
+    }
+
+    public List<GHUser> getRequestedReviewers() throws IOException {
+        populate();
+        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
+    }
+
+    /**
      * Fully populate the data by retrieving missing data.
      *
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-        if (merged_by!=null)    return; // already populated
+        if (mergeable_state!=null)    return; // already populated
+        refresh();
+    }
 
+    /**
+     * Repopulates this object.
+     */
+    public void refresh() throws IOException {
+        if (root.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
         root.retrieve().to(url, this).wrapUp(owner);
+    }
+
+    /**
+     * Retrieves all the files associated to this pull request.
+     */
+    public PagedIterable<GHPullRequestFileDetail> listFiles() {
+        return new PagedIterable<GHPullRequestFileDetail>() {
+            public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiRoute()),
+                        GHPullRequestFileDetail[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestFileDetail[] page) {
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Retrieves all the reviews associated to this pull request.
+     */
+    public PagedIterable<GHPullRequestReview> listReviews() {
+        return new PagedIterable<GHPullRequestReview>() {
+            public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestReview>(root.retrieve()
+                        .asIterator(String.format("%s/reviews", getApiRoute()),
+                        GHPullRequestReview[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHPullRequestReview[] page) {
+                        for (GHPullRequestReview r: page) {
+                            r.wrapUp(GHPullRequest.this);
+                        }
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Obtains all the review comments associated with this pull request.
+     */
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+        return new PagedIterable<GHPullRequestReviewComment>() {
+            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
+                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + COMMENTS_ACTION,
+                        GHPullRequestReviewComment[].class, pageSize)) {
+                    protected void wrapUp(GHPullRequestReviewComment[] page) {
+                        for (GHPullRequestReviewComment c : page)
+                            c.wrapUp(GHPullRequest.this);
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -202,18 +307,61 @@ public class GHPullRequest extends GHIssue {
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
         return new PagedIterable<GHPullRequestCommitDetail>() {
-            public PagedIterator<GHPullRequestCommitDetail> iterator() {
+            public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
                 return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
-                        String.format("%s/commits", getApiURL()),
-                        GHPullRequestCommitDetail[].class)) {
+                        String.format("%s/commits", getApiRoute()),
+                        GHPullRequestCommitDetail[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHPullRequestCommitDetail[] page) {
+                        for (GHPullRequestCommitDetail c : page)
+                            c.wrapUp(GHPullRequest.this);
                     }
                 };
             }
         };
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #createReview()}
+     */
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            GHPullRequestReviewComment... comments) throws IOException {
+        return createReview(body, event, Arrays.asList(comments));
+    }
+
+    /**
+     * @deprecated
+     *      Use {@link #createReview()}
+     */
+    public GHPullRequestReview createReview(String body, @CheckForNull GHPullRequestReviewState event,
+                                            List<GHPullRequestReviewComment> comments) throws IOException {
+        GHPullRequestReviewBuilder b = createReview().body(body);
+        for (GHPullRequestReviewComment c : comments) {
+            b.comment(c.getBody(), c.getPath(), c.getPosition());
+        }
+        return b.create();
+    }
+
+    public GHPullRequestReviewBuilder createReview() {
+        return new GHPullRequestReviewBuilder(this);
+    }
+
+    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
+        return new Requester(root).method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                .with("path", path)
+                .with("position", position)
+                .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class).wrapUp(this);
+    }
+
+    public void requestReviewers(List<GHUser> reviewers) throws IOException {
+        new Requester(root).method("POST")
+                .withLogins("reviewers", reviewers)
+                .to(getApiRoute() + REQUEST_REVIEWERS);
+    }
+    
     /**
      * Merge this pull request.
      *
@@ -223,12 +371,46 @@ public class GHPullRequest extends GHIssue {
      *      Commit message. If null, the default one will be used.
      */
     public void merge(String msg) throws IOException {
-        new Requester(root).method("PUT").with("commit_message",msg).to(getApiRoute()+"/merge");
+        merge(msg,null);
     }
+
+    /**
+     * Merge this pull request.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     * @param sha
+     *      SHA that pull request head must match to allow merge.
+     */
+    public void merge(String msg, String sha) throws IOException {
+        merge(msg, sha, null);
+    }
+
+    /**
+     * Merge this pull request, using the specified merge method.
+     *
+     * The equivalent of the big green "Merge pull request" button.
+     *
+     * @param msg
+     *      Commit message. If null, the default one will be used.
+     * @param method
+     *      SHA that pull request head must match to allow merge.
+     */
+    public void merge(String msg, String sha, MergeMethod method) throws IOException {
+        new Requester(root).method("PUT")
+                .with("commit_message", msg)
+                .with("sha", sha)
+                .with("merge_method", method)
+                .to(getApiRoute() + "/merge");
+    }
+
+    public enum MergeMethod{ MERGE, SQUASH, REBASE }
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            new Requester(root).to(getIssuesApiRoute(), this);
+            new Requester(root).method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

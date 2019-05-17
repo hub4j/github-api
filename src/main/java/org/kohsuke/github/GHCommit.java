@@ -1,12 +1,14 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +18,8 @@ import java.util.List;
  * @see GHRepository#getCommit(String)
  * @see GHCommitComment#getCommit()
  */
+@SuppressFBWarnings(value = {"NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+        justification = "JSON API")
 public class GHCommit {
     private GHRepository owner;
     
@@ -24,6 +28,8 @@ public class GHCommit {
     /**
      * Short summary of this commit.
      */
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
     public static class ShortInfo {
         private GHAuthor author;
         private GHAuthor committer;
@@ -32,14 +38,28 @@ public class GHCommit {
         
         private int comment_count;
 
+        static class Tree {
+            String sha;
+        }
+
+        private Tree tree;
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
 
+        public Date getAuthoredDate() {
+            return GitHub.parseDate(author.date);
+        }
+
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
+        }
+
+        public Date getCommitDate() {
+            return GitHub.parseDate(committer.date);
         }
 
         /**
@@ -58,6 +78,7 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
+        private String date;
     }
 
     public static class Stats {
@@ -67,10 +88,13 @@ public class GHCommit {
     /**
      * A file that was modified.
      */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", 
+            justification = "It's being initilized by JSON deserialization")
     public static class File {
         String status;
         int changes,additions,deletions;
-        String raw_url, blob_url, filename, sha, patch;
+        String raw_url, blob_url, sha, patch;
+        String filename, previous_filename;
 
         /**
          * Number of lines added + removed.
@@ -94,17 +118,26 @@ public class GHCommit {
         }
 
         /**
-         * "modified", "added", or "deleted"
+         * "modified", "added", or "removed"
          */
         public String getStatus() {
             return status;
         }
 
         /**
-         * Just the base name and the extension without any directory name.
+         * Full path in the repository.
          */
+        @SuppressFBWarnings(value = "NM_CONFUSING",
+                justification = "It's a part of the library's API and cannot be renamed")
         public String getFileName() {
             return filename;
+        }
+
+        /**
+         * Previous path, in case file has moved.
+         */
+        public String getPreviousFilename() {
+            return previous_filename;
         }
 
         /**
@@ -139,23 +172,31 @@ public class GHCommit {
     }
 
     public static class Parent {
-        String url,sha;
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        String url;  
+        String sha;
     }
 
     static class User {
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        String url,avatar_url,login,gravatar_id;
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        String url,avatar_url,gravatar_id;
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         int id;
+        
+        String login;
     }
 
-    String url,sha;
+    String url,html_url,sha;
     List<File> files;
     Stats stats;
     List<Parent> parents;
     User author,committer;
 
 
-    public ShortInfo getCommitShortInfo() {
+    public ShortInfo getCommitShortInfo() throws IOException {
+        if (commit==null)
+            populate();
         return commit;
     }
 
@@ -169,22 +210,39 @@ public class GHCommit {
     /**
      * Number of lines added + removed.
      */
-    public int getLinesChanged() {
+    public int getLinesChanged() throws IOException {
+        populate();
         return stats.total;
     }
 
     /**
      * Number of lines added.
      */
-    public int getLinesAdded() {
+    public int getLinesAdded() throws IOException {
+        populate();
         return stats.additions;
     }
 
     /**
      * Number of lines removed.
      */
-    public int getLinesDeleted() {
+    public int getLinesDeleted() throws IOException {
+        populate();
         return stats.deletions;
+    }
+
+    /**
+     * Use this method to walk the tree
+     */
+    public GHTree getTree() throws IOException {
+        return owner.getTree(getCommitShortInfo().tree.sha);
+    }
+
+    /**
+     *  URL of this commit like "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
+     */
+    public URL getHtmlUrl() {
+        return GitHub.parseURL(html_url);
     }
 
     /**
@@ -200,7 +258,8 @@ public class GHCommit {
      * @return
      *      Can be empty but never null.
      */
-    public List<File> getFiles() {
+    public List<File> getFiles() throws IOException {
+        populate();
         return files!=null ? Collections.unmodifiableList(files) : Collections.<File>emptyList();
     }
 
@@ -236,8 +295,27 @@ public class GHCommit {
         return resolveUser(author);
     }
 
+    /**
+     * Gets the date the change was authored on.
+     * @return the date the change was authored on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getAuthoredDate() throws IOException {
+        return getCommitShortInfo().getAuthoredDate();
+    }
+
     public GHUser getCommitter() throws IOException {
         return resolveUser(committer);
+    }
+
+    /**
+     * Gets the date the change was committed on.
+     *
+     * @return the date the change was committed on.
+     * @throws IOException if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getCommitDate() throws IOException {
+        return getCommitShortInfo().getCommitDate();
     }
 
     private GHUser resolveUser(User author) throws IOException {
@@ -250,8 +328,8 @@ public class GHCommit {
      */
     public PagedIterable<GHCommitComment> listComments() {
         return new PagedIterable<GHCommitComment>() {
-            public PagedIterator<GHCommitComment> iterator() {
-                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha), GHCommitComment[].class)) {
+            public PagedIterator<GHCommitComment> _iterator(int pageSize) {
+                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha), GHCommitComment[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHCommitComment[] page) {
                         for (GHCommitComment c : page)
@@ -278,7 +356,7 @@ public class GHCommit {
     }
 
     public GHCommitComment createComment(String body) throws IOException {
-        return createComment(body,null,null,null);
+        return createComment(body, null, null, null);
     }
 
     /**
@@ -293,6 +371,14 @@ public class GHCommit {
      */
     public GHCommitStatus getLastStatus() throws IOException {
         return owner.getLastCommitStatus(sha);
+    }
+
+    /**
+     * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
+     */
+    void populate() throws IOException {
+        if (files==null && stats==null)
+            owner.root.retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

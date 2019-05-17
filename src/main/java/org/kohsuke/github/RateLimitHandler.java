@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
  *
  * @author Kohsuke Kawaguchi
  * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler)
+ * @see AbuseLimitHandler
  */
 public abstract class RateLimitHandler {
     /**
@@ -36,7 +37,7 @@ public abstract class RateLimitHandler {
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
-            } catch (InterruptedException _) {
+            } catch (InterruptedException x) {
                 throw (InterruptedIOException)new InterruptedIOException().initCause(e);
             }
         }

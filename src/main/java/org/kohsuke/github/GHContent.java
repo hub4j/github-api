@@ -1,12 +1,11 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * A Content of a repository.
@@ -75,8 +74,9 @@ public class GHContent {
      * @deprecated
      *      Use {@link #read()}
      */
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(DatatypeConverter.parseBase64Binary(getEncodedContent()));
+        return new String(Base64.decodeBase64(getEncodedContent()));
     }
 
     /**
@@ -113,7 +113,8 @@ public class GHContent {
      * Retrieves the actual content stored here.
      */
     public InputStream read() throws IOException {
-        return new Requester(root).asStream(getDownloadUrl());
+        // if the download link is encoded with a token on the query string, the default behavior of POST will fail
+        return new Requester(root).method("GET").asStream(getDownloadUrl());
     }
 
     /**
@@ -150,8 +151,8 @@ public class GHContent {
             throw new IllegalStateException(path+" is not a directory");
 
         return new PagedIterable<GHContent>() {
-            public PagedIterator<GHContent> iterator() {
-                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class)) {
+            public PagedIterator<GHContent> _iterator(int pageSize) {
+                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHContent[] page) {
                         GHContent.wrap(page, repository);
@@ -161,10 +162,12 @@ public class GHContent {
         };
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
         return update(newContent.getBytes(), commitMessage, null);
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
         return update(newContent.getBytes(), commitMessage, branch);
     }
@@ -174,7 +177,7 @@ public class GHContent {
     }
 
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
-        String encodedContent = DatatypeConverter.printBase64Binary(newContentBytes);
+        String encodedContent = Base64.encodeBase64String(newContentBytes);
 
         Requester requester = new Requester(root)
             .with("path", path)

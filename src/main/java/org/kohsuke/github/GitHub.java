@@ -23,14 +23,23 @@
  */
 package org.kohsuke.github;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -40,18 +49,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Logger;
 
-import org.apache.commons.codec.binary.Base64;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
+import static java.net.HttpURLConnection.*;
+import static java.util.logging.Level.*;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Root of the GitHub API.
@@ -72,14 +81,20 @@ public class GitHub {
      */
     /*package*/ final String encodedAuthorization;
 
-    private final Map<String,GHUser> users = new Hashtable<String, GHUser>();
-    private final Map<String,GHOrganization> orgs = new Hashtable<String, GHOrganization>();
-
+    private final ConcurrentMap<String,GHUser> users;
+    private final ConcurrentMap<String,GHOrganization> orgs;
+    // Cache of myself object.
+    private GHMyself myself;
     private final String apiUrl;
 
     /*package*/ final RateLimitHandler rateLimitHandler;
+    /*package*/ final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector = HttpConnector.DEFAULT;
+
+    private final Object headerRateLimitLock = new Object();
+    private GHRateLimit headerRateLimit = null;
+    private volatile GHRateLimit rateLimit = null;
 
     /**
      * Creates a client API root object.
@@ -117,7 +132,7 @@ public class GitHub {
      * @param connector
      *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
@@ -127,16 +142,21 @@ public class GitHub {
         } else {
             if (password!=null) {
                 String authorization = (login + ':' + password);
-                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes()));
+                String charsetName = Charsets.UTF_8.name();
+                encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
             } else {// anonymous access
                 encodedAuthorization = null;
             }
         }
 
+        users = new ConcurrentHashMap<String, GHUser>();
+        orgs = new ConcurrentHashMap<String, GHOrganization>();
+        this.rateLimitHandler = rateLimitHandler;
+        this.abuseLimitHandler = abuseLimitHandler;
+
         if (login==null && encodedAuthorization!=null)
             login = getMyself().getLogin();
         this.login = login;
-        this.rateLimitHandler = rateLimitHandler;
     }
 
     /**
@@ -149,15 +169,31 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
+     * @deprecated
+     *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
+     */
+    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
+        return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
+    }
+
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
      * @param apiUrl
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
-    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken).build();
+    public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
     }
 
+    /**
+     * Version that connects to GitHub Enterprise.
+     *
+     * @deprecated
+     *      Use with caution. Login with password is not a preferred method.
+     */
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
@@ -196,6 +232,33 @@ public class GitHub {
     }
 
     /**
+     * Connects to GitHub Enterprise anonymously.
+     *
+     * All operations that requires authentication will fail.
+     */
+    public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
+        return new GitHubBuilder().withEndpoint(apiUrl).build();
+    }
+
+    /**
+     * An offline-only {@link GitHub} useful for parsing event notification from an unknown source.
+     *
+     * All operations that require a connection will fail.
+     *
+     * @return An offline-only {@link GitHub}.
+     */
+    public static GitHub offline() {
+        try {
+            return new GitHubBuilder()
+                    .withEndpoint("https://api.github.invalid")
+                    .withConnector(HttpConnector.OFFLINE)
+                    .build();
+        } catch (IOException e) {
+            throw new IllegalStateException("The offline implementation constructor should not connect", e);
+        }
+    }
+
+    /**
      * Is this an anonymous connection
      * @return {@code true} if operations that require authentication will fail.
      */
@@ -203,8 +266,20 @@ public class GitHub {
         return login==null && encodedAuthorization==null;
     }
 
+    /**
+     * Is this an always offline "connection".
+     * @return {@code true} if this is an always offline "connection".
+     */
+    public boolean isOffline() {
+        return connector == HttpConnector.OFFLINE;
+    }
+
     public HttpConnector getConnector() {
         return connector;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     /**
@@ -240,15 +315,61 @@ public class GitHub {
      */
     public GHRateLimit getRateLimit() throws IOException {
         try {
-            return retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
             // see issue #78
             GHRateLimit r = new GHRateLimit();
             r.limit = r.remaining = 1000000;
-            return r;
+            long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
+            r.reset = new Date(System.currentTimeMillis() / 1000L + hour);
+            return rateLimit = r;
         }
+    }
+
+    /*package*/ void updateRateLimit(@Nonnull GHRateLimit observed) {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit == null
+                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
+                    || headerRateLimit.remaining > observed.remaining) {
+                headerRateLimit = observed;
+                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
+            }
+        }
+    }
+
+    /**
+     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit
+     * (for example GitHub Enterprise) or if no requests have been made.
+     *
+     * @return the most recently observed rate limit data or {@code null}.
+     */
+    @CheckForNull
+    public GHRateLimit lastRateLimit() {
+        synchronized (headerRateLimitLock) {
+            return headerRateLimit;
+        }
+    }
+
+    /**
+     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     *
+     * @return the current rate limit data.
+     * @throws IOException if we couldn't get the current rate limit data.
+     */
+    @Nonnull
+    public GHRateLimit rateLimit() throws IOException {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit != null) {
+                return headerRateLimit;
+            }
+        }
+        GHRateLimit rateLimit = this.rateLimit;
+        if (rateLimit == null || rateLimit.getResetDate().getTime() < System.currentTimeMillis()) {
+            rateLimit = getRateLimit();
+        }
+        return rateLimit;
     }
 
     /**
@@ -257,13 +378,15 @@ public class GitHub {
     @WithBridgeMethods(GHUser.class)
     public GHMyself getMyself() throws IOException {
         requireCredential();
+        synchronized (this) {
+            if (this.myself != null) return myself;
+            
+            GHMyself u = retrieve().to("/user", GHMyself.class);
 
-        GHMyself u = retrieve().to("/user", GHMyself.class);
-
-        u.root = this;
-        users.put(u.getLogin(), u);
-
-        return u;
+            u.root = this;
+            this.myself = u;
+            return u;
+        }
     }
 
     /**
@@ -279,7 +402,7 @@ public class GitHub {
         return u;
     }
 
-
+    
     /**
      * clears all cached data in order for external changes (modifications and del
      */
@@ -291,7 +414,7 @@ public class GitHub {
     /**
      * Interns the given {@link GHUser}.
      */
-    protected GHUser getUser(GHUser orig) throws IOException {
+    protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
             orig.root = this;
@@ -301,6 +424,9 @@ public class GitHub {
         return u;
     }
 
+    /**
+     * Gets {@link GHOrganization} specified by name.
+     */
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
@@ -311,6 +437,35 @@ public class GitHub {
     }
 
     /**
+     * Gets a list of all organizations.
+     */
+    public PagedIterable<GHOrganization> listOrganizations() {
+        return listOrganizations(null);
+    }
+
+    /**
+     * Gets a list of all organizations starting after the organization identifier specified by 'since'.
+     *
+     * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
+     */
+    public PagedIterable<GHOrganization> listOrganizations(final String since) {
+        return new PagedIterable<GHOrganization>() {
+            @Override
+            public PagedIterator<GHOrganization> _iterator(int pageSize) {
+                System.out.println("page size: " + pageSize);
+                return new PagedIterator<GHOrganization>(retrieve().with("since",since)
+                        .asIterator("/organizations", GHOrganization[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHOrganization[] page) {
+                        for (GHOrganization c : page)
+                            c.wrapUp(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Gets the repository object from 'user/reponame' string that GitHub calls as "repository name"
      *
      * @see GHRepository#getName()
@@ -318,6 +473,71 @@ public class GitHub {
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
         return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
+    }
+    /**
+     * Returns a list of popular open source licenses
+     *
+     * WARNING: This uses a PREVIEW API.
+     *
+     * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
+     *
+     * @return a list of popular open source licenses
+     */
+    @Preview @Deprecated
+    public PagedIterable<GHLicense> listLicenses() throws IOException {
+        return new PagedIterable<GHLicense>() {
+            public PagedIterator<GHLicense> _iterator(int pageSize) {
+                return new PagedIterator<GHLicense>(retrieve().withPreview(DRAX).asIterator("/licenses", GHLicense[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHLicense[] page) {
+                        for (GHLicense c : page)
+                            c.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns a list of all users.
+     */
+    public PagedIterable<GHUser> listUsers() throws IOException {
+        return new PagedIterable<GHUser>() {
+            public PagedIterator<GHUser> _iterator(int pageSize) {
+                return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHUser[] page) {
+                        for (GHUser u : page)
+                            u.wrapUp(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns the full details for a license
+     *
+     * WARNING: This uses a PREVIEW API.
+     *
+     * @param key The license key provided from the API
+     * @return The license details
+     * @see GHLicense#getKey()
+     */
+    @Preview @Deprecated
+    public GHLicense getLicense(String key) throws IOException {
+        return retrieve().withPreview(DRAX).to("/licenses/" + key, GHLicense.class);
+    }
+
+    /**
+     * Gets complete list of open invitations for current user.
+     */
+    public List<GHInvitation> getMyInvitations() throws IOException {
+        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        for (GHInvitation i : invitations) {
+            i.wrapUp(this);
+        }
+        return Arrays.asList(invitations);
     }
 
     /**
@@ -395,17 +615,28 @@ public class GitHub {
     /**
      * Creates a new repository.
      *
-     * To create a repository in an organization, see
-     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
-     *
      * @return
      *      Newly created repository.
+     * @deprecated
+     *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
-        Requester requester = new Requester(this)
-                .with("name", name).with("description", description).with("homepage", homepage)
-                .with("public", isPublic ? 1 : 0);
-        return requester.method("POST").to("/user/repos", GHRepository.class).wrap(this);
+        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();
+    }
+
+    /**
+     * Starts a builder that creates a new repository.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
+     * to finally createa repository.
+     *
+     * <p>
+     * To create a repository in an organization, see
+     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
+     */
+    public GHCreateRepositoryBuilder createRepository(String name) {
+        return new GHCreateRepositoryBuilder(this,"/user/repos",name);
     }
 
     /**
@@ -425,6 +656,42 @@ public class GitHub {
     }
 
     /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
+     */
+    public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
+                                           String note_url)
+            throws IOException {
+        Requester requester = new Requester(this)
+                .with("client_secret", clientSecret)
+                .with("scopes", scopes)
+                .with("note", note)
+                .with("note_url", note_url);
+
+        return requester.method("PUT").to("/authorizations/clients/" + clientId, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an authorization</a>
+     */
+    public void deleteAuth(long id) throws IOException {
+        retrieve().method("DELETE").to("/authorizations/" + id);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an authorization</a>
+     */
+    public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an authorization</a>
+     */
+    public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+        return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
      * Ensures that the credential is valid.
      */
     public boolean isCredentialValid() throws IOException {
@@ -432,8 +699,108 @@ public class GitHub {
             retrieve().to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
+            if (LOGGER.isLoggable(FINE))
+                LOGGER.log(FINE, "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e, e);
             return false;
         }
+    }
+
+    /*package*/ GHUser intern(GHUser user) throws IOException {
+        if (user==null) return user;
+
+        // if we already have this user in our map, use it
+        GHUser u = users.get(user.getLogin());
+        if (u!=null)    return u;
+
+        // if not, remember this new user
+        users.putIfAbsent(user.getLogin(),user);
+        return user;
+    }
+
+    private static class GHApiInfo {
+        private String rate_limit_url;
+
+        void check(String apiUrl) throws IOException {
+            if (rate_limit_url==null)
+                throw new IOException(apiUrl+" doesn't look like GitHub API URL");
+
+            // make sure that the URL is legitimate
+            new URL(rate_limit_url);
+        }
+    }
+
+    /**
+     * Tests the connection.
+     *
+     * <p>
+     * Verify that the API URL and credentials are valid to access this GitHub.
+     *
+     * <p>
+     * This method returns normally if the endpoint is reachable and verified to be GitHub API URL.
+     * Otherwise this method throws {@link IOException} to indicate the problem.
+     */
+    public void checkApiUrlValidity() throws IOException {
+        try {
+            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+        } catch (IOException e) {
+            if (isPrivateModeEnabled()) {
+                throw (IOException)new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Ensures if a GitHub Enterprise server is configured in private mode.
+     *
+     * @return {@code true} if private mode is enabled. If it tries to use this method with GitHub, returns {@code
+     * false}.
+     */
+    private boolean isPrivateModeEnabled() {
+        try {
+            HttpURLConnection uc = getConnector().connect(getApiURL("/"));
+            /*
+                $ curl -i https://github.mycompany.com/api/v3/
+                HTTP/1.1 401 Unauthorized
+                Server: GitHub.com
+                Date: Sat, 05 Mar 2016 19:45:01 GMT
+                Content-Type: application/json; charset=utf-8
+                Content-Length: 130
+                Status: 401 Unauthorized
+                X-GitHub-Media-Type: github.v3
+                X-XSS-Protection: 1; mode=block
+                X-Frame-Options: deny
+                Content-Security-Policy: default-src 'none'
+                Access-Control-Allow-Credentials: true
+                Access-Control-Expose-Headers: ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+                Access-Control-Allow-Origin: *
+                X-GitHub-Request-Id: dbc70361-b11d-4131-9a7f-674b8edd0411
+                Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+                X-Content-Type-Options: nosniff
+             */
+            try {
+                return uc.getResponseCode() == HTTP_UNAUTHORIZED
+                        && uc.getHeaderField("X-GitHub-Media-Type") != null;
+            } finally {
+                // ensure that the connection opened by getResponseCode gets closed
+                try {
+                    IOUtils.closeQuietly(uc.getInputStream());
+                } catch (IOException ignore) {
+                    // ignore
+                }
+                IOUtils.closeQuietly(uc.getErrorStream());
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Search commits.
+     */
+    @Preview @Deprecated
+    public GHCommitSearchBuilder searchCommits() {
+        return new GHCommitSearchBuilder(this);
     }
 
     /**
@@ -483,13 +850,13 @@ public class GitHub {
      * This provides a dump of every public repository, in the order that they were created.
      *
      * @param since
-     *      The integer ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
+     *      The numeric ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
@@ -552,7 +919,10 @@ public class GitHub {
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
     }
 
     /* package */ static final String GITHUB_URL = "https://api.github.com";
+
+    private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
 }

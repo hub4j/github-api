@@ -11,7 +11,27 @@ import java.util.Set;
  * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
-    public abstract PagedIterator<T> iterator();
+    /**
+     * Page size. 0 is default.
+     */
+    private int size = 0;
+
+    /**
+     * Sets the pagination size.
+     *
+     * <p>
+     * When set to non-zero, each API call will retrieve this many entries.
+     */
+    public PagedIterable<T> withPageSize(int size) {
+        this.size = size;
+        return this;
+    }
+
+    public final PagedIterator<T> iterator() {
+        return _iterator(size);
+    }
+
+    public abstract PagedIterator<T> _iterator(int pageSize);
 
     /**
      * Eagerly walk {@link Iterable} and return the result in a list.

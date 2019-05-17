@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -11,21 +13,13 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GHHook extends GHObject {
-    /**
-     * Repository that the hook belongs to.
-     */
-    /*package*/ transient GHRepository repository;
-    
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+public abstract class GHHook extends GHObject {
     String name;
     List<String> events;
     boolean active;
     Map<String,String> config;
-
-    /*package*/ GHHook wrap(GHRepository owner) {
-        this.repository = owner;
-        return this;
-    }
 
     public String getName() {
         return name;
@@ -33,8 +27,10 @@ public class GHHook extends GHObject {
 
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
-        for (String e : events)
-            s.add(Enum.valueOf(GHEvent.class,e.toUpperCase(Locale.ENGLISH)));
+        for (String e : events) {
+            if (e.equals("*"))  s.add(GHEvent.ALL);
+            else                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
+        }
         return s;
     }
 
@@ -47,10 +43,17 @@ public class GHHook extends GHObject {
     }
 
     /**
+     * @see <a href="https://developer.github.com/v3/repos/hooks/#ping-a-hook">Ping hook</a>
+     */
+    public void ping() throws IOException {
+        new Requester(getRoot()).method("POST").to(getApiRoute() + "/pings");
+    }
+
+    /**
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Requester(repository.root).method("DELETE").to(String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id));
+        new Requester(getRoot()).method("DELETE").to(getApiRoute());
     }
 
     /**
@@ -60,4 +63,8 @@ public class GHHook extends GHObject {
     public URL getHtmlUrl() {
         return null;
     }
+
+    abstract GitHub getRoot();
+
+    abstract String getApiRoute();
 }

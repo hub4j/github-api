@@ -21,9 +21,7 @@ public class GHReleaseBuilder {
      * @param body The release notes body.
      */
     public GHReleaseBuilder body(String body) {
-        if (body != null) {
-            builder.with("body", body);
-        }
+        builder.with("body", body);
         return this;
     }
 
@@ -33,12 +31,9 @@ public class GHReleaseBuilder {
      *
      * @param commitish Defaults to the repository’s default branch (usually "master"). Unused if the Git tag
      *                  already exists.
-     * @return
      */
     public GHReleaseBuilder commitish(String commitish) {
-        if (commitish != null) {
-            builder.with("target_commitish", commitish);
-        }
+        builder.with("target_commitish", commitish);
         return this;
     }
 
@@ -57,9 +52,7 @@ public class GHReleaseBuilder {
      * @param name the name of the release
      */
     public GHReleaseBuilder name(String name) {
-        if (name != null) {
-            builder.with("name", name);
-        }
+        builder.with("name", name);
         return this;
     }
 

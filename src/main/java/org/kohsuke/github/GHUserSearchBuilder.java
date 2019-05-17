@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Locale;
-
 /**
  * Search users.
  *
@@ -49,8 +47,13 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
         return q("followers:"+v);
     }
 
+    public GHUserSearchBuilder order(GHDirection v) {
+        req.with("order",v);
+        return this;
+    }
+
     public GHUserSearchBuilder sort(Sort sort) {
-        req.with("sort",sort.toString().toLowerCase(Locale.ENGLISH));
+        req.with("sort",sort);
         return this;
     }
 

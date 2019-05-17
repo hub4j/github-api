@@ -5,16 +5,18 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Unit test for simple App.
@@ -36,6 +38,22 @@ public class AppTest extends AbstractGitHubApiTestBase {
         r.enableWiki(false);
         r.renameTo(targetName);
         getUser().getRepository(targetName).delete();
+    }
+
+    @Test
+    public void testRepositoryWithAutoInitializationCRUD() throws Exception {
+        String name = "github-api-test-autoinit";
+        deleteRepository(name);
+        GHRepository r = gitHub.createRepository(name)
+                .description("a test repository for auto init")
+                .homepage("http://github-api.kohsuke.org/")
+                .autoInit(true).create();
+        r.enableIssueTracker(false);
+        r.enableDownloads(false);
+        r.enableWiki(false);
+        Thread.sleep(3000);
+        assertNotNull(r.getReadme());
+        getUser().getRepository(name).delete();
     }
 
     private void deleteRepository(final String name) throws IOException {
@@ -116,10 +134,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .description("question")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .create();
-       GHDeploymentStatus ghDeploymentStatus = repository.createDeployStatus(deployment.getId(), GHDeploymentState.SUCCESS)
+        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
                                      .description("success")
                                      .targetUrl("http://www.github.com").create();
-        Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
+        Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1,Iterables.size(deploymentStatuses));
         assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
@@ -150,14 +168,6 @@ public class AppTest extends AbstractGitHubApiTestBase {
             repository.enableWiki(true);
         }
         return repository;
-    }
-
-    private GHUser getUser() {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
     }
 
     @Test
@@ -206,10 +216,12 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testMyTeamsContainsAllMyOrganizations() throws IOException {
+    public void testMyOrganizationsContainMyTeams() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
         Map<String, GHOrganization> myOrganizations = gitHub.getMyOrganizations();
-        assertEquals(teams.keySet(), myOrganizations.keySet());
+        //GitHub no longer has default 'owners' team, so there may be organization memberships without a team
+        //https://help.github.com/articles/about-improved-organization-permissions/
+        assertTrue(myOrganizations.keySet().containsAll(teams.keySet()));
     }
     
     @Test
@@ -286,12 +298,13 @@ public class AppTest extends AbstractGitHubApiTestBase {
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
-        assertEquals(1, gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
+        // 'Core Developers' and 'Owners'
+        assertEquals(2, gitHub.getOrganization("github-api-test-org").getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
     @Test
     public void testMembership() throws Exception {
-        Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
+        Set<String> members = gitHub.getOrganization("github-api-test-org").getRepository("jenkins").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
 
@@ -320,16 +333,30 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testOrgTeamBySlug() throws Exception {
+        kohsuke();
+        GHTeam e = gitHub.getOrganization("github-api-test-org").getTeamBySlug("core-developers");
+        assertNotNull(e);
+    }
+
+    @Test
     public void testCommit() throws Exception {
         GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         System.out.println(commit);
         assertEquals(1, commit.getParents().size());
         assertEquals(1,commit.getFiles().size());
+        assertEquals("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7",
+                commit.getHtmlUrl().toString());
 
         File f = commit.getFiles().get(0);
         assertEquals(48,f.getLinesChanged());
         assertEquals("modified",f.getStatus());
         assertEquals("changelog.html", f.getFileName());
+
+        // walk the tree
+        GHTree t = commit.getTree();
+        assertThat(IOUtils.toString(t.getEntry("todo.txt").readAsBlob()), containsString("executor rendering"));
+        assertNotNull(t.getEntry("war").asTree());
     }
 
     @Test
@@ -351,7 +378,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             sha1.add(c.getSHA1());
         }
         assertEquals("1cccddb22e305397151b2b7b87b4b47d74ca337b",sha1.get(0));
-        assertEquals(29,sha1.size());
+        assertEquals(29, sha1.size());
     }
 
     @Test
@@ -574,6 +601,8 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .prerelease(false)
                 .create();
 
+        Thread.sleep(3000);
+
         try {
 
             for (GHTag tag : r.listTags()) {
@@ -618,7 +647,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testAddDeployKey() throws IOException {
-        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(),0);
+        GHRepository myRepository = getTestRepository();
         final GHDeployKey newDeployKey = myRepository.addDeployKey("test", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
         try {
             assertNotNull(newDeployKey.getId());
@@ -636,7 +665,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
     
     @Test
     public void testCommitStatusContext() throws IOException {
-        GHRepository myRepository = Iterables.get(gitHub.getMyself().getRepositories().values(), 0);
+        GHRepository myRepository = getTestRepository();
         GHRef masterRef = myRepository.getRef("heads/master");
         GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
         assertEquals("test/context", commitStatus.getContext());
@@ -651,6 +680,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
             all.add(u);
         }
         assertFalse(all.isEmpty());
+    }
+
+    @Test
+    public void testCommitSearch() throws IOException {
+        PagedSearchIterable<GHCommit> r = gitHub.searchCommits().author("kohsuke").list();
+        assertTrue(r.getTotalCount() > 0);
+        
+        GHCommit firstCommit = r.iterator().next();
+        assertTrue(firstCommit.getFiles().size() > 0);
     }
 
     @Test
@@ -715,6 +753,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getUrl(), t2.getUrl());
+
+            t.setColor("000000");
+            GHLabel t3 = r.getLabel("test");
+            assertEquals(t3.getColor(), "000000");
             t.delete();
         }
     }
@@ -773,7 +815,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
         assertTrue(actual.contains("href=\"https://github.com/kohsuke/github-api/pull/1\""));
         assertTrue(actual.contains("class=\"user-mention\""));
-        assertTrue(actual.contains("class=\"issue-link\""));
+        assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
     }
 
@@ -827,8 +869,65 @@ public class AppTest extends AbstractGitHubApiTestBase {
         gitHub.listNotifications().markAsRead();
     }
 
-    private void kohsuke() {
-        String login = getUser().getLogin();
-        Assume.assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+    /**
+     * Just basic code coverage to make sure toString() doesn't blow up
+     */
+    @Test
+    public void checkToString() throws Exception {
+        GHUser u = gitHub.getUser("rails");
+        System.out.println(u);
+        GHRepository r = u.getRepository("rails");
+        System.out.println(r);
+        System.out.println(r.getIssue(1));
+    }
+
+    @Test
+    public void reactions() throws Exception {
+        GHIssue i = gitHub.getRepository("kohsuke/github-api").getIssue(311);
+
+        // retrieval
+        GHReaction r = i.listReactions().iterator().next();
+        assertThat(r.getUser().getLogin(), is("kohsuke"));
+        assertThat(r.getContent(),is(ReactionContent.HEART));
+
+        // CRUD
+        GHReaction a = i.createReaction(ReactionContent.HOORAY);
+        assertThat(a.getUser().getLogin(),is(gitHub.getMyself().getLogin()));
+        a.delete();
+    }
+
+    @Test
+    public void listOrgMemberships() throws Exception {
+        GHMyself me = gitHub.getMyself();
+        for (GHMembership m : me.listOrgMemberships()) {
+            assertThat(m.getUser(), is((GHUser)me));
+            assertNotNull(m.getState());
+            assertNotNull(m.getRole());
+
+            System.out.printf("%s %s %s\n",
+                    m.getOrganization().getLogin(),
+                    m.getState(),
+                    m.getRole());
+        }
+    }
+
+    @Test
+    public void blob() throws Exception {
+        GHRepository r = gitHub.getRepository("kohsuke/github-api");
+        String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
+
+        assertBlobContent(r.readBlob(sha1));
+
+        GHBlob blob = r.getBlob(sha1);
+        assertBlobContent(blob.read());
+        assertThat(blob.getSha(),is("a12243f2fc5b8c2ba47dd677d0b0c7583539584d"));
+        assertThat(blob.getSize(),is(1104L));
+    }
+
+    private void assertBlobContent(InputStream is) throws Exception {
+        String content = new String(IOUtils.toByteArray(is),"UTF-8");
+        assertThat(content,containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
+        assertThat(content,containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
+        assertThat(content.length(),is(1104));
     }
 }

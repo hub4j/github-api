@@ -152,7 +152,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
                         while (true) {
                             long now = System.currentTimeMillis();
                             if (nextCheckTime < now) break;
-                            long waitTime = Math.max(Math.min(nextCheckTime - now, 1000), 60 * 1000);
+                            long waitTime = Math.min(Math.max(nextCheckTime - now, 1000), 60 * 1000);
                             Thread.sleep(waitTime);
                         }
 
@@ -180,7 +180,8 @@ public class GHNotificationStream implements Iterable<GHThread> {
             private long calcNextCheckTime() {
                 String v = req.getResponseHeader("X-Poll-Interval");
                 if (v==null)    v="60";
-                return System.currentTimeMillis()+Integer.parseInt(v)*1000;
+                long seconds = Integer.parseInt(v);
+                return System.currentTimeMillis() + seconds*1000;
             }
 
             public void remove() {

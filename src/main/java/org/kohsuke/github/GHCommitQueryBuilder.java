@@ -92,8 +92,8 @@ public class GHCommitQueryBuilder {
      */
     public PagedIterable<GHCommit> list() {
         return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> iterator() {
-                return new PagedIterator<GHCommit>(req.asIterator(repo.getApiTailUrl("commits"), GHCommit[].class)) {
+            public PagedIterator<GHCommit> _iterator(int pageSize) {
+                return new PagedIterator<GHCommit>(req.asIterator(repo.getApiTailUrl("commits"), GHCommit[].class, pageSize)) {
                     protected void wrapUp(GHCommit[] page) {
                         for (GHCommit c : page)
                             c.wrapUp(repo);

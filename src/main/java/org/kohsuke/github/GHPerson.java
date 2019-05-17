@@ -38,8 +38,12 @@ public abstract class GHPerson extends GHObject {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        if (created_at!=null)    return; // already populated
-
+        if (created_at!=null) {
+            return; // already populated
+        }
+        if (root == null || root.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
         root.retrieve().to(url, this);
     }
 
@@ -52,7 +56,7 @@ public abstract class GHPerson extends GHObject {
      */
     public synchronized Map<String,GHRepository> getRepositories() throws IOException {
         Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listRepositories()) {
+        for (GHRepository r : listRepositories(100)) {
             repositories.put(r.getName(),r);
         }
         return Collections.unmodifiableMap(repositories);
@@ -76,8 +80,8 @@ public abstract class GHPerson extends GHObject {
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/users/" + login + "/repos?per_page=" + pageSize, GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/users/" + login + "/repos", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
@@ -85,14 +89,14 @@ public abstract class GHPerson extends GHObject {
                     }
                 };
             }
-        };
+        }.withPageSize(pageSize);
     }
 
     /**
-     * Loads repository list in a pagenated fashion.
+     * Loads repository list in a paginated fashion.
      * 
      * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a pagenated fashion.
+     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion.
      * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
      * 
      * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
@@ -104,7 +108,7 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos?per_page="+pageSize,GHRepository[].class);
+                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -204,7 +208,7 @@ public abstract class GHPerson extends GHObject {
 
     public Date getUpdatedAt() throws IOException {
         populate();
-        return super.getCreatedAt();
+        return super.getUpdatedAt();
     }
 
     /**

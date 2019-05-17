@@ -1,9 +1,9 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
-import java.util.Date;
 
 /**
  * The model user for comparing 2 commits in the GitHub API.
@@ -65,12 +65,24 @@ public class GHCompare {
         return merge_base_commit;
     }
 
+    /**
+     * Gets an array of commits.
+     * @return A copy of the array being stored in the class.
+     */
     public Commit[] getCommits() {
-        return commits;
+        Commit[] newValue = new Commit[commits.length];
+        System.arraycopy(commits, 0, newValue, 0, commits.length);
+        return newValue;
     }
     
+    /**
+     * Gets an array of commits.
+     * @return A copy of the array being stored in the class.
+     */
     public GHCommit.File[] getFiles() {
-        return files;
+        GHCommit.File[] newValue = new GHCommit.File[files.length];
+        System.arraycopy(files, 0, newValue, 0, files.length);
+        return newValue;
     }
 
     public GHCompare wrap(GHRepository owner) {
@@ -87,6 +99,8 @@ public class GHCompare {
      * Compare commits had a child commit element with additional details we want to capture.
      * This extenstion of GHCommit provides that.
      */
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+            justification = "JSON API")
     public static class Commit extends GHCommit {
 
         private InnerCommit commit;

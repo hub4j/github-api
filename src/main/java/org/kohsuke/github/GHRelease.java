@@ -3,12 +3,13 @@ package org.kohsuke.github;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.format;
+import static java.lang.String.*;
 
 /**
  * Release in a github repository.
@@ -45,6 +46,14 @@ public class GHRelease extends GHObject {
         return draft;
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #update()}
+     */
+    public GHRelease setDraft(boolean draft) throws IOException {
+        return update().draft(draft).update();
+    }
+
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
@@ -70,7 +79,7 @@ public class GHRelease extends GHObject {
     }
 
     public Date getPublished_at() {
-        return published_at;
+        return new Date(published_at.getTime());
     }
 
     public GitHub getRoot() {
@@ -115,16 +124,23 @@ public class GHRelease extends GHObject {
      * Java 7 or greater.  Options for fixing this for earlier JVMs can be found here
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
      * handling of the HTTP requests to github's API.
-     *
-     * @throws IOException
-     */
+         */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
+        FileInputStream s = new FileInputStream(file);
+        try {
+            return uploadAsset(file.getName(), s, contentType);
+        } finally {
+            s.close();
+        }
+    }
+    
+    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 
         String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""), getId(), file.getName());
+                owner.getApiTailUrl(""), getId(), filename);
         return builder.contentType(contentType)
-                .with(new FileInputStream(file))
+                .with(stream)
                 .to(url, GHAsset.class).wrap(this);
     }
 
@@ -142,6 +158,13 @@ public class GHRelease extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+    }
+
+    /**
+     * Updates this release via a builder.
+     */
+    public GHReleaseUpdater update() {
+        return new GHReleaseUpdater(this);
     }
 
     private String getApiTailUrl(String end) {

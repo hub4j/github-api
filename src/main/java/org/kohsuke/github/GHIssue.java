@@ -24,13 +24,21 @@
 
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Represents an issue on GitHub.
@@ -41,16 +49,20 @@ import java.util.Locale;
  * @see GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-public class GHIssue extends GHObject {
+public class GHIssue extends GHObject implements Reactable{
+    private static final String ASSIGNEES = "assignees";
+
     GitHub root;
     GHRepository owner;
     
     // API v3
-    protected GHUser assignee;
+    protected GHUser assignee;  // not sure what this field is now that 'assignees' exist
+    protected GHUser[] assignees;
     protected String state;
     protected int number;
     protected String closed_at;
     protected int comments;
+    @SkipFromToString
     protected String body;
     // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
     protected List<Label> labels;
@@ -59,6 +71,7 @@ public class GHIssue extends GHObject {
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
+    protected boolean locked;
 
     /**
      * @deprecated use {@link GHLabel}
@@ -75,6 +88,7 @@ public class GHIssue extends GHObject {
     /*package*/ GHIssue wrap(GitHub root) {
         this.root = root;
         if(assignee != null) assignee.wrapUp(root);
+        if(assignees!=null)    GHUser.wrap(assignees,root);
         if(user != null) user.wrapUp(root);
         if(closed_by != null) closed_by.wrapUp(root);
         return this;
@@ -119,6 +133,10 @@ public class GHIssue extends GHObject {
         return title;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
     public GHIssueState getState() {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
@@ -138,11 +156,24 @@ public class GHIssue extends GHObject {
         return GitHub.parseURL(url);
     }
 
+    public void lock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+    }
+
+    public void unlock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+    }
+
     /**
      * Updates the issue by adding a comment.
+     *
+     * @return
+     *      Newly posted comment.
      */
-    public void comment(String message) throws IOException {
-        new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments");
+    @WithBridgeMethods(void.class)
+    public GHIssueComment comment(String message) throws IOException {
+        GHIssueComment r = new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+        return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -175,12 +206,77 @@ public class GHIssue extends GHObject {
         edit("body",body);
     }
 
+    public void setMilestone(GHMilestone milestone) throws IOException {
+        edit("milestone",milestone.getNumber());
+    }
+
     public void assignTo(GHUser user) throws IOException {
-        editIssue("assignee",user.getLogin());
+        setAssignees(user);
     }
 
     public void setLabels(String... labels) throws IOException {
         editIssue("labels",labels);
+    }
+
+    /**
+     * Adds labels to the issue.
+     *
+     * @param names Names of the label
+     */
+    public void addLabels(String... names) throws IOException {
+        _addLabels(Arrays.asList(names));
+    }
+
+    public void addLabels(GHLabel... labels) throws IOException {
+        addLabels(Arrays.asList(labels));
+    }
+
+    public void addLabels(Collection<GHLabel> labels) throws IOException {
+        _addLabels(GHLabel.toNames(labels));
+    }
+
+    private void _addLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel label : getLabels()) {
+            newLabels.add(label.getName());
+        }
+        for (String name : names) {
+            if (!newLabels.contains(name)) {
+                newLabels.add(name);
+            }
+        }
+        setLabels(newLabels.toArray(new String[0]));
+    }
+
+    /**
+     * Remove a given label by name from this issue.
+     */
+    public void removeLabels(String... names) throws IOException {
+        _removeLabels(Arrays.asList(names));
+    }
+
+    /**
+     * @see #removeLabels(String...)
+     */
+    public void removeLabels(GHLabel... labels) throws IOException {
+        removeLabels(Arrays.asList(labels));
+    }
+
+    public void removeLabels(Collection<GHLabel> labels) throws IOException {
+        _removeLabels(GHLabel.toNames(labels));
+    }
+
+    private void _removeLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel l : getLabels()) {
+            if (!names.contains(l.getName())) {
+                newLabels.add(l.getName());
+            }
+        }
+
+        setLabels(newLabels.toArray(new String[0]));
     }
 
     /**
@@ -197,8 +293,8 @@ public class GHIssue extends GHObject {
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return new PagedIterable<GHIssueComment>() {
-            public PagedIterator<GHIssueComment> iterator() {
-                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class)) {
+            public PagedIterator<GHIssueComment> _iterator(int pageSize) {
+                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class, pageSize)) {
                     protected void wrapUp(GHIssueComment[] page) {
                         for (GHIssueComment c : page)
                             c.wrapUp(GHIssue.this);
@@ -206,6 +302,53 @@ public class GHIssue extends GHObject {
                 };
             }
         };
+    }
+
+    @Preview @Deprecated
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return new Requester(owner.root)
+                .withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(root);
+    }
+
+    @Preview @Deprecated
+    public PagedIterable<GHReaction> listReactions() {
+        return new PagedIterable<GHReaction>() {
+            public PagedIterator<GHReaction> _iterator(int pageSize) {
+                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHReaction[] page) {
+                        for (GHReaction c : page)
+                            c.wrap(owner.root);
+                    }
+                };
+            }
+        };
+    }
+
+    public void addAssignees(GHUser... assignees) throws IOException {
+        addAssignees(Arrays.asList(assignees));
+    }
+
+    public void addAssignees(Collection<GHUser> assignees) throws IOException {
+        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    public void setAssignees(GHUser... assignees) throws IOException {
+        setAssignees(Arrays.asList(assignees));
+    }
+
+    public void setAssignees(Collection<GHUser> assignees) throws IOException {
+        new Requester(root).withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
+    }
+
+    public void removeAssignees(GHUser... assignees) throws IOException {
+        removeAssignees(Arrays.asList(assignees));
+    }
+
+    public void removeAssignees(Collection<GHUser> assignees) throws IOException {
+        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected String getApiRoute() {
@@ -216,15 +359,19 @@ public class GHIssue extends GHObject {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-    public GHUser getAssignee() {
-        return assignee;
+    public GHUser getAssignee() throws IOException {
+        return root.intern(assignee);
     }
-    
+
+    public List<GHUser> getAssignees() {
+        return Collections.unmodifiableList(Arrays.asList(assignees));
+    }
+
     /**
      * User who submitted the issue.
      */
-    public GHUser getUser() {
-        return user;
+    public GHUser getUser() throws IOException {
+        return root.intern(user);
     }
 
     /**
@@ -235,12 +382,16 @@ public class GHIssue extends GHObject {
      * even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
-    public GHUser getClosedBy() {
+    public GHUser getClosedBy() throws IOException {
         if(!"closed".equals(state)) return null;
-        if(closed_by != null) return closed_by;
-        
-        //TODO closed_by = owner.getIssue(number).getClosed_by();
-        return closed_by;
+
+        //TODO
+        /*
+        if (closed_by==null) {
+            closed_by = owner.getIssue(number).getClosed_by();
+        }
+        */
+        return root.intern(closed_by);
     }
     
     public int getCommentsCount(){
@@ -262,6 +413,8 @@ public class GHIssue extends GHObject {
         return milestone;
     }
 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+        justification = "JSON API")
     public static class PullRequest{
         private String diff_url, patch_url, html_url;
         

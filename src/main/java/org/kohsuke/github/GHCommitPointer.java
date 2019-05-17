@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import java.io.IOException;
+
 /**
  * Identifies a commit in {@link GHPullRequest}.
  *
@@ -37,7 +39,8 @@ public class GHCommitPointer {
      * This points to the user who owns
      * the {@link #getRepository()}.
      */
-    public GHUser getUser() {
+    public GHUser getUser() throws IOException {
+        if (user != null) return user.root.intern(user);
         return user;
     }
 
@@ -67,6 +70,13 @@ public class GHCommitPointer {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * Obtains the commit that this pointer is referring to.
+     */
+    public GHCommit getCommit() throws IOException {
+        return getRepository().getCommit(getSha());
     }
 
     void wrapUp(GitHub root) {

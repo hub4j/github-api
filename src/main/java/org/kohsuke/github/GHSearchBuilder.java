@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,7 @@ import java.util.List;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class GHSearchBuilder<T> {
-    protected final GitHub root;
-    protected final Requester req;
+public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     protected final List<String> terms = new ArrayList<String>();
 
     /**
@@ -21,15 +19,14 @@ public abstract class GHSearchBuilder<T> {
     private final Class<? extends SearchResult<T>> receiverType;
 
     /*package*/ GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
-        this.root = root;
-        this.req = root.retrieve();
+        super(root);
         this.receiverType = receiverType;
     }
 
     /**
      * Search terms.
      */
-    public GHSearchBuilder q(String term) {
+    public GHQueryBuilder<T> q(String term) {
         terms.add(term);
         return this;
     }
@@ -37,11 +34,12 @@ public abstract class GHSearchBuilder<T> {
     /**
      * Performs the search.
      */
+    @Override
     public PagedSearchIterable<T> list() {
         return new PagedSearchIterable<T>(root) {
-            public PagedIterator<T> iterator() {
+            public PagedIterator<T> _iterator(int pageSize) {
                 req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.asIterator(getApiUrl(), receiverType))) {
+                return new PagedIterator<T>(adapt(req.asIterator(getApiUrl(), receiverType, pageSize))) {
                     protected void wrapUp(T[] page) {
                         // SearchResult.getItems() should do it
                     }

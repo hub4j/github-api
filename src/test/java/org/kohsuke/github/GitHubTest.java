@@ -1,34 +1,59 @@
 package org.kohsuke.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Properties;
+import java.util.Set;
 
-import junit.framework.TestCase;
+import com.google.common.collect.Iterables;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
  */
-public class GitHubTest extends TestCase {
+public class GitHubTest {
+    @Test
+    public void testOffline() throws Exception {
+        GitHub hub = GitHub.offline();
+        assertEquals("https://api.github.invalid/test", hub.getApiURL("/test").toString());
+        assertTrue(hub.isAnonymous());
+        try {
+            hub.getRateLimit();
+            fail("Offline instance should always fail");
+        } catch (IOException e) {
+            assertEquals("Offline", e.getMessage());
+        }
+    }
 
+    @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus","bogus");
         assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
-
+    @Test
     public void testGitHubServerWithHttps() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus","bogus");
         assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
-
+    @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
         assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
     }
-    
+    @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
         
         Map<String, String>props = new HashMap<String, String>();
@@ -86,7 +111,7 @@ public class GitHubTest extends TestCase {
             e1.printStackTrace();
         }
     }
-
+    @Test
     public void testGitHubBuilderFromCustomEnvironment() throws IOException {
         Map<String, String> props = new HashMap<String, String>();
 
@@ -105,4 +130,44 @@ public class GitHubTest extends TestCase {
         assertEquals("bogusEndpoint", builder.endpoint);
     }
 
+    @Test
+    public void testGitHubEnterpriseDoesNotHaveRateLimit() throws IOException {
+        GitHub github = spy(new GitHubBuilder().build());
+        when(github.retrieve()).thenThrow(FileNotFoundException.class);
+
+        GHRateLimit rateLimit = github.getRateLimit();
+        assertThat(rateLimit.getResetDate(), notNullValue());
+    }
+
+    @Test
+    public void testGitHubIsApiUrlValid() throws IOException {
+        GitHub github = GitHub.connectAnonymously();
+        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        try {
+            github.checkApiUrlValidity();
+        } catch (IOException ioe) {
+            assertTrue(ioe.getMessage().contains("private mode enabled"));
+        }
+    }
+
+    @Test
+    public void listUsers() throws IOException {
+        GitHub hub = GitHub.connect();
+        for (GHUser u : Iterables.limit(hub.listUsers(),10)) {
+            assert u.getName()!=null;
+            System.out.println(u.getName());
+        }
+    }
+
+    @Test
+    public void getOrgs() throws IOException {
+        GitHub hub = GitHub.connect();
+        int iterations = 10;
+        Set<Long> orgIds = new HashSet<Long>();
+        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
+            orgIds.add(org.getId());
+            System.out.println(org.getName());
+        }
+        assertThat(orgIds.size(), equalTo(iterations));
+    }
 }

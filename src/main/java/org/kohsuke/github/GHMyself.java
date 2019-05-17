@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +16,33 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
+
+    /**
+     * Type of repositories returned during listing.
+     */
+    public enum RepositoryListFilter {
+        /**
+         * All public and private repositories that current user has access or collaborates to
+         */
+        ALL,
+        /**
+         * Public and private repositories owned by current user
+         */
+        OWNER,
+        /**
+         * Public repositories that current user has access or collaborates to
+         */
+        PUBLIC,
+        /**
+         * Private repositories that current user has access or collaborates to
+         */
+        PRIVATE,
+        /**
+         * Public and private repositories that current user is a member
+         */
+        MEMBER;
+    }
+
     /**
      * @deprecated
      *      Use {@link #getEmails2()}
@@ -109,16 +135,30 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Lists up all the repositories this user owns (public and private) using the specified page size.
+     * List repositories that are accessible to the authenticated user (public and private) using the specified page size.
+     *
+     * This includes repositories owned by the authenticated user, repositories that belong to other users
+     * where the authenticated user is a collaborator, and other organizations' repositories that the authenticated
+     * user has access to through an organization membership.
      *
      * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
      *
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+        return listRepositories(pageSize, RepositoryListFilter.ALL);
+    }
+
+    /**
+     * List repositories of a certain type that are accessible by current authenticated user using the specified page size.
+     *
+     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
+     * @param repoType type of repository returned in the listing
+     */
+    public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
         return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> iterator() {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/user/repos?per_page=" + pageSize, GHRepository[].class)) {
+            public PagedIterator<GHRepository> _iterator(int pageSize) {
+                return new PagedIterator<GHRepository>(root.retrieve().with("type",repoType).asIterator("/user/repos", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
@@ -126,7 +166,7 @@ public class GHMyself extends GHUser {
                     }
                 };
             }
-        };
+        }.withPageSize(pageSize);
     }
 
     /**
@@ -135,6 +175,39 @@ public class GHMyself extends GHUser {
      */
     public PagedIterable<GHRepository> listAllRepositories() {
         return listRepositories();
+    }
+
+    /**
+     * List your organization memberships
+     */
+    public PagedIterable<GHMembership> listOrgMemberships() {
+        return listOrgMemberships(null);
+    }
+
+    /**
+     * List your organization memberships
+     *
+     * @param state
+     *      Filter by a specific state
+     */
+    public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
+        return new PagedIterable<GHMembership>() {
+            public PagedIterator<GHMembership> _iterator(int pageSize) {
+                return new PagedIterator<GHMembership>(root.retrieve().with("state",state).asIterator("/user/memberships/orgs", GHMembership[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHMembership[] page) {
+                        GHMembership.wrap(page,root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Gets your membership in a specific organization.
+     */
+    public GHMembership getMembership(GHOrganization o) throws IOException {
+        return root.retrieve().to("/user/memberships/orgs/"+o.getLogin(),GHMembership.class).wrap(root);
     }
 
 //    public void addEmails(Collection<String> emails) throws IOException {

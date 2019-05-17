@@ -1151,6 +1151,10 @@ public class GHRepository extends GHObject {
         return root.retrieve().to(getApiTailUrl("labels/"+name), GHLabel.class).wrapUp(this);
     }
 
+    public GHLabel createLabel(String name, String color) throws IOException {
+        return createLabel(name, color, "");
+    }    
+    
     public GHLabel createLabel(String name, String color, String description) throws IOException {
         return root.retrieve().method("POST")
                 .with("name",name)

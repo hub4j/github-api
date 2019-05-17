@@ -5,7 +5,7 @@
     "user": {
       "login": "baxterthehacker",
       "id": 6752317,
-      "avatar_url": "https://avatars.githubusercontent.com/u/6752317?v=3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6752317?v=4",
       "gravatar_id": "",
       "url": "https://api.github.com/users/baxterthehacker",
       "html_url": "https://github.com/baxterthehacker",
@@ -21,11 +21,11 @@
       "type": "User",
       "site_admin": false
     },
-    "body": "Looks great!",
-    "submitted_at": "2016-10-03T23:39:09Z",
-    "state": "approved",
+    "body": "Looks great!\n",
+    "state": "APPROVED",
     "html_url": "https://github.com/baxterthehacker/public-repo/pull/8#pullrequestreview-2626884",
     "pull_request_url": "https://api.github.com/repos/baxterthehacker/public-repo/pulls/8",
+    "author_association": "OWNER",
     "_links": {
       "html": {
         "href": "https://github.com/baxterthehacker/public-repo/pull/8#pullrequestreview-2626884"
@@ -33,7 +33,9 @@
       "pull_request": {
         "href": "https://api.github.com/repos/baxterthehacker/public-repo/pulls/8"
       }
-    }
+    },
+    "submitted_at": "2016-10-03T23:39:09Z",
+    "commit_id": "b7a1f9c27caa4e03c14a88feb56e2d4f7500aa63"
   },
   "pull_request": {
     "url": "https://api.github.com/repos/baxterthehacker/public-repo/pulls/8",

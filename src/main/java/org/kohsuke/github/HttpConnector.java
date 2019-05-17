@@ -5,7 +5,6 @@ import org.kohsuke.github.extras.ImpatientHttpConnector;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Pluggability for customizing HTTP request behaviors or using altogether different library.

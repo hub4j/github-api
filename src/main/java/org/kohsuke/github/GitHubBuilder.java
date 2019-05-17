@@ -154,6 +154,12 @@ public class GitHubBuilder {
         return self;
     }
 
+    /**
+     * @param endpoint
+     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     */
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;

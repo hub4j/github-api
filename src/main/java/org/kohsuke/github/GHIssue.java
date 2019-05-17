@@ -24,9 +24,10 @@
 
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,10 +35,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-
-import static org.kohsuke.github.Previews.*;
+import java.util.Set;
 
 /**
  * Represents an issue on GitHub.
@@ -49,6 +50,8 @@ import static org.kohsuke.github.Previews.*;
  * @see GHIssueSearchBuilder
  */
 public class GHIssue extends GHObject implements Reactable{
+    private static final String ASSIGNEES = "assignees";
+
     GitHub root;
     GHRepository owner;
     
@@ -68,6 +71,7 @@ public class GHIssue extends GHObject implements Reactable{
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
+    protected boolean locked;
 
     /**
      * @deprecated use {@link GHLabel}
@@ -129,6 +133,10 @@ public class GHIssue extends GHObject implements Reactable{
         return title;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
     public GHIssueState getState() {
         return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
     }
@@ -146,6 +154,14 @@ public class GHIssue extends GHObject implements Reactable{
 
     public URL getApiURL(){
         return GitHub.parseURL(url);
+    }
+
+    public void lock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+    }
+
+    public void unlock() throws IOException {
+        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
     }
 
     /**
@@ -190,12 +206,77 @@ public class GHIssue extends GHObject implements Reactable{
         edit("body",body);
     }
 
+    public void setMilestone(GHMilestone milestone) throws IOException {
+        edit("milestone",milestone.getNumber());
+    }
+
     public void assignTo(GHUser user) throws IOException {
         setAssignees(user);
     }
 
     public void setLabels(String... labels) throws IOException {
         editIssue("labels",labels);
+    }
+
+    /**
+     * Adds labels to the issue.
+     *
+     * @param names Names of the label
+     */
+    public void addLabels(String... names) throws IOException {
+        _addLabels(Arrays.asList(names));
+    }
+
+    public void addLabels(GHLabel... labels) throws IOException {
+        addLabels(Arrays.asList(labels));
+    }
+
+    public void addLabels(Collection<GHLabel> labels) throws IOException {
+        _addLabels(GHLabel.toNames(labels));
+    }
+
+    private void _addLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel label : getLabels()) {
+            newLabels.add(label.getName());
+        }
+        for (String name : names) {
+            if (!newLabels.contains(name)) {
+                newLabels.add(name);
+            }
+        }
+        setLabels(newLabels.toArray(new String[0]));
+    }
+
+    /**
+     * Remove a given label by name from this issue.
+     */
+    public void removeLabels(String... names) throws IOException {
+        _removeLabels(Arrays.asList(names));
+    }
+
+    /**
+     * @see #removeLabels(String...)
+     */
+    public void removeLabels(GHLabel... labels) throws IOException {
+        removeLabels(Arrays.asList(labels));
+    }
+
+    public void removeLabels(Collection<GHLabel> labels) throws IOException {
+        _removeLabels(GHLabel.toNames(labels));
+    }
+
+    private void _removeLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel l : getLabels()) {
+            if (!names.contains(l.getName())) {
+                newLabels.add(l.getName());
+            }
+        }
+
+        setLabels(newLabels.toArray(new String[0]));
     }
 
     /**
@@ -251,8 +332,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        List<String> names = toLogins(assignees);
-        root.retrieve().method("POST").with("assignees",names).to(getIssuesApiRoute()+"/assignees",this);
+        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -260,7 +340,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        editIssue("assignees",toLogins(assignees));
+        new Requester(root).withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
     }
 
     public void removeAssignees(GHUser... assignees) throws IOException {
@@ -268,16 +348,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        List<String> names = toLogins(assignees);
-        root.retrieve().method("DELETE").with("assignees",names).inBody().to(getIssuesApiRoute()+"/assignees",this);
-    }
-
-    private List<String> toLogins(Collection<GHUser> assignees) {
-        List<String> names = new ArrayList<String>(assignees.size());
-        for (GHUser a : assignees) {
-            names.add(a.getLogin());
-        }
-        return names;
+        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected String getApiRoute() {
@@ -288,8 +359,8 @@ public class GHIssue extends GHObject implements Reactable{
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
     }
 
-    public GHUser getAssignee() {
-        return assignee;
+    public GHUser getAssignee() throws IOException {
+        return root.intern(assignee);
     }
 
     public List<GHUser> getAssignees() {
@@ -299,8 +370,8 @@ public class GHIssue extends GHObject implements Reactable{
     /**
      * User who submitted the issue.
      */
-    public GHUser getUser() {
-        return user;
+    public GHUser getUser() throws IOException {
+        return root.intern(user);
     }
 
     /**
@@ -311,12 +382,16 @@ public class GHIssue extends GHObject implements Reactable{
      * even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
-    public GHUser getClosedBy() {
+    public GHUser getClosedBy() throws IOException {
         if(!"closed".equals(state)) return null;
-        if(closed_by != null) return closed_by;
-        
-        //TODO closed_by = owner.getIssue(number).getClosed_by();
-        return closed_by;
+
+        //TODO
+        /*
+        if (closed_by==null) {
+            closed_by = owner.getIssue(number).getClosed_by();
+        }
+        */
+        return root.intern(closed_by);
     }
     
     public int getCommentsCount(){

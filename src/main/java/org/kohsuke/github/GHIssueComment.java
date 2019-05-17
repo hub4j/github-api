@@ -26,17 +26,19 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Comment to the issue
  *
  * @author Kohsuke Kawaguchi
+ * @see GHIssue#comment(String)
+ * @see GHIssue#listComments()
  */
 public class GHIssueComment extends GHObject implements Reactable {
     GHIssue owner;
 
-    private String body, gravatar_id;
+    private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
     /*package*/ GHIssueComment wrapUp(GHIssue owner) {
@@ -73,12 +75,13 @@ public class GHIssueComment extends GHObject implements Reactable {
         return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
     
-    /**
-     * @deprecated This object has no HTML URL.
-     */
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHub.parseURL(html_url);
+    }
+
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return GHCommentAuthorAssociation.valueOf(author_association);
     }
     
     /**

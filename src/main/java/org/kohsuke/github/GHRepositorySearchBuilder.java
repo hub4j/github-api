@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Locale;
-
 /**
  * Search repositories.
  *
@@ -55,6 +53,10 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
     public GHRepositorySearchBuilder stars(String v) {
         return q("stars:"+v);
+    }
+
+    public GHRepositorySearchBuilder topic(String v) {
+        return q("topic:"+v);
     }
 
     public GHRepositorySearchBuilder order(GHDirection v) {

@@ -21,13 +21,6 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testBranchProtection() throws Exception {
-        GHBranch b = repo.getBranch("master");
-        b.enableProtection(EnforcementLevel.NON_ADMINS, "foo/bar");
-        b.disableProtection();
-    }
-
-    @Test
     public void testGetFileContent() throws Exception {
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
@@ -60,7 +53,8 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testCRUDContent() throws Exception {
-        GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename);
+        GHContentUpdateResponse created =
+                repo.createContent("this is an awesome file I created\n", "Creating a file for integration tests.", createdFilename);
         GHContent createdContent = created.getContent();
 
         assertNotNull(created.getCommit());

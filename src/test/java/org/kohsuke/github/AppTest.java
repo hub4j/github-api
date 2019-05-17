@@ -5,8 +5,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -16,7 +14,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -137,10 +134,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
                 .description("question")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .create();
-       GHDeploymentStatus ghDeploymentStatus = repository.createDeployStatus(deployment.getId(), GHDeploymentState.SUCCESS)
+        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
                                      .description("success")
                                      .targetUrl("http://www.github.com").create();
-        Iterable<GHDeploymentStatus> deploymentStatuses = repository.getDeploymentStatuses(deployment.getId());
+        Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1,Iterables.size(deploymentStatuses));
         assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
@@ -307,7 +304,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testMembership() throws Exception {
-        Set<String> members = gitHub.getOrganization("jenkinsci").getRepository("violations-plugin").getCollaboratorNames();
+        Set<String> members = gitHub.getOrganization("github-api-test-org").getRepository("jenkins").getCollaboratorNames();
         System.out.println(members.contains("kohsuke"));
     }
 
@@ -686,6 +683,15 @@ public class AppTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
+    public void testCommitSearch() throws IOException {
+        PagedSearchIterable<GHCommit> r = gitHub.searchCommits().author("kohsuke").list();
+        assertTrue(r.getTotalCount() > 0);
+        
+        GHCommit firstCommit = r.iterator().next();
+        assertTrue(firstCommit.getFiles().size() > 0);
+    }
+
+    @Test
     public void testIssueSearch() throws IOException {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
         for (GHIssue i : r) {
@@ -747,6 +753,10 @@ public class AppTest extends AbstractGitHubApiTestBase {
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getUrl(), t2.getUrl());
+
+            t.setColor("000000");
+            GHLabel t3 = r.getLabel("test");
+            assertEquals(t3.getColor(), "000000");
             t.delete();
         }
     }
@@ -778,7 +788,7 @@ public class AppTest extends AbstractGitHubApiTestBase {
             GHRepository r = itr.next();
             System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
-            assertNotEquals(0,r.getId());
+            assertNotEquals(0L,r.getId());
         }
     }
 

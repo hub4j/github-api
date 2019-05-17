@@ -43,6 +43,7 @@ public class GHPullRequestFileDetail {
     String raw_url;
     String contents_url;
     String patch;
+    String previous_filename;
 
     public String getSha() {
         return sha;
@@ -82,5 +83,10 @@ public class GHPullRequestFileDetail {
 
     public String getPatch() {
         return patch;
+    }
+
+    public String getPreviousFilename()
+    {
+        return previous_filename;
     }
 }

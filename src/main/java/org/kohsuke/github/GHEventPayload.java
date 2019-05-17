@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.Reader;
 import java.util.List;
 
@@ -77,9 +78,143 @@ public abstract class GHEventPayload {
                 throw new IllegalStateException("Expected pull_request payload, but got something else. Maybe we've got another type of event?");
             if (repository!=null) {
                 repository.wrap(root);
-                pull_request.wrap(repository);
+                pull_request.wrapUp(repository);
             } else {
                 pull_request.wrapUp(root);
+            }
+        }
+    }
+
+
+    /**
+     * A review was added to a pull request
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent">authoritative source</a>
+     */
+    public static class PullRequestReview extends GHEventPayload {
+        private String action;
+        private GHPullRequestReview review;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        public String getAction() {
+            return action;
+        }
+        
+        public GHPullRequestReview getReview() {
+            return review;
+        }
+
+        public GHPullRequest getPullRequest() {
+            return pull_request;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (review==null)
+                throw new IllegalStateException("Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
+            
+            review.wrapUp(pull_request);
+            
+            if (repository!=null) {
+                repository.wrap(root);
+                pull_request.wrapUp(repository);
+            } else {
+                pull_request.wrapUp(root);
+            }
+        }
+    }
+    
+    /**
+     * A review comment was added to a pull request
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent">authoritative source</a>
+     */
+    public static class PullRequestReviewComment extends GHEventPayload {
+        private String action;
+        private GHPullRequestReviewComment comment;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        public String getAction() {
+            return action;
+        }
+        
+        public GHPullRequestReviewComment getComment() {
+            return comment;
+        }
+
+        public GHPullRequest getPullRequest() {
+            return pull_request;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (comment==null)
+                throw new IllegalStateException("Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
+            
+            comment.wrapUp(pull_request);
+            
+            if (repository!=null) {
+                repository.wrap(root);
+                pull_request.wrapUp(repository);
+            } else {
+                pull_request.wrapUp(root);
+            }
+        }
+    }
+
+    /**
+     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or reopened.
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#issueevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Issue extends GHEventPayload {
+        private String action;
+        private GHIssue issue;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getAction() {
+            return action;
+        }
+
+        public GHIssue getIssue() {
+            return issue;
+        }
+
+        public void setIssue(GHIssue issue) {
+            this.issue = issue;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
+                issue.wrap(repository);
+            } else {
+                issue.wrap(root);
             }
         }
     }
@@ -622,6 +757,48 @@ public abstract class GHEventPayload {
 
             public List<String> getModified() {
                 return modified;
+            }
+        }
+    }
+
+    /**
+     * A release was added to the repo
+     *
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#releaseevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
+    public static class Release extends GHEventPayload {
+        private String action;
+        private GHRelease release;
+        private GHRepository repository;
+
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
+        public String getAction() {
+            return action;
+        }
+
+        public GHRelease getRelease() {
+            return release;
+        }
+
+        public void setRelease(GHRelease release) {
+            this.release = release;
+        }
+
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (repository != null) {
+                repository.wrap(root);
             }
         }
     }

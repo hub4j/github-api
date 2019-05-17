@@ -1,9 +1,6 @@
-import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHRepository.Contributor;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
-
-import java.util.Collection;
 
 /**
  * @author Kohsuke Kawaguchi

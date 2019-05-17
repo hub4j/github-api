@@ -2,15 +2,16 @@ package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
@@ -18,12 +19,32 @@ import java.util.Date;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public abstract class GHObject {
+    /**
+     * Capture response HTTP headers on the state object.
+     */
+    protected Map<String, List<String>> responseHeaderFields;
+
     protected String url;
-    protected int id;
+    protected long id;
     protected String created_at;
     protected String updated_at;
 
     /*package*/ GHObject() {
+    }
+
+    /**
+     * Returns the HTTP response headers given along with the state of this object.
+     *
+     * <p>
+     * Some of the HTTP headers have nothing to do with the object, for example "Cache-Control"
+     * and others are different depending on how this object was retrieved.
+     *
+     * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such.
+     * Use with caution. The method might be removed in the future.
+     */
+    @CheckForNull @Deprecated
+    public Map<String, List<String>> getResponseHeaderFields() {
+        return responseHeaderFields;
     }
 
     /**
@@ -63,14 +84,18 @@ public abstract class GHObject {
     /**
      * Unique ID number of this resource.
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="intToString")
-    public int getId() {
+    @WithBridgeMethods(value={String.class,int.class}, adapterMethod="longToStringOrInt")
+    public long getId() {
         return id;
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getId")
-    private Object intToString(int id, Class type) {
-        return String.valueOf(id);
+    private Object longToStringOrInt(long id, Class type) {
+        if (type==String.class)
+            return String.valueOf(id);
+        if (type==int.class)
+            return (int)id;
+        throw new AssertionError("Unexpected type: "+type);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getHtmlUrl")

@@ -1,8 +1,15 @@
 package org.kohsuke.github;
 
-
+import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Represents a deployment
+ *
+ * @see <a href="https://developer.github.com/v3/repos/deployments/">documentation</a>
+ * @see GHRepository#listDeployments(String, String, String, String)
+ * @see GHRepository#getDeployment(long)
+ */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
     private GitHub root;
@@ -41,8 +48,8 @@ public class GHDeployment extends GHObject {
     public String getEnvironment() {
         return environment;
     }
-    public GHUser getCreator() {
-        return creator;
+    public GHUser getCreator() throws IOException {
+        return root.intern(creator);
     }
     public String getRef() {
         return ref;
@@ -58,4 +65,23 @@ public class GHDeployment extends GHObject {
     public URL getHtmlUrl() {
         return null;
     }
+
+    public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
+        return new GHDeploymentStatusBuilder(owner,id,state);
+    }
+
+    public PagedIterable<GHDeploymentStatus> listStatuses() {
+        return new PagedIterable<GHDeploymentStatus>() {
+            public PagedIterator<GHDeploymentStatus> _iterator(int pageSize) {
+                return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(statuses_url, GHDeploymentStatus[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHDeploymentStatus[] page) {
+                        for (GHDeploymentStatus c : page)
+                            c.wrap(owner);
+                    }
+                };
+            }
+        };
+    }
+
 }

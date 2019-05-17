@@ -3,12 +3,13 @@ package org.kohsuke.github;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.format;
+import static java.lang.String.*;
 
 /**
  * Release in a github repository.
@@ -45,10 +46,12 @@ public class GHRelease extends GHObject {
         return draft;
     }
 
+    /**
+     * @deprecated
+     *      Use {@link #update()}
+     */
     public GHRelease setDraft(boolean draft) throws IOException {
-      edit("draft", draft);
-      this.draft = draft;
-      return this;
+        return update().draft(draft).update();
     }
 
     public URL getHtmlUrl() {
@@ -123,12 +126,21 @@ public class GHRelease extends GHObject {
      * handling of the HTTP requests to github's API.
          */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
+        FileInputStream s = new FileInputStream(file);
+        try {
+            return uploadAsset(file.getName(), s, contentType);
+        } finally {
+            s.close();
+        }
+    }
+    
+    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 
         String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""), getId(), file.getName());
+                owner.getApiTailUrl(""), getId(), filename);
         return builder.contentType(contentType)
-                .with(new FileInputStream(file))
+                .with(stream)
                 .to(url, GHAsset.class).wrap(this);
     }
 
@@ -149,10 +161,10 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Edit this release.
+     * Updates this release via a builder.
      */
-    private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(owner.getApiTailUrl("releases/"+id));
+    public GHReleaseUpdater update() {
+        return new GHReleaseUpdater(this);
     }
 
     private String getApiTailUrl(String end) {

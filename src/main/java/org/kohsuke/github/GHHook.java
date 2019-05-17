@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -39,6 +40,13 @@ public abstract class GHHook extends GHObject {
 
     public Map<String, String> getConfig() {
         return Collections.unmodifiableMap(config);
+    }
+
+    /**
+     * @see <a href="https://developer.github.com/v3/repos/hooks/#ping-a-hook">Ping hook</a>
+     */
+    public void ping() throws IOException {
+        new Requester(getRoot()).method("POST").to(getApiRoute() + "/pings");
     }
 
     /**

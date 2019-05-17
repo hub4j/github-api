@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -155,5 +157,17 @@ public class GitHubTest {
             assert u.getName()!=null;
             System.out.println(u.getName());
         }
+    }
+
+    @Test
+    public void getOrgs() throws IOException {
+        GitHub hub = GitHub.connect();
+        int iterations = 10;
+        Set<Long> orgIds = new HashSet<Long>();
+        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
+            orgIds.add(org.getId());
+            System.out.println(org.getName());
+        }
+        assertThat(orgIds.size(), equalTo(iterations));
     }
 }

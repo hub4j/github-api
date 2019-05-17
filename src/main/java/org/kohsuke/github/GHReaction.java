@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.Previews.*;
 
 /**
  * Reaction to issue, comment, PR, and so on.

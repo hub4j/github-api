@@ -560,6 +560,32 @@ public class GitHub {
         }
         return r;
     }
+    
+    /**
+     * Alias for {@link #getUserPublicOrganizations(String)}.
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) throws IOException {
+        return getUserPublicOrganizations( user.getLogin() );
+    }
+
+    /**
+     * This method returns a shallowly populated organizations.
+     *
+     * To retrieve full organization details, you need to call {@link #getOrganization(String)}
+     *
+     * @param user the user to retrieve public Organization membership information for
+     *
+     * @return the public Organization memberships for the user
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
+        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        for (GHOrganization o : orgs) {
+            // don't put 'o' into orgs because they are shallow
+            r.put(o.getLogin(),o.wrapUp(this));
+        }
+        return r;
+    }
 
     /**
      * Gets complete map of organizations/teams that current user belongs to.

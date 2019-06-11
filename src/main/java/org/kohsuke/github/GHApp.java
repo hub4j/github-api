@@ -105,6 +105,7 @@ public class GHApp extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
+    @Preview @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
         return new PagedIterable<GHAppInstallation>() {
             public PagedIterator<GHAppInstallation> _iterator(int pageSize) {
@@ -127,6 +128,7 @@ public class GHApp extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
+    @Preview @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
         return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/app/installations/%d", id), GHAppInstallation.class).wrapUp(root);
     }
@@ -139,6 +141,7 @@ public class GHApp extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization installation</a>
      */
+    @Preview @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
         return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/orgs/%s/installation", name), GHAppInstallation.class).wrapUp(root);
     }
@@ -152,6 +155,7 @@ public class GHApp extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository installation</a>
      */
+    @Preview @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
         return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/repos/%s/%s/installation", ownerName, repositoryName), GHAppInstallation.class).wrapUp(root);
     }
@@ -164,6 +168,7 @@ public class GHApp extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
+    @Preview @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
         return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/users/%s/installation", name), GHAppInstallation.class).wrapUp(root);
     }

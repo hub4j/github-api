@@ -61,7 +61,8 @@ public class GitHubTest {
         props.put("login", "bogus");
         props.put("oauth", "bogus");
         props.put("password", "bogus");
-        
+        props.put("jwt", "bogus");
+
         setupEnvironment(props);
         
         GitHubBuilder builder = GitHubBuilder.fromEnvironment();
@@ -69,7 +70,8 @@ public class GitHubTest {
         assertEquals("bogus", builder.user);
         assertEquals("bogus", builder.oauthToken);
         assertEquals("bogus", builder.password);
-        
+        assertEquals("bogus", builder.jwtToken);
+
     }
     
     /*

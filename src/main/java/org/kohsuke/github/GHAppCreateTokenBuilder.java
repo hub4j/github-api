@@ -18,6 +18,7 @@ public class GHAppCreateTokenBuilder {
     protected final Requester builder;
     private final String apiUrlTail;
 
+    @Preview @Deprecated
     /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, String> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
@@ -33,6 +34,7 @@ public class GHAppCreateTokenBuilder {
      * @param repositoryIds - Array containing the repositories Ids
      *
      */
+    @Preview @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Integer> repositoryIds) {
         this.builder.with("repository_ids",repositoryIds);
         return this;
@@ -43,6 +45,7 @@ public class GHAppCreateTokenBuilder {
      *
      * You must use a JWT to access this endpoint.
      */
+    @Preview @Deprecated
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(root);
     }

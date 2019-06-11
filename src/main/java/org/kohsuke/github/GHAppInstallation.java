@@ -147,6 +147,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
+    @Preview @Deprecated
     public void deleteInstallation() throws IOException {
         root.retrieve().method("DELETE").withPreview(GAMBIT).to(String.format("/app/installations/%d", id));
     }
@@ -159,6 +160,7 @@ public class GHAppInstallation extends GHObject {
      * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()}
      * to finally create an access token.
      */
+    @Preview @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String,String> permissions){
         return new GHAppCreateTokenBuilder(root,String.format("/app/installations/%d/access_tokens", id), permissions);
     }

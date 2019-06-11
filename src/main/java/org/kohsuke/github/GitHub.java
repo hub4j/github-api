@@ -712,6 +712,7 @@ public class GitHub {
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated GitHub App</a>
      */
+    @Preview @Deprecated
     public GHApp getApp() throws IOException {
         return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
     }

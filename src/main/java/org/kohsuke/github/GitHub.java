@@ -115,6 +115,12 @@ public class GitHub {
      *     <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null.
      *         This will send OAuth token to the GitHub API. If the login parameter is null,
      *         The constructor makes an API call to figure out the user name that owns the token.
+     *
+     *     <dt>Log in with JWT token
+     *     <dd>Specify jwtToken. Leave password null.
+     *         This will send JWT token to the GitHub API via the Authorization HTTP header.
+     *         Please note thatonly operations in which permissions have been previously configured and accepted during
+     *         the GitHub App will be executed successfully.
      * </dl>
      *
      * @param apiUrl
@@ -132,7 +138,7 @@ public class GitHub {
      * @param connector
      *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String jwtToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
@@ -140,7 +146,9 @@ public class GitHub {
         if (oauthAccessToken!=null) {
             encodedAuthorization = "token "+oauthAccessToken;
         } else {
-            if (password!=null) {
+            if(jwtToken!=null){
+                encodedAuthorization = "Bearer "+jwtToken;
+            }else if (password!=null) {
                 String authorization = (login + ':' + password);
                 String charsetName = Charsets.UTF_8.name();
                 encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
@@ -154,7 +162,7 @@ public class GitHub {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
-        if (login==null && encodedAuthorization!=null)
+        if (login==null && encodedAuthorization!=null && jwtToken == null)
             login = getMyself().getLogin();
         this.login = login;
     }
@@ -695,6 +703,17 @@ public class GitHub {
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
         return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+    }
+
+    /**
+     * Returns the GitHub App associated with the authentication credentials used.
+     *
+     * You must use a JWT to access this endpoint.
+     *
+     * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated GitHub App</a>
+     */
+    public GHApp getApp() throws IOException {
+        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
     }
 
     /**

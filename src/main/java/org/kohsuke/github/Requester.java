@@ -165,7 +165,7 @@ class Requester {
         return _with(key, value);
     }
 
-    public Requester with(String key, Collection<String> value) {
+    public Requester with(String key, Collection<?> value) {
         return _with(key, value);
     }
 

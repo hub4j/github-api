@@ -35,20 +35,7 @@ import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.net.URL;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
@@ -1020,6 +1007,26 @@ public class GHRepository extends GHObject {
                 };
             }
         };
+    }
+
+    /**
+     * This method can get the last commit instance
+     * @return the last commit instance
+     */
+    public GHCommit getLastCommit(){
+        List<GHCommit> commits = listCommits().asList();
+        commits.sort(new Comparator<GHCommit>() {
+            @Override
+            public int compare(GHCommit commit1, GHCommit commit2) {
+                try{
+                    return (int)(commit2.getCommitDate().getTime()-commit1.getCommitDate().getTime());
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        return commits.get(0);
     }
 
     /**

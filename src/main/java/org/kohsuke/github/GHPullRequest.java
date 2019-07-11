@@ -52,7 +52,7 @@ public class GHPullRequest extends GHIssue {
     // details that are only available when obtained from ID
     private GHUser merged_by;
     private int review_comments, additions, commits;
-    private boolean merged, maintainer_can_modify;
+    private boolean merged, maintainer_can_modify, draft;
     private Boolean mergeable;
     private int deletions;
     private String mergeable_state;
@@ -185,6 +185,11 @@ public class GHPullRequest extends GHIssue {
     public boolean canMaintainerModify() throws IOException {
         populate();
         return maintainer_can_modify;
+    }
+
+    public boolean isDraft() throws IOException {
+        populate();
+        return draft;
     }
 
     /**

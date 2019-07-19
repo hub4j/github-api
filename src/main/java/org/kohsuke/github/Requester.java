@@ -554,6 +554,9 @@ class Requester {
 
 
     private void setupConnection(URL url) throws IOException {
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+        }
         uc = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls

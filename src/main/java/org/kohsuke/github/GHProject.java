@@ -23,8 +23,11 @@
  */
 package org.kohsuke.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+
 import static org.kohsuke.github.Previews.INERTIA;
 
 /**
@@ -33,12 +36,11 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Martin van Zijl
  */
 public class GHProject extends GHObject {
-    private GitHub root;
-    private GHRepository owner;
+    protected GitHub root;
+    protected GHObject owner;
 
     private String owner_url;
     private String html_url;
-    private String columns_url;
     private String node_id;
     private String name;
     private String body;
@@ -55,20 +57,25 @@ public class GHProject extends GHObject {
         return root;
     }
 
-    public GHRepository getOwner() {
+    public GHObject getOwner() throws IOException {
+        if(owner == null) {
+            try {
+                if(owner_url.contains("/orgs/")) {
+                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                } else if(owner_url.contains("/users/")) {
+                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                } else if(owner_url.contains("/repos/")) {
+                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                }
+            } catch (FileNotFoundException e) {
+                return null;
+            }
+        }
         return owner;
     }
 
-    public String getOwner_url() {
-        return owner_url;
-    }
-
-    public String getHtml_url() {
-        return html_url;
-    }
-
-    public String getColumns_url() {
-        return columns_url;
+    public URL getOwnerUrl() {
+        return GitHub.parseURL(owner_url);
     }
 
     public String getNode_id() {
@@ -87,8 +94,8 @@ public class GHProject extends GHObject {
         return number;
     }
 
-    public String getState() {
-        return state;
+    public ProjectState getState() {
+        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));
     }
 
     public GHUser getCreator() {
@@ -155,5 +162,28 @@ public class GHProject extends GHObject {
 
     public void delete() throws IOException {
         new Requester(root).withPreview(INERTIA).method("DELETE").to(getApiRoute());
+    }
+
+    public PagedIterable<GHProjectColumn> listColumns() throws IOException {
+        final GHProject project = this;
+        return new PagedIterable<GHProjectColumn>() {
+            public PagedIterator<GHProjectColumn> _iterator(int pageSize) {
+                return new PagedIterator<GHProjectColumn>(root.retrieve().withPreview(INERTIA)
+                        .asIterator(String.format("/projects/%d/columns", id), GHProjectColumn[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHProjectColumn[] page) {
+                        for (GHProjectColumn c : page)
+                            c.wrap(project);
+                    }
+                };
+            }
+        };
+    }
+
+    public GHProjectColumn createColumn(String name) throws IOException {
+        return root.retrieve().method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);
     }
 }

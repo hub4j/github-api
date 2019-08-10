@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -361,7 +362,17 @@ public class GHPullRequest extends GHIssue {
                 .withLogins("reviewers", reviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
-    
+
+    public void requestTeamReviewers(List<GHTeam> teams) throws IOException {
+        List<String> teamReviewers = new ArrayList<String>(teams.size());
+        for (GHTeam team : teams) {
+          teamReviewers.add(team.getSlug());
+        }
+        new Requester(root).method("POST")
+                .with("team_reviewers", teamReviewers)
+                .to(getApiRoute() + REQUEST_REVIEWERS);
+    }
+
     /**
      * Merge this pull request.
      *

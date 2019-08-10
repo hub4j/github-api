@@ -35,7 +35,7 @@ public class GHAppInstallation extends GHObject {
     private long targetId;
     @JsonProperty("target_type")
     private GHTargetType targetType;
-    private Map<String, String> permissions;
+    private Map<String, GHPermissionType> permissions;
     private List<GHEvent> events;
     @JsonProperty("single_file_name")
     private String singleFileName;
@@ -103,11 +103,11 @@ public class GHAppInstallation extends GHObject {
         this.targetType = targetType;
     }
 
-    public Map<String, String> getPermissions() {
+    public Map<String, GHPermissionType> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Map<String, String> permissions) {
+    public void setPermissions(Map<String, GHPermissionType> permissions) {
         this.permissions = permissions;
     }
 
@@ -161,7 +161,7 @@ public class GHAppInstallation extends GHObject {
      * to finally create an access token.
      */
     @Preview @Deprecated
-    public GHAppCreateTokenBuilder createToken(Map<String,String> permissions){
+    public GHAppCreateTokenBuilder createToken(Map<String,GHPermissionType> permissions){
         return new GHAppCreateTokenBuilder(root,String.format("/app/installations/%d/access_tokens", id), permissions);
     }
 }

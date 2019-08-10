@@ -19,11 +19,11 @@ public class GHAppCreateTokenBuilder {
     private final String apiUrlTail;
 
     @Preview @Deprecated
-    /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, String> permissions) {
+    /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = new Requester(root);
-        this.builder.with("permissions",permissions);
+        this.builder.withPermissions("permissions",permissions);
     }
 
     /**

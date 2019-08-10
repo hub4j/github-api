@@ -119,7 +119,7 @@ public class GitHub {
      *     <dt>Log in with JWT token
      *     <dd>Specify jwtToken. Leave password null.
      *         This will send JWT token to the GitHub API via the Authorization HTTP header.
-     *         Please note thatonly operations in which permissions have been previously configured and accepted during
+     *         Please note that only operations in which permissions have been previously configured and accepted during
      *         the GitHub App will be executed successfully.
      * </dl>
      *
@@ -940,7 +940,11 @@ public class GitHub {
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ","yyyy-MM-dd'T'HH:mm:ss'Z'"};
+    private static final String[] TIME_FORMATS = {
+            "yyyy/MM/dd HH:mm:ss ZZZZ",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
+    };
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));

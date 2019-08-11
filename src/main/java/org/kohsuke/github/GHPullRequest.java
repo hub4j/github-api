@@ -62,6 +62,7 @@ public class GHPullRequest extends GHIssue {
 
     // pull request reviewers
     private GHUser[] requested_reviewers;
+    private GHTeam[] requested_teams;
 
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
@@ -82,6 +83,11 @@ public class GHPullRequest extends GHIssue {
         if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
         if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
+        if (requested_teams != null) {
+            for (GHTeam team : requested_teams) {
+                team.wrapUp(root);
+            }
+        }
         return this;
     }
 
@@ -228,6 +234,11 @@ public class GHPullRequest extends GHIssue {
     public List<GHUser> getRequestedReviewers() throws IOException {
         populate();
         return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
+    }
+
+    public List<GHTeam> getRequestedTeams() throws IOException {
+        populate();
+        return Collections.unmodifiableList(Arrays.asList(requested_teams));
     }
 
     /**

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -28,7 +29,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         p.comment("Some comment");
     }
 
-    @Test 
+    @Test
     public void testPullRequestReviews() throws Exception {
         String name = rnd.next();
         GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
@@ -78,6 +79,18 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         comment.delete();
         comments = p.listReviewComments().asList();
         assertTrue(comments.isEmpty());
+    }
+
+    @Test
+    public void testPullRequestReviewRequests() throws Exception {
+        String name = rnd.next();
+        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        System.out.println(p.getUrl());
+        assertTrue(p.getRequestedReviewers().isEmpty());
+
+        GHUser kohsuke2 = gitHub.getUser("kohsuke2");
+        p.requestReviewers(Collections.singletonList(kohsuke2));
+        assertFalse(p.getRequestedReviewers().isEmpty());
     }
 
     @Test

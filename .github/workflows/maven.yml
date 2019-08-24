@@ -20,6 +20,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Maven Download all dependencies
-      run: mvn dependency:go-offline
+      run: mvn -B dependency:go-offline
     - name: Maven Build
-      run: mvn package --file pom.xml -DskipTests
+      run: mvn -B package --file pom.xml -DskipTests

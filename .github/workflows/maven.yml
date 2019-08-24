@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Maven: Download all dependencies
+    - name: Maven Download all dependencies
       run: mvn dependency:go-offline
-    - name: Build with Maven
+    - name: Maven Build
       run: mvn package --file pom.xml -DskipTests

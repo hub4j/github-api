@@ -92,6 +92,17 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Do not use gmaven plugin -->
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>gmaven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 

@@ -29,8 +29,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
-    <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>
+    <spotbugs-maven-plugin.version>3.1.11</spotbugs-maven-plugin.version>
+    <spotbugs.version>3.1.12</spotbugs.version>
+    <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
   </properties>
 
   <build>
@@ -76,22 +77,30 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${findbugs-maven-plugin.version}</version>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
-          <failOnError>${findbugs-maven-plugin.failOnError}</failOnError>
+          <failOnError>${spotbugs-maven-plugin.failOnError}</failOnError>
         </configuration>
         <executions>
           <execution>
-            <id>run-findbugs</id>
+            <id>run-spotbugs</id>
             <phase>verify</phase> 
             <goals>
               <goal>check</goal> 
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <!-- Do not use gmaven plugin -->
       <plugin>
@@ -183,10 +192,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>3.0.1</version>
-      <scope>provided</scope>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs.version}</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <repositories>

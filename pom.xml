@@ -161,7 +161,7 @@
       <version>1.1</version>
       <exclusions>
           <!--
-            Require as this conflicts with
+            Required as this conflicts with
             the wiremock-standalone dependency
           -->
         <exclusion>

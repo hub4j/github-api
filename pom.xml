@@ -10,13 +10,13 @@
   <artifactId>github-api</artifactId>
   <version>1.96-SNAPSHOT</version>
   <name>GitHub API for Java</name>
-  <url>http://github-api.kohsuke.org/</url>
+  <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
 
   <scm>
     <connection>scm:git:git@github.com/kohsuke/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/kohsuke/${project.artifactId}.git</developerConnection>
-    <url>http://${project.artifactId}.kohsuke.org/</url>
+    <url>https://${project.artifactId}.kohsuke.org/</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -201,13 +201,13 @@
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
 
@@ -223,7 +223,7 @@
   <licenses>
     <license>
       <name>The MIT license</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <url>https://www.opensource.org/licenses/mit-license.php</url>
       <distribution>repo</distribution>
     </license>
   </licenses>

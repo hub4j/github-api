@@ -1,25 +1,20 @@
 {
-  "id" : "d0e32d3a-8eb4-393f-aa53-1b6b0cfe07ab",
+  "id" : "60a31449-0374-3cb0-96a5-b7ba9c0f8d41",
   "request" : {
-    "url" : "/gists/9903708",
-    "method" : "GET"
+    "url" : "/gists/bf0058f87bb7c773123bb1763a6bb9b3",
+    "method" : "DELETE"
   },
   "response" : {
-    "status" : 200,
-    "bodyFileName" : "body-gists-9903708-k8R2l.json",
+    "status" : 204,
+    "bodyFileName" : "body-gists-bf0058f87bb7c773123bb1763a6bb9b3-delete.txt",
     "headers" : {
-      "Date" : "Fri, 30 Aug 2019 23:51:28 GMT",
-      "Content-Type" : "application/json; charset=utf-8",
-      "Transfer-Encoding" : "chunked",
+      "Date" : "Sat, 31 Aug 2019 07:02:11 GMT",
+      "Content-Type" : "application/octet-stream",
       "Server" : "GitHub.com",
-      "Status" : "200 OK",
+      "Status" : "204 No Content",
       "X-RateLimit-Limit" : "5000",
-      "X-RateLimit-Remaining" : "4963",
-      "X-RateLimit-Reset" : "1567212363",
-      "Cache-Control" : "private, max-age=60, s-maxage=60",
-      "Vary" : [ "Accept, Authorization, Cookie, X-GitHub-OTP", "Accept-Encoding" ],
-      "ETag" : "W/\"e850bf4bf8eefa116ce82bd68dc07dde\"",
-      "Last-Modified" : "Thu, 08 Aug 2019 03:57:56 GMT",
+      "X-RateLimit-Remaining" : "4969",
+      "X-RateLimit-Reset" : "1567238453",
       "X-OAuth-Scopes" : "gist, notifications, repo",
       "X-Accepted-OAuth-Scopes" : "",
       "X-GitHub-Media-Type" : "unknown, github.v3",
@@ -31,8 +26,9 @@
       "X-XSS-Protection" : "1; mode=block",
       "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy" : "default-src 'none'",
-      "X-GitHub-Request-Id" : "D3B8:467C:1AA6FB5:1F844D1:5D69B680"
+      "Vary" : "Accept-Encoding",
+      "X-GitHub-Request-Id" : "D806:7BE9:BD3A90:DBB4CD:5D6A1B6C"
     }
   },
-  "uuid" : "d0e32d3a-8eb4-393f-aa53-1b6b0cfe07ab"
+  "uuid" : "60a31449-0374-3cb0-96a5-b7ba9c0f8d41"
 }

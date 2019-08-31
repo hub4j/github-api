@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import org.junit.Test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.Matchers.notNullValue;
 
 import static org.hamcrest.core.Is.is;
@@ -9,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GistTest extends AbstractGitHubApiWireMockBase {
+public class GistTest extends AbstractGitHubApiWireMockTest {
     /**
      * CRUD operation.
      */
@@ -36,11 +38,39 @@ public class GistTest extends AbstractGitHubApiWireMockBase {
 
     @Test
     public void starTest() throws Exception {
+
+        githubApi.stubFor(
+            put(urlEqualTo("/gists/9903708/star"))
+                .inScenario("Star Test")
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willReturn(
+                    noContent())
+                .willSetStateTo("Starred"));
+
+        githubApi.stubFor(
+            get(urlEqualTo("/gists/9903708/star"))
+                .inScenario("Star Test")
+                .whenScenarioStateIs("Starred")
+                .willReturn(
+                    noContent())
+                .willSetStateTo("Starred"));
+
+        githubApi.stubFor(
+            delete(urlEqualTo("/gists/9903708/star"))
+                .inScenario("Star Test")
+                .whenScenarioStateIs("Starred")
+                .willReturn(
+                    noContent())
+                .willSetStateTo("UnStarred"));
+
+
         GHGist gist = gitHub.getGist("9903708");
         assertEquals("rtyler",gist.getOwner().getLogin());
 
+
         gist.star();
         assertTrue(gist.isStarred());
+
         gist.unstar();
         assertFalse(gist.isStarred());
 
@@ -69,7 +99,7 @@ public class GistTest extends AbstractGitHubApiWireMockBase {
         assertEquals(1,gist.getFiles().size());
         GHGistFile f = gist.getFile("keybase.md");
 
-        assertEquals("text/plain", f.getType());
+        assertEquals("text/markdown", f.getType());
         assertEquals("Markdown", f.getLanguage());
         assertTrue(f.getContent().contains("### Keybase proof"));
         assertNotNull(f.getContent());

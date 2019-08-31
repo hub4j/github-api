@@ -1,27 +1,31 @@
 {
-  "id" : "cc28f788-b923-384e-abd9-0a5ec89ba88e",
+  "id" : "39637126-0df4-3c07-9e1f-1e73df434d88",
   "request" : {
-    "url" : "/gists/9903708",
-    "method" : "GET"
+    "url" : "/gists/9903708/forks",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
   },
   "response" : {
-    "status" : 200,
-    "bodyFileName" : "body-gists-9903708-rQzcp.json",
+    "status" : 201,
+    "bodyFileName" : "body-gists-9903708-forks-create.json",
     "headers" : {
-      "Date" : "Fri, 30 Aug 2019 23:51:28 GMT",
+      "Date" : "Sat, 31 Aug 2019 07:01:58 GMT",
       "Content-Type" : "application/json; charset=utf-8",
-      "Transfer-Encoding" : "chunked",
       "Server" : "GitHub.com",
-      "Status" : "200 OK",
+      "Status" : "201 Created",
       "X-RateLimit-Limit" : "5000",
-      "X-RateLimit-Remaining" : "4961",
-      "X-RateLimit-Reset" : "1567212363",
+      "X-RateLimit-Remaining" : "4974",
+      "X-RateLimit-Reset" : "1567238453",
       "Cache-Control" : "private, max-age=60, s-maxage=60",
       "Vary" : [ "Accept, Authorization, Cookie, X-GitHub-OTP", "Accept-Encoding" ],
-      "ETag" : "W/\"e850bf4bf8eefa116ce82bd68dc07dde\"",
-      "Last-Modified" : "Thu, 08 Aug 2019 03:57:56 GMT",
+      "ETag" : "\"02d41ded1e68f60ee6434d7d14372e4a\"",
       "X-OAuth-Scopes" : "gist, notifications, repo",
       "X-Accepted-OAuth-Scopes" : "",
+      "Location" : "https://api.github.com/gists/bf0058f87bb7c773123bb1763a6bb9b3",
       "X-GitHub-Media-Type" : "unknown, github.v3",
       "Access-Control-Expose-Headers" : "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin" : "*",
@@ -31,8 +35,8 @@
       "X-XSS-Protection" : "1; mode=block",
       "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy" : "default-src 'none'",
-      "X-GitHub-Request-Id" : "D3BC:9A51:149CE1E:1839942:5D69B680"
+      "X-GitHub-Request-Id" : "D806:7BE9:BD36A2:DBB104:5D6A1B5E"
     }
   },
-  "uuid" : "cc28f788-b923-384e-abd9-0a5ec89ba88e"
+  "uuid" : "39637126-0df4-3c07-9e1f-1e73df434d88"
 }

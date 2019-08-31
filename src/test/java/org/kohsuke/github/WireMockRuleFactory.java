@@ -49,7 +49,6 @@ public class WireMockRuleFactory {
         }
     }
 
-
     private class WireMockRecorderRule extends WireMockRule {
         //needed for WireMockRule file location
         private String mappingLocation = "src/test/resources";

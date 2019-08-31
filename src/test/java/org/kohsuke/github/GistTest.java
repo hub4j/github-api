@@ -2,10 +2,14 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.notNullValue;
+
+import static org.hamcrest.core.Is.is;
+
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GistTest extends AbstractGitHubApiTestBase {
+public class GistTest extends AbstractGitHubApiWireMockBase {
     /**
      * CRUD operation.
      */
@@ -18,9 +22,9 @@ public class GistTest extends AbstractGitHubApiTestBase {
                 .file("def.txt","def")
                 .create();
 
-        assertNotNull(gist.getCreatedAt());
-        assertNotNull(gist.getUpdatedAt());
+        assertThat(gist.getCreatedAt(), is(notNullValue()));
 
+        assertNotNull(gist.getUpdatedAt());
         assertNotNull(gist.getCommentsUrl());
         assertNotNull(gist.getCommitsUrl());
         assertNotNull(gist.getGitPullUrl());

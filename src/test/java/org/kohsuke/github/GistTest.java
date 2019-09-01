@@ -38,32 +38,6 @@ public class GistTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void starTest() throws Exception {
-
-        githubApi.stubFor(
-            put(urlEqualTo("/gists/9903708/star"))
-                .inScenario("Star Test")
-                .whenScenarioStateIs(Scenario.STARTED)
-                .willReturn(
-                    noContent())
-                .willSetStateTo("Starred"));
-
-        githubApi.stubFor(
-            get(urlEqualTo("/gists/9903708/star"))
-                .inScenario("Star Test")
-                .whenScenarioStateIs("Starred")
-                .willReturn(
-                    noContent())
-                .willSetStateTo("Starred"));
-
-        githubApi.stubFor(
-            delete(urlEqualTo("/gists/9903708/star"))
-                .inScenario("Star Test")
-                .whenScenarioStateIs("Starred")
-                .willReturn(
-                    noContent())
-                .willSetStateTo("UnStarred"));
-
-
         GHGist gist = gitHub.getGist("9903708");
         assertEquals("rtyler",gist.getOwner().getLogin());
 

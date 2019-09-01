@@ -1,0 +1,35 @@
+{
+  "id" : "ffac033c-525e-3a55-993c-14b629e4ceaf",
+  "scenarioName": "Star Test",
+  "requiredScenarioState": "Started",
+  "request" : {
+    "url" : "/gists/9903708/star",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 404,
+    "body" : "{}",
+    "headers" : {
+      "Date" : "Sat, 31 Aug 2019 07:00:18 GMT",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Server" : "GitHub.com",
+      "Status" : "404 Not Found",
+      "X-RateLimit-Limit" : "5000",
+      "X-RateLimit-Remaining" : "4984",
+      "X-RateLimit-Reset" : "1567238418",
+      "X-OAuth-Scopes" : "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes" : "",
+      "X-GitHub-Media-Type" : "unknown, github.v3",
+      "Access-Control-Expose-Headers" : "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin" : "*",
+      "Strict-Transport-Security" : "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options" : "deny",
+      "X-Content-Type-Options" : "nosniff",
+      "X-XSS-Protection" : "1; mode=block",
+      "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy" : "default-src 'none'",
+      "X-GitHub-Request-Id" : "D806:7BE9:BD241A:DB9CE8:5D6A1B02"
+    }
+  },
+  "uuid" : "ffac033c-525e-3a55-993c-14b629e4ceaf"
+}

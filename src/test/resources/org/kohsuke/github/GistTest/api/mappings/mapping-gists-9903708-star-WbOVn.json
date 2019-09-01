@@ -1,20 +1,28 @@
 {
-  "id" : "ffac033c-525e-3a55-993c-14b629e4ceaf",
+  "id" : "725fe929-9ea9-355d-bfe9-89f8bf7a9bb2",
+  "scenarioName": "Star Test",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "Gist Starred",
   "request" : {
     "url" : "/gists/9903708/star",
-    "method" : "GET"
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
   },
   "response" : {
-    "status" : 404,
-    "bodyFileName" : "body-gists-9903708-unstarred.json",
+    "status" : 204,
+    "body" : "",
     "headers" : {
-      "Date" : "Sat, 31 Aug 2019 07:00:18 GMT",
-      "Content-Type" : "application/json; charset=utf-8",
+      "Date" : "Sun, 01 Sep 2019 02:35:19 GMT",
+      "Content-Type" : "application/octet-stream",
       "Server" : "GitHub.com",
-      "Status" : "404 Not Found",
+      "Status" : "204 No Content",
       "X-RateLimit-Limit" : "5000",
-      "X-RateLimit-Remaining" : "4984",
-      "X-RateLimit-Reset" : "1567238418",
+      "X-RateLimit-Remaining" : "4999",
+      "X-RateLimit-Reset" : "1567308919",
       "X-OAuth-Scopes" : "gist, notifications, repo",
       "X-Accepted-OAuth-Scopes" : "",
       "X-GitHub-Media-Type" : "unknown, github.v3",
@@ -26,8 +34,9 @@
       "X-XSS-Protection" : "1; mode=block",
       "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy" : "default-src 'none'",
-      "X-GitHub-Request-Id" : "D806:7BE9:BD241A:DB9CE8:5D6A1B02"
+      "Vary" : "Accept-Encoding",
+      "X-GitHub-Request-Id" : "E74D:9A51:1AEB246:1F93AB5:5D6B2E67"
     }
   },
-  "uuid" : "ffac033c-525e-3a55-993c-14b629e4ceaf"
+  "uuid" : "725fe929-9ea9-355d-bfe9-89f8bf7a9bb2"
 }

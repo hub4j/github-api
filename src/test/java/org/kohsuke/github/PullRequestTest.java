@@ -134,6 +134,20 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
         branchRef.delete();
     }
+    
+    @Test
+    public void testQueryPullRequestsUnqualifiedHead() throws Exception {
+        GHRepository repo = getRepository();
+        // Create PRs from two different branches to master
+        repo.createPullRequest(rnd.next(), "stable", "master", null);
+        repo.createPullRequest(rnd.next(), "rc", "master", null);
+        
+        // Query by one of the heads and make sure we only get that branch's PR back.
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("stable").base("master").list().asList();
+        assertNotNull(prs);
+        assertEquals(1, prs.size());
+        assertEquals("stable", prs.get(0).getHead().getRef());
+    }
 
     @Test
     // Requires push access to the test repo to pass

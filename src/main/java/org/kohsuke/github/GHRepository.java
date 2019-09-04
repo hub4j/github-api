@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
@@ -1739,22 +1740,29 @@ public class GHRepository extends GHObject {
     public List<CodeFrequency> getCodeFrequency() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.retrieve().asStream(getApiTailUrl("stats/code_frequency"));
+        try {
+            InputStream stream = root.retrieve().asStream(getApiTailUrl("stats/code_frequency"));
 
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
-                new TypeReference<ArrayList< ArrayList<Integer> > >() {};
-        ArrayList<ArrayList <Integer> > list = mapper.readValue(stream, typeRef);
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
+                    new TypeReference<ArrayList< ArrayList<Integer> > >() {};
+            ArrayList<ArrayList <Integer> > list = mapper.readValue(stream, typeRef);
 
-        // Convert to proper objects.
-        ArrayList<CodeFrequency> returnList = new ArrayList<CodeFrequency>();
-        for(ArrayList<Integer> item: list)
-        {
-            CodeFrequency cf = new CodeFrequency(item);
-            returnList.add(cf);
+            // Convert to proper objects.
+            ArrayList<CodeFrequency> returnList = new ArrayList<CodeFrequency>();
+            for(ArrayList<Integer> item: list)
+            {
+                CodeFrequency cf = new CodeFrequency(item);
+                returnList.add(cf);
+            }
+
+            return returnList;
+        } catch (MismatchedInputException e) {
+            // This sometimes happens when retrieving code frequency statistics
+            // for a repository for the first time. It is probably still being
+            // generated, so return null.
+            return null;
         }
-
-        return returnList;
     }
 
     public static class CodeFrequency {

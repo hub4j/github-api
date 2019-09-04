@@ -626,6 +626,7 @@ class Requester {
             // See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             if (responseCode == 202) {
                 LOGGER.log(INFO, "The statistics are still being generated. Please try again in 5 seconds.");
+                // Maybe throw an exception instead?
                 return null;
             }
 

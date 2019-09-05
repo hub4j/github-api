@@ -63,6 +63,12 @@ public class GHTeam {
         return description;
     }
 
+    public void setDescription(String description) throws IOException {
+        org.root.retrieve().method("PATCH")
+                .with("description", description)
+                .to(api(""));
+    }
+
     public int getId() {
         return id;
     }

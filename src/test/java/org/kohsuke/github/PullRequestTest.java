@@ -136,6 +136,20 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     }
     
     @Test
+    public void testQueryPullRequestsQualifiedHead() throws Exception {
+        GHRepository repo = getRepository();
+        // Create PRs from two different branches to master
+        repo.createPullRequest(rnd.next(), "stable", "master", null);
+        repo.createPullRequest(rnd.next(), "rc", "master", null);
+        
+        // Query by one of the heads and make sure we only get that branch's PR back.
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("github-api-test-org:stable").base("master").list().asList();
+        assertNotNull(prs);
+        assertEquals(1, prs.size());
+        assertEquals("stable", prs.get(0).getHead().getRef());
+    }
+    
+    @Test
     public void testQueryPullRequestsUnqualifiedHead() throws Exception {
         GHRepository repo = getRepository();
         // Create PRs from two different branches to master

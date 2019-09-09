@@ -118,15 +118,19 @@ public class GitHubBuilder {
      * login, password, oauth
      */
     public static GitHubBuilder fromEnvironment() throws IOException {
+        return fromProperties(getPropertiesFromEnvironment());
+    }
+
+    static Properties getPropertiesFromEnvironment() {
         Properties props = new Properties();
         for (Entry<String, String> e : System.getenv().entrySet()) {
             String name = e.getKey().toLowerCase(Locale.ENGLISH);
             if (name.startsWith("github_")) name=name.substring(7);
             props.put(name,e.getValue());
         }
-        return fromProperties(props);
+        return props;
     }
-    
+
     public static GitHubBuilder fromPropertyFile() throws IOException {
         File homeDir = new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");

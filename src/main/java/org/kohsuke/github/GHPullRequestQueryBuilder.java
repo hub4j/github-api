@@ -20,6 +20,9 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     }
 
     public GHPullRequestQueryBuilder head(String head) {
+        if (head != null && !head.contains(":")) {
+            head = repo.getOwnerName() + ":" + head;
+        }
         req.with("head",head);
         return this;
     }

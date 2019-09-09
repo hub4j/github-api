@@ -126,7 +126,7 @@ public class GitHubBuilder {
         }
         return fromProperties(props);
     }
-    
+
     public static GitHubBuilder fromPropertyFile() throws IOException {
         File homeDir = new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");

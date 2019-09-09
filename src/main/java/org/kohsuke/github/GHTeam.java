@@ -140,7 +140,7 @@ public class GHTeam {
      */
     public void add(GHUser user, Role role) throws IOException {
         org.root.retrieve().method("PUT")
-                .with("role", role.name())
+                .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
 

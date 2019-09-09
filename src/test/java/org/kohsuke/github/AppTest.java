@@ -245,6 +245,17 @@ public class AppTest extends AbstractGitHubApiTestBase {
         assertNotNull(team);
         return team.hasMember(gitHub.getMyself());
     }
+    
+    @Test
+    public void testShouldFetchTeam() throws Exception {
+        GHOrganization j = gitHub.getOrganization("github-api-test-org");
+        GHTeam teamByName = j.getTeams().get("Core Developers");
+
+        GHTeam teamById = gitHub.getTeam(teamByName.getId());
+        assertNotNull(teamById);
+        
+        assertEquals(teamByName, teamById);
+    }
 
     @Test
     public void testFetchPullRequest() throws Exception {

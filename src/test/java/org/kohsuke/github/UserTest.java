@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class UserTest extends AbstractGitHubApiTestBase {
+public class UserTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");

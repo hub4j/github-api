@@ -1,7 +1,8 @@
-name: Java CI
+name: Java CI Build and Test
 
 on: [push, pull_request]
-    
+
+
 jobs:
   build:
 

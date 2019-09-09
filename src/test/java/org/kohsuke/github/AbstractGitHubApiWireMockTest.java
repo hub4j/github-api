@@ -21,10 +21,21 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
  */
 public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
+    // By default the wiremock tests will, run without proxy or taking a snapshot.
+    // The tests will use only the stubbed data and will fail if requests are made for missing data.
+    // You can use the proxy without taking a snapshot while writing and debugging tests.
+    // You cannot take a snapshot without proxying.
+    protected final static boolean takeSnapshot = System.getProperty("test.github.takeSnapshot", "false") != "false";
+    protected final static boolean useProxy = takeSnapshot || System.getProperty("test.github.useProxy", "false") != "false";
+
+    public final static String STUBBED_USER_LOGIN = "placeholder-user";
+    public final static String STUBBED_USER_PASSWORD = "placeholder-password";
+
     protected GitHub gitHub;
     private final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
-    private boolean takeSnapshot = false;
+
+
 
     @Rule
     public WireMockRule githubApi = new WireMockRule(WireMockConfiguration.options()
@@ -51,7 +62,7 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
                 @Override
                 public String getName() {
-                    return "url-rewrite";
+                    return "github-api-url-rewrite";
                 }
             })
     );
@@ -59,36 +70,30 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     @Before
     public void wireMockSetup() throws Exception {
 
-        Properties props = GitHubBuilder.getPropertiesFromEnvironment();
+        GitHubBuilder builder = GitHubBuilder.fromEnvironment()
+            .withEndpoint("http://localhost:" + githubApi.port())
+            .withRateLimitHandler(RateLimitHandler.FAIL);
 
-        // By default the wiremock tests will proxy to github transparently without taking snapshots
-        // This lets you debug any
-        if(Boolean.parseBoolean(props.getProperty("snapshot", "false"))) {
-            takeSnapshot = true;
-        }
 
-        if(!props.containsKey("oauth") && !takeSnapshot) {
-            // This sets the oauth token to a placeholder wiremock tests
+        if(useProxy) {
+            githubApi.stubFor(
+                proxyAllTo("https://api.github.com/")
+                    .atPriority(100)
+            );
+        } else {
+            // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
-            props.setProperty("oauth", "placeholder-will-fail-when-not-mocking");
+            builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
 
+            // Just to be super clear
             githubApi.stubFor(
                 any(urlPathMatching(".*"))
-                    .willReturn(status(500))
+                    .willReturn(status(500).withBody("Stubbed data not found. Set test.github.use-proxy to have WireMock proxy to github"))
                     .atPriority(100));
         }
 
-        githubApi.stubFor(
-            proxyAllTo("https://api.github.com/")
-                .atPriority(100)
-        );
-
-        gitHub = GitHubBuilder.fromProperties(props)
-            .withEndpoint("http://localhost:" + githubApi.port())
-            .withRateLimitHandler(RateLimitHandler.FAIL)
-            .build();
-
+        gitHub = builder.build();
     }
 
     @After

@@ -1,0 +1,34 @@
+{
+  "id" : "0f74e225-1959-390a-8b9c-afee6ca5807b",
+  "request" : {
+    "url" : "/gists/a9b6f50c8f4e0db38cd8e12cd6e0c738",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-gists-a9b6f50c8f4e0db38cd8e12cd6e0c738-delete.txt",
+    "headers" : {
+      "Date" : "Sat, 31 Aug 2019 06:42:55 GMT",
+      "Content-Type" : "application/octet-stream",
+      "Server" : "GitHub.com",
+      "Status" : "204 No Content",
+      "X-RateLimit-Limit" : "5000",
+      "X-RateLimit-Remaining" : "4992",
+      "X-RateLimit-Reset" : "1567237374",
+      "X-OAuth-Scopes" : "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes" : "",
+      "X-GitHub-Media-Type" : "unknown, github.v3",
+      "Access-Control-Expose-Headers" : "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin" : "*",
+      "Strict-Transport-Security" : "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options" : "deny",
+      "X-Content-Type-Options" : "nosniff",
+      "X-XSS-Protection" : "1; mode=block",
+      "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy" : "default-src 'none'",
+      "Vary" : "Accept-Encoding",
+      "X-GitHub-Request-Id" : "D775:9A51:16656CB:1A4CFCA:5D6A16EF"
+    }
+  },
+  "uuid" : "0f74e225-1959-390a-8b9c-afee6ca5807b"
+}

@@ -18,6 +18,7 @@ public abstract class AbstractGitHubApiTestBase extends Assert {
 
     protected GitHub gitHub;
 
+
     @Before
     public void setUp() throws Exception {
         File f = new File(System.getProperty("user.home"), ".github.kohsuke2");

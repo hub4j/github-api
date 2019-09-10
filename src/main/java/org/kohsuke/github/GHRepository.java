@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
@@ -74,15 +75,15 @@ public class GHRepository extends GHObject {
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived;
     @JsonProperty("private")
     private boolean _private;
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
     private String pushed_at, updated_at, created_at;
-    private Map<Integer,GHMilestone> milestones = new HashMap<Integer, GHMilestone>();
+    private Map<Integer,GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
 
     private String default_branch,language;
-    private Map<String,GHCommit> commits = new HashMap<String, GHCommit>();
+    private Map<String,GHCommit> commits = new WeakHashMap<String, GHCommit>();
 
     @SkipFromToString
     private GHRepoPermission permissions;
@@ -404,6 +405,10 @@ public class GHRepository extends GHObject {
 
     public boolean isFork() {
         return fork;
+    }
+
+    public boolean isArchived() {
+        return archived;
     }
 
     /**
@@ -774,10 +779,36 @@ public class GHRepository extends GHObject {
      *      of a pull request.
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
+        return createPullRequest(title, head, base, body, true);
+    }
+
+    /**
+     * Creates a new pull request. Maintainer's permissions aware.
+     *
+     * @param title
+     *      Required. The title of the pull request.
+     * @param head
+     *      Required. The name of the branch where your changes are implemented.
+     *      For cross-repository pull requests in the same network,
+     *      namespace head with a user like this: username:branch.
+     * @param base
+     *      Required. The name of the branch you want your changes pulled into.
+     *      This should be an existing branch on the current repository.
+     * @param body
+     *      The contents of the pull request. This is the markdown description
+     *      of a pull request.
+     * @param maintainerCanModify
+     *      Indicates whether maintainers can modify the pull request.
+     */
+    public GHPullRequest createPullRequest(String title, String head, String base, String body,
+            boolean maintainerCanModify) throws IOException {
         return new Requester(root).with("title",title)
                 .with("head",head)
                 .with("base",base)
-                .with("body",body).to(getApiTailUrl("pulls"),GHPullRequest.class).wrapUp(this);
+                .with("body",body)
+                .with("maintainer_can_modify", maintainerCanModify)
+                .to(getApiTailUrl("pulls"),GHPullRequest.class)
+                .wrapUp(this);
     }
 
     /**

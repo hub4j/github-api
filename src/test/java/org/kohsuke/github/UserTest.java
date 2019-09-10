@@ -9,22 +9,22 @@ import java.util.Set;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class UserTest extends AbstractGitHubApiTestBase {
+public class UserTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");
         assertNotEquals(
-            count50(u.listFollowers()),
-            count50(u.listFollows()));
+            count30(u.listFollowers()),
+            count30(u.listFollows()));
     }
 
-    private Set<GHUser> count50(PagedIterable<GHUser> l) {
+    private Set<GHUser> count30(PagedIterable<GHUser> l) {
         Set<GHUser> users = new HashSet<GHUser>();
         PagedIterator<GHUser> itr = l.iterator();
-        for (int i=0; i<50 && itr.hasNext(); i++) {
+        for (int i=0; i<30 && itr.hasNext(); i++) {
             users.add(itr.next());
         }
-        assertEquals(50, users.size());
+        assertEquals(30, users.size());
         return users;
     }
 }

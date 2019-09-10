@@ -24,19 +24,21 @@
 
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-
-import static org.kohsuke.github.Previews.*;
+import java.util.Set;
 
 /**
  * Represents an issue on GitHub.
@@ -214,6 +216,67 @@ public class GHIssue extends GHObject implements Reactable{
 
     public void setLabels(String... labels) throws IOException {
         editIssue("labels",labels);
+    }
+
+    /**
+     * Adds labels to the issue.
+     *
+     * @param names Names of the label
+     */
+    public void addLabels(String... names) throws IOException {
+        _addLabels(Arrays.asList(names));
+    }
+
+    public void addLabels(GHLabel... labels) throws IOException {
+        addLabels(Arrays.asList(labels));
+    }
+
+    public void addLabels(Collection<GHLabel> labels) throws IOException {
+        _addLabels(GHLabel.toNames(labels));
+    }
+
+    private void _addLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel label : getLabels()) {
+            newLabels.add(label.getName());
+        }
+        for (String name : names) {
+            if (!newLabels.contains(name)) {
+                newLabels.add(name);
+            }
+        }
+        setLabels(newLabels.toArray(new String[0]));
+    }
+
+    /**
+     * Remove a given label by name from this issue.
+     */
+    public void removeLabels(String... names) throws IOException {
+        _removeLabels(Arrays.asList(names));
+    }
+
+    /**
+     * @see #removeLabels(String...)
+     */
+    public void removeLabels(GHLabel... labels) throws IOException {
+        removeLabels(Arrays.asList(labels));
+    }
+
+    public void removeLabels(Collection<GHLabel> labels) throws IOException {
+        _removeLabels(GHLabel.toNames(labels));
+    }
+
+    private void _removeLabels(Collection<String> names) throws IOException {
+        List<String> newLabels = new ArrayList<String>();
+
+        for (GHLabel l : getLabels()) {
+            if (!names.contains(l.getName())) {
+                newLabels.add(l.getName());
+            }
+        }
+
+        setLabels(newLabels.toArray(new String[0]));
     }
 
     /**

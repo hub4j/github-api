@@ -452,7 +452,6 @@ public class GitHub {
         return new PagedIterable<GHOrganization>() {
             @Override
             public PagedIterator<GHOrganization> _iterator(int pageSize) {
-                System.out.println("page size: " + pageSize);
                 return new PagedIterator<GHOrganization>(retrieve().with("since",since)
                         .asIterator("/organizations", GHOrganization[].class, pageSize)) {
                     @Override
@@ -474,6 +473,14 @@ public class GitHub {
         String[] tokens = name.split("/");
         return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
     }
+
+    /**
+     * Gets the repository object from its ID
+     */
+    public GHRepository getRepositoryById(String id) throws IOException {
+        return retrieve().to("/repositories/" + id, GHRepository.class).wrap(this);
+    }
+
     /**
      * Returns a list of popular open source licenses
      *
@@ -578,6 +585,13 @@ public class GitHub {
         return allMyTeams;
     }
 
+    /**
+     * Gets a sigle team by ID.
+     */
+    public GHTeam getTeam(int id) throws IOException {
+        return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
+    }
+    
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
@@ -694,7 +708,7 @@ public class GitHub {
     /**
      * Ensures that the credential is valid.
      */
-    public boolean isCredentialValid() throws IOException {
+    public boolean isCredentialValid() {
         try {
             retrieve().to("/user", GHUser.class);
             return true;

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,29 +13,42 @@ import static org.hamcrest.CoreMatchers.*;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class PullRequestTest extends AbstractGitHubApiTestBase {
+public class PullRequestTest extends AbstractGitHubApiWireMockTest {
+
     @Test
     public void createPullRequest() throws Exception {
-        String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        String name = "createPullRequest";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         System.out.println(p.getUrl());
         assertEquals(name, p.getTitle());
     }
 
     @Test
     public void createPullRequestComment() throws Exception {
-        String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+        String name = "createPullRequestComment";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         p.comment("Some comment");
     }
 
+    @Test
+    public void closePullRequest() throws Exception {
+        String name = "closePullRequest";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        System.out.println(p.getUrl());
+        assertEquals(name, p.getTitle());
+        assertEquals(GHIssueState.OPEN, getRepository().getPullRequest(p.getNumber()).getState());
+        p.close();
+        assertEquals(GHIssueState.CLOSED, getRepository().getPullRequest(p.getNumber()).getState());
+    }
+
+
     @Test 
-    public void testPullRequestReviews() throws Exception {
-        String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+    public void pullRequestReviews() throws Exception {
+        String name = "testPullRequestReviews";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         GHPullRequestReview draftReview = p.createReview()
             .body("Some draft review")
-            .comment("Some niggle", "changelog.html", 1)
+            .comment("Some niggle", "README.md", 1)
             .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
@@ -52,18 +66,18 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
         assertEquals("Some niggle", comment.getBody());
         draftReview = p.createReview()
             .body("Some new review")
-            .comment("Some niggle", "changelog.html", 1)
+            .comment("Some niggle", "README.md", 1)
             .create();
         draftReview.delete();
     }
 
     @Test
-    public void testPullRequestReviewComments() throws Exception {
-        String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "stable", "master", "## test");
+    public void pullRequestReviewComments() throws Exception {
+        String name = "pullRequestReviewComments";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         System.out.println(p.getUrl());
         assertTrue(p.listReviewComments().asList().isEmpty());
-        p.createReviewComment("Sample review comment", p.getHead().getSha(), "cli/pom.xml", 5);
+        p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
         List<GHPullRequestReviewComment> comments = p.listReviewComments().asList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
@@ -81,12 +95,15 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testMergeCommitSHA() throws Exception {
-        String name = rnd.next();
-        GHPullRequest p = getRepository().createPullRequest(name, "mergeable-branch", "master", "## test");
-        for (int i=0; i<100; i++) {
+    public void mergeCommitSHA() throws Exception {
+        String name = "mergeCommitSHA";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/mergeable_branch", "master", "## test");
+        p.getMergeable();
+        // mergeability computation takes time. give it more chance
+        Thread.sleep(1000);
+        for (int i=0; i<10; i++) {
             GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
-            if (updated.getMergeCommitSha()!=null) {
+            if (updated.getMergeable() && updated.getMergeCommitSha()!=null) {
                 // make sure commit exists
                 GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
                 assertNotNull(commit);
@@ -94,52 +111,82 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
             }
 
             // mergeability computation takes time. give it more chance
-            Thread.sleep(100);
+            Thread.sleep(1000);
         }
         // hmm?
         fail();
     }
 
     @Test
-    public void testSquashMerge() throws Exception {
-        String name = rnd.next();
+    public void squashMerge() throws Exception {
+        String name = "squashMerge";
+        String branchName = "test/" + name;
         GHRef masterRef = getRepository().getRef("heads/master");
-        GHRef branchRef = getRepository().createRef("refs/heads/" + name, masterRef.getObject().getSha());
+        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, masterRef.getObject().getSha());
 
-        getRepository().createContent(name, name, name, name);
+        getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
-        GHPullRequest p = getRepository().createPullRequest(name, name, "master", "## test squash");
+        GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
-        branchRef.delete();
     }
-    @Test
-    public void testUpdateContentSquashMerge() throws Exception {
-        String name = rnd.next();
-        GHRef masterRef = getRepository().getRef("heads/master");
-        GHRef branchRef = getRepository().createRef("refs/heads/" + name, masterRef.getObject().getSha());
 
-        GHContentUpdateResponse response = getRepository().createContent(name, name, name, name);
+    @Test
+    public void updateContentSquashMerge() throws Exception {
+        String name = "updateContentSquashMerge";
+        String branchName = "test/" + name;
+
+        GHRef masterRef = getRepository().getRef("heads/master");
+        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, masterRef.getObject().getSha());
+
+        GHContentUpdateResponse response = getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
 
         getRepository().createContent()
-                .content(name + name)
-                .path(name)
-                .branch(name)
-                .message(name)
-                .sha(response.getContent().getSha())
-                .commit();
-        GHPullRequest p = getRepository().createPullRequest(name, name, "master", "## test squash");
+            .content(name + name)
+            .path(name)
+            .branch(branchName)
+            .message(name)
+            .sha(response.getContent().getSha())
+            .commit();
+        GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
-        branchRef.delete();
+    }
+    
+    @Test
+    public void queryPullRequestsQualifiedHead() throws Exception {
+        GHRepository repo = getRepository();
+        // Create PRs from two different branches to master
+        repo.createPullRequest("queryPullRequestsQualifiedHead_stable", "test/stable", "master", null);
+        repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
+        
+        // Query by one of the heads and make sure we only get that branch's PR back.
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("github-api-test-org:test/stable").base("master").list().asList();
+        assertNotNull(prs);
+        assertEquals(1, prs.size());
+        assertEquals("test/stable", prs.get(0).getHead().getRef());
+    }
+    
+    @Test
+    public void queryPullRequestsUnqualifiedHead() throws Exception {
+        GHRepository repo = getRepository();
+        // Create PRs from two different branches to master
+        repo.createPullRequest("queryPullRequestsUnqualifiedHead_stable", "test/stable", "master", null);
+        repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
+        
+        // Query by one of the heads and make sure we only get that branch's PR back.
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master").list().asList();
+        assertNotNull(prs);
+        assertEquals(1, prs.size());
+        assertEquals("test/stable", prs.get(0).getHead().getRef());
     }
 
     @Test
     // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
-        GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
-        String label = rnd.next();
+        GHPullRequest p = getRepository().createPullRequest("setLabels", "test/stable", "master", "## test");
+        String label = "setLabels_label_name";
         p.setLabels(label);
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
@@ -150,7 +197,7 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     @Test
     // Requires push access to the test repo to pass
     public void setAssignee() throws Exception {
-        GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest("setAssignee", "test/stable", "master", "## test");
         GHMyself user = gitHub.getMyself();
         p.assignTo(user);
 
@@ -158,8 +205,8 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
     }
 
     @Test
-    public void testGetUser() throws IOException {
-        GHPullRequest p = getRepository().createPullRequest(rnd.next(), "stable", "master", "## test");
+    public void getUser() throws IOException {
+        GHPullRequest p = getRepository().createPullRequest("getUser", "test/stable", "master", "## test");
         GHPullRequest prSingle = getRepository().getPullRequest(p.getNumber());
         assertNotNull(prSingle.getUser().root);
         prSingle.getMergeable();
@@ -175,12 +222,15 @@ public class PullRequestTest extends AbstractGitHubApiTestBase {
 
     @After
     public void cleanUp() throws Exception {
-        for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
-            pr.close();
+        // Cleanup is only needed when proxying
+        if (useProxy) {
+            for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
+                pr.close();
+            }
         }
     }
 
     private GHRepository getRepository() throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("jenkins");
+        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
     }
 }

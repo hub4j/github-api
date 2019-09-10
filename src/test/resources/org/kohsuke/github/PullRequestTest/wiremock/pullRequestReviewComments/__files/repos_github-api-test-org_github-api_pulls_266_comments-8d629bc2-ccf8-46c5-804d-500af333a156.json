@@ -1,0 +1,51 @@
+[
+  {
+    "url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/comments/321995146",
+    "pull_request_review_id": 285200976,
+    "id": 321995146,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDMyMTk5NTE0Ng==",
+    "diff_hunk": "@@ -1,3 +1,3 @@\n-Java API for GitHub",
+    "path": "README.md",
+    "position": 1,
+    "original_position": 1,
+    "commit_id": "2d29c787b46ce61b98a1c13e05e21ebc21f49dbf",
+    "original_commit_id": "2d29c787b46ce61b98a1c13e05e21ebc21f49dbf",
+    "user": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Updated review comment",
+    "created_at": "2019-09-08T07:24:44Z",
+    "updated_at": "2019-09-08T07:24:45Z",
+    "html_url": "https://github.com/github-api-test-org/github-api/pull/266#discussion_r321995146",
+    "pull_request_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/266",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/comments/321995146"
+      },
+      "html": {
+        "href": "https://github.com/github-api-test-org/github-api/pull/266#discussion_r321995146"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/266"
+      }
+    }
+  }
+]

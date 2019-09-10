@@ -222,8 +222,11 @@ public class PullRequestTest extends AbstractGitHubApiWireMockTest {
 
     @After
     public void cleanUp() throws Exception {
-        for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
-            pr.close();
+        // Cleanup is only needed when proxying
+        if (useProxy) {
+            for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
+                pr.close();
+            }
         }
     }
 

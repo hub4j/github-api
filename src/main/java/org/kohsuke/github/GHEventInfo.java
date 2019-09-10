@@ -34,7 +34,7 @@ public class GHEventInfo {
         "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "JSON API")
     public static class GHEventRepository {
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        private int id;
+        private long id;
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private String url;     // repository API URL
         private String name;    // owner/repo

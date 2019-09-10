@@ -762,10 +762,36 @@ public class GHRepository extends GHObject {
      *      of a pull request.
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
+        return createPullRequest(title, head, base, body, true);
+    }
+
+    /**
+     * Creates a new pull request. Maintainer's permissions aware.
+     *
+     * @param title
+     *      Required. The title of the pull request.
+     * @param head
+     *      Required. The name of the branch where your changes are implemented.
+     *      For cross-repository pull requests in the same network,
+     *      namespace head with a user like this: username:branch.
+     * @param base
+     *      Required. The name of the branch you want your changes pulled into.
+     *      This should be an existing branch on the current repository.
+     * @param body
+     *      The contents of the pull request. This is the markdown description
+     *      of a pull request.
+     * @param maintainerCanModify
+     *      Indicates whether maintainers can modify the pull request.
+     */
+    public GHPullRequest createPullRequest(String title, String head, String base, String body,
+            boolean maintainerCanModify) throws IOException {
         return new Requester(root).with("title",title)
                 .with("head",head)
                 .with("base",base)
-                .with("body",body).to(getApiTailUrl("pulls"),GHPullRequest.class).wrapUp(this);
+                .with("body",body)
+                .with("maintainer_can_modify", maintainerCanModify)
+                .to(getApiTailUrl("pulls"),GHPullRequest.class)
+                .wrapUp(this);
     }
 
     /**

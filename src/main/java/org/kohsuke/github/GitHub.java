@@ -708,7 +708,7 @@ public class GitHub {
     /**
      * Ensures that the credential is valid.
      */
-    public boolean isCredentialValid() throws IOException {
+    public boolean isCredentialValid() {
         try {
             retrieve().to("/user", GHUser.class);
             return true;

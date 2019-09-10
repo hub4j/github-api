@@ -1,0 +1,50 @@
+{
+  "id": "778d6679-3928-4f4c-beda-b8f1ae11aac3",
+  "name": "repos_github-api-test-org_github-api_git_refs",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/git/refs",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/test/updateContentSquashMerge\",\"sha\":\"3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-778d6679-3928-4f4c-beda-b8f1ae11aac3.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:24:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4939",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"ef1495292577b64a037f529dcaf2232b\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/github-api-test-org/github-api/git/refs/heads/test/updateContentSquashMerge",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF7E:15CC:AA7521:C68AD5:5D74ACA2"
+    }
+  },
+  "uuid": "778d6679-3928-4f4c-beda-b8f1ae11aac3",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "squashMerge",
+    "path": "squashMerge",
+    "sha": "58a8e2e48db272555de87ee74d36770d6172845b",
+    "size": 11,
+    "url": "https://api.github.com/repos/github-api-test-org/github-api/contents/squashMerge?ref=test/squashMerge",
+    "html_url": "https://github.com/github-api-test-org/github-api/blob/test/squashMerge/squashMerge",
+    "git_url": "https://api.github.com/repos/github-api-test-org/github-api/git/blobs/58a8e2e48db272555de87ee74d36770d6172845b",
+    "download_url": "https://raw.githubusercontent.com/github-api-test-org/github-api/test/squashMerge/squashMerge",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/github-api-test-org/github-api/contents/squashMerge?ref=test/squashMerge",
+      "git": "https://api.github.com/repos/github-api-test-org/github-api/git/blobs/58a8e2e48db272555de87ee74d36770d6172845b",
+      "html": "https://github.com/github-api-test-org/github-api/blob/test/squashMerge/squashMerge"
+    }
+  },
+  "commit": {
+    "sha": "4f8759011021d7e954334e8e887c2e485b51f57a",
+    "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOjRmODc1OTAxMTAyMWQ3ZTk1NDMzNGU4ZTg4N2MyZTQ4NWI1MWY1N2E=",
+    "url": "https://api.github.com/repos/github-api-test-org/github-api/git/commits/4f8759011021d7e954334e8e887c2e485b51f57a",
+    "html_url": "https://github.com/github-api-test-org/github-api/commit/4f8759011021d7e954334e8e887c2e485b51f57a",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-09-08T07:24:49Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-09-08T07:24:49Z"
+    },
+    "tree": {
+      "sha": "2d70711de9ad39070f370221ef17943a5f4490d0",
+      "url": "https://api.github.com/repos/github-api-test-org/github-api/git/trees/2d70711de9ad39070f370221ef17943a5f4490d0"
+    },
+    "message": "squashMerge",
+    "parents": [
+      {
+        "sha": "912e2176a00e60e02196737e0ae4c218a14b5dcb",
+        "url": "https://api.github.com/repos/github-api-test-org/github-api/git/commits/912e2176a00e60e02196737e0ae4c218a14b5dcb",
+        "html_url": "https://github.com/github-api-test-org/github-api/commit/912e2176a00e60e02196737e0ae4c218a14b5dcb"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

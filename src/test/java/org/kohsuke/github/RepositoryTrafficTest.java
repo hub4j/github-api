@@ -17,8 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-public class RepositoryTrafficTest {
+public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
     final private String login = "kohsuke", repositoryName = "github-api";
+
+    @Override
+    protected GitHubBuilder getGitHubBuilder() {
+        return new GitHubBuilder()
+            .withPassword(login, null);
+    }
 
     @SuppressWarnings("unchecked")
     private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual){
@@ -49,8 +55,6 @@ public class RepositoryTrafficTest {
         ObjectMapper mapper = new ObjectMapper().setDateFormat(dateFormat);
         String mockedResponse = mapper.writeValueAsString(expectedResult);
 
-
-        GitHub gitHub = GitHub.connect(login, null);
         GitHub gitHubSpy = Mockito.spy(gitHub);
         GHRepository repo = gitHubSpy.getUser(login).getRepository(repositoryName);
 
@@ -71,8 +75,8 @@ public class RepositoryTrafficTest {
 
 
         // this covers calls on "uc" in Requester.setupConnection and Requester.buildRequest
-        URL trafficURL = new URL(
-                "https://api.github.com/repos/"+login+"/"+repositoryName+"/traffic/" +
+        URL trafficURL = gitHub.getApiURL(
+            "/repos/"+login+"/"+repositoryName+"/traffic/" +
                 ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones")
         );
         Mockito.doReturn(mockHttpURLConnection).when(connectorSpy).connect(Mockito.eq(trafficURL));
@@ -149,7 +153,7 @@ public class RepositoryTrafficTest {
     @Test
     public void testGetTrafficStatsAccessFailureDueToInsufficientPermissions() throws IOException {
         String errorMsg = "Exception should be thrown, since we don't have permission to access repo traffic info.";
-        GitHub gitHub = GitHub.connect(login, null);
+
         GHRepository repo = gitHub.getUser(login).getRepository(repositoryName);
         try {
             repo.getViewTraffic();

@@ -15,6 +15,17 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class PullRequestTest extends AbstractGitHubApiWireMockTest {
 
+    @Before
+    @After
+    public void cleanUp() throws Exception {
+        // Cleanup is only needed when proxying
+        if (!githubApi.isUseProxy()) return;
+
+        for (GHPullRequest pr : getRepository(this.gitHubBeforeAfter).getPullRequests(GHIssueState.OPEN)) {
+            pr.close();
+        }
+    }
+
     @Test
     public void createPullRequest() throws Exception {
         String name = "createPullRequest";
@@ -220,17 +231,11 @@ public class PullRequestTest extends AbstractGitHubApiWireMockTest {
         }
     }
 
-    @After
-    public void cleanUp() throws Exception {
-        // Cleanup is only needed when proxying
-        if (useProxy) {
-            for (GHPullRequest pr : getRepository().getPullRequests(GHIssueState.OPEN)) {
-                pr.close();
-            }
-        }
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 
-    private GHRepository getRepository() throws IOException {
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
     }
 }

@@ -11,6 +11,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.kohsuke.github.junit.GitHubApiWireMockRule;
 import org.kohsuke.github.junit.WireMockRule;
 
 import java.io.File;
@@ -21,55 +23,36 @@ import java.util.Properties;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 /**
- * @author Kohsuke Kawaguchi
+ * @author Liam Newman
  */
 public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
-    // By default the wiremock tests will run without proxy or taking a snapshot.
-    // The tests will use only the stubbed data and will fail if requests are made for missing data.
-    // You can use the proxy without taking a snapshot while writing and debugging tests.
-    // You cannot take a snapshot without proxying.
-    protected final static boolean takeSnapshot = System.getProperty("test.github.takeSnapshot", "false") != "false";
-    protected final static boolean useProxy = takeSnapshot || System.getProperty("test.github.useProxy", "false") != "false";
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
     public final static String STUBBED_USER_LOGIN = "placeholder-user";
     public final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
+    /**
+     * {@link GitHub} instance for use during test.
+     * Traffic will be part of snapshot when taken.
+     */
     protected GitHub gitHub;
-    private final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
+
+    /**
+     * {@link GitHub} instance for use before/after test.
+     * Traffic will not be part of snapshot when taken.
+     * Should only be used when isUseProxy() or isTakeSnapShot().
+     */
+    protected GitHub gitHubBeforeAfter;
+
+    protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
-
-
     @Rule
-    public WireMockRule githubApi = new WireMockRule(WireMockConfiguration.options()
-        .dynamicPort()
-        .usingFilesUnderDirectory(baseRecordPath)
-        .extensions(
-            new ResponseTransformer() {
-                @Override
-                public Response transform(Request request, Response response, FileSource files,
-                                          Parameters parameters) {
-                    if ("application/json"
-                            .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())
-                        && !response.getHeaders().getHeader("Content-Encoding").containsValue("gzip")) {
-                        return Response.Builder.like(response)
-                            .but()
-                            .body(response.getBodyAsString()
-                                .replace("https://api.github.com/",
-                                    "http://localhost:" + githubApi.port() + "/")
-                            )
-                            .build();
-                    }
-                    return response;
-                }
-
-                @Override
-                public String getName() {
-                    return "github-api-url-rewrite";
-                }
-            })
+    public GitHubApiWireMockRule githubApi = new GitHubApiWireMockRule(
+        WireMockConfiguration.options()
+            .dynamicPort()
+            .usingFilesUnderDirectory(baseRecordPath)
     );
 
     private static GitHubBuilder createGitHubBuilder() {
@@ -96,13 +79,6 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
         } catch (IOException e) {
         }
 
-        if (!useProxy) {
-            // This sets the user and password to a placeholder for wiremock testing
-            // This makes the tests believe they are running with permissions
-            // The recorded stubs will behave like they running with permissions
-            builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
-        }
-
         return builder.withRateLimitHandler(RateLimitHandler.FAIL);
     }
 
@@ -112,31 +88,25 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
     @Before
     public void wireMockSetup() throws Exception {
-        if(useProxy) {
-            githubApi.stubFor(
-                proxyAllTo("https://api.github.com/")
-                    .atPriority(100)
-            );
-        } else {
-            // Just to be super clear
-            githubApi.stubFor(
-                any(urlPathMatching(".*"))
-                    .willReturn(status(500).withBody("Stubbed data not found. Set test.github.use-proxy to have WireMock proxy to github"))
-                    .atPriority(100));
+        GitHubBuilder builder = getGitHubBuilder();
+
+        if (!githubApi.isUseProxy()) {
+            // This sets the user and password to a placeholder for wiremock testing
+            // This makes the tests believe they are running with permissions
+            // The recorded stubs will behave like they running with permissions
+            builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
-
-        gitHub = getGitHubBuilder()
+        gitHub = builder
             .withEndpoint("http://localhost:" + githubApi.port())
             .build();
-    }
 
-    @After
-    public void snapshotRequests() {
-        if (takeSnapshot) {
-            githubApi.snapshotRecord(recordSpec()
-                .forTarget("https://api.github.com")
-                .extractTextBodiesOver(255));
+        if (githubApi.isUseProxy()) {
+            gitHubBeforeAfter = builder
+                .withEndpoint("https://api.github.com/")
+                .build();
+        } else {
+            gitHubBeforeAfter = null;
         }
     }
 }

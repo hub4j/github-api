@@ -484,8 +484,6 @@ public class GitHub {
     /**
      * Returns a list of popular open source licenses
      *
-     * WARNING: This uses a PREVIEW API.
-     *
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      *
      * @return a list of popular open source licenses

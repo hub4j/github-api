@@ -601,7 +601,7 @@ public class GitHub {
     }
 
     /**
-     * Gets a sigle gist by ID.
+     * Gets a single gist by ID.
      */
     public GHGist getGist(String id) throws IOException {
         return retrieve().to("/gists/"+id,GHGist.class).wrapUp(this);

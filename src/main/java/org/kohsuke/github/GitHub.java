@@ -225,7 +225,7 @@ public class GitHub {
     /**
      * Connects to GitHub anonymously.
      *
-     * All operations that requires authentication will fail.
+     * All operations that require authentication will fail.
      */
     public static GitHub connectAnonymously() throws IOException {
         return new GitHubBuilder().build();
@@ -234,7 +234,7 @@ public class GitHub {
     /**
      * Connects to GitHub Enterprise anonymously.
      *
-     * All operations that requires authentication will fail.
+     * All operations that require authentication will fail.
      */
     public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).build();

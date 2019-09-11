@@ -20,7 +20,7 @@ public abstract class AbstractGitHubApiTestBase extends AbstractGitHubApiWireMoc
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue( "All tests inheriting from this class are not guaranteed to work without proxy", useProxy);
+        assumeTrue( "All tests inheriting from this class are not guaranteed to work without proxy", githubApi.isUseProxy());
     }
 
     protected GHUser getUser() {

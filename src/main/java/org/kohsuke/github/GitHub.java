@@ -546,7 +546,7 @@ public class GitHub {
     }
 
     /**
-     * This method returns a shallowly populated organizations.
+     * This method returns shallowly populated organizations.
      *
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}
      * TODO: make this automatic.

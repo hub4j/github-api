@@ -123,7 +123,7 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      * @param login
-     *      The use ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
+     *      The user ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
      *      provided or if logging in anonymously. Specifying this would save one API call.
      * @param oauthAccessToken
      *      Secret OAuth token.

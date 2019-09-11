@@ -104,7 +104,7 @@ public class GitHub {
      * to represent different ways of authentication.
      *
      * <dl>
-     *     <dt>Loging anonymously
+     *     <dt>Log in anonymously
      *     <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
      *
      *     <dt>Log in with password

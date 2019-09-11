@@ -49,9 +49,6 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.1</version>
-        <configuration>
-          <rerunFailingTestsCount>2</rerunFailingTestsCount>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

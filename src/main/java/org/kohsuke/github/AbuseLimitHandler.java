@@ -57,7 +57,7 @@ public abstract class AbuseLimitHandler {
     public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-            throw (IOException)new IOException("Abust limit reached").initCause(e);
+            throw (IOException)new IOException("Abuse limit reached").initCause(e);
         }
     };
 }

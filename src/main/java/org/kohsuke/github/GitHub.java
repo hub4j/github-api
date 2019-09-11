@@ -404,7 +404,7 @@ public class GitHub {
 
     
     /**
-     * clears all cached data in order for external changes (modifications and del
+     * clears all cached data in order for external changes (modifications and del) to be reflected
      */
     public void refreshCache() {
         users.clear();

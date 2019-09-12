@@ -83,12 +83,7 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     }
 
     protected GitHubBuilder getGitHubBuilder() {
-        return githubBuilder;
-    }
-
-    @Before
-    public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder();
+        GitHubBuilder builder = githubBuilder.clone();
 
         if (!githubApi.isUseProxy()) {
             // This sets the user and password to a placeholder for wiremock testing
@@ -97,12 +92,19 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
+        return builder;
+    }
+
+    @Before
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder()
+            .withEndpoint(githubApi.baseUrl());
+
         gitHub = builder
-            .withEndpoint("http://localhost:" + githubApi.port())
             .build();
 
         if (githubApi.isUseProxy()) {
-            gitHubBeforeAfter = builder
+            gitHubBeforeAfter = getGitHubBuilder()
                 .withEndpoint("https://api.github.com/")
                 .build();
         } else {

@@ -104,7 +104,7 @@ public class GitHub {
      * to represent different ways of authentication.
      *
      * <dl>
-     *     <dt>Loging anonymously
+     *     <dt>Log in anonymously
      *     <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
      *
      *     <dt>Log in with password
@@ -129,7 +129,7 @@ public class GitHub {
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      * @param login
-     *      The use ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
+     *      The user ID on GitHub that you are logging in as. Can be omitted if the OAuth token is
      *      provided or if logging in anonymously. Specifying this would save one API call.
      * @param oauthAccessToken
      *      Secret OAuth token.
@@ -188,7 +188,7 @@ public class GitHub {
      * Version that connects to GitHub Enterprise.
      *
      * @param apiUrl
-     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *      The URL of GitHub (or GitHub Enterprise) API endpoint, such as "https://api.github.com" or
      *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
@@ -233,7 +233,7 @@ public class GitHub {
     /**
      * Connects to GitHub anonymously.
      *
-     * All operations that requires authentication will fail.
+     * All operations that require authentication will fail.
      */
     public static GitHub connectAnonymously() throws IOException {
         return new GitHubBuilder().build();
@@ -242,7 +242,7 @@ public class GitHub {
     /**
      * Connects to GitHub Enterprise anonymously.
      *
-     * All operations that requires authentication will fail.
+     * All operations that require authentication will fail.
      */
     public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).build();
@@ -412,7 +412,7 @@ public class GitHub {
 
     
     /**
-     * clears all cached data in order for external changes (modifications and del
+     * clears all cached data in order for external changes (modifications and del) to be reflected
      */
     public void refreshCache() {
         users.clear();
@@ -492,8 +492,6 @@ public class GitHub {
     /**
      * Returns a list of popular open source licenses
      *
-     * WARNING: This uses a PREVIEW API.
-     *
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      *
      * @return a list of popular open source licenses
@@ -556,7 +554,7 @@ public class GitHub {
     }
 
     /**
-     * This method returns a shallowly populated organizations.
+     * This method returns shallowly populated organizations.
      *
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}
      * TODO: make this automatic.
@@ -611,7 +609,7 @@ public class GitHub {
     }
 
     /**
-     * Gets a sigle gist by ID.
+     * Gets a single gist by ID.
      */
     public GHGist getGist(String id) throws IOException {
         return retrieve().to("/gists/"+id,GHGist.class).wrapUp(this);
@@ -651,7 +649,7 @@ public class GitHub {
      *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
-     * to finally createa repository.
+     * to finally create a repository.
      *
      * <p>
      * To create a repository in an organization, see
@@ -728,7 +726,7 @@ public class GitHub {
     /**
      * Ensures that the credential is valid.
      */
-    public boolean isCredentialValid() throws IOException {
+    public boolean isCredentialValid() {
         try {
             retrieve().to("/user", GHUser.class);
             return true;

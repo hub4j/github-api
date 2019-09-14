@@ -24,7 +24,8 @@ import static org.mockito.Mockito.when;
 /**
  * Unit test for {@link GitHub}.
  */
-public class GitHubTest {
+public class GitHubTest extends AbstractGitHubApiTestBase {
+
     @Test
     public void testOffline() throws Exception {
         GitHub hub = GitHub.offline();

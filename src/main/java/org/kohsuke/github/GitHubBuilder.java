@@ -43,13 +43,13 @@ public class GitHubBuilder {
      *
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
-     * @return the configured Builder from credentials defined on the system or in the environment.
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
      *
      * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
-    public static GitHubBuilder fromCredentials() throws IOException {
+    static GitHubBuilder fromCredentials() throws IOException {
         Exception cause = null;
-        GitHubBuilder builder;
+        GitHubBuilder builder = null;
 
         try {
             builder = fromPropertyFile();
@@ -128,7 +128,7 @@ public class GitHubBuilder {
         }
         return fromProperties(props);
     }
-    
+
     public static GitHubBuilder fromPropertyFile() throws IOException {
         File homeDir = new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");

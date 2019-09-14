@@ -1,0 +1,50 @@
+{
+  "id": "2f93eec6-32ad-4c3d-a7bf-33a134d16dbe",
+  "name": "gists",
+  "request": {
+    "url": "/gists",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"public\":false,\"description\":\"Test Gist\",\"files\":{\"abc.txt\":{\"content\":\"abc\"},\"def.txt\":{\"content\":\"def\"}}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "gists-2f93eec6-32ad-4c3d-a7bf-33a134d16dbe.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 06:47:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4800",
+      "X-RateLimit-Reset": "1567926046",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"32bd93e7c792880260a7f86efe7fa182\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/gists/9faa55cd67b21a789bb44e34e5e41f72",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FD4E:40BC:96FAEF:B22CDC:5D74A40D"
+    }
+  },
+  "uuid": "2f93eec6-32ad-4c3d-a7bf-33a134d16dbe",
+  "persistent": true,
+  "insertionIndex": 2
+}

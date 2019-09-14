@@ -1,108 +1,88 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
-public class GHAppTest {
+/**
+ * Tests for the GitHub App API methods
+ *
+ * @author Paulo Miguel Almeida
+ */
+public class GHAppTest extends AbstractGitHubApiWireMockTest {
 
-    @Rule
-    public WireMockRule githubApi = new WireMockRule(WireMockConfiguration.options()
-            .dynamicPort().usingFilesUnderClasspath("api"));
-    public GitHub github;
-
-    @Before
-    public void prepareMockGitHub() throws Exception {
-        githubApi.stubFor(get(urlMatching(".*")).atPriority(10));
-        github = new GitHubBuilder().withJwtToken("bogus").withEndpoint("http://localhost:" + githubApi.port()).build();
+    protected GitHubBuilder getGitHubBuilder() {
+        return super.getGitHubBuilder()
+                // ensure that only JWT will be used against the tests below
+                .withPassword(null, null)
+                .withJwtToken("bogus");
     }
 
     @Test
     public void getGitHubApp() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-app.json");
-        JsonNode ownerNode = rootNode.get("owner");
-
-        GHApp app = github.getApp();
-        assertThat(app.id, is(rootNode.get("id").asLong()));
-        assertThat(app.getOwner().id, is(ownerNode.get("id").asLong()));
-        assertThat(app.getOwner().login, is(ownerNode.get("login").asText()));
-        assertThat(app.getName(), is(rootNode.get("name").asText()));
-        assertThat(app.getDescription(), is(rootNode.get("description").asText()));
-        assertThat(app.getExternalUrl(), is(rootNode.get("external_url").asText()));
-        assertThat(app.getHtmlUrl().toString(), is(rootNode.get("html_url").asText()));
-        assertThat(app.getCreatedAt(), is(GitHub.parseDate(rootNode.get("created_at").asText())));
-        assertThat(app.getUpdatedAt(), is(GitHub.parseDate(rootNode.get("updated_at").asText())));
-        assertThat(app.getPermissions().size(), is(rootNode.get("permissions").size()));
-        assertThat(app.getEvents().size(), is(rootNode.get("events").size()));
-        assertThat(app.getInstallationsCount(), is(rootNode.get("installations_count").asLong()));
+        GHApp app = gitHub.getApp();
+        assertThat(app.id, is((long) 11111));
+        assertThat(app.getOwner().id, is((long) 111111111));
+        assertThat(app.getOwner().login, is("bogus"));
+        assertThat(app.getName(), is("Bogus-Development"));
+        assertThat(app.getDescription(), is(""));
+        assertThat(app.getExternalUrl(), is("https://bogus.domain.com"));
+        assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/bogus-development"));
+        assertThat(app.getCreatedAt(), is(GitHub.parseDate("2019-06-10T04:21:41Z")));
+        assertThat(app.getUpdatedAt(), is(GitHub.parseDate("2019-06-10T04:21:41Z")));
+        assertThat(app.getPermissions().size(), is(4));
+        assertThat(app.getEvents().size(), is(2));
+        assertThat(app.getInstallationsCount(), is((long) 1));
     }
+
 
     @Test
     public void listInstallations() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-installations.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         List<GHAppInstallation> installations = app.listInstallations().asList();
-        assertThat(installations.size(), is(rootNode.size()));
+        assertThat(installations.size(), is(1));
 
         GHAppInstallation appInstallation = installations.get(0);
-        JsonNode installationNode = rootNode.get(0);
-        testAppInstallation(installationNode, appInstallation);
+        testAppInstallation(appInstallation);
     }
 
     @Test
     public void getInstallationById() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-installation-by-id.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationById(1111111);
-        testAppInstallation(rootNode, installation);
+        testAppInstallation(installation);
     }
 
     @Test
     public void getInstallationByOrganization() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-installation-by-organization.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationByOrganization("bogus");
-        testAppInstallation(rootNode, installation);
+        testAppInstallation(installation);
     }
 
     @Test
     public void getInstallationByRepository() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-installation-by-organization.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationByRepository("bogus", "bogus");
-        testAppInstallation(rootNode, installation);
+        testAppInstallation(installation);
     }
 
     @Test
     public void getInstallationByUser() throws IOException {
-        JsonNode rootNode = readPayload("/body-mapping-githubapp-installation-by-user.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationByUser("bogus");
-        testAppInstallation(rootNode, installation);
+        testAppInstallation(installation);
     }
 
     @Test
     public void deleteInstallation() throws IOException {
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationByUser("bogus");
         try {
             installation.deleteInstallation();
@@ -113,9 +93,7 @@ public class GHAppTest {
 
     @Test
     public void createToken() throws IOException {
-        JsonNode rootNode = readPayload("/body-githubapp-create-installation-accesstokens.json");
-
-        GHApp app = github.getApp();
+        GHApp app = gitHub.getApp();
         GHAppInstallation installation = app.getInstallationByUser("bogus");
 
         Map<String, GHPermissionType> permissions = new HashMap<String, GHPermissionType>();
@@ -128,77 +106,43 @@ public class GHAppTest {
                 .repositoryIds(Arrays.asList(111111111))
                 .create();
 
-        assertThat(installationToken.getToken(), is(rootNode.get("token").asText()));
-        assertThat(installation.getPermissions(), is(convertToMap(rootNode.get("permissions"), GHPermissionType.class)));
-        assertThat(installationToken.getRepositorySelection(),
-                is(convertToEnum(rootNode.get("repository_selection").asText(), GHRepositorySelection.class)));
-        assertThat(installationToken.getExpiresAt(), is(GitHub.parseDate(rootNode.get("expires_at").asText())));
+        assertThat(installationToken.getToken(), is("bogus"));
+        assertThat(installation.getPermissions(), is(permissions));
+        assertThat(installationToken.getRepositorySelection(),is(GHRepositorySelection.SELECTED));
+        assertThat(installationToken.getExpiresAt(), is(GitHub.parseDate("2019-08-10T05:54:58Z")));
 
-        ArrayNode repositoriesNode = (ArrayNode) rootNode.get("repositories");
-        JsonNode repositoryNode = repositoriesNode.get(0);
         GHRepository repository = installationToken.getRepositories().get(0);
-        assertThat(installationToken.getRepositories().size(), is(repositoriesNode.size()));
-        assertThat(repository.getId(), is(repositoryNode.get("id").asLong()));
-        assertThat(repository.getName(), is(repositoryNode.get("name").asText()));
+        assertThat(installationToken.getRepositories().size(), is(1));
+        assertThat(repository.getId(), is((long) 111111111));
+        assertThat(repository.getName(), is("bogus"));
     }
 
-    private void testAppInstallation(JsonNode installationNode, GHAppInstallation appInstallation) throws IOException {
+    private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {
         Map<String, GHPermissionType> appPermissions = appInstallation.getPermissions();
         GHUser appAccount = appInstallation.getAccount();
-        JsonNode accountNode = installationNode.get("account");
-        JsonNode permissionsNode = installationNode.get("permissions");
 
-        assertThat(appInstallation.id, is(installationNode.get("id").asLong()));
-        assertThat(appAccount.id, is(accountNode.get("id").asLong()));
-        assertThat(appAccount.login, is(accountNode.get("login").asText()));
-        assertThat(appInstallation.getRepositorySelection(),
-                is(convertToEnum(installationNode.get("repository_selection").asText(), GHRepositorySelection.class)));
-        assertThat(appInstallation.getAccessTokenUrl(), is(installationNode.get("access_tokens_url").asText()));
-        assertThat(appInstallation.getRepositoriesUrl(), is(installationNode.get("repositories_url").asText()));
-        assertThat(appInstallation.getAppId(), is(installationNode.get("app_id").asLong()));
-        assertThat(appInstallation.getTargetId(), is(installationNode.get("target_id").asLong()));
-        assertThat(appInstallation.getTargetType(),
-                is(convertToEnum(installationNode.get("target_type").asText(), GHTargetType.class)));
-        assertThat(appPermissions, is(convertToMap(permissionsNode, GHPermissionType.class)));
+        assertThat(appInstallation.id, is((long) 11111111));
+        assertThat(appAccount.id, is((long) 111111111));
+        assertThat(appAccount.login, is("bogus"));
+        assertThat(appInstallation.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
+        assertThat(appInstallation.getAccessTokenUrl(), endsWith("/app/installations/11111111/access_tokens"));
+        assertThat(appInstallation.getRepositoriesUrl(), endsWith("/installation/repositories"));
+        assertThat(appInstallation.getAppId(), is((long) 11111));
+        assertThat(appInstallation.getTargetId(), is((long) 111111111));
+        assertThat(appInstallation.getTargetType(), is(GHTargetType.ORGANIZATION));
 
-        List<GHEvent> events = convertToEnumList((ArrayNode) installationNode.get("events"), GHEvent.class);
+        Map<String, GHPermissionType> permissionsMap = new HashMap<String, GHPermissionType>();
+        permissionsMap.put("checks", GHPermissionType.WRITE);
+        permissionsMap.put("pull_requests", GHPermissionType.WRITE);
+        permissionsMap.put("contents", GHPermissionType.READ);
+        permissionsMap.put("metadata", GHPermissionType.READ);
+        assertThat(appPermissions, is(permissionsMap));
+
+        List<GHEvent> events = Arrays.asList(GHEvent.PULL_REQUEST, GHEvent.PUSH);
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
-        assertThat(appInstallation.getCreatedAt(), is(GitHub.parseDate(installationNode.get("created_at").asText())));
-        assertThat(appInstallation.getUpdatedAt(), is(GitHub.parseDate(installationNode.get("updated_at").asText())));
+        assertThat(appInstallation.getCreatedAt(), is(GitHub.parseDate("2019-07-04T01:19:36.000Z")));
+        assertThat(appInstallation.getUpdatedAt(), is(GitHub.parseDate("2019-07-30T22:48:09.000Z")));
         assertNull(appInstallation.getSingleFileName());
-    }
-
-    private JsonNode readPayload(String relativeFilePath) throws IOException {
-        String payload = "/api/__files/".concat(relativeFilePath);
-        return new ObjectMapper().readTree(this.getClass().getResourceAsStream(payload));
-    }
-
-    private <T extends Enum<T>> List<T> convertToEnumList(ArrayNode jsonValues, Class<T> valueType) {
-        List<T> retList = new ArrayList<T>(jsonValues.size());
-        for (int i = 0; i < jsonValues.size(); i++) {
-            retList.add(convertToEnum(jsonValues.get(i).asText(), valueType));
-        }
-        return retList;
-    }
-
-    private <V extends Enum<V>> Map<String, V> convertToMap(JsonNode jsonNode, Class<V> valueType) {
-        Map<String, V> retMap = new HashMap<String, V>(jsonNode.size());
-        Iterator<String> iterator = jsonNode.fieldNames();
-        while (iterator.hasNext()) {
-            String current = iterator.next();
-            retMap.put(current, convertToEnum(jsonNode.get(current).asText(), valueType));
-        }
-        return retMap;
-    }
-
-    private <T extends Enum<T>> T convertToEnum(String text, Class<T> valueType) {
-        // by convention Java constant names are upper cases, but github uses
-        // lower-case constants. GitHub also uses '-', which in Java we always
-        // replace by '_'
-        String value = text.toUpperCase(Locale.ENGLISH).replace('-', '_');
-        // special treatment this sdk has provided certain enums with
-        if (value.equals("*")) value = "ALL";
-        return Enum.valueOf(valueType, value);
     }
 
 }

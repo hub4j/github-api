@@ -182,7 +182,7 @@
       <exclusions>
           <!--
             Required as this conflicts with
-            the wiremock-standalone dependency
+            the wiremock-jre8-standalone dependency
           -->
         <exclusion>
           <groupId>javax.servlet</groupId>
@@ -219,12 +219,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>3.0.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock-standalone</artifactId>
-      <version>2.24.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>

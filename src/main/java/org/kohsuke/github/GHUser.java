@@ -26,8 +26,7 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents an user of GitHub.
@@ -35,6 +34,10 @@ import java.util.Set;
  * @author Kohsuke Kawaguchi
  */
 public class GHUser extends GHPerson {
+
+    public List<GHKey> listKeys() throws IOException {
+        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/users/"+login+"/keys", GHKey[].class)));
+    }
 
     /**
      * Follow this user.

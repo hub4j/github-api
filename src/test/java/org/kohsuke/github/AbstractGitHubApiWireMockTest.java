@@ -1,82 +1,112 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.common.FileSource;
-import com.github.tomakehurst.wiremock.common.SingleRootFileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.kohsuke.github.junit.GitHubApiWireMockRule;
+import org.kohsuke.github.junit.WireMockRule;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 /**
- * @author Kohsuke Kawaguchi
+ * @author Liam Newman
  */
 public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
-    protected GitHub gitHub;
-    protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');;
-    protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath;
+    private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
-    public static WireMockRuleFactory factory = new WireMockRuleFactory();
+    public final static String STUBBED_USER_LOGIN = "placeholder-user";
+    public final static String STUBBED_USER_PASSWORD = "placeholder-password";
+
+    /**
+     * {@link GitHub} instance for use during test.
+     * Traffic will be part of snapshot when taken.
+     */
+    protected GitHub gitHub;
+
+    /**
+     * {@link GitHub} instance for use before/after test.
+     * Traffic will not be part of snapshot when taken.
+     * Should only be used when isUseProxy() or isTakeSnapShot().
+     */
+    protected GitHub gitHubBeforeAfter;
+
+    protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
+    protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
     @Rule
-    public WireMockRule githubApi = factory.getRule(WireMockConfiguration.options()
-        .dynamicPort()
-        .usingFilesUnderClasspath(baseFilesClassPath + "/api")
-        .extensions(
-            new ResponseTransformer() {
-                @Override
-                public Response transform(Request request, Response response, FileSource files,
-                                          Parameters parameters) {
-                    try {
-                      if ("application/json"
-                          .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())) {
-                        // Something strange happending here... turning off for now
-//                        return Response.Builder.like(response)
-//                            .but()
-//                            .body(response.getBodyAsString()
-//                                .replace("https://api.github.com/",
-//                                    "http://localhost:" + githubApi.port() + "/")
-//                                .replace("https://raw.githubusercontent.com/",
-//                                    "http://localhost:" + githubRaw.port() + "/")
-//                            )
-//                            .build();
-                      }
-                    } catch (Exception e) {
-                    }
-                    return response;
-                }
-
-                @Override
-                public String getName() {
-                    return "url-rewrite";
-                }
-
-            })
+    public GitHubApiWireMockRule githubApi = new GitHubApiWireMockRule(
+        WireMockConfiguration.options()
+            .dynamicPort()
+            .usingFilesUnderDirectory(baseRecordPath)
     );
 
+    private static GitHubBuilder createGitHubBuilder() {
+
+        GitHubBuilder builder = new GitHubBuilder();
+
+        try {
+            File f = new File(System.getProperty("user.home"), ".github.kohsuke2");
+            if (f.exists()) {
+                Properties props = new Properties();
+                FileInputStream in = null;
+                try {
+                    in = new FileInputStream(f);
+                    props.load(in);
+                } finally {
+                    IOUtils.closeQuietly(in);
+                }
+                // use the non-standard credential preferentially, so that developers of this library do not have
+                // to clutter their event stream.
+                builder = GitHubBuilder.fromProperties(props);
+            } else {
+                builder = GitHubBuilder.fromCredentials();
+            }
+        } catch (IOException e) {
+        }
+
+        return builder.withRateLimitHandler(RateLimitHandler.FAIL);
+    }
+
+    protected GitHubBuilder getGitHubBuilder() {
+        return githubBuilder;
+    }
+
     @Before
-    public void prepareMockGitHub() throws Exception {
-        new File(baseRecordPath + "/api/mappings").mkdirs();
-        new File(baseRecordPath + "/api/__files").mkdirs();
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder();
 
-        githubApi.stubFor(proxyAllTo("https://api.github.com/").atPriority(10));
+        if (!githubApi.isUseProxy()) {
+            // This sets the user and password to a placeholder for wiremock testing
+            // This makes the tests believe they are running with permissions
+            // The recorded stubs will behave like they running with permissions
+            builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
+        }
 
-        githubApi.enableRecordMappings(new SingleRootFileSource(baseRecordPath + "/api/mappings"),
-            new SingleRootFileSource(baseRecordPath + "/api/__files"));
-
-        gitHub = GitHubBuilder.fromEnvironment()
+        gitHub = builder
             .withEndpoint("http://localhost:" + githubApi.port())
-            .withRateLimitHandler(RateLimitHandler.FAIL)
             .build();
 
+        if (githubApi.isUseProxy()) {
+            gitHubBeforeAfter = builder
+                .withEndpoint("https://api.github.com/")
+                .build();
+        } else {
+            gitHubBeforeAfter = null;
+        }
     }
 }

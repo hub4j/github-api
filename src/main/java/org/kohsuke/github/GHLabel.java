@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -75,5 +76,21 @@ public class GHLabel {
             r.add(l.getName());
         }
         return r;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final GHLabel ghLabel = (GHLabel) o;
+        return Objects.equals(url, ghLabel.url) &&
+                Objects.equals(name, ghLabel.name) &&
+                Objects.equals(color, ghLabel.color) &&
+                Objects.equals(repo, ghLabel.repo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, name, color, repo);
     }
 }

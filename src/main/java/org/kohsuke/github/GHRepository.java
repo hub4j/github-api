@@ -54,6 +54,7 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import static java.util.Arrays.*;
+import java.util.NoSuchElementException;
 import static org.kohsuke.github.Previews.*;
 
 /**
@@ -1615,6 +1616,9 @@ public class GHRepository extends GHObject {
             return root;
         }
 
+        /**
+         * @return The author described by these statistics.
+         */
         public GHUser getAuthor() {
             return author;
         }
@@ -1626,6 +1630,28 @@ public class GHRepository extends GHObject {
             return total;
         }
 
+        /**
+         * Convenience method to look up week with particular timestamp.
+         * @param timestamp The timestamp to look for.
+         * @return The week starting with the given timestamp. Throws an
+         * exception if it is not found.
+         * @throws NoSuchElementException
+         */
+        public Week getWeek(long timestamp) throws NoSuchElementException {
+            // maybe store the weeks in a map to make this more efficient?
+            for (Week week: weeks) {
+                if (week.getWeekTimestamp() == timestamp) {
+                    return week;
+                }
+            }
+
+            // this is safer than returning null
+            throw new NoSuchElementException();
+        }
+
+        /**
+         * @return The total number of commits authored by the contributor.
+         */
         public List<Week> getWeeks() {
             return weeks;
         }
@@ -1662,6 +1688,11 @@ public class GHRepository extends GHObject {
              */
             public int getNumberOfCommits() {
                 return c;
+            }
+
+            @Override
+            public String toString() {
+                return String.format("Week starting %d - Additions: %d, Deletions: %d, Commits: %d", w, a, d, c);
             }
         }
 

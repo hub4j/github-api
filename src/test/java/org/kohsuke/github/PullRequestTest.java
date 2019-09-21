@@ -54,7 +54,7 @@ public class PullRequestTest extends AbstractGitHubApiWireMockTest {
     }
 
 
-    @Test 
+    @Test
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
@@ -115,6 +115,7 @@ public class PullRequestTest extends AbstractGitHubApiWireMockTest {
 
         GHUser kohsuke2 = gitHub.getUser("kohsuke2");
         p.requestReviewers(Collections.singletonList(kohsuke2));
+        p.refresh();
         assertFalse(p.getRequestedReviewers().isEmpty());
     }
 
@@ -176,28 +177,28 @@ public class PullRequestTest extends AbstractGitHubApiWireMockTest {
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
-    
+
     @Test
     public void queryPullRequestsQualifiedHead() throws Exception {
         GHRepository repo = getRepository();
         // Create PRs from two different branches to master
         repo.createPullRequest("queryPullRequestsQualifiedHead_stable", "test/stable", "master", null);
         repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
-        
+
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("github-api-test-org:test/stable").base("master").list().asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
     }
-    
+
     @Test
     public void queryPullRequestsUnqualifiedHead() throws Exception {
         GHRepository repo = getRepository();
         // Create PRs from two different branches to master
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_stable", "test/stable", "master", null);
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
-        
+
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master").list().asList();
         assertNotNull(prs);

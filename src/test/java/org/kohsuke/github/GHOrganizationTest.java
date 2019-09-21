@@ -14,7 +14,9 @@ public class GHOrganizationTest extends AbstractGitHubApiTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        org = gitHub.getOrganization("github-api-test-org");
+        if (githubApi.isUseProxy()) {
+            org = gitHub.getOrganization("github-api-test-org");
+        }
     }
 
     @Test
@@ -37,7 +39,9 @@ public class GHOrganizationTest extends AbstractGitHubApiTestBase {
 
     @After
     public void cleanUp() throws Exception {
+        if (githubApi.isUseProxy()) {
         GHRepository repository = org.getRepository(GITHUB_API_TEST);
         repository.delete();
     }
+}
 }

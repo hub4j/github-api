@@ -647,8 +647,10 @@ public class GHRepository extends GHObject {
      *
      * @throws IOException In case of any networking error or error from the server.
      */
-    public void doArchive() throws IOException {
+    public void archive() throws IOException {
         edit("archived", "true");
+        // Generall would not update this record,
+        // but do so here since this will result in any other update actions failing
         archived = true;
     }
 

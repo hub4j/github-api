@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.Assume.assumeFalse;
 
 /**
  * @author Liam Newman
@@ -29,8 +30,10 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
-    public final static String STUBBED_USER_LOGIN = "placeholder-user";
-    public final static String STUBBED_USER_PASSWORD = "placeholder-password";
+    final static String GITHUB_API_TEST_ORG = "github-api-test-org";
+
+    final static String STUBBED_USER_LOGIN = "placeholder-user";
+    final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
     /**
      * {@link GitHub} instance for use during test.
@@ -109,4 +112,9 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
             gitHubBeforeAfter = null;
         }
     }
+
+    protected void snapshotNotAllowed() {
+        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", githubApi.isTakeSnapshot());
+    }
+
 }

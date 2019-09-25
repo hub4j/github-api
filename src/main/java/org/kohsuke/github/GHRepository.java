@@ -636,6 +636,29 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Will archive and this repository as read-only. When a repository is archived, any operation
+     * that can change its state is forbidden. This applies symmetrically if trying to unarchive it.
+     *
+     * <p>When you try to do any operation that modifies a read-only repository, it returns the
+     * response:
+     *
+     * <pre>
+     * org.kohsuke.github.HttpException: {
+     *     "message":"Repository was archived so is read-only.",
+     *     "documentation_url":"https://developer.github.com/v3/repos/#edit"
+     * }
+     * </pre>
+     *
+     * @throws IOException In case of any networking error or error from the server.
+     */
+    public void archive() throws IOException {
+        edit("archived", "true");
+        // Generall would not update this record,
+        // but do so here since this will result in any other update actions failing
+        archived = true;
+    }
+
+    /**
      * Sort orders for listing forks
      */
     public enum ForkSort { NEWEST, OLDEST, STARGAZERS }
@@ -1053,12 +1076,10 @@ public class GHRepository extends GHObject {
     /**
      * Gets the basic license details for the repository.
      * <p>
-     * This is a preview item and subject to change.
      *
      * @throws IOException as usual but also if you don't use the preview connector
      * @return null if there's no license.
      */
-    @Preview @Deprecated
     public GHLicense getLicense() throws IOException{
         GHContentWithLicense lic = getLicenseContent_();
         return lic!=null ? lic.license : null;
@@ -1067,21 +1088,17 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves the contents of the repository's license file - makes an additional API call
      * <p>
-     * This is a preview item and subject to change.
      *
      * @return details regarding the license contents, or null if there's no license.
      * @throws IOException as usual but also if you don't use the preview connector
      */
-    @Preview @Deprecated
     public GHContent getLicenseContent() throws IOException {
         return getLicenseContent_();
     }
 
-    @Preview @Deprecated
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
             return root.retrieve()
-                    .withPreview(DRAX)
                     .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
         } catch (FileNotFoundException e) {
             return null;

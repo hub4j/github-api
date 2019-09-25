@@ -526,7 +526,7 @@ class Requester {
                     }
                 }
             } catch (IOException e) {
-                throw new GHException("Failed to retrieve "+url);
+                throw new GHException("Failed to retrieve " + url, e);
             }
         }
 

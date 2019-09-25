@@ -1077,12 +1077,10 @@ public class GHRepository extends GHObject {
     /**
      * Gets the basic license details for the repository.
      * <p>
-     * This is a preview item and subject to change.
      *
      * @throws IOException as usual but also if you don't use the preview connector
      * @return null if there's no license.
      */
-    @Preview @Deprecated
     public GHLicense getLicense() throws IOException{
         GHContentWithLicense lic = getLicenseContent_();
         return lic!=null ? lic.license : null;
@@ -1091,21 +1089,17 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves the contents of the repository's license file - makes an additional API call
      * <p>
-     * This is a preview item and subject to change.
      *
      * @return details regarding the license contents, or null if there's no license.
      * @throws IOException as usual but also if you don't use the preview connector
      */
-    @Preview @Deprecated
     public GHContent getLicenseContent() throws IOException {
         return getLicenseContent_();
     }
 
-    @Preview @Deprecated
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
             return root.retrieve()
-                    .withPreview(DRAX)
                     .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
         } catch (FileNotFoundException e) {
             return null;

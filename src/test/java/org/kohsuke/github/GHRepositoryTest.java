@@ -29,6 +29,15 @@ public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
     assertThat(getRepository().isArchived(), is(true));
   }
 
+  @Test
+  public void getBranch_URLEncoded() throws Exception {
+    GHRepository repo = getRepository();
+    GHBranch branch = repo.getBranch("test/#UrlEncode");
+    assertThat(branch.getName(), is("test/#UrlEncode"));
+  }
+
+
+
   protected GHRepository getRepository() throws IOException {
     return getRepository(gitHub);
   }

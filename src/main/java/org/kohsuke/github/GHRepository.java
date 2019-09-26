@@ -34,7 +34,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +53,8 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import static java.util.Arrays.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.kohsuke.github.Previews.*;
 
 /**
@@ -1393,8 +1397,25 @@ public class GHRepository extends GHObject {
         return r;
     }
 
+    /**
+     * Replace special characters (e.g. #) with standard values (e.g. %23) so
+     * GitHub understands what is being requested.
+     * @param The string to be encoded.
+     * @return The encoded string.
+     */
+    private String UrlEncode(String value) {
+        try {
+            return URLEncoder.encode(value, org.apache.commons.codec.CharEncoding.UTF_8);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GHRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Something went wrong - just return original value as is.
+        return value;
+    }
+
     public GHBranch getBranch(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("branches/"+UrlEncode(name)),GHBranch.class).wrap(this);
     }
 
     /**

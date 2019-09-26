@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.*;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class PullRequestTest extends AbstractGitHubApiWireMockTest {
+public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
 
     @Before
     @After

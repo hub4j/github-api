@@ -488,11 +488,10 @@ public class GitHub {
      *
      * @return a list of popular open source licenses
      */
-    @Preview @Deprecated
     public PagedIterable<GHLicense> listLicenses() throws IOException {
         return new PagedIterable<GHLicense>() {
             public PagedIterator<GHLicense> _iterator(int pageSize) {
-                return new PagedIterator<GHLicense>(retrieve().withPreview(DRAX).asIterator("/licenses", GHLicense[].class, pageSize)) {
+                return new PagedIterator<GHLicense>(retrieve().asIterator("/licenses", GHLicense[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHLicense[] page) {
                         for (GHLicense c : page)
@@ -523,15 +522,12 @@ public class GitHub {
     /**
      * Returns the full details for a license
      *
-     * WARNING: This uses a PREVIEW API.
-     *
      * @param key The license key provided from the API
      * @return The license details
      * @see GHLicense#getKey()
      */
-    @Preview @Deprecated
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve().withPreview(DRAX).to("/licenses/" + key, GHLicense.class);
+        return retrieve().to("/licenses/" + key, GHLicense.class);
     }
 
     /**

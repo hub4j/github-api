@@ -1,5 +1,7 @@
 package org.kohsuke.github.extras;
 
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.squareup.okhttp.OkUrlFactory;
 import com.squareup.okhttp.Cache;
@@ -65,6 +67,17 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     private GHRateLimit rateLimitBefore;
 
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions()
+            .extensions(ResponseTemplateTransformer.builder()
+                .global(true)
+                .maxCacheEntries(0L)
+                .build()
+            //new ResponseTemplateTransformer(true)
+        );
+    }
+
     @Before
     public void setupRepo() throws Exception {
         if (githubApi.isUseProxy()) {
@@ -118,16 +131,10 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAgeNone() throws Exception {
-        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
-        // when running via snapshot.  I think part of it is cache aging but there is also some
-        // other issue which I do not have the bandwidth to track down right now.
-        // For the moment, I'm committing this code as documentation of testing.
-
-        // NOTE: Tried removing "Date" from mappings.
-        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
-        // Likely need to dynamically construct mapping for these three tests
-        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+        // The responses were recorded from github, but the Date headers
+        // have been templated to make caching behavior work as expected.
+        // This is reasonable as long as the number of network requests matches up.
+        snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
@@ -155,14 +162,9 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAge_Three() throws Exception {
-        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
-        // when running via snapshot.  I think part of it is cache aging but there is also some
-        // other issue which I do not have the bandwidth to track down right now.
-        // For the moment, I'm committing this code as documentation of testing.
 
-        // NOTE: Tried removing "Date" from mappings.
-        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
-        // Likely need to dynamically construct mapping for these three tests
+        // NOTE: This test is very timing sensitive.
+        // It can be run locally to verify behavior but snapshot data is to touchy
         assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
 
@@ -177,7 +179,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         doTestActions();
 
-        // Due to max-age=5 this eventually checks the site and gets updated information. Yay?
+        // Due to max-age=3 this eventually checks the site and gets updated information. Yay?
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
         checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
@@ -188,16 +190,10 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero() throws Exception {
-        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
-        // when running via snapshot.  I think part of it is cache aging but there is also some
-        // other issue which I do not have the bandwidth to track down right now.
-        // For the moment, I'm committing this code as documentation of testing.
-
-        // NOTE: Tried removing "Date" from mappings.
-        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
-        // Likely need to dynamically construct mapping for these three tests
-        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+        // The responses were recorded from github, but the Date headers
+        // have been templated to make caching behavior work as expected.
+        // This is reasonable as long as the number of network requests matches up.
+        snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));

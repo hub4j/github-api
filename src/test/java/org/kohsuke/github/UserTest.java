@@ -30,7 +30,7 @@ public class UserTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void getKeys() throws IOException {
         GHUser u = gitHub.getUser("rtyler");
-        List<GHKey> ghKeys = new ArrayList<>(u.listKeys());
+        List<GHKey> ghKeys = new ArrayList<>(u.getKeys());
 
         assertEquals(3, ghKeys.size());
         Collections.sort(ghKeys, new Comparator<GHKey>() {

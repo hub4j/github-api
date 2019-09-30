@@ -35,8 +35,8 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
-    public List<GHKey> listKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/users/"+login+"/keys", GHKey[].class)));
+    public List<GHKey> getKeys() throws IOException {
+        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to(getApiTailUrl("keys"), GHKey[].class)));
     }
 
     /**

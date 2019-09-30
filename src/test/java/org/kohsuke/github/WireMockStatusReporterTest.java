@@ -20,8 +20,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
-        assumeFalse("Test only valid when not taking a snapshot", takeSnapshot);
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", useProxy);
+        snapshotNotAllowed();
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
 
         assertThat(
             "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
@@ -42,8 +42,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void user_whenNotProxying_Stubbed() throws Exception {
-        assumeFalse("Test only valid when not taking a snapshot", takeSnapshot);
-        assumeFalse("Test only valid when not proxying", useProxy);
+        snapshotNotAllowed();
+        assumeFalse("Test only valid when not proxying", githubApi.isUseProxy());
 
         assertThat(gitHub.isAnonymous(), is(false));
         assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
@@ -59,8 +59,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void BasicBehaviors_whenNotProxying() throws Exception {
-        assumeFalse("Test only valid when not taking a snapshot", takeSnapshot);
-        assumeFalse("Test only valid when not proxying", useProxy);
+        snapshotNotAllowed();
+        assumeFalse("Test only valid when not proxying", githubApi.isUseProxy());
 
         Exception e = null;
         GHRepository repo = null;
@@ -96,8 +96,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void BasicBehaviors_whenProxying() throws Exception {
-        assumeFalse("Test only valid when not taking a snapshot", takeSnapshot);
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", useProxy);
+        snapshotNotAllowed();
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
         Exception e = null;
         GHRepository repo = null;
 
@@ -123,15 +123,15 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void whenSnapshot_EnsureProxy() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", takeSnapshot);
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", githubApi.isTakeSnapshot());
 
-        assertTrue("When taking a snapshot, proxy should automatically be enabled", useProxy);
+        assertTrue("When taking a snapshot, proxy should automatically be enabled", githubApi.isUseProxy());
     }
 
     @Ignore("Not implemented yet")
     @Test
     public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", takeSnapshot);
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", githubApi.isTakeSnapshot());
 
     }
 }

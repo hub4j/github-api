@@ -35,6 +35,8 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     final static String STUBBED_USER_LOGIN = "placeholder-user";
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
+    protected boolean useDefaultGitHub = true;
+
     /**
      * {@link GitHub} instance for use during test.
      * Traffic will be part of snapshot when taken.
@@ -103,8 +105,10 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
         GitHubBuilder builder = getGitHubBuilder()
             .withEndpoint(githubApi.baseUrl());
 
-        gitHub = builder
-            .build();
+        if (useDefaultGitHub) {
+            gitHub = builder
+                .build();
+        }
 
         if (githubApi.isUseProxy()) {
             gitHubBeforeAfter = getGitHubBuilder()

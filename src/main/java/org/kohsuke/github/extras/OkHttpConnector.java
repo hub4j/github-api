@@ -58,7 +58,6 @@ public class OkHttpConnector implements HttpConnector {
                 .maxAge(cacheMaxAge, TimeUnit.SECONDS)
                 .build()
                 .toString();
-
         } else {
             maxAgeHeaderValue = null;
         }

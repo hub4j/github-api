@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
@@ -41,60 +41,56 @@ import static org.junit.Assume.assumeTrue;
  */
 public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
-    private static int defaultRateLimitUsed = 21;
+    public OkHttpConnectorTest() {
+        useDefaultGitHub = false;
+    }
+
+    private static int defaultRateLimitUsed = 17;
     private static int okhttpRateLimitUsed = 17;
     private static int maxAgeZeroRateLimitUsed = 7;
     private static int maxAgeThreeRateLimitUsed = 7;
     private static int maxAgeNoneRateLimitUsed = 4;
 
+    private static int userRequestCount = 0;
+
     private static int defaultNetworkRequestCount = 16;
-    private static int okhttpNetworkRequestCount = 17;
-    private static int maxAgeZeroNetworkRequestCount = 17;
+    private static int okhttpNetworkRequestCount = 16;
+    private static int maxAgeZeroNetworkRequestCount = 16;
     private static int maxAgeThreeNetworkRequestCount = 9;
-    private static int maxAgeNoneNetworkRequestCount = 6;
+    private static int maxAgeNoneNetworkRequestCount = 5;
 
     private static int maxAgeZeroHitCount = 10;
     private static int maxAgeThreeHitCount = 10;
     private static int maxAgeNoneHitCount = 11;
 
+    private GHRateLimit rateLimitBefore;
+
     @Before
     public void setupRepo() throws Exception {
-        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
-
-        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
-        // when running via snapshot.  I think part of it is cache aging but there is also some
-        // other issue which I do not have the bandwidth to track down right now.
-        // For the moment, I'm committing this code as documentation of testing.
-
         if (githubApi.isUseProxy()) {
             GHRepository repo = getRepository(gitHubBeforeAfter);
             repo.setDescription("Resetting");
 
             // Let things settle a bit between tests when working against the live site
             Thread.sleep(5000);
+            userRequestCount = 1;
         }
     }
 
     @Test
     public void DefaultConnector() throws Exception {
 
-        GHRateLimit rateLimitBefore = gitHub.rateLimit();
+        this.gitHub = getGitHubBuilder()
+            .withEndpoint(githubApi.baseUrl())
+            .build();
+
         doTestActions();
 
         // Testing behavior after change
         // Uncached connection gets updated correctly but at cost of rate limit
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
-
-        assertThat("Request Count",
-            getRequestCount(),
-            is(defaultNetworkRequestCount));
-
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(defaultRateLimitUsed));
+        checkRequestAndLimit(defaultNetworkRequestCount, defaultRateLimitUsed);
     }
 
     @Test
@@ -108,22 +104,13 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
             .withConnector(connector)
             .build();
 
-        GHRateLimit rateLimitBefore = gitHub.rateLimit();
         doTestActions();
 
         // Testing behavior after change
         // Uncached okhttp connection gets updated correctly but at cost of rate limit
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
-
-        assertThat("Request Count",
-            getRequestCount(),
-            is(okhttpNetworkRequestCount));
-
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(okhttpRateLimitUsed));
+        checkRequestAndLimit(okhttpNetworkRequestCount, okhttpRateLimitUsed);
 
         Cache cache = client.getCache();
         assertThat("Cache", cache, is(nullValue()));
@@ -131,6 +118,16 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAgeNone() throws Exception {
+        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
+        // when running via snapshot.  I think part of it is cache aging but there is also some
+        // other issue which I do not have the bandwidth to track down right now.
+        // For the moment, I'm committing this code as documentation of testing.
+
+        // NOTE: Tried removing "Date" from mappings.
+        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
+        // Likely need to dynamically construct mapping for these three tests
+        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
@@ -140,7 +137,6 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
             .withConnector(connector)
             .build();
 
-        GHRateLimit rateLimitBefore = gitHub.rateLimit();
         doTestActions();
 
         // Testing behavior after change
@@ -148,15 +144,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         // Due to max-age (default 60 from response) the cache returns the old data.
         assertThat(getRepository(gitHub).getDescription(), is(githubApi.getMethodName()));
 
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
-
-        assertThat("Request Count",
-            getRequestCount(),
-            is(maxAgeNoneNetworkRequestCount));
-
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(maxAgeNoneRateLimitUsed));
+        checkRequestAndLimit(maxAgeNoneNetworkRequestCount, maxAgeNoneRateLimitUsed);
 
         Cache cache = client.getCache();
 
@@ -167,6 +155,17 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAge_Three() throws Exception {
+        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
+        // when running via snapshot.  I think part of it is cache aging but there is also some
+        // other issue which I do not have the bandwidth to track down right now.
+        // For the moment, I'm committing this code as documentation of testing.
+
+        // NOTE: Tried removing "Date" from mappings.
+        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
+        // Likely need to dynamically construct mapping for these three tests
+        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), 3);
@@ -176,21 +175,12 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
             .withConnector(connector)
             .build();
 
-        GHRateLimit rateLimitBefore = gitHub.rateLimit();
         doTestActions();
 
         // Due to max-age=5 this eventually checks the site and gets updated information. Yay?
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
-
-        assertThat("Request Count",
-            getRequestCount(),
-            is(maxAgeThreeNetworkRequestCount));
-
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(maxAgeThreeRateLimitUsed));
+        checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
 
         Cache cache = client.getCache();
         assertThat("getHitCount",  cache.getHitCount(), is(maxAgeThreeHitCount));
@@ -198,6 +188,17 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero() throws Exception {
+        // TODO: (bitiwseman) These tests work locally when proxying but run in to some kind of issue
+        // when running via snapshot.  I think part of it is cache aging but there is also some
+        // other issue which I do not have the bandwidth to track down right now.
+        // For the moment, I'm committing this code as documentation of testing.
+
+        // NOTE: Tried removing "Date" from mappings.
+        // That made MaxAgeNon pass but disabled max-age detection, so it is not a valid data.
+        // Likely need to dynamically construct mapping for these three tests
+        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
@@ -206,25 +207,29 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
             .withConnector(connector)
             .build();
 
-        GHRateLimit rateLimitBefore = gitHub.rateLimit();
         doTestActions();
 
         // Testing behavior after change
         // NOTE: max-age=0 produces the same result at uncached without added rate-limit use.
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
-
-        assertThat("Request Count",
-            getRequestCount(),
-            is(maxAgeZeroNetworkRequestCount));
-
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(maxAgeZeroRateLimitUsed));
-
+        checkRequestAndLimit(maxAgeZeroNetworkRequestCount, maxAgeZeroRateLimitUsed);
+        
         Cache cache = client.getCache();
         assertThat("getHitCount",  cache.getHitCount(), is(maxAgeZeroHitCount));
+    }
+
+    private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
+        GHRateLimit rateLimitAfter = gitHub.rateLimit();
+        assertThat("Request Count",
+            getRequestCount(),
+            is(networkRequestCount + userRequestCount));
+
+        // Rate limit must be under this value, but if it wiggles we don't care
+        assertThat("Rate Limit Change",
+            rateLimitBefore.remaining - rateLimitAfter.remaining,
+            is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
+
     }
 
     private int getRequestCount() {
@@ -252,7 +257,10 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
      * @throws Exception
      */
     private void  doTestActions() throws Exception {
+        rateLimitBefore = gitHub.getRateLimit();
+
         String name = githubApi.getMethodName();
+
 
         GHRepository repo = getRepository(gitHub);
 

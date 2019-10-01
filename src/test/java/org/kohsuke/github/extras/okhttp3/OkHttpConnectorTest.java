@@ -1,22 +1,23 @@
-package org.kohsuke.github.extras;
+package org.kohsuke.github.extras.okhttp3;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import com.squareup.okhttp.OkUrlFactory;
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github.*;
+import org.kohsuke.github.AbstractGitHubApiWireMockTest;
+import org.kohsuke.github.GHRateLimit;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 
-import javax.xml.datatype.Duration;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
@@ -70,11 +71,13 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
+            // Use the same data files as the 2.x test
+            .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
             .extensions(ResponseTemplateTransformer.builder()
                 .global(true)
                 .maxCacheEntries(0L)
                 .build()
-           );
+            );
     }
 
     @Before
@@ -109,7 +112,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     public void OkHttpConnector_NoCache() throws Exception {
 
         OkHttpClient client = createClient(false);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
+        OkHttpConnector connector = new OkHttpConnector(client);
 
         this.gitHub = getGitHubBuilder()
             .withEndpoint(githubApi.baseUrl())
@@ -124,7 +127,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         checkRequestAndLimit(okhttpNetworkRequestCount, okhttpRateLimitUsed);
 
-        Cache cache = client.getCache();
+        Cache cache = client.cache();
         assertThat("Cache", cache, is(nullValue()));
     }
 
@@ -136,7 +139,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
+        OkHttpConnector connector = new OkHttpConnector(client, -1);
 
         this.gitHub = getGitHubBuilder()
             .withEndpoint(githubApi.baseUrl())
@@ -152,11 +155,11 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         checkRequestAndLimit(maxAgeNoneNetworkRequestCount, maxAgeNoneRateLimitUsed);
 
-        Cache cache = client.getCache();
+        Cache cache = client.cache();
 
         // NOTE: this is actually bad.
         // This elevated hit count is the stale requests returning bad data took longer to detect a change.
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeNoneHitCount));
+        assertThat("getHitCount",  cache.hitCount(), is(maxAgeNoneHitCount));
     }
 
     @Test
@@ -169,7 +172,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), 3);
+        OkHttpConnector connector = new OkHttpConnector(client, 3);
 
         this.gitHub = getGitHubBuilder()
             .withEndpoint(githubApi.baseUrl())
@@ -183,8 +186,8 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
 
-        Cache cache = client.getCache();
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeThreeHitCount));
+        Cache cache = client.cache();
+        assertThat("getHitCount",  cache.hitCount(), is(maxAgeThreeHitCount));
     }
 
     @Test
@@ -195,7 +198,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
+        OkHttpConnector connector = new OkHttpConnector(client);
 
         this.gitHub = getGitHubBuilder()
             .withEndpoint(githubApi.baseUrl())
@@ -210,8 +213,8 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         checkRequestAndLimit(maxAgeZeroNetworkRequestCount, maxAgeZeroRateLimitUsed);
         
-        Cache cache = client.getCache();
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeZeroHitCount));
+        Cache cache = client.cache();
+        assertThat("getHitCount",  cache.hitCount(), is(maxAgeZeroHitCount));
     }
 
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
@@ -232,7 +235,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     }
 
     private OkHttpClient createClient(boolean useCache) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
         if (useCache) {
             File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + githubApi.getMethodName());
@@ -240,10 +243,10 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
             FileUtils.cleanDirectory(cacheDir);
             Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
 
-            client.setCache(cache);
+            builder.cache(cache);
         }
 
-        return client;
+        return builder.build();
     }
 
 

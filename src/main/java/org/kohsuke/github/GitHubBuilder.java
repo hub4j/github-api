@@ -19,7 +19,7 @@ import java.util.Properties;
  *
  * @since 1.59
  */
-public class GitHubBuilder {
+public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHub.GITHUB_URL;
@@ -205,5 +205,14 @@ public class GitHubBuilder {
 
     public GitHub build() throws IOException {
         return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
+    }
+
+    @Override
+    public GitHubBuilder clone() {
+        try {
+            return (GitHubBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone should be supported", e);
+        }
     }
 }

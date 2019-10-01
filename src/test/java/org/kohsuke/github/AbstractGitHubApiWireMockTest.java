@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
 import org.apache.commons.io.IOUtils;
@@ -35,6 +36,8 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     final static String STUBBED_USER_LOGIN = "placeholder-user";
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
+    protected boolean useDefaultGitHub = true;
+
     /**
      * {@link GitHub} instance for use during test.
      * Traffic will be part of snapshot when taken.
@@ -52,11 +55,20 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
     @Rule
-    public GitHubApiWireMockRule githubApi = new GitHubApiWireMockRule(
-        WireMockConfiguration.options()
+    public final GitHubApiWireMockRule githubApi;
+
+    public AbstractGitHubApiWireMockTest() {
+        githubApi = new GitHubApiWireMockRule(
+            this.getWireMockOptions()
+        );
+    }
+
+    protected WireMockConfiguration getWireMockOptions() {
+        return WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory(baseRecordPath)
-    );
+            .usingFilesUnderDirectory(baseRecordPath);
+    };
+
 
     private static GitHubBuilder createGitHubBuilder() {
 
@@ -86,12 +98,7 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     }
 
     protected GitHubBuilder getGitHubBuilder() {
-        return githubBuilder;
-    }
-
-    @Before
-    public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder();
+        GitHubBuilder builder = githubBuilder.clone();
 
         if (!githubApi.isUseProxy()) {
             // This sets the user and password to a placeholder for wiremock testing
@@ -100,12 +107,21 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
-        gitHub = builder
-            .withEndpoint("http://localhost:" + githubApi.port())
-            .build();
+        return builder;
+    }
+
+    @Before
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder()
+            .withEndpoint(githubApi.baseUrl());
+
+        if (useDefaultGitHub) {
+            gitHub = builder
+                .build();
+        }
 
         if (githubApi.isUseProxy()) {
-            gitHubBeforeAfter = builder
+            gitHubBeforeAfter = getGitHubBuilder()
                 .withEndpoint("https://api.github.com/")
                 .build();
         } else {

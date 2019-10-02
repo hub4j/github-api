@@ -29,10 +29,10 @@ public class GHOrganizationTest extends AbstractGitHubApiTestBase {
     @Test
     public void testCreateRepositoryWithAutoInitialization() throws IOException {
         GHRepository repository = org.createRepository(GITHUB_API_TEST)
-                .description("a test repository used to test kohsuke's github-api")
-                .homepage("http://github-api.kohsuke.org/")
-                .team(org.getTeamByName("Core Developers"))
-                .autoInit(true).create();
+            .description("a test repository used to test kohsuke's github-api")
+            .homepage("http://github-api.kohsuke.org/")
+            .team(org.getTeamByName("Core Developers"))
+            .autoInit(true).create();
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());
     }
@@ -40,8 +40,8 @@ public class GHOrganizationTest extends AbstractGitHubApiTestBase {
     @After
     public void cleanUp() throws Exception {
         if (githubApi.isUseProxy()) {
-        GHRepository repository = org.getRepository(GITHUB_API_TEST);
-        repository.delete();
+            GHRepository repository = org.getRepository(GITHUB_API_TEST);
+            repository.delete();
+        }
     }
-}
 }

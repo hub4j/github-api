@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -44,8 +45,8 @@ public class PayloadRule implements TestRule {
 
     public InputStream asInputStream() throws FileNotFoundException {
         String name = resourceName.startsWith("/")
-                ? resourceName + type
-                : testClass.getSimpleName() + "/" + resourceName + type;
+            ? resourceName + type
+            : testClass.getSimpleName() + "/" + resourceName + type;
         InputStream stream = testClass.getResourceAsStream(name);
         if (stream == null) {
             throw new FileNotFoundException(String.format("Resource %s from class %s", name, testClass));
@@ -81,6 +82,7 @@ public class PayloadRule implements TestRule {
     public Reader asReader(String encoding) throws IOException {
         return new InputStreamReader(asInputStream(), encoding);
     }
+
     public Reader asReader(Charset encoding) throws FileNotFoundException {
         return new InputStreamReader(asInputStream(), encoding);
     }

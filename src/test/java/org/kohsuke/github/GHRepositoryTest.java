@@ -13,36 +13,35 @@ import static org.junit.Assume.assumeFalse;
  */
 public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
 
-  @Test
-  public void archive() throws Exception {
-    snapshotNotAllowed();
+    @Test
+    public void archive() throws Exception {
+        snapshotNotAllowed();
 
-    // Archive is a one-way action in the API.
-    // We do thi this one
-    GHRepository repo = getRepository();
+        // Archive is a one-way action in the API.
+        // We do thi this one
+        GHRepository repo = getRepository();
 
-    assertThat(repo.isArchived(), is(false));
+        assertThat(repo.isArchived(), is(false));
 
-    repo.archive();
+        repo.archive();
 
-    assertThat(repo.isArchived(), is(true));
-    assertThat(getRepository().isArchived(), is(true));
-  }
+        assertThat(repo.isArchived(), is(true));
+        assertThat(getRepository().isArchived(), is(true));
+    }
 
-  @Test
-  public void getBranch_URLEncoded() throws Exception {
-    GHRepository repo = getRepository();
-    GHBranch branch = repo.getBranch("test/#UrlEncode");
-    assertThat(branch.getName(), is("test/#UrlEncode"));
-  }
+    @Test
+    public void getBranch_URLEncoded() throws Exception {
+        GHRepository repo = getRepository();
+        GHBranch branch = repo.getBranch("test/#UrlEncode");
+        assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
 
 
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
 
-  protected GHRepository getRepository() throws IOException {
-    return getRepository(gitHub);
-  }
-
-  private GHRepository getRepository(GitHub gitHub) throws IOException {
-    return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
-  }
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+    }
 }

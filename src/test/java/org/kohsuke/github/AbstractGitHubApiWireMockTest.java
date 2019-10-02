@@ -23,6 +23,7 @@ import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
@@ -67,7 +68,9 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
         return WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory(baseRecordPath);
-    };
+    }
+
+    ;
 
 
     private static GitHubBuilder createGitHubBuilder() {
@@ -89,6 +92,9 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
                 // to clutter their event stream.
                 builder = GitHubBuilder.fromProperties(props);
             } else {
+
+                builder = GitHubBuilder.fromEnvironment();
+
                 builder = GitHubBuilder.fromCredentials();
             }
         } catch (IOException e) {
@@ -131,6 +137,27 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
     protected void snapshotNotAllowed() {
         assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", githubApi.isTakeSnapshot());
+    }
+
+    protected GHUser getUser() {
+        return getUser(gitHub);
+    }
+
+    protected static GHUser getUser(GitHub gitHub) {
+        try {
+            return gitHub.getMyself();
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    protected void kohsuke() {
+        // No-op for now
+        // Generally this means the test is doing something that requires additional access rights
+        // Not always clear which ones.
+        // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
+//        String login = getUserTest().getLogin();
+//        assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
 }

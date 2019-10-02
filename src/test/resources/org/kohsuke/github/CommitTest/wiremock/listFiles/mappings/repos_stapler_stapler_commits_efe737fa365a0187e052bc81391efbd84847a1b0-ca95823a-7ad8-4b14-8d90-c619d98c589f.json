@@ -1,42 +1,45 @@
 {
-  "id" : "ca95823a-7ad8-4b14-8d90-c619d98c589f",
-  "name" : "repos_stapler_stapler_commits_efe737fa365a0187e052bc81391efbd84847a1b0",
-  "request" : {
-    "url" : "/repos/stapler/stapler/commits/efe737fa365a0187e052bc81391efbd84847a1b0",
-    "method" : "GET"
+  "id": "ca95823a-7ad8-4b14-8d90-c619d98c589f",
+  "name": "repos_stapler_stapler_commits_efe737fa365a0187e052bc81391efbd84847a1b0",
+  "request": {
+    "url": "/repos/stapler/stapler/commits/efe737fa365a0187e052bc81391efbd84847a1b0",
+    "method": "GET"
   },
-  "response" : {
-    "status" : 200,
-    "bodyFileName" : "repos_stapler_stapler_commits_efe737fa365a0187e052bc81391efbd84847a1b0-ca95823a-7ad8-4b14-8d90-c619d98c589f.json",
-    "headers" : {
-      "Date" : "Mon, 09 Sep 2019 18:31:04 GMT",
-      "Content-Type" : "application/json; charset=utf-8",
-      "Server" : "GitHub.com",
-      "Status" : "200 OK",
-      "X-RateLimit-Limit" : "5000",
-      "X-RateLimit-Remaining" : "4940",
-      "X-RateLimit-Reset" : "1568056823",
-      "Cache-Control" : "private, max-age=60, s-maxage=60",
-      "Vary" : [ "Accept, Authorization, Cookie, X-GitHub-OTP", "Accept-Encoding" ],
-      "ETag" : "W/\"105b96446da95ff8ee109ccaf4fd0d26\"",
-      "Last-Modified" : "Mon, 08 Apr 2019 14:17:55 GMT",
-      "X-OAuth-Scopes" : "delete_repo, gist, notifications, repo",
-      "X-Accepted-OAuth-Scopes" : "",
-      "X-GitHub-Media-Type" : "unknown, github.v3",
-      "Access-Control-Expose-Headers" : "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin" : "*",
-      "Strict-Transport-Security" : "max-age=31536000; includeSubdomains; preload",
-      "X-Frame-Options" : "deny",
-      "X-Content-Type-Options" : "nosniff",
-      "X-XSS-Protection" : "1; mode=block",
-      "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
-      "Content-Security-Policy" : "default-src 'none'",
-      "X-GitHub-Request-Id" : "D99C:7CF7:A22A6:C0400:5D769A67"
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_stapler_stapler_commits_efe737fa365a0187e052bc81391efbd84847a1b0-ca95823a-7ad8-4b14-8d90-c619d98c589f.json",
+    "headers": {
+      "Date": "Mon, 09 Sep 2019 18:31:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4940",
+      "X-RateLimit-Reset": "1568056823",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"105b96446da95ff8ee109ccaf4fd0d26\"",
+      "Last-Modified": "Mon, 08 Apr 2019 14:17:55 GMT",
+      "X-OAuth-Scopes": "delete_repo, gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99C:7CF7:A22A6:C0400:5D769A67"
     }
   },
-  "uuid" : "ca95823a-7ad8-4b14-8d90-c619d98c589f",
-  "persistent" : true,
-  "scenarioName" : "scenario-7-repos-stapler-stapler-commits-efe737fa365a0187e052bc81391efbd84847a1b0",
-  "requiredScenarioState" : "scenario-7-repos-stapler-stapler-commits-efe737fa365a0187e052bc81391efbd84847a1b0-2",
-  "insertionIndex" : 17
+  "uuid": "ca95823a-7ad8-4b14-8d90-c619d98c589f",
+  "persistent": true,
+  "scenarioName": "scenario-7-repos-stapler-stapler-commits-efe737fa365a0187e052bc81391efbd84847a1b0",
+  "requiredScenarioState": "scenario-7-repos-stapler-stapler-commits-efe737fa365a0187e052bc81391efbd84847a1b0-2",
+  "insertionIndex": 17
 }

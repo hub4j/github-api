@@ -24,50 +24,50 @@ public class GitHubApiWireMockRule extends WireMockRule {
     private final static boolean useProxy = takeSnapshot || System.getProperty("test.github.useProxy", "false") != "false";
 
     public GitHubApiWireMockRule(WireMockConfiguration options) {
-      this(options, true);
+        this(options, true);
     }
 
     public GitHubApiWireMockRule(WireMockConfiguration options, boolean failOnUnmatchedRequests) {
-      super(options
-          .extensions(
-              new ResponseTransformer() {
-                @Override
-                public Response transform(Request request, Response response, FileSource files,
-                                          Parameters parameters) {
-                  if ("application/json"
-                      .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())
-                      && !response.getHeaders().getHeader("Content-Encoding").containsValue("gzip")) {
-                    return Response.Builder.like(response)
-                        .but()
-                        .body(response.getBodyAsString()
-                            .replace("https://api.github.com/",
-                                "http://localhost:" + request.getPort() + "/")
-                        )
-                        .build();
-                  }
-                  return response;
-                }
+        super(options
+                .extensions(
+                    new ResponseTransformer() {
+                        @Override
+                        public Response transform(Request request, Response response, FileSource files,
+                                                  Parameters parameters) {
+                            if ("application/json"
+                                .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())
+                                && !response.getHeaders().getHeader("Content-Encoding").containsValue("gzip")) {
+                                return Response.Builder.like(response)
+                                    .but()
+                                    .body(response.getBodyAsString()
+                                        .replace("https://api.github.com/",
+                                            "http://localhost:" + request.getPort() + "/")
+                                    )
+                                    .build();
+                            }
+                            return response;
+                        }
 
-                @Override
-                public String getName() {
-                  return "github-api-url-rewrite";
-                }
-              }),
-          failOnUnmatchedRequests);
+                        @Override
+                        public String getName() {
+                            return "github-api-url-rewrite";
+                        }
+                    }),
+            failOnUnmatchedRequests);
     }
 
     public boolean isUseProxy() {
-      return GitHubApiWireMockRule.useProxy;
+        return GitHubApiWireMockRule.useProxy;
     }
 
     public boolean isTakeSnapshot() {
-      return GitHubApiWireMockRule.takeSnapshot;
+        return GitHubApiWireMockRule.takeSnapshot;
     }
 
     @Override
     protected void before() {
         super.before();
-        if(isUseProxy()) {
+        if (isUseProxy()) {
             this.stubFor(
                 proxyAllTo("https://api.github.com/")
                     .atPriority(100)

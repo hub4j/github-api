@@ -1,1 +1,29 @@
-{"resources":{"core":{"limit":5000,"remaining":4970,"reset":1569875630},"search":{"limit":30,"remaining":30,"reset":1569872097},"graphql":{"limit":5000,"remaining":5000,"reset":1569875637},"integration_manifest":{"limit":5000,"remaining":5000,"reset":1569875637}},"rate":{"limit":5000,"remaining":4970,"reset":1569875630}}
+{
+  "resources": {
+    "core": {
+      "limit": 5000,
+      "remaining": 4970,
+      "reset": 1569875630
+    },
+    "search": {
+      "limit": 30,
+      "remaining": 30,
+      "reset": 1569872097
+    },
+    "graphql": {
+      "limit": 5000,
+      "remaining": 5000,
+      "reset": 1569875637
+    },
+    "integration_manifest": {
+      "limit": 5000,
+      "remaining": 5000,
+      "reset": 1569875637
+    }
+  },
+  "rate": {
+    "limit": 5000,
+    "remaining": 4970,
+    "reset": 1569875630
+  }
+}

@@ -23,20 +23,20 @@ import static org.junit.Assume.assumeTrue;
 
 /**
  * Test showing the behavior of OkHttpConnector with and without cache.
- *
+ * <p>
  * Key take aways:
  *
  * <ul>
- *   <li>These tests are artificial and intended to highlight the differences
- *   in behavior between scenarios. However, the differences they indicate are stark.</li>
- *   <li>Caching reduces rate limit consumption by at least a factor of two in even the simplest case.</li>
- *   <li>The OkHttp cache is pretty smart and will often connect read and write requests made
- *   on the same client and invalidate caches.</li>
- *   <li>Changes made outside the current client cause the OkHttp cache to return stale data.
- *   This is expected and correct behavior.</li>
- *   <li>"max-age=0" addresses the problem of external changes by revalidating caches for each request.
- *   This produces the same number of requests as OkHttp without caching, but those requests only
- *   count towards the GitHub rate limit if data has changes.</li>
+ * <li>These tests are artificial and intended to highlight the differences
+ * in behavior between scenarios. However, the differences they indicate are stark.</li>
+ * <li>Caching reduces rate limit consumption by at least a factor of two in even the simplest case.</li>
+ * <li>The OkHttp cache is pretty smart and will often connect read and write requests made
+ * on the same client and invalidate caches.</li>
+ * <li>Changes made outside the current client cause the OkHttp cache to return stale data.
+ * This is expected and correct behavior.</li>
+ * <li>"max-age=0" addresses the problem of external changes by revalidating caches for each request.
+ * This produces the same number of requests as OkHttp without caching, but those requests only
+ * count towards the GitHub rate limit if data has changes.</li>
  * </ul>
  *
  * @author Liam Newman
@@ -74,7 +74,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
                 .global(true)
                 .maxCacheEntries(0L)
                 .build()
-           );
+            );
     }
 
     @Before
@@ -156,7 +156,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         // NOTE: this is actually bad.
         // This elevated hit count is the stale requests returning bad data took longer to detect a change.
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeNoneHitCount));
+        assertThat("getHitCount", cache.getHitCount(), is(maxAgeNoneHitCount));
     }
 
     @Test
@@ -184,7 +184,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
 
         Cache cache = client.getCache();
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeThreeHitCount));
+        assertThat("getHitCount", cache.getHitCount(), is(maxAgeThreeHitCount));
     }
 
     @Test
@@ -209,9 +209,9 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         assertThat(getRepository(gitHub).getDescription(), is("Tricky"));
 
         checkRequestAndLimit(maxAgeZeroNetworkRequestCount, maxAgeZeroRateLimitUsed);
-        
+
         Cache cache = client.getCache();
-        assertThat("getHitCount",  cache.getHitCount(), is(maxAgeZeroHitCount));
+        assertThat("getHitCount", cache.getHitCount(), is(maxAgeZeroHitCount));
     }
 
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
@@ -249,9 +249,10 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     /**
      * This is a standard set of actions to be performed with each connector
+     *
      * @throws Exception
      */
-    private void  doTestActions() throws Exception {
+    private void doTestActions() throws Exception {
         rateLimitBefore = gitHub.getRateLimit();
 
         String name = githubApi.getMethodName();

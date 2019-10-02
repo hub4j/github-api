@@ -26,16 +26,18 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
     @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("stapler").getRepository("stapler");
-        int i=0;
+        int i = 0;
         boolean kohsuke = false;
 
         for (Contributor c : r.listContributors()) {
             System.out.println(c.getName());
-            assertTrue(c.getContributions()>0);
-            if (c.getLogin().equals("kohsuke"))
+            assertTrue(c.getContributions() > 0);
+            if (c.getLogin().equals("kohsuke")) {
                 kohsuke = true;
-            if (i++ > 5)
+            }
+            if (i++ > 5) {
                 break;
+            }
         }
 
         assertTrue(kohsuke);
@@ -67,34 +69,34 @@ public class RepositoryTest extends AbstractGitHubApiTestBase {
             }
         }
     }
-    
-    
-	
-	@Test
-	public void LatestRepositoryExist() {
-		try {
-			// add the repository that have latest release
-			GHRelease release = gitHub.getRepository("kamontat/CheckIDNumber").getLatestRelease();
-			assertEquals("v3.0", release.getTagName());
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	@Test
-	public void LatestRepositoryNotExist() {
-		try {
-			// add the repository that `NOT` have latest release
-			GHRelease release = gitHub.getRepository("kamontat/Java8Example").getLatestRelease();
-			assertNull(release);
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
 
-    @Test public void listReleases() throws IOException {
+
+    @Test
+    public void LatestRepositoryExist() {
+        try {
+            // add the repository that have latest release
+            GHRelease release = gitHub.getRepository("kamontat/CheckIDNumber").getLatestRelease();
+            assertEquals("v3.0", release.getTagName());
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void LatestRepositoryNotExist() {
+        try {
+            // add the repository that `NOT` have latest release
+            GHRelease release = gitHub.getRepository("kamontat/Java8Example").getLatestRelease();
+            assertNull(release);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void listReleases() throws IOException {
         PagedIterable<GHRelease> releases = gitHub.getOrganization("github").getRepository("hub").listReleases();
         assertTrue(releases.iterator().hasNext());
     }

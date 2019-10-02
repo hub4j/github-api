@@ -36,10 +36,11 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * First check if the credentials are configured using the ~/.github properties file.
+     * First check if the credentials are configured in the environment.
+     * We use environment first because users are not likely to give required (full) permissions to their default key.
      *
-     * If no user is specified it means there is no configuration present so check the environment instead.
-     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
      * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
@@ -50,6 +51,11 @@ public class GitHubBuilder implements Cloneable {
         Exception cause = null;
         GitHubBuilder builder = null;
 
+        builder = fromEnvironment();
+
+        if (builder.oauthToken != null || builder.user != null)
+            return builder;
+
         try {
             builder = fromPropertyFile();
 
@@ -59,13 +65,7 @@ public class GitHubBuilder implements Cloneable {
             // fall through
             cause = e;
         }
-
-        builder = fromEnvironment();
-
-        if (builder.oauthToken != null || builder.user != null)
-            return builder;
-        else
-            throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
+        throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
     /**

@@ -32,8 +32,7 @@
     "prerelease": false,
     "created_at": "2015-05-05T23:40:12Z",
     "published_at": "2015-05-05T23:40:38Z",
-    "assets": [
-    ],
+    "assets": [],
     "tarball_url": "https://api.github.com/repos/baxterthehacker/public-repo/tarball/0.0.1",
     "zipball_url": "https://api.github.com/repos/baxterthehacker/public-repo/zipball/0.0.1",
     "body": null

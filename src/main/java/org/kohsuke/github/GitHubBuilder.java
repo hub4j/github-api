@@ -19,7 +19,7 @@ import java.util.Properties;
  *
  * @since 1.59
  */
-public class GitHubBuilder {
+public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHub.GITHUB_URL;
@@ -36,19 +36,25 @@ public class GitHubBuilder {
     }
 
     /**
-     * First check if the credentials are configured using the ~/.github properties file.
+     * First check if the credentials are configured in the environment.
+     * We use environment first because users are not likely to give required (full) permissions to their default key.
      *
-     * If no user is specified it means there is no configuration present so check the environment instead.
-     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
-     * @return the configured Builder from credentials defined on the system or in the environment.
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
      *
      * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
-    public static GitHubBuilder fromCredentials() throws IOException {
+    static GitHubBuilder fromCredentials() throws IOException {
         Exception cause = null;
-        GitHubBuilder builder;
+        GitHubBuilder builder = null;
+
+        builder = fromEnvironment();
+
+        if (builder.oauthToken != null || builder.user != null)
+            return builder;
 
         try {
             builder = fromPropertyFile();
@@ -59,13 +65,7 @@ public class GitHubBuilder {
             // fall through
             cause = e;
         }
-
-        builder = fromEnvironment();
-
-        if (builder.oauthToken != null || builder.user != null)
-            return builder;
-        else
-            throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
+        throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
     /**
@@ -126,7 +126,7 @@ public class GitHubBuilder {
         }
         return fromProperties(props);
     }
-    
+
     public static GitHubBuilder fromPropertyFile() throws IOException {
         File homeDir = new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");
@@ -205,5 +205,14 @@ public class GitHubBuilder {
 
     public GitHub build() throws IOException {
         return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
+    }
+
+    @Override
+    public GitHubBuilder clone() {
+        try {
+            return (GitHubBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone should be supported", e);
+        }
     }
 }

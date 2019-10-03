@@ -7,7 +7,6 @@ package org.kohsuke.github;
  * @see <a href="https://developer.github.com/v3/licenses/#get-a-repositorys-license">documentation</a>
  * @see GHRepository#getLicense()
  */
-@Preview @Deprecated
 class GHContentWithLicense extends GHContent {
     GHLicense license;
 

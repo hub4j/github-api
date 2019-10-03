@@ -110,21 +110,8 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         o.close();
     }
 
-    @Ignore("Needs mocking check")
     @Test
-    public void testCreateDeployment() throws IOException {
-        GHRepository repository = getTestRepository();
-        GHDeployment deployment = repository.createDeployment("master")
-            .payload("{\"user\":\"atmos\",\"room_id\":123456}")
-            .description("question")
-            .create();
-        assertNotNull(deployment.getCreator());
-        assertNotNull(deployment.getId());
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void testListDeployments() throws IOException {
+    public void testCreateAndListDeployments() throws IOException {
         GHRepository repository = getTestRepository();
         GHDeployment deployment = repository.createDeployment("master")
             .payload("{\"user\":\"atmos\",\"room_id\":123456}")
@@ -133,7 +120,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
             .create();
         assertNotNull(deployment.getCreator());
         assertNotNull(deployment.getId());
-        ArrayList<GHDeployment> deployments = Lists.newArrayList(repository.listDeployments(null, "master", null, "unittest"));
+        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").asList();
         assertNotNull(deployments);
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
@@ -158,12 +145,11 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testGetIssues() throws Exception {
         List<GHIssue> closedIssues = gitHub.getOrganization("github-api").getRepository("github-api").getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
-        assertTrue(closedIssues.size() > 30);
+        assertTrue(closedIssues.size() > 150);
     }
 
 
@@ -196,7 +182,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
 
     }
 
-    @Ignore("Needs mocking check")
+    @Ignore("Needs to be rewritten to not create new issues just to check that they can be found.")
     @Test
     public void testListIssues() throws IOException {
         GHUser u = getUser();
@@ -242,7 +228,6 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         System.out.println(org);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testMyOrganizationsContainMyTeams() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
@@ -252,7 +237,6 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         assertTrue(myOrganizations.keySet().containsAll(teams.keySet()));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testMyTeamsShouldIncludeMyself() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();

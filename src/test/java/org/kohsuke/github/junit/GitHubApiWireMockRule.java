@@ -100,7 +100,8 @@ public class GitHubApiWireMockRule extends WireMockRule {
                 .extractTextBodiesOver(255));
 
             // After taking the snapshot, format the output
-            formatJsonFiles(new File(this.getOptions().filesRoot().getPath()).toPath());
+            // Disabled for now as the output is more confusing than helpful
+            // formatJsonFiles(new File(this.getOptions().filesRoot().getPath()).toPath());
         }
     }
 

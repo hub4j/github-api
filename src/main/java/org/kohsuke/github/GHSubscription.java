@@ -49,7 +49,7 @@ public class GHSubscription {
      * Removes this subscription.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to(url);
+        new Requester(root).method("DELETE").to(repo.getApiTailUrl("subscription"));
     }
 
     GHSubscription wrapUp(GHRepository repo) {

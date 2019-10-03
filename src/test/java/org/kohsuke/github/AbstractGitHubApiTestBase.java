@@ -24,14 +24,6 @@ public abstract class AbstractGitHubApiTestBase extends AbstractGitHubApiWireMoc
         assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy", githubApi.isUseProxy());
     }
 
-    protected GHUser getUser() {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
     protected void kohsuke() {
         String login = getUser().getLogin();
         assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));

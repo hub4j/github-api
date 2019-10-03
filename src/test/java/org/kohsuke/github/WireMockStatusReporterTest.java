@@ -22,7 +22,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
         snapshotNotAllowed();
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+        requireProxy("Tests proper configuration when proxying.");
 
         assertThat(
             "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
@@ -44,6 +44,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void user_whenNotProxying_Stubbed() throws Exception {
         snapshotNotAllowed();
+
         assumeFalse("Test only valid when not proxying", githubApi.isUseProxy());
 
         assertThat(gitHub.isAnonymous(), is(false));
@@ -98,7 +99,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void BasicBehaviors_whenProxying() throws Exception {
         snapshotNotAllowed();
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+        requireProxy("Tests basic behaviors when proxying.");
+
         Exception e = null;
         GHRepository repo = null;
 

@@ -70,9 +70,6 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
             .usingFilesUnderDirectory(baseRecordPath);
     }
 
-    ;
-
-
     private static GitHubBuilder createGitHubBuilder() {
 
         GitHubBuilder builder = new GitHubBuilder();
@@ -137,6 +134,10 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
     protected void snapshotNotAllowed() {
         assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", githubApi.isTakeSnapshot());
+    }
+
+    protected void requireProxy(String reason) {
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason, githubApi.isUseProxy());
     }
 
     protected GHUser getUser() {

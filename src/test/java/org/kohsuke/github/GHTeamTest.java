@@ -5,26 +5,29 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Random;
 
-public class GHTeamTest extends AbstractGitHubApiTestBase {
+public class GHTeamTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void testSetDescription() throws IOException {
 
-        Random random = new Random();
-        String description = "Updated by API Test " + String.valueOf(random.nextInt());
-        String organizationSlug = "martinvz-test";
+        String description = "Updated by API Test";
         String teamSlug = "dummy-team";
 
         // Set the description.
-        {
-            GHTeam team = gitHub.getOrganization(organizationSlug).getTeamBySlug(teamSlug);
-            team.setDescription(description);
-        }
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        team.setDescription(description);
 
         // Check that it was set correctly.
-        {
-            GHTeam team = gitHub.getOrganization(organizationSlug).getTeamBySlug(teamSlug);
-            assertEquals(description, team.getDescription());
-        }
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertEquals(description, team.getDescription());
+
+        description += "Modified";
+
+        // Set the description.
+        team.setDescription(description);
+
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertEquals(description, team.getDescription());
     }
 }

@@ -1,12 +1,18 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.common.FileSource;
-import com.github.tomakehurst.wiremock.core.Options;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
@@ -84,11 +90,41 @@ public class GitHubApiWireMockRule extends WireMockRule {
     @Override
     protected void after() {
         super.after();
+        // To reformat everything
+        //formatJsonFiles(new File("src/test/resources").toPath());
+
         if (isTakeSnapshot()) {
             this.snapshotRecord(recordSpec()
                 .forTarget("https://api.github.com")
                 .captureHeader("If-None-Match")
                 .extractTextBodiesOver(255));
+
+            // After taking the snapshot, format the output
+            formatJsonFiles(new File(this.getOptions().filesRoot().getPath()).toPath());
+        }
+    }
+
+    private void formatJsonFiles(Path path) {
+        try {
+            Files.walk(path)
+                .forEach(filePath -> {
+                    try {
+                        if (filePath.toString().endsWith(".json")) {
+                            String fileText = new String(Files.readAllBytes(filePath));
+                            if (fileText.startsWith("{")) {
+                                fileText = new JSONObject(new String(Files.readAllBytes(filePath))).toString(2);
+                            } else {
+                                fileText = new JSONArray(new String(Files.readAllBytes(filePath))).toString(2);
+                            }
+
+                            Files.write(filePath, fileText.getBytes());
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException("Files could not be written", e);
+                    }
+                });
+        } catch (IOException e) {
+            throw new RuntimeException("Files could not be written");
         }
     }
 }

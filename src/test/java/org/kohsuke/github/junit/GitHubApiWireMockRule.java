@@ -6,13 +6,14 @@ import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
@@ -91,7 +92,7 @@ public class GitHubApiWireMockRule extends WireMockRule {
     protected void after() {
         super.after();
         // To reformat everything
-        //formatJsonFiles(new File("src/test/resources").toPath());
+        // formatJsonFiles(new File("src/test/resources").toPath());
 
         if (isTakeSnapshot()) {
             this.snapshotRecord(recordSpec()
@@ -100,24 +101,34 @@ public class GitHubApiWireMockRule extends WireMockRule {
                 .extractTextBodiesOver(255));
 
             // After taking the snapshot, format the output
-            // Disabled for now as the output is more confusing than helpful
-            // formatJsonFiles(new File(this.getOptions().filesRoot().getPath()).toPath());
+            formatJsonFiles(new File(this.getOptions().filesRoot().getPath()).toPath());
         }
     }
 
     private void formatJsonFiles(Path path) {
+        // The more consistent we can make the json output the more meaningful it will be.
+        // TODO: For understandability, rename the files to include the response order
+        // TODO: Consider templating out Date and Last-Updated
+        Gson g = new Gson().newBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting()
+            .registerTypeAdapter(Double.class,  new JsonSerializer<Double>() {
+                @Override
+                public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
+                    if(src == src.longValue())
+                        return new JsonPrimitive(src.longValue());
+                    return new JsonPrimitive(src);
+                }
+            })
+            .create();
+
         try {
             Files.walk(path)
                 .forEach(filePath -> {
                     try {
                         if (filePath.toString().endsWith(".json")) {
                             String fileText = new String(Files.readAllBytes(filePath));
-                            if (fileText.startsWith("{")) {
-                                fileText = new JSONObject(new String(Files.readAllBytes(filePath))).toString(2);
-                            } else {
-                                fileText = new JSONArray(new String(Files.readAllBytes(filePath))).toString(2);
-                            }
-
+                            // Can be Array or Map
+                            Object parsedObject = g.fromJson(fileText, Object.class);
+                            fileText = g.toJson(parsedObject);
                             Files.write(filePath, fileText.getBytes());
                         }
                     } catch (Exception e) {

@@ -181,16 +181,6 @@
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler-jetty</artifactId>
       <version>1.1</version>
-      <exclusions>
-          <!--
-            Required as this conflicts with
-            the wiremock-jre8-standalone dependency
-          -->
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-        </exclusion>
-      </exclusions>
       <scope>test</scope>
     </dependency>
     <dependency>

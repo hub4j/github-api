@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
 import com.google.gson.*;
+import com.jcraft.jsch.IO;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class GitHubApiWireMockRule extends WireMockRule {
     protected void after() {
         super.after();
         // To reformat everything
-        // formatJsonFiles(new File("src/test/resources").toPath());
+        //formatJsonFiles(new File("src/test/resources").toPath());
 
         if (isTakeSnapshot()) {
             this.snapshotRecord(recordSpec()
@@ -108,7 +109,6 @@ public class GitHubApiWireMockRule extends WireMockRule {
     private void formatJsonFiles(Path path) {
         // The more consistent we can make the json output the more meaningful it will be.
         // TODO: For understandability, rename the files to include the response order
-        // TODO: Consider templating out Date and Last-Updated
         Gson g = new Gson().newBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting()
             .registerTypeAdapter(Double.class,  new JsonSerializer<Double>() {
                 @Override
@@ -128,6 +128,9 @@ public class GitHubApiWireMockRule extends WireMockRule {
                             String fileText = new String(Files.readAllBytes(filePath));
                             // Can be Array or Map
                             Object parsedObject = g.fromJson(fileText, Object.class);
+                            if (parsedObject instanceof Map && filePath.toString().contains("mappings")) {
+                                filePath = renameMappingFile(filePath, (Map<String, Object>) parsedObject);
+                            }
                             fileText = g.toJson(parsedObject);
                             Files.write(filePath, fileText.getBytes());
                         }
@@ -138,5 +141,20 @@ public class GitHubApiWireMockRule extends WireMockRule {
         } catch (IOException e) {
             throw new RuntimeException("Files could not be written");
         }
+    }
+
+    private Path renameMappingFile(Path filePath, Map<String, Object> parsedObject) throws IOException {
+        Path targetPath = filePath;
+        String id = (String)parsedObject.getOrDefault("id", null);
+        Long insertionIndex = ((Double)parsedObject.getOrDefault("insertionIndex", 0.0)).longValue();
+        if (id != null && insertionIndex > 0) {
+            String filePathString = filePath.toString();
+            if (filePathString.contains(id)) {
+                targetPath = new File(filePathString.replace(id, insertionIndex.toString() + "-" + id.substring(0, 6))).toPath();
+                Files.move(filePath, targetPath);
+            }
+        }
+
+        return targetPath;
     }
 }

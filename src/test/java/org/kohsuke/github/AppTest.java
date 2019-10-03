@@ -218,14 +218,14 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void testRateLimit() throws IOException {
-        System.out.println(gitHub.getRateLimit());
+        assertThat(gitHub.getRateLimit(), notNullValue());
     }
 
     @Test
     public void testMyOrganizations() throws IOException {
         Map<String, GHOrganization> org = gitHub.getMyOrganizations();
         assertFalse(org.keySet().contains(null));
-        System.out.println(org);
+        //System.out.println(org);
     }
 
     @Test

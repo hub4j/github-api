@@ -34,7 +34,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +53,8 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import static java.util.Arrays.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.kohsuke.github.Previews.*;
 
 /**
@@ -620,6 +624,10 @@ public class GHRepository extends GHObject {
         edit("default_branch", value);
     }
 
+    public void setPrivate(boolean value) throws IOException {
+        edit("private", Boolean.toString(value));
+    }
+
     /**
      * Deletes this repository.
      */
@@ -629,6 +637,29 @@ public class GHRepository extends GHObject {
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
         }
+    }
+
+    /**
+     * Will archive and this repository as read-only. When a repository is archived, any operation
+     * that can change its state is forbidden. This applies symmetrically if trying to unarchive it.
+     *
+     * <p>When you try to do any operation that modifies a read-only repository, it returns the
+     * response:
+     *
+     * <pre>
+     * org.kohsuke.github.HttpException: {
+     *     "message":"Repository was archived so is read-only.",
+     *     "documentation_url":"https://developer.github.com/v3/repos/#edit"
+     * }
+     * </pre>
+     *
+     * @throws IOException In case of any networking error or error from the server.
+     */
+    public void archive() throws IOException {
+        edit("archived", "true");
+        // Generall would not update this record,
+        // but do so here since this will result in any other update actions failing
+        archived = true;
     }
 
     /**
@@ -1049,12 +1080,10 @@ public class GHRepository extends GHObject {
     /**
      * Gets the basic license details for the repository.
      * <p>
-     * This is a preview item and subject to change.
      *
      * @throws IOException as usual but also if you don't use the preview connector
      * @return null if there's no license.
      */
-    @Preview @Deprecated
     public GHLicense getLicense() throws IOException{
         GHContentWithLicense lic = getLicenseContent_();
         return lic!=null ? lic.license : null;
@@ -1063,21 +1092,17 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves the contents of the repository's license file - makes an additional API call
      * <p>
-     * This is a preview item and subject to change.
      *
      * @return details regarding the license contents, or null if there's no license.
      * @throws IOException as usual but also if you don't use the preview connector
      */
-    @Preview @Deprecated
     public GHContent getLicenseContent() throws IOException {
         return getLicenseContent_();
     }
 
-    @Preview @Deprecated
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
             return root.retrieve()
-                    .withPreview(DRAX)
                     .to(getApiTailUrl("license"), GHContentWithLicense.class).wrap(this);
         } catch (FileNotFoundException e) {
             return null;
@@ -1376,8 +1401,25 @@ public class GHRepository extends GHObject {
         return r;
     }
 
+    /**
+     * Replace special characters (e.g. #) with standard values (e.g. %23) so
+     * GitHub understands what is being requested.
+     * @param The string to be encoded.
+     * @return The encoded string.
+     */
+    private String UrlEncode(String value) {
+        try {
+            return URLEncoder.encode(value, org.apache.commons.codec.CharEncoding.UTF_8);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GHRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Something went wrong - just return original value as is.
+        return value;
+    }
+
     public GHBranch getBranch(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("branches/"+name),GHBranch.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("branches/"+UrlEncode(name)),GHBranch.class).wrap(this);
     }
 
     /**

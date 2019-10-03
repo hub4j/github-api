@@ -19,7 +19,7 @@ import java.util.Properties;
  *
  * @since 1.59
  */
-public class GitHubBuilder {
+public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHub.GITHUB_URL;
@@ -37,10 +37,11 @@ public class GitHubBuilder {
     }
 
     /**
-     * First check if the credentials are configured using the ~/.github properties file.
+     * First check if the credentials are configured in the environment.
+     * We use environment first because users are not likely to give required (full) permissions to their default key.
      *
-     * If no user is specified it means there is no configuration present so check the environment instead.
-     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
      * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
@@ -51,6 +52,11 @@ public class GitHubBuilder {
         Exception cause = null;
         GitHubBuilder builder = null;
 
+        builder = fromEnvironment();
+
+        if (builder.oauthToken != null || builder.user != null  || builder.jwtToken != null)
+            return builder;
+
         try {
             builder = fromPropertyFile();
 
@@ -60,13 +66,7 @@ public class GitHubBuilder {
             // fall through
             cause = e;
         }
-
-        builder = fromEnvironment();
-
-        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
-            return builder;
-        else
-            throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
+        throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
     /**
@@ -212,5 +212,14 @@ public class GitHubBuilder {
 
     public GitHub build() throws IOException {
         return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler, abuseLimitHandler);
+    }
+
+    @Override
+    public GitHubBuilder clone() {
+        try {
+            return (GitHubBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone should be supported", e);
+        }
     }
 }

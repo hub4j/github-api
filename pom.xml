@@ -29,10 +29,12 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>3.1.11</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
     <spotbugs.version>3.1.12</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.1</hamcrest.version>
+    <okhttp3.version>3.12.3</okhttp3.version>
+    <okio.version>2.4.0</okio.version>
   </properties>
 
   <build>
@@ -41,14 +43,14 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>7</source>
-          <target>7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.1</version>
+        <version>2.22.2</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -57,13 +59,13 @@
         <configuration>
           <signature>
             <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java17</artifactId>
+            <artifactId>java18</artifactId>
             <version>1.0</version>
           </signature>
         </configuration>
         <executions>
           <execution>
-            <id>ensure-java-1.5-class-library</id>
+            <id>ensure-java-1.8-class-library</id>
             <phase>test</phase>
             <goals>
               <goal>check</goal>
@@ -127,12 +129,12 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.7</version>
+      <version>3.9</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.7</version>
+      <version>1.13</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -162,17 +164,17 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.9.3</version>
+      <version>2.9.10</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.4</version>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.17</version>
+      <version>1.18</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -194,19 +196,31 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>4.9.0.201710071750-r</version>
+      <version>5.5.0.201909110433-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.squareup.okhttp</groupId>
-      <artifactId>okhttp-urlconnection</artifactId>
-      <version>2.7.5</version>
+      <groupId>com.squareup.okio</groupId>
+      <artifactId>okio</artifactId>
+      <version>${okio.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>${okhttp3.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp-urlconnection</artifactId>
-      <version>3.9.0</version>
+      <version>${okhttp3.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp</groupId>
+      <artifactId>okhttp-urlconnection</artifactId>
+      <version>2.7.5</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -218,7 +232,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.0.0</version>
+      <version>3.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -230,7 +244,13 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.24.1</version>
+      <version>2.25.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.5</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

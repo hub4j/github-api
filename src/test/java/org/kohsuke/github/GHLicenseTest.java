@@ -169,6 +169,8 @@ public class GHLicenseTest extends AbstractGitHubApiWireMockTest {
      */
     @Test
     public void checkRepositoryLicenseContent() throws IOException {
+        requireProxy("Uses https://raw.githubusercontent.com which is not wiremocked yet.");
+
         GHRepository repo = gitHub.getRepository("pomes/pomes");
         GHContent content = repo.getLicenseContent();
         assertNotNull("The license content is populated", content);

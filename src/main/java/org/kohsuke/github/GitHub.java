@@ -49,8 +49,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.FINE;
-import static org.kohsuke.github.Previews.DRAX;
 import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.Previews.MACHINE_MAN;
 
 /**
  * Root of the GitHub API.

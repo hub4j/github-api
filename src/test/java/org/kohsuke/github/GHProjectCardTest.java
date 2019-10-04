@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -10,15 +11,15 @@ import java.io.IOException;
 /**
  * @author Gunnar Skjold
  */
-public class GHProjectCardTest extends AbstractGitHubApiTestBase {
+public class GHProjectCardTest extends AbstractGitHubApiWireMockTest {
 	private GHOrganization org;
 	private GHProject project;
 	private GHProjectColumn column;
 	private GHProjectCard card;
 
-	@Override public void setUp() throws Exception {
-		super.setUp();
-		org = gitHub.getOrganization("github-api-test-org");
+	@Before
+	public void setUp() throws Exception {
+		org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 		project = org.createProject("test-project", "This is a test project");
 		column = project.createColumn("column-one");
 		card = column.createCard("This is a card");
@@ -71,28 +72,35 @@ public class GHProjectCardTest extends AbstractGitHubApiTestBase {
 
 	@After
 	public void after() throws IOException {
-		if(card != null) {
-			try {
-				card.delete();
-				card = null;
-			} catch (FileNotFoundException e) {
-				card = null;
+		if(githubApi.isUseProxy()) {
+			if (card != null) {
+				card = gitHubBeforeAfter.getProjectCard(card.getId());
+				try {
+					card.delete();
+					card = null;
+				} catch (FileNotFoundException e) {
+					card = null;
+				}
 			}
-		}
-		if(column != null) {
-			try {
-				column.delete();
-				column = null;
-			} catch (FileNotFoundException e) {
-				column = null;
+			if (column != null) {
+				column = gitHubBeforeAfter
+					.getProjectColumn(column.getId());
+				try {
+					column.delete();
+					column = null;
+				} catch (FileNotFoundException e) {
+					column = null;
+				}
 			}
-		}
-		if(project != null) {
-			try {
-				project.delete();
-				project = null;
-			} catch (FileNotFoundException e) {
-				project = null;
+			if (project != null) {
+				project = gitHubBeforeAfter
+					.getProject(project.getId());
+				try {
+					project.delete();
+					project = null;
+				} catch (FileNotFoundException e) {
+					project = null;
+				}
 			}
 		}
 	}

@@ -20,7 +20,7 @@ public class CommitTest extends AbstractGitHubApiWireMockTest {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
-            GHCommit expected = repo.getCommit( commit.getSHA1() );
+            GHCommit expected = repo.getCommit(commit.getSHA1());
             assertEquals(expected.getFiles().size(), commit.getFiles().size());
         }
     }

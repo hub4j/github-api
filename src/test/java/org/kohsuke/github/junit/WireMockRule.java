@@ -443,6 +443,18 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         return wireMockServer.findUnmatchedRequests();
     }
 
+    public void removeServeEvent(UUID uuid) {
+        wireMockServer.removeServeEvent(uuid);
+    }
+
+    public FindServeEventsResult removeServeEventsMatching(RequestPattern requestPattern) {
+        return wireMockServer.removeServeEventsMatching(requestPattern);
+    }
+
+    public FindServeEventsResult removeServeEventsForStubsMatchingMetadata(StringValuePattern stringValuePattern) {
+        return wireMockServer.removeServeEventsForStubsMatchingMetadata(stringValuePattern);
+    }
+
     public void updateGlobalSettings(GlobalSettings newSettings) {
         wireMockServer.updateGlobalSettings(newSettings);
     }

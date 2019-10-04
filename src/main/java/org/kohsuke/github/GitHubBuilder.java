@@ -19,14 +19,15 @@ import java.util.Properties;
  *
  * @since 1.59
  */
-public class GitHubBuilder {
+public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHub.GITHUB_URL;
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
-    
+    /* private */ String jwtToken;
+
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
@@ -36,36 +37,36 @@ public class GitHubBuilder {
     }
 
     /**
-     * First check if the credentials are configured using the ~/.github properties file.
+     * First check if the credentials are configured in the environment.
+     * We use environment first because users are not likely to give required (full) permissions to their default key.
      *
-     * If no user is specified it means there is no configuration present so check the environment instead.
-     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
-     * @return the configured Builder from credentials defined on the system or in the environment.
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
      *
      * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
      */
-    public static GitHubBuilder fromCredentials() throws IOException {
+    static GitHubBuilder fromCredentials() throws IOException {
         Exception cause = null;
-        GitHubBuilder builder;
+        GitHubBuilder builder = null;
+
+        builder = fromEnvironment();
+
+        if (builder.oauthToken != null || builder.user != null  || builder.jwtToken != null)
+            return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.oauthToken != null || builder.user != null)
+            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
             cause = e;
         }
-
-        builder = fromEnvironment();
-
-        if (builder.oauthToken != null || builder.user != null)
-            return builder;
-        else
-            throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
+        throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
     }
 
     /**
@@ -108,6 +109,7 @@ public class GitHubBuilder {
      *     <li>GITHUB_PASSWORD: raw password
      *     <li>GITHUB_OAUTH: OAuth token to login
      *     <li>GITHUB_ENDPOINT: URL of the API endpoint
+     *     <li>GITHUB_JWT: JWT token to login
      * </ul>
      *
      * <p>
@@ -149,6 +151,7 @@ public class GitHubBuilder {
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
         self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
+        self.withJwtToken(props.getProperty("jwt"));
         self.withPassword(props.getProperty("login"), props.getProperty("password"));
         self.withEndpoint(props.getProperty("endpoint", GitHub.GITHUB_URL));
         return self;
@@ -175,6 +178,10 @@ public class GitHubBuilder {
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
         this.oauthToken = oauthToken;
         this.user = user;
+        return this;
+    }
+    public GitHubBuilder withJwtToken(String jwtToken){
+        this.jwtToken = jwtToken;
         return this;
     }
     public GitHubBuilder withConnector(HttpConnector connector) {
@@ -204,6 +211,15 @@ public class GitHubBuilder {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler, abuseLimitHandler);
+    }
+
+    @Override
+    public GitHubBuilder clone() {
+        try {
+            return (GitHubBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone should be supported", e);
+        }
     }
 }

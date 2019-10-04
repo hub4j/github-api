@@ -35,15 +35,7 @@ import java.net.URL;
 /**
  * @author Duncan Dickinson
  */
-public class GHLicenseTest extends Assert {
-    private GitHub gitHub;
-
-    @Before
-    public void setUp() throws Exception {
-        gitHub = new GitHubBuilder()
-                .fromCredentials()
-                .build();
-    }
+public class GHLicenseTest extends AbstractGitHubApiTestBase {
 
     /**
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned

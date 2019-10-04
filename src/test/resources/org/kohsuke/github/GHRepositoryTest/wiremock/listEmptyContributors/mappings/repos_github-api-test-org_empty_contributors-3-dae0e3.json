@@ -1,28 +1,19 @@
 {
-  "id": "009b9e10-1f02-4c40-bc83-b37bfd70670e",
-  "name": "user",
+  "id": "dae0e321-23f5-462b-8d0b-cb67f101e856",
+  "name": "repos_github-api-test-org_empty_contributors",
   "request": {
-    "url": "/user",
+    "url": "/repos/github-api-test-org/empty/contributors",
     "method": "GET"
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "user-009b9e10-1f02-4c40-bc83-b37bfd70670e.json",
+    "status": 204,
     "headers": {
-      "Date": "Thu, 03 Oct 2019 18:56:13 GMT",
-      "Content-Type": "application/json; charset=utf-8",
+      "Date": "Fri, 04 Oct 2019 00:34:14 GMT",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Status": "204 No Content",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4879",
-      "X-RateLimit-Reset": "1570132527",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
-      ],
-      "ETag": "W/\"cf6199fecf47b59c42190e1e11147ee2\"",
-      "Last-Modified": "Tue, 24 Sep 2019 19:32:29 GMT",
+      "X-RateLimit-Remaining": "4825",
+      "X-RateLimit-Reset": "1570151182",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -34,10 +25,11 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F373:78E9:F56BC4:1244F1E:5D96444C"
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "D778:2CE6:7EE795:96BD55:5D969386"
     }
   },
-  "uuid": "009b9e10-1f02-4c40-bc83-b37bfd70670e",
+  "uuid": "dae0e321-23f5-462b-8d0b-cb67f101e856",
   "persistent": true,
-  "insertionIndex": 1
+  "insertionIndex": 3
 }

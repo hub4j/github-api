@@ -1,23 +1,31 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.common.FileSource;
+import com.github.tomakehurst.wiremock.common.InputStreamSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
+import com.github.tomakehurst.wiremock.http.HttpHeader;
+import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
 import com.google.gson.*;
 import com.jcraft.jsch.IO;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
+import static com.github.tomakehurst.wiremock.common.Gzip.gzip;
+import static com.github.tomakehurst.wiremock.common.Gzip.unGzipToString;
 
 /**
  * @author Liam Newman
@@ -42,18 +50,35 @@ public class GitHubApiWireMockRule extends WireMockRule {
                         @Override
                         public Response transform(Request request, Response response, FileSource files,
                                                   Parameters parameters) {
-                            if ("application/json"
-                                .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())
-                                && !response.getHeaders().getHeader("Content-Encoding").containsValue("gzip")) {
-                                return Response.Builder.like(response)
-                                    .but()
-                                    .body(response.getBodyAsString()
-                                        .replace("https://api.github.com/",
-                                            "http://localhost:" + request.getPort() + "/")
-                                    )
-                                    .build();
+                            Response.Builder builder = Response.Builder.like(response);
+                            Collection<HttpHeader> headers = response.getHeaders().all();
+                            HttpHeader linkHeader = response.getHeaders().getHeader("Link");
+                            if (linkHeader.isPresent()) {
+                                headers.removeIf(item -> item.keyEquals("Link"));
+                                headers.add(HttpHeader.httpHeader("Link", linkHeader.firstValue()
+                                    .replace("https://api.github.com/",
+                                    "http://localhost:" + request.getPort() + "/")));
                             }
-                            return response;
+
+                            if ("application/json"
+                                .equals(response.getHeaders().getContentTypeHeader().mimeTypePart())) {
+
+                                String body;
+                                if (response.getHeaders().getHeader("Content-Encoding").containsValue("gzip")) {
+                                    headers.removeIf(item -> item.keyEquals("Content-Encoding"));
+                                    body = unGzipToString(response.getBody());
+                                } else {
+                                    body = response.getBodyAsString();
+                                }
+
+                                builder.body(body
+                                    .replace("https://api.github.com/",
+                                    "http://localhost:" + request.getPort() + "/"));
+
+                            }
+                            builder.headers(new HttpHeaders(headers));
+
+                            return builder.build();
                         }
 
                         @Override
@@ -126,6 +151,10 @@ public class GitHubApiWireMockRule extends WireMockRule {
                     try {
                         if (filePath.toString().endsWith(".json")) {
                             String fileText = new String(Files.readAllBytes(filePath));
+                            // while recording responses we replaced all github calls localhost
+                            // now we reverse that for storage.
+                            fileText = fileText.replace(this.baseUrl(),
+                                "https://api.github.com");
                             // Can be Array or Map
                             Object parsedObject = g.fromJson(fileText, Object.class);
                             if (parsedObject instanceof Map && filePath.toString().contains("mappings")) {

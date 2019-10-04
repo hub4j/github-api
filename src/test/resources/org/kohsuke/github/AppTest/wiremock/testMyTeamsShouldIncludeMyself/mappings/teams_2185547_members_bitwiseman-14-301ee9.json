@@ -1,0 +1,35 @@
+{
+  "id": "301ee9c8-0469-4653-a4b6-3e3965388517",
+  "name": "teams_2185547_members_bitwiseman",
+  "request": {
+    "url": "/teams/2185547/members/bitwiseman",
+    "method": "GET"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 00:21:31 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4904",
+      "X-RateLimit-Reset": "1570151182",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "D601:78E9:111356A:145BEEC:5D96908B"
+    }
+  },
+  "uuid": "301ee9c8-0469-4653-a4b6-3e3965388517",
+  "persistent": true,
+  "insertionIndex": 14
+}

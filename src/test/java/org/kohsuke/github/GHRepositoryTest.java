@@ -178,9 +178,9 @@ public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
 
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
-        GitHub gh = GitHub.connect();
-        for (GHRepository.Contributor c : gh.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors()) {
+        for (GHRepository.Contributor c : gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors()) {
             System.out.println(c);
+            fail("This list should be empty, but should return a valid empty iterable.");
         }
     }
 

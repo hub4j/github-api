@@ -1,1 +1,98 @@
-{"sha":"06b1108ec041fd8d6e7f54c8578d84a672fee9e4","node_id":"MDY6Q29tbWl0MTU0ODUxNDowNmIxMTA4ZWMwNDFmZDhkNmU3ZjU0Yzg1NzhkODRhNjcyZmVlOWU0","commit":{"author":{"name":"Jeff Thompson","email":"37345299+jeffret-b@users.noreply.github.com","date":"2019-08-19T17:42:58Z"},"committer":{"name":"GitHub","email":"noreply@github.com","date":"2019-08-19T17:42:58Z"},"message":"Update BSD license reference.\n\nCo-Authored-By: Jesse Glick <jglick@cloudbees.com>","tree":{"sha":"859fffa8ce0c958e4e4209c7a758be16f0c97c55","url":"https://api.github.com/repos/stapler/stapler/git/trees/859fffa8ce0c958e4e4209c7a758be16f0c97c55"},"url":"https://api.github.com/repos/stapler/stapler/git/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4","comment_count":0,"verification":{"verified":true,"reason":"valid","signature":"-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJdWt+iCRBK7hj4Ov3rIwAAdHIIAF2vncFEFRwkJdZrVZEkT30N\neYJXFeILq+wFRDuWEDOueIkUwCy9Z4xYnM/n7fw+51LsRK+4kaFNjP6HFJGr/+m5\nioCArE27vaXnZjTAldpAG0Jku3eIfChutub0HcBy4UURozLw70ajWpbA3vOQ560B\ntontgx2I/pJmwOqkXRVvM7yxTlW751kyTVWScCtOeX2efuveeotECsDrqScKxq66\nkvJ1xmb9olWdlTjChOgqNrLbLC0jUHqc1nMGCkkVL0Pl2BMB8cXrKBQyU71ZuVJt\n4EW8IBWBtuHwHFtwABBCHXdtSsCGPat0hVag72CHiqKoZV/EAPecIlyiZMAYYig=\n=7zTb\n-----END PGP SIGNATURE-----\n","payload":"tree 859fffa8ce0c958e4e4209c7a758be16f0c97c55\nparent 2a971c4e38c6d6693f7ad8b6768e4d74840d6679\nauthor Jeff Thompson <37345299+jeffret-b@users.noreply.github.com> 1566236578 -0600\ncommitter GitHub <noreply@github.com> 1566236578 -0600\n\nUpdate BSD license reference.\n\nCo-Authored-By: Jesse Glick <jglick@cloudbees.com>"}},"url":"https://api.github.com/repos/stapler/stapler/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4","html_url":"https://github.com/stapler/stapler/commit/06b1108ec041fd8d6e7f54c8578d84a672fee9e4","comments_url":"https://api.github.com/repos/stapler/stapler/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/comments","author":{"login":"jeffret-b","id":37345299,"node_id":"MDQ6VXNlcjM3MzQ1Mjk5","avatar_url":"https://avatars0.githubusercontent.com/u/37345299?v=4","gravatar_id":"","url":"https://api.github.com/users/jeffret-b","html_url":"https://github.com/jeffret-b","followers_url":"https://api.github.com/users/jeffret-b/followers","following_url":"https://api.github.com/users/jeffret-b/following{/other_user}","gists_url":"https://api.github.com/users/jeffret-b/gists{/gist_id}","starred_url":"https://api.github.com/users/jeffret-b/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/jeffret-b/subscriptions","organizations_url":"https://api.github.com/users/jeffret-b/orgs","repos_url":"https://api.github.com/users/jeffret-b/repos","events_url":"https://api.github.com/users/jeffret-b/events{/privacy}","received_events_url":"https://api.github.com/users/jeffret-b/received_events","type":"User","site_admin":false},"committer":{"login":"web-flow","id":19864447,"node_id":"MDQ6VXNlcjE5ODY0NDQ3","avatar_url":"https://avatars3.githubusercontent.com/u/19864447?v=4","gravatar_id":"","url":"https://api.github.com/users/web-flow","html_url":"https://github.com/web-flow","followers_url":"https://api.github.com/users/web-flow/followers","following_url":"https://api.github.com/users/web-flow/following{/other_user}","gists_url":"https://api.github.com/users/web-flow/gists{/gist_id}","starred_url":"https://api.github.com/users/web-flow/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/web-flow/subscriptions","organizations_url":"https://api.github.com/users/web-flow/orgs","repos_url":"https://api.github.com/users/web-flow/repos","events_url":"https://api.github.com/users/web-flow/events{/privacy}","received_events_url":"https://api.github.com/users/web-flow/received_events","type":"User","site_admin":false},"parents":[{"sha":"2a971c4e38c6d6693f7ad8b6768e4d74840d6679","url":"https://api.github.com/repos/stapler/stapler/commits/2a971c4e38c6d6693f7ad8b6768e4d74840d6679","html_url":"https://github.com/stapler/stapler/commit/2a971c4e38c6d6693f7ad8b6768e4d74840d6679"}],"stats":{"total":2,"additions":1,"deletions":1},"files":[{"sha":"fcfba8d7fc2b339aaa73e28142b5dfc2234a35bc","filename":"pom.xml","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/stapler/stapler/blob/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/pom.xml","raw_url":"https://github.com/stapler/stapler/raw/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/pom.xml","contents_url":"https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=06b1108ec041fd8d6e7f54c8578d84a672fee9e4","patch":"@@ -30,7 +30,7 @@\n     <license>\n       <name>2-clause BSD license</name>\n       <distribution>repo</distribution>\n-      <url>https://opensource.org/licenses/bsd-license</url>\n+      <url>https://opensource.org/licenses/BSD-2-Clause</url>\n     </license>\n   </licenses>\n   "}]}
+{
+  "sha": "06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
+  "node_id": "MDY6Q29tbWl0MTU0ODUxNDowNmIxMTA4ZWMwNDFmZDhkNmU3ZjU0Yzg1NzhkODRhNjcyZmVlOWU0",
+  "commit": {
+    "author": {
+      "name": "Jeff Thompson",
+      "email": "37345299+jeffret-b@users.noreply.github.com",
+      "date": "2019-08-19T17:42:58Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2019-08-19T17:42:58Z"
+    },
+    "message": "Update BSD license reference.\n\nCo-Authored-By: Jesse Glick <jglick@cloudbees.com>",
+    "tree": {
+      "sha": "859fffa8ce0c958e4e4209c7a758be16f0c97c55",
+      "url": "https://api.github.com/repos/stapler/stapler/git/trees/859fffa8ce0c958e4e4209c7a758be16f0c97c55"
+    },
+    "url": "https://api.github.com/repos/stapler/stapler/git/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJdWt+iCRBK7hj4Ov3rIwAAdHIIAF2vncFEFRwkJdZrVZEkT30N\neYJXFeILq+wFRDuWEDOueIkUwCy9Z4xYnM/n7fw+51LsRK+4kaFNjP6HFJGr/+m5\nioCArE27vaXnZjTAldpAG0Jku3eIfChutub0HcBy4UURozLw70ajWpbA3vOQ560B\ntontgx2I/pJmwOqkXRVvM7yxTlW751kyTVWScCtOeX2efuveeotECsDrqScKxq66\nkvJ1xmb9olWdlTjChOgqNrLbLC0jUHqc1nMGCkkVL0Pl2BMB8cXrKBQyU71ZuVJt\n4EW8IBWBtuHwHFtwABBCHXdtSsCGPat0hVag72CHiqKoZV/EAPecIlyiZMAYYig=\n=7zTb\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 859fffa8ce0c958e4e4209c7a758be16f0c97c55\nparent 2a971c4e38c6d6693f7ad8b6768e4d74840d6679\nauthor Jeff Thompson <37345299+jeffret-b@users.noreply.github.com> 1566236578 -0600\ncommitter GitHub <noreply@github.com> 1566236578 -0600\n\nUpdate BSD license reference.\n\nCo-Authored-By: Jesse Glick <jglick@cloudbees.com>"
+    }
+  },
+  "url": "https://api.github.com/repos/stapler/stapler/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
+  "html_url": "https://github.com/stapler/stapler/commit/06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
+  "comments_url": "https://api.github.com/repos/stapler/stapler/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/comments",
+  "author": {
+    "login": "jeffret-b",
+    "id": 37345299,
+    "node_id": "MDQ6VXNlcjM3MzQ1Mjk5",
+    "avatar_url": "https://avatars0.githubusercontent.com/u/37345299?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jeffret-b",
+    "html_url": "https://github.com/jeffret-b",
+    "followers_url": "https://api.github.com/users/jeffret-b/followers",
+    "following_url": "https://api.github.com/users/jeffret-b/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jeffret-b/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jeffret-b/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jeffret-b/subscriptions",
+    "organizations_url": "https://api.github.com/users/jeffret-b/orgs",
+    "repos_url": "https://api.github.com/users/jeffret-b/repos",
+    "events_url": "https://api.github.com/users/jeffret-b/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jeffret-b/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+      "url": "https://api.github.com/repos/stapler/stapler/commits/2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+      "html_url": "https://github.com/stapler/stapler/commit/2a971c4e38c6d6693f7ad8b6768e4d74840d6679"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 1,
+    "deletions": 1
+  },
+  "files": [
+    {
+      "sha": "fcfba8d7fc2b339aaa73e28142b5dfc2234a35bc",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/06b1108ec041fd8d6e7f54c8578d84a672fee9e4/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
+      "patch": "@@ -30,7 +30,7 @@\n     <license>\n       <name>2-clause BSD license</name>\n       <distribution>repo</distribution>\n-      <url>https://opensource.org/licenses/bsd-license</url>\n+      <url>https://opensource.org/licenses/BSD-2-Clause</url>\n     </license>\n   </licenses>\n   "
+    }
+  ]
+}

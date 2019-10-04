@@ -1,1 +1,98 @@
-{"sha":"53ce34d7d89c5172ae4f4f3167e35852b1910b59","node_id":"MDY6Q29tbWl0MTU0ODUxNDo1M2NlMzRkN2Q4OWM1MTcyYWU0ZjRmMzE2N2UzNTg1MmIxOTEwYjU5","commit":{"author":{"name":"Jesse Glick","email":"jglick@cloudbees.com","date":"2019-04-03T19:03:54Z"},"committer":{"name":"Jesse Glick","email":"jglick@cloudbees.com","date":"2019-04-03T19:03:54Z"},"message":"Miscellaneous POM updates while I am here.","tree":{"sha":"996a8d951dc95bc002ee4703865f45594418902e","url":"https://api.github.com/repos/stapler/stapler/git/trees/996a8d951dc95bc002ee4703865f45594418902e"},"url":"https://api.github.com/repos/stapler/stapler/git/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59","comment_count":0,"verification":{"verified":true,"reason":"valid","signature":"-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCgAdFiEEYYylhqBIUt57zhxYHdpp2UtiQxEFAlylA5oACgkQHdpp2Uti\nQxFfbgf/Sv3T07OcY1W31Z1RyUVaEx0WeZpfZPuAOibFGfGLC6wpa4LCJCwaTK5l\n2I5T9nNZ95/22S3nsFHyb+VAnOFusXblKw8W6BvvyUWwNXzoBQGgvg37hKyNFwdO\nMRdErOixk71Yb6cnCatvzIpBuM4ENO77/TNvLtBApCETO9UQf6GjLU4jbHJySEHJ\n/NXvpdO1Xu5WskTc2k8/x+dtuilvLEAdMZUEHBiBTcGTUGQqedC6C7Mg3pTm9zGE\nQPj5THk+GZ6fD4KJwx0lyW9dGwTM9XYC/hjVs6AHC2dlROFiJ8/K722Fqti/zAyM\nDYz6+UUHcugK555ttRS1ntqgjxxEPw==\n=kTXy\n-----END PGP SIGNATURE-----","payload":"tree 996a8d951dc95bc002ee4703865f45594418902e\nparent 0e294ea94617a0926bd583dfe41515f4afb881e7\nauthor Jesse Glick <jglick@cloudbees.com> 1554318234 -0400\ncommitter Jesse Glick <jglick@cloudbees.com> 1554318234 -0400\n\nMiscellaneous POM updates while I am here.\n"}},"url":"https://api.github.com/repos/stapler/stapler/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59","html_url":"https://github.com/stapler/stapler/commit/53ce34d7d89c5172ae4f4f3167e35852b1910b59","comments_url":"https://api.github.com/repos/stapler/stapler/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59/comments","author":{"login":"jglick","id":154109,"node_id":"MDQ6VXNlcjE1NDEwOQ==","avatar_url":"https://avatars1.githubusercontent.com/u/154109?v=4","gravatar_id":"","url":"https://api.github.com/users/jglick","html_url":"https://github.com/jglick","followers_url":"https://api.github.com/users/jglick/followers","following_url":"https://api.github.com/users/jglick/following{/other_user}","gists_url":"https://api.github.com/users/jglick/gists{/gist_id}","starred_url":"https://api.github.com/users/jglick/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/jglick/subscriptions","organizations_url":"https://api.github.com/users/jglick/orgs","repos_url":"https://api.github.com/users/jglick/repos","events_url":"https://api.github.com/users/jglick/events{/privacy}","received_events_url":"https://api.github.com/users/jglick/received_events","type":"User","site_admin":false},"committer":{"login":"jglick","id":154109,"node_id":"MDQ6VXNlcjE1NDEwOQ==","avatar_url":"https://avatars1.githubusercontent.com/u/154109?v=4","gravatar_id":"","url":"https://api.github.com/users/jglick","html_url":"https://github.com/jglick","followers_url":"https://api.github.com/users/jglick/followers","following_url":"https://api.github.com/users/jglick/following{/other_user}","gists_url":"https://api.github.com/users/jglick/gists{/gist_id}","starred_url":"https://api.github.com/users/jglick/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/jglick/subscriptions","organizations_url":"https://api.github.com/users/jglick/orgs","repos_url":"https://api.github.com/users/jglick/repos","events_url":"https://api.github.com/users/jglick/events{/privacy}","received_events_url":"https://api.github.com/users/jglick/received_events","type":"User","site_admin":false},"parents":[{"sha":"0e294ea94617a0926bd583dfe41515f4afb881e7","url":"https://api.github.com/repos/stapler/stapler/commits/0e294ea94617a0926bd583dfe41515f4afb881e7","html_url":"https://github.com/stapler/stapler/commit/0e294ea94617a0926bd583dfe41515f4afb881e7"}],"stats":{"total":7,"additions":2,"deletions":5},"files":[{"sha":"2c12ec3f8c2d8b52772784b939ccea49b1fa904d","filename":"pom.xml","status":"modified","additions":2,"deletions":5,"changes":7,"blob_url":"https://github.com/stapler/stapler/blob/53ce34d7d89c5172ae4f4f3167e35852b1910b59/pom.xml","raw_url":"https://github.com/stapler/stapler/raw/53ce34d7d89c5172ae4f4f3167e35852b1910b59/pom.xml","contents_url":"https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=53ce34d7d89c5172ae4f4f3167e35852b1910b59","patch":"@@ -4,7 +4,8 @@\n   <parent>\n     <groupId>org.kohsuke</groupId>\n     <artifactId>pom</artifactId>\n-    <version>19</version>\n+    <version>21</version>\n+    <relativePath />\n   </parent>\n   <groupId>org.kohsuke.stapler</groupId>\n   <artifactId>stapler-parent</artifactId>\n@@ -40,10 +41,6 @@\n     <tag>${scmTag}</tag>\n   </scm>\n \n-  <prerequisites>\n-    <maven>3.0.4</maven>\n-  </prerequisites>\n-\n   <distributionManagement>\n     <repository>\n       <id>maven.jenkins-ci.org</id>"}]}
+{
+  "sha": "53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+  "node_id": "MDY6Q29tbWl0MTU0ODUxNDo1M2NlMzRkN2Q4OWM1MTcyYWU0ZjRmMzE2N2UzNTg1MmIxOTEwYjU5",
+  "commit": {
+    "author": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2019-04-03T19:03:54Z"
+    },
+    "committer": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2019-04-03T19:03:54Z"
+    },
+    "message": "Miscellaneous POM updates while I am here.",
+    "tree": {
+      "sha": "996a8d951dc95bc002ee4703865f45594418902e",
+      "url": "https://api.github.com/repos/stapler/stapler/git/trees/996a8d951dc95bc002ee4703865f45594418902e"
+    },
+    "url": "https://api.github.com/repos/stapler/stapler/git/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCgAdFiEEYYylhqBIUt57zhxYHdpp2UtiQxEFAlylA5oACgkQHdpp2Uti\nQxFfbgf/Sv3T07OcY1W31Z1RyUVaEx0WeZpfZPuAOibFGfGLC6wpa4LCJCwaTK5l\n2I5T9nNZ95/22S3nsFHyb+VAnOFusXblKw8W6BvvyUWwNXzoBQGgvg37hKyNFwdO\nMRdErOixk71Yb6cnCatvzIpBuM4ENO77/TNvLtBApCETO9UQf6GjLU4jbHJySEHJ\n/NXvpdO1Xu5WskTc2k8/x+dtuilvLEAdMZUEHBiBTcGTUGQqedC6C7Mg3pTm9zGE\nQPj5THk+GZ6fD4KJwx0lyW9dGwTM9XYC/hjVs6AHC2dlROFiJ8/K722Fqti/zAyM\nDYz6+UUHcugK555ttRS1ntqgjxxEPw==\n=kTXy\n-----END PGP SIGNATURE-----",
+      "payload": "tree 996a8d951dc95bc002ee4703865f45594418902e\nparent 0e294ea94617a0926bd583dfe41515f4afb881e7\nauthor Jesse Glick <jglick@cloudbees.com> 1554318234 -0400\ncommitter Jesse Glick <jglick@cloudbees.com> 1554318234 -0400\n\nMiscellaneous POM updates while I am here.\n"
+    }
+  },
+  "url": "https://api.github.com/repos/stapler/stapler/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+  "html_url": "https://github.com/stapler/stapler/commit/53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+  "comments_url": "https://api.github.com/repos/stapler/stapler/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59/comments",
+  "author": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "0e294ea94617a0926bd583dfe41515f4afb881e7",
+      "url": "https://api.github.com/repos/stapler/stapler/commits/0e294ea94617a0926bd583dfe41515f4afb881e7",
+      "html_url": "https://github.com/stapler/stapler/commit/0e294ea94617a0926bd583dfe41515f4afb881e7"
+    }
+  ],
+  "stats": {
+    "total": 7,
+    "additions": 2,
+    "deletions": 5
+  },
+  "files": [
+    {
+      "sha": "2c12ec3f8c2d8b52772784b939ccea49b1fa904d",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 5,
+      "changes": 7,
+      "blob_url": "https://github.com/stapler/stapler/blob/53ce34d7d89c5172ae4f4f3167e35852b1910b59/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/53ce34d7d89c5172ae4f4f3167e35852b1910b59/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+      "patch": "@@ -4,7 +4,8 @@\n   <parent>\n     <groupId>org.kohsuke</groupId>\n     <artifactId>pom</artifactId>\n-    <version>19</version>\n+    <version>21</version>\n+    <relativePath />\n   </parent>\n   <groupId>org.kohsuke.stapler</groupId>\n   <artifactId>stapler-parent</artifactId>\n@@ -40,10 +41,6 @@\n     <tag>${scmTag}</tag>\n   </scm>\n \n-  <prerequisites>\n-    <maven>3.0.4</maven>\n-  </prerequisites>\n-\n   <distributionManagement>\n     <repository>\n       <id>maven.jenkins-ci.org</id>"
+    }
+  ]
+}

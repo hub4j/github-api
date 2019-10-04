@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
@@ -29,8 +32,12 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
-    public final static String STUBBED_USER_LOGIN = "placeholder-user";
-    public final static String STUBBED_USER_PASSWORD = "placeholder-password";
+    final static String GITHUB_API_TEST_ORG = "github-api-test-org";
+
+    final static String STUBBED_USER_LOGIN = "placeholder-user";
+    final static String STUBBED_USER_PASSWORD = "placeholder-password";
+
+    protected boolean useDefaultGitHub = true;
 
     /**
      * {@link GitHub} instance for use during test.
@@ -49,11 +56,19 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
     @Rule
-    public GitHubApiWireMockRule githubApi = new GitHubApiWireMockRule(
-        WireMockConfiguration.options()
+    public final GitHubApiWireMockRule githubApi;
+
+    public AbstractGitHubApiWireMockTest() {
+        githubApi = new GitHubApiWireMockRule(
+            this.getWireMockOptions()
+        );
+    }
+
+    protected WireMockConfiguration getWireMockOptions() {
+        return WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory(baseRecordPath)
-    );
+            .usingFilesUnderDirectory(baseRecordPath);
+    }
 
     private static GitHubBuilder createGitHubBuilder() {
 
@@ -74,6 +89,9 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
                 // to clutter their event stream.
                 builder = GitHubBuilder.fromProperties(props);
             } else {
+
+                builder = GitHubBuilder.fromEnvironment();
+
                 builder = GitHubBuilder.fromCredentials();
             }
         } catch (IOException e) {
@@ -83,30 +101,65 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     }
 
     protected GitHubBuilder getGitHubBuilder() {
-        return githubBuilder;
-    }
-
-    @Before
-    public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder();
+        GitHubBuilder builder = githubBuilder.clone();
 
         if (!githubApi.isUseProxy()) {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
+            builder.oauthToken = null;
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
-        gitHub = builder
-            .withEndpoint("http://localhost:" + githubApi.port())
-            .build();
+        return builder;
+    }
+
+    @Before
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder()
+            .withEndpoint(githubApi.baseUrl());
+
+        if (useDefaultGitHub) {
+            gitHub = builder
+                .build();
+        }
 
         if (githubApi.isUseProxy()) {
-            gitHubBeforeAfter = builder
+            gitHubBeforeAfter = getGitHubBuilder()
                 .withEndpoint("https://api.github.com/")
                 .build();
         } else {
             gitHubBeforeAfter = null;
         }
     }
+
+    protected void snapshotNotAllowed() {
+        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", githubApi.isTakeSnapshot());
+    }
+
+    protected void requireProxy(String reason) {
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason, githubApi.isUseProxy());
+    }
+
+    protected GHUser getUser() {
+        return getUser(gitHub);
+    }
+
+    protected static GHUser getUser(GitHub gitHub) {
+        try {
+            return gitHub.getMyself();
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    protected void kohsuke() {
+        // No-op for now
+        // Generally this means the test is doing something that requires additional access rights
+        // Not always clear which ones.
+        // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
+//        String login = getUserTest().getLogin();
+//        assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+    }
+
 }

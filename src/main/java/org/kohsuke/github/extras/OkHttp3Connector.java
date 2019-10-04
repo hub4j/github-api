@@ -16,12 +16,18 @@ import java.net.URL;
  * response does not count against the rate limit.
  * See http://developer.github.com/v3/#conditional-requests
  *
+ * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
  */
+@Deprecated
 public class OkHttp3Connector implements HttpConnector {
     private final OkUrlFactory urlFactory;
 
+    /*
+     * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
+     */
+    @Deprecated
     public OkHttp3Connector(OkUrlFactory urlFactory) {
         this.urlFactory = urlFactory;
     }

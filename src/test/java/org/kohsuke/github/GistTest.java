@@ -18,11 +18,11 @@ public class GistTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void lifecycleTest() throws Exception {
         GHGist gist = gitHub.createGist()
-                .public_(false)
-                .description("Test Gist")
-                .file("abc.txt","abc")
-                .file("def.txt","def")
-                .create();
+            .public_(false)
+            .description("Test Gist")
+            .file("abc.txt", "abc")
+            .file("def.txt", "def")
+            .create();
 
         assertThat(gist.getCreatedAt(), is(notNullValue()));
 
@@ -39,7 +39,7 @@ public class GistTest extends AbstractGitHubApiWireMockTest {
     @Test
     public void starTest() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
-        assertEquals("rtyler",gist.getOwner().getLogin());
+        assertEquals("rtyler", gist.getOwner().getLogin());
 
 
         gist.star();
@@ -70,7 +70,7 @@ public class GistTest extends AbstractGitHubApiWireMockTest {
 
         assertTrue(gist.isPublic());
 
-        assertEquals(1,gist.getFiles().size());
+        assertEquals(1, gist.getFiles().size());
         GHGistFile f = gist.getFile("keybase.md");
 
         assertEquals("text/markdown", f.getType());

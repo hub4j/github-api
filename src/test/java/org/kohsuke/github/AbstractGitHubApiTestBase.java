@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.FileInputStream;
 import java.util.Properties;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Assume;
@@ -20,15 +21,7 @@ public abstract class AbstractGitHubApiTestBase extends AbstractGitHubApiWireMoc
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue( "All tests inheriting from this class are not guaranteed to work without proxy", githubApi.isUseProxy());
-    }
-
-    protected GHUser getUser() {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy", githubApi.isUseProxy());
     }
 
     protected void kohsuke() {

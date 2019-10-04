@@ -24,7 +24,7 @@ public abstract class AbuseLimitHandler {
      * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">API documentation from GitHub</a>
      * @param e
      *      Exception from Java I/O layer. If you decide to fail the processing, you can throw
-     *      this exception (or wrap this exception into another exception and throw it.)
+     *      this exception (or wrap this exception into another exception and throw it).
      * @param uc
      *      Connection that resulted in an error. Useful for accessing other response headers.
      */
@@ -57,7 +57,7 @@ public abstract class AbuseLimitHandler {
     public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-            throw (IOException)new IOException("Abust limit reached").initCause(e);
+            throw (IOException)new IOException("Abuse limit reached").initCause(e);
         }
     };
 }

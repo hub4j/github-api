@@ -154,18 +154,14 @@ class Requester {
 
     public Requester with(String key, Enum e) {
         if (e==null)    return _with(key, null);
-
-        // by convention Java constant names are upper cases, but github uses
-        // lower-case constants. GitHub also uses '-', which in Java we always
-        // replace by '_'
-        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_', '-'));
+        return with(key, transformEnum(e));
     }
 
     public Requester with(String key, String value) {
         return _with(key, value);
     }
 
-    public Requester with(String key, Collection<String> value) {
+    public Requester with(String key, Collection<?> value) {
         return _with(key, value);
     }
 
@@ -179,6 +175,14 @@ class Requester {
 
     public Requester with(String key, Map<String, String> value) {
         return _with(key, value);
+    }
+
+    public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
+        Map<String,String> retMap = new HashMap<String, String>();
+        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
+            retMap.put(entry.getKey(), transformEnum(entry.getValue()));
+        }
+        return _with(key, retMap);
     }
 
     public Requester with(@WillClose/*later*/ InputStream body) {
@@ -526,7 +530,7 @@ class Requester {
                     }
                 }
             } catch (IOException e) {
-                throw new GHException("Failed to retrieve "+url);
+                throw new GHException("Failed to retrieve " + url, e);
             }
         }
 
@@ -724,6 +728,18 @@ class Requester {
         }
 
         throw e;
+    }
+
+    /**
+     * Transform Java Enum into Github constants given its conventions
+     * @param en - Enum to be transformed
+     * @return a String containing the value of a Github constant
+     */
+    private String transformEnum(Enum en){
+        // by convention Java constant names are upper cases, but github uses
+        // lower-case constants. GitHub also uses '-', which in Java we always
+        // replace by '_'
+        return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

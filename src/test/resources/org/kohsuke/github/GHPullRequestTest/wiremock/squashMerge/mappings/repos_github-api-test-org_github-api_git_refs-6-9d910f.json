@@ -1,0 +1,50 @@
+{
+  "id": "9d910f89-f71e-441d-8781-cba77a54dd08",
+  "name": "repos_github-api-test-org_github-api_git_refs",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/git/refs",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/test/squashMerge\",\"sha\":\"912e2176a00e60e02196737e0ae4c218a14b5dcb\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-9d910f89-f71e-441d-8781-cba77a54dd08.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:24:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4867",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"b87362620c8682d8c473abd414562140\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/github-api-test-org/github-api/git/refs/heads/test/squashMerge",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF94:9A2F:6886CD:76EF71:5D74ACC0"
+    }
+  },
+  "uuid": "9d910f89-f71e-441d-8781-cba77a54dd08",
+  "persistent": true,
+  "insertionIndex": 6
+}

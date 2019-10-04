@@ -41,6 +41,8 @@ public class GHRepositoryStatistics {
      * @param waitTillReady Whether to sleep the thread if necessary until the
      * statistics are ready. This is true by default.
      */
+    @Preview
+    @Deprecated
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = {"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"}, justification = "JSON API")
     public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady) throws IOException, InterruptedException {
@@ -69,7 +71,7 @@ public class GHRepositoryStatistics {
         return new PagedIterable<ContributorStats>() {
             @Override
             public PagedIterator<ContributorStats> _iterator(int pageSize) {
-                return new PagedIterator<ContributorStats>(root.retrieve().asIterator(getApiTailUrl("stats/contributors"), ContributorStats[].class, pageSize)) {
+                return new PagedIterator<ContributorStats>(root.retrieve().asIterator(getApiTailUrl("contributors"), ContributorStats[].class, pageSize)) {
                     @Override
                     protected void wrapUp(ContributorStats[] page) {
                         for (ContributorStats c : page) {
@@ -202,7 +204,7 @@ public class GHRepositoryStatistics {
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
         return new PagedIterable<CommitActivity>() {
             public PagedIterator<CommitActivity> _iterator(int pageSize) {
-                return new PagedIterator<CommitActivity>(root.retrieve().asIterator(getApiTailUrl("stats/commit_activity"), CommitActivity[].class, pageSize)) {
+                return new PagedIterator<CommitActivity>(root.retrieve().asIterator(getApiTailUrl("commit_activity"), CommitActivity[].class, pageSize)) {
                     @Override
                     protected void wrapUp(CommitActivity[] page) {
                         for (CommitActivity c : page) {
@@ -265,7 +267,7 @@ public class GHRepositoryStatistics {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = root.retrieve().asStream(getApiTailUrl("stats/code_frequency"));
+            InputStream stream = root.retrieve().asStream(getApiTailUrl("code_frequency"));
 
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
@@ -336,7 +338,7 @@ public class GHRepositoryStatistics {
      * See https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
      */
     public Participation getParticipation() throws IOException {
-        return root.retrieve().to(getApiTailUrl("stats/participation"), Participation.class);
+        return root.retrieve().to(getApiTailUrl("participation"), Participation.class);
     }
 
     public static class Participation extends GHObject {
@@ -382,7 +384,7 @@ public class GHRepositoryStatistics {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.retrieve().asStream(getApiTailUrl("stats/punch_card"));
+        InputStream stream = root.retrieve().asStream(getApiTailUrl("punch_card"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
@@ -439,6 +441,6 @@ public class GHRepositoryStatistics {
     }
 
     String getApiTailUrl(String tail) {
-        return repo.getApiTailUrl(tail);
+        return repo.getApiTailUrl("stats/" + tail);
     }
 }

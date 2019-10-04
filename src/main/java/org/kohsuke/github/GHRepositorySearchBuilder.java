@@ -55,6 +55,10 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         return q("stars:"+v);
     }
 
+    public GHRepositorySearchBuilder topic(String v) {
+        return q("topic:"+v);
+    }
+
     public GHRepositorySearchBuilder order(GHDirection v) {
         req.with("order",v);
         return this;

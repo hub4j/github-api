@@ -65,9 +65,8 @@ public class GHBranch {
         return GitHub.parseURL(protection_url);
     }
 
-    @Preview @Deprecated
     public GHBranchProtection getProtection() throws IOException {
-        return root.retrieve().withPreview(LOKI).to(protection_url, GHBranchProtection.class);
+        return root.retrieve().to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -80,9 +79,8 @@ public class GHBranch {
     /**
      * Disables branch protection and allows anyone with push access to push changes.
      */
-    @Preview @Deprecated
     public void disableProtection() throws IOException {
-        new Requester(root).method("DELETE").withPreview(LOKI).to(protection_url);
+        new Requester(root).method("DELETE").to(protection_url);
     }
 
     /**

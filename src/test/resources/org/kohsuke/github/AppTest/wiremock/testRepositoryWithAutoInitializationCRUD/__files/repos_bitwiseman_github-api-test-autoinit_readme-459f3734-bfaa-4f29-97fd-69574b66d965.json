@@ -1,0 +1,18 @@
+{
+  "name": "README.md",
+  "path": "README.md",
+  "sha": "9ab0314e21ff2990ac133d0dc5c5c79437edeb83",
+  "size": 59,
+  "url": "https://api.github.com/repos/bitwiseman/github-api-test-autoinit/contents/README.md?ref=master",
+  "html_url": "https://github.com/bitwiseman/github-api-test-autoinit/blob/master/README.md",
+  "git_url": "https://api.github.com/repos/bitwiseman/github-api-test-autoinit/git/blobs/9ab0314e21ff2990ac133d0dc5c5c79437edeb83",
+  "download_url": "https://raw.githubusercontent.com/bitwiseman/github-api-test-autoinit/master/README.md",
+  "type": "file",
+  "content": "IyBnaXRodWItYXBpLXRlc3QtYXV0b2luaXQKYSB0ZXN0IHJlcG9zaXRvcnkg\nZm9yIGF1dG8gaW5pdAo=\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/bitwiseman/github-api-test-autoinit/contents/README.md?ref=master",
+    "git": "https://api.github.com/repos/bitwiseman/github-api-test-autoinit/git/blobs/9ab0314e21ff2990ac133d0dc5c5c79437edeb83",
+    "html": "https://github.com/bitwiseman/github-api-test-autoinit/blob/master/README.md"
+  }
+}

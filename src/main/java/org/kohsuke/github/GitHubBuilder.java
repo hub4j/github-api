@@ -26,7 +26,8 @@ public class GitHubBuilder implements Cloneable {
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
-    
+    /* private */ String jwtToken;
+
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
@@ -53,13 +54,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.oauthToken != null || builder.user != null)
+        if (builder.oauthToken != null || builder.user != null  || builder.jwtToken != null)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.oauthToken != null || builder.user != null)
+            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -108,6 +109,7 @@ public class GitHubBuilder implements Cloneable {
      *     <li>GITHUB_PASSWORD: raw password
      *     <li>GITHUB_OAUTH: OAuth token to login
      *     <li>GITHUB_ENDPOINT: URL of the API endpoint
+     *     <li>GITHUB_JWT: JWT token to login
      * </ul>
      *
      * <p>
@@ -149,6 +151,7 @@ public class GitHubBuilder implements Cloneable {
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
         self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
+        self.withJwtToken(props.getProperty("jwt"));
         self.withPassword(props.getProperty("login"), props.getProperty("password"));
         self.withEndpoint(props.getProperty("endpoint", GitHub.GITHUB_URL));
         return self;
@@ -175,6 +178,10 @@ public class GitHubBuilder implements Cloneable {
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
         this.oauthToken = oauthToken;
         this.user = user;
+        return this;
+    }
+    public GitHubBuilder withJwtToken(String jwtToken){
+        this.jwtToken = jwtToken;
         return this;
     }
     public GitHubBuilder withConnector(HttpConnector connector) {
@@ -204,7 +211,7 @@ public class GitHubBuilder implements Cloneable {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, password, connector, rateLimitHandler, abuseLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler, abuseLimitHandler);
     }
 
     @Override

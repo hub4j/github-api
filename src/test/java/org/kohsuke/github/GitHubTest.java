@@ -14,10 +14,6 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +46,6 @@ public class GitHubTest extends AbstractGitHubApiTestBase {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
         assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
-
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
@@ -65,6 +60,7 @@ public class GitHubTest extends AbstractGitHubApiTestBase {
         props.put("login", "bogus");
         props.put("oauth", "bogus");
         props.put("password", "bogus");
+        props.put("jwt", "bogus");
 
         setupEnvironment(props);
 
@@ -73,6 +69,7 @@ public class GitHubTest extends AbstractGitHubApiTestBase {
         assertEquals("bogus", builder.user);
         assertEquals("bogus", builder.oauthToken);
         assertEquals("bogus", builder.password);
+        assertEquals("bogus", builder.jwtToken);
 
     }
 

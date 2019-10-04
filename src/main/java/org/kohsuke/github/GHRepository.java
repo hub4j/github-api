@@ -627,7 +627,19 @@ public class GHRepository extends GHObject {
     public void setPrivate(boolean value) throws IOException {
         edit("private", Boolean.toString(value));
     }
-
+    
+    public void allowSquashMerge(boolean value) throws IOException {
+        edit("allow_squash_merge", Boolean.toString(value));
+    }
+    
+    public void allowMergeCommit(boolean value) throws IOException {
+        edit("allow_merge_commit", Boolean.toString(value));
+    }
+    
+    public void allowRebaseMerge(boolean value) throws IOException {
+        edit("allow_rebase_merge", Boolean.toString(value));
+    }
+    
     /**
      * Deletes this repository.
      */

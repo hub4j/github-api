@@ -1,0 +1,45 @@
+{
+  "id": "1c529d7c-99f0-43ae-8231-044f48beac1a",
+  "name": "repos_github-api-test-org_github-api",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api-1c529d7c-99f0-43ae-8231-044f48beac1a.json",
+    "headers": {
+      "Date": "Wed, 25 Sep 2019 23:35:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1569457884",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"e40487cafd3670c0de171f4250dbefb8\"",
+      "Last-Modified": "Wed, 25 Sep 2019 23:35:59 GMT",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F855:59E1:1397F42:1714091:5D8BF9DF"
+    }
+  },
+  "uuid": "1c529d7c-99f0-43ae-8231-044f48beac1a",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-github-api",
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-github-api-2",
+  "insertionIndex": 5
+}

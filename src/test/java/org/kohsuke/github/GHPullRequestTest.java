@@ -19,7 +19,9 @@ public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
     @After
     public void cleanUp() throws Exception {
         // Cleanup is only needed when proxying
-        if (!githubApi.isUseProxy()) return;
+        if (!githubApi.isUseProxy()) {
+            return;
+        }
 
         for (GHPullRequest pr : getRepository(this.gitHubBeforeAfter).getPullRequests(GHIssueState.OPEN)) {
             pr.close();
@@ -53,7 +55,7 @@ public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
     }
 
 
-    @Test 
+    @Test
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
@@ -112,9 +114,9 @@ public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
         p.getMergeable();
         // mergeability computation takes time. give it more chance
         Thread.sleep(1000);
-        for (int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
-            if (updated.getMergeable() && updated.getMergeCommitSha()!=null) {
+            if (updated.getMergeable() && updated.getMergeCommitSha() != null) {
                 // make sure commit exists
                 GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
                 assertNotNull(commit);
@@ -164,28 +166,28 @@ public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
-    
+
     @Test
     public void queryPullRequestsQualifiedHead() throws Exception {
         GHRepository repo = getRepository();
         // Create PRs from two different branches to master
         repo.createPullRequest("queryPullRequestsQualifiedHead_stable", "test/stable", "master", null);
         repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
-        
+
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("github-api-test-org:test/stable").base("master").list().asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
     }
-    
+
     @Test
     public void queryPullRequestsUnqualifiedHead() throws Exception {
         GHRepository repo = getRepository();
         // Create PRs from two different branches to master
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_stable", "test/stable", "master", null);
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
-        
+
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master").list().asList();
         assertNotNull(prs);
@@ -216,8 +218,8 @@ public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
     }
 
     @Test
-    public void getUser() throws IOException {
-        GHPullRequest p = getRepository().createPullRequest("getUser", "test/stable", "master", "## test");
+    public void getUserTest() throws IOException {
+        GHPullRequest p = getRepository().createPullRequest("getUserTest", "test/stable", "master", "## test");
         GHPullRequest prSingle = getRepository().getPullRequest(p.getNumber());
         assertNotNull(prSingle.getUser().root);
         prSingle.getMergeable();

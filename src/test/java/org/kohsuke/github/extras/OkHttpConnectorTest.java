@@ -215,7 +215,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
         GHRateLimit rateLimitAfter = gitHub.rateLimit();
         assertThat("Request Count",
-            getRequestCount(),
+            mockGitHub.getRequestCount(),
             is(networkRequestCount + userRequestCount));
 
         // Rate limit must be under this value, but if it wiggles we don't care
@@ -223,10 +223,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
             rateLimitBefore.remaining - rateLimitAfter.remaining,
             is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
 
-    }
-
-    private int getRequestCount() {
-        return mockGitHub.apiServer().countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
     private OkHttpClient createClient(boolean useCache) throws IOException {

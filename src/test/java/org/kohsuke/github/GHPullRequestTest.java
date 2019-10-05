@@ -132,22 +132,47 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");
 
         p.requestTeamReviewers(Collections.singletonList(testTeam));
+
+        int baseRequestCount = mockGitHub.getRequestCount();
         p.refresh();
-        assertFalse(p.getRequestedTeams().isEmpty());
+        assertThat("We should not eagerly load organizations for teams",
+            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+        assertThat(p.getRequestedTeams().size(), equalTo(1));
+        assertThat("We should not eagerly load organizations for teams",
+            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+        assertThat("Org should be queried for automatically if asked for",
+            p.getRequestedTeams().get(0).getOrganization(), notNullValue());
+        assertThat("Request count should show lazy load occurred",
+            mockGitHub.getRequestCount() - baseRequestCount , equalTo(2));
     }
 
+    @Test
     public void mergeCommitSHA() throws Exception {
         String name = "mergeCommitSHA";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/mergeable_branch", "master", "## test");
-        p.getMergeable();
-        // mergeability computation takes time. give it more chance
-        Thread.sleep(1000);
-        for (int i = 0; i < 10; i++) {
-            GHPullRequest updated = getRepository().getPullRequest(p.getNumber());
-            if (updated.getMergeable() && updated.getMergeCommitSha() != null) {
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/mergeable_branch", "master", "## test");
+        int baseRequestCount = mockGitHub.getRequestCount();
+        assertThat(p.getMergeableNoRefresh(), nullValue());
+        assertThat("Used existing value",
+            mockGitHub.getRequestCount() - baseRequestCount , equalTo(0));
+
+        // mergeability computation takes time, this should still be null immediately after creation
+        assertThat(p.getMergeable(), nullValue());
+        assertThat("Asked for PR information",
+            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+
+        for (int i = 2; i <= 10; i++) {
+            if (Boolean.TRUE.equals(p.getMergeable()) && p.getMergeCommitSha() != null) {
+                assertThat("Asked for PR information",
+                    mockGitHub.getRequestCount() - baseRequestCount , equalTo(i));
+
                 // make sure commit exists
-                GHCommit commit = getRepository().getCommit(updated.getMergeCommitSha());
+                GHCommit commit = repo.getCommit(p.getMergeCommitSha());
                 assertNotNull(commit);
+
+                assertThat("Asked for PR information",
+                    mockGitHub.getRequestCount() - baseRequestCount , equalTo(i + 1));
+
                 return;
             }
 

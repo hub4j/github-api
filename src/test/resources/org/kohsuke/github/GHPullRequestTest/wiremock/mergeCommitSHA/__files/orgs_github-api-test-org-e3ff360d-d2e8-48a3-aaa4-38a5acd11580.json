@@ -14,7 +14,7 @@
   "is_verified": false,
   "has_organization_projects": true,
   "has_repository_projects": true,
-  "public_repos": 9,
+  "public_repos": 10,
   "public_gists": 0,
   "followers": 0,
   "following": 0,
@@ -35,7 +35,7 @@
     "name": "free",
     "space": 976562499,
     "private_repos": 0,
-    "filled_seats": 3,
+    "filled_seats": 5,
     "seats": 0
   }
 }

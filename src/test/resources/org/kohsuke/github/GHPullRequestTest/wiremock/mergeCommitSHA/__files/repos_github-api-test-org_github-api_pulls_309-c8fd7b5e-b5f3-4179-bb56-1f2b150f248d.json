@@ -1,12 +1,12 @@
 {
-  "url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265",
-  "id": 315252334,
-  "node_id": "MDExOlB1bGxSZXF1ZXN0MzE1MjUyMzM0",
-  "html_url": "https://github.com/github-api-test-org/github-api/pull/265",
-  "diff_url": "https://github.com/github-api-test-org/github-api/pull/265.diff",
-  "patch_url": "https://github.com/github-api-test-org/github-api/pull/265.patch",
-  "issue_url": "https://api.github.com/repos/github-api-test-org/github-api/issues/265",
-  "number": 265,
+  "url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309",
+  "id": 324976764,
+  "node_id": "MDExOlB1bGxSZXF1ZXN0MzI0OTc2NzY0",
+  "html_url": "https://github.com/github-api-test-org/github-api/pull/309",
+  "diff_url": "https://github.com/github-api-test-org/github-api/pull/309.diff",
+  "patch_url": "https://github.com/github-api-test-org/github-api/pull/309.patch",
+  "issue_url": "https://api.github.com/repos/github-api-test-org/github-api/issues/309",
+  "number": 309,
   "state": "open",
   "locked": false,
   "title": "mergeCommitSHA",
@@ -31,21 +31,21 @@
     "site_admin": false
   },
   "body": "## test",
-  "created_at": "2019-09-08T07:24:38Z",
-  "updated_at": "2019-09-08T07:24:38Z",
+  "created_at": "2019-10-05T21:11:40Z",
+  "updated_at": "2019-10-05T21:11:40Z",
   "closed_at": null,
   "merged_at": null,
-  "merge_commit_sha": "a6d4683ed59c03bda91ef94ec463ae95ac0d31da",
+  "merge_commit_sha": null,
   "assignee": null,
   "assignees": [],
   "requested_reviewers": [],
   "requested_teams": [],
   "labels": [],
   "milestone": null,
-  "commits_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265/commits",
-  "review_comments_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265/comments",
+  "commits_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309/commits",
+  "review_comments_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309/comments",
   "review_comment_url": "https://api.github.com/repos/github-api-test-org/github-api/pulls/comments{/number}",
-  "comments_url": "https://api.github.com/repos/github-api-test-org/github-api/issues/265/comments",
+  "comments_url": "https://api.github.com/repos/github-api-test-org/github-api/issues/309/comments",
   "statuses_url": "https://api.github.com/repos/github-api-test-org/github-api/statuses/b036909fcf45565c82c888ee326ebd0e382f6173",
   "head": {
     "label": "github-api-test-org:test/mergeable_branch",
@@ -98,7 +98,7 @@
         "site_admin": false
       },
       "html_url": "https://github.com/github-api-test-org/github-api",
-      "description": "Java API for GitHub",
+      "description": "Tricky",
       "fork": true,
       "url": "https://api.github.com/repos/github-api-test-org/github-api",
       "forks_url": "https://api.github.com/repos/github-api-test-org/github-api/forks",
@@ -138,18 +138,18 @@
       "releases_url": "https://api.github.com/repos/github-api-test-org/github-api/releases{/id}",
       "deployments_url": "https://api.github.com/repos/github-api-test-org/github-api/deployments",
       "created_at": "2019-09-06T23:26:04Z",
-      "updated_at": "2019-09-08T07:24:28Z",
-      "pushed_at": "2019-09-08T07:24:38Z",
+      "updated_at": "2019-09-30T22:36:47Z",
+      "pushed_at": "2019-10-05T21:11:41Z",
       "git_url": "git://github.com/github-api-test-org/github-api.git",
       "ssh_url": "git@github.com:github-api-test-org/github-api.git",
       "clone_url": "https://github.com/github-api-test-org/github-api.git",
       "svn_url": "https://github.com/github-api-test-org/github-api",
       "homepage": "http://github-api.kohsuke.org/",
-      "size": 11386,
+      "size": 11391,
       "stargazers_count": 0,
       "watchers_count": 0,
       "language": "Java",
-      "has_issues": false,
+      "has_issues": true,
       "has_projects": true,
       "has_downloads": true,
       "has_wiki": true,
@@ -175,7 +175,7 @@
   "base": {
     "label": "github-api-test-org:master",
     "ref": "master",
-    "sha": "912e2176a00e60e02196737e0ae4c218a14b5dcb",
+    "sha": "3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353",
     "user": {
       "login": "github-api-test-org",
       "id": 7544739,
@@ -223,7 +223,7 @@
         "site_admin": false
       },
       "html_url": "https://github.com/github-api-test-org/github-api",
-      "description": "Java API for GitHub",
+      "description": "Tricky",
       "fork": true,
       "url": "https://api.github.com/repos/github-api-test-org/github-api",
       "forks_url": "https://api.github.com/repos/github-api-test-org/github-api/forks",
@@ -263,18 +263,18 @@
       "releases_url": "https://api.github.com/repos/github-api-test-org/github-api/releases{/id}",
       "deployments_url": "https://api.github.com/repos/github-api-test-org/github-api/deployments",
       "created_at": "2019-09-06T23:26:04Z",
-      "updated_at": "2019-09-08T07:24:28Z",
-      "pushed_at": "2019-09-08T07:24:38Z",
+      "updated_at": "2019-09-30T22:36:47Z",
+      "pushed_at": "2019-10-05T21:11:41Z",
       "git_url": "git://github.com/github-api-test-org/github-api.git",
       "ssh_url": "git@github.com:github-api-test-org/github-api.git",
       "clone_url": "https://github.com/github-api-test-org/github-api.git",
       "svn_url": "https://github.com/github-api-test-org/github-api",
       "homepage": "http://github-api.kohsuke.org/",
-      "size": 11386,
+      "size": 11391,
       "stargazers_count": 0,
       "watchers_count": 0,
       "language": "Java",
-      "has_issues": false,
+      "has_issues": true,
       "has_projects": true,
       "has_downloads": true,
       "has_wiki": true,
@@ -299,25 +299,25 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265"
+      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309"
     },
     "html": {
-      "href": "https://github.com/github-api-test-org/github-api/pull/265"
+      "href": "https://github.com/github-api-test-org/github-api/pull/309"
     },
     "issue": {
-      "href": "https://api.github.com/repos/github-api-test-org/github-api/issues/265"
+      "href": "https://api.github.com/repos/github-api-test-org/github-api/issues/309"
     },
     "comments": {
-      "href": "https://api.github.com/repos/github-api-test-org/github-api/issues/265/comments"
+      "href": "https://api.github.com/repos/github-api-test-org/github-api/issues/309/comments"
     },
     "review_comments": {
-      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265/comments"
+      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309/comments"
     },
     "review_comment": {
       "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/comments{/number}"
     },
     "commits": {
-      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265/commits"
+      "href": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309/commits"
     },
     "statuses": {
       "href": "https://api.github.com/repos/github-api-test-org/github-api/statuses/b036909fcf45565c82c888ee326ebd0e382f6173"
@@ -325,9 +325,9 @@
   },
   "author_association": "MEMBER",
   "merged": false,
-  "mergeable": true,
-  "rebaseable": true,
-  "mergeable_state": "clean",
+  "mergeable": null,
+  "rebaseable": null,
+  "mergeable_state": "unknown",
   "merged_by": null,
   "comments": 0,
   "review_comments": 0,

@@ -1,5 +1,5 @@
 {
-  "id": "8f286e1a-bf89-4038-9df2-226e0026e09a",
+  "id": "361c15b4-b52d-4da7-a810-bfabf94e819a",
   "name": "repos_github-api-test-org_github-api_pulls",
   "request": {
     "url": "/repos/github-api-test-org/github-api/pulls",
@@ -14,24 +14,24 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_github-api-test-org_github-api_pulls-8f286e1a-bf89-4038-9df2-226e0026e09a.json",
+    "bodyFileName": "repos_github-api-test-org_github-api_pulls-361c15b4-b52d-4da7-a810-bfabf94e819a.json",
     "headers": {
-      "Date": "Sun, 08 Sep 2019 07:24:38 GMT",
+      "Date": "Sat, 05 Oct 2019 21:11:41 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4895",
-      "X-RateLimit-Reset": "1567929276",
+      "X-RateLimit-Remaining": "4892",
+      "X-RateLimit-Reset": "1570311642",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "\"0a534bae39e513a8b52d701350dadc96\"",
-      "X-OAuth-Scopes": "gist, notifications, repo",
+      "ETag": "\"9960683cf7257316abbf7d1515d2c274\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/github-api-test-org/github-api/pulls/265",
+      "Location": "https://api.github.com/repos/github-api-test-org/github-api/pulls/309",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -41,10 +41,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FF8D:9A32:9E9FEB:BB5C69:5D74ACB5"
+      "X-GitHub-Request-Id": "E2BB:2CE6:D397AD:FC6BB1:5D99070B"
     }
   },
-  "uuid": "8f286e1a-bf89-4038-9df2-226e0026e09a",
+  "uuid": "361c15b4-b52d-4da7-a810-bfabf94e819a",
   "persistent": true,
   "insertionIndex": 4
 }

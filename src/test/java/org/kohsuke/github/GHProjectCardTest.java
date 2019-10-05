@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @author Gunnar Skjold
  */
-public class GHProjectCardTest extends AbstractGitHubApiWireMockTest {
+public class GHProjectCardTest extends AbstractGitHubWireMockTest {
 	private GHOrganization org;
 	private GHProject project;
 	private GHProjectColumn column;
@@ -72,7 +72,7 @@ public class GHProjectCardTest extends AbstractGitHubApiWireMockTest {
 
 	@After
 	public void after() throws IOException {
-		if(githubApi.isUseProxy()) {
+		if(mockGitHub.isUseProxy()) {
 			if (card != null) {
 				card = gitHubBeforeAfter.getProjectCard(card.getId());
 				try {

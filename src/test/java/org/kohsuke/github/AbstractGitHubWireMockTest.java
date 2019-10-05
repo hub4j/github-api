@@ -1,34 +1,24 @@
 package org.kohsuke.github;
 
-import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.Parameters;
-import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.http.Request;
-import com.github.tomakehurst.wiremock.http.Response;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.TestWatcher;
-import org.kohsuke.github.junit.GitHubApiWireMockRule;
-import org.kohsuke.github.junit.WireMockRule;
+import org.kohsuke.github.junit.GitHubWireMockRule;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
  */
-public abstract class AbstractGitHubApiWireMockTest extends Assert {
+public abstract class AbstractGitHubWireMockTest extends Assert {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
@@ -56,10 +46,10 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
     @Rule
-    public final GitHubApiWireMockRule githubApi;
+    public final GitHubWireMockRule mockGitHub;
 
-    public AbstractGitHubApiWireMockTest() {
-        githubApi = new GitHubApiWireMockRule(
+    public AbstractGitHubWireMockTest() {
+        mockGitHub = new GitHubWireMockRule(
             this.getWireMockOptions()
         );
     }
@@ -103,7 +93,7 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     protected GitHubBuilder getGitHubBuilder() {
         GitHubBuilder builder = githubBuilder.clone();
 
-        if (!githubApi.isUseProxy()) {
+        if (!mockGitHub.isUseProxy()) {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
@@ -117,14 +107,14 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     @Before
     public void wireMockSetup() throws Exception {
         GitHubBuilder builder = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl());
+            .withEndpoint(mockGitHub.apiServer().baseUrl());
 
         if (useDefaultGitHub) {
             gitHub = builder
                 .build();
         }
 
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             gitHubBeforeAfter = getGitHubBuilder()
                 .withEndpoint("https://api.github.com/")
                 .build();
@@ -134,11 +124,11 @@ public abstract class AbstractGitHubApiWireMockTest extends Assert {
     }
 
     protected void snapshotNotAllowed() {
-        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", githubApi.isTakeSnapshot());
+        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", mockGitHub.isTakeSnapshot());
     }
 
     protected void requireProxy(String reason) {
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason, githubApi.isUseProxy());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason, mockGitHub.isUseProxy());
     }
 
     protected GHUser getUser() {

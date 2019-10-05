@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @author Gunnar Skjold
  */
-public class GHProjectTest extends AbstractGitHubApiWireMockTest {
+public class GHProjectTest extends AbstractGitHubWireMockTest {
 	private GHProject project;
 
 	@Before
@@ -69,7 +69,7 @@ public class GHProjectTest extends AbstractGitHubApiWireMockTest {
 
 	@After
 	public void after() throws IOException {
-		if (githubApi.isUseProxy()) {
+		if (mockGitHub.isUseProxy()) {
 			if (project != null) {
 				project = gitHubBeforeAfter
 					.getProject(project.getId());

@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.hasProperty;
 /**
  * Unit test for simple App.
  */
-public class AppTest extends AbstractGitHubApiWireMockTest {
+public class AppTest extends AbstractGitHubWireMockTest {
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
     private String getTestRepositoryName() throws IOException {
@@ -59,7 +59,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             Thread.sleep(3000);
         }
         assertNotNull(r.getReadme());
@@ -67,7 +67,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
     }
 
     private void cleanupRepository(final String name) throws IOException {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repository = getUser(gitHubBeforeAfter).getRepository(name);
             if (repository != null) {
                 repository.delete();
@@ -154,7 +154,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
 
 
     private GHRepository getTestRepository() throws IOException {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repository = gitHubBeforeAfter
                 .getOrganization(GITHUB_API_TEST_ORG)
                 .getRepository(GITHUB_API_TEST_REPO);
@@ -460,7 +460,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         GHHook hook = r.createWebHook(new URL("http://www.google.com/"));
         System.out.println(hook);
 
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             r = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
             for (GHHook h : r.getHooks()) {
                 h.delete();

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class GHOrganizationTest extends AbstractGitHubApiWireMockTest {
+public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
 
@@ -36,7 +36,7 @@ public class GHOrganizationTest extends AbstractGitHubApiWireMockTest {
 
     @After
     public void cleanUp() throws IOException {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository(GITHUB_API_TEST);
             if (repository != null) {
                 repository.delete();

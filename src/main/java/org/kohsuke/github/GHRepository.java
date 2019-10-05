@@ -1408,7 +1408,7 @@ public class GHRepository extends GHObject {
     /**
      * Replace special characters (e.g. #) with standard values (e.g. %23) so
      * GitHub understands what is being requested.
-     * @param The string to be encoded.
+     * @param value string to be encoded.
      * @return The encoded string.
      */
     private String UrlEncode(String value) {

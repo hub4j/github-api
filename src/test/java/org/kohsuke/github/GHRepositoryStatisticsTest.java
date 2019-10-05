@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class GHRepositoryStatisticsTest extends AbstractGitHubApiWireMockTest {
+public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
     public static int MAX_ITERATIONS = 3;
     public static int SLEEP_INTERVAL = 5000;
@@ -215,6 +215,6 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubApiWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
     }
 }

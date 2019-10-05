@@ -216,6 +216,8 @@ public class GHRepositoryStatistics {
         };
     }
 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
     public static class CommitActivity extends GHObject {
         /*package almost final*/ private GitHub root;
         private List<Integer> days;

@@ -17,4 +17,4 @@ jobs:
     - name: Maven Download all dependencies
       run: mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.1:go-offline
     - name: Maven Build
-      run: mvn -B package --file pom.xml -Dtest=CommitTest,GistTest,PullRequestTest,UserTest,WireMockStatusReporterTest
+      run: mvn -B package --file pom.xml

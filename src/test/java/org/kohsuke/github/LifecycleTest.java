@@ -26,26 +26,26 @@ public class LifecycleTest extends AbstractGitHubApiTestBase {
             Thread.sleep(1000);
         }
         repository = org.createRepository("github-api-test",
-                "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/", "Core Developers", true);
+            "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/", "Core Developers", true);
         Thread.sleep(1000); // wait for the repository to become ready
 
         assertTrue(repository.getReleases().isEmpty());
         try {
             GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
             GHIssue issue = repository.createIssue("Test Issue")
-                    .body("issue body just for grins")
-                    .milestone(milestone)
-                    .assignee(myself)
-                    .label("bug")
-                    .create();
+                .body("issue body just for grins")
+                .milestone(milestone)
+                .assignee(myself)
+                .label("bug")
+                .create();
             File repoDir = new File(System.getProperty("java.io.tmpdir"), "github-api-test");
             delete(repoDir);
             Git origin = Git.cloneRepository()
-                    .setBare(false)
-                    .setURI(repository.getSshUrl())
-                    .setDirectory(repoDir)
-                    .setCredentialsProvider(getCredentialsProvider(myself))
-                    .call();
+                .setBare(false)
+                .setURI(repository.getSshUrl())
+                .setDirectory(repoDir)
+                .setCredentialsProvider(getCredentialsProvider(myself))
+                .call();
 
             commitTestFile(myself, repoDir, origin);
 
@@ -84,9 +84,9 @@ public class LifecycleTest extends AbstractGitHubApiTestBase {
 
     private GHRelease createRelease(GHRepository repository) throws IOException {
         GHRelease builder = repository.createRelease("release_tag")
-                .name("Test Release")
-                .body("How exciting!  To be able to programmatically create releases is a dream come true!")
-                .create();
+            .name("Test Release")
+            .body("How exciting!  To be able to programmatically create releases is a dream come true!")
+            .create();
         List<GHRelease> releases = repository.getReleases();
         assertEquals(1, releases.size());
         GHRelease release = releases.get(0);

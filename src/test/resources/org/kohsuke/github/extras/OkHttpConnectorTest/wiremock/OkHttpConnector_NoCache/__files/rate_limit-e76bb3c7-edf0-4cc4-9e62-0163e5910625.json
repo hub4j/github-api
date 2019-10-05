@@ -1,0 +1,29 @@
+{
+  "resources": {
+    "core": {
+      "limit": 5000,
+      "remaining": 4995,
+      "reset": 1569867392
+    },
+    "search": {
+      "limit": 30,
+      "remaining": 30,
+      "reset": 1569863859
+    },
+    "graphql": {
+      "limit": 5000,
+      "remaining": 5000,
+      "reset": 1569867399
+    },
+    "integration_manifest": {
+      "limit": 5000,
+      "remaining": 5000,
+      "reset": 1569867399
+    }
+  },
+  "rate": {
+    "limit": 5000,
+    "remaining": 4995,
+    "reset": 1569867392
+  }
+}

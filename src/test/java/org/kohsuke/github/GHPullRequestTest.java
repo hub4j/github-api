@@ -121,6 +121,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertFalse(p.getRequestedReviewers().isEmpty());
     }
 
+    @Test
+    public void testPullRequestTeamReviewRequests() throws Exception {
+        String name = "testPullRequestTeamReviewRequests";
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        System.out.println(p.getUrl());
+        assertTrue(p.getRequestedReviewers().isEmpty());
+
+        GHOrganization testOrg = gitHub.getOrganization("github-api-test-org");
+        GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");
+
+        p.requestTeamReviewers(Collections.singletonList(testTeam));
+        p.refresh();
+        assertFalse(p.getRequestedTeams().isEmpty());
+    }
+
     public void mergeCommitSHA() throws Exception {
         String name = "mergeCommitSHA";
         GHPullRequest p = getRepository().createPullRequest(name, "test/mergeable_branch", "master", "## test");

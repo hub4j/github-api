@@ -57,4 +57,11 @@ package org.kohsuke.github;
      * @see <a href="https://developer.github.com/v3/previews/#uninstall-a-github-app">GitHub API Previews</a>
      */
     static final String GAMBIT = "application/vnd.github.gambit-preview+json";
+
+    /**
+     * Label emoji, search, and descriptions
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#label-emoji-search-and-descriptions">GitHub API Previews</a>
+     */
+    static final String SYMMETRA = "application/vnd.github.symmetra-preview+json";
 }

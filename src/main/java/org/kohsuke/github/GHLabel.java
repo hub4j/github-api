@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import static org.kohsuke.github.Previews.SYMMETRA;
 /**
  * @author Kohsuke Kawaguchi
  * @see GHIssue#getLabels()
@@ -33,6 +34,7 @@ public class GHLabel {
     /**
      * Purpose of Label
      */
+    @Preview @Deprecated
     public String getDescription() {
         return description;
     }
@@ -52,6 +54,7 @@ public class GHLabel {
      */
     public void setColor(String newColor) throws IOException {
         repo.root.retrieve().method("PATCH")
+                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", newColor)
                 .with("description", description)
@@ -62,8 +65,10 @@ public class GHLabel {
      * @param newDescription
      *      Description of label
      */
+    @Preview @Deprecated
     public void setDescription(String newDescription) throws IOException {
         repo.root.retrieve().method("PATCH")
+                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)
                 .with("description", newDescription)

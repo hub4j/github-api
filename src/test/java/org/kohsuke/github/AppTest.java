@@ -800,9 +800,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertTrue(foundThisFile);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testRepoLabel() throws IOException {
+        cleanupLabel("test");
+        cleanupLabel("test2");
+
         GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
         List<GHLabel> lst = r.listLabels().asList();
         for (GHLabel l : lst) {
@@ -814,9 +816,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertNotNull(e.getUrl());
         assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));
 
-        {// CRUD
-            GHLabel t = r.createLabel("test", "123456");
-            GHLabel t2 = r.getLabel("test");
+        GHLabel t = null;
+        GHLabel t2 = null;
+        try {// CRUD
+            t = r.createLabel("test", "123456");
+            t2 = r.getLabel("test");
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
@@ -825,12 +829,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.getUrl(), t2.getUrl());
 
             t.setColor("000000");
+
+            // This is annoying behavior, but it is by design at this time.
+            // Verifying so we can know when it is fixed.
+            assertEquals(t.getColor(), "123456");
+
+            t = r.getLabel("test");
             t.setDescription("this is also a test");
+
             GHLabel t3 = r.getLabel("test");
             assertEquals(t3.getColor(), "000000");
             assertEquals(t3.getDescription(), "this is also a test");
             t.delete();
-            
+
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
             assertEquals(t.getName(), t2.getName());
@@ -839,6 +850,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.getDescription(), "this is a different test");
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
+        } finally {
+            cleanupLabel("test");
+            cleanupLabel("test2");
+        }
+    }
+
+    void cleanupLabel(String name) {
+        if (mockGitHub.isUseProxy()) {
+            try {
+                GHLabel t = gitHubBeforeAfter.getRepository("github-api-test-org/test-labels").getLabel("test");
+                t.delete();
+            } catch (IOException e) {
+
+            }
         }
     }
 

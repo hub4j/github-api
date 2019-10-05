@@ -40,7 +40,7 @@ import java.util.List;
  * @see GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHPullRequest extends GHIssue {
+public class GHPullRequest extends GHIssue implements Refreshable {
 
     private static final String COMMENTS_ACTION = "/comments";
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
@@ -83,25 +83,7 @@ public class GHPullRequest extends GHIssue {
         if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
         if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
-        if (requested_teams != null) {
-            // We don't get full org information from this API request, and
-            // the GHRepository doesn't currently support an organization
-            // owner very well, so we work around this by materializing the
-            // requested teams directly from the API so we get everything
-            // we need.
-            GHTeam[] materialized_requested_teams = new GHTeam[requested_teams.length];
-            for (int i = 0; i < requested_teams.length; i++) {
-              GHTeam team = requested_teams[i];
-
-              try {
-                materialized_requested_teams[i] = root.getTeam(team.getId());
-              } catch (IOException ioe) {
-                // fall back to the unmaterialized team if needed
-                materialized_requested_teams[i] = team;
-              }
-            }
-            requested_teams = materialized_requested_teams;
-        }
+        if (requested_teams != null) GHTeam.wrapUp(requested_teams, this);
         return this;
     }
 
@@ -217,10 +199,18 @@ public class GHPullRequest extends GHIssue {
      *      API call is made to retrieve the latest state.
      */
     public Boolean getMergeable() throws IOException {
-        if (mergeable==null)
-            refresh();
+        refresh(mergeable);
         return mergeable;
     }
+
+    /**
+     * for test purposes only
+     */
+    @Deprecated
+    Boolean getMergeableNoRefresh() throws IOException {
+        return mergeable;
+    }
+
 
     public int getDeletions() throws IOException {
         populate();
@@ -246,12 +236,12 @@ public class GHPullRequest extends GHIssue {
     }
 
     public List<GHUser> getRequestedReviewers() throws IOException {
-        populate();
+        refresh(requested_reviewers);
         return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
     }
 
     public List<GHTeam> getRequestedTeams() throws IOException {
-        populate();
+        refresh(requested_teams);
         return Collections.unmodifiableList(Arrays.asList(requested_teams));
     }
 

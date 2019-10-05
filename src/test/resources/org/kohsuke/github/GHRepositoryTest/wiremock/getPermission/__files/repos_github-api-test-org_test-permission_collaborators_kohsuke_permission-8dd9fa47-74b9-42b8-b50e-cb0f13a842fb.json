@@ -1,0 +1,23 @@
+{
+  "permission": "admin",
+  "user": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}

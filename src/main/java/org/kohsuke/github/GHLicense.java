@@ -32,19 +32,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.kohsuke.github.Previews.*;
-
 /**
  * The GitHub Preview API's license information
  * <p>
- * WARNING: This uses a PREVIEW API - subject to change.
  *
  * @author Duncan Dickinson
  * @see GitHub#getLicense(String)
  * @see GHRepository#getLicense()
  * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>
  */
-@Preview @Deprecated
 @SuppressWarnings({"UnusedDeclaration"})
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
         "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
@@ -144,7 +140,7 @@ public class GHLicense extends GHObject {
     protected synchronized void populate() throws IOException {
         if (description!=null)    return; // already populated
 
-        root.retrieve().withPreview(DRAX).to(url, this);
+        root.retrieve().to(url, this);
     }
 
     @Override

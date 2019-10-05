@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
  *
  * @author Paulo Miguel Almeida
  */
-public class GHAppTest extends AbstractGitHubApiWireMockTest {
+public class GHAppTest extends AbstractGitHubWireMockTest {
 
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()

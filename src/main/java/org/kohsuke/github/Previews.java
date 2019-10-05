@@ -36,6 +36,25 @@ package org.kohsuke.github;
      * @see <a href="https://developer.github.com/v3/previews/#require-signed-commits">GitHub API Previews</a>
      */
     static final String ZZZAX = "application/vnd.github.zzzax-preview+json";
+
+    /**
+     * Manage projects
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#projects">GitHub API Previews</a>
+     */
+    static final String INERTIA = "application/vnd.github.inertia-preview+json";
+
+    /**
+     * Manage integrations through the API
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#integrations">GitHub API Previews</a>
+     */
     static final String MACHINE_MAN = "application/vnd.github.machine-man-preview+json";
+
+    /**
+     * Owners of GitHub Apps can now uninstall an app using the Apps API
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#uninstall-a-github-app">GitHub API Previews</a>
+     */
     static final String GAMBIT = "application/vnd.github.gambit-preview+json";
 }

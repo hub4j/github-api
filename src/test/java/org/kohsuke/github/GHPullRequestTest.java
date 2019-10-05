@@ -13,13 +13,13 @@ import static org.hamcrest.CoreMatchers.*;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GHPullRequestTest extends AbstractGitHubApiWireMockTest {
+public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
     @Before
     @After
     public void cleanUp() throws Exception {
         // Cleanup is only needed when proxying
-        if (!githubApi.isUseProxy()) {
+        if (!mockGitHub.isUseProxy()) {
             return;
         }
 

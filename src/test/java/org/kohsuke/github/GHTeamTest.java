@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Random;
 
-public class GHTeamTest extends AbstractGitHubApiWireMockTest {
+public class GHTeamTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testSetDescription() throws IOException {

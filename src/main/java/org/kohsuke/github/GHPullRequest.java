@@ -84,9 +84,23 @@ public class GHPullRequest extends GHIssue {
         if (merged_by != null) merged_by.wrapUp(root);
         if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
         if (requested_teams != null) {
-            for (GHTeam team : requested_teams) {
-                team.wrapUp(root);
+            // We don't get full org information from this API request, and
+            // the GHRepository doesn't currently support an organization
+            // owner very well, so we work around this by materializing the
+            // requested teams directly from the API so we get everything
+            // we need.
+            GHTeam[] materialized_requested_teams = new GHTeam[requested_teams.length];
+            for (int i = 0; i < requested_teams.length; i++) {
+              GHTeam team = requested_teams[i];
+
+              try {
+                materialized_requested_teams[i] = root.getTeam(team.getId());
+              } catch (IOException ioe) {
+                // fall back to the unmaterialized team if needed
+                materialized_requested_teams[i] = team;
+              }
             }
+            requested_teams = materialized_requested_teams;
         }
         return this;
     }

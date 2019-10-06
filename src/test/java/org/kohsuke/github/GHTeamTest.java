@@ -30,4 +30,6 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
         assertEquals(description, team.getDescription());
     }
+
+
 }

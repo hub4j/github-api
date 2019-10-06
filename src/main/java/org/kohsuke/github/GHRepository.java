@@ -1191,7 +1191,9 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHLabel> listLabels() throws IOException {
         return new PagedIterable<GHLabel>() {
             public PagedIterator<GHLabel> _iterator(int pageSize) {
-                return new PagedIterator<GHLabel>(root.retrieve().asIterator(getApiTailUrl("labels"), GHLabel[].class, pageSize)) {
+                return new PagedIterator<GHLabel>(root.retrieve()
+                    .withPreview(SYMMETRA)
+                    .asIterator(getApiTailUrl("labels"), GHLabel[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHLabel[] page) {
                         for (GHLabel c : page)
@@ -1203,13 +1205,31 @@ public class GHRepository extends GHObject {
     }
 
     public GHLabel getLabel(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("labels/"+name), GHLabel.class).wrapUp(this);
+        return root.retrieve()
+            .withPreview(SYMMETRA)
+            .to(getApiTailUrl("labels/"+name), GHLabel.class)
+            .wrapUp(this);
     }
 
     public GHLabel createLabel(String name, String color) throws IOException {
+        return createLabel(name, color, "");
+    }
+
+    /**
+     * Description is still in preview.
+     * @param name
+     * @param color
+     * @param description
+     * @return
+     * @throws IOException
+     */
+    @Preview @Deprecated
+    public GHLabel createLabel(String name, String color, String description) throws IOException {
         return root.retrieve().method("POST")
+                .withPreview(SYMMETRA)
                 .with("name",name)
                 .with("color", color)
+                .with("description", description)
                 .to(getApiTailUrl("labels"), GHLabel.class).wrapUp(this);
     }
 

@@ -9,6 +9,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.verification.*;
 import com.google.gson.*;
 import org.junit.rules.MethodRule;
@@ -117,6 +118,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             formatJsonFiles(new File(this.rawServer().getOptions().filesRoot().child("mappings").getPath()).toPath());
         }
     }
+
+    public int getRequestCount() {
+        return getRequestCount(apiServer());
+    }
+
+    public static int getRequestCount(WireMockServer server) {
+        return server.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
+    }
+
 
     private void formatJsonFiles(Path path) {
         // The more consistent we can make the json output the more meaningful it will be.

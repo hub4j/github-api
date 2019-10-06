@@ -75,8 +75,7 @@ public class GHOrganization extends GHPerson {
                 return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHTeam[] page) {
-                        for (GHTeam c : page)
-                            c.wrapUp(GHOrganization.this);
+                        GHTeam.wrapUp(page, GHOrganization.this);
                     }
                 };
             }

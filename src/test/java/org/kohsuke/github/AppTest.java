@@ -889,60 +889,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Ignore("Needs mocking check")
     @Test
-    public void testListAllRepositories() throws Exception {
-        Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
-        for (int i = 0; i < 30; i++) {
-            assertTrue(itr.hasNext());
-            GHRepository r = itr.next();
-            System.out.println(r.getFullName());
-            assertNotNull(r.getUrl());
-            assertNotEquals(0L, r.getId());
-        }
-    }
-
-    @Ignore("Needs mocking check")
-    @Test // issue #162
-    public void testIssue162() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
-        List<GHContent> contents = r.getDirectoryContent("", "gh-pages");
-        for (GHContent content : contents) {
-            if (content.isFile()) {
-                String content1 = content.getContent();
-                String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
-                System.out.println(content.getPath());
-                assertEquals(content1, content2);
-            }
-        }
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void markDown() throws Exception {
-        assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
-
-        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
-        System.out.println(actual);
-        assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
-        assertTrue(actual.contains("href=\"https://github.com/kohsuke/github-api/pull/1\""));
-        assertTrue(actual.contains("class=\"user-mention\""));
-        assertTrue(actual.contains("class=\"issue-link "));
-        assertTrue(actual.contains("to fix issue"));
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void searchContent() throws Exception {
-        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
-        GHContent c = r.iterator().next();
-        System.out.println(c.getName());
-        assertNotNull(c.getDownloadUrl());
-        assertNotNull(c.getOwner());
-        assertEquals("jquery/jquery", c.getOwner().getFullName());
-        assertTrue(r.getTotalCount() > 0);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
     public void notifications() throws Exception {
         boolean found = false;
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {

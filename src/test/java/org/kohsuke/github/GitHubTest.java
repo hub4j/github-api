@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import com.google.common.collect.Iterables;
+import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -45,4 +46,28 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertNotNull(u.getId());
         assertTrue(r.getTotalCount() > 0);
     }
+
+    @Test
+    public void testListAllRepositories() throws Exception {
+        Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
+        for (int i = 0; i < 115; i++) {
+            assertTrue(itr.hasNext());
+            GHRepository r = itr.next();
+            System.out.println(r.getFullName());
+            assertNotNull(r.getUrl());
+            assertNotEquals(0L, r.getId());
+        }
+    }
+    
+    @Test
+    public void searchContent() throws Exception {
+        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
+        GHContent c = r.iterator().next();
+        System.out.println(c.getName());
+        assertNotNull(c.getDownloadUrl());
+        assertNotNull(c.getOwner());
+        assertEquals("jquery/jquery", c.getOwner().getFullName());
+        assertTrue(r.getTotalCount() > 0);
+    }
 }
+

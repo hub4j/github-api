@@ -8,11 +8,11 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class CommitTest extends AbstractGitHubApiTestBase {
+public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 152
     public void lastStatus() throws IOException {
         GHTag t = gitHub.getRepository("stapler/stapler").listTags().iterator().next();
-        t.getCommit().getLastStatus();
+        assertNotNull(t.getCommit().getLastStatus());
     }
 
     @Test // issue 230
@@ -20,7 +20,7 @@ public class CommitTest extends AbstractGitHubApiTestBase {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
-            GHCommit expected = repo.getCommit( commit.getSHA1() );
+            GHCommit expected = repo.getCommit(commit.getSHA1());
             assertEquals(expected.getFiles().size(), commit.getFiles().size());
         }
     }

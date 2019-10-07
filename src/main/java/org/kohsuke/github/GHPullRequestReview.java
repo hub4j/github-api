@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.Date;
 import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
@@ -43,6 +44,7 @@ public class GHPullRequestReview extends GHObject {
     private GHUser user;
     private String commit_id;
     private GHPullRequestReviewState state;
+    private String submitted_at;
 
     /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
@@ -86,6 +88,21 @@ public class GHPullRequestReview extends GHObject {
 
     protected String getApiRoute() {
         return owner.getApiRoute()+"/reviews/"+id;
+    }
+
+    /**
+     * When was this resource created?
+     */
+    public Date getSubmittedAt() throws IOException {
+        return GitHub.parseDate(submitted_at);
+    }
+
+    /**
+     * Since this method does not exist, we forward this value.
+     */
+    @Override
+    public Date getCreatedAt() throws IOException {
+        return getSubmittedAt();
     }
 
     /**

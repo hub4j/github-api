@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Owners",
+    "id": 663296,
+    "node_id": "MDQ6VGVhbTY2MzI5Ng==",
+    "slug": "owners",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/teams/663296",
+    "html_url": "https://github.com/orgs/beautify-web/teams/owners",
+    "members_url": "https://api.github.com/teams/663296/members{/member}",
+    "repositories_url": "https://api.github.com/teams/663296/repos",
+    "permission": "admin"
+  }
+]

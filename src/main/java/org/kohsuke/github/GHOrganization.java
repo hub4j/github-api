@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -50,7 +51,7 @@ public class GHOrganization extends GHPerson {
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()}
      * to finally createa repository.
      */
-    public GHCreateRepositoryBuilder createRepository(String name) throws IOException {
+    public GHCreateRepositoryBuilder createRepository(String name) {
         return new GHCreateRepositoryBuilder(root,"/orgs/"+login+"/repos",name);
     }
 
@@ -74,8 +75,7 @@ public class GHOrganization extends GHPerson {
                 return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHTeam[] page) {
-                        for (GHTeam c : page)
-                            c.wrapUp(GHOrganization.this);
+                        GHTeam.wrapUp(page, GHOrganization.this);
                     }
                 };
             }
@@ -193,6 +193,44 @@ public class GHOrganization extends GHPerson {
         root.retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
+    /**
+     * Returns the projects for this organization.
+     * @param status The status filter (all, open or closed).
+     */
+    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+        return new PagedIterable<GHProject>() {
+            public PagedIterator<GHProject> _iterator(int pageSize) {
+                return new PagedIterator<GHProject>(root.retrieve().withPreview(INERTIA)
+                        .with("state", status)
+                        .asIterator(String.format("/orgs/%s/projects", login), GHProject[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHProject[] page) {
+                        for (GHProject c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns all open projects for the organization.
+     */
+    public PagedIterable<GHProject> listProjects() throws IOException {
+        return listProjects(GHProject.ProjectStateFilter.OPEN);
+    }
+
+    /**
+     * Creates a project for the organization.
+     */
+    public GHProject createProject(String name, String body) throws IOException {
+        return root.retrieve().method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .with("body", body)
+                .to(String.format("/orgs/%s/projects", login), GHProject.class).wrap(root);
+    }
+
     public enum Permission { ADMIN, PUSH, PULL }
 
     /**
@@ -269,7 +307,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos?per_page=" + pageSize, GHRepository[].class, pageSize)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos", GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository c : page)
@@ -277,7 +315,7 @@ public class GHOrganization extends GHPerson {
                     }
                 };
             }
-        };
+        }.withPageSize(pageSize);
     }
 
     /**

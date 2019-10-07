@@ -14,6 +14,15 @@ import static org.junit.Assume.assumeFalse;
  */
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+    }
+
+
     @Test
     public void archive() throws Exception {
         snapshotNotAllowed();
@@ -184,13 +193,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
+    @Test
+    public void searchRepositories() throws Exception {
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        GHRepository u = r.iterator().next();
+        System.out.println(u.getName());
+        assertNotNull(u.getId());
+        assertEquals("Assembly", u.getLanguage());
+        assertTrue(r.getTotalCount() > 0);
     }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
-    }
-
 
 }

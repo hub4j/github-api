@@ -931,27 +931,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Ignore("Needs mocking check")
     @Test
-    public void searchUsers() throws Exception {
-        PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
-        GHUser u = r.iterator().next();
-        System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertTrue(r.getTotalCount() > 0);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void searchRepositories() throws Exception {
-        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
-        GHRepository u = r.iterator().next();
-        System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertEquals("Assembly", u.getLanguage());
-        assertTrue(r.getTotalCount() > 0);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
     public void searchContent() throws Exception {
         PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
         GHContent c = r.iterator().next();

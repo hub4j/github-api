@@ -1,0 +1,50 @@
+{
+  "id": "29d82e53-34b8-4443-bddd-fdd14726484d",
+  "name": "repos_github-api-test-org_repo-for-project-card_issues",
+  "request": {
+    "url": "/repos/github-api-test-org/repo-for-project-card/issues",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"assignees\":[],\"title\":\"new-issue\",\"body\":\"With body\",\"labels\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_repo-for-project-card_issues-29d82e53-34b8-4443-bddd-fdd14726484d.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:25:13 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4600",
+      "X-RateLimit-Reset": "1570212957",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"0d7123758265ea6286208deab2079438\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/github-api-test-org/repo-for-project-card/issues/1",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FEDA:67D5:1420438:183BFF5:5D978079"
+    }
+  },
+  "uuid": "29d82e53-34b8-4443-bddd-fdd14726484d",
+  "persistent": true,
+  "insertionIndex": 7
+}

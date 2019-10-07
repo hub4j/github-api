@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +40,7 @@ import java.util.List;
  * @see GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHPullRequest extends GHIssue {
+public class GHPullRequest extends GHIssue implements Refreshable {
 
     private static final String COMMENTS_ACTION = "/comments";
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
@@ -61,6 +62,7 @@ public class GHPullRequest extends GHIssue {
 
     // pull request reviewers
     private GHUser[] requested_reviewers;
+    private GHTeam[] requested_teams;
 
     /**
      * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API
@@ -81,6 +83,7 @@ public class GHPullRequest extends GHIssue {
         if (head != null) head.wrapUp(root);
         if (merged_by != null) merged_by.wrapUp(root);
         if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
+        if (requested_teams != null) GHTeam.wrapUp(requested_teams, this);
         return this;
     }
 
@@ -196,10 +199,18 @@ public class GHPullRequest extends GHIssue {
      *      API call is made to retrieve the latest state.
      */
     public Boolean getMergeable() throws IOException {
-        if (mergeable==null)
-            refresh();
+        refresh(mergeable);
         return mergeable;
     }
+
+    /**
+     * for test purposes only
+     */
+    @Deprecated
+    Boolean getMergeableNoRefresh() throws IOException {
+        return mergeable;
+    }
+
 
     public int getDeletions() throws IOException {
         populate();
@@ -225,8 +236,13 @@ public class GHPullRequest extends GHIssue {
     }
 
     public List<GHUser> getRequestedReviewers() throws IOException {
-        populate();
+        refresh(requested_reviewers);
         return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
+    }
+
+    public List<GHTeam> getRequestedTeams() throws IOException {
+        refresh(requested_teams);
+        return Collections.unmodifiableList(Arrays.asList(requested_teams));
     }
 
     /**
@@ -361,7 +377,17 @@ public class GHPullRequest extends GHIssue {
                 .withLogins("reviewers", reviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
-    
+
+    public void requestTeamReviewers(List<GHTeam> teams) throws IOException {
+        List<String> teamReviewers = new ArrayList<String>(teams.size());
+        for (GHTeam team : teams) {
+          teamReviewers.add(team.getSlug());
+        }
+        new Requester(root).method("POST")
+                .with("team_reviewers", teamReviewers)
+                .to(getApiRoute() + REQUEST_REVIEWERS);
+    }
+
     /**
      * Merge this pull request.
      *

@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class CommitTest extends AbstractGitHubApiWireMockTest {
+public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 152
     public void lastStatus() throws IOException {
         GHTag t = gitHub.getRepository("stapler/stapler").listTags().iterator().next();

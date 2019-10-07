@@ -1,0 +1,42 @@
+{
+  "id": "4cc836da-9288-41bd-886c-05c93470225d",
+  "name": "licenses_mit",
+  "request": {
+    "url": "/licenses/mit",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "licenses_mit-4cc836da-9288-41bd-886c-05c93470225d.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:29:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4583",
+      "X-RateLimit-Reset": "1570212957",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"cdc71ea0b0e60f4cdbf00107bcf1035c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C161:67D5:1425BD1:18429E5:5D97817F"
+    }
+  },
+  "uuid": "4cc836da-9288-41bd-886c-05c93470225d",
+  "persistent": true,
+  "insertionIndex": 4
+}

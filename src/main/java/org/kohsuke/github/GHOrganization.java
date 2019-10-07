@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -74,8 +75,7 @@ public class GHOrganization extends GHPerson {
                 return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHTeam[] page) {
-                        for (GHTeam c : page)
-                            c.wrapUp(GHOrganization.this);
+                        GHTeam.wrapUp(page, GHOrganization.this);
                     }
                 };
             }
@@ -207,6 +207,44 @@ public class GHOrganization extends GHPerson {
      */
     public void conceal(GHUser u) throws IOException {
         root.retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+    }
+
+    /**
+     * Returns the projects for this organization.
+     * @param status The status filter (all, open or closed).
+     */
+    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+        return new PagedIterable<GHProject>() {
+            public PagedIterator<GHProject> _iterator(int pageSize) {
+                return new PagedIterator<GHProject>(root.retrieve().withPreview(INERTIA)
+                        .with("state", status)
+                        .asIterator(String.format("/orgs/%s/projects", login), GHProject[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHProject[] page) {
+                        for (GHProject c : page)
+                            c.wrap(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns all open projects for the organization.
+     */
+    public PagedIterable<GHProject> listProjects() throws IOException {
+        return listProjects(GHProject.ProjectStateFilter.OPEN);
+    }
+
+    /**
+     * Creates a project for the organization.
+     */
+    public GHProject createProject(String name, String body) throws IOException {
+        return root.retrieve().method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .with("body", body)
+                .to(String.format("/orgs/%s/projects", login), GHProject.class).wrap(root);
     }
 
     public enum Permission { ADMIN, PUSH, PULL }

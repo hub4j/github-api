@@ -53,6 +53,13 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+            <annotationProcessorPaths>
+              <annotationProcessorPath>
+                <groupId>com.infradna.tool</groupId>
+                <artifactId>bridge-method-injector</artifactId>
+                <version>1.18</version>
+              </annotationProcessorPath>
+            </annotationProcessorPaths>
         </configuration>
       </plugin>
 
@@ -104,9 +111,9 @@
         <executions>
           <execution>
             <id>run-spotbugs</id>
-            <phase>verify</phase> 
+            <phase>verify</phase>
             <goals>
-              <goal>check</goal> 
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>

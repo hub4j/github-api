@@ -5,10 +5,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * @author Kohsuke Kawaguchi
- */
-public class UserTest extends AbstractGitHubWireMockTest {
+import static org.hamcrest.CoreMatchers.*;
+
+
+public class GHUserTest extends AbstractGitHubWireMockTest {
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");
@@ -49,4 +49,37 @@ public class UserTest extends AbstractGitHubWireMockTest {
         assertEquals("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3JhH2FZBDmHLjXTcBoV6tdcYKmsQ7sgu8k1RsUhwxGsXm65+Cuas6GcMVoA1DncKfJGQkulHDFiTxIROIBmedh9/otHWBlZ4HqYZ4MQ1A8W5quULkXwX/kF+UdRBUxFvjigibEbuHB+LARVxRRzFlPnTSE9rAfAv8OOEsb3lNUGT/IGhN8w1vwe8GclB90tgqN1RBDgrVqwLFwn5AfrW9kUIa2f2oT4RjYu1OrhKhVIIzfHADo85aD+s8wEhqwI96BCJG3qTWrypoHwBUoj1O6Ak5CGc1iKz9o8XyTMjudRt2ddCjfOtxsuwSlTbVtQXJGIpgKviX1sgh4pPvGh7BVAFP+mdAK4F+mEugDnuj47GO/K5KGGDRCL56kh9+h28l4q/+fZvp7DhtmSN2EzrVAdQFskF8yY/6Xit/aAvjeKm03DcjbylSXbG26EJefaLHlwYFq2mUFRMak25wuuCZS71GF3RC3Sl/bMoxBKRYkyfYtGafeaYTFNGn8Dbd+hfVUCz31ebI8cvmlQR5b5AbCre3T7HTVgw8FKbAxWRf1Fio56PnqHsj+sT1KVj255Zo1F8iD9GrgERSVAlkh5bY/CKszQ8ZSd01c9Qp2a47/gR7XAAbxhzGHP+cSOlrqDlJ24fbPtcpVsM0llqKUcxpmoOBFNboRmE1QqnSmAf9ww==",
             ghKeys.get(2).getKey());
     }
+
+    @Test
+    public void listPublicRepositories() throws IOException {
+        GHUser user = gitHub.getUser("kohsuke");
+        Iterator<GHRepository> itr = user.listRepositories().iterator();
+        int i = 0;
+        for (; i < 115; i++) {
+            assertTrue(itr.hasNext());
+            GHRepository r = itr.next();
+            System.out.println(r.getFullName());
+            assertNotNull(r.getUrl());
+            assertNotEquals(0L, r.getId());
+        }
+
+        assertThat(i, equalTo(115));
+    }
+
+    @Test
+    public void listPublicRepositoriesPageSize62() throws IOException {
+        GHUser user = gitHub.getUser("kohsuke");
+        Iterator<GHRepository> itr = user.listRepositories().withPageSize(62).iterator();
+        int i = 0;
+        for (; i < 115; i++) {
+            assertTrue(itr.hasNext());
+            GHRepository r = itr.next();
+            System.out.println(r.getFullName());
+            assertNotNull(r.getUrl());
+            assertNotEquals(0L, r.getId());
+        }
+
+        assertThat(i, equalTo(115));
+    }
+
 }

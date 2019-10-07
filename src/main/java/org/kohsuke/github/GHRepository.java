@@ -80,6 +80,11 @@ public class GHRepository extends GHObject {
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner;   // not fully populated. beware.
     private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived;
+    
+    private boolean allow_squash_merge;
+    private boolean allow_merge_commit;
+    private boolean allow_rebase_merge;
+    
     @JsonProperty("private")
     private boolean _private;
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
@@ -400,6 +405,18 @@ public class GHRepository extends GHObject {
 
     public boolean isArchived() {
         return archived;
+    }
+    
+    public boolean isAllowSquashMerge() {
+      return allow_squash_merge;
+    }
+  
+    public boolean isAllowMergeCommit() {
+      return allow_merge_commit;
+    }
+  
+    public boolean isAllowRebaseMerge() {
+      return allow_rebase_merge;
     }
 
     /**

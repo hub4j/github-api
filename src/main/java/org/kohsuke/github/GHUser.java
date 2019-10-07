@@ -84,15 +84,11 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHUser> listUser(final String suffix) {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(getApiTailUrl(suffix), GHUser[].class, pageSize)) {
-                    protected void wrapUp(GHUser[] page) {
-                        GHUser.wrap(page,root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiTailUrl(suffix),
+                GHUser[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**
@@ -112,16 +108,11 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(getApiTailUrl(suffix), GHRepository[].class, pageSize)) {
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiTailUrl(suffix),
+                GHRepository[].class,
+                item -> item.wrap(root) );
     }
 
     /**
@@ -169,34 +160,22 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return new PagedIterable<GHEventInfo>() {
-            public PagedIterator<GHEventInfo> _iterator(int pageSize) {
-                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/users/%s/events", login), GHEventInfo[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHEventInfo[] page) {
-                        for (GHEventInfo c : page)
-                            c.wrapUp(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("/users/%s/events", login),
+                GHEventInfo[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**
      * Lists Gists created by this user.
      */
     public PagedIterable<GHGist> listGists() throws IOException {
-        return new PagedIterable<GHGist>() {
-            public PagedIterator<GHGist> _iterator(int pageSize) {
-                return new PagedIterator<GHGist>(root.retrieve().asIterator(String.format("/users/%s/gists", login), GHGist[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHGist[] page) {
-                        for (GHGist c : page)
-                            c.wrapUp(GHUser.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("/users/%s/gists", login),
+                GHGist[].class,
+                item -> item.wrapUp(GHUser.this) );
     }
 
     @Override

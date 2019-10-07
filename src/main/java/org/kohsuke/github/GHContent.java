@@ -150,16 +150,11 @@ public class GHContent {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return new PagedIterable<GHContent>() {
-            public PagedIterator<GHContent> _iterator(int pageSize) {
-                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHContent[] page) {
-                        GHContent.wrap(page, repository);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                url,
+                GHContent[].class,
+                item -> item.wrap(repository) );
     }
 
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")

@@ -292,16 +292,11 @@ public class GHIssue extends GHObject implements Reactable{
      * Obtains all the comments associated with this issue.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return new PagedIterable<GHIssueComment>() {
-            public PagedIterator<GHIssueComment> _iterator(int pageSize) {
-                return new PagedIterator<GHIssueComment>(root.retrieve().asIterator(getIssuesApiRoute() + "/comments", GHIssueComment[].class, pageSize)) {
-                    protected void wrapUp(GHIssueComment[] page) {
-                        for (GHIssueComment c : page)
-                            c.wrapUp(GHIssue.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getIssuesApiRoute() + "/comments",
+                GHIssueComment[].class,
+                item -> item.wrapUp(GHIssue.this) );
     }
 
     @Preview @Deprecated
@@ -314,17 +309,11 @@ public class GHIssue extends GHObject implements Reactable{
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return new PagedIterable<GHReaction>() {
-            public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHReaction[] page) {
-                        for (GHReaction c : page)
-                            c.wrap(owner.root);
-                    }
-                };
-            }
-        };
+        return owner.root.retrieve().withPreview(SQUIRREL_GIRL)
+            .asPagedIterable(
+                getApiRoute()+"/reactions",
+                GHReaction[].class,
+                item -> item.wrap(owner.root) );
     }
 
     public void addAssignees(GHUser... assignees) throws IOException {

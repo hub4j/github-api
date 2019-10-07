@@ -91,15 +91,10 @@ public class GHCommitQueryBuilder {
      * Lists up the commits with the criteria built so far.
      */
     public PagedIterable<GHCommit> list() {
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> _iterator(int pageSize) {
-                return new PagedIterator<GHCommit>(req.asIterator(repo.getApiTailUrl("commits"), GHCommit[].class, pageSize)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(repo);
-                    }
-                };
-            }
-        };
+        return req
+            .asPagedIterable(
+                repo.getApiTailUrl("commits"),
+                GHCommit[].class,
+                item -> item.wrapUp(repo) );
     }
 }

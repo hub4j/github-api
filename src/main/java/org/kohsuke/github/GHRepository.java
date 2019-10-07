@@ -24,6 +24,9 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
@@ -51,10 +54,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
-
-import static java.util.Arrays.*;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
 
 /**
@@ -1187,7 +1191,9 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHLabel> listLabels() throws IOException {
         return new PagedIterable<GHLabel>() {
             public PagedIterator<GHLabel> _iterator(int pageSize) {
-                return new PagedIterator<GHLabel>(root.retrieve().asIterator(getApiTailUrl("labels"), GHLabel[].class, pageSize)) {
+                return new PagedIterator<GHLabel>(root.retrieve()
+                    .withPreview(SYMMETRA)
+                    .asIterator(getApiTailUrl("labels"), GHLabel[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHLabel[] page) {
                         for (GHLabel c : page)
@@ -1199,13 +1205,31 @@ public class GHRepository extends GHObject {
     }
 
     public GHLabel getLabel(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("labels/"+name), GHLabel.class).wrapUp(this);
+        return root.retrieve()
+            .withPreview(SYMMETRA)
+            .to(getApiTailUrl("labels/"+name), GHLabel.class)
+            .wrapUp(this);
     }
 
     public GHLabel createLabel(String name, String color) throws IOException {
+        return createLabel(name, color, "");
+    }
+
+    /**
+     * Description is still in preview.
+     * @param name
+     * @param color
+     * @param description
+     * @return
+     * @throws IOException
+     */
+    @Preview @Deprecated
+    public GHLabel createLabel(String name, String color, String description) throws IOException {
         return root.retrieve().method("POST")
+                .withPreview(SYMMETRA)
                 .with("name",name)
                 .with("color", color)
+                .with("description", description)
                 .to(getApiTailUrl("labels"), GHLabel.class).wrapUp(this);
     }
 
@@ -1404,7 +1428,7 @@ public class GHRepository extends GHObject {
     /**
      * Replace special characters (e.g. #) with standard values (e.g. %23) so
      * GitHub understands what is being requested.
-     * @param The string to be encoded.
+     * @param value string to be encoded.
      * @return The encoded string.
      */
     private String UrlEncode(String value) {
@@ -1644,6 +1668,53 @@ public class GHRepository extends GHObject {
             // We ignore contributions in the calculation
             return super.equals(obj);
         }
+    }
+
+    /**
+     * Returns the statistics for this repository.
+     */
+    public GHRepositoryStatistics getStatistics() {
+        // TODO: Use static object and introduce refresh() method,
+        // instead of returning new object each time.
+        return new GHRepositoryStatistics(this);
+    }
+
+    /**
+     * Create a project for this repository.
+     */
+    public GHProject createProject(String name, String body) throws IOException {
+        return root.retrieve().method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .with("body", body)
+                .to(getApiTailUrl("projects"), GHProject.class).wrap(this);
+    }
+
+    /**
+     * Returns the projects for this repository.
+     * @param status The status filter (all, open or closed).
+     */
+    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+         return new PagedIterable<GHProject>() {
+            public PagedIterator<GHProject> _iterator(int pageSize) {
+                return new PagedIterator<GHProject>(root.retrieve().withPreview(INERTIA)
+                        .with("state", status)
+                        .asIterator(getApiTailUrl("projects"), GHProject[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHProject[] page) {
+                        for (GHProject c : page)
+                            c.wrap(GHRepository.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns open projects for this repository.
+     */
+    public PagedIterable<GHProject> listProjects() throws IOException {
+        return listProjects(GHProject.ProjectStateFilter.OPEN);
     }
 
     /**

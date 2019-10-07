@@ -1,0 +1,40 @@
+{
+  "id": "b36b55f4-b5a9-4a27-a574-ed60462026e9",
+  "name": "github-api_github-api_gh-pages_cname",
+  "request": {
+    "url": "/github-api/github-api/gh-pages/CNAME",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "github-api.kohsuke.org\n",
+    "headers": {
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "ETag": "\"b54f5a6e2976e5e0ea312837006e9b2b3378f99c\"",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "max-age=300",
+      "X-Geo-Block-List": "",
+      "X-GitHub-Request-Id": "B722:6BCD:5C6248:6D2CFB:5D9B9BBC",
+      "Accept-Ranges": "bytes",
+      "Date": "Mon, 07 Oct 2019 20:15:21 GMT",
+      "Via": "1.1 varnish",
+      "Connection": "keep-alive",
+      "X-Served-By": "cache-sea1051-SEA",
+      "X-Cache": "HIT",
+      "X-Cache-Hits": "1",
+      "X-Timer": "S1570479322.771981,VS0,VE1",
+      "Vary": "Authorization,Accept-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "X-Fastly-Request-ID": "85cde5b1762e3c2030557d2125c3d4eacfddde5f",
+      "Expires": "Mon, 07 Oct 2019 20:20:21 GMT",
+      "Source-Age": "284"
+    }
+  },
+  "uuid": "b36b55f4-b5a9-4a27-a574-ed60462026e9",
+  "persistent": true,
+  "insertionIndex": 1
+}

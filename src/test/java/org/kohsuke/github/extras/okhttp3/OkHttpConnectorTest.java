@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github.AbstractGitHubApiWireMockTest;
+import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GHRateLimit;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -42,7 +42,7 @@ import static org.junit.Assume.assumeTrue;
  *
  * @author Liam Newman
  */
-public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
+public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
     public OkHttpConnectorTest() {
         useDefaultGitHub = false;
@@ -82,7 +82,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
     @Before
     public void setupRepo() throws Exception {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repo = getRepository(gitHubBeforeAfter);
             repo.setDescription("Resetting");
 
@@ -96,7 +96,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     public void DefaultConnector() throws Exception {
 
         this.gitHub = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl())
+            .withEndpoint(mockGitHub.apiServer().baseUrl())
             .build();
 
         doTestActions();
@@ -115,7 +115,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         OkHttpConnector connector = new OkHttpConnector(client);
 
         this.gitHub = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl())
+            .withEndpoint(mockGitHub.apiServer().baseUrl())
             .withConnector(connector)
             .build();
 
@@ -142,7 +142,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         OkHttpConnector connector = new OkHttpConnector(client, -1);
 
         this.gitHub = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl())
+            .withEndpoint(mockGitHub.apiServer().baseUrl())
             .withConnector(connector)
             .build();
 
@@ -151,7 +151,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         // Testing behavior after change
         // NOTE: this is wrong!  The live data changed!
         // Due to max-age (default 60 from response) the cache returns the old data.
-        assertThat(getRepository(gitHub).getDescription(), is(githubApi.getMethodName()));
+        assertThat(getRepository(gitHub).getDescription(), is(mockGitHub.getMethodName()));
 
         checkRequestAndLimit(maxAgeNoneNetworkRequestCount, maxAgeNoneRateLimitUsed);
 
@@ -167,15 +167,15 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
         // NOTE: This test is very timing sensitive.
         // It can be run locally to verify behavior but snapshot data is to touchy
-        assumeFalse("Test only valid when not taking a snapshot", githubApi.isTakeSnapshot());
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", githubApi.isUseProxy());
+        assumeFalse("Test only valid when not taking a snapshot", mockGitHub.isTakeSnapshot());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", mockGitHub.isUseProxy());
 
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(client, 3);
 
         this.gitHub = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl())
+            .withEndpoint(mockGitHub.apiServer().baseUrl())
             .withConnector(connector)
             .build();
 
@@ -201,7 +201,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         OkHttpConnector connector = new OkHttpConnector(client);
 
         this.gitHub = getGitHubBuilder()
-            .withEndpoint(githubApi.baseUrl())
+            .withEndpoint(mockGitHub.apiServer().baseUrl())
             .withConnector(connector)
             .build();
 
@@ -231,14 +231,14 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     }
 
     private int getRequestCount() {
-        return githubApi.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
+        return mockGitHub.apiServer().countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
     private OkHttpClient createClient(boolean useCache) throws IOException {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
         if (useCache) {
-            File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + githubApi.getMethodName());
+            File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName());
             cacheDir.mkdirs();
             FileUtils.cleanDirectory(cacheDir);
             Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
@@ -258,7 +258,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
     private void doTestActions() throws Exception {
         rateLimitBefore = gitHub.getRateLimit();
 
-        String name = githubApi.getMethodName();
+        String name = mockGitHub.getMethodName();
 
 
         GHRepository repo = getRepository(gitHub);
@@ -276,7 +276,7 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
 
 
         // Get Tricky - make a change via a different client
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository altRepo = getRepository(gitHubBeforeAfter);
             altRepo.setDescription("Tricky");
         }
@@ -291,13 +291,13 @@ public class OkHttpConnectorTest extends AbstractGitHubApiWireMockTest {
         getRepository(gitHub).getDescription();
         //This is only interesting when running the max-age=3 test which currently only runs with proxy
         //Disabled to speed up the tests
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             Thread.sleep(1000);
         }
         getRepository(gitHub).getDescription();
         //This is only interesting when running the max-age=3 test which currently only runs with proxy
         //Disabled to speed up the tests
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             Thread.sleep(4000);
         }
     }

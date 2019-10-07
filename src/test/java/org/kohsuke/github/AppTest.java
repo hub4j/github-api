@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.hasProperty;
 /**
  * Unit test for simple App.
  */
-public class AppTest extends AbstractGitHubApiWireMockTest {
+public class AppTest extends AbstractGitHubWireMockTest {
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
     private String getTestRepositoryName() throws IOException {
@@ -59,7 +59,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             Thread.sleep(3000);
         }
         assertNotNull(r.getReadme());
@@ -67,7 +67,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
     }
 
     private void cleanupRepository(final String name) throws IOException {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repository = getUser(gitHubBeforeAfter).getRepository(name);
             if (repository != null) {
                 repository.delete();
@@ -154,7 +154,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
 
 
     private GHRepository getTestRepository() throws IOException {
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             GHRepository repository = gitHubBeforeAfter
                 .getOrganization(GITHUB_API_TEST_ORG)
                 .getRepository(GITHUB_API_TEST_REPO);
@@ -460,7 +460,7 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         GHHook hook = r.createWebHook(new URL("http://www.google.com/"));
         System.out.println(hook);
 
-        if (githubApi.isUseProxy()) {
+        if (mockGitHub.isUseProxy()) {
             r = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
             for (GHHook h : r.getHooks()) {
                 h.delete();
@@ -800,9 +800,11 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         assertTrue(foundThisFile);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testRepoLabel() throws IOException {
+        cleanupLabel("test");
+        cleanupLabel("test2");
+
         GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
         List<GHLabel> lst = r.listLabels().asList();
         for (GHLabel l : lst) {
@@ -814,18 +816,54 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
         assertNotNull(e.getUrl());
         assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));
 
-        {// CRUD
-            GHLabel t = r.createLabel("test", "123456");
-            GHLabel t2 = r.getLabel("test");
+        GHLabel t = null;
+        GHLabel t2 = null;
+        try {// CRUD
+            t = r.createLabel("test", "123456");
+            t2 = r.getLabel("test");
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getDescription(), "");
+            assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
 
             t.setColor("000000");
+
+            // This is annoying behavior, but it is by design at this time.
+            // Verifying so we can know when it is fixed.
+            assertEquals(t.getColor(), "123456");
+
+            t = r.getLabel("test");
+            t.setDescription("this is also a test");
+
             GHLabel t3 = r.getLabel("test");
             assertEquals(t3.getColor(), "000000");
+            assertEquals(t3.getDescription(), "this is also a test");
             t.delete();
+
+            t = r.createLabel("test2", "123457", "this is a different test");
+            t2 = r.getLabel("test2");
+            assertEquals(t.getName(), t2.getName());
+            assertEquals(t.getColor(), "123457");
+            assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getDescription(), "this is a different test");
+            assertEquals(t.getDescription(), t2.getDescription());
+            assertEquals(t.getUrl(), t2.getUrl());
+        } finally {
+            cleanupLabel("test");
+            cleanupLabel("test2");
+        }
+    }
+
+    void cleanupLabel(String name) {
+        if (mockGitHub.isUseProxy()) {
+            try {
+                GHLabel t = gitHubBeforeAfter.getRepository("github-api-test-org/test-labels").getLabel("test");
+                t.delete();
+            } catch (IOException e) {
+
+            }
         }
     }
 
@@ -847,81 +885,6 @@ public class AppTest extends AbstractGitHubApiWireMockTest {
             githubApi |= r.equals(mr);
         }
         assertTrue(githubApi);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void testListAllRepositories() throws Exception {
-        Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
-        for (int i = 0; i < 30; i++) {
-            assertTrue(itr.hasNext());
-            GHRepository r = itr.next();
-            System.out.println(r.getFullName());
-            assertNotNull(r.getUrl());
-            assertNotEquals(0L, r.getId());
-        }
-    }
-
-    @Ignore("Needs mocking check")
-    @Test // issue #162
-    public void testIssue162() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
-        List<GHContent> contents = r.getDirectoryContent("", "gh-pages");
-        for (GHContent content : contents) {
-            if (content.isFile()) {
-                String content1 = content.getContent();
-                String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
-                System.out.println(content.getPath());
-                assertEquals(content1, content2);
-            }
-        }
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void markDown() throws Exception {
-        assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
-
-        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
-        System.out.println(actual);
-        assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
-        assertTrue(actual.contains("href=\"https://github.com/kohsuke/github-api/pull/1\""));
-        assertTrue(actual.contains("class=\"user-mention\""));
-        assertTrue(actual.contains("class=\"issue-link "));
-        assertTrue(actual.contains("to fix issue"));
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void searchUsers() throws Exception {
-        PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
-        GHUser u = r.iterator().next();
-        System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertTrue(r.getTotalCount() > 0);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void searchRepositories() throws Exception {
-        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
-        GHRepository u = r.iterator().next();
-        System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertEquals("Assembly", u.getLanguage());
-        assertTrue(r.getTotalCount() > 0);
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void searchContent() throws Exception {
-        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
-        GHContent c = r.iterator().next();
-        System.out.println(c.getName());
-        assertNotNull(c.getDownloadUrl());
-        assertNotNull(c.getOwner());
-        assertEquals("jquery/jquery", c.getOwner().getFullName());
-        assertTrue(r.getTotalCount() > 0);
     }
 
     @Ignore("Needs mocking check")

@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class UserTest extends AbstractGitHubApiWireMockTest {
+public class UserTest extends AbstractGitHubWireMockTest {
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");

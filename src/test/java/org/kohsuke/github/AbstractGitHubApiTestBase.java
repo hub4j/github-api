@@ -17,11 +17,11 @@ import static org.junit.Assume.assumeTrue;
 /**
  * @author Kohsuke Kawaguchi
  */
-public abstract class AbstractGitHubApiTestBase extends AbstractGitHubApiWireMockTest {
+public abstract class AbstractGitHubApiTestBase extends AbstractGitHubWireMockTest {
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy", githubApi.isUseProxy());
+        assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy", mockGitHub.isUseProxy());
     }
 
     protected void kohsuke() {

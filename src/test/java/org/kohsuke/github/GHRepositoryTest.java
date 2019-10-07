@@ -12,7 +12,7 @@ import static org.junit.Assume.assumeFalse;
 /**
  * @author Liam Newman
  */
-public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
+public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void archive() throws Exception {

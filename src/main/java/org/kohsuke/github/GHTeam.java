@@ -11,12 +11,12 @@ import java.util.TreeMap;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class GHTeam {
+public class GHTeam implements Refreshable {
     private String name,permission,slug,description;
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
-    protected /*final*/ GHOrganization org;
+    protected /*final*/ GitHub root;
 
     /** Member's role in a team */
     public enum Role {
@@ -31,7 +31,8 @@ public class GHTeam {
     }
 
     /*package*/ GHTeam wrapUp(GHOrganization owner) {
-        this.org = owner;
+        this.organization = owner;
+        this.root = owner.root;
         return this;
     }
 
@@ -43,6 +44,13 @@ public class GHTeam {
     /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
         for (GHTeam t : teams) {
             t.wrapUp(owner);
+        }
+        return teams;
+    }
+
+    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
+        for (GHTeam t : teams) {
+            t.root = owner.root;
         }
         return teams;
     }
@@ -64,7 +72,7 @@ public class GHTeam {
     }
 
     public void setDescription(String description) throws IOException {
-        org.root.retrieve().method("PATCH")
+        root.retrieve().method("PATCH")
                 .with("description", description)
                 .to(api(""));
     }
@@ -79,10 +87,10 @@ public class GHTeam {
     public PagedIterable<GHUser> listMembers() throws IOException {
         return new PagedIterable<GHUser>() {
             public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(org.root.retrieve().asIterator(api("/members"), GHUser[].class, pageSize)) {
+                return new PagedIterator<GHUser>(root.retrieve().asIterator(api("/members"), GHUser[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHUser[] page) {
-                        GHUser.wrap(page, org.root);
+                        GHUser.wrap(page, root);
                     }
                 };
             }
@@ -98,7 +106,7 @@ public class GHTeam {
      */
     public boolean hasMember(GHUser user) {
         try {
-            org.root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -116,11 +124,11 @@ public class GHTeam {
     public PagedIterable<GHRepository> listRepositories() {
         return new PagedIterable<GHRepository>() {
             public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(org.root.retrieve().asIterator(api("/repos"), GHRepository[].class, pageSize)) {
+                return new PagedIterator<GHRepository>(root.retrieve().asIterator(api("/repos"), GHRepository[].class, pageSize)) {
                     @Override
                     protected void wrapUp(GHRepository[] page) {
                         for (GHRepository r : page)
-                            r.wrap(org.root);
+                            r.wrap(root);
                     }
                 };
             }
@@ -135,7 +143,7 @@ public class GHTeam {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        org.root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
+        root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**
@@ -149,7 +157,7 @@ public class GHTeam {
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        org.root.retrieve().method("PUT")
+        root.retrieve().method("PUT")
                 .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
@@ -158,7 +166,7 @@ public class GHTeam {
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        org.root.retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
+        root.retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
@@ -166,27 +174,33 @@ public class GHTeam {
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        org.root.retrieve().method("PUT")
+        root.retrieve().method("PUT")
                 .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        org.root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
     
     /**
      * Deletes this team.
      */
     public void delete() throws IOException {
-        org.root.retrieve().method("DELETE").to(api(""));
+        root.retrieve().method("DELETE").to(api(""));
     }
 
     private String api(String tail) {
         return "/teams/" + id + tail;
     }
 
-    public GHOrganization getOrganization() {
-      return org;
+    public GHOrganization getOrganization() throws IOException {
+        refresh(organization);
+        return organization;
+    }
+
+    @Override
+    public void refresh() throws IOException {
+        root.retrieve().to(api(""), this).wrapUp(root);
     }
 }

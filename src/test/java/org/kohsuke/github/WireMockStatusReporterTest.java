@@ -11,13 +11,13 @@ import static org.junit.Assume.assumeTrue;
 
 
 /**
- * Tests in this class are meant to show the behavior of {@link AbstractGitHubApiWireMockTest} with proxying on or off.
+ * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
  * <p>
  * The wiremock data for these tests should only be modified by hand - thus most are skipped when snapshotting.
  *
  * @author Liam Newman
  */
-public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
+public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
@@ -45,7 +45,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
     public void user_whenNotProxying_Stubbed() throws Exception {
         snapshotNotAllowed();
 
-        assumeFalse("Test only valid when not proxying", githubApi.isUseProxy());
+        assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         assertThat(gitHub.isAnonymous(), is(false));
         assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
@@ -59,10 +59,11 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
         System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
     }
 
+    @Ignore("Can't run this as WireMock will report failure after the test method completes.")
     @Test
     public void BasicBehaviors_whenNotProxying() throws Exception {
         snapshotNotAllowed();
-        assumeFalse("Test only valid when not proxying", githubApi.isUseProxy());
+        assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         Exception e = null;
         GHRepository repo = null;
@@ -71,18 +72,18 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
         repo = gitHub.getRepository("github-api/github-api");
         assertThat(repo.getDescription(), equalTo("this is a stubbed description"));
 
-        // Valid repository, without stub - fails 500 when not proxying
+        // Invalid repository, without stub - fails 404 when not proxying
         try {
             gitHub.getRepository("jenkinsci/jenkins");
             fail();
         } catch (Exception ex) {
             e = ex;
         }
-        assertThat(e, Matchers.<Exception>instanceOf(HttpException.class));
-        assertThat("Status should be 500 for missing stubs", ((HttpException) e).getResponseCode(), equalTo(500));
-        assertThat(e.getMessage(), equalTo("Stubbed data not found. Set test.github.use-proxy to have WireMock proxy to github"));
 
-        // Invalid repository, without stub - fails 500 when not proxying
+        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
+        assertThat(e.getMessage(), containsString("Request was not matched"));
+
+        // Invalid repository, without stub - fails 404 when not proxying
         e = null;
         try {
             gitHub.getRepository("github-api/non-existant-repository");
@@ -91,9 +92,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception>instanceOf(HttpException.class));
-        assertThat("Status should be 500 for missing stubs", ((HttpException) e).getResponseCode(), equalTo(500));
-        assertThat(e.getMessage(), equalTo("Stubbed data not found. Set test.github.use-proxy to have WireMock proxy to github"));
+        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
+        assertThat(e.getMessage(), containsString("Request was not matched"));
     }
 
     @Test
@@ -126,15 +126,15 @@ public class WireMockStatusReporterTest extends AbstractGitHubApiWireMockTest {
 
     @Test
     public void whenSnapshot_EnsureProxy() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", githubApi.isTakeSnapshot());
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", mockGitHub.isTakeSnapshot());
 
-        assertTrue("When taking a snapshot, proxy should automatically be enabled", githubApi.isUseProxy());
+        assertTrue("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
     }
 
     @Ignore("Not implemented yet")
     @Test
     public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", githubApi.isTakeSnapshot());
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", mockGitHub.isTakeSnapshot());
 
     }
 }

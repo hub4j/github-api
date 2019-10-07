@@ -6,13 +6,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import static org.kohsuke.github.Previews.SYMMETRA;
 /**
  * @author Kohsuke Kawaguchi
  * @see GHIssue#getLabels()
  * @see GHRepository#listLabels()
  */
 public class GHLabel {
-    private String url, name, color;
+    private String url, name, color, description;
     private GHRepository repo;
 
     public String getUrl() {
@@ -30,6 +31,14 @@ public class GHLabel {
         return color;
     }
 
+    /**
+     * Purpose of Label
+     */
+    @Preview @Deprecated
+    public String getDescription() {
+        return description;
+    }
+
     /*package*/ GHLabel wrapUp(GHRepository repo) {
         this.repo = repo;
         return this;
@@ -44,7 +53,26 @@ public class GHLabel {
      *      6-letter hex color code, like "f29513"
      */
     public void setColor(String newColor) throws IOException {
-        repo.root.retrieve().method("PATCH").with("name", name).with("color", newColor).to(url);
+        repo.root.retrieve().method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", newColor)
+                .with("description", description)
+                .to(url);
+    }
+
+    /**
+     * @param newDescription
+     *      Description of label
+     */
+    @Preview @Deprecated
+    public void setDescription(String newDescription) throws IOException {
+        repo.root.retrieve().method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", color)
+                .with("description", newDescription)
+                .to(url);
     }
 
     /*package*/ static Collection<String> toNames(Collection<GHLabel> labels) {

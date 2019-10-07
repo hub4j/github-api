@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -12,7 +14,16 @@ import static org.junit.Assume.assumeFalse;
 /**
  * @author Liam Newman
  */
-public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
+public class GHRepositoryTest extends AbstractGitHubWireMockTest {
+
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+    }
+
 
     @Test
     public void archive() throws Exception {
@@ -184,12 +195,42 @@ public class GHRepositoryTest extends AbstractGitHubApiWireMockTest {
         }
     }
 
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
+    @Test
+    public void searchRepositories() throws Exception {
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        GHRepository u = r.iterator().next();
+        System.out.println(u.getName());
+        assertNotNull(u.getId());
+        assertEquals("Assembly", u.getLanguage());
+        assertTrue(r.getTotalCount() > 0);
     }
 
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+
+    @Test // issue #162
+    public void testIssue162() throws Exception {
+        GHRepository r = gitHub.getRepository("github-api/github-api");
+        List<GHContent> contents = r.getDirectoryContent("", "gh-pages");
+        for (GHContent content : contents) {
+            if (content.isFile()) {
+                String content1 = content.getContent();
+                String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
+                System.out.println(content.getPath());
+                assertEquals(content1, content2);
+            }
+        }
+    }
+
+    @Test
+    public void markDown() throws Exception {
+        assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
+
+        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
+        System.out.println(actual);
+        assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
+        assertTrue(actual.contains("href=\"https://github.com/github-api/github-api/pull/1\""));
+        assertTrue(actual.contains("class=\"user-mention\""));
+        assertTrue(actual.contains("class=\"issue-link "));
+        assertTrue(actual.contains("to fix issue"));
     }
 
 

@@ -558,6 +558,9 @@ class Requester {
 
 
     private void setupConnection(URL url) throws IOException {
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+        }
         uc = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
@@ -624,6 +627,14 @@ class Requester {
             if (responseCode == 204 && type!=null && type.isArray()) {
                 // no content
                 return type.cast(Array.newInstance(type.getComponentType(),0));
+            }
+
+            // Response code 202 means the statistics are still being cached.
+            // See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
+            if (responseCode == 202) {
+                LOGGER.log(INFO, "The statistics are still being generated. Please try again in 5 seconds.");
+                // Maybe throw an exception instead?
+                return null;
             }
 
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");

@@ -1,0 +1,50 @@
+{
+  "id": "5b504083-4657-4d27-aaff-54f97a361d7a",
+  "name": "projects_3312449_columns",
+  "request": {
+    "url": "/projects/3312449/columns",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"column-one\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "projects_3312449_columns-5b504083-4657-4d27-aaff-54f97a361d7a.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:25:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4603",
+      "X-RateLimit-Reset": "1570212957",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"6d8f989a5dec185be871918f7ec4d50c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo, write:org",
+      "Location": "https://api.github.com/projects/columns/6706803",
+      "X-GitHub-Media-Type": "github.inertia-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FEDA:67D5:142037F:183BF13:5D978077"
+    }
+  },
+  "uuid": "5b504083-4657-4d27-aaff-54f97a361d7a",
+  "persistent": true,
+  "insertionIndex": 4
+}

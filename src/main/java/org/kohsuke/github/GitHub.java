@@ -34,33 +34,23 @@ import org.apache.commons.io.IOUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
-import static java.net.HttpURLConnection.*;
-import static java.util.logging.Level.*;
-import static org.kohsuke.github.Previews.*;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.util.logging.Level.FINE;
+import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.Previews.MACHINE_MAN;
 
 /**
  * Root of the GitHub API.
@@ -740,6 +730,24 @@ public class GitHub {
     }
 
     /**
+     * Returns a list of all authorizations.
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
+     */
+    public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
+        return new PagedIterable<GHAuthorization>() {
+            public PagedIterator<GHAuthorization> _iterator(int pageSize) {
+                return new PagedIterator<GHAuthorization>(retrieve().asIterator("/authorizations", GHAuthorization[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHAuthorization[] page) {
+                        for (GHAuthorization u : page)
+                            u.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Returns the GitHub App associated with the authentication credentials used.
      *
      * You must use a JWT to access this endpoint.
@@ -775,6 +783,18 @@ public class GitHub {
         // if not, remember this new user
         users.putIfAbsent(user.getLogin(),user);
         return user;
+    }
+
+    public GHProject getProject(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/"+id, GHProject.class).wrap(this);
+    }
+
+    public GHProjectColumn getProjectColumn(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class).wrap(this);
+    }
+
+    public GHProjectCard getProjectCard(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class).wrap(this);
     }
 
     private static class GHApiInfo {

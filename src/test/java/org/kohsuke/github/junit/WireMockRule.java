@@ -78,7 +78,7 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     public WireMockRule() {
-        this(WireMockConfiguration.wireMockConfig());
+        this(WireMockRuleConfiguration.wireMockConfig());
     }
 
     public Statement apply(Statement base, Description description) {
@@ -93,7 +93,7 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         return new Statement() {
             public void evaluate() throws Throwable {
                 WireMockRule.this.methodName = methodName;
-                final Options localOptions = new WireMockOptions(
+                final Options localOptions = new WireMockRuleConfiguration(
                     WireMockRule.this.options,
                     methodName);
 
@@ -137,126 +137,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     protected void after() {
-    }
-
-
-    private class WireMockOptions implements Options {
-
-        private final Options wireMockConfiguration;
-        private final String childDirectory;
-        private final FileSource childSource;
-        private final MappingsSource mappingsSource;
-
-        public WireMockOptions(Options options, String childDirectory) {
-            wireMockConfiguration = options;
-            this.childDirectory = childDirectory;
-            childSource = wireMockConfiguration.filesRoot().child(childDirectory);
-            mappingsSource = new JsonFileMappingsSource(childSource.child("mappings"));
-        }
-
-        public int portNumber() {
-            return wireMockConfiguration.portNumber();
-        }
-
-        public int containerThreads() {
-            return wireMockConfiguration.containerThreads();
-        }
-
-        public HttpsSettings httpsSettings() {
-            return wireMockConfiguration.httpsSettings();
-        }
-
-        public JettySettings jettySettings() {
-            return wireMockConfiguration.jettySettings();
-        }
-
-        public boolean browserProxyingEnabled() {
-            return wireMockConfiguration.browserProxyingEnabled();
-        }
-
-        public ProxySettings proxyVia() {
-            return wireMockConfiguration.proxyVia();
-        }
-
-        public FileSource filesRoot() {
-            return childSource;
-        }
-
-        public MappingsLoader mappingsLoader() {
-            return mappingsSource;
-        }
-
-        public MappingsSaver mappingsSaver() {
-            return mappingsSource;
-        }
-
-        public Notifier notifier() {
-            return wireMockConfiguration.notifier();
-        }
-
-        public boolean requestJournalDisabled() {
-            return wireMockConfiguration.requestJournalDisabled();
-        }
-
-        public Optional<Integer> maxRequestJournalEntries() {
-            return wireMockConfiguration.maxRequestJournalEntries();
-        }
-
-        public String bindAddress() {
-            return wireMockConfiguration.bindAddress();
-        }
-
-        public List<CaseInsensitiveKey> matchingHeaders() {
-            return wireMockConfiguration.matchingHeaders();
-        }
-
-        public HttpServerFactory httpServerFactory() {
-            return wireMockConfiguration.httpServerFactory();
-        }
-
-        public ThreadPoolFactory threadPoolFactory() {
-            return wireMockConfiguration.threadPoolFactory();
-        }
-
-        public boolean shouldPreserveHostHeader() {
-            return wireMockConfiguration.shouldPreserveHostHeader();
-        }
-
-        public String proxyHostHeader() {
-            return wireMockConfiguration.proxyHostHeader();
-        }
-
-        public <T extends Extension> Map<String, T> extensionsOfType(Class<T> extensionType) {
-            return wireMockConfiguration.extensionsOfType(extensionType);
-        }
-
-        public WiremockNetworkTrafficListener networkTrafficListener() {
-            return wireMockConfiguration.networkTrafficListener();
-        }
-
-        public Authenticator getAdminAuthenticator() {
-            return wireMockConfiguration.getAdminAuthenticator();
-        }
-
-        public boolean getHttpsRequiredForAdminApi() {
-            return wireMockConfiguration.getHttpsRequiredForAdminApi();
-        }
-
-        public NotMatchedRenderer getNotMatchedRenderer() {
-            return wireMockConfiguration.getNotMatchedRenderer();
-        }
-
-        public AsynchronousResponseSettings getAsynchronousResponseSettings() {
-            return wireMockConfiguration.getAsynchronousResponseSettings();
-        }
-
-        public ChunkedEncodingPolicy getChunkedEncodingPolicy() {
-            return wireMockConfiguration.getChunkedEncodingPolicy();
-        }
-
-        public boolean getGzipDisabled() {
-            return wireMockConfiguration.getGzipDisabled();
-        }
     }
 
     public void loadMappingsUsing(MappingsLoader mappingsLoader) {

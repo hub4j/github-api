@@ -34,6 +34,27 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         Assert.assertNotNull(repository.getReadme());
     }
 
+    @Test
+    public void testInviteUser() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHUser user = gitHub.getUser("martinvanzijl2");
+
+        // First remove the user
+        if (org.hasMember(user)) {
+            org.remove(user);
+        }
+
+        // Then invite the user again
+        org.add(user, GHOrganization.Role.MEMBER);
+
+        // Now the user has to accept the invitation
+        // Can this be automated?
+        // user.acceptInvitationTo(org); // ?
+
+        // Check the invitation has worked.
+        // assertTrue(org.hasMember(user));
+    }
+
     @After
     public void cleanUp() throws IOException {
         if (mockGitHub.isUseProxy()) {

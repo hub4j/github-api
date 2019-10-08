@@ -104,6 +104,22 @@ public class GHOrganization extends GHPerson {
         return null;
     }
 
+    /** Member's role in an organization */
+    public enum Role {
+        ADMIN, /** The user is an owner of the organization. */
+        MEMBER /** The user is a non-owner member of the organization. */
+    }
+
+    /**
+     * Adds (invites) a user to the organization.
+     * @see <a href="https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
+     */
+    public void add(GHUser user, Role role) throws IOException {
+        root.retrieve().method("PUT")
+                .with("role", role.name().toLowerCase())
+                .to("/orgs/" + login + "/memberships/" + user.getLogin());
+    }
+
     /**
      * Checks if this organization has the specified user as a member.
      */

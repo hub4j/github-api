@@ -1,0 +1,35 @@
+{
+  "id": "e93cbdb3-bfef-4942-864a-2dedbfee68ad",
+  "name": "projects_columns_cards_27353272",
+  "request": {
+    "url": "/projects/columns/cards/27353272",
+    "method": "DELETE"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:25:08 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4613",
+      "X-RateLimit-Reset": "1570212957",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo, write:org",
+      "X-GitHub-Media-Type": "github.inertia-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "FED7:6B2E:1EAC1C8:2447A1F:5D978074"
+    }
+  },
+  "uuid": "e93cbdb3-bfef-4942-864a-2dedbfee68ad",
+  "persistent": true,
+  "insertionIndex": 6
+}

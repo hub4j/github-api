@@ -154,18 +154,14 @@ class Requester {
 
     public Requester with(String key, Enum e) {
         if (e==null)    return _with(key, null);
-
-        // by convention Java constant names are upper cases, but github uses
-        // lower-case constants. GitHub also uses '-', which in Java we always
-        // replace by '_'
-        return with(key, e.toString().toLowerCase(Locale.ENGLISH).replace('_', '-'));
+        return with(key, transformEnum(e));
     }
 
     public Requester with(String key, String value) {
         return _with(key, value);
     }
 
-    public Requester with(String key, Collection<String> value) {
+    public Requester with(String key, Collection<?> value) {
         return _with(key, value);
     }
 
@@ -179,6 +175,14 @@ class Requester {
 
     public Requester with(String key, Map<String, String> value) {
         return _with(key, value);
+    }
+
+    public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
+        Map<String,String> retMap = new HashMap<String, String>();
+        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
+            retMap.put(entry.getKey(), transformEnum(entry.getValue()));
+        }
+        return _with(key, retMap);
     }
 
     public Requester with(@WillClose/*later*/ InputStream body) {
@@ -554,6 +558,9 @@ class Requester {
 
 
     private void setupConnection(URL url) throws IOException {
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+        }
         uc = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
@@ -620,6 +627,14 @@ class Requester {
             if (responseCode == 204 && type!=null && type.isArray()) {
                 // no content
                 return type.cast(Array.newInstance(type.getComponentType(),0));
+            }
+
+            // Response code 202 means the statistics are still being cached.
+            // See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
+            if (responseCode == 202) {
+                LOGGER.log(INFO, "The statistics are still being generated. Please try again in 5 seconds.");
+                // Maybe throw an exception instead?
+                return null;
             }
 
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
@@ -724,6 +739,18 @@ class Requester {
         }
 
         throw e;
+    }
+
+    /**
+     * Transform Java Enum into Github constants given its conventions
+     * @param en - Enum to be transformed
+     * @return a String containing the value of a Github constant
+     */
+    private String transformEnum(Enum en){
+        // by convention Java constant names are upper cases, but github uses
+        // lower-case constants. GitHub also uses '-', which in Java we always
+        // replace by '_'
+        return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

@@ -53,13 +53,13 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
-            <annotationProcessorPaths>
-              <annotationProcessorPath>
-                <groupId>com.infradna.tool</groupId>
-                <artifactId>bridge-method-injector</artifactId>
-                <version>1.18</version>
-              </annotationProcessorPath>
-            </annotationProcessorPaths>
+          <annotationProcessorPaths>
+            <annotationProcessorPath>
+              <groupId>org.jenkins-ci</groupId>
+              <artifactId>annotation-indexer</artifactId>
+              <version>1.12</version>
+            </annotationProcessorPath>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
 
@@ -87,6 +87,18 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>	
+        <groupId>com.infradna.tool</groupId>	
+        <artifactId>bridge-method-injector</artifactId>	
+        <version>1.18</version>	
+        <executions>	
+          <execution>	
+            <goals>	
+              <goal>process</goal>	
+            </goals>	
+          </execution>	
+        </executions>	
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>

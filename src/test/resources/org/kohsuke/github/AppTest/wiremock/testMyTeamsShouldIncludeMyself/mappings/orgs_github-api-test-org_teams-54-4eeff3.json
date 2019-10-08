@@ -1,0 +1,44 @@
+{
+  "id": "4eeff351-c1bd-449c-bf07-0cd3d013dc9b",
+  "name": "orgs_github-api-test-org_teams",
+  "request": {
+    "url": "/orgs/github-api-test-org/teams",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org_teams-4eeff351-c1bd-449c-bf07-0cd3d013dc9b.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 00:21:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4864",
+      "X-RateLimit-Reset": "1570151182",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"d73a82173554b9946f9c6dc2ec80456a\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D601:78E9:11137C9:145C1DA:5D969091"
+    }
+  },
+  "uuid": "4eeff351-c1bd-449c-bf07-0cd3d013dc9b",
+  "persistent": true,
+  "scenarioName": "scenario-5-orgs-github-api-test-org-teams",
+  "requiredScenarioState": "scenario-5-orgs-github-api-test-org-teams-2",
+  "insertionIndex": 54
+}

@@ -36,5 +36,34 @@ package org.kohsuke.github;
      * @see <a href="https://developer.github.com/v3/previews/#require-signed-commits">GitHub API Previews</a>
      */
     static final String ZZZAX = "application/vnd.github.zzzax-preview+json";
+
     static final String SHADOW_CAT = "application/vnd.github.shadow-cat-preview+json";
+
+    /**
+     * Manage projects
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#projects">GitHub API Previews</a>
+     */
+    static final String INERTIA = "application/vnd.github.inertia-preview+json";
+
+    /**
+     * Manage integrations through the API
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#integrations">GitHub API Previews</a>
+     */
+    static final String MACHINE_MAN = "application/vnd.github.machine-man-preview+json";
+
+    /**
+     * Owners of GitHub Apps can now uninstall an app using the Apps API
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#uninstall-a-github-app">GitHub API Previews</a>
+     */
+    static final String GAMBIT = "application/vnd.github.gambit-preview+json";
+
+    /**
+     * Label emoji, search, and descriptions
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#label-emoji-search-and-descriptions">GitHub API Previews</a>
+     */
+    static final String SYMMETRA = "application/vnd.github.symmetra-preview+json";
 }

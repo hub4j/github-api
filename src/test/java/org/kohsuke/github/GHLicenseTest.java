@@ -25,8 +25,6 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,7 +33,7 @@ import java.net.URL;
 /**
  * @author Duncan Dickinson
  */
-public class GHLicenseTest extends AbstractGitHubApiTestBase {
+public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned
@@ -59,7 +57,7 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
         PagedIterable<GHLicense> licenses = gitHub.listLicenses();
         for (GHLicense lic : licenses) {
             if (lic.getKey().equals("mit")) {
-                assertTrue(lic.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+                assertTrue(lic.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
                 return;
             }
         }
@@ -89,12 +87,12 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("kohsuke/github-api");
+        GHRepository repo = gitHub.getRepository("github-api/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
     }
 
     /**
@@ -110,7 +108,7 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
     }
 
     /**
@@ -126,7 +124,7 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("apache-2.0"));
         assertTrue("The name is correct", license.getName().equals("Apache License 2.0"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/apache-2.0")));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/apache-2.0")));
     }
 
     /**
@@ -137,7 +135,7 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
      */
     @Test
     public void checkRepositoryWithoutLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("dedickinson/test-repo");
+        GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty");
         GHLicense license = repo.getLicense();
         assertNull("There is no license", license);
     }
@@ -151,12 +149,12 @@ public class GHLicenseTest extends AbstractGitHubApiTestBase {
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("kohsuke/github-api");
+        GHRepository repo = gitHub.getRepository("github-api/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL("https://api.github.com/licenses/mit")));
+        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
         assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
 

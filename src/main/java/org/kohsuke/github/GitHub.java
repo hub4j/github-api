@@ -34,33 +34,23 @@ import org.apache.commons.io.IOUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
-import static java.net.HttpURLConnection.*;
-import static java.util.logging.Level.*;
-import static org.kohsuke.github.Previews.*;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.util.logging.Level.FINE;
+import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.Previews.MACHINE_MAN;
 
 /**
  * Root of the GitHub API.
@@ -115,6 +105,12 @@ public class GitHub {
      *     <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null.
      *         This will send OAuth token to the GitHub API. If the login parameter is null,
      *         The constructor makes an API call to figure out the user name that owns the token.
+     *
+     *     <dt>Log in with JWT token
+     *     <dd>Specify jwtToken. Leave password null.
+     *         This will send JWT token to the GitHub API via the Authorization HTTP header.
+     *         Please note that only operations in which permissions have been previously configured and accepted during
+     *         the GitHub App will be executed successfully.
      * </dl>
      *
      * @param apiUrl
@@ -132,7 +128,7 @@ public class GitHub {
      * @param connector
      *      HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
+    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String jwtToken, String password, HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/")) apiUrl = apiUrl.substring(0, apiUrl.length()-1); // normalize
         this.apiUrl = apiUrl;
         if (null != connector) this.connector = connector;
@@ -140,7 +136,9 @@ public class GitHub {
         if (oauthAccessToken!=null) {
             encodedAuthorization = "token "+oauthAccessToken;
         } else {
-            if (password!=null) {
+            if(jwtToken!=null){
+                encodedAuthorization = "Bearer "+jwtToken;
+            }else if (password!=null) {
                 String authorization = (login + ':' + password);
                 String charsetName = Charsets.UTF_8.name();
                 encodedAuthorization = "Basic "+new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
@@ -154,7 +152,7 @@ public class GitHub {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
-        if (login==null && encodedAuthorization!=null)
+        if (login==null && encodedAuthorization!=null && jwtToken == null)
             login = getMyself().getLogin();
         this.login = login;
     }
@@ -700,6 +698,36 @@ public class GitHub {
     }
 
     /**
+     * Returns a list of all authorizations.
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
+     */
+    public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
+        return new PagedIterable<GHAuthorization>() {
+            public PagedIterator<GHAuthorization> _iterator(int pageSize) {
+                return new PagedIterator<GHAuthorization>(retrieve().asIterator("/authorizations", GHAuthorization[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHAuthorization[] page) {
+                        for (GHAuthorization u : page)
+                            u.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Returns the GitHub App associated with the authentication credentials used.
+     *
+     * You must use a JWT to access this endpoint.
+     *
+     * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated GitHub App</a>
+     */
+    @Preview @Deprecated
+    public GHApp getApp() throws IOException {
+        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
+    }
+
+    /**
      * Ensures that the credential is valid.
      */
     public boolean isCredentialValid() {
@@ -723,6 +751,18 @@ public class GitHub {
         // if not, remember this new user
         users.putIfAbsent(user.getLogin(),user);
         return user;
+    }
+
+    public GHProject getProject(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/"+id, GHProject.class).wrap(this);
+    }
+
+    public GHProjectColumn getProjectColumn(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class).wrap(this);
+    }
+
+    public GHProjectCard getProjectCard(long id) throws IOException {
+        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class).wrap(this);
     }
 
     private static class GHApiInfo {
@@ -922,7 +962,11 @@ public class GitHub {
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final String[] TIME_FORMATS = {"yyyy/MM/dd HH:mm:ss ZZZZ","yyyy-MM-dd'T'HH:mm:ss'Z'"};
+    private static final String[] TIME_FORMATS = {
+            "yyyy/MM/dd HH:mm:ss ZZZZ",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
+    };
 
     static {
         MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));

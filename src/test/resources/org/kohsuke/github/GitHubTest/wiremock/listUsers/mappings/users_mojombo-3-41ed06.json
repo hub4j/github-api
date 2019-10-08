@@ -1,0 +1,43 @@
+{
+  "id": "41ed065f-76ae-483d-acd2-363d73c6fc1d",
+  "name": "users_mojombo",
+  "request": {
+    "url": "/users/mojombo",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_mojombo-41ed065f-76ae-483d-acd2-363d73c6fc1d.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 19:26:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4948",
+      "X-RateLimit-Reset": "1570478899",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"a5edfb24b60db17ec8053aff2e34da64\"",
+      "Last-Modified": "Mon, 19 Aug 2019 19:50:56 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E258:2CE7:29154ED:3118BD9:5D9B916B"
+    }
+  },
+  "uuid": "41ed065f-76ae-483d-acd2-363d73c6fc1d",
+  "persistent": true,
+  "insertionIndex": 3
+}

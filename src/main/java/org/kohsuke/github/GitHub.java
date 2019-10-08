@@ -713,6 +713,7 @@ public class GitHub {
                 };
             }
         };
+    }
 
     /**
      * Returns the GitHub App associated with the authentication credentials used.

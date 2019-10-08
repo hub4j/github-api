@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Engineering",
+    "id": 1941826,
+    "node_id": "MDQ6VGVhbTE5NDE4MjY=",
+    "slug": "engineering",
+    "description": "Jenkins, Inc. engineering team",
+    "privacy": "closed",
+    "url": "https://api.github.com/teams/1941826",
+    "html_url": "https://github.com/orgs/jenkins-inc/teams/engineering",
+    "members_url": "https://api.github.com/teams/1941826/members{/member}",
+    "repositories_url": "https://api.github.com/teams/1941826/repos",
+    "permission": "pull"
+  }
+]

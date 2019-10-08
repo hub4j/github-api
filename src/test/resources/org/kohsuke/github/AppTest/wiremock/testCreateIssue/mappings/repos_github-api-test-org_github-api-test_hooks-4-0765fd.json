@@ -1,0 +1,45 @@
+{
+  "id": "0765fda8-b2f8-4474-8936-f02c33023e52",
+  "name": "repos_github-api-test-org_github-api-test_hooks",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api-test/hooks",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Date": "Wed, 02 Oct 2019 21:55:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4877",
+      "X-RateLimit-Reset": "1570055937",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"ad5808b0a5d75d70a16a73b8e9763e19\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:repo_hook, public_repo, read:repo_hook, repo, write:repo_hook",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C568:957A:C9FE0F:F131B4:5D951CC8"
+    }
+  },
+  "uuid": "0765fda8-b2f8-4474-8936-f02c33023e52",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-github-api-test-hooks",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-github-api-test-hooks-2",
+  "insertionIndex": 4
+}

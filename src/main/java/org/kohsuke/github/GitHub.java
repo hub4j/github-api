@@ -698,6 +698,24 @@ public class GitHub {
     }
 
     /**
+     * Returns a list of all authorizations.
+     * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
+     */
+    public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
+        return new PagedIterable<GHAuthorization>() {
+            public PagedIterator<GHAuthorization> _iterator(int pageSize) {
+                return new PagedIterator<GHAuthorization>(retrieve().asIterator("/authorizations", GHAuthorization[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHAuthorization[] page) {
+                        for (GHAuthorization u : page)
+                            u.wrap(GitHub.this);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
      * Returns the GitHub App associated with the authentication credentials used.
      *
      * You must use a JWT to access this endpoint.

@@ -30,7 +30,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     protected boolean useDefaultGitHub = true;
 
-    protected Set<String> tempGitHubRepositories = new HashSet<>();
+    protected final Set<String> tempGitHubRepositories = new HashSet<>();
 
     /**
      * {@link GitHub} instance for use during test.
@@ -159,16 +159,11 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     protected GHRepository getTempRepository(String name) throws IOException {
         String fullName = GITHUB_API_TEST_ORG +'/' + name;
         if (mockGitHub.isUseProxy()) {
-            GHRepository repository = gitHubBeforeAfter
-                .getOrganization(GITHUB_API_TEST_ORG)
-                .getRepository(name);
-            if (repository != null) {
-                repository.delete();
-            }
+            cleanupRepository(fullName);
 
-            repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
+            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
                 .createRepository(name)
-                .description("A test repository for testing the github-api project: " + name )
+                .description("A test repository for testing the github-api project: " + name)
                 .homepage("http://github-api.kohsuke.org/")
                 .autoInit(true)
                 .create();
@@ -179,8 +174,6 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
             }
 
             configureTempRepository(repository);
-
-            this.tempGitHubRepositories.add(fullName);
         }
 
         return gitHub.getRepository(fullName);

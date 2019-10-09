@@ -1,29 +1,29 @@
 {
-  "id": "7d759a3f-08d4-49d5-b9c4-a65c54c8b650",
-  "name": "repos_github-api-test-org_test-mergeoptions",
+  "id": "4de721aa-c26b-4df7-a87e-67b440454149",
+  "name": "repos_github-api-test-org_temp-setmergeoptions",
   "request": {
-    "url": "/repos/github-api-test-org/test-mergeoptions",
+    "url": "/repos/github-api-test-org/temp-setMergeOptions",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_test-mergeoptions-7d759a3f-08d4-49d5-b9c4-a65c54c8b650.json",
+    "bodyFileName": "repos_github-api-test-org_temp-setmergeoptions-4de721aa-c26b-4df7-a87e-67b440454149.json",
     "headers": {
-      "Date": "Tue, 08 Oct 2019 16:05:36 GMT",
+      "Date": "Wed, 09 Oct 2019 20:35:27 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4982",
-      "X-RateLimit-Reset": "1570554322",
+      "X-RateLimit-Remaining": "4756",
+      "X-RateLimit-Reset": "1570656117",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"bc67de8fb9554a459188fac7692140dc\"",
-      "Last-Modified": "Tue, 08 Oct 2019 15:53:14 GMT",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "W/\"9b6a5b60f9f5940540226c138cadaa94\"",
+      "Last-Modified": "Wed, 09 Oct 2019 20:35:26 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
@@ -34,13 +34,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "11AF:6922:DCB2EE:19A8E49:5D9CB3D0"
+      "X-GitHub-Request-Id": "CCBD:55D1:740DAA:DD3896:5D9E448F"
     }
   },
-  "uuid": "7d759a3f-08d4-49d5-b9c4-a65c54c8b650",
+  "uuid": "4de721aa-c26b-4df7-a87e-67b440454149",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-github-api-test-org-test-mergeoptions",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-github-api-test-org-test-mergeoptions-2",
-  "insertionIndex": 2
+  "scenarioName": "scenario-1-repos-github-api-test-org-temp-setMergeOptions",
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-temp-setMergeOptions-2",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-temp-setMergeOptions-3",
+  "insertionIndex": 6
 }

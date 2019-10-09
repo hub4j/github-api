@@ -235,39 +235,38 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     
     @Test
     public void getMergeOptions() throws IOException {
-      GHRepository r = gitHub.getRepository("github-api-test-org/test-mergeoptions");
-      assertNotNull(r.isAllowMergeCommit());
-      assertNotNull(r.isAllowRebaseMerge());
-      assertNotNull(r.isAllowSquashMerge());
+        GHRepository r = getTempRepository();
+        assertNotNull(r.isAllowMergeCommit());
+        assertNotNull(r.isAllowRebaseMerge());
+        assertNotNull(r.isAllowSquashMerge());
     }
     
     @Test
     public void setMergeOptions() throws IOException {
-      String repoName = "github-api-test-org/test-mergeoptions";
-      GHRepository r = gitHub.getRepository(repoName);
+        // String repoName = "github-api-test-org/test-mergeoptions";
+        GHRepository r = getTempRepository();
 
-      // at least one merge option must be selected
-      // flip all the values at least once
-      r.allowMergeCommit(false);
-      r.allowRebaseMerge(false);
-      r.allowSquashMerge(true);
-      
-      r = gitHub.getRepository(repoName);
-      assertFalse(r.isAllowMergeCommit());
-      assertFalse(r.isAllowRebaseMerge());
-      assertTrue(r.isAllowSquashMerge());
-      
-      // flip the last value
-      r.allowMergeCommit(true);
-      r.allowRebaseMerge(true);
-      r.allowSquashMerge(false);
-      
-      r = gitHub.getRepository(repoName);
-      assertTrue(r.isAllowMergeCommit());
-      assertTrue(r.isAllowRebaseMerge());
-      assertFalse(r.isAllowSquashMerge());
-      
-      // no need to reset the values
+        // at least one merge option must be selected
+        // flip all the values at least once
+        r.allowSquashMerge(true);
+
+        r.allowMergeCommit(false);
+        r.allowRebaseMerge(false);
+
+        r = gitHub.getRepository(r.getFullName());
+        assertFalse(r.isAllowMergeCommit());
+        assertFalse(r.isAllowRebaseMerge());
+        assertTrue(r.isAllowSquashMerge());
+
+        // flip the last value
+        r.allowMergeCommit(true);
+        r.allowRebaseMerge(true);
+        r.allowSquashMerge(false);
+
+        r = gitHub.getRepository(r.getFullName());
+        assertTrue(r.isAllowMergeCommit());
+        assertTrue(r.isAllowRebaseMerge());
+        assertFalse(r.isAllowSquashMerge());
     }
 
 

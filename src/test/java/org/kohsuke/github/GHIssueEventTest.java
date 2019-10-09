@@ -13,6 +13,7 @@ public class GHIssueEventTest extends AbstractGitHubApiTestBase {
         GHRepository repo = getRepository();
         GHIssue issue = repo.getIssue(1);
 
+        System.out.println("Single issue:");
         for (GHIssueEvent event : issue.listEvents()) {
             System.out.println(event);
         }
@@ -27,8 +28,11 @@ public class GHIssueEventTest extends AbstractGitHubApiTestBase {
         GHRepository repo = getRepository();
         PagedIterable<GHIssueEvent> list = repo.listIssueEvents();
 
-        for (GHIssueEvent event : list) {
+        System.out.println("Repository (all):");
+        int i = 0;
+        for (GHIssueEvent event : list.asList()) {
             System.out.println(event);
+            if (i++ > 10) break;
         }
     }
 
@@ -37,6 +41,7 @@ public class GHIssueEventTest extends AbstractGitHubApiTestBase {
         GHRepository repo = getRepository();
         GHIssueEvent event = repo.getIssueEvent(2615868520L);
 
+        System.out.println("Repository (single event):");
         System.out.println(event);
     }
 

@@ -431,72 +431,18 @@ public class GHIssue extends GHObject implements Reactable{
         }
     }
 
-    public static class IssueEventInfo {
-        private GitHub root;
-
-        private int id;
-        private String node_id;
-        private String url;
-        private GHUser actor;
-        private String event;
-        private String commit_id;
-        private String commit_url;
-        private String created_at;
-
-        public int getId() {
-            return id;
-        }
-
-        public String getNodeId() {
-            return node_id;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public GHUser getActor() {
-            return actor;
-        }
-
-        public String getEvent() {
-            return event;
-        }
-
-        public String getCommitId() {
-            return commit_id;
-        }
-
-        public String getCommitUrl() {
-            return commit_url;
-        }
-
-        public Date getCreatedAt() {
-            return GitHub.parseDate(created_at);
-        }
-
-        public IssueEventInfo wrapUp(GitHub root) {
-            this.root = root;
-            return this;
-        }
-
-        public GitHub getRoot() {
-            return root;
-        }
-    }
-
     /**
      * Lists events for this issue.
      * See https://developer.github.com/v3/issues/events/
      */
-    public PagedIterable<IssueEventInfo> listEvents() throws IOException {
-        return new PagedIterable<IssueEventInfo>() {
-            public PagedIterator<IssueEventInfo> _iterator(int pageSize) {
-                return new PagedIterator<IssueEventInfo>(root.retrieve().asIterator(owner.getApiTailUrl(String.format("/issues/%s/events", number)), IssueEventInfo[].class, pageSize)) {
+    public PagedIterable<GHIssueEvent> listEvents() throws IOException {
+        return new PagedIterable<GHIssueEvent>() {
+            public PagedIterator<GHIssueEvent> _iterator(int pageSize) {
+                return new PagedIterator<GHIssueEvent>(root.retrieve().asIterator(owner.getApiTailUrl(String.format("/issues/%s/events", number)), GHIssueEvent[].class, pageSize)) {
                     @Override
-                    protected void wrapUp(IssueEventInfo[] page) {
-                        for (IssueEventInfo c : page)
-                            c.wrapUp(root);
+                    protected void wrapUp(GHIssueEvent[] page) {
+                        for (GHIssueEvent c : page)
+                            c.wrapUp(GHIssue.this);
                     }
                 };
             }

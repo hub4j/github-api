@@ -1776,76 +1776,17 @@ public class GHRepository extends GHObject {
         return "/repos/" + getOwnerName() + "/" + name +tail;
     }
 
-    public static class IssueEventInfo {
-        private GitHub root;
-
-        private long id;
-        private String node_id;
-        private String url;
-        private GHUser actor;
-        private String event;
-        private String commit_id;
-        private String commit_url;
-        private String created_at;
-        private GHIssue issue;
-
-        public long getId() {
-            return id;
-        }
-
-        public String getNodeId() {
-            return node_id;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public GHUser getActor() {
-            return actor;
-        }
-
-        public String getEvent() {
-            return event;
-        }
-
-        public String getCommitId() {
-            return commit_id;
-        }
-
-        public String getCommitUrl() {
-            return commit_url;
-        }
-
-        public Date getCreatedAt() {
-            return GitHub.parseDate(created_at);
-        }
-
-        public IssueEventInfo wrapUp(GitHub root) {
-            this.root = root;
-            return this;
-        }
-
-        public GitHub getRoot() {
-            return root;
-        }
-
-        public GHIssue getIssue() {
-            return issue;
-        }
-    }
-
     /**
      * Get all issue events for this repository.
      * See https://developer.github.com/v3/issues/events/#list-events-for-a-repository
      */
-    public PagedIterable<IssueEventInfo> listIssueEvents() throws IOException {
-        return new PagedIterable<IssueEventInfo>() {
-            public PagedIterator<IssueEventInfo> _iterator(int pageSize) {
-                return new PagedIterator<IssueEventInfo>(root.retrieve().asIterator(getApiTailUrl("issues/events"), IssueEventInfo[].class, pageSize)) {
+    public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
+        return new PagedIterable<GHIssueEvent>() {
+            public PagedIterator<GHIssueEvent> _iterator(int pageSize) {
+                return new PagedIterator<GHIssueEvent>(root.retrieve().asIterator(getApiTailUrl("issues/events"), GHIssueEvent[].class, pageSize)) {
                     @Override
-                    protected void wrapUp(IssueEventInfo[] page) {
-                        for (IssueEventInfo c : page)
+                    protected void wrapUp(GHIssueEvent[] page) {
+                        for (GHIssueEvent c : page)
                             c.wrapUp(root);
                     }
                 };
@@ -1857,7 +1798,7 @@ public class GHRepository extends GHObject {
      * Get a single issue event.
      * See https://developer.github.com/v3/issues/events/#get-a-single-event
      */
-    public IssueEventInfo getIssueEvent(int id) throws IOException {
-        return root.retrieve().to(getApiTailUrl("issues/events/" + id), IssueEventInfo.class).wrapUp(root);
+    public GHIssueEvent getIssueEvent(long id) throws IOException {
+        return root.retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class).wrapUp(root);
     }
 }

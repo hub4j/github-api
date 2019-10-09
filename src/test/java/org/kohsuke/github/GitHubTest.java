@@ -69,5 +69,14 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertEquals("jquery/jquery", c.getOwner().getFullName());
         assertTrue(r.getTotalCount() > 0);
     }
-}
 
+    @Test
+    public void testListMyAuthorizations() throws IOException
+    {
+        PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
+
+        for (GHAuthorization auth: list) {
+            assertNotNull(auth.getAppName());
+        }
+    }
+}

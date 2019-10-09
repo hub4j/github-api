@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -10,7 +11,7 @@ import org.kohsuke.github.junit.GitHubWireMockRule;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
@@ -28,6 +29,8 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
     protected boolean useDefaultGitHub = true;
+
+    protected Set<String> tempGitHubRepositories = new HashSet<>();
 
     /**
      * {@link GitHub} instance for use during test.
@@ -140,6 +143,77 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
             return gitHub.getMyself();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     *
+     */
+    protected GHRepository getTempRepository() throws IOException{
+        return getTempRepository("temp-" + this.mockGitHub.getMethodName());
+    }
+
+    /**
+     * Creates
+     */
+    protected GHRepository getTempRepository(String name) throws IOException {
+        String fullName = GITHUB_API_TEST_ORG +'/' + name;
+        if (mockGitHub.isUseProxy()) {
+            GHRepository repository = gitHubBeforeAfter
+                .getOrganization(GITHUB_API_TEST_ORG)
+                .getRepository(name);
+            if (repository != null) {
+                repository.delete();
+            }
+
+            repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
+                .createRepository(name)
+                .description("A test repository for testing the github-api project: " + name )
+                .homepage("http://github-api.kohsuke.org/")
+                .autoInit(true)
+                .create();
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+
+            configureTempRepository(repository);
+
+            this.tempGitHubRepositories.add(fullName);
+        }
+
+        return gitHub.getRepository(fullName);
+    }
+
+    protected void configureTempRepository(GHRepository repository) throws IOException {
+        repository.enableIssueTracker(true);
+        repository.enableDownloads(true);
+        repository.enableWiki(true);
+    }
+
+    @Before
+    @After
+    public void cleanupTempRepositories() throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            for(String fullName : tempGitHubRepositories) {
+                cleanupRepository(fullName);
+            }
+        }
+    }
+
+    protected void cleanupRepository(String fullName) throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            tempGitHubRepositories.add(fullName);
+            try {
+                GHRepository repository = gitHubBeforeAfter.getRepository(fullName);
+                if (repository != null) {
+                    repository.delete();
+                }
+            } catch (GHFileNotFoundException e) {
+                // Repo already deleted
+            }
+
         }
     }
 

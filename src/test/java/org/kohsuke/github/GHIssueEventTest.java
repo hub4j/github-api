@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.List;
 import org.junit.Test;
 
 /**
@@ -10,39 +11,42 @@ public class GHIssueEventTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testEventsForSingleIssue() throws Exception {
+        // Create the issue.
         GHRepository repo = getRepository();
-        GHIssue issue = repo.getIssue(1);
+        GHIssueBuilder builder = repo.createIssue("Test from the API");
+        GHIssue issue = builder.create();
 
-        System.out.println("Single issue:");
-        for (GHIssueEvent event : issue.listEvents()) {
-            System.out.println(event);
-        }
+        // Generate some events.
+        issue.addLabels("test-label");
 
-        //TODO: Use the following...
-        //GHIssueBuilder builder = repo.createIssue("test from the api");
-        //GHIssue issue = builder.create();
+        // Test that the events are present.
+        List<GHIssueEvent> list = issue.listEvents().asList();
+        assertEquals(1, list.size());
+
+        GHIssueEvent event = list.get(0);
+        assertEquals(issue.getNumber(), event.getIssue().getNumber());
+        assertEquals("labeled", event.getEvent());
+
+        // Test that we can get a single event directly.
+        GHIssueEvent eventFromRepo = repo.getIssueEvent(event.getId());
+        assertEquals(event.getId(), eventFromRepo.getId());
+        assertEquals(event.getCreatedAt(), eventFromRepo.getCreatedAt());
+
+        // Close the issue.
+        issue.close();
     }
 
     @Test
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
-        PagedIterable<GHIssueEvent> list = repo.listIssueEvents();
+        List<GHIssueEvent> list = repo.listIssueEvents().asList();
+        assertTrue(list.size() > 0);
 
-        System.out.println("Repository (all):");
         int i = 0;
-        for (GHIssueEvent event : list.asList()) {
-            System.out.println(event);
+        for (GHIssueEvent event : list) {
+            assertNotNull(event.getIssue());
             if (i++ > 10) break;
         }
-    }
-
-    @Test
-    public void testRepositorySingleEvent() throws Exception {
-        GHRepository repo = getRepository();
-        GHIssueEvent event = repo.getIssueEvent(2615868520L);
-
-        System.out.println("Repository (single event):");
-        System.out.println(event);
     }
 
     protected GHRepository getRepository() throws IOException {

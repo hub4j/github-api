@@ -1804,4 +1804,30 @@ public class GHRepository extends GHObject {
         if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
         return "/repos/" + getOwnerName() + "/" + name +tail;
     }
+
+    /**
+     * Get all issue events for this repository.
+     * See https://developer.github.com/v3/issues/events/#list-events-for-a-repository
+     */
+    public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
+        return new PagedIterable<GHIssueEvent>() {
+            public PagedIterator<GHIssueEvent> _iterator(int pageSize) {
+                return new PagedIterator<GHIssueEvent>(root.retrieve().asIterator(getApiTailUrl("issues/events"), GHIssueEvent[].class, pageSize)) {
+                    @Override
+                    protected void wrapUp(GHIssueEvent[] page) {
+                        for (GHIssueEvent c : page)
+                            c.wrapUp(root);
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Get a single issue event.
+     * See https://developer.github.com/v3/issues/events/#get-a-single-event
+     */
+    public GHIssueEvent getIssueEvent(long id) throws IOException {
+        return root.retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class).wrapUp(root);
+    }
 }

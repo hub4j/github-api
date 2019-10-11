@@ -1,0 +1,40 @@
+{
+  "url": "https://api.github.com/orgs/github-api-test-org/memberships/martinvanzijl2",
+  "state": "pending",
+  "role": "member",
+  "organization_url": "https://api.github.com/orgs/github-api-test-org",
+  "user": {
+    "login": "martinvanzijl2",
+    "id": 56241446,
+    "node_id": "MDQ6VXNlcjU2MjQxNDQ2",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/56241446?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/martinvanzijl2",
+    "html_url": "https://github.com/martinvanzijl2",
+    "followers_url": "https://api.github.com/users/martinvanzijl2/followers",
+    "following_url": "https://api.github.com/users/martinvanzijl2/following{/other_user}",
+    "gists_url": "https://api.github.com/users/martinvanzijl2/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/martinvanzijl2/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/martinvanzijl2/subscriptions",
+    "organizations_url": "https://api.github.com/users/martinvanzijl2/orgs",
+    "repos_url": "https://api.github.com/users/martinvanzijl2/repos",
+    "events_url": "https://api.github.com/users/martinvanzijl2/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/martinvanzijl2/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "organization": {
+    "login": "github-api-test-org",
+    "id": 7544739,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjc1NDQ3Mzk=",
+    "url": "https://api.github.com/orgs/github-api-test-org",
+    "repos_url": "https://api.github.com/orgs/github-api-test-org/repos",
+    "events_url": "https://api.github.com/orgs/github-api-test-org/events",
+    "hooks_url": "https://api.github.com/orgs/github-api-test-org/hooks",
+    "issues_url": "https://api.github.com/orgs/github-api-test-org/issues",
+    "members_url": "https://api.github.com/orgs/github-api-test-org/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/github-api-test-org/public_members{/member}",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/7544739?v=4",
+    "description": null
+  }
+}

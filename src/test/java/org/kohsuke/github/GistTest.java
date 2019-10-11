@@ -1,26 +1,32 @@
 package org.kohsuke.github;
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import org.junit.Test;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.hamcrest.Matchers.notNullValue;
+
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GistTest extends AbstractGitHubApiTestBase {
+public class GistTest extends AbstractGitHubWireMockTest {
     /**
      * CRUD operation.
      */
     @Test
     public void lifecycleTest() throws Exception {
         GHGist gist = gitHub.createGist()
-                .public_(false)
-                .description("Test Gist")
-                .file("abc.txt","abc")
-                .file("def.txt","def")
-                .create();
+            .public_(false)
+            .description("Test Gist")
+            .file("abc.txt", "abc")
+            .file("def.txt", "def")
+            .create();
 
-        assertNotNull(gist.getCreatedAt());
+        assertThat(gist.getCreatedAt(), is(notNullValue()));
+
         assertNotNull(gist.getUpdatedAt());
-
         assertNotNull(gist.getCommentsUrl());
         assertNotNull(gist.getCommitsUrl());
         assertNotNull(gist.getGitPullUrl());
@@ -33,10 +39,12 @@ public class GistTest extends AbstractGitHubApiTestBase {
     @Test
     public void starTest() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
-        assertEquals("rtyler",gist.getOwner().getLogin());
+        assertEquals("rtyler", gist.getOwner().getLogin());
+
 
         gist.star();
         assertTrue(gist.isStarred());
+
         gist.unstar();
         assertFalse(gist.isStarred());
 
@@ -62,10 +70,10 @@ public class GistTest extends AbstractGitHubApiTestBase {
 
         assertTrue(gist.isPublic());
 
-        assertEquals(1,gist.getFiles().size());
+        assertEquals(1, gist.getFiles().size());
         GHGistFile f = gist.getFile("keybase.md");
 
-        assertEquals("text/plain", f.getType());
+        assertEquals("text/markdown", f.getType());
         assertEquals("Markdown", f.getLanguage());
         assertTrue(f.getContent().contains("### Keybase proof"));
         assertNotNull(f.getContent());

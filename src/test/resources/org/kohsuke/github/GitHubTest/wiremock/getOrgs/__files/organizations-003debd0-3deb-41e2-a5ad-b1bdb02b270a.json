@@ -1,0 +1,30 @@
+[
+  {
+    "login": "moneyspyder",
+    "id": 359,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjM1OQ==",
+    "url": "https://api.github.com/orgs/moneyspyder",
+    "repos_url": "https://api.github.com/orgs/moneyspyder/repos",
+    "events_url": "https://api.github.com/orgs/moneyspyder/events",
+    "hooks_url": "https://api.github.com/orgs/moneyspyder/hooks",
+    "issues_url": "https://api.github.com/orgs/moneyspyder/issues",
+    "members_url": "https://api.github.com/orgs/moneyspyder/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/moneyspyder/public_members{/member}",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/359?v=4",
+    "description": null
+  },
+  {
+    "login": "sproutit",
+    "id": 374,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjM3NA==",
+    "url": "https://api.github.com/orgs/sproutit",
+    "repos_url": "https://api.github.com/orgs/sproutit/repos",
+    "events_url": "https://api.github.com/orgs/sproutit/events",
+    "hooks_url": "https://api.github.com/orgs/sproutit/hooks",
+    "issues_url": "https://api.github.com/orgs/sproutit/issues",
+    "members_url": "https://api.github.com/orgs/sproutit/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/sproutit/public_members{/member}",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/374?v=4",
+    "description": null
+  }
+]

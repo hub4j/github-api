@@ -59,12 +59,12 @@ public class GHIssueEvent {
         return issue;
     }
 
-    public GHIssueEvent wrapUp(GitHub root) {
+    GHIssueEvent wrapUp(GitHub root) {
         this.root = root;
         return this;
     }
 
-    public GHIssueEvent wrapUp(GHIssue parent) {
+    GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
         this.root = parent.root;
         return this;

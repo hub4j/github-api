@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import com.jcraft.jsch.IO;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -10,9 +12,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
 
+
     @Test
     public void testCreateRepository() throws IOException {
-        cleanUp();
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST,
@@ -22,7 +25,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreateRepositoryWithAutoInitialization() throws IOException {
-        cleanUp();
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST)
@@ -53,15 +56,5 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Check the invitation has worked.
         // assertTrue(org.hasMember(user));
-    }
-
-    @After
-    public void cleanUp() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository(GITHUB_API_TEST);
-            if (repository != null) {
-                repository.delete();
-            }
-        }
     }
 }

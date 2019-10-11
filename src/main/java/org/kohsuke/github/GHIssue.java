@@ -425,16 +425,9 @@ public class GHIssue extends GHObject implements Reactable{
      * See https://developer.github.com/v3/issues/events/
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return new PagedIterable<GHIssueEvent>() {
-            public PagedIterator<GHIssueEvent> _iterator(int pageSize) {
-                return new PagedIterator<GHIssueEvent>(root.retrieve().asIterator(owner.getApiTailUrl(String.format("/issues/%s/events", number)), GHIssueEvent[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHIssueEvent[] page) {
-                        for (GHIssueEvent c : page)
-                            c.wrapUp(GHIssue.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve().asPagedIterable(
+            owner.getApiTailUrl(String.format("/issues/%s/events", number)),
+            GHIssueEvent[].class,
+            item -> item.wrapUp(GHIssue.this) );
     }
 }

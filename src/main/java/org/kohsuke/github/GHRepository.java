@@ -1701,17 +1701,10 @@ public class GHRepository extends GHObject {
      * See https://developer.github.com/v3/issues/events/#list-events-for-a-repository
      */
     public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
-        return new PagedIterable<GHIssueEvent>() {
-            public PagedIterator<GHIssueEvent> _iterator(int pageSize) {
-                return new PagedIterator<GHIssueEvent>(root.retrieve().asIterator(getApiTailUrl("issues/events"), GHIssueEvent[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHIssueEvent[] page) {
-                        for (GHIssueEvent c : page)
-                            c.wrapUp(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve().asPagedIterable(
+            getApiTailUrl("issues/events"),
+            GHIssueEvent[].class,
+            item -> item.wrapUp(root) );
     }
 
     /**

@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -437,6 +438,40 @@ class Requester {
 
     private boolean isMethodWithBody() {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
+    }
+
+    /*package*/  <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
+        return new PagedIterableWithConsumer(type, this, tailApiUrl, consumer);
+    }
+
+    private static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
+
+        private final Class<S[]> clazz;
+        private final Requester requester;
+        private final String tailApiUrl;
+        private final Consumer<S> consumer;
+
+        public PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
+            this.clazz = clazz;
+            this.tailApiUrl = tailApiUrl;
+            this.requester = requester;
+            this.consumer = consumer;
+        }
+
+        @Override
+        public PagedIterator<S> _iterator(int pageSize) {
+            final Iterator<S[]> iterator = requester.asIterator(tailApiUrl, clazz, pageSize);
+            return new PagedIterator<S>(iterator) {
+                @Override
+                protected void wrapUp(S[] page) {
+                    if (consumer != null) {
+                        for (S item : page) {
+                            consumer.accept(item);
+                        }
+                    }
+                }
+            };
+        }
     }
 
     /**

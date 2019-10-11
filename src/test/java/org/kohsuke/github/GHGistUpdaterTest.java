@@ -42,7 +42,7 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGitUpdater() throws Exception {
-        GHGistUpdater updater = new GHGistUpdater(gist);
+        GHGistUpdater updater = gist.update();
         GHGist updatedGist = updater.description("Description updated by API")
                 .addFile("new-file.txt", "Added by updater")
                 //.deleteFile("delete-me.txt")

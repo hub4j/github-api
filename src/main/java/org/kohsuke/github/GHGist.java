@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -116,13 +117,12 @@ public class GHGist extends GHObject {
         }
     }
 
-    String getApiRoute() {
-        // Needed since getId() returns the hidden field from GHObject.
-        return "/gists/" + id;
-    }
-
     String getApiTailUrl(String tail) {
-        return "/gists/" + id + '/' + tail;
+        String result = "/gists/" + id;
+        if (!StringUtils.isBlank(tail)) {
+            result += StringUtils.prependIfMissing(tail, "/");
+        }
+        return result;
     }
 
     public void star() throws IOException {
@@ -163,6 +163,13 @@ public class GHGist extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to("/gists/" + id);
+    }
+
+    /**
+     * Updates this gist via a builder.
+     */
+    public GHGistUpdater update() throws IOException {
+        return new GHGistUpdater(this);
     }
 
     @Override

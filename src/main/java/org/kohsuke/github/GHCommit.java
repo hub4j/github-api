@@ -327,17 +327,11 @@ public class GHCommit {
      * Lists up all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return new PagedIterable<GHCommitComment>() {
-            public PagedIterator<GHCommitComment> _iterator(int pageSize) {
-                return new PagedIterator<GHCommitComment>(owner.root.retrieve().asIterator(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha), GHCommitComment[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHCommitComment[] page) {
-                        for (GHCommitComment c : page)
-                            c.wrap(owner);
-                    }
-                };
-            }
-        };
+        return owner.root.retrieve()
+            .asPagedIterable(
+                String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
+                GHCommitComment[].class,
+                item -> item.wrap(owner) );
     }
 
     /**

@@ -447,19 +447,12 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
-        return new PagedIterable<GHOrganization>() {
-            @Override
-            public PagedIterator<GHOrganization> _iterator(int pageSize) {
-                return new PagedIterator<GHOrganization>(retrieve().with("since",since)
-                        .asIterator("/organizations", GHOrganization[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHOrganization[] page) {
-                        for (GHOrganization c : page)
-                            c.wrapUp(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .with("since",since)
+            .asPagedIterable(
+                "/organizations",
+                GHOrganization[].class,
+                item -> item.wrapUp(GitHub.this) );
     }
 
     /**
@@ -487,34 +480,22 @@ public class GitHub {
      * @return a list of popular open source licenses
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return new PagedIterable<GHLicense>() {
-            public PagedIterator<GHLicense> _iterator(int pageSize) {
-                return new PagedIterator<GHLicense>(retrieve().asIterator("/licenses", GHLicense[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHLicense[] page) {
-                        for (GHLicense c : page)
-                            c.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/licenses",
+                GHLicense[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**
      * Returns a list of all users.
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHUser[] page) {
-                        for (GHUser u : page)
-                            u.wrapUp(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/users",
+                GHUser[].class,
+                item -> item.wrapUp(GitHub.this) );
     }
 
     /**
@@ -720,17 +701,11 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return new PagedIterable<GHAuthorization>() {
-            public PagedIterator<GHAuthorization> _iterator(int pageSize) {
-                return new PagedIterator<GHAuthorization>(retrieve().asIterator("/authorizations", GHAuthorization[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHAuthorization[] page) {
-                        for (GHAuthorization u : page)
-                            u.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/authorizations",
+                GHAuthorization[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**
@@ -920,17 +895,11 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve().with("since",since)
+            .asPagedIterable(
+                "/repositories",
+                GHRepository[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**

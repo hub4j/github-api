@@ -71,17 +71,11 @@ public class GHDeployment extends GHObject {
     }
 
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return new PagedIterable<GHDeploymentStatus>() {
-            public PagedIterator<GHDeploymentStatus> _iterator(int pageSize) {
-                return new PagedIterator<GHDeploymentStatus>(root.retrieve().asIterator(statuses_url, GHDeploymentStatus[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHDeploymentStatus[] page) {
-                        for (GHDeploymentStatus c : page)
-                            c.wrap(owner);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                statuses_url,
+                GHDeploymentStatus[].class,
+                item -> item.wrap(owner) );
     }
 
 }

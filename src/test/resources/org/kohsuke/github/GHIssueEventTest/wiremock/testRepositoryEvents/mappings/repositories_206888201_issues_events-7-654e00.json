@@ -1,0 +1,41 @@
+{
+  "id": "654e008f-d77e-4339-957e-f2bdfcab904b",
+  "name": "repositories_206888201_issues_events",
+  "request": {
+    "url": "/repositories/206888201/issues/events?page=5",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_206888201_issues_events-654e008f-d77e-4339-957e-f2bdfcab904b.json",
+    "headers": {
+      "Date": "Fri, 11 Oct 2019 03:33:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4976",
+      "X-RateLimit-Reset": "1570768157",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"021b9686a4cb768611897c6a6ad6737f\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C422:6D1D:15D9C1:194E22:5D9FF811",
+      "Link": "<https://api.github.com/repositories/206888201/issues/events?page=4>; rel=\"prev\", <https://api.github.com/repositories/206888201/issues/events?page=6>; rel=\"next\", <https://api.github.com/repositories/206888201/issues/events?page=14>; rel=\"last\", <https://api.github.com/repositories/206888201/issues/events?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "654e008f-d77e-4339-957e-f2bdfcab904b",
+  "persistent": true,
+  "insertionIndex": 7
+}

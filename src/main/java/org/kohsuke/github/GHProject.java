@@ -166,18 +166,12 @@ public class GHProject extends GHObject {
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return new PagedIterable<GHProjectColumn>() {
-            public PagedIterator<GHProjectColumn> _iterator(int pageSize) {
-                return new PagedIterator<GHProjectColumn>(root.retrieve().withPreview(INERTIA)
-                        .asIterator(String.format("/projects/%d/columns", id), GHProjectColumn[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHProjectColumn[] page) {
-                        for (GHProjectColumn c : page)
-                            c.wrap(project);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .withPreview(INERTIA)
+            .asPagedIterable(
+                String.format("/projects/%d/columns", id),
+                GHProjectColumn[].class,
+                item -> item.wrap(project) );
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {

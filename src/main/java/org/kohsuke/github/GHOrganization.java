@@ -70,16 +70,11 @@ public class GHOrganization extends GHPerson {
      * List up all the teams.
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
-        return new PagedIterable<GHTeam>() {
-            public PagedIterator<GHTeam> _iterator(int pageSize) {
-                return new PagedIterator<GHTeam>(root.retrieve().asIterator(String.format("/orgs/%s/teams", login), GHTeam[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHTeam[] page) {
-                        GHTeam.wrapUp(page, GHOrganization.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("/orgs/%s/teams", login),
+                GHTeam[].class,
+                item -> item.wrapUp(GHOrganization.this) );
     }
 
     /**
@@ -102,6 +97,22 @@ public class GHOrganization extends GHPerson {
                 return t;
         }
         return null;
+    }
+
+    /** Member's role in an organization */
+    public enum Role {
+        ADMIN, /** The user is an owner of the organization. */
+        MEMBER /** The user is a non-owner member of the organization. */
+    }
+
+    /**
+     * Adds (invites) a user to the organization.
+     * @see <a href="https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
+     */
+    public void add(GHUser user, Role role) throws IOException {
+        root.retrieve().method("PUT")
+                .with("role", role.name().toLowerCase())
+                .to("/orgs/" + login + "/memberships/" + user.getLogin());
     }
 
     /**
@@ -173,17 +184,12 @@ public class GHOrganization extends GHPerson {
     }
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-                String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(String.format("/orgs/%s/%s%s", login, suffix, filterParams), GHUser[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHUser[] users) {
-                        GHUser.wrap(users, root);
-                    }
-                };
-            }
-        };
+        String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("/orgs/%s/%s%s", login, suffix, filterParams),
+                GHUser[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**
@@ -198,19 +204,12 @@ public class GHOrganization extends GHPerson {
      * @param status The status filter (all, open or closed).
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-        return new PagedIterable<GHProject>() {
-            public PagedIterator<GHProject> _iterator(int pageSize) {
-                return new PagedIterator<GHProject>(root.retrieve().withPreview(INERTIA)
+        return root.retrieve().withPreview(INERTIA)
                         .with("state", status)
-                        .asIterator(String.format("/orgs/%s/projects", login), GHProject[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHProject[] page) {
-                        for (GHProject c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        };
+                        .asPagedIterable(
+                            String.format("/orgs/%s/projects", login),
+                            GHProject[].class,
+                            item -> item.wrap(root) );
     }
 
     /**
@@ -294,17 +293,11 @@ public class GHOrganization extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return new PagedIterable<GHEventInfo>() {
-            public PagedIterator<GHEventInfo> _iterator(int pageSize) {
-                return new PagedIterator<GHEventInfo>(root.retrieve().asIterator(String.format("/orgs/%s/events", login), GHEventInfo[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHEventInfo[] page) {
-                        for (GHEventInfo c : page)
-                            c.wrapUp(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("/orgs/%s/events", login),
+                GHEventInfo[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**
@@ -316,17 +309,12 @@ public class GHOrganization extends GHPerson {
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/orgs/" + login + "/repos", GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        }.withPageSize(pageSize);
+        return root.retrieve()
+            .asPagedIterable(
+                "/orgs/" + login + "/repos",
+                GHRepository[].class,
+                item -> item.wrap(root)
+            ).withPageSize(pageSize);
     }
 
     /**

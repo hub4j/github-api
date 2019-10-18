@@ -85,16 +85,11 @@ public class GHTeam implements Refreshable {
      * Retrieves the current members.
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(root.retrieve().asIterator(api("/members"), GHUser[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHUser[] page) {
-                        GHUser.wrap(page, root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                api("/members"),
+                GHUser[].class,
+                item -> item.wrapUp(root) );
     }
 
     public Set<GHUser> getMembers() throws IOException {
@@ -122,17 +117,11 @@ public class GHTeam implements Refreshable {
     }
 
     public PagedIterable<GHRepository> listRepositories() {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator(api("/repos"), GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository r : page)
-                            r.wrap(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                api("/repos"),
+                GHRepository[].class,
+                item -> item.wrap(root) );
     }
 
     /**

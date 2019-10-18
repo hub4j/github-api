@@ -73,18 +73,12 @@ public class GHProjectColumn extends GHObject {
 
 	public PagedIterable<GHProjectCard> listCards() throws IOException {
 		final GHProjectColumn column = this;
-		return new PagedIterable<GHProjectCard>() {
-			public PagedIterator<GHProjectCard> _iterator(int pageSize) {
-				return new PagedIterator<GHProjectCard>(root.retrieve().withPreview(INERTIA)
-						.asIterator(String.format("/projects/columns/%d/cards", id), GHProjectCard[].class, pageSize)) {
-					@Override
-					protected void wrapUp(GHProjectCard[] page) {
-						for (GHProjectCard c : page)
-							c.wrap(column);
-					}
-				};
-			}
-		};
+		return root.retrieve()
+			.withPreview(INERTIA)
+			.asPagedIterable(
+				String.format("/projects/columns/%d/cards", id),
+				GHProjectCard[].class,
+				item -> item.wrap(column) );
 	}
 
 	public GHProjectCard createCard(String note) throws IOException {

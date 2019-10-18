@@ -79,32 +79,28 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().asIterator("/users/" + login + "/repos", GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        }.withPageSize(pageSize);
+        return root.retrieve()
+            .asPagedIterable(
+                "/users/" + login + "/repos",
+                GHRepository[].class,
+                item -> item.wrap(root)
+            ).withPageSize(pageSize);
     }
 
     /**
      * Loads repository list in a paginated fashion.
-     * 
+     *
      * <p>
      * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion.
      * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
-     * 
+     *
      * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
      * into {@link Error}.
      *
      * @deprecated
      *      Use {@link #listRepositories()}
      */
+    @Deprecated
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {

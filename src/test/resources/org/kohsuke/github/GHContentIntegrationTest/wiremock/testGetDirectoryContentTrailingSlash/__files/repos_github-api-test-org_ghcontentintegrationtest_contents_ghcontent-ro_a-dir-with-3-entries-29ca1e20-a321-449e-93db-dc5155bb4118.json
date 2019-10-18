@@ -1,0 +1,50 @@
+[
+  {
+    "name": "entry-one",
+    "path": "ghcontent-ro/a-dir-with-3-entries/entry-one",
+    "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "size": 0,
+    "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-one?ref=master",
+    "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-one",
+    "git_url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "download_url": "https://raw.githubusercontent.com/github-api-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-dir-with-3-entries/entry-one",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-one?ref=master",
+      "git": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "html": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-one"
+    }
+  },
+  {
+    "name": "entry-three",
+    "path": "ghcontent-ro/a-dir-with-3-entries/entry-three",
+    "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "size": 0,
+    "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-three?ref=master",
+    "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-three",
+    "git_url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "download_url": "https://raw.githubusercontent.com/github-api-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-dir-with-3-entries/entry-three",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-three?ref=master",
+      "git": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "html": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-three"
+    }
+  },
+  {
+    "name": "entry-two",
+    "path": "ghcontent-ro/a-dir-with-3-entries/entry-two",
+    "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "size": 0,
+    "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-two?ref=master",
+    "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-two",
+    "git_url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "download_url": "https://raw.githubusercontent.com/github-api-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-dir-with-3-entries/entry-two",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries/entry-two?ref=master",
+      "git": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "html": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-3-entries/entry-two"
+    }
+  }
+]

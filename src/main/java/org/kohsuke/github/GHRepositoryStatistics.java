@@ -68,19 +68,11 @@ public class GHRepositoryStatistics {
      * are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return new PagedIterable<ContributorStats>() {
-            @Override
-            public PagedIterator<ContributorStats> _iterator(int pageSize) {
-                return new PagedIterator<ContributorStats>(root.retrieve().asIterator(getApiTailUrl("contributors"), ContributorStats[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(ContributorStats[] page) {
-                        for (ContributorStats c : page) {
-                            c.wrapUp(root);
-                        }
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiTailUrl("contributors"),
+                ContributorStats[].class,
+                item -> item.wrapUp(root) );
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -202,18 +194,11 @@ public class GHRepositoryStatistics {
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return new PagedIterable<CommitActivity>() {
-            public PagedIterator<CommitActivity> _iterator(int pageSize) {
-                return new PagedIterator<CommitActivity>(root.retrieve().asIterator(getApiTailUrl("commit_activity"), CommitActivity[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(CommitActivity[] page) {
-                        for (CommitActivity c : page) {
-                            c.wrapUp(root);
-                        }
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiTailUrl("commit_activity"),
+                CommitActivity[].class,
+                item -> item.wrapUp(root) );
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",

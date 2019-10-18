@@ -274,72 +274,44 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return new PagedIterable<GHPullRequestFileDetail>() {
-            public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiRoute()),
-                        GHPullRequestFileDetail[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestFileDetail[] page) {
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("%s/files", getApiRoute()),
+                GHPullRequestFileDetail[].class,
+                null);
     }
 
     /**
      * Retrieves all the reviews associated to this pull request.
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return new PagedIterable<GHPullRequestReview>() {
-            public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReview>(root.retrieve()
-                        .asIterator(String.format("%s/reviews", getApiRoute()),
-                        GHPullRequestReview[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestReview[] page) {
-                        for (GHPullRequestReview r: page) {
-                            r.wrapUp(GHPullRequest.this);
-                        }
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("%s/reviews", getApiRoute()),
+                GHPullRequestReview[].class,
+                item -> item.wrapUp(GHPullRequest.this));
     }
 
     /**
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return new PagedIterable<GHPullRequestReviewComment>() {
-            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + COMMENTS_ACTION,
-                        GHPullRequestReviewComment[].class, pageSize)) {
-                    protected void wrapUp(GHPullRequestReviewComment[] page) {
-                        for (GHPullRequestReviewComment c : page)
-                            c.wrapUp(GHPullRequest.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiRoute() + COMMENTS_ACTION,
+                        GHPullRequestReviewComment[].class,
+                        item -> item.wrapUp(GHPullRequest.this) );
     }
 
     /**
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return new PagedIterable<GHPullRequestCommitDetail>() {
-            public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
+        return root.retrieve()
+            .asPagedIterable(
                         String.format("%s/commits", getApiRoute()),
-                        GHPullRequestCommitDetail[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestCommitDetail[] page) {
-                        for (GHPullRequestCommitDetail c : page)
-                            c.wrapUp(GHPullRequest.this);
-                    }
-                };
-            }
-        };
+                        GHPullRequestCommitDetail[].class,
+                        item -> item.wrapUp(GHPullRequest.this) );
     }
 
     /**

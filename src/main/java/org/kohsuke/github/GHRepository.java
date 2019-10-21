@@ -745,7 +745,9 @@ public class GHRepository extends GHObject {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieve().to(getApiTailUrl("pulls/" + i), GHPullRequest.class).wrapUp(this);
+        return root.retrieve()
+            .withPreview(SHADOW_CAT)
+            .to(getApiTailUrl("pulls/" + i), GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -814,11 +816,39 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body,
             boolean maintainerCanModify) throws IOException {
-        return new Requester(root).with("title",title)
+        return createPullRequest(title, head, base, body, maintainerCanModify, false);
+    }
+
+    /**
+     * Creates a new pull request. Maintainer's permissions and draft aware.
+     *
+     * @param title
+     *      Required. The title of the pull request.
+     * @param head
+     *      Required. The name of the branch where your changes are implemented.
+     *      For cross-repository pull requests in the same network,
+     *      namespace head with a user like this: username:branch.
+     * @param base
+     *      Required. The name of the branch you want your changes pulled into.
+     *      This should be an existing branch on the current repository.
+     * @param body
+     *      The contents of the pull request. This is the markdown description
+     *      of a pull request.
+     * @param maintainerCanModify
+     *      Indicates whether maintainers can modify the pull request.
+     * @param draft
+     *      Indicates whether to create a draft pull request or not.
+     */
+    public GHPullRequest createPullRequest(String title, String head, String base, String body,
+                                           boolean maintainerCanModify, boolean draft) throws IOException {
+        return new Requester(root)
+                .withPreview(SHADOW_CAT)
+                .with("title",title)
                 .with("head",head)
                 .with("base",base)
                 .with("body",body)
                 .with("maintainer_can_modify", maintainerCanModify)
+                .with("draft", draft)
                 .to(getApiTailUrl("pulls"),GHPullRequest.class)
                 .wrapUp(this);
     }

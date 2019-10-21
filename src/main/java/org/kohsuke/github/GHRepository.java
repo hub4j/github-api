@@ -745,7 +745,9 @@ public class GHRepository extends GHObject {
      * Retrieves a specified pull request.
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root.retrieve().to(getApiTailUrl("pulls/" + i), GHPullRequest.class).wrapUp(this);
+        return root.retrieve()
+            .withPreview(SHADOW_CAT)
+            .to(getApiTailUrl("pulls/" + i), GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -839,7 +841,8 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body,
                                            boolean maintainerCanModify, boolean draft) throws IOException {
-        return new Requester(root).withPreview(SHADOW_CAT)
+        return new Requester(root)
+                .withPreview(SHADOW_CAT)
                 .with("title",title)
                 .with("head",head)
                 .with("base",base)

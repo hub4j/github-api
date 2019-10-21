@@ -435,15 +435,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
-            System.out.println(ev);
             if (ev.getType() == GHEvent.PULL_REQUEST) {
                 GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
-                System.out.println(pr.getNumber());
-                System.out.println(pr.getPullRequest());
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
             }
         }
     }

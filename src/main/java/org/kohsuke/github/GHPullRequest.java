@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.Previews.SHADOW_CAT;
+
 /**
  * A pull request.
  *
@@ -53,7 +55,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     // details that are only available when obtained from ID
     private GHUser merged_by;
     private int review_comments, additions, commits;
-    private boolean merged, maintainer_can_modify, draft;
+    private boolean merged, maintainer_can_modify;
+    // making these package private to all for testing
+    boolean draft;
     private Boolean mergeable;
     private int deletions;
     private String mergeable_state;
@@ -267,7 +271,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve().to(url, this).wrapUp(owner);
+        root.retrieve()
+            .withPreview(SHADOW_CAT)
+            .to(url, this).wrapUp(owner);
     }
 
     /**

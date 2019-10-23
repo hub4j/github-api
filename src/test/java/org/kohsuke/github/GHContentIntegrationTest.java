@@ -1,27 +1,46 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
  * Integration test for {@link GHContent}.
  */
-public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
+public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     private GHRepository repo;
-    private String createdFilename = rnd.next();
+    private String createdFilename = "test-file-to-create.txt";
 
     @Before
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest").fork();
+    @After
+    public void cleanup() throws Exception {
+        if(mockGitHub.isUseProxy()) {
+            repo = gitHubBeforeAfter.getRepository("github-api-test-org/GHContentIntegrationTest");
+            try {
+                GHContent content = repo.getFileContent(createdFilename);
+                if (content != null) {
+                    content.delete("Cleanup");
+                }
+            } catch (IOException e) {}
+        }
     }
+
+    @Before
+    public void setUp() throws Exception {
+        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
+    }
+
 
     @Test
     public void testGetFileContent() throws Exception {
+        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
         assertTrue(content.isFile());
@@ -68,7 +87,8 @@ public class GHContentIntegrationTest extends AbstractGitHubApiTestBase {
         assertNotNull(updatedContentResponse.getCommit());
         assertNotNull(updatedContentResponse.getContent());
         // due to what appears to be a cache propagation delay, this test is too flaky
-        // assertEquals("this is some new content\n", updatedContent.getContent());
+        assertEquals("this is some new content", new BufferedReader(new InputStreamReader(updatedContent.read())).readLine());
+        assertEquals("this is some new content\n", updatedContent.getContent());
 
         GHContentUpdateResponse deleteResponse = updatedContent.delete("Enough of this foolishness!");
 

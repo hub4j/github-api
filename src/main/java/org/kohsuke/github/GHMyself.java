@@ -156,17 +156,13 @@ public class GHMyself extends GHUser {
      * @param repoType type of repository returned in the listing
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(root.retrieve().with("type",repoType).asIterator("/user/repos", GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(root);
-                    }
-                };
-            }
-        }.withPageSize(pageSize);
+        return root.retrieve()
+            .with("type",repoType)
+            .asPagedIterable(
+                "/user/repos",
+                GHRepository[].class,
+                item -> item.wrap(root)
+            ).withPageSize(pageSize);
     }
 
     /**
@@ -191,16 +187,12 @@ public class GHMyself extends GHUser {
      *      Filter by a specific state
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return new PagedIterable<GHMembership>() {
-            public PagedIterator<GHMembership> _iterator(int pageSize) {
-                return new PagedIterator<GHMembership>(root.retrieve().with("state",state).asIterator("/user/memberships/orgs", GHMembership[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHMembership[] page) {
-                        GHMembership.wrap(page,root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .with("state",state)
+            .asPagedIterable(
+                "/user/memberships/orgs",
+                GHMembership[].class,
+                item -> item.wrap(root) );
     }
 
     /**

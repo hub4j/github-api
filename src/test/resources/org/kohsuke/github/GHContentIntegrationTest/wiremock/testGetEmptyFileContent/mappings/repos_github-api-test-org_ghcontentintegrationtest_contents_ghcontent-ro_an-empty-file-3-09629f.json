@@ -1,0 +1,40 @@
+{
+  "id": "09629f63-a530-4e70-86d7-7c38d409c649",
+  "name": "repos_github-api-test-org_ghcontentintegrationtest_contents_ghcontent-ro_an-empty-file",
+  "request": {
+    "url": "/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/an-empty-file",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_ghcontentintegrationtest_contents_ghcontent-ro_an-empty-file-09629f63-a530-4e70-86d7-7c38d409c649.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Oct 2019 22:17:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4700",
+      "X-RateLimit-Reset": "1570835121",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "W/\"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\"",
+      "Last-Modified": "Fri, 11 Oct 2019 22:17:05 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C0EE:6185:1483AF:2A3CE5:5DA0FF84"
+    }
+  },
+  "uuid": "09629f63-a530-4e70-86d7-7c38d409c649",
+  "persistent": true,
+  "insertionIndex": 3
+}

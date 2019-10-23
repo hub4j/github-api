@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.Previews.SHADOW_CAT;
+
 /**
  * A pull request.
  *
@@ -54,6 +56,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private GHUser merged_by;
     private int review_comments, additions, commits;
     private boolean merged, maintainer_can_modify;
+    // making these package private to all for testing
+    boolean draft;
     private Boolean mergeable;
     private int deletions;
     private String mergeable_state;
@@ -190,6 +194,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return maintainer_can_modify;
     }
 
+    public boolean isDraft() throws IOException {
+        populate();
+        return draft;
+    }
+
     /**
      * Is this PR mergeable?
      *
@@ -262,79 +271,53 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve().to(url, this).wrapUp(owner);
+        root.retrieve()
+            .withPreview(SHADOW_CAT)
+            .to(url, this).wrapUp(owner);
     }
 
     /**
      * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return new PagedIterable<GHPullRequestFileDetail>() {
-            public PagedIterator<GHPullRequestFileDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestFileDetail>(root.retrieve().asIterator(String.format("%s/files", getApiRoute()),
-                        GHPullRequestFileDetail[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestFileDetail[] page) {
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("%s/files", getApiRoute()),
+                GHPullRequestFileDetail[].class,
+                null);
     }
 
     /**
      * Retrieves all the reviews associated to this pull request.
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return new PagedIterable<GHPullRequestReview>() {
-            public PagedIterator<GHPullRequestReview> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReview>(root.retrieve()
-                        .asIterator(String.format("%s/reviews", getApiRoute()),
-                        GHPullRequestReview[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestReview[] page) {
-                        for (GHPullRequestReview r: page) {
-                            r.wrapUp(GHPullRequest.this);
-                        }
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                String.format("%s/reviews", getApiRoute()),
+                GHPullRequestReview[].class,
+                item -> item.wrapUp(GHPullRequest.this));
     }
 
     /**
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return new PagedIterable<GHPullRequestReviewComment>() {
-            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReviewComment>(root.retrieve().asIterator(getApiRoute() + COMMENTS_ACTION,
-                        GHPullRequestReviewComment[].class, pageSize)) {
-                    protected void wrapUp(GHPullRequestReviewComment[] page) {
-                        for (GHPullRequestReviewComment c : page)
-                            c.wrapUp(GHPullRequest.this);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiRoute() + COMMENTS_ACTION,
+                        GHPullRequestReviewComment[].class,
+                        item -> item.wrapUp(GHPullRequest.this) );
     }
 
     /**
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return new PagedIterable<GHPullRequestCommitDetail>() {
-            public PagedIterator<GHPullRequestCommitDetail> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestCommitDetail>(root.retrieve().asIterator(
+        return root.retrieve()
+            .asPagedIterable(
                         String.format("%s/commits", getApiRoute()),
-                        GHPullRequestCommitDetail[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequestCommitDetail[] page) {
-                        for (GHPullRequestCommitDetail c : page)
-                            c.wrapUp(GHPullRequest.this);
-                    }
-                };
-            }
-        };
+                        GHPullRequestCommitDetail[].class,
+                        item -> item.wrapUp(GHPullRequest.this) );
     }
 
     /**

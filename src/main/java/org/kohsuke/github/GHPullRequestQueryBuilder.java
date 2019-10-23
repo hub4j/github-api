@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import static org.kohsuke.github.Previews.SHADOW_CAT;
+
 /**
  * Lists up pull requests with some filtering and sorting.
  *
@@ -46,7 +48,9 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
 
     @Override
     public PagedIterable<GHPullRequest> list() {
-        return req.asPagedIterable(
+        return req
+            .withPreview(SHADOW_CAT)
+            .asPagedIterable(
             repo.getApiTailUrl("pulls"),
             GHPullRequest[].class,
             item -> item.wrapUp(repo) );

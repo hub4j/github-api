@@ -2,10 +2,12 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.codec.binary.Base64InputStream;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * A Content of a repository.
@@ -14,7 +16,7 @@ import java.io.InputStream;
  * @see GHRepository#getFileContent(String)
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHContent {
+public class GHContent implements Refreshable {
     /*
         In normal use of this class, repository field is set via wrap(),
         but in the code search API, there's a nested 'repository' field that gets populated from JSON.
@@ -91,10 +93,8 @@ public class GHContent {
      *      Use {@link #read()}
      */
     public String getEncodedContent() throws IOException {
-        if (content!=null)
-            return content;
-        else
-            return Base64.encodeBase64String(IOUtils.toByteArray(read()));
+        refresh(content);
+        return content;
     }
 
     public String getUrl() {
@@ -112,16 +112,27 @@ public class GHContent {
     /**
      * Retrieves the actual content stored here.
      */
+    /**
+     * Retrieves the actual bytes of the blob.
+     */
     public InputStream read() throws IOException {
-        // if the download link is encoded with a token on the query string, the default behavior of POST will fail
-        return new Requester(root).method("GET").asStream(getDownloadUrl());
+        refresh(content);
+        if (encoding.equals("base64")) {
+            try {
+                return new Base64InputStream(new ByteArrayInputStream(content.getBytes("US-ASCII")), false);
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError(e);    // US-ASCII is mandatory
+            }
+        }
+
+        throw new UnsupportedOperationException("Unrecognized encoding: "+encoding);
     }
 
     /**
      * URL to retrieve the raw content of the file. Null if this is a directory.
      */
     public String getDownloadUrl() throws IOException {
-        populate();
+        refresh(download_url);
         return download_url;
     }
 
@@ -139,7 +150,6 @@ public class GHContent {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        if (download_url!=null)    return; // already populated
         root.retrieve().to(url, this);
     }
 
@@ -150,16 +160,11 @@ public class GHContent {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return new PagedIterable<GHContent>() {
-            public PagedIterator<GHContent> _iterator(int pageSize) {
-                return new PagedIterator<GHContent>(root.retrieve().asIterator(url, GHContent[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHContent[] page) {
-                        GHContent.wrap(page, repository);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                url,
+                GHContent[].class,
+                item -> item.wrap(repository) );
     }
 
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
@@ -242,5 +247,15 @@ public class GHContent {
             unwrappedContent.wrap(repository);
         }
         return contents;
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    @Override
+    public synchronized void refresh() throws IOException {
+        root.retrieve().to(url, this);
     }
 }

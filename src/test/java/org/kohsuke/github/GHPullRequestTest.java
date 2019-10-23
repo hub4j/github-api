@@ -32,9 +32,42 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void createPullRequest() throws Exception {
         String name = "createPullRequest";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        System.out.println(p.getUrl());
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "master", "## test");
         assertEquals(name, p.getTitle());
+        assertThat(p.canMaintainerModify(), is(false));
+        assertThat(p.isDraft(), is(false));
+    }
+
+    @Test
+    public void createDraftPullRequest() throws Exception {
+        String name = "createDraftPullRequest";
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "master", "## test", false, true);
+        assertEquals(name, p.getTitle());
+        assertThat(p.canMaintainerModify(), is(false));
+        assertThat(p.isDraft(), is(true));
+
+        // There are multiple paths to get PRs and each needs to read draft correctly
+        p.draft = false;
+        p.refresh();
+        assertThat(p.isDraft(), is(true));
+
+        GHPullRequest p2 = repo.getPullRequest(p.getNumber());
+        assertThat(p2.getNumber(), is(p.getNumber()));
+        assertThat(p2.isDraft(), is(true));
+
+        p = repo.queryPullRequests()
+            .state(GHIssueState.OPEN)
+            .head("test/stable")
+            .list().asList().get(0);
+        assertThat(p2.getNumber(), is(p.getNumber()));
+        assertThat(p.isDraft(), is(true));
+
+
+
+
+
     }
 
     @Test

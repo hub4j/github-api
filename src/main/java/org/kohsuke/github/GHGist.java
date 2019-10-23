@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -115,8 +116,13 @@ public class GHGist extends GHObject {
             e.getValue().fileName = e.getKey();
         }
     }
+
     String getApiTailUrl(String tail) {
-        return "/gists/" + id + '/' + tail;
+        String result = "/gists/" + id;
+        if (!StringUtils.isBlank(tail)) {
+            result += StringUtils.prependIfMissing(tail, "/");
+        }
+        return result;
     }
 
     public void star() throws IOException {
@@ -139,17 +145,11 @@ public class GHGist extends GHObject {
     }
 
     public PagedIterable<GHGist> listForks() {
-        return new PagedIterable<GHGist>() {
-            public PagedIterator<GHGist> _iterator(int pageSize) {
-                return new PagedIterator<GHGist>(root.retrieve().asIterator(getApiTailUrl("forks"), GHGist[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHGist[] page) {
-                        for (GHGist c : page)
-                            c.wrapUp(root);
-                    }
-                };
-            }
-        };
+        return root.retrieve()
+            .asPagedIterable(
+                getApiTailUrl("forks"),
+                GHGist[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**
@@ -157,6 +157,13 @@ public class GHGist extends GHObject {
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").to("/gists/" + id);
+    }
+
+    /**
+     * Updates this gist via a builder.
+     */
+    public GHGistUpdater update() throws IOException {
+        return new GHGistUpdater(this);
     }
 
     @Override
@@ -171,5 +178,11 @@ public class GHGist extends GHObject {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    GHGist wrap(GHUser owner) {
+        this.owner = owner;
+        this.root = owner.root;
+        return this;
     }
 }

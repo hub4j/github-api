@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "test-file-to-create.txt",
+    "path": "test-file-to-create.txt",
+    "sha": "8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
+    "size": 34,
+    "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/test-file-to-create.txt?ref=master",
+    "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/test-file-to-create.txt",
+    "git_url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
+    "download_url": "https://raw.githubusercontent.com/github-api-test-org/GHContentIntegrationTest/master/test-file-to-create.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/test-file-to-create.txt?ref=master",
+      "git": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
+      "html": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/test-file-to-create.txt"
+    }
+  },
+  "commit": {
+    "sha": "88bd1f52fc1e8242758364cee7dce2c82790d272",
+    "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6ODhiZDFmNTJmYzFlODI0Mjc1ODM2NGNlZTdkY2UyYzgyNzkwZDI3Mg==",
+    "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/commits/88bd1f52fc1e8242758364cee7dce2c82790d272",
+    "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/commit/88bd1f52fc1e8242758364cee7dce2c82790d272",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-10-11T22:17:42Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-10-11T22:17:42Z"
+    },
+    "tree": {
+      "sha": "baa85f9e7c712c76d80024300011226f4b442945",
+      "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/trees/baa85f9e7c712c76d80024300011226f4b442945"
+    },
+    "message": "Creating a file for integration tests.",
+    "parents": [
+      {
+        "sha": "89ac3f7e8c951288c26f6a80bddbd32ecf28fbba",
+        "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/commits/89ac3f7e8c951288c26f6a80bddbd32ecf28fbba",
+        "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/commit/89ac3f7e8c951288c26f6a80bddbd32ecf28fbba"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

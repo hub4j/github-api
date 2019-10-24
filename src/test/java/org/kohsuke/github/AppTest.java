@@ -217,6 +217,26 @@ public class AppTest extends AbstractGitHubWireMockTest {
             }
         }
     }
+    
+    @Test
+    public void testUserPublicOrganizationsWhenThereAreSome() throws IOException {
+    	// kohsuke had some public org memberships at the time Wiremock recorded the GitHub API responses
+    	GHUser user = new GHUser();
+    	user.login = "kohsuke";
+    	
+        Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations( user );
+        assertFalse(orgs.isEmpty());
+    }
+    
+    @Test
+    public void testUserPublicOrganizationsWhenThereAreNone() throws IOException {
+    	// bitwiseman had no public org memberships at the time Wiremock recorded the GitHub API responses
+    	GHUser user = new GHUser();
+    	user.login = "bitwiseman";
+    	
+        Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations( user );
+        assertTrue(orgs.isEmpty());
+    }
 
     private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
         GHOrganization org = gitHub.getOrganization(organizationName);

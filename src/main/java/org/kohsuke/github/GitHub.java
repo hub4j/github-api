@@ -170,6 +170,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
         return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
     }
@@ -192,6 +193,7 @@ public class GitHub {
      * @deprecated
      *      Use with caution. Login with password is not a preferred method.
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
@@ -205,6 +207,7 @@ public class GitHub {
      *      Either OAuth token or password is sufficient, so there's no point in passing both.
      *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
+    @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
     }
@@ -378,7 +381,7 @@ public class GitHub {
         requireCredential();
         synchronized (this) {
             if (this.myself != null) return myself;
-            
+
             GHMyself u = retrieve().to("/user", GHMyself.class);
 
             u.root = this;
@@ -400,7 +403,7 @@ public class GitHub {
         return u;
     }
 
-    
+
     /**
      * clears all cached data in order for external changes (modifications and del) to be reflected
      */
@@ -447,19 +450,12 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
-        return new PagedIterable<GHOrganization>() {
-            @Override
-            public PagedIterator<GHOrganization> _iterator(int pageSize) {
-                return new PagedIterator<GHOrganization>(retrieve().with("since",since)
-                        .asIterator("/organizations", GHOrganization[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHOrganization[] page) {
-                        for (GHOrganization c : page)
-                            c.wrapUp(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .with("since",since)
+            .asPagedIterable(
+                "/organizations",
+                GHOrganization[].class,
+                item -> item.wrapUp(GitHub.this) );
     }
 
     /**
@@ -487,34 +483,22 @@ public class GitHub {
      * @return a list of popular open source licenses
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return new PagedIterable<GHLicense>() {
-            public PagedIterator<GHLicense> _iterator(int pageSize) {
-                return new PagedIterator<GHLicense>(retrieve().asIterator("/licenses", GHLicense[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHLicense[] page) {
-                        for (GHLicense c : page)
-                            c.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/licenses",
+                GHLicense[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**
      * Returns a list of all users.
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return new PagedIterable<GHUser>() {
-            public PagedIterator<GHUser> _iterator(int pageSize) {
-                return new PagedIterator<GHUser>(retrieve().asIterator("/users", GHUser[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHUser[] page) {
-                        for (GHUser u : page)
-                            u.wrapUp(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/users",
+                GHUser[].class,
+                item -> item.wrapUp(GitHub.this) );
     }
 
     /**
@@ -547,6 +531,32 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
         GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
+        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        for (GHOrganization o : orgs) {
+            // don't put 'o' into orgs because they are shallow
+            r.put(o.getLogin(),o.wrapUp(this));
+        }
+        return r;
+    }
+    
+    /**
+     * Alias for {@link #getUserPublicOrganizations(String)}.
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) throws IOException {
+        return getUserPublicOrganizations( user.getLogin() );
+    }
+
+    /**
+     * This method returns a shallowly populated organizations.
+     *
+     * To retrieve full organization details, you need to call {@link #getOrganization(String)}
+     *
+     * @param user the user to retrieve public Organization membership information for
+     *
+     * @return the public Organization memberships for the user
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
+        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -626,6 +636,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
         return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();
     }
@@ -702,17 +713,11 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return new PagedIterable<GHAuthorization>() {
-            public PagedIterator<GHAuthorization> _iterator(int pageSize) {
-                return new PagedIterator<GHAuthorization>(retrieve().asIterator("/authorizations", GHAuthorization[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHAuthorization[] page) {
-                        for (GHAuthorization u : page)
-                            u.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve()
+            .asPagedIterable(
+                "/authorizations",
+                GHAuthorization[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**
@@ -902,17 +907,11 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return new PagedIterable<GHRepository>() {
-            public PagedIterator<GHRepository> _iterator(int pageSize) {
-                return new PagedIterator<GHRepository>(retrieve().with("since",since).asIterator("/repositories", GHRepository[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHRepository[] page) {
-                        for (GHRepository c : page)
-                            c.wrap(GitHub.this);
-                    }
-                };
-            }
-        };
+        return retrieve().with("since",since)
+            .asPagedIterable(
+                "/repositories",
+                GHRepository[].class,
+                item -> item.wrap(GitHub.this) );
     }
 
     /**

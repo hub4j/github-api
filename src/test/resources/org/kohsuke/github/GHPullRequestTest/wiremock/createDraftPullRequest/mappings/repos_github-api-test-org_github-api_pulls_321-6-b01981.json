@@ -1,0 +1,46 @@
+{
+  "id": "b01981ed-7e57-46f9-af4b-8571bd6cedcf",
+  "name": "repos_github-api-test-org_github-api_pulls_321",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/pulls/321",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api_pulls_321-b01981ed-7e57-46f9-af4b-8571bd6cedcf.json",
+    "headers": {
+      "Date": "Mon, 21 Oct 2019 22:34:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4860",
+      "X-RateLimit-Reset": "1571700639",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"97bf06d75e0548a5d05619526fbc4a95\"",
+      "Last-Modified": "Mon, 21 Oct 2019 22:34:48 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.shadow-cat-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FB3F:7FDF:C18BF:E6BB1:5DAE3289"
+    }
+  },
+  "uuid": "b01981ed-7e57-46f9-af4b-8571bd6cedcf",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-github-api-pulls-321",
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-github-api-pulls-321-2",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-github-api-pulls-321-3",
+  "insertionIndex": 6
+}

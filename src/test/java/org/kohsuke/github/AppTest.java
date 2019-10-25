@@ -27,16 +27,12 @@ import static org.hamcrest.Matchers.hasProperty;
 public class AppTest extends AbstractGitHubWireMockTest {
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
-    private String getTestRepositoryName() throws IOException {
-        return GITHUB_API_TEST_ORG + "/" + GITHUB_API_TEST_REPO;
-    }
-
     @Test
     public void testRepoCRUD() throws Exception {
         String targetName = "github-api-test-rename2";
 
-        cleanupRepository("github-api-test-rename");
-        cleanupRepository(targetName);
+        cleanupUserRepository("github-api-test-rename");
+        cleanupUserRepository(targetName);
 
         GHRepository r = gitHub.createRepository("github-api-test-rename", "a test repository", "http://github-api.kohsuke.org/", true);
         assertThat(r.hasIssues(), is(true));
@@ -51,7 +47,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testRepositoryWithAutoInitializationCRUD() throws Exception {
         String name = "github-api-test-autoinit";
-        cleanupRepository(name);
+        cleanupUserRepository(name);
         GHRepository r = gitHub.createRepository(name)
             .description("a test repository for auto init")
             .homepage("http://github-api.kohsuke.org/")
@@ -66,12 +62,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         getUser().getRepository(name).delete();
     }
 
-    private void cleanupRepository(final String name) throws IOException {
+    private void cleanupUserRepository(final String name) throws IOException {
         if (mockGitHub.isUseProxy()) {
-            GHRepository repository = getUser(gitHubBeforeAfter).getRepository(name);
-            if (repository != null) {
-                repository.delete();
-            }
+            cleanupRepository(getUser(gitHubBeforeAfter).getLogin() + "/" + name);
         }
     }
 
@@ -152,34 +145,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertTrue(closedIssues.size() > 150);
     }
 
-
     private GHRepository getTestRepository() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            GHRepository repository = gitHubBeforeAfter
-                .getOrganization(GITHUB_API_TEST_ORG)
-                .getRepository(GITHUB_API_TEST_REPO);
-            if (repository != null) {
-                repository.delete();
-            }
-
-            repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
-                .createRepository(GITHUB_API_TEST_REPO)
-                .description("A test repository for testing the github-api project")
-                .homepage("http://github-api.kohsuke.org/")
-                .autoInit(true)
-                .create();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
-            repository.enableIssueTracker(true);
-            repository.enableDownloads(true);
-            repository.enableWiki(true);
-        }
-
-        return gitHub.getRepository(getTestRepositoryName());
-
+        return getTempRepository(GITHUB_API_TEST_REPO);
     }
 
     @Ignore("Needs to be rewritten to not create new issues just to check that they can be found.")
@@ -249,6 +216,26 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     shouldBelongToTeam(organizationName, teamName));
             }
         }
+    }
+    
+    @Test
+    public void testUserPublicOrganizationsWhenThereAreSome() throws IOException {
+    	// kohsuke had some public org memberships at the time Wiremock recorded the GitHub API responses
+    	GHUser user = new GHUser();
+    	user.login = "kohsuke";
+    	
+        Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations( user );
+        assertFalse(orgs.isEmpty());
+    }
+    
+    @Test
+    public void testUserPublicOrganizationsWhenThereAreNone() throws IOException {
+    	// bitwiseman had no public org memberships at the time Wiremock recorded the GitHub API responses
+    	GHUser user = new GHUser();
+    	user.login = "bitwiseman";
+    	
+        Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations( user );
+        assertTrue(orgs.isEmpty());
     }
 
     private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
@@ -468,15 +455,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
-            System.out.println(ev);
             if (ev.getType() == GHEvent.PULL_REQUEST) {
                 GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
-                System.out.println(pr.getNumber());
-                System.out.println(pr.getPullRequest());
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
             }
         }
     }

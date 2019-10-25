@@ -107,17 +107,11 @@ public class GHApp extends GHObject {
      */
     @Preview @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
-        return new PagedIterable<GHAppInstallation>() {
-            public PagedIterator<GHAppInstallation> _iterator(int pageSize) {
-                return new PagedIterator<GHAppInstallation>(root.retrieve().withPreview(MACHINE_MAN).asIterator("/app/installations", GHAppInstallation[].class, pageSize)) {
-                    protected void wrapUp(GHAppInstallation[] page) {
-                        for (GHAppInstallation appInstallation : page) {
-                            appInstallation.wrapUp(root);
-                        }
-                    }
-                };
-            }
-        };
+        return root.retrieve().withPreview(MACHINE_MAN)
+            .asPagedIterable(
+                "/app/installations",
+                GHAppInstallation[].class,
+                item -> item.wrapUp(root) );
     }
 
     /**

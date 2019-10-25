@@ -148,18 +148,10 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return new PagedIterable<GHPullRequestReviewComment>() {
-            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReviewComment>(
-                        owner.root.retrieve()
-                                .asIterator(getApiRoute() + "/comments",
-                                GHPullRequestReviewComment[].class, pageSize)) {
-                    protected void wrapUp(GHPullRequestReviewComment[] page) {
-                        for (GHPullRequestReviewComment c : page)
-                            c.wrapUp(owner);
-                    }
-                };
-            }
-        };
+        return owner.root.retrieve()
+            .asPagedIterable(
+                getApiRoute() + "/comments",
+                GHPullRequestReviewComment[].class,
+                item -> item.wrapUp(owner) );
     }
 }

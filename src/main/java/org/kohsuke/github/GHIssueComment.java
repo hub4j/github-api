@@ -109,17 +109,12 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return new PagedIterable<GHReaction>() {
-            public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHReaction[] page) {
-                        for (GHReaction c : page)
-                            c.wrap(owner.root);
-                    }
-                };
-            }
-        };
+        return owner.root.retrieve()
+            .withPreview(SQUIRREL_GIRL)
+            .asPagedIterable(
+                getApiRoute()+"/reactions",
+                GHReaction[].class,
+                item -> item.wrap(owner.root) );
     }
 
     private String getApiRoute() {

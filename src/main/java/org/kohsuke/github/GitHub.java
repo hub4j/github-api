@@ -170,6 +170,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
         return connectToEnterpriseWithOAuth(apiUrl,null,oauthAccessToken);
     }
@@ -192,6 +193,7 @@ public class GitHub {
      * @deprecated
      *      Use with caution. Login with password is not a preferred method.
      */
+    @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
@@ -205,6 +207,7 @@ public class GitHub {
      *      Either OAuth token or password is sufficient, so there's no point in passing both.
      *      Use {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
+    @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
     }
@@ -378,7 +381,7 @@ public class GitHub {
         requireCredential();
         synchronized (this) {
             if (this.myself != null) return myself;
-            
+
             GHMyself u = retrieve().to("/user", GHMyself.class);
 
             u.root = this;
@@ -400,7 +403,7 @@ public class GitHub {
         return u;
     }
 
-    
+
     /**
      * clears all cached data in order for external changes (modifications and del) to be reflected
      */
@@ -535,6 +538,32 @@ public class GitHub {
         }
         return r;
     }
+    
+    /**
+     * Alias for {@link #getUserPublicOrganizations(String)}.
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) throws IOException {
+        return getUserPublicOrganizations( user.getLogin() );
+    }
+
+    /**
+     * This method returns a shallowly populated organizations.
+     *
+     * To retrieve full organization details, you need to call {@link #getOrganization(String)}
+     *
+     * @param user the user to retrieve public Organization membership information for
+     *
+     * @return the public Organization memberships for the user
+     */
+    public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
+        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        for (GHOrganization o : orgs) {
+            // don't put 'o' into orgs because they are shallow
+            r.put(o.getLogin(),o.wrapUp(this));
+        }
+        return r;
+    }
 
     /**
      * Gets complete map of organizations/teams that current user belongs to.
@@ -607,6 +636,7 @@ public class GitHub {
      * @deprecated
      *      Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic) throws IOException {
         return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();
     }

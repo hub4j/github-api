@@ -190,7 +190,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
         for (GHRepository.Contributor c : gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors()) {
-            System.out.println(c);
+            // System.out.println(c);
             fail("This list should be empty, but should return a valid empty iterable.");
         }
     }
@@ -199,7 +199,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void searchRepositories() throws Exception {
         PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
         GHRepository u = r.iterator().next();
-        System.out.println(u.getName());
+        // System.out.println(u.getName());
         assertNotNull(u.getId());
         assertEquals("Assembly", u.getLanguage());
         assertTrue(r.getTotalCount() > 0);
@@ -214,7 +214,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             if (content.isFile()) {
                 String content1 = content.getContent();
                 String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
-                System.out.println(content.getPath());
+                // System.out.println(content.getPath());
                 assertEquals(content1, content2);
             }
         }
@@ -225,7 +225,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
 
         String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
-        System.out.println(actual);
+        // System.out.println(actual);
         assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
         assertTrue(actual.contains("href=\"https://github.com/github-api/github-api/pull/1\""));
         assertTrue(actual.contains("class=\"user-mention\""));

@@ -23,7 +23,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     public void listUsers() throws IOException {
         for (GHUser u : Iterables.limit(gitHub.listUsers(), 10)) {
             assert u.getName() != null;
-            System.out.println(u.getName());
+            // System.out.println(u.getName());
         }
     }
 
@@ -33,7 +33,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         Set<Long> orgIds = new HashSet<Long>();
         for (GHOrganization org : Iterables.limit(gitHub.listOrganizations().withPageSize(2), iterations)) {
             orgIds.add(org.getId());
-            System.out.println(org.getName());
+            // System.out.println(org.getName());
         }
         assertThat(orgIds.size(), equalTo(iterations));
     }
@@ -42,7 +42,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     public void searchUsers() throws Exception {
         PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
         GHUser u = r.iterator().next();
-        System.out.println(u.getName());
+        // System.out.println(u.getName());
         assertNotNull(u.getId());
         assertTrue(r.getTotalCount() > 0);
     }
@@ -53,7 +53,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         for (int i = 0; i < 115; i++) {
             assertTrue(itr.hasNext());
             GHRepository r = itr.next();
-            System.out.println(r.getFullName());
+            // System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
             assertNotEquals(0L, r.getId());
         }
@@ -63,7 +63,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     public void searchContent() throws Exception {
         PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
         GHContent c = r.iterator().next();
-        System.out.println(c.getName());
+        // System.out.println(c.getName());
         assertNotNull(c.getDownloadUrl());
         assertNotNull(c.getOwner());
         assertEquals("jquery/jquery", c.getOwner().getFullName());

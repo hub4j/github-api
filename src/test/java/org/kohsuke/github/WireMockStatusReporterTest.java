@@ -36,9 +36,9 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         GHUser user = gitHub.getMyself();
         assertThat(user.getLogin(), notNullValue());
 
-        System.out.println();
-        System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
-        System.out.println();
+        // System.out.println();
+        // System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
+        // System.out.println();
     }
 
     @Test
@@ -56,7 +56,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat(user.getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
         assertThat(user.getLogin(), equalTo("stubbed-user-login"));
 
-        System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
+        // System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
     }
 
     @Ignore("Can't run this as WireMock will report failure after the test method completes.")

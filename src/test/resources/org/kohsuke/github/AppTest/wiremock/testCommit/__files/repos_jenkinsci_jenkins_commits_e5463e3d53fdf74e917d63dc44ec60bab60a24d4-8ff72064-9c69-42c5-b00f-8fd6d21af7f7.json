@@ -1,0 +1,115 @@
+{
+  "sha": "e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+  "node_id": "MDY6Q29tbWl0MTEwMzYwNzplNTQ2M2UzZDUzZmRmNzRlOTE3ZDYzZGM0NGVjNjBiYWI2MGEyNGQ0",
+  "commit": {
+    "author": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-23T22:32:43Z"
+    },
+    "committer": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-23T22:32:43Z"
+    },
+    "message": "merged back the RC branch",
+    "tree": {
+      "sha": "4e56d5d5ae7c08d4bbdd7b8607669f37225600b1",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/4e56d5d5ae7c08d4bbdd7b8607669f37225600b1"
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+  "html_url": "https://github.com/jenkinsci/jenkins/commit/e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+  "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e5463e3d53fdf74e917d63dc44ec60bab60a24d4/comments",
+  "author": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "8060a13e57aeb4d15cfe8578c01ca3cc47dae03a",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8060a13e57aeb4d15cfe8578c01ca3cc47dae03a",
+      "html_url": "https://github.com/jenkinsci/jenkins/commit/8060a13e57aeb4d15cfe8578c01ca3cc47dae03a"
+    },
+    {
+      "sha": "6f841d459ac6a568632a26c00959d5cdf57fc945",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/6f841d459ac6a568632a26c00959d5cdf57fc945",
+      "html_url": "https://github.com/jenkinsci/jenkins/commit/6f841d459ac6a568632a26c00959d5cdf57fc945"
+    }
+  ],
+  "stats": {
+    "total": 22,
+    "additions": 20,
+    "deletions": 2
+  },
+  "files": [
+    {
+      "sha": "0c83b64e16cc54c0d6d097542929541cbb9a5cd0",
+      "filename": "changelog.html",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 2,
+      "changes": 10,
+      "blob_url": "https://github.com/jenkinsci/jenkins/blob/e5463e3d53fdf74e917d63dc44ec60bab60a24d4/changelog.html",
+      "raw_url": "https://github.com/jenkinsci/jenkins/raw/e5463e3d53fdf74e917d63dc44ec60bab60a24d4/changelog.html",
+      "contents_url": "https://api.github.com/repos/jenkinsci/jenkins/contents/changelog.html?ref=e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+      "patch": "@@ -74,7 +74,14 @@\n \n <!-- these changes are controlled by the release process. DO NOT MODIFY -->\n <div id=\"rc\" style=\"display:none;\"><!--=BEGIN=-->\n-<h3><a name=v1.461>What's new in 1.461</a> <!--=DATE=--></h3>\n+<h3><a name=v1.462>What's new in 1.462</a> <!--=DATE=--></h3>\n+<!--=RC-CHANGES=-->\n+</div><!--=END=-->\n+<h3><a name=v1.462>What's new in 1.462</a> (2012/04/23)</h3>\n+<!--=RC-CHANGES=-->\n+<h3><a name=v1.462>What's new in 1.462</a> (2012/04/23)</h3>\n+<!--=RC-CHANGES=-->\n+<h3><a name=v1.461>What's new in 1.461</a> (2012/04/23)</h3>\n <ul class=image>\n   <li class=bug>\n     Flag -U is not used during the parsing step of a Maven Job\n@@ -86,7 +93,6 @@ <h3><a name=v1.461>What's new in 1.461</a> <!--=DATE=--></h3>\n     allow j/k navigation for search results\n     (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13105\">issue 13105</a>)    \n </ul>\n-</div><!--=END=-->\n <h3><a name=v1.460>What's new in 1.460</a> (2012/04/14)</h3>\n <ul class=image>\n   <li class=bug>"
+    },
+    {
+      "sha": "3c0f1607e1408738ee2c0ff5eb286387b230a050",
+      "filename": "debian/debian/changelog",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 0,
+      "changes": 12,
+      "blob_url": "https://github.com/jenkinsci/jenkins/blob/e5463e3d53fdf74e917d63dc44ec60bab60a24d4/debian/debian/changelog",
+      "raw_url": "https://github.com/jenkinsci/jenkins/raw/e5463e3d53fdf74e917d63dc44ec60bab60a24d4/debian/debian/changelog",
+      "contents_url": "https://api.github.com/repos/jenkinsci/jenkins/contents/debian/debian/changelog?ref=e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+      "patch": "@@ -1,3 +1,15 @@\n+jenkins (1.461) unstable; urgency=low\n+\n+  * See http://jenkins-ci.org/changelog for more details.\n+\n+ -- Kohsuke Kawaguchi <kk@kohsuke.org>  Mon, 23 Apr 2012 15:17:44 -0700\n+\n+jenkins (1.461) unstable; urgency=low\n+\n+  * See http://jenkins-ci.org/changelog for more details.\n+\n+ -- Kohsuke Kawaguchi <kk@kohsuke.org>  Mon, 23 Apr 2012 13:51:09 -0700\n+\n jenkins (1.460) unstable; urgency=low\n \n   * See http://jenkins-ci.org/changelog for more details."
+    }
+  ]
+}

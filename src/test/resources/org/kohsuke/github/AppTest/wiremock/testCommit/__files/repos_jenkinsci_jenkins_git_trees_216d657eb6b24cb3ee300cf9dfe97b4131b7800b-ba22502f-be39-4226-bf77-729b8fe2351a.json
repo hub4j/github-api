@@ -1,0 +1,45 @@
+{
+  "sha": "216d657eb6b24cb3ee300cf9dfe97b4131b7800b",
+  "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/216d657eb6b24cb3ee300cf9dfe97b4131b7800b",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "e500657ff925b81739b25e2adf2121a6f201cc3e",
+      "size": 17,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/e500657ff925b81739b25e2adf2121a6f201cc3e"
+    },
+    {
+      "path": "images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ad3d16ad28fcc45519d0996c7e8f8b255ec0d196",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ad3d16ad28fcc45519d0996c7e8f8b255ec0d196"
+    },
+    {
+      "path": "nbactions.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3461cc32706bf8f0dd387b3cafa9511d8b45946e",
+      "size": 1627,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/3461cc32706bf8f0dd387b3cafa9511d8b45946e"
+    },
+    {
+      "path": "pom.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fef2e34182f5f5bb0c31b8b62d0048a920812158",
+      "size": 18790,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/fef2e34182f5f5bb0c31b8b62d0048a920812158"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f039b32c15ae8deb42819151c5f87804259fad8e",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/f039b32c15ae8deb42819151c5f87804259fad8e"
+    }
+  ],
+  "truncated": false
+}

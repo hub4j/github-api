@@ -1187,7 +1187,7 @@
     "updated_at": "2015-04-30T22:31:11Z",
     "closed_at": "2015-04-30T22:31:11Z",
     "author_association": "NONE",
-    "body": "Hello,\n\nI try to fetch notifications of a specific repository, but nothing is retrieved (See code below).\n\nWhat am I missing ?\n\nGHRepository repo = gh.getUser(\"blueimp\").getRepository(\"jQuery-File-Upload\");\nSystem.out.println(\"Start\");\nfor (GHThread t : repo.listNotifications().nonBlocking(true)) {\n    System.out.println(t.getReason());\n}\nSystem.out.println(\"Finish\");\n\nThank you,\nMohamed Ennahdi El Idrissi\n"
+    "body": "Hello,\n\nI try to fetch notifications of a specific repository, but nothing is retrieved (See code below).\n\nWhat am I missing ?\n\nGHRepository repo = gh.getUser(\"blueimp\").getRepository(\"jQuery-File-Upload\");\nSystem.out.println(\"Start\");\nfor (GHThread t : repo.listNotifications().nonBlocking(true)) {\n    // System.out.println(t.getReason());\n}\nSystem.out.println(\"Finish\");\n\nThank you,\nMohamed Ennahdi El Idrissi\n"
   },
   {
     "url": "https://api.github.com/repos/github-api/github-api/issues/180",

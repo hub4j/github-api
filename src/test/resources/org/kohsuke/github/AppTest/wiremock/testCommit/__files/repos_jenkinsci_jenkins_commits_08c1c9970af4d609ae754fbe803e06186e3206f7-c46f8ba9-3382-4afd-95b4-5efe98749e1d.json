@@ -1,0 +1,98 @@
+{
+  "sha": "08c1c9970af4d609ae754fbe803e06186e3206f7",
+  "node_id": "MDY6Q29tbWl0MTEwMzYwNzowOGMxYzk5NzBhZjRkNjA5YWU3NTRmYmU4MDNlMDYxODZlMzIwNmY3",
+  "commit": {
+    "author": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-24T00:16:52Z"
+    },
+    "committer": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-24T00:16:52Z"
+    },
+    "message": "creating an RC branch",
+    "tree": {
+      "sha": "d96a6e8b7231571b49af150a683177f37a180f04",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d96a6e8b7231571b49af150a683177f37a180f04"
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/08c1c9970af4d609ae754fbe803e06186e3206f7",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/08c1c9970af4d609ae754fbe803e06186e3206f7",
+  "html_url": "https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7",
+  "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/08c1c9970af4d609ae754fbe803e06186e3206f7/comments",
+  "author": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
+      "html_url": "https://github.com/jenkinsci/jenkins/commit/e5463e3d53fdf74e917d63dc44ec60bab60a24d4"
+    }
+  ],
+  "stats": {
+    "total": 48,
+    "additions": 40,
+    "deletions": 8
+  },
+  "files": [
+    {
+      "sha": "04d3e54017542ad0ff46355eababacd4850ccba5",
+      "filename": "changelog.html",
+      "status": "modified",
+      "additions": 40,
+      "deletions": 8,
+      "changes": 48,
+      "blob_url": "https://github.com/jenkinsci/jenkins/blob/08c1c9970af4d609ae754fbe803e06186e3206f7/changelog.html",
+      "raw_url": "https://github.com/jenkinsci/jenkins/raw/08c1c9970af4d609ae754fbe803e06186e3206f7/changelog.html",
+      "contents_url": "https://api.github.com/repos/jenkinsci/jenkins/contents/changelog.html?ref=08c1c9970af4d609ae754fbe803e06186e3206f7",
+      "patch": "@@ -54,6 +54,14 @@\n \n <!-- Record your changes in the trunk here. -->\n <div id=\"trunk\" style=\"display:none\"><!--=TRUNK-BEGIN=-->\n+<ul class=image>\n+  <li class=>\n+</ul>\n+</div><!--=TRUNK-END=-->\n+\n+<!-- these changes are controlled by the release process. DO NOT MODIFY -->\n+<div id=\"rc\" style=\"display:none;\"><!--=BEGIN=-->\n+<h3><a name=v1.462>What's new in 1.462</a> <!--=DATE=--></h3>\n <ul class=image>\n   <li class=rfe>\n     Added the filter textbox to the update center selector.\n@@ -70,17 +78,41 @@\n \n \n </ul>\n-</div><!--=TRUNK-END=-->\n-\n-<!-- these changes are controlled by the release process. DO NOT MODIFY -->\n-<div id=\"rc\" style=\"display:none;\"><!--=BEGIN=-->\n-<h3><a name=v1.462>What's new in 1.462</a> <!--=DATE=--></h3>\n-<!--=RC-CHANGES=-->\n </div><!--=END=-->\n <h3><a name=v1.462>What's new in 1.462</a> (2012/04/23)</h3>\n-<!--=RC-CHANGES=-->\n+<ul class=image>\n+  <li class=rfe>\n+    Added the filter textbox to the update center selector.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13476\">issue 13476</a>)\n+  <li class=rfe>\n+    Move \"View as plain text\" link on console output page from top right to the sidepanel.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13389\">issue 13389</a>)\n+  <li class=rfe>\n+    Convert \"Delete this build\" buttons into links in the sidepanel.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13387\">issue 13387</a>)\n+  <li class=rfe>\n+    Validate project naming regex immediately.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13524\">issue 13524</a>)\n+\n+\n+</ul>\n <h3><a name=v1.462>What's new in 1.462</a> (2012/04/23)</h3>\n-<!--=RC-CHANGES=-->\n+<ul class=image>\n+  <li class=rfe>\n+    Added the filter textbox to the update center selector.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13476\">issue 13476</a>)\n+  <li class=rfe>\n+    Move \"View as plain text\" link on console output page from top right to the sidepanel.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13389\">issue 13389</a>)\n+  <li class=rfe>\n+    Convert \"Delete this build\" buttons into links in the sidepanel.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13387\">issue 13387</a>)\n+  <li class=rfe>\n+    Validate project naming regex immediately.\n+    (<a href=\"https://issues.jenkins-ci.org/browse/JENKINS-13524\">issue 13524</a>)\n+\n+\n+</ul>\n <h3><a name=v1.461>What's new in 1.461</a> (2012/04/23)</h3>\n <ul class=image>\n   <li class=bug>"
+    }
+  ]
+}

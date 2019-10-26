@@ -1,0 +1,42 @@
+{
+  "id": "29d7ac4b-573b-4044-a2b8-470ac1bf6335",
+  "name": "user_memberships_orgs",
+  "request": {
+    "url": "/user/memberships/orgs",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "user_memberships_orgs-29d7ac4b-573b-4044-a2b8-470ac1bf6335.json",
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:27:46 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4396",
+      "X-RateLimit-Reset": "1572055286",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"421157c0a61f3834ed23839360e0441a\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAB4:5F2B:EE3A4F:1187E42:5DB3A112"
+    }
+  },
+  "uuid": "29d7ac4b-573b-4044-a2b8-470ac1bf6335",
+  "persistent": true,
+  "insertionIndex": 2
+}

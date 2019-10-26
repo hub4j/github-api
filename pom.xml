@@ -35,6 +35,9 @@
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>3.12.3</okhttp3.version>
     <okio.version>2.4.1</okio.version>
+    <jacoco.coverage.target>0.20</jacoco.coverage.target>
+    <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
+    <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
   </properties>
 
   <build>
@@ -46,6 +49,16 @@
         </excludes>
       </testResource>
     </testResources>
+    <pluginManagement>
+      <plugins>
+        <!-- adds jacoco coverage -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -271,7 +284,96 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
-
+  <profiles>
+    <profile>
+      <id>jacoco</id>
+      <activation>
+        <property>
+          <name>!jacoco.disabled</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.5</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <!-- attached to Maven test phase -->
+              <execution>
+                <id>report</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>check</id>
+                <phase>install</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <rule>
+                      <!--We end up with chatty logs, but it shows us which particular classes    -->
+                      <!--are lacking in coverage. If this is too much, just remove the           -->
+                      <!--<element>CLASS</element> tag below.                                     -->
+                      <element>CLASS</element>
+                      <limits>
+                        <!-- These limits can be overridden, in the form of `0.50` for          -->
+                        <!-- 50%, as necessary. Using a property just puts it in one spot.      -->
+                        <limit>
+                          <counter>LINE</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                        <limit>
+                          <counter>BRANCH</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                        <limit>
+                          <counter>INSTRUCTION</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                        <limit>
+                          <counter>COMPLEXITY</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                        <limit>
+                          <counter>METHOD</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                        <limit>
+                          <counter>CLASS</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target}</minimum>
+                        </limit>
+                      </limits>
+                      <excludes>
+                        <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+                        <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
+                        <!--<exclude>io.jenkins.plugins.todeclarative.converter.api.*</exclude>-->
+                      </excludes>
+                    </rule>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   <reporting>
     <plugins>
       <plugin>

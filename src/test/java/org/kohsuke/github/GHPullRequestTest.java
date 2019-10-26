@@ -81,7 +81,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void closePullRequest() throws Exception {
         String name = "closePullRequest";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        System.out.println(p.getUrl());
+        // System.out.println(p.getUrl());
         assertEquals(name, p.getTitle());
         assertEquals(GHIssueState.OPEN, getRepository().getPullRequest(p.getNumber()).getState());
         p.close();
@@ -122,7 +122,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestReviewComments() throws Exception {
         String name = "pullRequestReviewComments";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        System.out.println(p.getUrl());
+        // System.out.println(p.getUrl());
         assertTrue(p.listReviewComments().asList().isEmpty());
         p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
         List<GHPullRequestReviewComment> comments = p.listReviewComments().asList();
@@ -145,7 +145,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void testPullRequestReviewRequests() throws Exception {
         String name = "testPullRequestReviewRequests";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        System.out.println(p.getUrl());
+        // System.out.println(p.getUrl());
         assertTrue(p.getRequestedReviewers().isEmpty());
 
         GHUser kohsuke2 = gitHub.getUser("kohsuke2");
@@ -158,7 +158,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void testPullRequestTeamReviewRequests() throws Exception {
         String name = "testPullRequestTeamReviewRequests";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        System.out.println(p.getUrl());
+        // System.out.println(p.getUrl());
         assertTrue(p.getRequestedReviewers().isEmpty());
 
         GHOrganization testOrg = gitHub.getOrganization("github-api-test-org");

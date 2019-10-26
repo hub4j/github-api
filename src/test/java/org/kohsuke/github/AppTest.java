@@ -290,12 +290,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(r.hasAdminAccess());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testGetMyself() throws Exception {
         GHMyself me = gitHub.getMyself();
         assertNotNull(me);
-        assertNotNull(gitHub.getUser("kohsuke2"));
+        assertNotNull(gitHub.getUser("bitwiseman"));
         PagedIterable<GHRepository> ghRepositories = me.listRepositories();
         assertTrue(ghRepositories.iterator().hasNext());
     }
@@ -315,7 +314,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization(GITHUB_API_TEST_ORG));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
@@ -323,21 +321,18 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertEquals(2, gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("testGetTeamsForRepo").getTeams().size());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testMembership() throws Exception {
         Set<String> members = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("jenkins").getCollaboratorNames();
-        System.out.println(members.contains("kohsuke"));
+        // System.out.println(members.contains("kohsuke"));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testMemberOrgs() throws Exception {
         HashSet<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         assertThat(o, hasItem(hasProperty("name", equalTo("CloudBees"))));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgTeams() throws Exception {
         kohsuke();
@@ -349,7 +344,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertTrue(sz < 100);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgTeamByName() throws Exception {
         kohsuke();
@@ -357,7 +351,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertNotNull(e);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgTeamBySlug() throws Exception {
         kohsuke();
@@ -365,7 +358,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertNotNull(e);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommit() throws Exception {
         GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins").getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
@@ -385,12 +377,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertNotNull(t.getEntry("war").asTree());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testListCommits() throws Exception {
         List<String> sha1 = new ArrayList<String>();
         for (GHCommit c : gitHub.getUser("kohsuke").getRepository("empty-commit").listCommits()) {
-            System.out.println(c.getSHA1());
             sha1.add(c.getSHA1());
         }
         assertEquals("fdfad6be4db6f96faea1f153fb447b479a7a9cb7", sha1.get(0));
@@ -401,7 +391,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         List<String> sha1 = new ArrayList<String>();
         for (GHCommit c : gitHub.getUser("jenkinsci").getRepository("jenkins").queryCommits()
             .since(new Date(1199174400000L)).until(1201852800000L).path("pom.xml").list()) {
-            System.out.println(c.getSHA1());
+            // System.out.println(c.getSHA1());
             sha1.add(c.getSHA1());
         }
         assertEquals("1cccddb22e305397151b2b7b87b4b47d74ca337b", sha1.get(0));
@@ -413,39 +403,36 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testBranches() throws Exception {
         Map<String, GHBranch> b =
             gitHub.getUser("jenkinsci").getRepository("jenkins").getBranches();
-        System.out.println(b);
+        // System.out.println(b);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommitComment() throws Exception {
         GHRepository r = gitHub.getUser("jenkinsci").getRepository("jenkins");
         PagedIterable<GHCommitComment> comments = r.listCommitComments();
         List<GHCommitComment> batch = comments.iterator().nextPage();
         for (GHCommitComment comment : batch) {
-            System.out.println(comment.getBody());
+            // System.out.println(comment.getBody());
             assertSame(comment.getOwner(), r);
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCreateCommitComment() throws Exception {
         GHCommit commit = gitHub.getUser("kohsuke").getRepository("sandbox-ant").getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
         GHCommitComment c = commit.createComment("[testing](http://kohsuse.org/)");
-        System.out.println(c);
+        // System.out.println(c);
         c.update("updated text");
-        System.out.println(c);
+        // System.out.println(c);
         c.delete();
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void tryHook() throws Exception {
         kohsuke();
         GHRepository r = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
         GHHook hook = r.createWebHook(new URL("http://www.google.com/"));
-        System.out.println(hook);
+        // System.out.println(hook);
 
         if (mockGitHub.isUseProxy()) {
             r = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
@@ -468,7 +455,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testApp() throws IOException {
-        System.out.println(gitHub.getMyself().getEmails());
+        // System.out.println(gitHub.getMyself().getEmails());
 
 //        GHRepository r = gitHub.getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test", "http://kohsuke.org/", "Everyone", true);
 //        r.fork();
@@ -479,8 +466,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
 //        GHPullRequest i = gitHub.getOrganization("jenkinsci").getRepository("sandbox").getPullRequest(1);
 //        for (GHIssueComment c : i.getComments())
-//            System.out.println(c);
-//        System.out.println(i);
+//            // System.out.println(c);
+//        // System.out.println(i);
 
 //        gitHub.getMyself().getRepository("perforce-plugin").setEmailServiceHook("kk@kohsuke.org");
 
@@ -493,9 +480,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
 //        tryTeamCreation(gitHub);
 
 //        t.add(gitHub.getMyself());
-//        System.out.println(t.getMembers());
+//        // System.out.println(t.getMembers());
 //        t.remove(gitHub.getMyself());
-//        System.out.println(t.getMembers());
+//        // System.out.println(t.getMembers());
 
 //        GHRepository r = gitHub.getOrganization("HudsonLabs").createRepository("auto-test", "some description", "http://kohsuke.org/", "Plugin Developers", true);
 
@@ -504,17 +491,17 @@ public class AppTest extends AbstractGitHubWireMockTest {
 ////        hub.createRepository("test","test repository",null,true);
 ////        hub.getUserTest("kohsuke").getRepository("test").delete();
 //
-//        System.out.println(hub.getUserTest("kohsuke").getRepository("hudson").getCollaborators());
+//        // System.out.println(hub.getUserTest("kohsuke").getRepository("hudson").getCollaborators());
     }
 
     private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasIssues()) {
                 if (r.getOpenIssueCount() == 0) {
-                    System.out.println("DISABLED  " + r.getName());
+                    // System.out.println("DISABLED  " + r.getName());
                     r.enableIssueTracker(false);
                 } else {
-                    System.out.println("UNTOUCHED " + r.getName());
+                    // System.out.println("UNTOUCHED " + r.getName());
                 }
             }
         }
@@ -523,7 +510,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     private void tryDisablingWiki(GitHub gitHub) throws IOException {
         for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
             if (r.hasWiki()) {
-                System.out.println("DISABLED  " + r.getName());
+                // System.out.println("DISABLED  " + r.getName());
                 r.enableWiki(false);
             }
         }
@@ -531,8 +518,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     private void tryUpdatingIssueTracker(GitHub gitHub) throws IOException {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("lib-task-reactor");
-        System.out.println(r.hasIssues());
-        System.out.println(r.getOpenIssueCount());
+        // System.out.println(r.hasIssues());
+        // System.out.println(r.getOpenIssueCount());
         r.enableIssueTracker(false);
     }
 
@@ -550,12 +537,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getMyself().getRepository("foo");
         Set<URL> hooks = r.getPostCommitHooks();
         hooks.add(new URL("http://kohsuke.org/test"));
-        System.out.println(hooks);
+        // System.out.println(hooks);
         hooks.remove(new URL("http://kohsuke.org/test"));
-        System.out.println(hooks);
+        // System.out.println(hooks);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgRepositories() throws IOException {
         kohsuke();
@@ -563,10 +549,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         long start = System.currentTimeMillis();
         Map<String, GHRepository> repos = j.getRepositories();
         long end = System.currentTimeMillis();
-        System.out.printf("%d repositories in %dms\n", repos.size(), end - start);
+        // System.out.printf("%d repositories in %dms\n", repos.size(), end - start);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrganization() throws IOException {
         kohsuke();
@@ -578,7 +563,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 //        t.add(labs.getRepository("xyz"));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommitStatus() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
@@ -589,12 +573,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").asList();
         state = lst.get(0);
-        System.out.println(state);
+        // System.out.println(state);
         assertEquals("testing!", state.getDescription());
         assertEquals("http://kohsuke.org/", state.getTargetUrl());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommitShortInfo() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
@@ -612,7 +595,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertNotNull(u.getName());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCheckMembership() throws Exception {
         kohsuke();
@@ -653,7 +635,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     assertEquals(ref.getRef(), "refs/heads/" + releaseName);
 
                     for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
-                        System.out.println(entry.getKey() + "/" + entry.getValue());
+                        // System.out.println(entry.getKey() + "/" + entry.getValue());
                         if (releaseName.equals(entry.getValue().getName())) {
                             return;
                         }
@@ -667,22 +649,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testRef() throws IOException {
         GHRef masterRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
-        assertEquals("https://api.github.com/repos/jenkinsci/jenkins/git/refs/heads/master", masterRef.getUrl().toString());
+        assertEquals(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/master", masterRef.getUrl().toString());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void directoryListing() throws IOException {
         List<GHContent> children = gitHub.getRepository("jenkinsci/jenkins").getDirectoryContent("core");
         for (GHContent c : children) {
-            System.out.println(c.getName());
+            // System.out.println(c.getName());
             if (c.isDirectory()) {
                 for (GHContent d : c.listDirectoryContent()) {
-                    System.out.println("  " + d.getName());
+                    // System.out.println("  " + d.getName());
                 }
             }
         }
@@ -722,7 +702,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testMemberPagenation() throws IOException {
         Set<GHUser> all = new HashSet<GHUser>();
         for (GHUser u : gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamByName("Core Developers").listMembers()) {
-            System.out.println(u.getLogin());
+            // System.out.println(u.getLogin());
             all.add(u);
         }
         assertFalse(all.isEmpty());
@@ -743,7 +723,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testIssueSearch() throws IOException {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
         for (GHIssue i : r) {
-            System.out.println(i.getTitle());
+            // System.out.println(i.getTitle());
         }
     }
 
@@ -770,7 +750,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertTrue(foundReadme);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testTreesRecursive() throws IOException {
         GHTree masterTree = gitHub.getRepository("github-api/github-api").getTreeRecursive("master", 1);
@@ -792,7 +771,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
         List<GHLabel> lst = r.listLabels().asList();
         for (GHLabel l : lst) {
-            System.out.println(l.getName());
+            // System.out.println(l.getName());
         }
         assertTrue(lst.size() > 5);
         GHLabel e = r.getLabel("enhancement");
@@ -851,42 +830,32 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testSubscribers() throws IOException {
-        boolean kohsuke = false;
-        GHRepository mr = gitHub.getRepository("github-api/github-api");
+        boolean bitwiseman = false;
+        GHRepository mr = gitHub.getRepository("bitwiseman/github-api");
         for (GHUser u : mr.listSubscribers()) {
-            System.out.println(u.getLogin());
-            kohsuke |= u.getLogin().equals("kohsuke");
+            bitwiseman |= u.getLogin().equals("bitwiseman");
         }
-        assertTrue(kohsuke);
-        System.out.println("---");
+        assertTrue(bitwiseman);
 
-        boolean githubApi = false;
-        for (GHRepository r : gitHub.getUser("kohsuke").listRepositories()) {
-            System.out.println(r.getName());
-            githubApi |= r.equals(mr);
+        boolean githubApiFound = false;
+        for (GHRepository r : gitHub.getUser("bitwiseman").listRepositories()) {
+            githubApiFound |= r.equals(mr);
         }
-        assertTrue(githubApi);
+        assertTrue(githubApiFound);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void notifications() throws Exception {
         boolean found = false;
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
-                t.markAsRead(); // test this by calling it once on old nofication
+                t.markAsRead(); // test this by calling it once on old notfication
             }
             assertNotNull(t.getTitle());
             assertNotNull(t.getReason());
-
-            System.out.println(t.getTitle());
-            System.out.println(t.getLastReadAt());
-            System.out.println(t.getType());
-            System.out.println();
         }
         assertTrue(found);
         gitHub.listNotifications().markAsRead();
@@ -899,13 +868,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void checkToString() throws Exception {
         GHUser u = gitHub.getUser("rails");
-        System.out.println(u);
+        // System.out.println(u);
         GHRepository r = u.getRepository("rails");
-        System.out.println(r);
-        System.out.println(r.getIssue(1));
+        // System.out.println(r);
+        // System.out.println(r.getIssue(1));
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void reactions() throws Exception {
         GHIssue i = gitHub.getRepository("github-api/github-api").getIssue(311);
@@ -921,7 +889,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         a.delete();
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void listOrgMemberships() throws Exception {
         GHMyself me = gitHub.getMyself();
@@ -929,15 +896,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(m.getUser(), is((GHUser) me));
             assertNotNull(m.getState());
             assertNotNull(m.getRole());
-
-            System.out.printf("%s %s %s\n",
-                m.getOrganization().getLogin(),
-                m.getState(),
-                m.getRole());
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void blob() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");

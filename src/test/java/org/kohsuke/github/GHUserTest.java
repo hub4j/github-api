@@ -58,7 +58,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         for (; i < 115; i++) {
             assertTrue(itr.hasNext());
             GHRepository r = itr.next();
-            System.out.println(r.getFullName());
+            // System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
             assertNotEquals(0L, r.getId());
         }
@@ -74,7 +74,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         for (; i < 115; i++) {
             assertTrue(itr.hasNext());
             GHRepository r = itr.next();
-            System.out.println(r.getFullName());
+            // System.out.println(r.getFullName());
             assertNotNull(r.getUrl());
             assertNotEquals(0L, r.getId());
         }

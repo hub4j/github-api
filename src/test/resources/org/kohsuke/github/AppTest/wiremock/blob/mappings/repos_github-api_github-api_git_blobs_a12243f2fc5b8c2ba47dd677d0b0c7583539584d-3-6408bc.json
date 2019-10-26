@@ -1,0 +1,45 @@
+{
+  "id": "6408bcc8-3cd2-4e1a-a25b-a9fdc81972e8",
+  "name": "repos_github-api_github-api_git_blobs_a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
+  "request": {
+    "url": "/repos/github-api/github-api/git/blobs/a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api_github-api_git_blobs_a12243f2fc5b8c2ba47dd677d0b0c7583539584d-6408bcc8-3cd2-4e1a-a25b-a9fdc81972e8.txt",
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:28:28 GMT",
+      "Content-Type": "text/plain; charset=iso-8859-1",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4351",
+      "X-RateLimit-Reset": "1572055286",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"ffa971e80b5300a0fc0164a3114acb0f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=VERSION.raw",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAD0:98FF:9ED64E:BB8F10:5DB3A13C"
+    }
+  },
+  "uuid": "6408bcc8-3cd2-4e1a-a25b-a9fdc81972e8",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-github-api-git-blobs-a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-github-api-github-api-git-blobs-a12243f2fc5b8c2ba47dd677d0b0c7583539584d-2",
+  "insertionIndex": 3
+}

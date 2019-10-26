@@ -1,0 +1,66 @@
+[
+  {
+    "name": "move-l10n.groovy",
+    "path": "core/move-l10n.groovy",
+    "sha": "8d002348827a6c76ec3b4832278384c74a91d692",
+    "size": 1560,
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/move-l10n.groovy?ref=master",
+    "html_url": "https://github.com/jenkinsci/jenkins/blob/master/core/move-l10n.groovy",
+    "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/8d002348827a6c76ec3b4832278384c74a91d692",
+    "download_url": "https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/move-l10n.groovy",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/move-l10n.groovy?ref=master",
+      "git": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/8d002348827a6c76ec3b4832278384c74a91d692",
+      "html": "https://github.com/jenkinsci/jenkins/blob/master/core/move-l10n.groovy"
+    }
+  },
+  {
+    "name": "pom.xml",
+    "path": "core/pom.xml",
+    "sha": "0402553742ec270b65e5ea4c0851088659987183",
+    "size": 28950,
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/pom.xml?ref=master",
+    "html_url": "https://github.com/jenkinsci/jenkins/blob/master/core/pom.xml",
+    "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/0402553742ec270b65e5ea4c0851088659987183",
+    "download_url": "https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/pom.xml",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/pom.xml?ref=master",
+      "git": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/0402553742ec270b65e5ea4c0851088659987183",
+      "html": "https://github.com/jenkinsci/jenkins/blob/master/core/pom.xml"
+    }
+  },
+  {
+    "name": "report-l10n.rb",
+    "path": "core/report-l10n.rb",
+    "sha": "d48bf4d2f9ed5de92f6d4a9864ecc168d15e3420",
+    "size": 17290,
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/report-l10n.rb?ref=master",
+    "html_url": "https://github.com/jenkinsci/jenkins/blob/master/core/report-l10n.rb",
+    "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/d48bf4d2f9ed5de92f6d4a9864ecc168d15e3420",
+    "download_url": "https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/report-l10n.rb",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/report-l10n.rb?ref=master",
+      "git": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/d48bf4d2f9ed5de92f6d4a9864ecc168d15e3420",
+      "html": "https://github.com/jenkinsci/jenkins/blob/master/core/report-l10n.rb"
+    }
+  },
+  {
+    "name": "src",
+    "path": "core/src",
+    "sha": "11d50acb5fba7764e8ef1c230aac16aa9aa0ef31",
+    "size": 0,
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src?ref=master",
+    "html_url": "https://github.com/jenkinsci/jenkins/tree/master/core/src",
+    "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/11d50acb5fba7764e8ef1c230aac16aa9aa0ef31",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src?ref=master",
+      "git": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/11d50acb5fba7764e8ef1c230aac16aa9aa0ef31",
+      "html": "https://github.com/jenkinsci/jenkins/tree/master/core/src"
+    }
+  }
+]

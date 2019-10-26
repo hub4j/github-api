@@ -1,0 +1,35 @@
+{
+  "id": "0da2da27-69d2-416d-ac4c-6913ec0e3c62",
+  "name": "orgs_jenkinsci_public_members_kohsuke",
+  "request": {
+    "url": "/orgs/jenkinsci/public_members/kohsuke",
+    "method": "GET"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:27:50 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4382",
+      "X-RateLimit-Reset": "1572055286",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "CAC0:833C:55B6EF:63EEDF:5DB3A115"
+    }
+  },
+  "uuid": "0da2da27-69d2-416d-ac4c-6913ec0e3c62",
+  "persistent": true,
+  "insertionIndex": 7
+}

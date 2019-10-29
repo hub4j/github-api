@@ -239,7 +239,7 @@ public class GHOrganization extends GHPerson {
         Requester post = new Requester(root).with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
-            repo_names.add(r.getName());
+            repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names",repo_names);
         return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);

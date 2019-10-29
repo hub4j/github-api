@@ -1,0 +1,33 @@
+{
+  "id": "ab1d9c91-be50-4767-bc5c-7b358fc969ff",
+  "name": "teams_3494907",
+  "request": {
+    "url": "/teams/3494907",
+    "method": "DELETE"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Tue, 29 Oct 2019 04:41:56 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4909",
+      "X-RateLimit-Reset": "1572325243",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "957A:7FDE:1084CB:133DF9:5DB7C313"
+    }
+  },
+  "uuid": "ab1d9c91-be50-4767-bc5c-7b358fc969ff",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -57,4 +57,23 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Check the invitation has worked.
         // assertTrue(org.hasMember(user));
     }
+
+    @Test
+    public void testCreateTeamWithRepoAccess() throws IOException {
+        String REPO_NAME = "github-api";
+        String TEAM_NAME = "create-team-test";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Clean up team if exists.
+        GHTeam existingTeam = org.getTeamByName(TEAM_NAME);
+        if (existingTeam != null) {
+            existingTeam.delete();
+        }
+
+        // Create team with access to repository. Check access was granted.
+        GHTeam team = org.createTeam(TEAM_NAME, GHOrganization.Permission.PUSH, repo);
+        Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
+    }
 }

@@ -73,16 +73,27 @@ public class GHMilestone extends GHObject {
 
     /**
      * Closes this milestone.
+     * @deprecated use {@link #update()} instead
      */
+    @Deprecated
     public void close() throws IOException {
-        edit("state", "closed");
+        update().close();
     }
 
     /**
      * Reopens this milestone.
+     * @deprecated use {@link #update()} instead
      */
+    @Deprecated
     public void reopen() throws IOException {
-        edit("state", "open");
+        update().reopen();
+    }
+
+    /**
+     * Gets a GHMilestoneUpdater
+     */
+    public GHMilestoneUpdater update() throws IOException {
+        return new GHMilestoneUpdater(this);
     }
 
     /**
@@ -90,22 +101,6 @@ public class GHMilestone extends GHObject {
      */
     public void delete() throws IOException {
         root.retrieve().method("DELETE").to(getApiRoute());
-    }
-
-    private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
-    }
-
-    public void setTitle(String title) throws IOException {
-        edit("title", title);
-    }
-
-    public void setDescription(String description) throws IOException {
-        edit("description", description);
-    }
-
-    public void setDueOn(Date dueOn) throws IOException {
-        edit("due_on", GitHub.printDate(dueOn));
     }
 
     protected String getApiRoute() {

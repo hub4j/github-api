@@ -39,12 +39,11 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         Date NEW_DUE_DATE = GitHub.parseDate("2020-10-05T13:00:00Z");
         Date OUTPUT_DUE_DATE = GitHub.parseDate("2020-10-05T07:00:00Z");
 
-        milestone.setTitle(NEW_TITLE);
-        milestone.setDescription(NEW_DESCRIPTION);
-        milestone.setDueOn(NEW_DUE_DATE);
-
-        // Force reload.
-        milestone = repo.getMilestone(milestone.getNumber());
+        milestone = milestone.update()
+            .title(NEW_TITLE)
+            .description(NEW_DESCRIPTION)
+            .dueOn(NEW_DUE_DATE)
+            .update();
 
         assertEquals(NEW_TITLE, milestone.getTitle());
         assertEquals(NEW_DESCRIPTION, milestone.getDescription());
@@ -52,6 +51,10 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         // The time is truncated when sent to the server, but still part of the returned value
         // 07:00 midnight PDT
         assertEquals(OUTPUT_DUE_DATE, milestone.getDueOn());
+
+        // Force reload and verify just in case
+        assertEquals(milestone.getTitle(), repo.getMilestone(milestone.getNumber()).getTitle());
+
     }
 
     protected GHRepository getRepository() throws IOException {

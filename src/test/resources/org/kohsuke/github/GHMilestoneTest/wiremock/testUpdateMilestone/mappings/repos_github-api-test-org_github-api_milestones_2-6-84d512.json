@@ -1,5 +1,5 @@
 {
-  "id": "fffe46e8-0b2e-4195-8e42-857e3127cd0b",
+  "id": "84d512d9-d931-4477-8e44-1aaaebb3645b",
   "name": "repos_github-api-test-org_github-api_milestones_2",
   "request": {
     "url": "/repos/github-api-test-org/github-api/milestones/2",
@@ -7,22 +7,19 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_github-api_milestones_2-fffe46e8-0b2e-4195-8e42-857e3127cd0b.json",
+    "bodyFileName": "repos_github-api-test-org_github-api_milestones_2-84d512d9-d931-4477-8e44-1aaaebb3645b.json",
     "headers": {
-      "Date": "Wed, 30 Oct 2019 22:04:21 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
+      "Date": "Wed, 30 Oct 2019 23:01:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4944",
-      "X-RateLimit-Reset": "1572476616",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1572480114",
       "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
-      ],
-      "ETag": "W/\"f6b5158570f599d271e8d001b807457e\"",
-      "Last-Modified": "Wed, 30 Oct 2019 22:04:21 GMT",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "W/\"a81a701b0a28448d668a3136d29fa5ed\"",
+      "Last-Modified": "Wed, 30 Oct 2019 23:01:56 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -34,10 +31,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F2AC:26CD:64AB3:B174F:5DBA08E5"
+      "X-GitHub-Request-Id": "F7D0:608E:21397E:348E4A:5DBA1664"
     }
   },
-  "uuid": "fffe46e8-0b2e-4195-8e42-857e3127cd0b",
+  "uuid": "84d512d9-d931-4477-8e44-1aaaebb3645b",
   "persistent": true,
-  "insertionIndex": 8
+  "insertionIndex": 6
 }

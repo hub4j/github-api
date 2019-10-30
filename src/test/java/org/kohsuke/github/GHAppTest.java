@@ -103,7 +103,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         permissions.put("metadata", GHPermissionType.READ);
 
         GHAppInstallationToken installationToken = installation.createToken(permissions)
-                .repositoryIds(Arrays.asList(111111111))
+                .repositoryIds(Arrays.asList((long)111111111))
                 .create();
 
         assertThat(installationToken.getToken(), is("bogus"));

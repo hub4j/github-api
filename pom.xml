@@ -14,8 +14,8 @@
   <description>GitHub API for Java</description>
 
   <scm>
-    <connection>scm:git:git@github.com/kohsuke/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kohsuke/${project.artifactId}.git</developerConnection>
+    <connection>scm:git:git@github.com/github-api/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/github-api/${project.artifactId}.git</developerConnection>
     <url>https://${project.artifactId}.kohsuke.org/</url>
     <tag>HEAD</tag>
   </scm>
@@ -23,7 +23,7 @@
   <distributionManagement>
     <site>
       <id>github-pages</id>
-      <url>gitsite:git@github.com/kohsuke/${project.artifactId}.git</url>
+      <url>gitsite:git@github.com/github-api/${project.artifactId}.git</url>
     </site>
   </distributionManagement>
 

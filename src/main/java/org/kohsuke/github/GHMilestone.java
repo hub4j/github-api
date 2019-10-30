@@ -85,8 +85,27 @@ public class GHMilestone extends GHObject {
         edit("state", "open");
     }
 
+    /**
+     * Deletes this milestone.
+     */
+    public void delete() throws IOException {
+        root.retrieve().method("DELETE").to(getApiRoute());
+    }
+
     private void edit(String key, Object value) throws IOException {
         new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
+    }
+
+    public void setTitle(String title) throws IOException {
+        edit("title", title);
+    }
+
+    public void setDescription(String description) throws IOException {
+        edit("description", description);
+    }
+
+    public void setDueOn(Date dueOn) throws IOException {
+        edit("due_on", GitHub.printDate(dueOn));
     }
 
     protected String getApiRoute() {

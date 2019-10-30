@@ -956,7 +956,9 @@ public class GitHub {
     }
 
     /*package*/ static String printDate(Date dt) {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(dt);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return df.format(dt);
     }
 
     /*package*/ static final ObjectMapper MAPPER = new ObjectMapper();

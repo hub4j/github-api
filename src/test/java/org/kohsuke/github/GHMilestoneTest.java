@@ -21,7 +21,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHMilestone milestone : getRepository().listMilestones(GHIssueState.ALL)) {
+        for (GHMilestone milestone : getRepository(gitHubBeforeAfter).listMilestones(GHIssueState.ALL)) {
             if ("Original Title".equals(milestone.getTitle()) ||
                 "Updated Title".equals(milestone.getTitle())) {
                 milestone.delete();
@@ -37,7 +37,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         String NEW_TITLE = "Updated Title";
         String NEW_DESCRIPTION = "Updated Description";
-        Date NEW_DUE_DATE = GitHub.parseDate("2020-10-01T17:00:00Z");
+        Date NEW_DUE_DATE = GitHub.parseDate("2020-10-01T13:00:00Z");
+        Date OUTPUT_DUE_DATE = GitHub.parseDate("2020-10-01T13:00:00Z");
 
         milestone.setTitle(NEW_TITLE);
         milestone.setDescription(NEW_DESCRIPTION);
@@ -48,8 +49,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         assertEquals(NEW_TITLE, milestone.getTitle());
         assertEquals(NEW_DESCRIPTION, milestone.getDescription());
-        // The dates never seem to match exactly...
-        //assertEquals(NEW_DUE_DATE, milestone.getDueOn());
+        assertEquals(NEW_DUE_DATE, milestone.getDueOn());
         assertNotNull(milestone.getDueOn());
     }
 

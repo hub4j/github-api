@@ -269,5 +269,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertFalse(r.isAllowSquashMerge());
     }
 
-
+    @Test
+    public void testListTopics() throws Exception {
+        List<String> topics = getRepository(gitHub).listTopics();
+        assertTrue(topics.contains("api-test-dummy"));
+    }
 }

@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin van Zijl
@@ -37,8 +36,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         String NEW_TITLE = "Updated Title";
         String NEW_DESCRIPTION = "Updated Description";
-        Date NEW_DUE_DATE = GitHub.parseDate("2020-10-01T13:00:00Z");
-        Date OUTPUT_DUE_DATE = GitHub.parseDate("2020-10-01T13:00:00Z");
+        Date NEW_DUE_DATE = GitHub.parseDate("2020-10-05T13:00:00Z");
+        Date OUTPUT_DUE_DATE = GitHub.parseDate("2020-10-05T07:00:00Z");
 
         milestone.setTitle(NEW_TITLE);
         milestone.setDescription(NEW_DESCRIPTION);
@@ -49,8 +48,10 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         assertEquals(NEW_TITLE, milestone.getTitle());
         assertEquals(NEW_DESCRIPTION, milestone.getDescription());
-        assertEquals(NEW_DUE_DATE, milestone.getDueOn());
-        assertNotNull(milestone.getDueOn());
+
+        // The time is truncated when sent to the server, but still part of the returned value
+        // 07:00 midnight PDT
+        assertEquals(OUTPUT_DUE_DATE, milestone.getDueOn());
     }
 
     protected GHRepository getRepository() throws IOException {

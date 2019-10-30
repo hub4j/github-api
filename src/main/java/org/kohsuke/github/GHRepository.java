@@ -129,7 +129,7 @@ public class GHRepository extends GHObject {
      * Obtains a single {@link GHDeployment} by its ID.
      */
     public GHDeployment getDeployment(long id) throws IOException {
-        return root.retrieve().to("deployments/" + id, GHDeployment.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("deployments/" + id), GHDeployment.class).wrap(this);
     }
 
     private String join(List<String> params, String joinStr) {

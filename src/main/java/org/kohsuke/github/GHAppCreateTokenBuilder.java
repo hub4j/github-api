@@ -35,7 +35,7 @@ public class GHAppCreateTokenBuilder {
      *
      */
     @Preview @Deprecated
-    public GHAppCreateTokenBuilder repositoryIds(List<Integer> repositoryIds) {
+    public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids",repositoryIds);
         return this;
     }

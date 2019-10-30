@@ -1,0 +1,154 @@
+What is this?
+
+  This library defines an object oriented representation of the GitHub API. By "object oriented" we mean
+  there are classes that correspond to the domain model of GitHub (such as <<<GHUser>>> and <<<GHRepository>>>),
+  operations that act on them as defined as methods (such as <<<GHUser.follow()>>>), and those object references
+  are used in favor of using string handle (such as <<<GHUser.isMemberOf(GHOrganization)>>> instead of
+  <<<GHUser.isMemberOf(String)>>>)
+
+  The library supports both github.com and GitHub Enterprise.
+
+  Most of the GitHub APIs are covered, although there are some corners that are still not yet implemented.
+
+Sample Usage
+
++-----+
+GitHub github = GitHub.connect();
+
+GHRepository repo = github.createRepository(
+  "new-repository","this is my new repository",
+  "http://www.kohsuke.org/",true/*public*/);
+repo.addCollaborators(github.getUser("abayer"),github.getUser("rtyler"));
+repo.delete();
++-----+
+
+Authentication
+
+  The library allows connecting to GitHub via several different authentication mechanisms.
+
+* Programmatically
+
+  To connect via Username and Password (not recommended):
+
++-----+
+GitHub github = new GitHubBuilder().withPassword("my_user", "my_passwd").build();
++-----+
+
+  To connect via Personal access token:
+
++-----+
+// If you don't specify the GitHub user id then the sdk will retrieve it via /user endpoint
+GitHub github = new GitHubBuilder().withOAuthToken("my_personal_token").build();
+
+// If the token has access to an organization, you can specify it here.
+GitHub github = new GitHubBuilder().withOAuthToken("my_personal_token","user_id_OR_org_name").build();
++-----+
+
+  To connect via JWT token as a GitHub App:
+
++-----+
+GitHub github = new GitHubBuilder().withJwtToken("my_jwt_token").build();
++-----+
+
+  To connect via GitHub App installation token on behalf of a user or organization:
+
++-----+
+GitHub github = new GitHubBuilder().withAppInstallationToken("my_installation_token").build();
++-----+
+
+* Property file
+
+  This library defines a common convention so that applications using this library will look at a consistent location.
+  In this convention, the library looks at <<<~/.github>>> property file. The content of the files depends on the way
+  you want this library to authenticate as shown below:
+
+
+  To connect via Username and Password (not recommended):
+
++-----+
+login=kohsuke
+password=012345678
++-----+
+
+  To connect via Personal access token:
+
++-----+
+oauth=4d98173f7c075527cb64878561d1fe70
++-----+
+
+  To connect via Personal access token as a user or organization:
+
++-----+
+login=my_org
+oauth=4d98173f7c075527cb64878561d1fe70
++-----+
+
+  To connect via JWT token as a GitHub App:
+
++-----+
+jwt=my_jwt_token
++-----+
+
+  Once your <<<~/.github>>> property file is properly configured, you can obtain a <<<GitHub>>> instance using:
+
++-----+
+// if you are using the default configuration file
+GitHub github = new GitHubBuilder().fromPropertyFile().build();
+
+// if you need to use a separate configuration file
+GitHub github = new GitHubBuilder().fromPropertyFile("location/my_custom_github.properties").build();
++-----+
+
+* Environmental variables
+
+  This library also allows developers to authenticate GitHub with environmental variables.
+
+  To connect via Username and Password (not recommended):
+
++-----+
+export GITHUB_LOGIN=kohsuke
+export GITHUB_PASSWORD=012345678
++-----+
+
+    To connect via Personal access token:
+
++-----+
+export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70
++-----+
+
+    To connect via Personal access token as a user or organization:
+
++-----+
+export GITHUB_LOGIN=my_org
+export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70
++-----+
+
+    To connect via JWT token as a GitHub App:
+
++-----+
+export GITHUB_JWT=my_jwt_token
++-----+
+
+    Once exported, you can obtain a <<<GitHub>>> instance using:
+
++-----+
+GitHub github = new GitHubBuilder().fromEnvironment().build();
++-----+
+
+
+Pluggable HTTP client
+
+  This library comes with a pluggable connector to use different HTTP client implementations
+  through <<<HttpConnector>>>. In particular, this means you can use {{{http://square.github.io/okhttp/}OkHttp}},
+  so we can make use of it's HTTP response cache.
+  Making a conditional request against the GitHub API and receiving a 304 response
+  {{{http://developer.github.com/v3/#conditional-requests}does not count against the rate limit}}.
+
+  The following code shows an example of how to set up persistent cache on the disk:
+
++-----+
+Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
+GitHub gitHub = GitHubBuilder.fromCredentials()
+    .withConnector(new OkHttpConnector(new OkUrlFactory(new OkHttpClient().setCache(cache))))
+    .build();
++-----+

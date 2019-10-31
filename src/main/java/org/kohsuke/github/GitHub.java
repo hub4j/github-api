@@ -115,7 +115,7 @@ public class GitHub {
      *
      * @param apiUrl
      *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
-     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      *      Password is also considered deprecated as it is no longer required for api usage.
      * @param login
@@ -180,7 +180,7 @@ public class GitHub {
      *
      * @param apiUrl
      *      The URL of GitHub (or GitHub Enterprise) API endpoint, such as "https://api.github.com" or
-     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <tt>/api/v3</tt> in the URL.
+     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL.
      *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
      */
     public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken) throws IOException {

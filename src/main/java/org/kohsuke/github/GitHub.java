@@ -551,7 +551,7 @@ public class GitHub {
      *
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}
      *
-     * @param user the user to retrieve public Organization membership information for
+     * @param login the user to retrieve public Organization membership information for
      *
      * @return the public Organization memberships for the user
      */

@@ -27,6 +27,7 @@ public abstract class AbuseLimitHandler {
      *      this exception (or wrap this exception into another exception and throw it).
      * @param uc
      *      Connection that resulted in an error. Useful for accessing other response headers.
+     * @throws IOException
      */
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 
@@ -38,7 +39,7 @@ public abstract class AbuseLimitHandler {
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
-            } catch (InterruptedException _) {
+            } catch (InterruptedException ex) {
                 throw (InterruptedIOException)new InterruptedIOException().initCause(e);
             }
         }

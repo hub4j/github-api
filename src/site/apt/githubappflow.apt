@@ -1,7 +1,7 @@
 GitHub App Auth Flow
 
   GitHub Apps are commonly mistaken for OAuth Apps due to their similarities but understanding the differences between
-  them will help you decide which app you want to create.
+  them will help you decide which kind of app you want to create.
 
   In a nutshell, an OAuth App acts as a GitHub user, whereas a GitHub App uses its own identity when installed on an
   organization or on repositories within an organization. For a comprehensive comparision please refer to the official
@@ -9,18 +9,18 @@ GitHub App Auth Flow
 
   For this guide, we are going assume that you are using a GitHub App.
 
-How does it look like?
+Overview
 
-  Considering that your GitHub app has already been installed on either a user or an organization, the programmatic flow
+  Assuming that your GitHub app has already been installed on either a user or an organization, the programmatic flow
   the developer must follow in order to be able to authenticate on their behalf is:
 
 [images/GitHub_App_Auth_Flow.jpg] GitHub_App_Auth_Flow
 
-  The key point here is that you must know that multiple <<<GitHub>>> instances will have to be created and each of
-  them will be using a different authentication mechanism. Some actions can only be accessible if you are authenticated
-  as as GitHub App while other will only be possible if you are authenticated on behalf of a user or org.
+  Multiple <<<GitHub>>> instances will have to be created and each of them will be using a different authentication
+  mechanism. Some actions are only accessible if you are authenticated as a GitHub App while others will only be
+  possible if you are authenticated on behalf of a user or org.
 
-Pre-requisites
+Prerequisites
 
   In order to follow this guide, you must have:
 

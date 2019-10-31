@@ -1,7 +1,7 @@
 Authenticating as an installation
 
-  Once In order to authenticate to GitHub as an installation of your GitHub App, you must use the App Installation Token
-  authentication mechanism. This can be easily achieved with this library by obtaining a <<<GitHub>>> instance like this:
+  In order to authenticate to GitHub as an installation of your GitHub App, you must use the App Installation Token
+  authentication mechanism. This can be achieved with by creating a <<<GitHub>>> instance like this:
 
 +-----+
 GitHub githubAuthAsInst = new GitHubBuilder()
@@ -11,7 +11,7 @@ GitHub githubAuthAsInst = new GitHubBuilder()
 
 How do I create an App Installation Token?
 
-  Considering that you followed the {{{/githubappjwtauth.html} GitHub App Authentication via JWT token guide}} then you
+  Assuming that you followed the {{{/githubappjwtauth.html} GitHub App Authentication via JWT token guide}} then you
   can create the App Installation Token like this:
 
 +-----+

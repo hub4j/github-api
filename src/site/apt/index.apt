@@ -93,10 +93,10 @@ jwt=my_jwt_token
 
 +-----+
 // if you are using the default configuration file
-GitHub github = new GitHubBuilder().fromPropertyFile().build();
+GitHub github = GitHubBuilder.fromPropertyFile().build();
 
 // if you need to use a separate configuration file
-GitHub github = new GitHubBuilder().fromPropertyFile("location/my_custom_github.properties").build();
+GitHub github = GitHubBuilder.fromPropertyFile("location/my_custom_github.properties").build();
 +-----+
 
 * Environmental variables
@@ -132,7 +132,7 @@ export GITHUB_JWT=my_jwt_token
     Once exported, you can obtain a <<<GitHub>>> instance using:
 
 +-----+
-GitHub github = new GitHubBuilder().fromEnvironment().build();
+GitHub github = GitHubBuilder.fromEnvironment().build();
 +-----+
 
 
@@ -148,7 +148,7 @@ Pluggable HTTP client
 
 +-----+
 Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
-GitHub gitHub = GitHubBuilder.fromCredentials()
+GitHub gitHub = GitHubBuilder.fromEnvironment()
     .withConnector(new OkHttpConnector(new OkUrlFactory(new OkHttpClient().setCache(cache))))
     .build();
 +-----+

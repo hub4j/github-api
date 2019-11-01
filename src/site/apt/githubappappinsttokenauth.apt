@@ -1,0 +1,28 @@
+Authenticating as an installation
+
+  In order to authenticate to GitHub as an installation of your GitHub App, you must use the App Installation Token
+  authentication mechanism. This can be achieved with by creating a <<<GitHub>>> instance like this:
+
++-----+
+GitHub githubAuthAsInst = new GitHubBuilder()
+                    .withAppInstallationToken(appInstallationToken.getToken())
+                    .build();
++-----+
+
+How do I create an App Installation Token?
+
+  Assuming that you followed the {{{/githubappjwtauth.html} GitHub App Authentication via JWT token guide}} then you
+  can create the App Installation Token like this:
+
++-----+
+String jwtToken = createJWT("44435", 600000); //sdk-github-api-app-test
+GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+GHAppInstallation appInstallation = gitHubApp.getApp().getInstallationById(111111); // Installation Id
+
+Map<String, GHPermissionType> permissions = new HashMap<>();
+permissions.put("pull_requests", GHPermissionType.WRITE);
+
+GHAppInstallationToken appInstallationToken = appInstallation
+                    .createToken(permissions)
+                    .create();
++-----+

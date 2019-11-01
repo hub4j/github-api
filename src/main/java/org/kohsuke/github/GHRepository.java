@@ -1745,7 +1745,7 @@ public class GHRepository extends GHObject {
         return root.retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class).wrapUp(root);
     }
 
-    // Only used within getTopics().
+    // Only used within listTopics().
     private static class Topics {
         public List<String> names;
     }

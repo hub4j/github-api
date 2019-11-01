@@ -11,7 +11,23 @@ import java.io.IOException;
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
+    public static final String TEAM_NAME_CREATE = "create-team-test";
 
+
+    @Before
+    @After
+    public void cleanUpTeam() throws IOException {
+        // Cleanup is only needed when proxying
+        if (!mockGitHub.isUseProxy()) {
+            return;
+        }
+
+        GHTeam team = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).
+            getTeamByName(TEAM_NAME_CREATE);
+        if (team != null) {
+            team.delete();
+        }
+    }
 
     @Test
     public void testCreateRepository() throws IOException {
@@ -58,19 +74,6 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // assertTrue(org.hasMember(user));
     }
 
-    @Before
-    public void cleanUpTeam() throws IOException {
-        // Cleanup is only needed when proxying
-        if (!mockGitHub.isUseProxy()) {
-            return;
-        }
-
-        GHTeam team = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).
-                getTeamByName("create-team-test");
-        if (team != null) {
-            team.delete();
-        }
-    }
 
     @Test
     public void testCreateTeamWithRepoAccess() throws IOException {
@@ -80,7 +83,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHRepository repo = org.getRepository(REPO_NAME);
 
         // Create team with access to repository. Check access was granted.
-        GHTeam team = org.createTeam("create-team-test", GHOrganization.Permission.PUSH, repo);
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
         Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
     }
 }

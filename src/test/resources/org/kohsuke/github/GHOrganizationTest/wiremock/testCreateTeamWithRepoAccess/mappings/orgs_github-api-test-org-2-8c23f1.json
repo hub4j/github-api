@@ -1,35 +1,30 @@
 {
-  "id": "8a4057e5-3912-4df3-b894-4da1079aa8b7",
-  "name": "orgs_github-api-test-org_teams",
+  "id": "8c23f18e-d928-4e88-851d-fa36feecf615",
+  "name": "orgs_github-api-test-org",
   "request": {
-    "url": "/orgs/github-api-test-org/teams",
-    "method": "POST",
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"name\":\"create-team-test\",\"repo_names\":[\"github-api-test-org/github-api\"],\"permission\":\"push\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    "url": "/orgs/github-api-test-org",
+    "method": "GET"
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "orgs_github-api-test-org_teams-8a4057e5-3912-4df3-b894-4da1079aa8b7.json",
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org-8c23f18e-d928-4e88-851d-fa36feecf615.json",
     "headers": {
-      "Date": "Tue, 29 Oct 2019 04:41:56 GMT",
+      "Date": "Fri, 01 Nov 2019 16:29:08 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4908",
-      "X-RateLimit-Reset": "1572325243",
+      "X-RateLimit-Remaining": "4975",
+      "X-RateLimit-Reset": "1572629252",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "\"1fb14ab55df002658e274f04781a40ea\"",
-      "Location": "https://api.github.com/teams/3494908",
+      "ETag": "W/\"bbee0a14a82ca84871298052e1bcb545\"",
+      "Last-Modified": "Mon, 20 Apr 2015 00:42:30 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -39,10 +34,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "957A:7FDE:1084DB:133E0C:5DB7C314"
+      "X-GitHub-Request-Id": "D319:5DFB:15D51C7:19DE151:5DBC5D53"
     }
   },
-  "uuid": "8a4057e5-3912-4df3-b894-4da1079aa8b7",
+  "uuid": "8c23f18e-d928-4e88-851d-fa36feecf615",
   "persistent": true,
-  "insertionIndex": 5
+  "insertionIndex": 2
 }

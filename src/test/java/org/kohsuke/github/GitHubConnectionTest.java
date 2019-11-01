@@ -46,7 +46,6 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
         assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
     }
-
     @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
 
@@ -85,6 +84,17 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertEquals("bogusOauth", builder.oauthToken);
         assertEquals("bogusPassword", builder.password);
         assertEquals("bogusEndpoint", builder.endpoint);
+    }
+    @Test
+    public void testGithubBuilderWithAppInstallationToken() throws Exception{
+        GitHubBuilder builder = new GitHubBuilder().withAppInstallationToken("bogus");
+        assertEquals("bogus", builder.oauthToken);
+        assertEquals("", builder.user);
+
+        // test authorization header is set as in the RFC6749
+        GitHub github = builder.build();
+        assertEquals("token bogus",github.encodedAuthorization);
+        assertEquals("",github.login);
     }
 
     @Test

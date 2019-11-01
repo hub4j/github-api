@@ -129,7 +129,7 @@ public class GHRepository extends GHObject {
      * Obtains a single {@link GHDeployment} by its ID.
      */
     public GHDeployment getDeployment(long id) throws IOException {
-        return root.retrieve().to("deployments/" + id, GHDeployment.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("deployments/" + id), GHDeployment.class).wrap(this);
     }
 
     private String join(List<String> params, String joinStr) {
@@ -866,7 +866,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Gets a comparison between 2 points in the repository. This would be similar
-     * to calling <tt>git log id1...id2</tt> against a local repository.
+     * to calling <code>git log id1...id2</code> against a local repository.
      * @param id1 an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a direct tag name
      * @param id2 an identifier for the second point to compare to. Can be the same as the first point.
      * @return the comparison output
@@ -928,7 +928,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Retrieves all refs of the given type for the current GitHub repository.
-     * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
+     * @param refType the type of reg to search for e.g. <code>tags</code> or <code>commits</code>
      * @return an array of all refs matching the request type
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
@@ -939,7 +939,7 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves all refs of the given type for the current GitHub repository.
      *
-     * @param refType the type of reg to search for e.g. <tt>tags</tt> or <tt>commits</tt>
+     * @param refType the type of reg to search for e.g. <code>tags</code> or <code>commits</code>
      * @return paged iterable of all refs of the specified type
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */

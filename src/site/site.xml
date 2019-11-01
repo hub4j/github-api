@@ -9,13 +9,20 @@
     <artifactId>maven-skin</artifactId>
     <version>1.2</version>
   </skin>
-  
+
   <body>
     <menu name="Git Hub API for Java">
-      <item name="Introduction"                   href="/index.html"/>
-      <item name="Download"               href="http://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
-      <item name="Source code" href="https://github.com/kohsuke/${project.artifactId}"/>
+      <item name="Introduction" href="/index.html"/>
+      <item name="Download" href="http://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
+      <item name="Source code" href="https://github.com/github-api/${project.artifactId}"/>
       <item name="Mailing List" href="https://groups.google.com/forum/#!forum/github-api"/>
+    </menu>
+
+    <menu name="Guides">
+      <item name="GitHub App Auth Flow" href="/githubappflow.html">
+        <item name="JWT Authentication" href="/githubappjwtauth.html"/>
+        <item name="App Installation Token " href="/githubappappinsttokenauth.html"/>
+      </item>
     </menu>
 
     <menu name="References">

@@ -1744,4 +1744,29 @@ public class GHRepository extends GHObject {
     public GHIssueEvent getIssueEvent(long id) throws IOException {
         return root.retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class).wrapUp(root);
     }
+
+    // Only used within listTopics().
+    private static class Topics {
+        public List<String> names;
+    }
+
+    /**
+     * Return the topics for this repository.
+     * See https://developer.github.com/v3/repos/#list-all-topics-for-a-repository
+     */
+    public List<String> listTopics() throws IOException {
+        Topics topics = root.retrieve().withPreview(MERCY).to(getApiTailUrl("topics"), Topics.class);
+        return topics.names;
+    }
+
+    /**
+     * Set the topics for this repository.
+     * See https://developer.github.com/v3/repos/#replace-all-topics-for-a-repository
+     */
+    // This currently returns a "404" error (as of 30 Oct 2019).
+//    public void setTopics(List<String> topics) throws IOException {
+//        Requester requester = new Requester(root);
+//        requester.with("names", topics);
+//        requester.method("PUT").withPreview(MERCY).to(getApiTailUrl("topics"));
+//    }
 }

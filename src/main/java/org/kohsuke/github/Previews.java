@@ -45,6 +45,13 @@ package org.kohsuke.github;
     static final String MACHINE_MAN = "application/vnd.github.machine-man-preview+json";
 
     /**
+     * View a list of repository topics in calls that return repository results
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#repository-topics">GitHub API Previews</a>
+     */
+    static final String MERCY = "application/vnd.github.mercy-preview+json";
+
+    /**
      * Draft pull requests
      *
      * @see <a href="https://developer.github.com/v3/previews/#draft-pull-requests">GitHub API Previews</a>

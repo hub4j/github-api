@@ -104,6 +104,7 @@ public class GHApp extends GHObject {
      * You must use a JWT to access this endpoint.
      *
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
+     * @return a list of App installations
      */
     @Preview @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {

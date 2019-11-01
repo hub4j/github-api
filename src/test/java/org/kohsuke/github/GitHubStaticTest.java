@@ -26,6 +26,11 @@ public class GitHubStaticTest extends Assert {
         Date instantSeconds = Date.from(instantNow.truncatedTo(ChronoUnit.SECONDS));
         Date instantMillis = Date.from(instantNow.truncatedTo(ChronoUnit.MILLIS));
 
+        // if we happen to land exactly on zero milliseconds, add 1 milli
+        if (instantSeconds.equals(instantMillis)) {
+            instantMillis = Date.from(instantNow.plusMillis(1).truncatedTo(ChronoUnit.MILLIS));
+        }
+
         // TODO: other formats
         String instantFormatSlash = formatDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ");
         String instantFormatDash = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -40,6 +45,7 @@ public class GitHubStaticTest extends Assert {
         assertThat(instantSeconds,
             equalTo(GitHub.parseDate(GitHub.printDate(instantSeconds))));
 
+        // printDate will truncate to the nearest second, so it should not be equal
         assertThat(instantMillis,
             not(equalTo(GitHub.parseDate(GitHub.printDate(instantMillis)))));
 
@@ -49,6 +55,7 @@ public class GitHubStaticTest extends Assert {
         assertThat(instantSeconds,
             equalTo(GitHub.parseDate(instantFormatDash)));
 
+        // This parser does not truncate to the nearest second, so it will be equal
         assertThat(instantMillis,
             equalTo(GitHub.parseDate(instantFormatMillis)));
 

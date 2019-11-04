@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <title>GitHub API for Java &#x2013; </title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/1024px.css");
+      @import url("./css/site.css");
+    </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      </head>
+  <body>
+    <div id="wrap2"><div id="wrap">
+    <div id="header">
+      <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
+		
+            <h1 id="bannerLeft">
+          <a href="http://github-api.kohsuke.org/">
+    
+            GitHub API for Java
+    
+            </a>
+        </h1>
+                
+      <p id="slogan">GitHub API for Java</p>
+    </div>
+    <div id="breadcrumbs">
+      <div class="xright">  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+
+    <div id="sidebar">
+      <div id="navcolumn">
+              <h2>
+          Git Hub API for Java
+        </h2><ul>
+              
+    <li class="none">
+              <a href="index.html">Introduction</a>
+        </li>
+              
+    <li class="none">
+              <a href="http://mvnrepository.com/artifact/org.kohsuke/github-api">Download</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://github.com/github-api/github-api">Source code</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://groups.google.com/forum/#!forum/github-api">Mailing List</a>
+        </li>
+          </ul>
+      <h2>
+          Guides
+        </h2><ul>
+              
+          
+              
+      
+            
+            
+              
+            <li class="expanded">
+              <a href="githubappflow.html">GitHub App Auth Flow</a>
+                <ul>
+                  
+    <li class="none">
+              <a href="githubappjwtauth.html">JWT Authentication</a>
+        </li>
+                  
+    <li class="none">
+              <strong>App Installation Token</strong>
+        </li>
+              </ul>
+        </li>
+          </ul>
+      <h2>
+          References
+        </h2><ul>
+              
+    <li class="none">
+              <a href="apidocs/index.html">Javadoc</a>
+        </li>
+          </ul>
+      <h2>
+          Project Documentation
+        </h2><ul>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-info.html">Project Information</a>
+              </li>
+              
+                
+              
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-reports.html">Project Reports</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    <div id="content">
+      <div id="contentBox">
+        <section>
+<h2><a name="Authenticating_as_an_installation"></a>Authenticating as an installation</h2>
+<p>In order to authenticate to GitHub as an installation of your GitHub App, you must use the App Installation Token authentication mechanism. This can be achieved with by creating a <code>GitHub</code> instance like this:</p>
+<div class="source">
+<pre>GitHub githubAuthAsInst = new GitHubBuilder()
+                    .withAppInstallationToken(appInstallationToken.getToken())
+                    .build();</pre></div></section><section>
+<h2><a name="How_do_I_create_an_App_Installation_Token.3F"></a>How do I create an App Installation Token?</h2>
+<p>Assuming that you followed the <a href="/githubappjwtauth.html"> GitHub App Authentication via JWT token guide</a> then you can create the App Installation Token like this:</p>
+<div class="source">
+<pre>String jwtToken = createJWT(&quot;44435&quot;, 600000); //sdk-github-api-app-test
+GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+GHAppInstallation appInstallation = gitHubApp.getApp().getInstallationById(111111); // Installation Id
+
+Map&lt;String, GHPermissionType&gt; permissions = new HashMap&lt;&gt;();
+permissions.put(&quot;pull_requests&quot;, GHPermissionType.WRITE);
+
+GHAppInstallationToken appInstallationToken = appInstallation
+                    .createToken(permissions)
+                    .create();</pre></div></section>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2019
+    
+          <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
+          
+  
+
+  
+  
+  &nbsp;| Last Published: 2019-11-04
+  &nbsp;| Version: 1.100-SNAPSHOT
+</div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    </div></div>
+  </body>
+</html>

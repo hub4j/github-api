@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <title>GitHub API for Java &#x2013; </title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/1024px.css");
+      @import url("./css/site.css");
+    </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      </head>
+  <body>
+    <div id="wrap2"><div id="wrap">
+    <div id="header">
+      <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
+		
+            <h1 id="bannerLeft">
+          <a href="http://github-api.kohsuke.org/">
+    
+            GitHub API for Java
+    
+            </a>
+        </h1>
+                
+      <p id="slogan">GitHub API for Java</p>
+    </div>
+    <div id="breadcrumbs">
+      <div class="xright">  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+
+    <div id="sidebar">
+      <div id="navcolumn">
+              <h2>
+          Git Hub API for Java
+        </h2><ul>
+              
+    <li class="none">
+              <a href="index.html">Introduction</a>
+        </li>
+              
+    <li class="none">
+              <a href="http://mvnrepository.com/artifact/org.kohsuke/github-api">Download</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://github.com/github-api/github-api">Source code</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://groups.google.com/forum/#!forum/github-api">Mailing List</a>
+        </li>
+          </ul>
+      <h2>
+          Guides
+        </h2><ul>
+              
+          
+              
+      
+            
+      
+              
+            <li class="expanded">
+              <strong>GitHub App Auth Flow</strong>
+                <ul>
+                  
+    <li class="none">
+              <a href="githubappjwtauth.html">JWT Authentication</a>
+        </li>
+                  
+    <li class="none">
+              <a href="githubappappinsttokenauth.html">App Installation Token</a>
+        </li>
+              </ul>
+        </li>
+          </ul>
+      <h2>
+          References
+        </h2><ul>
+              
+    <li class="none">
+              <a href="apidocs/index.html">Javadoc</a>
+        </li>
+          </ul>
+      <h2>
+          Project Documentation
+        </h2><ul>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-info.html">Project Information</a>
+              </li>
+              
+                
+              
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-reports.html">Project Reports</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    <div id="content">
+      <div id="contentBox">
+        <section>
+<h2><a name="GitHub_App_Auth_Flow"></a>GitHub App Auth Flow</h2>
+<p>GitHub Apps are commonly mistaken for OAuth Apps due to their similarities but understanding the differences between them will help you decide which kind of app you want to create.</p>
+<p>In a nutshell, an OAuth App acts as a GitHub user, whereas a GitHub App uses its own identity when installed on an organization or on repositories within an organization. For a comprehensive comparision please refer to the official GitHub <a class="externalLink" href="https://developer.github.com/apps/differences-between-apps/">documentation</a>.</p>
+<p>For this guide, we are going assume that you are using a GitHub App.</p></section><section>
+<h2><a name="Overview"></a>Overview</h2>
+<p>Assuming that your GitHub app has already been installed on either a user or an organization, the programmatic flow the developer must follow in order to be able to authenticate on their behalf is:</p><figure><img src="images/GitHub_App_Auth_Flow.jpg" alt="" /><figcaption>GitHub_App_Auth_Flow</figcaption></figure>
+<p>Multiple <code>GitHub</code> instances will have to be created and each of them will be using a different authentication mechanism. Some actions are only accessible if you are authenticated as a GitHub App while others will only be possible if you are authenticated on behalf of a user or org.</p></section><section>
+<h2><a name="Prerequisites"></a>Prerequisites</h2>
+<p>In order to follow this guide, you must have:</p>
+<ul>
+<li>A GitHub App created as described <a class="externalLink" href="https://developer.github.com/apps/building-github-apps/creating-a-github-app/">here</a></li>
+<li>A Private Key must be configured in your GitHub App as described <a class="externalLink" href="https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#generating-a-private-key">here</a></li>
+<li>A User or an organisation that has already installed your GitHub App as described <a class="externalLink" href="https://developer.github.com/apps/installing-github-apps/">here</a></li></ul></section><section>
+<h2><a name="What_next.3F"></a>What next?</h2>
+<ul>
+<li>Authenticating as a GitHub App via the <a href="/githubappjwtauth.html">JWT Authentication</a></li>
+<li>Authenticating as an installation via the <a href="/githubappappinsttokenauth.html">App Installation Token</a></li></ul></section>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2019
+    
+          <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
+          
+  
+
+  
+  
+  &nbsp;| Last Published: 2019-11-04
+  &nbsp;| Version: 1.100-SNAPSHOT
+</div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    </div></div>
+  </body>
+</html>

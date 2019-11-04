@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java - </title>
+    <title>GitHub API for Java &#x2013; </title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -26,7 +26,7 @@
       <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
 		
             <h1 id="bannerLeft">
-          <a href="./">
+          <a href="http://github-api.kohsuke.org/">
     
             GitHub API for Java
     
@@ -57,11 +57,35 @@
         </li>
               
     <li class="none">
-              <a href="https://github.com/kohsuke/github-api">Source code</a>
+              <a href="https://github.com/github-api/github-api">Source code</a>
         </li>
               
     <li class="none">
               <a href="https://groups.google.com/forum/#!forum/github-api">Mailing List</a>
+        </li>
+          </ul>
+      <h2>
+          Guides
+        </h2><ul>
+              
+          
+              
+      
+            
+      
+              
+        <li class="expanded">
+              <a href="githubappflow.html">GitHub App Auth Flow</a>
+                <ul>
+                  
+    <li class="none">
+              <a href="githubappjwtauth.html">JWT Authentication</a>
+        </li>
+                  
+    <li class="none">
+              <a href="githubappappinsttokenauth.html">App Installation Token</a>
+        </li>
+              </ul>
         </li>
           </ul>
       <h2>
@@ -78,8 +102,6 @@
               
                 
               
-      
-            
       
             
       
@@ -108,10 +130,6 @@
                   
     <li class="none">
               <a href="dependencies.html">Dependencies</a>
-        </li>
-                  
-    <li class="none">
-              <a href="dependency-convergence.html">Dependency Convergence</a>
         </li>
                   
     <li class="none">
@@ -170,64 +188,94 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <h1>What is this?</h1>
-
-<p>This library defines an object oriented representation of the GitHub API. By "object oriented" we mean
-there are classes that correspond to the domain model of GitHub (such as <code>GHUser</code> and <code>GHRepository</code>),
-operations that act on them as defined as methods (such as <code>GHUser.follow()</code>), and those object references
-are used in favor of using string handle (such as <code>GHUser.isMemberOf(GHOrganization)</code> instead of
-<code>GHUser.isMemberOf(String)</code>)</p>
-
+        <section>
+<h2><a name="What_is_this.3F"></a>What is this?</h2>
+<p>This library defines an object oriented representation of the GitHub API. By &quot;object oriented&quot; we mean there are classes that correspond to the domain model of GitHub (such as <code>GHUser</code> and <code>GHRepository</code>), operations that act on them as defined as methods (such as <code>GHUser.follow()</code>), and those object references are used in favor of using string handle (such as <code>GHUser.isMemberOf(GHOrganization)</code> instead of <code>GHUser.isMemberOf(String)</code>)</p>
 <p>The library supports both github.com and GitHub Enterprise.</p>
+<p>Most of the GitHub APIs are covered, although there are some corners that are still not yet implemented.</p></section><section>
+<h2><a name="Sample_Usage"></a>Sample Usage</h2>
+<div class="source">
+<pre>GitHub github = GitHub.connect();
 
-<p>Most of the GitHub APIs are covered, although there are some corners that are still not yet implemented.</p>
-
-<h2>Sample Usage</h2>
-
-<pre><code>GitHub github = GitHub.connect();
 GHRepository repo = github.createRepository(
-  "new-repository","this is my new repository",
-  "http://www.kohsuke.org/",true/*public*/);
-repo.addCollaborators(github.getUser("abayer"),github.getUser("rtyler"));
-repo.delete();
-</code></pre>
+  &quot;new-repository&quot;,&quot;this is my new repository&quot;,
+  &quot;http://www.kohsuke.org/&quot;,true/*public*/);
+repo.addCollaborators(github.getUser(&quot;abayer&quot;),github.getUser(&quot;rtyler&quot;));
+repo.delete();</pre></div></section><section>
+<h2><a name="Authentication"></a>Authentication</h2>
+<p>The library allows connecting to GitHub via several different authentication mechanisms.</p><section>
+<h3><a name="Programmatically"></a>Programmatically</h3>
+<p>To connect via Username and Password (not recommended):</p>
+<div class="source">
+<pre>GitHub github = new GitHubBuilder().withPassword(&quot;my_user&quot;, &quot;my_passwd&quot;).build();</pre></div>
+<p>To connect via Personal access token:</p>
+<div class="source">
+<pre>// If you don't specify the GitHub user id then the sdk will retrieve it via /user endpoint
+GitHub github = new GitHubBuilder().withOAuthToken(&quot;my_personal_token&quot;).build();
 
-<h2>Credential</h2>
+// If the token has access to an organization, you can specify it here.
+GitHub github = new GitHubBuilder().withOAuthToken(&quot;my_personal_token&quot;,&quot;user_id_OR_org_name&quot;).build();</pre></div>
+<p>To connect via JWT token as a GitHub App:</p>
+<div class="source">
+<pre>GitHub github = new GitHubBuilder().withJwtToken(&quot;my_jwt_token&quot;).build();</pre></div>
+<p>To connect via GitHub App installation token on behalf of a user or organization:</p>
+<div class="source">
+<pre>GitHub github = new GitHubBuilder().withAppInstallationToken(&quot;my_installation_token&quot;).build();</pre></div></section><section>
+<h3><a name="Property_file"></a>Property file</h3>
+<p>This library defines a common convention so that applications using this library will look at a consistent location. In this convention, the library looks at <code>~/.github</code> property file. The content of the files depends on the way you want this library to authenticate as shown below:</p>
+<p>To connect via Username and Password (not recommended):</p>
+<div class="source">
+<pre>login=kohsuke
+password=012345678</pre></div>
+<p>To connect via Personal access token:</p>
+<div class="source">
+<pre>oauth=4d98173f7c075527cb64878561d1fe70</pre></div>
+<p>To connect via Personal access token as a user or organization:</p>
+<div class="source">
+<pre>login=my_org
+oauth=4d98173f7c075527cb64878561d1fe70</pre></div>
+<p>To connect via JWT token as a GitHub App:</p>
+<div class="source">
+<pre>jwt=my_jwt_token</pre></div>
+<p>Once your <code>~/.github</code> property file is properly configured, you can obtain a <code>GitHub</code> instance using:</p>
+<div class="source">
+<pre>// if you are using the default configuration file
+GitHub github = GitHubBuilder.fromPropertyFile().build();
 
-<p>This library allows the caller to supply the credential as parameters, but it also defines a common convention
-so that applications using this library will look at the consistent location. In this convention, the library
-looks at <code>~/.github</code> property file, which should have the following two values:</p>
-
-<pre><code>login=kohsuke
-password=012345678
-</code></pre>
-
-<p>Alternatively, you can have just the OAuth token in this file:</p>
-
-<pre><code>oauth=4d98173f7c075527cb64878561d1fe70
-</code></pre>
-
-<h2>OkHttp</h2>
-
-<p>This library comes with a pluggable connector to use different HTTP client implementations
-through <code>HttpConnector</code>. In particular, this means you can use <a href="http://square.github.io/okhttp/">OkHttp</a>,
-so we can make use of it's HTTP response cache.
-Making a conditional request against the GitHub API and receiving a 304 response
-<a href="http://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
-
+// if you need to use a separate configuration file
+GitHub github = GitHubBuilder.fromPropertyFile(&quot;location/my_custom_github.properties&quot;).build();</pre></div></section><section>
+<h3><a name="Environmental_variables"></a>Environmental variables</h3>
+<p>This library also allows developers to authenticate GitHub with environmental variables.</p>
+<p>To connect via Username and Password (not recommended):</p>
+<div class="source">
+<pre>export GITHUB_LOGIN=kohsuke
+export GITHUB_PASSWORD=012345678</pre></div>
+<p>To connect via Personal access token:</p>
+<div class="source">
+<pre>export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70</pre></div>
+<p>To connect via Personal access token as a user or organization:</p>
+<div class="source">
+<pre>export GITHUB_LOGIN=my_org
+export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70</pre></div>
+<p>To connect via JWT token as a GitHub App:</p>
+<div class="source">
+<pre>export GITHUB_JWT=my_jwt_token</pre></div>
+<p>Once exported, you can obtain a <code>GitHub</code> instance using:</p>
+<div class="source">
+<pre>GitHub github = GitHubBuilder.fromEnvironment().build();</pre></div></section></section><section>
+<h2><a name="Pluggable_HTTP_client"></a>Pluggable HTTP client</h2>
+<p>This library comes with a pluggable connector to use different HTTP client implementations through <code>HttpConnector</code>. In particular, this means you can use <a class="externalLink" href="http://square.github.io/okhttp/">OkHttp</a>, so we can make use of it's HTTP response cache. Making a conditional request against the GitHub API and receiving a 304 response <a class="externalLink" href="http://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
 <p>The following code shows an example of how to set up persistent cache on the disk:</p>
-
-<pre><code>Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
-GitHub gitHub = GitHubBuilder.fromCredentials()
+<div class="source">
+<pre>Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
+GitHub gitHub = GitHubBuilder.fromEnvironment()
     .withConnector(new OkHttpConnector(new OkUrlFactory(new OkHttpClient().setCache(cache))))
-    .build();
-</code></pre>
-
+    .build();</pre></div></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2018
+          2019
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
@@ -235,8 +283,8 @@ GitHub gitHub = GitHubBuilder.fromCredentials()
 
   
   
-  &nbsp;| Last Published: 2018-11-07
-  &nbsp;| Version: 1.95
+  &nbsp;| Last Published: 2019-11-04
+  &nbsp;| Version: 1.100-SNAPSHOT
 </div>
       <div class="clear">
         <hr/>

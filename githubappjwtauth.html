@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <title>GitHub API for Java &#x2013; </title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/1024px.css");
+      @import url("./css/site.css");
+    </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      </head>
+  <body>
+    <div id="wrap2"><div id="wrap">
+    <div id="header">
+      <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
+		
+            <h1 id="bannerLeft">
+          <a href="http://github-api.kohsuke.org/">
+    
+            GitHub API for Java
+    
+            </a>
+        </h1>
+                
+      <p id="slogan">GitHub API for Java</p>
+    </div>
+    <div id="breadcrumbs">
+      <div class="xright">  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+
+    <div id="sidebar">
+      <div id="navcolumn">
+              <h2>
+          Git Hub API for Java
+        </h2><ul>
+              
+    <li class="none">
+              <a href="index.html">Introduction</a>
+        </li>
+              
+    <li class="none">
+              <a href="http://mvnrepository.com/artifact/org.kohsuke/github-api">Download</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://github.com/github-api/github-api">Source code</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://groups.google.com/forum/#!forum/github-api">Mailing List</a>
+        </li>
+          </ul>
+      <h2>
+          Guides
+        </h2><ul>
+              
+          
+              
+            
+            
+      
+              
+            <li class="expanded">
+              <a href="githubappflow.html">GitHub App Auth Flow</a>
+                <ul>
+                  
+    <li class="none">
+              <strong>JWT Authentication</strong>
+        </li>
+                  
+    <li class="none">
+              <a href="githubappappinsttokenauth.html">App Installation Token</a>
+        </li>
+              </ul>
+        </li>
+          </ul>
+      <h2>
+          References
+        </h2><ul>
+              
+    <li class="none">
+              <a href="apidocs/index.html">Javadoc</a>
+        </li>
+          </ul>
+      <h2>
+          Project Documentation
+        </h2><ul>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-info.html">Project Information</a>
+              </li>
+              
+                
+              
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-reports.html">Project Reports</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    <div id="content">
+      <div id="contentBox">
+        <section>
+<h2><a name="GitHub_App_Authentication_via_JWT_token"></a>GitHub App Authentication via JWT token</h2>
+<p>In order to authenticate to GitHub as a GitHub App, you must use the JWT token authentication mechanism. This can be easily achieved with this library by obtaining a <code>GitHub</code> instance like this:</p>
+<div class="source">
+<pre>GitHub github = new GitHubBuilder().withJwtToken(&quot;my_jwt_token&quot;).build();</pre></div>
+<p>Authenticating as a GitHub App lets you do a couple of things:</p>
+<ul>
+<li>You can retrieve high-level management information about your GitHub App.</li>
+<li>You can request access tokens for an installation of the app.</li></ul></section><section>
+<h2><a name="Where_do_I_get_the_JWT_token_from.3F"></a>Where do I get the JWT token from?</h2>
+<p>To generate the JWT token required to authenticate as a GitHub app you have to:</p>
+<ul>
+<li>Sign the JWT token using the private key you configured on your GitHub app as described <a class="externalLink" href="https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#generating-a-private-key">here</a></li>
+<li>Encode it using the <code>RS256</code> algorithm.</li></ul>
+<p>GitHub checks that the request is authenticated by verifying the token with the app's stored public key.</p></section><section>
+<h2><a name="Converting_the_private_key_into_a_Java_friendly_format"></a>Converting the private key into a Java friendly format</h2>
+<p><b>Note:</b> GitHub let's you download the GitHub App private key in the <code>PEM</code> format which isn't natively supported by the JVM unless you leverage a third-party library such as <a class="externalLink" href="https://www.bouncycastle.org/">BouncyCastle</a>. In this guide we will convert it to <code>DER</code> using the <code>openssl</code> utility.</p>
+<div class="source">
+<pre>openssl pkcs8 -topk8 -inform PEM -outform DER -in ~/github-api-app.private-key.pem -out ~/github-api-app.private-key.der -nocrypt</pre></div></section><section>
+<h2><a name="How_can_I_generate_the_JWT_token.3F"></a>How can I generate the JWT token?</h2>
+<p>Once you have the private key converted to the <code>DER</code> format, you will need 2 more things before you are able to generate JWT tokens:</p>
+<p><b>GitHub App Id:</b></p>
+<p>You can obtain the GitHub App Id from your app settings webpage as shown below:</p><figure><img src="images/Github_App_Id.png" alt="" /><figcaption>Github_App_Id</figcaption></figure>
+<p><b>JWT library:</b></p>
+<p>In order to generate the JWT, you will have to likely use a JWT library. In this guide we will use <a class="externalLink" href="https://github.com/jwtk/jjwt">jjwt</a> to that matter.</p>
+<p>Having said that, add on your <code>pom.xml</code> the following dependencies:</p>
+<div class="source">
+<pre>&lt;dependency&gt;
+  &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+  &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
+  &lt;version&gt;0.10.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+  &lt;artifactId&gt;jjwt-impl&lt;/artifactId&gt;
+  &lt;version&gt;0.10.5&lt;/version&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+  &lt;artifactId&gt;jjwt-jackson&lt;/artifactId&gt;
+  &lt;version&gt;0.10.5&lt;/version&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</pre></div>
+<p>Now we have everything we need so let's generate the JWT token:</p>
+<div class="source">
+<pre>static PrivateKey get(String filename) throws Exception {
+  byte[] keyBytes = Files.toByteArray(new File(filename));
+
+  PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+  KeyFactory kf = KeyFactory.getInstance(&quot;RSA&quot;);
+  return kf.generatePrivate(spec);
+}
+
+static String createJWT(String githubAppId, long ttlMillis) throws Exception {
+  //The JWT signature algorithm we will be using to sign the token
+  SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
+
+  long nowMillis = System.currentTimeMillis();
+  Date now = new Date(nowMillis);
+
+  //We will sign our JWT with our private key
+  Key signingKey = get(&quot;github-api-app.private-key.der&quot;);
+
+  //Let's set the JWT Claims
+  JwtBuilder builder = Jwts.builder()
+          .setIssuedAt(now)
+          .setIssuer(githubAppId)
+          .signWith(signingKey, signatureAlgorithm);
+
+  //if it has been specified, let's add the expiration
+  if (ttlMillis &gt; 0) {
+    long expMillis = nowMillis + ttlMillis;
+    Date exp = new Date(expMillis);
+    builder.setExpiration(exp);
+  }
+
+  //Builds the JWT and serializes it to a compact, URL-safe string
+  return builder.compact();
+}
+
+public static void main(String[] args) throws Exception {
+  String jwtToken = createJWT(&quot;44435&quot;, 600000); //sdk-github-api-app-test
+  GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+}</pre></div></section><section>
+<h2><a name="How_do_I_get_a_specific_app_installation.3F"></a>How do I get a specific app installation?</h2>
+<div class="source">
+<pre>String jwtToken = createJWT(&quot;44435&quot;, 600000); //sdk-github-api-app-test
+GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+GHAppInstallation appInstallation = gitHubApp.getApp().getInstallationById(111111); // Installation Id</pre></div></section><section>
+<h2><a name="What_next.3F"></a>What next?</h2>
+<ul>
+<li>Authenticating as an installation via the <a href="/githubappappinsttokenauth.html">App Installation Token</a></li></ul></section>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2019
+    
+          <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
+          
+  
+
+  
+  
+  &nbsp;| Last Published: 2019-11-04
+  &nbsp;| Version: 1.100-SNAPSHOT
+</div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    </div></div>
+  </body>
+</html>

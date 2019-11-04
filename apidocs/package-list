@@ -1,2 +1,3 @@
 org.kohsuke.github
 org.kohsuke.github.extras
+org.kohsuke.github.extras.okhttp3

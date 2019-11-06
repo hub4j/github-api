@@ -33,7 +33,7 @@
     <spotbugs.version>3.1.12</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>3.14.2</okhttp3.version>
+    <okhttp3.version>4.2.2</okhttp3.version>
     <okio.version>2.4.1</okio.version>
     <jacoco.coverage.target.class>.80</jacoco.coverage.target.class>
     <jacoco.coverage.target.method>0.20</jacoco.coverage.target.method>

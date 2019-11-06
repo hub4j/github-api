@@ -44,16 +44,7 @@ import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -352,10 +343,9 @@ class Requester {
     }
 
     private void noteRateLimit(String tailApiUrl) {
-        if ("/rate_limit".equals(tailApiUrl)) {
-            // the rate_limit API is "free"
-            return;
-        }
+        // "/rate_limit" is free, but we want to always get header rate limit anyway.
+        // Specifically, in this method we get the accurate server Date for calculating reset time.
+
         if (tailApiUrl.startsWith("/search")) {
             // the search API uses a different rate limit
             return;
@@ -375,9 +365,14 @@ class Requester {
             // if we are missing a header, return fast
             return;
         }
+
         GHRateLimit observed = new GHRateLimit();
+
+        // Date header can be missing or invalid, will be ignored later.
+        observed.updatedAt = uc.getHeaderField("Date");;
+
         try {
-            observed.limit = Integer.parseInt(limit);
+            observed.setLimit(Integer.parseInt(limit));
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
@@ -385,7 +380,7 @@ class Requester {
             return;
         }
         try {
-            observed.remaining = Integer.parseInt(remaining);
+            observed.setRemaining(Integer.parseInt(remaining));
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
@@ -393,13 +388,15 @@ class Requester {
             return;
         }
         try {
-            observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
-            root.updateRateLimit(observed);
+            observed.setResetEpochSeconds(Long.parseLong(reset));
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
             }
+            return;
         }
+
+        root.updateRateLimit(observed);
     }
 
     public String getResponseHeader(String header) {

@@ -31,6 +31,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -316,15 +317,18 @@ public class GitHub {
      */
     public GHRateLimit getRateLimit() throws IOException {
         try {
-            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            GHRateLimit rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            // Use the response date from the header
+            GHRateLimit lastRateLimit = lastRateLimit();
+            if (lastRateLimit != null) {
+                rateLimit.updatedAt = lastRateLimit.updatedAt;
+            }
+            return this.rateLimit = rateLimit;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
             // see issue #78
-            GHRateLimit r = new GHRateLimit();
-            r.limit = r.remaining = 1000000;
-            long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
-            r.reset = new Date(System.currentTimeMillis() / 1000L + hour);
+            GHRateLimit r = GHRateLimit.getPlaceholder();
             return rateLimit = r;
         }
     }
@@ -333,7 +337,7 @@ public class GitHub {
         synchronized (headerRateLimitLock) {
             if (headerRateLimit == null
                     || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
-                    || headerRateLimit.remaining > observed.remaining) {
+                    || headerRateLimit.getRemaining() > observed.getRemaining()) {
                 headerRateLimit = observed;
                 LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }
@@ -367,7 +371,7 @@ public class GitHub {
             }
         }
         GHRateLimit rateLimit = this.rateLimit;
-        if (rateLimit == null || rateLimit.getResetDate().getTime() < System.currentTimeMillis()) {
+        if (rateLimit == null || rateLimit.isExpired()) {
             rateLimit = getRateLimit();
         }
         return rateLimit;

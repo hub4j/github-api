@@ -65,7 +65,7 @@
   "releases_url": "https://api.github.com/repos/github-api-test-org/github-api/releases{/id}",
   "deployments_url": "https://api.github.com/repos/github-api-test-org/github-api/deployments",
   "created_at": "2019-09-06T23:26:04Z",
-  "updated_at": "2019-11-07T00:25:40Z",
+  "updated_at": "2019-11-07T05:19:07Z",
   "pushed_at": "2019-10-21T22:34:49Z",
   "git_url": "git://github.com/github-api-test-org/github-api.git",
   "ssh_url": "git@github.com:github-api-test-org/github-api.git",
@@ -193,7 +193,7 @@
     "deployments_url": "https://api.github.com/repos/github-api/github-api/deployments",
     "created_at": "2010-04-19T04:13:03Z",
     "updated_at": "2019-11-06T12:09:45Z",
-    "pushed_at": "2019-11-06T07:12:42Z",
+    "pushed_at": "2019-11-07T04:38:19Z",
     "git_url": "git://github.com/github-api/github-api.git",
     "ssh_url": "git@github.com:github-api/github-api.git",
     "clone_url": "https://github.com/github-api/github-api.git",
@@ -212,7 +212,7 @@
     "mirror_url": null,
     "archived": false,
     "disabled": false,
-    "open_issues_count": 57,
+    "open_issues_count": 60,
     "license": {
       "key": "mit",
       "name": "MIT License",
@@ -221,7 +221,7 @@
       "node_id": "MDc6TGljZW5zZTEz"
     },
     "forks": 437,
-    "open_issues": 57,
+    "open_issues": 60,
     "watchers": 575,
     "default_branch": "master"
   },
@@ -293,7 +293,7 @@
     "deployments_url": "https://api.github.com/repos/github-api/github-api/deployments",
     "created_at": "2010-04-19T04:13:03Z",
     "updated_at": "2019-11-06T12:09:45Z",
-    "pushed_at": "2019-11-06T07:12:42Z",
+    "pushed_at": "2019-11-07T04:38:19Z",
     "git_url": "git://github.com/github-api/github-api.git",
     "ssh_url": "git@github.com:github-api/github-api.git",
     "clone_url": "https://github.com/github-api/github-api.git",
@@ -312,7 +312,7 @@
     "mirror_url": null,
     "archived": false,
     "disabled": false,
-    "open_issues_count": 57,
+    "open_issues_count": 60,
     "license": {
       "key": "mit",
       "name": "MIT License",
@@ -321,7 +321,7 @@
       "node_id": "MDc6TGljZW5zZTEz"
     },
     "forks": 437,
-    "open_issues": 57,
+    "open_issues": 60,
     "watchers": 575,
     "default_branch": "master"
   },

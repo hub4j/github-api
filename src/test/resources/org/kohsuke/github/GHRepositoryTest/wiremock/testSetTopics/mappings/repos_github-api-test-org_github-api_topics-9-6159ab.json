@@ -1,5 +1,5 @@
 {
-  "id": "44c674a1-d6bf-448f-b5a2-4ff860e3921d",
+  "id": "6159ab53-1522-4d89-933a-734578f4481a",
   "name": "repos_github-api-test-org_github-api_topics",
   "request": {
     "url": "/repos/github-api-test-org/github-api/topics",
@@ -7,21 +7,23 @@
   },
   "response": {
     "status": 200,
-    "body": "{\"names\":[\"api-test-dummy\",\"java\"]}",
+    "body": "{\"names\":[\"api-test-dummy\",\"ordered-state\"]}",
     "headers": {
-      "Date": "Thu, 07 Nov 2019 00:29:52 GMT",
+      "Date": "Thu, 07 Nov 2019 05:19:29 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4887",
-      "X-RateLimit-Reset": "1573089404",
+      "X-RateLimit-Remaining": "4927",
+      "X-RateLimit-Reset": "1573107045",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"bb8a902204adac24713280143d4f2542\"",
+      "ETag": "W/\"7cf11892f99547fa0b0870388bfd00f7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "github.mercy-preview; format=json",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -31,13 +33,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "9411:6B14:1318BCB:15EE7D8:5DC36580"
+      "X-GitHub-Request-Id": "EE66:9B40:1DDFA1A:2298C33:5DC3A961"
     }
   },
-  "uuid": "44c674a1-d6bf-448f-b5a2-4ff860e3921d",
+  "uuid": "6159ab53-1522-4d89-933a-734578f4481a",
   "persistent": true,
   "scenarioName": "scenario-1-repos-github-api-test-org-github-api-topics",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-github-api-test-org-github-api-topics-2",
-  "insertionIndex": 4
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-github-api-topics-3",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-github-api-topics-4",
+  "insertionIndex": 9
 }

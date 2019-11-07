@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -270,8 +271,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testListTopics() throws Exception {
-        List<String> topics = getRepository(gitHub).listTopics();
-        assertTrue(topics.contains("api-test-dummy"));
+    public void testSetTopics() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+
+        List<String> topics = new ArrayList<>();
+        topics.add("api-test-dummy");
+        topics.add("java");
+        repo.setTopics(topics);
+        assertTrue(repo.listTopics().contains("api-test-dummy"));
+        assertTrue(repo.listTopics().contains("java"));
+    }
+
+    @Test
+    public void testSetTopicsEmpty() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+
+        List<String> topics = new ArrayList<>();
+        repo.setTopics(topics);
+        assertTrue(repo.listTopics().isEmpty());
     }
 }

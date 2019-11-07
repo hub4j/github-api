@@ -1763,10 +1763,9 @@ public class GHRepository extends GHObject {
      * Set the topics for this repository.
      * See https://developer.github.com/v3/repos/#replace-all-topics-for-a-repository
      */
-    // This currently returns a "404" error (as of 30 Oct 2019).
-//    public void setTopics(List<String> topics) throws IOException {
-//        Requester requester = new Requester(root);
-//        requester.with("names", topics);
-//        requester.method("PUT").withPreview(MERCY).to(getApiTailUrl("topics"));
-//    }
+    public void setTopics(List<String> topics) throws IOException {
+        Requester requester = new Requester(root);
+        requester.with("names", topics);
+        requester.method("PUT").withPreview(MERCY).to(getApiTailUrl("topics"));
+    }
 }

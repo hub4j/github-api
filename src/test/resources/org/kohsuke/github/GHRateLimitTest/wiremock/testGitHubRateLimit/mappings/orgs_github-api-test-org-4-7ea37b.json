@@ -9,13 +9,13 @@
     "status": 200,
     "bodyFileName": "orgs_github-api-test-org-7ea37b72-8b01-4ed5-a63d-98d32b2faa0f.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 19:55:56 GMT",
+      "Date": "{{now}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
       "X-RateLimit-Remaining": "4896",
-      "X-RateLimit-Reset": "1570478899",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",

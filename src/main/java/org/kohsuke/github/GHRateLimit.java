@@ -1,11 +1,12 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.Clock;
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -17,6 +18,7 @@ import static java.util.logging.Level.FINEST;
 
 /**
  * Rate limit.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHRateLimit {
@@ -49,38 +51,30 @@ public class GHRateLimit {
     /**
      * Remaining calls that can be made.
      */
-    private int remainingCount;
+    private final int remainingCount;
 
     /**
      * Allotted API call per hour.
      */
-    private int limitCount;
+    private final int limitCount;
 
     /**
      * The time at which the current rate limit window resets in UTC epoch seconds.
      */
-    private long resetEpochSeconds = -1;
-
-    /**
-     * String representation of the Date header from the response.
-     * If null, the value is ignored.
-     * Package private and effectively final.
-     */
-    @CheckForNull
-    String updatedAt = null;
+    private final long resetEpochSeconds;
 
     /**
      * EpochSeconds time (UTC) at which this response was updated.
      * Will be updated to match {@link this.updatedAt} if that is not null.
      */
-    private long updatedAtEpochSeconds = System.currentTimeMillis() / 1000L;
+    private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
     /**
      * The calculated time at which the rate limit will reset.
      * Only calculated if {@link #getResetDate} is called.
      */
     @CheckForNull
-    private Date calculatedResetDate;
+    private Date resetDate = null;
 
     /**
      * Gets a placeholder instance that can be used when we fail to get one from the server.
@@ -88,13 +82,54 @@ public class GHRateLimit {
      * @return a GHRateLimit
      */
     public static GHRateLimit getPlaceholder() {
-        GHRateLimit r = new GHRateLimit();
-        r.setLimit(1000000);
-        r.setRemaining(1000000);
-        long minute = 60L;
+        final long oneHour = 60L * 60L;
+        // This placeholder limit does not expire for a while
         // This make it so that calling rateLimit() multiple times does not result in multiple request
-        r.setResetEpochSeconds(System.currentTimeMillis() / 1000L + minute);
+        GHRateLimit r = new GHRateLimit(1000000, 1000000, System.currentTimeMillis() / 1000L + oneHour);
         return r;
+    }
+
+    @JsonCreator
+    public GHRateLimit(@JsonProperty("limit") int limit,
+                @JsonProperty("remaining") int remaining,
+                @JsonProperty("reset")long resetEpochSeconds) {
+        this(limit, remaining, resetEpochSeconds, null);
+    }
+
+    public GHRateLimit(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
+        this.limitCount = limit;
+        this.remainingCount = remaining;
+        this.resetEpochSeconds = resetEpochSeconds;
+        setUpdatedAt(updatedAt);
+
+        // Deprecated fields
+        this.remaining = remaining;
+        this.limit = limit;
+        this.reset = new Date(resetEpochSeconds);
+
+    }
+
+    /**
+     *
+     * @param updatedAt a string date in RFC 1123
+     */
+    void setUpdatedAt(String updatedAt) {
+        long updatedAtEpochSeconds = createdAtEpochSeconds;
+        if (!StringUtils.isBlank(updatedAt)) {
+            try {
+                // Get the server date and reset data, will always return a time in GMT
+                updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME).toEpochSecond();
+            } catch (DateTimeParseException e) {
+                if (LOGGER.isLoggable(FINEST)) {
+                    LOGGER.log(FINEST, "Malformed Date header value " + updatedAt, e);
+                }
+            }
+        }
+
+        long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
+
+        // This may seem odd but it results in an accurate or slightly pessimistic reset date
+        resetDate = new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
     }
 
     /**
@@ -102,42 +137,17 @@ public class GHRateLimit {
      *
      * @return an integer
      */
-    @JsonProperty("remaining")
     public int getRemaining() {
         return remainingCount;
     }
-
-    /**
-     * Sets the remaining number of requests allowed before this connection will be throttled.
-     *
-     * @param remaining an integer
-     */
-    @JsonProperty("remaining")
-    void setRemaining(int remaining) {
-        this.remainingCount = remaining;
-        this.remaining = remaining;
-    }
-
 
     /**
      * Gets the total number of API calls per hour allotted for this connection.
      *
      * @return an integer
      */
-    @JsonProperty("limit")
     public int getLimit() {
         return limitCount;
-    }
-
-    /**
-     * Sets the total number of API calls per hour allotted for this connection.
-     *
-     * @param limit an integer
-     */
-    @JsonProperty("limit")
-    void setLimit(int limit) {
-        this.limitCount = limit;
-        this.limit = limit;
     }
 
     /**
@@ -145,20 +155,8 @@ public class GHRateLimit {
      *
      * @return a long
      */
-    @JsonProperty("reset")
     public long getResetEpochSeconds() {
         return resetEpochSeconds;
-    }
-
-    /**
-     * The time in epoch seconds when the rate limit will reset.
-     *
-     * @param resetEpochSeconds the reset time in epoch seconds
-     */
-    @JsonProperty("reset")
-    void setResetEpochSeconds(long resetEpochSeconds) {
-        this.resetEpochSeconds = resetEpochSeconds;
-        this.reset = new Date(resetEpochSeconds);
     }
 
     /**
@@ -171,35 +169,15 @@ public class GHRateLimit {
     }
 
     /**
-     * Calculates the date at which the rate limit will reset.
-     * If available, it uses the server time indicated by the Date response header to accurately
-     * calculate this date.  If not, it uses the system time UTC.
+     * Returns the date at which the rate limit will reset.
      *
      * @return the calculated date at which the rate limit has or will reset.
      */
     @SuppressFBWarnings(value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
             justification = "The value comes from JSON deserialization")
+    @Nonnull
     public Date getResetDate() {
-        if (calculatedResetDate == null) {
-            if (!StringUtils.isBlank(updatedAt)) {
-                // this is why we wait to calculate the reset date - it is expensive.
-                try {
-                    // Get the server date and reset data, will always return a time in GMT
-                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME).toEpochSecond();
-                } catch (DateTimeParseException e) {
-                    if (LOGGER.isLoggable(FINEST)) {
-                        LOGGER.log(FINEST, "Malformed Date header value " + updatedAt, e);
-                    }
-                }
-            }
-
-            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
-
-            // This may seem odd but it results in an accurate or slightly pessimistic reset date
-            calculatedResetDate = new Date((updatedAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
-        }
-
-        return calculatedResetDate;
+        return new Date(resetDate.getTime());
     }
 
     @Override
@@ -209,6 +187,27 @@ public class GHRateLimit {
                 ", limit=" + getLimit() +
                 ", resetDate=" + getResetDate() +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHRateLimit rateLimit = (GHRateLimit) o;
+        return getRemaining() == rateLimit.getRemaining() &&
+            getLimit() == rateLimit.getLimit() &&
+            getResetEpochSeconds() == rateLimit.getResetEpochSeconds() &&
+            getResetDate().equals(rateLimit.getResetDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());
     }
 
     private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());

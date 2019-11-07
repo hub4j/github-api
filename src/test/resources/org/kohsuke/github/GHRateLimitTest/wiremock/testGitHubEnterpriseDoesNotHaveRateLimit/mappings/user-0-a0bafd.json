@@ -9,7 +9,7 @@
     "status": 200,
     "bodyFileName": "user-a0bafdae-2f0d-4d0b-966b-f2408c1240bd.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 17:05:48 GMT",
+      "Date": "{{now}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",

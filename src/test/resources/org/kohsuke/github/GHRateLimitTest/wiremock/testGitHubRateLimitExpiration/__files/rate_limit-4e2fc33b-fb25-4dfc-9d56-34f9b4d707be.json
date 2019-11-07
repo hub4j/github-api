@@ -2,7 +2,7 @@
   "resources": {
     "core": {
       "limit": 5000,
-      "remaining": 4897,
+      "remaining": 4896,
       "reset": 1570478899
     },
     "search": {
@@ -23,7 +23,7 @@
   },
   "rate": {
     "limit": 5000,
-    "remaining": 4897,
-    "reset": {{now offset='1 hours' format='unix'}}
+    "remaining": 4896,
+    "reset": {{now offset='5 seconds' format='unix'}}
   }
 }

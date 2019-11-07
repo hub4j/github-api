@@ -316,28 +316,25 @@ public class GitHub {
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
+        GHRateLimit rateLimit;
         try {
-            GHRateLimit rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
-            // Use the response date from the header
-            GHRateLimit lastRateLimit = lastRateLimit();
-            if (lastRateLimit != null) {
-                rateLimit.updatedAt = lastRateLimit.updatedAt;
-            }
-            return this.rateLimit = rateLimit;
+            rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
             // see issue #78
-            GHRateLimit r = GHRateLimit.getPlaceholder();
-            return rateLimit = r;
+            rateLimit = GHRateLimit.getPlaceholder();
         }
+
+        return this.rateLimit = rateLimit;
+
     }
 
     /*package*/ void updateRateLimit(@Nonnull GHRateLimit observed) {
         synchronized (headerRateLimitLock) {
             if (headerRateLimit == null
-                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
-                    || headerRateLimit.getRemaining() > observed.getRemaining()) {
+                    || headerRateLimit.getRemaining() > observed.getRemaining()
+                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()) {
                 headerRateLimit = observed;
                 LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }
@@ -366,7 +363,7 @@ public class GitHub {
     @Nonnull
     public GHRateLimit rateLimit() throws IOException {
         synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null) {
+            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
                 return headerRateLimit;
             }
         }

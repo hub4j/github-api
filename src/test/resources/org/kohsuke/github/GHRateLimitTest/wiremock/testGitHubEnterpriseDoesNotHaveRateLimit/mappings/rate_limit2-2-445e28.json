@@ -9,7 +9,7 @@
     "status": 404,
     "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3\"}",
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "404 Not Found",

@@ -9,7 +9,7 @@
     "status": 200,
     "bodyFileName": "rate_limit-f22b1cea-3679-481d-8b95-459b2c47bf98.json",
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",

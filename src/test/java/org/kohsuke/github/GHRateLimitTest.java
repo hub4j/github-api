@@ -306,10 +306,26 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         Thread.sleep(1000);
     }
 
+
+    // These three tests should be have the same, showing server time adjustment working
     @Test
     public void testGitHubRateLimitExpiration() throws Exception {
+        executeExpirationTest();
+    }
+
+    @Test
+    public void testGitHubRateLimitExpirationServerFiveMinutesAhead() throws Exception {
+        executeExpirationTest();
+    }
+
+    @Test
+    public void testGitHubRateLimitExpirationServerFiveMinutesBehind() throws Exception {
+        executeExpirationTest();
+    }
+
+    private void executeExpirationTest() throws Exception  {
         // Customized response that templates the date to keep things working
-        //snapshotNotAllowed();
+        snapshotNotAllowed();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
         GHRateLimit rateLimit = null;
@@ -347,6 +363,9 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         // This time, rateLimit() should find an expired record and get a new one.
         Thread.sleep(3000);
+
+        assertThat("Header instance has expired",
+            gitHub.lastRateLimit().isExpired(), is(true));
 
         assertThat("rateLimit() will ask server when header instance expires and it has not called getRateLimit() yet",
             gitHub.rateLimit(), not(sameInstance(rateLimit)));
@@ -399,8 +418,6 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
-
-
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("github-api");

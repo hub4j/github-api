@@ -9,7 +9,7 @@
     "status": 200,
     "bodyFileName": "orgs_github-api-test-org-7ea37b72-8b01-4ed5-a63d-98d32b2faa0f.json",
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",

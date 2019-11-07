@@ -25,7 +25,7 @@
         "Accept-Encoding"
       ],
       "ETag": "\"4f508593b64df214fee8f6ab42df633c\"",
-      "Last-Modified": "{{now offset='-2 seconds'}}",
+      "Last-Modified": "{{now offset='-2 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",

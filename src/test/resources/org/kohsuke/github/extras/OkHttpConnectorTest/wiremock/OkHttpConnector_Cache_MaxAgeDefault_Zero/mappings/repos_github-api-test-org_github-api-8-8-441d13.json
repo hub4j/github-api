@@ -20,7 +20,7 @@
         "Accept-Encoding"
       ],
       "ETag": "\"295ae3430c604f3d10b6eb145fe511b5\"",
-      "Last-Modified": "{{now offset='-7 seconds'}}",
+      "Last-Modified": "{{now offset='-7 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",

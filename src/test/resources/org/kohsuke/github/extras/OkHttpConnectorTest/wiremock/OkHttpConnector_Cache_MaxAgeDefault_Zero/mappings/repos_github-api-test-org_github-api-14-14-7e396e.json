@@ -27,7 +27,7 @@
         "Accept-Encoding"
       ],
       "ETag": "W/\"31f73a7ecc35bbecec125851ce166af4\"",
-      "Last-Modified": "{{now offset='-7 seconds'}}",
+      "Last-Modified": "{{now offset='-7 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "github.v3; format=json",

@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -64,17 +63,16 @@ public class GHRateLimit {
     private final long resetEpochSeconds;
 
     /**
-     * EpochSeconds time (UTC) at which this response was updated.
-     * Will be updated to match {@link this.updatedAt} if that is not null.
+     * EpochSeconds time (UTC) at which this instance was created.
      */
     private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
     /**
      * The calculated time at which the rate limit will reset.
-     * Only calculated if {@link #getResetDate} is called.
+     * Recalculated if {@link #recalculateResetDate} is called.
      */
-    @CheckForNull
-    private Date resetDate = null;
+    @Nonnull
+    private Date resetDate;
 
     /**
      * Gets a placeholder instance that can be used when we fail to get one from the server.
@@ -96,24 +94,26 @@ public class GHRateLimit {
         this(limit, remaining, resetEpochSeconds, null);
     }
 
+    @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+        justification = "Deprecated")
     public GHRateLimit(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
         this.limitCount = limit;
         this.remainingCount = remaining;
         this.resetEpochSeconds = resetEpochSeconds;
-        setUpdatedAt(updatedAt);
+        this.resetDate = recalculateResetDate(updatedAt);
 
         // Deprecated fields
         this.remaining = remaining;
         this.limit = limit;
         this.reset = new Date(resetEpochSeconds);
-
     }
 
     /**
      *
      * @param updatedAt a string date in RFC 1123
+     * @return reset date based on the passed date
      */
-    void setUpdatedAt(String updatedAt) {
+    Date recalculateResetDate(String updatedAt) {
         long updatedAtEpochSeconds = createdAtEpochSeconds;
         if (!StringUtils.isBlank(updatedAt)) {
             try {
@@ -126,10 +126,10 @@ public class GHRateLimit {
             }
         }
 
-        long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
-
         // This may seem odd but it results in an accurate or slightly pessimistic reset date
-        resetDate = new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
+        // based on system time rather than on the system being in sync with the server
+        long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
+        return resetDate = new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
     }
 
     /**
@@ -173,8 +173,6 @@ public class GHRateLimit {
      *
      * @return the calculated date at which the rate limit has or will reset.
      */
-    @SuppressFBWarnings(value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            justification = "The value comes from JSON deserialization")
     @Nonnull
     public Date getResetDate() {
         return new Date(resetDate.getTime());

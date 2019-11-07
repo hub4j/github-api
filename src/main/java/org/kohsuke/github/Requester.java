@@ -44,7 +44,15 @@ import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -702,7 +710,7 @@ class Requester {
             setResponseHeaders((GHObject) readValue);
         } else if (readValue instanceof JsonRateLimit) {
             // if we're getting a GHRateLimit it needs the server date
-            ((JsonRateLimit)readValue).rate.setUpdatedAt(uc.getHeaderField("Date"));
+            ((JsonRateLimit)readValue).rate.recalculateResetDate(uc.getHeaderField("Date"));
         }
         return readValue;
     }

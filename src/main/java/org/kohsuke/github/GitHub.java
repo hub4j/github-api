@@ -334,7 +334,7 @@ public class GitHub {
         synchronized (headerRateLimitLock) {
             if (headerRateLimit == null
                     || headerRateLimit.getRemaining() > observed.getRemaining()
-                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()) {
+                    || headerRateLimit.getResetEpochSeconds() < observed.getResetEpochSeconds()) {
                 headerRateLimit = observed;
                 LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }

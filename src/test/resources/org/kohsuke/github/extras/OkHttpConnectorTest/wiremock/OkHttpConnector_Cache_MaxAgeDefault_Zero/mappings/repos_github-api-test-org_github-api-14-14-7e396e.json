@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "repos_github-api-test-org_github-api-7e396e4c-c5eb-4bc0-a5cd-3d9f75fac0f0.json",
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",

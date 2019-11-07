@@ -9,7 +9,7 @@
     "status": 200,
     "bodyFileName": "repos_github-api-test-org_github-api-ec57e178-8204-439b-b45a-58c773fa46f6.json",
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
@@ -22,7 +22,7 @@
         "Accept-Encoding"
       ],
       "ETag": "W/\"ef30773e1dfdb07ba4ea64143df970ab\"",
-      "Last-Modified": "{{now offset='-20 seconds'}}",
+      "Last-Modified": "{{now offset='-20 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "github.v3; format=json",

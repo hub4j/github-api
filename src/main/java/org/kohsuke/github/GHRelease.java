@@ -135,7 +135,7 @@ public class GHRelease extends GHObject {
     }
     
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = new Requester(owner.root);
+        Requester builder = owner.root.createRequester();
 
         String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
                 owner.getApiTailUrl(""), getId(), filename);
@@ -145,7 +145,7 @@ public class GHRelease extends GHObject {
     }
 
     public List<GHAsset> getAssets() throws IOException {
-        Requester builder = new Requester(owner.root);
+        Requester builder = owner.root.createRequester();
 
         GHAsset[] assets = builder
                 .method("GET")
@@ -157,7 +157,7 @@ public class GHRelease extends GHObject {
      * Deletes this release.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+        root.createRequester().method("DELETE").to(owner.getApiTailUrl("releases/"+id));
     }
 
     /**

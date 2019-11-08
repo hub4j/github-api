@@ -33,7 +33,7 @@ public class GHTreeBuilder {
 
     GHTreeBuilder(GHRepository repo) {
         this.repo = repo;
-        req = new Requester(repo.root);
+        req = repo.root.createRequester();
     }
 
     /**
@@ -84,7 +84,7 @@ public class GHTreeBuilder {
      * Creates a tree based on the parameters specified thus far.
      */
     public GHTree create() throws IOException {
-        req._with("tree", treeEntries);
+        req.with("tree", treeEntries);
         return req.method("POST").to(getApiTail(), GHTree.class).wrap(repo);
     }
 }

@@ -35,10 +35,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Represents an issue on GitHub.
@@ -157,11 +155,11 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void lock() throws IOException {
-        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+        root.createRequester().method("PUT").to(getApiRoute()+"/lock");
     }
 
     public void unlock() throws IOException {
-        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+        root.createRequester().method("PUT").to(getApiRoute()+"/lock");
     }
 
     /**
@@ -172,16 +170,16 @@ public class GHIssue extends GHObject implements Reactable{
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+        GHIssueComment r = root.createRequester().with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
         return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getIssuesApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getIssuesApiRoute());
     }
 
     /**
@@ -301,8 +299,8 @@ public class GHIssue extends GHObject implements Reactable{
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
+        return owner.root.createRequester()
+            .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiRoute()+"/reactions", GHReaction.class).wrap(root);
     }
@@ -321,7 +319,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+        List<String> logins = getLogins(assignees);
+        root.retrieve().method("POST").with(ASSIGNEES,logins).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -329,7 +328,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        new Requester(root).withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
+        List<String> logins = getLogins(assignees);
+        root.createRequester().with(ASSIGNEES, logins).method("PATCH").to(getIssuesApiRoute());
     }
 
     public void removeAssignees(GHUser... assignees) throws IOException {
@@ -337,7 +337,16 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        List<String> logins = getLogins(assignees);
+        root.retrieve().method("DELETE").with(ASSIGNEES,logins).inBody().to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    protected static List<String> getLogins(Collection<GHUser> users) {
+        List<String> names = new ArrayList<String>(users.size());
+        for (GHUser a : users) {
+            names.add(a.getLogin());
+        }
+        return names;
     }
 
     protected String getApiRoute() {

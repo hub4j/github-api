@@ -260,6 +260,10 @@ public class GitHub {
         }
     }
 
+    Requester createRequester() {
+        return new Requester(this);
+    }
+
     /**
      * Is this an anonymous connection
      * @return {@code true} if operations that require authentication will fail.
@@ -309,7 +313,7 @@ public class GitHub {
     }
 
     /*package*/ Requester retrieve() {
-        return new Requester(this).method("GET");
+        return this.createRequester().method("GET");
     }
 
     /**
@@ -695,8 +699,8 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
-        Requester requester = new Requester(this)
-                .with("scopes", scope)
+        Requester requester = this.createRequester()
+            .with("scopes", scope)
                 .with("note", note)
                 .with("note_url", noteUrl);
 
@@ -709,8 +713,8 @@ public class GitHub {
     public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
                                            String note_url)
             throws IOException {
-        Requester requester = new Requester(this)
-                .with("client_secret", clientSecret)
+        Requester requester = this.createRequester()
+            .with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
                 .with("note_url", note_url);
@@ -957,8 +961,8 @@ public class GitHub {
      */
     public Reader renderMarkdown(String text) throws IOException {
         return new InputStreamReader(
-            new Requester(this)
-                    .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
+            this.createRequester()
+                .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
                     .contentType("text/plain;charset=UTF-8")
                     .asStream("/markdown/raw"),
             "UTF-8");

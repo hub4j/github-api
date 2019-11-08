@@ -16,7 +16,7 @@ public class GHGistUpdater {
 
     GHGistUpdater(GHGist base) {
         this.base = base;
-        this.builder = new Requester(base.root);
+        this.builder = base.root.createRequester();
 
         files = new LinkedHashMap<>();
     }
@@ -52,7 +52,7 @@ public class GHGistUpdater {
      * Updates the Gist based on the parameters specified thus far.
      */
     public GHGist update() throws IOException {
-        builder._with("files", files);
+        builder.with("files", files);
         return builder
                 .method("PATCH")
                 .to(base.getApiTailUrl(""), GHGist.class).wrap(base.owner);

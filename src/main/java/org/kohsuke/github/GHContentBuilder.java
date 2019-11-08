@@ -21,7 +21,7 @@ public final class GHContentBuilder {
 
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = new Requester(repo.root).method("PUT");
+        this.req = repo.root.createRequester().method("PUT");
     }
 
     public GHContentBuilder path(String path) {

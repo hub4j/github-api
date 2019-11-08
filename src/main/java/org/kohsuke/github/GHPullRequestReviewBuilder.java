@@ -17,7 +17,7 @@ public class GHPullRequestReviewBuilder {
 
     /*package*/ GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
-        this.builder = new Requester(pr.root);
+        this.builder = pr.root.createRequester();
     }
 
     //     public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
@@ -60,7 +60,7 @@ public class GHPullRequestReviewBuilder {
     }
 
     public GHPullRequestReview create() throws IOException {
-        return builder.method("POST")._with("comments",comments)
+        return builder.method("POST").with("comments",comments)
                 .to(pr.getApiRoute() + "/reviews", GHPullRequestReview.class)
                 .wrapUp(pr);
     }

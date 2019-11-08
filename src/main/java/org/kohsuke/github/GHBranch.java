@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
-import static org.kohsuke.github.Previews.*;
-
 /**
  * A branch in a repository.
  *
@@ -80,7 +78,7 @@ public class GHBranch {
      * Disables branch protection and allows anyone with push access to push changes.
      */
     public void disableProtection() throws IOException {
-        new Requester(root).method("DELETE").to(protection_url);
+        root.createRequester().method("DELETE").to(protection_url);
     }
 
     /**

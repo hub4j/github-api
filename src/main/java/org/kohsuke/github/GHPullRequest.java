@@ -347,7 +347,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
-        return new Requester(root).method("POST")
+        return root.createRequester().method("POST")
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
@@ -356,8 +356,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
-        new Requester(root).method("POST")
-                .withLogins("reviewers", reviewers)
+        List<String> logins = getLogins(reviewers);
+        root.createRequester().method("POST")
+                .with("reviewers", logins)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
 
@@ -366,7 +367,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         for (GHTeam team : teams) {
           teamReviewers.add(team.getSlug());
         }
-        new Requester(root).method("POST")
+        root.createRequester().method("POST")
                 .with("team_reviewers", teamReviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
@@ -408,7 +409,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *      SHA that pull request head must match to allow merge.
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-        new Requester(root).method("PUT")
+        root.createRequester().method("PUT")
                 .with("commit_message", msg)
                 .with("sha", sha)
                 .with("merge_method", method)
@@ -419,7 +420,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            new Requester(root).method("GET").to(getIssuesApiRoute(), this);
+            root.createRequester().method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

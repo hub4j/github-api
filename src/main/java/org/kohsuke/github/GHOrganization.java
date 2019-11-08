@@ -236,7 +236,7 @@ public class GHOrganization extends GHPerson {
      * Creates a new team and assigns the repositories.
      */
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Requester post = new Requester(root).with("name", name).with("permission", p);
+        Requester post = root.createRequester().with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());

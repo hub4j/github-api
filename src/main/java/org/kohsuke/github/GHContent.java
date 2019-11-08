@@ -184,7 +184,7 @@ public class GHContent implements Refreshable {
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = new Requester(root)
+        Requester requester = root.createRequester()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -209,7 +209,7 @@ public class GHContent implements Refreshable {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(root)
+        Requester requester = root.createRequester()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)

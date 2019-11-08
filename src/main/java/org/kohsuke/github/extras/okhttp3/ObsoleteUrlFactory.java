@@ -201,12 +201,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
     // If the Content-Length or Transfer-Encoding headers disagree with the response code, the
     // response is malformed. For best compatibility, we honor the headers.
-    if (contentLength(response.headers()) != -1
-        || "chunked".equalsIgnoreCase(response.header("Transfer-Encoding"))) {
-      return true;
-    }
-
-    return false;
+    return contentLength(response.headers()) != -1
+        || "chunked".equalsIgnoreCase(response.header("Transfer-Encoding"));
   }
 
   static long contentLength(Headers headers) {

@@ -74,7 +74,7 @@ public class GHBranchProtection {
     }
 
     private Requester requester() {
-        return new Requester(root).withPreview(ZZZAX);
+        return root.createRequester().withPreview(ZZZAX);
     }
 
     public static class EnforceAdmins {

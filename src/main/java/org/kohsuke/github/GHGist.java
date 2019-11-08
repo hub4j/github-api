@@ -126,11 +126,11 @@ public class GHGist extends GHObject {
     }
 
     public void star() throws IOException {
-        new Requester(root).method("PUT").to(getApiTailUrl("star"));
+        root.createRequester().method("PUT").to(getApiTailUrl("star"));
     }
 
     public void unstar() throws IOException {
-        new Requester(root).method("DELETE").to(getApiTailUrl("star"));
+        root.createRequester().method("DELETE").to(getApiTailUrl("star"));
     }
 
     public boolean isStarred() throws IOException {
@@ -141,7 +141,7 @@ public class GHGist extends GHObject {
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return new Requester(root).to(getApiTailUrl("forks"),GHGist.class).wrapUp(root);
+        return root.createRequester().to(getApiTailUrl("forks"),GHGist.class).wrapUp(root);
     }
 
     public PagedIterable<GHGist> listForks() {
@@ -156,7 +156,7 @@ public class GHGist extends GHObject {
      * Deletes this gist.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to("/gists/" + id);
+        root.createRequester().method("DELETE").to("/gists/" + id);
     }
 
     /**

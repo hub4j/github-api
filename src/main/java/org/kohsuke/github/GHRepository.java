@@ -24,9 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +51,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
-import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -299,8 +295,8 @@ public class GHRepository extends GHObject {
      *      The SHA1 value to set this reference to
      */
     public GHRef createRef(String name, String sha) throws IOException {
-        return new Requester(root)
-                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class).wrap(root);
+        return root.createRequester()
+            .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class).wrap(root);
     }
 
     /**
@@ -566,19 +562,19 @@ public class GHRepository extends GHObject {
 
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         for (GHUser user : users) {
-            new Requester(root).method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
+            root.createRequester().method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
         }
     }
 
     public void setEmailServiceHook(String address) throws IOException {
         Map<String, String> config = new HashMap<String, String>();
         config.put("address", address);
-        new Requester(root).method("POST").with("name", "email").with("config", config).with("active", true)
+        root.createRequester().method("POST").with("name", "email").with("config", config).with("active", true)
                 .to(getApiTailUrl("hooks"));
     }
 
     private void edit(String key, String value) throws IOException {
-        Requester requester = new Requester(root);
+        Requester requester = root.createRequester();
         if (!key.equals("name"))
             requester.with("name", name);   // even when we don't change the name, we need to send it in
         requester.with(key, value).method("PATCH").to(getApiTailUrl(""));
@@ -642,7 +638,7 @@ public class GHRepository extends GHObject {
      */
     public void delete() throws IOException {
         try {
-            new Requester(root).method("DELETE").to(getApiTailUrl(""));
+            root.createRequester().method("DELETE").to(getApiTailUrl(""));
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916").initCause(x);
         }
@@ -704,7 +700,7 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository fork() throws IOException {
-        new Requester(root).method("POST").to(getApiTailUrl("forks"), null);
+        root.createRequester().method("POST").to(getApiTailUrl("forks"), null);
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -726,7 +722,7 @@ public class GHRepository extends GHObject {
      *      Newly forked repository that belong to you.
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        new Requester(root).to(getApiTailUrl("forks?org="+org.getLogin()));
+        root.createRequester().to(getApiTailUrl("forks?org="+org.getLogin()));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i=0; i<10; i++) {
@@ -841,8 +837,8 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body,
                                            boolean maintainerCanModify, boolean draft) throws IOException {
-        return new Requester(root)
-                .withPreview(SHADOW_CAT)
+        return root.createRequester()
+            .withPreview(SHADOW_CAT)
                 .with("title",title)
                 .with("head",head)
                 .with("base",base)
@@ -1152,8 +1148,8 @@ public class GHRepository extends GHObject {
      *      Optinal commit status context.
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description, String context) throws IOException {
-        return new Requester(root)
-                .with("state", state)
+        return root.createRequester()
+            .with("state", state)
                 .with("target_url", targetUrl)
                 .with("description", description)
                 .with("context", context)
@@ -1526,13 +1522,13 @@ public class GHRepository extends GHObject {
     }
 
     public GHMilestone createMilestone(String title, String description) throws IOException {
-        return new Requester(root)
-                .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
+        return root.createRequester()
+            .with("title", title).with("description", description).method("POST").to(getApiTailUrl("milestones"), GHMilestone.class).wrap(this);
     }
 
     public GHDeployKey addDeployKey(String title,String key) throws IOException {
-         return new Requester(root)
-         .with("title", title).with("key", key).method("POST").to(getApiTailUrl("keys"), GHDeployKey.class).wrap(this);
+         return root.createRequester()
+             .with("title", title).with("key", key).method("POST").to(getApiTailUrl("keys"), GHDeployKey.class).wrap(this);
 
     }
 
@@ -1580,7 +1576,7 @@ public class GHRepository extends GHObject {
      * Subscribes to this repository to get notifications.
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(root)
+        return root.createRequester()
             .with("subscribed", subscribed)
             .with("ignored", ignored)
             .method("PUT").to(getApiTailUrl("subscription"), GHSubscription.class).wrapUp(this);
@@ -1677,8 +1673,8 @@ public class GHRepository extends GHObject {
      */
     public Reader renderMarkdown(String text, MarkdownMode mode) throws IOException {
         return new InputStreamReader(
-            new Requester(root)
-                    .with("text", text)
+            root.createRequester()
+                .with("text", text)
                     .with("mode",mode==null?null:mode.toString())
                     .with("context", getFullName())
                     .asStream("/markdown"),
@@ -1764,7 +1760,7 @@ public class GHRepository extends GHObject {
      * See https://developer.github.com/v3/repos/#replace-all-topics-for-a-repository
      */
     public void setTopics(List<String> topics) throws IOException {
-        Requester requester = new Requester(root);
+        Requester requester = root.createRequester();
         requester.with("names", topics);
         requester.method("PUT").withPreview(MERCY).to(getApiTailUrl("topics"));
     }

@@ -82,16 +82,16 @@ public class GHCommitComment extends GHObject implements Reactable {
      * Updates the body of the commit message.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root)
-                .with("body", body)
+        owner.root.createRequester()
+            .with("body", body)
                 .method("PATCH").to(getApiTail(), GHCommitComment.class);
         this.body = body;
     }
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
+        return owner.root.createRequester()
+            .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.root);
     }
@@ -109,7 +109,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * Deletes this comment.
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiTail());
+        owner.root.createRequester().method("DELETE").to(getApiTail());
     }
 
     private String getApiTail() {

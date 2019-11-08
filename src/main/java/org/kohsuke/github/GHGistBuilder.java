@@ -17,7 +17,7 @@ public class GHGistBuilder {
 
     public GHGistBuilder(GitHub root) {
         this.root = root;
-        req = new Requester(root);
+        req = root.createRequester();
     }
 
     public GHGistBuilder description(String desc) {

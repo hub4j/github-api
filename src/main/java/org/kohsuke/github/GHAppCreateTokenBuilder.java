@@ -22,7 +22,7 @@ public class GHAppCreateTokenBuilder {
     /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
-        this.builder = new Requester(root);
+        this.builder = root.createRequester();
         this.builder.withPermissions("permissions",permissions);
     }
 

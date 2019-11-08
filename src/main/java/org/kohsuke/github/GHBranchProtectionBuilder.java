@@ -203,7 +203,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return new Requester(branch.getRoot()).withPreview(LUKE_CAGE);
+        return branch.getRoot().createRequester().withPreview(LUKE_CAGE);
     }
 
     private static class Restrictions {

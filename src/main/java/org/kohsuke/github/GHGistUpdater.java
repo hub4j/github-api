@@ -55,6 +55,7 @@ public class GHGistUpdater {
         builder._with("files", files);
         return builder
                 .method("PATCH")
-                .to(base.getApiTailUrl(""), GHGist.class).wrap(base.owner);
+                .inject("owner", base.owner)
+                .to(base.getApiTailUrl(""), GHGist.class);
     }
 }

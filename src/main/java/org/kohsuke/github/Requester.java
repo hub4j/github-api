@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
@@ -76,6 +77,7 @@ class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
+    private final InjectableValues.Std inject = new InjectableValues.Std();
 
     /**
      * Request method.
@@ -102,6 +104,8 @@ class Requester {
 
     Requester(GitHub root) {
         this.root = root;
+        inject.addValue("owner", null);
+        inject.addValue(GitHub.class.getName(), root);
     }
 
     /**
@@ -233,6 +237,11 @@ class Requester {
      */
     /*package*/ Requester inBody() {
         forceBody = true;
+        return this;
+    }
+
+    public Requester inject(String key, Object value) {
+        inject.addValue(key, value);
         return this;
     }
 
@@ -676,12 +685,14 @@ class Requester {
             String data = IOUtils.toString(r);
             if (type!=null)
                 try {
-                    return setResponseHeaders(MAPPER.readValue(data, type));
+                    T result = MAPPER.reader(inject).forType(type).readValue(data);
+                    return setResponseHeaders(result);
                 } catch (JsonMappingException e) {
                     throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
                 }
             if (instance!=null) {
-                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
+                T result = MAPPER.reader(inject).withValueToUpdate(instance).readValue(data);
+                return setResponseHeaders(result);
             }
             return null;
         } catch (FileNotFoundException e) {

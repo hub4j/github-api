@@ -1,6 +1,10 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -20,8 +24,11 @@ import java.util.Map.Entry;
  * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
 public class GHGist extends GHObject {
-    /*package almost final*/ GHUser owner;
-    /*package almost final*/ GitHub root;
+
+    GHUser owner;
+
+    @JacksonInject
+    GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
@@ -39,9 +46,15 @@ public class GHGist extends GHObject {
     /**
      * User that owns this Gist.
      */
+    @JacksonInject(value = "owner")
+    @JsonProperty
     public GHUser getOwner() throws IOException {
         return root.intern(owner);
     }
+    public void setOwner(GHUser owner) {
+        this.owner = root.getUser(owner);
+    }
+
 
     public String getForksUrl() {
         return forks_url;
@@ -93,28 +106,16 @@ public class GHGist extends GHObject {
         return Collections.unmodifiableMap(files);
     }
 
-    /*package*/ GHGist wrapUp(GHUser owner) {
-        this.owner = owner;
-        this.root = owner.root;
-        wrapUp();
-        return this;
-    }
-
-    /**
-     * Used when caller obtains {@link GHGist} without knowing its owner.
-     * A partially constructed owner object is interned.
-     */
-    /*package*/ GHGist wrapUp(GitHub root) {
-        this.owner = root.getUser(owner);
-        this.root = root;
-        wrapUp();
-        return this;
-    }
-
-    private void wrapUp() {
+    @JsonSetter
+    void setFiles(Map<String,GHGistFile> files) {
         for (Entry<String, GHGistFile> e : files.entrySet()) {
             e.getValue().fileName = e.getKey();
         }
+        this.files.putAll(files);
+    }
+
+    /*package*/ GHGist wrapUp(GHUser owner) {
+        return this;
     }
 
     String getApiTailUrl(String tail) {
@@ -141,7 +142,7 @@ public class GHGist extends GHObject {
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return new Requester(root).to(getApiTailUrl("forks"),GHGist.class).wrapUp(root);
+        return new Requester(root).to(getApiTailUrl("forks"),GHGist.class);
     }
 
     public PagedIterable<GHGist> listForks() {
@@ -149,7 +150,7 @@ public class GHGist extends GHObject {
             .asPagedIterable(
                 getApiTailUrl("forks"),
                 GHGist[].class,
-                item -> item.wrapUp(root) );
+                null);
     }
 
     /**
@@ -180,9 +181,4 @@ public class GHGist extends GHObject {
         return id.hashCode();
     }
 
-    GHGist wrap(GHUser owner) {
-        this.owner = owner;
-        this.root = owner.root;
-        return this;
-    }
 }

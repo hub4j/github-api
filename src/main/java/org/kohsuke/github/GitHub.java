@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
@@ -608,7 +609,7 @@ public class GitHub {
      * Gets a single gist by ID.
      */
     public GHGist getGist(String id) throws IOException {
-        return retrieve().to("/gists/"+id,GHGist.class).wrapUp(this);
+        return retrieve().to("/gists/"+id,GHGist.class);
     }
 
     public GHGistBuilder createGist() {
@@ -623,7 +624,9 @@ public class GitHub {
      * to know the type of the payload you are expecting.
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
-        T t = MAPPER.readValue(r, type);
+        InjectableValues.Std inject = new InjectableValues.Std();
+        inject.addValue(GitHub.class.getName(), this);
+        T t = MAPPER.reader(inject).forType(type).readValue(r);
         t.wrapUp(this);
         return t;
     }

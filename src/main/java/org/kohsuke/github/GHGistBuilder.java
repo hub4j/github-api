@@ -43,6 +43,6 @@ public class GHGistBuilder {
      */
     public GHGist create() throws IOException {
         req._with("files",files);
-        return req.to("/gists",GHGist.class).wrapUp(root);
+        return req.to("/gists",GHGist.class);
     }
 }

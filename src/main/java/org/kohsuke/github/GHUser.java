@@ -172,10 +172,11 @@ public class GHUser extends GHPerson {
      */
     public PagedIterable<GHGist> listGists() throws IOException {
         return root.retrieve()
+            .inject("owner", this)
             .asPagedIterable(
                 String.format("/users/%s/gists", login),
                 GHGist[].class,
-                item -> item.wrapUp(GHUser.this) );
+                null);
     }
 
     @Override

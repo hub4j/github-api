@@ -220,14 +220,16 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
   }
 
   static String responseSourceHeader(Response response) {
-    if (response.networkResponse() == null) {
+    Response networkResponse = response.networkResponse();
+    if (networkResponse == null) {
       return response.cacheResponse() == null
           ? "NONE"
           : "CACHE " + response.code();
+    } else {
+      return response.cacheResponse() == null
+          ? "NETWORK " + response.code()
+          : "CONDITIONAL_CACHE " + networkResponse.code();
     }
-    return response.cacheResponse() == null
-        ? "NETWORK " + response.code()
-        : "CONDITIONAL_CACHE " + response.networkResponse().code();
   }
 
   static String statusLineToString(Response response) {
@@ -351,6 +353,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
       call.cancel();
     }
 
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+      justification = "hasBody checks for this")
     @Override public InputStream getErrorStream() {
       try {
         Response response = getResponse(true);
@@ -422,6 +426,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
       return toMultimap(requestHeaders.build(), null);
     }
 
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+        justification = "Good request will have body")
     @Override public InputStream getInputStream() throws IOException {
       if (!doInput) {
         throw new ProtocolException("This protocol does not support input");
@@ -450,6 +456,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
       return requestBody.outputStream;
     }
 
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+        justification = "usingProxy() handles this")
     @Override public Permission getPermission() {
       URL url = getURL();
       String hostname = url.getHost();
@@ -714,6 +722,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         }
       }
 
+      @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+          justification = "If we get here there is a connection and request.body() is checked")
       @Override public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 

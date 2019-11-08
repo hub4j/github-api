@@ -31,6 +31,7 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -51,11 +52,7 @@ public interface Requester {
 
     Requester with(String key, long value);
 
-    Requester with(String key, Integer value);
-
     Requester with(String key, boolean value);
-
-    Requester with(String key, Boolean value);
 
     Requester with(String key, Enum e);
 
@@ -65,17 +62,11 @@ public interface Requester {
 
     Requester with(String key, Map<String, String> value);
 
-    Requester withPermissions(String key, Map<String, GHPermissionType> value);
-
     Requester with(@WillClose InputStream body);
 
+    Requester with(String key, Object value);
+
     Requester withNullable(String key, Object value);
-
-
-    Requester withLogins(String key, Collection<GHUser> users);
-
-
-    Requester _with(String key, Object value);
 
     /**
      * Unlike {@link #with(String, String)}, overrides the existing value
@@ -95,6 +86,11 @@ public interface Requester {
      */
     Requester inBody();
 
+    /**
+     *
+     * @param tailApiUrl
+     * @throws IOException
+     */
     void to(String tailApiUrl) throws IOException;
 
     /**
@@ -125,4 +121,17 @@ public interface Requester {
     <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize);
 
     String getResponseHeader(String header);
+
+    /**
+     * Transform Java Enum into Github constants given its conventions
+     * @param en - Enum to be transformed
+     * @return a String containing the value of a Github constant
+     */
+    static String transformEnum(Enum en){
+        // by convention Java constant names are upper cases, but github uses
+        // lower-case constants. GitHub also uses '-', which in Java we always
+        // replace by '_'
+        return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
+    }
+
 }

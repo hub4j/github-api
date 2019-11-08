@@ -93,7 +93,7 @@ public class GHMilestone extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester()._with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void setTitle(String title) throws IOException {

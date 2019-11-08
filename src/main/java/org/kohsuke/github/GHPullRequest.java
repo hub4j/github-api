@@ -356,8 +356,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
+        List<String> logins = getLogins(reviewers);
         root.createRequester().method("POST")
-                .withLogins("reviewers", reviewers)
+                .with("reviewers", logins)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
 

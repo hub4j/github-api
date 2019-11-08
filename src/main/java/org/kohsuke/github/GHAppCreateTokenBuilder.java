@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class GHAppCreateTokenBuilder {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequester();
-        this.builder.withPermissions("permissions",permissions);
+        withPermissions(builder, permissions);
     }
 
     /**
@@ -48,6 +49,14 @@ public class GHAppCreateTokenBuilder {
     @Preview @Deprecated
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(root);
+    }
+
+    private static Requester withPermissions(Requester builder, Map<String, GHPermissionType> value) {
+        Map<String,String> retMap = new HashMap<String, String>();
+        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
+            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
+        }
+        return builder.with("permissions", retMap);
     }
 
 }

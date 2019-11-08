@@ -175,11 +175,11 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester()._with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.createRequester()._with(key, value).method("PATCH").to(getIssuesApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getIssuesApiRoute());
     }
 
     /**
@@ -319,7 +319,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+        List<String> logins = getLogins(assignees);
+        root.retrieve().method("POST").with(ASSIGNEES,logins).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -327,7 +328,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        root.createRequester().withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
+        List<String> logins = getLogins(assignees);
+        root.createRequester().with(ASSIGNEES, logins).method("PATCH").to(getIssuesApiRoute());
     }
 
     public void removeAssignees(GHUser... assignees) throws IOException {
@@ -335,7 +337,16 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        List<String> logins = getLogins(assignees);
+        root.retrieve().method("DELETE").with(ASSIGNEES,logins).inBody().to(getIssuesApiRoute()+"/assignees",this);
+    }
+
+    protected static List<String> getLogins(Collection<GHUser> users) {
+        List<String> names = new ArrayList<String>(users.size());
+        for (GHUser a : users) {
+            names.add(a.getLogin());
+        }
+        return names;
     }
 
     protected String getApiRoute() {

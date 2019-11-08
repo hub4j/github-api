@@ -42,7 +42,7 @@ public class GHGistBuilder {
      * Creates a Gist based on the parameters specified thus far.
      */
     public GHGist create() throws IOException {
-        req._with("files",files);
+        req.with("files",files);
         return req.to("/gists",GHGist.class).wrapUp(root);
     }
 }

@@ -110,7 +110,7 @@ public class GHProjectCard extends GHObject {
 	}
 
 	private void edit(String key, Object value) throws IOException {
-		root.createRequester().withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
+		root.createRequester().withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
 	}
 
 	protected String getApiRoute() {

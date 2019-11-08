@@ -74,7 +74,7 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester()._with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void delete() throws IOException {

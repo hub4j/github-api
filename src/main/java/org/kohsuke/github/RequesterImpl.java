@@ -121,57 +121,38 @@ class RequesterImpl implements Requester {
     }
 
     public Requester with(String key, int value) {
-        return _with(key, value);
+        return with(key, (Object)value);
     }
 
     public Requester with(String key, long value) {
-        return _with(key, value);
+        return with(key, (Object)value);
     }
 
     public Requester with(String key, Integer value) {
         if (value!=null)
-            _with(key, value);
+            with(key, (Object)value);
         return this;
     }
 
     public Requester with(String key, boolean value) {
-        return _with(key, value);
-    }
-    public Requester with(String key, Boolean value) {
-        return _with(key, value);
+        return with(key, (Object)value);
     }
 
     public Requester with(String key, Enum e) {
-        if (e==null)    return _with(key, null);
-        return with(key, transformEnum(e));
+        if (e==null)    return with(key, (Object)null);
+        return with(key, Requester.transformEnum(e));
     }
 
     public Requester with(String key, String value) {
-        return _with(key, value);
+        return with(key, (Object)value);
     }
 
     public Requester with(String key, Collection<?> value) {
-        return _with(key, value);
-    }
-
-    public Requester withLogins(String key, Collection<GHUser> users) {
-        List<String> names = new ArrayList<String>(users.size());
-        for (GHUser a : users) {
-            names.add(a.getLogin());
-        }
-        return with(key,names);
+        return with(key, (Object)value);
     }
 
     public Requester with(String key, Map<String, String> value) {
-        return _with(key, value);
-    }
-
-    public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
-        Map<String,String> retMap = new HashMap<String, String>();
-        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
-            retMap.put(entry.getKey(), transformEnum(entry.getValue()));
-        }
-        return _with(key, retMap);
+        return with(key, (Object)value);
     }
 
     public Requester with(@WillClose/*later*/ InputStream body) {
@@ -184,7 +165,7 @@ class RequesterImpl implements Requester {
 		return this;
 	}
 
-    public Requester _with(String key, Object value) {
+    public Requester with(String key, Object value) {
         if (value!=null) {
             args.add(new Entry(key,value));
         }
@@ -201,7 +182,7 @@ class RequesterImpl implements Requester {
                 return this;
             }
         }
-        return _with(key,value);
+        return with(key,value);
     }
 
     public Requester method(String method) {
@@ -754,18 +735,6 @@ class RequesterImpl implements Requester {
         }
 
         throw e;
-    }
-
-    /**
-     * Transform Java Enum into Github constants given its conventions
-     * @param en - Enum to be transformed
-     * @return a String containing the value of a Github constant
-     */
-    private String transformEnum(Enum en){
-        // by convention Java constant names are upper cases, but github uses
-        // lower-case constants. GitHub also uses '-', which in Java we always
-        // replace by '_'
-        return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

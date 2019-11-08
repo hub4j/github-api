@@ -66,7 +66,7 @@ public class GHCommitBuilder {
      * Configures the author of this commit.
      */
     public GHCommitBuilder author(String name, String email, Date date) {
-        req._with("author", new UserInfo(name, email, date));
+        req.with("author", new UserInfo(name, email, date));
         return this;
     }
 
@@ -74,7 +74,7 @@ public class GHCommitBuilder {
      * Configures the committer of this commit.
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
-        req._with("committer", new UserInfo(name, email, date));
+        req.with("committer", new UserInfo(name, email, date));
         return this;
     }
 
@@ -86,7 +86,7 @@ public class GHCommitBuilder {
      * Creates a blob based on the parameters specified thus far.
      */
     public GHCommit create() throws IOException {
-        req._with("parents", parents);
+        req.with("parents", parents);
         return req.method("POST").to(getApiTail(), GHCommit.class).wrapUp(repo);
     }
 }

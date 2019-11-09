@@ -70,7 +70,6 @@ import static org.kohsuke.github.Previews.*;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHRepository extends GHObject {
-    /*package almost final*/ GitHub root;
 
     private String description, homepage, name, full_name;
     private String html_url;    // this is the UI

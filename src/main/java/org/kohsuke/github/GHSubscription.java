@@ -10,11 +10,10 @@ import java.util.Date;
  * @see GHRepository#getSubscription()
  * @see GHThread#getSubscription()
  */
-public class GHSubscription {
+public class GHSubscription extends GHObjectBase {
     private String created_at, url, repository_url, reason;
     private boolean subscribed, ignored;
 
-    private GitHub root;
     private GHRepository repo;
 
     public Date getCreatedAt() {

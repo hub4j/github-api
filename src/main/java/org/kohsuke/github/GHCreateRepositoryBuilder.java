@@ -8,8 +8,7 @@ import java.net.URL;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCreateRepositoryBuilder {
-    private final GitHub root;
+public class GHCreateRepositoryBuilder extends GHObjectBase{
     protected final Requester builder;
     private final String apiUrlTail;
 

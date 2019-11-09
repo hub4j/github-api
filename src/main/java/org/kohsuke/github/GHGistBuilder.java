@@ -10,8 +10,7 @@ import java.util.LinkedHashMap;
  * @author Kohsuke Kawaguchi
  * @see GitHub#createGist()
  */
-public class GHGistBuilder {
-    private final GitHub root;
+public class GHGistBuilder extends GHObjectBase {
     private final Requester req;
     private final LinkedHashMap<String,Object> files = new LinkedHashMap<String, Object>();
 

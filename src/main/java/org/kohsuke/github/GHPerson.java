@@ -17,8 +17,6 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
-    /*package almost final*/ GitHub root;
-
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url, gravatar_id;
 

@@ -5,7 +5,6 @@ import java.util.Locale;
 
 public class GHDeploymentStatus extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     protected GHUser creator;
     protected String state;
     protected String description;

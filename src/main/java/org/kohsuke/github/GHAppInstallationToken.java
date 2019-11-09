@@ -17,8 +17,7 @@ import java.util.Map;
  * @see GHAppInstallation#createToken(Map)
  */
 
-public class GHAppInstallationToken {
-    private GitHub root;
+public class GHAppInstallationToken extends GHObjectBase{
 
     private String token;
     protected String expires_at;

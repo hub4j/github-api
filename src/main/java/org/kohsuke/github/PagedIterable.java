@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class PagedIterable<T> implements Iterable<T> {
+public abstract class PagedIterable<T> extends GHObjectBase implements Iterable<T> {
     /**
      * Page size. 0 is default.
      */

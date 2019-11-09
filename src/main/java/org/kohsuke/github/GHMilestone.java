@@ -11,7 +11,6 @@ import java.util.Locale;
  *
  */
 public class GHMilestone extends GHObject {
-    GitHub root;
     GHRepository owner;
 
     GHUser creator;

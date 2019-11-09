@@ -27,9 +27,6 @@ public class GHGist extends GHObject {
 
     GHUser owner;
 
-    @JacksonInject
-    GitHub root;
-
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
     @JsonProperty("public")

@@ -13,8 +13,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  *
  * @see GHAppInstallation#createToken(Map)
  */
-public class GHAppCreateTokenBuilder {
-    private final GitHub root;
+public class GHAppCreateTokenBuilder extends GHObjectBase {
     protected final Requester builder;
     private final String apiUrlTail;
 

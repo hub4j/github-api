@@ -671,7 +671,22 @@ public class GitHub {
 
         return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
     }
-
+    /**
+     * Creates a new authorization.
+     *
+     * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
+     *
+     * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
+     */
+    public GHAuthorization createTokenOtp(Collection<String> scope, String note, String noteUrl, String OTP) throws IOException{
+        Requester requester = new Requester(this)
+                .with("scopes", scope)
+                .with("note", note)
+                .with("note_url", noteUrl);
+        // Add the OTP from the user
+        requester.setHeader("x-github-otp", OTP);
+        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+    }
     /**
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
      */

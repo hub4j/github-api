@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
-import static org.kohsuke.github.Previews.*;
-
 /**
  * A branch in a repository.
  *
@@ -34,7 +32,7 @@ public class GHBranch extends GHObjectBase {
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     /**
@@ -65,7 +63,7 @@ public class GHBranch extends GHObjectBase {
     }
 
     public GHBranchProtection getProtection() throws IOException {
-        return root.retrieve().to(protection_url, GHBranchProtection.class).wrap(this);
+        return super.getRoot().retrieve().to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -79,7 +77,7 @@ public class GHBranch extends GHObjectBase {
      * Disables branch protection and allows anyone with push access to push changes.
      */
     public void disableProtection() throws IOException {
-        new Requester(root).method("DELETE").to(protection_url);
+        new Requester(super.getRoot()).method("DELETE").to(protection_url);
     }
 
     /**

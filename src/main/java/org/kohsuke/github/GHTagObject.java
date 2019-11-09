@@ -29,7 +29,7 @@ public class GHTagObject extends GHObjectBase{
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     public String getTag() {

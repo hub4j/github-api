@@ -19,7 +19,7 @@ public class GHMilestone extends GHObject {
     protected String closed_at;
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
     
     public GHRepository getOwner() {
@@ -27,7 +27,7 @@ public class GHMilestone extends GHObject {
     }
     
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return getRoot().intern(creator);
     }
     
     public Date getDueOn() {
@@ -88,11 +88,11 @@ public class GHMilestone extends GHObject {
      * Deletes this milestone.
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(getApiRoute());
+        getRoot().retrieve().method("DELETE").to(getApiRoute());
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
+        new Requester(getRoot())._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void setTitle(String title) throws IOException {

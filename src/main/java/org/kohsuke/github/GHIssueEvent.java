@@ -50,7 +50,7 @@ public class GHIssueEvent extends GHObjectBase {
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     public GHIssue getIssue() {

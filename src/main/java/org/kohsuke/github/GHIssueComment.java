@@ -72,7 +72,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Gets the user who posted this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
+        return owner == null || owner.getRoot().isOffline() ? user : owner.getRoot().getUser(user.getLogin());
     }
     
     @Override
@@ -88,7 +88,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Updates the body of the issue comment.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        new Requester(owner.getRoot()).with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
         this.body = body;
     }
 
@@ -96,25 +96,25 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Deletes this issue comment.
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiRoute());
+        new Requester(owner.getRoot()).method("DELETE").to(getApiRoute());
     }
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
+        return new Requester(owner.getRoot())
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.getRoot());
     }
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
+        return owner.getRoot().retrieve()
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",
                 GHReaction[].class,
-                item -> item.wrap(owner.root) );
+                item -> item.wrap(owner.getRoot()) );
     }
 
     private String getApiRoute() {

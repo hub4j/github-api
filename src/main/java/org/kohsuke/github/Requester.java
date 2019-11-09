@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -239,6 +240,10 @@ class Requester extends GHObjectBase {
         return this;
     }
 
+    public Requester inject(@Nonnull Object value) {
+        return inject(value.getClass().getName(), value);
+    }
+
     public Requester inject(String key, Object value) {
         inject.addValue(key, value);
         return this;
@@ -290,7 +295,7 @@ class Requester extends GHObjectBase {
         }
 
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -329,7 +334,7 @@ class Requester extends GHObjectBase {
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             method("GET");
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -345,7 +350,7 @@ class Requester extends GHObjectBase {
 
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -402,7 +407,7 @@ class Requester extends GHObjectBase {
         }
         try {
             observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
-            root.updateRateLimit(observed);
+            getRoot().updateRateLimit(observed);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
@@ -446,6 +451,10 @@ class Requester extends GHObjectBase {
 
     private boolean isMethodWithBody() {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
+    }
+
+    /*package*/  <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type) {
+        return new PagedIterableWithConsumer(type, this, tailApiUrl, null);
     }
 
     /*package*/  <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
@@ -510,7 +519,7 @@ class Requester extends GHObjectBase {
         }
 
         try {
-            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
+            return new PagingIterator<T>(type, tailApiUrl, getRoot().getApiURL(s.toString()));
         } catch (IOException e) {
             throw new GHException("Unable to build github Api URL",e);
         }
@@ -602,14 +611,14 @@ class Requester extends GHObjectBase {
 
     private void setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+            LOGGER.log(FINE, "GitHub API request [" + (getRoot().login == null ? "anonymous" : getRoot().login) + "]: " + method + " " + url.toString());
         }
-        uc = root.getConnector().connect(url);
+        uc = getRoot().getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        if (root.encodedAuthorization!=null)
-            uc.setRequestProperty("Authorization", root.encodedAuthorization);
+        if (getRoot().encodedAuthorization!=null)
+            uc.setRequestProperty("Authorization", getRoot().encodedAuthorization);
 
         for (Map.Entry<String, String> e : headers.entrySet()) {
             String v = e.getValue();
@@ -772,14 +781,14 @@ class Requester extends GHObjectBase {
             throw e;
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            root.rateLimitHandler.onError(e,uc);
+            getRoot().rateLimitHandler.onError(e,uc);
             return;
         }
 
         // Retry-After is not documented but apparently that field exists
         if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
             uc.getHeaderField("Retry-After") != null) {
-            this.root.abuseLimitHandler.onError(e,uc);
+            this.getRoot().abuseLimitHandler.onError(e,uc);
             return;
         }
 

@@ -56,7 +56,7 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
             public T[] next() {
                 SearchResult<T> v = base.next();
                 if (result==null)   result = v;
-                return v.getItems(root);
+                return v.getItems(getRoot());
             }
 
             public void remove() {

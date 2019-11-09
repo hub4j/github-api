@@ -1,10 +1,8 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -46,10 +44,10 @@ public class GHGist extends GHObject {
     @JacksonInject(value = "owner")
     @JsonProperty
     public GHUser getOwner() throws IOException {
-        return root.intern(owner);
+        return getRoot().intern(owner);
     }
     public void setOwner(GHUser owner) {
-        this.owner = root.getUser(owner);
+        this.owner = getRoot().getUser(owner);
     }
 
 
@@ -124,26 +122,26 @@ public class GHGist extends GHObject {
     }
 
     public void star() throws IOException {
-        new Requester(root).method("PUT").to(getApiTailUrl("star"));
+        new Requester(getRoot()).method("PUT").to(getApiTailUrl("star"));
     }
 
     public void unstar() throws IOException {
-        new Requester(root).method("DELETE").to(getApiTailUrl("star"));
+        new Requester(getRoot()).method("DELETE").to(getApiTailUrl("star"));
     }
 
     public boolean isStarred() throws IOException {
-        return root.retrieve().asHttpStatusCode(getApiTailUrl("star"))/100==2;
+        return getRoot().retrieve().asHttpStatusCode(getApiTailUrl("star"))/100==2;
     }
 
     /**
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return new Requester(root).to(getApiTailUrl("forks"),GHGist.class);
+        return new Requester(getRoot()).to(getApiTailUrl("forks"),GHGist.class);
     }
 
     public PagedIterable<GHGist> listForks() {
-        return root.retrieve()
+        return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl("forks"),
                 GHGist[].class,
@@ -154,7 +152,7 @@ public class GHGist extends GHObject {
      * Deletes this gist.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to("/gists/" + id);
+        new Requester(getRoot()).method("DELETE").to("/gists/" + id);
     }
 
     /**

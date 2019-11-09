@@ -46,13 +46,16 @@ public class GHAppInstallation extends GHObject {
         return GitHub.parseURL(htmlUrl);
     }
 
+    @Override
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
+    @Override
     public void setRoot(GitHub root) {
         //TODO: needs fixing
         //this.root = root;
+        super.setRoot(root);
     }
 
     public GHUser getAccount() {
@@ -148,7 +151,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Preview @Deprecated
     public void deleteInstallation() throws IOException {
-        root.retrieve().method("DELETE").withPreview(GAMBIT).to(String.format("/app/installations/%d", id));
+        getRoot().retrieve().method("DELETE").withPreview(GAMBIT).to(String.format("/app/installations/%d", id));
     }
 
 
@@ -161,6 +164,6 @@ public class GHAppInstallation extends GHObject {
      */
     @Preview @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String,GHPermissionType> permissions){
-        return new GHAppCreateTokenBuilder(root,String.format("/app/installations/%d/access_tokens", id), permissions);
+        return new GHAppCreateTokenBuilder(getRoot(),String.format("/app/installations/%d/access_tokens", id), permissions);
     }
 }

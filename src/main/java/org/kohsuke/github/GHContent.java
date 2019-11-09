@@ -148,7 +148,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        root.retrieve().to(url, this);
+        getRoot().retrieve().to(url, this);
     }
 
     /**
@@ -158,7 +158,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return root.retrieve()
+        return getRoot().retrieve()
             .asPagedIterable(
                 url,
                 GHContent[].class,
@@ -182,7 +182,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = new Requester(root)
+        Requester requester = new Requester(getRoot())
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -207,7 +207,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(root)
+        Requester requester = new Requester(getRoot())
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -252,6 +252,6 @@ public class GHContent extends GHObjectBase implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.retrieve().to(url, this);
+        getRoot().retrieve().to(url, this);
     }
 }

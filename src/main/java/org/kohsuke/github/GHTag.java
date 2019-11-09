@@ -27,7 +27,7 @@ public class GHTag extends GHObjectBase {
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     public String getName() {

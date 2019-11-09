@@ -45,7 +45,7 @@ public class GHAuthorization extends GHObject {
     //private GHUser user;
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     public List<String> getScopes() {

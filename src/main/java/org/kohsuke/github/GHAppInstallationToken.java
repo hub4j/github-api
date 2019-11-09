@@ -26,15 +26,16 @@ public class GHAppInstallationToken extends GHObjectBase{
     @JsonProperty("repository_selection")
     private GHRepositorySelection repositorySelection;
 
-
-
+    @Override
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
+    @Override
     public void setRoot(GitHub root) {
         //TODO: needs fixing
         //this.root = root;
+        super.setRoot(root);
     }
 
     public Map<String, String> getPermissions() {

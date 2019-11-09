@@ -35,7 +35,7 @@ public class GHKey extends GHObjectBase {
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
     
     public boolean isVerified() {

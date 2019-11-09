@@ -82,7 +82,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Gets the user who posted this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        return owner.getRoot().getUser(user.getLogin());
     }
 
     public String getPath() {
@@ -116,7 +116,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Updates the comment.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
+        new Requester(owner.getRoot()).method("PATCH").with("body", body).to(getApiRoute(),this);
         this.body = body;
     }
 
@@ -124,14 +124,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Deletes this review comment.
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiRoute());
+        new Requester(owner.getRoot()).method("DELETE").to(getApiRoute());
     }
 
     /**
      * Create a new comment that replies to this comment.
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-        return new Requester(owner.root).method("POST")
+        return new Requester(owner.getRoot()).method("POST")
                 .with("body", body)
                 .with("in_reply_to", getId())
                 .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
@@ -140,19 +140,19 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
+        return new Requester(owner.getRoot())
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.getRoot());
     }
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
+        return owner.getRoot().retrieve()
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute() + "/reactions",
                 GHReaction[].class,
-                item -> item.wrap(owner.root) );
+                item -> item.wrap(owner.getRoot()) );
     }
 }

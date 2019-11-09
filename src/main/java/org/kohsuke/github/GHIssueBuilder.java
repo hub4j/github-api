@@ -15,7 +15,7 @@ public class GHIssueBuilder {
 
     GHIssueBuilder(GHRepository repo, String title) {
         this.repo = repo;
-        this.builder = new Requester(repo.root);
+        this.builder = new Requester(repo.getRoot());
         builder.with("title",title);
     }
 

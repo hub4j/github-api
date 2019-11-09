@@ -25,10 +25,6 @@ public abstract class GHPerson extends GHObject {
     protected String html_url;
     protected int followers,following,public_repos,public_gists;
 
-    /*package*/ GHPerson wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Fully populate the data by retrieving missing data.
      *
@@ -38,10 +34,10 @@ public abstract class GHPerson extends GHObject {
         if (created_at!=null) {
             return; // already populated
         }
-        if (root == null || root.isOffline()) {
+        if (getRoot() == null || getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve().to(url, this);
+        getRoot().retrieve().to(url, this);
     }
 
     /**
@@ -76,11 +72,11 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return root.retrieve()
+        return getRoot().retrieve()
             .asPagedIterable(
                 "/users/" + login + "/repos",
                 GHRepository[].class,
-                item -> item.wrap(root)
+                item -> item.wrap(getRoot())
             ).withPageSize(pageSize);
     }
 
@@ -101,7 +97,7 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = getRoot().retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -128,7 +124,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.retrieve().to("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+            return getRoot().retrieve().to("/repos/" + login + '/' + name, GHRepository.class).wrap(getRoot());
         } catch (FileNotFoundException e) {
             return null;
         }

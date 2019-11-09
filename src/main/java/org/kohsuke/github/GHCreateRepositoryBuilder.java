@@ -131,7 +131,7 @@ public class GHCreateRepositoryBuilder extends GHObjectBase{
      * Creates a repository with all the parameters.
      */
     public GHRepository create() throws IOException {
-        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(root);
+        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(getRoot());
     }
 
 }

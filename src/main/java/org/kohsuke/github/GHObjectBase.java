@@ -1,9 +1,9 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.GitHub;
+
+import javax.annotation.Nonnull;
 
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
@@ -12,14 +12,31 @@ import org.kohsuke.github.GitHub;
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public abstract class GHObjectBase {
 
-    @JacksonInject
-    final GitHub root;
+    /**
+     * Effectively final.
+     */
+    @Nonnull
+    private GitHub root;
 
     GHObjectBase() {
         this(GitHub.offline());
     }
 
-    GHObjectBase(GitHub root) {
+    GHObjectBase(@Nonnull GitHub root) {
         this.root = root;
     }
+
+    GitHub getRoot() {
+        return root;
+    }
+
+    /**
+     * Adding this setter to allow objects to override and hook in.
+     * @param root
+     */
+    @JacksonInject(value = "org.kohsuke.github.GitHub")
+    void setRoot(@Nonnull GitHub root) {
+        this.root = root;
+    }
+
 }

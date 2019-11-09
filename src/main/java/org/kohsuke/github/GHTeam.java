@@ -66,7 +66,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void setDescription(String description) throws IOException {
-        root.retrieve().method("PATCH")
+        getRoot().retrieve().method("PATCH")
                 .with("description", description)
                 .to(api(""));
     }
@@ -79,11 +79,10 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * Retrieves the current members.
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.retrieve()
+        return getRoot().retrieve()
             .asPagedIterable(
                 api("/members"),
-                GHUser[].class,
-                item -> item.wrapUp(root) );
+                GHUser[].class);
     }
 
     public Set<GHUser> getMembers() throws IOException {
@@ -95,7 +94,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            getRoot().retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -111,11 +110,11 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public PagedIterable<GHRepository> listRepositories() {
-        return root.retrieve()
+        return getRoot().retrieve()
             .asPagedIterable(
                 api("/repos"),
                 GHRepository[].class,
-                item -> item.wrap(root) );
+                item -> item.wrap(getRoot()) );
     }
 
     /**
@@ -126,7 +125,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
+        getRoot().retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**
@@ -140,7 +139,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT")
+        getRoot().retrieve().method("PUT")
                 .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
@@ -149,7 +148,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
+        getRoot().retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
@@ -157,20 +156,20 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        root.retrieve().method("PUT")
+        getRoot().retrieve().method("PUT")
                 .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        getRoot().retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
     
     /**
      * Deletes this team.
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(api(""));
+        getRoot().retrieve().method("DELETE").to(api(""));
     }
 
     private String api(String tail) {
@@ -184,6 +183,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        root.retrieve().to(api(""), this).wrapUp(root);
+        getRoot().retrieve().to(api(""), this).wrapUp(getRoot());
     }
 }

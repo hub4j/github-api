@@ -40,7 +40,7 @@ public class GHCommitPointer {
      * the {@link #getRepository()}.
      */
     public GHUser getUser() throws IOException {
-        if (user != null) return user.root.intern(user);
+        if (user != null) return user.getRoot().intern(user);
         return user;
     }
 

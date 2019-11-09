@@ -30,6 +30,7 @@ public abstract class GHObject extends GHObjectBase {
     protected String updated_at;
 
     /*package*/ GHObject() {
+
     }
 
     /**

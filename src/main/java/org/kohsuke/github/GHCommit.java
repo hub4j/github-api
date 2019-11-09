@@ -320,14 +320,14 @@ public class GHCommit {
 
     private GHUser resolveUser(User author) throws IOException {
         if (author==null || author.login==null) return null;
-        return owner.root.getUser(author.login);
+        return owner.getRoot().getUser(author.login);
     }
 
     /**
      * Lists up all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.retrieve()
+        return owner.getRoot().retrieve()
             .asPagedIterable(
                 String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
                 GHCommitComment[].class,
@@ -340,7 +340,7 @@ public class GHCommit {
      * I'm not sure how path/line/position parameters interact with each other.
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = new Requester(owner.root)
+        GHCommitComment r = new Requester(owner.getRoot())
                 .with("body",body)
                 .with("path",path)
                 .with("line",line)
@@ -372,7 +372,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files==null && stats==null)
-            owner.root.retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
+            owner.getRoot().retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

@@ -418,7 +418,7 @@ public class GitHub {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
             // TODO: Do not commit this without dealing with this.
-//            orig.root = this;
+            orig.setRoot(this);
             users.put(orig.getLogin(),orig);
             return orig;
         }
@@ -497,8 +497,7 @@ public class GitHub {
         return retrieve()
             .asPagedIterable(
                 "/users",
-                GHUser[].class,
-                item -> item.wrapUp(GitHub.this) );
+                GHUser[].class);
     }
 
     /**

@@ -68,7 +68,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * Gets the user who put this comment.
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.login);
+        return owner == null || owner.getRoot().isOffline() ? user : owner.getRoot().getUser(user.login);
     }
 
     /**
@@ -82,7 +82,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * Updates the body of the commit message.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root)
+        new Requester(owner.getRoot())
                 .with("body", body)
                 .method("PATCH").to(getApiTail(), GHCommitComment.class);
         this.body = body;
@@ -90,26 +90,26 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
+        return new Requester(owner.getRoot())
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.root);
+                .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.getRoot());
     }
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL)
+        return owner.getRoot().retrieve().withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiTail()+"/reactions",
                 GHReaction[].class,
-                item -> item.wrap(owner.root) );
+                item -> item.wrap(owner.getRoot()) );
     }
 
     /**
      * Deletes this comment.
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiTail());
+        new Requester(owner.getRoot()).method("DELETE").to(getApiTail());
     }
 
     private String getApiTail() {
@@ -119,8 +119,8 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
-        if (owner.root.isOffline()) {
-            user.wrapUp(owner.root);
+        if (owner.getRoot().isOffline()) {
+            user.wrapUp(owner.getRoot());
         }
         return this;
     }

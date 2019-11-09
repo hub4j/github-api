@@ -53,18 +53,18 @@ public class GHProject extends GHObject {
     }
 
     public GitHub getRoot() {
-        return root;
+        return super.getRoot();
     }
 
     public GHObject getOwner() throws IOException {
         if(owner == null) {
             try {
                 if(owner_url.contains("/orgs/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(getRoot());
                 } else if(owner_url.contains("/users/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(getRoot());
                 } else if(owner_url.contains("/repos/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(getRoot());
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -111,7 +111,7 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
+        new Requester(getRoot()).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     protected String getApiRoute() {
@@ -158,12 +158,12 @@ public class GHProject extends GHObject {
     }
 
     public void delete() throws IOException {
-        new Requester(root).withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        new Requester(getRoot()).withPreview(INERTIA).method("DELETE").to(getApiRoute());
     }
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.retrieve()
+        return getRoot().retrieve()
             .withPreview(INERTIA)
             .asPagedIterable(
                 String.format("/projects/%d/columns", id),
@@ -172,7 +172,7 @@ public class GHProject extends GHObject {
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.retrieve().method("POST")
+        return getRoot().retrieve().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);

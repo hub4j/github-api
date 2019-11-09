@@ -68,13 +68,13 @@ public class GHEventInfo extends GHObjectBase {
     @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
             justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
-        return root.getRepository(repo.name);
+        return getRoot().getRepository(repo.name);
     }
     
     @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
             justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
-        return root.getUser(actor.getLogin());
+        return getRoot().getUser(actor.getLogin());
     }
 
     /**
@@ -87,7 +87,7 @@ public class GHEventInfo extends GHObjectBase {
     @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
             justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
-        return (org==null || org.getLogin()==null) ? null : root.getOrganization(org.getLogin());
+        return (org==null || org.getLogin()==null) ? null : getRoot().getOrganization(org.getLogin());
     }
 
     /**
@@ -99,9 +99,9 @@ public class GHEventInfo extends GHObjectBase {
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
         InjectableValues.Std inject = new InjectableValues.Std();
-        inject.addValue(GitHub.class.getName(), this.root);
+        inject.addValue(GitHub.class.getName(), this.getRoot());
         T v = GitHub.MAPPER.reader(inject).forType(type).readValue(payload.traverse());
-        v.wrapUp(root);
+        v.wrapUp(getRoot());
         return v;
     }
 }

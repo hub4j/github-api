@@ -138,7 +138,7 @@ public class GHLicense extends GHObject {
     protected synchronized void populate() throws IOException {
         if (description!=null)    return; // already populated
 
-        root.retrieve().to(url, this);
+        getRoot().retrieve().to(url, this);
     }
 
     @Override

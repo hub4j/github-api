@@ -30,13 +30,13 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public GitHub getRoot() {
-		return root;
+		return super.getRoot();
 	}
 
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+				project = getRoot().retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(getRoot());
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -57,7 +57,7 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	private void edit(String key, Object value) throws IOException {
-		new Requester(root).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
+		new Requester(getRoot()).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
 	}
 
 	protected String getApiRoute() {
@@ -65,12 +65,12 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public void delete() throws IOException {
-		new Requester(root).withPreview(INERTIA).method("DELETE").to(getApiRoute());
+		new Requester(getRoot()).withPreview(INERTIA).method("DELETE").to(getApiRoute());
 	}
 
 	public PagedIterable<GHProjectCard> listCards() throws IOException {
 		final GHProjectColumn column = this;
-		return root.retrieve()
+		return getRoot().retrieve()
 			.withPreview(INERTIA)
 			.asPagedIterable(
 				String.format("/projects/columns/%d/cards", id),
@@ -79,14 +79,14 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public GHProjectCard createCard(String note) throws IOException {
-		return root.retrieve().method("POST")
+		return getRoot().retrieve().method("POST")
 				.withPreview(INERTIA)
 				.with("note", note)
 				.to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class).wrap(this);
 	}
 
 	public GHProjectCard createCard(GHIssue issue) throws IOException {
-		return root.retrieve().method("POST")
+		return getRoot().retrieve().method("POST")
 				.withPreview(INERTIA)
 				.with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
 				.with("content_id", issue.getId())

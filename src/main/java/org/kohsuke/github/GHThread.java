@@ -110,10 +110,6 @@ public class GHThread extends GHObject {
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
     }
 
-    /*package*/ GHThread wrap(GitHub root) {
-        return this;
-    }
-
     /**
      * Marks this thread as read.
      */
@@ -128,7 +124,7 @@ public class GHThread extends GHObject {
         return new Requester(getRoot())
             .with("subscribed", subscribed)
             .with("ignored", ignored)
-            .method("PUT").to(subscription_url, GHSubscription.class).wrapUp(getRoot());
+            .method("PUT").to(subscription_url, GHSubscription.class);
     }
 
     /**
@@ -138,7 +134,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return new Requester(getRoot()).to(subscription_url, GHSubscription.class).wrapUp(getRoot());
+            return new Requester(getRoot()).to(subscription_url, GHSubscription.class);
         } catch (FileNotFoundException e) {
             return null;
         }

@@ -70,8 +70,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl("contributors"),
-                ContributorStats[].class,
-                item -> item.wrapUp(getRoot()) );
+                ContributorStats[].class);
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -180,10 +179,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
                 return String.format("Week starting %d - Additions: %d, Deletions: %d, Commits: %d", w, a, d, c);
             }
         }
-
-        /*package*/ ContributorStats wrapUp(GitHub root) {
-            return this;
-        }
     }
 
     /**
@@ -194,8 +189,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl("commit_activity"),
-                CommitActivity[].class,
-                item -> item.wrapUp(getRoot()) );
+                CommitActivity[].class);
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -225,10 +219,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
          */
         public long getWeek() {
             return week;
-        }
-
-        /*package*/ CommitActivity wrapUp(GitHub root) {
-            return this;
         }
 
         public GitHub getRoot() {
@@ -350,10 +340,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
          */
         public List<Integer> getOwnerCommits() {
             return owner;
-        }
-
-        /*package*/ Participation wrapUp(GitHub root) {
-        return this;
         }
     }
 

@@ -19,10 +19,6 @@ public class GHInvitation extends GHObject {
     private String permissions;
     private String html_url;
 
-    /*package*/ GHInvitation wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Accept a repository invitation.
      */

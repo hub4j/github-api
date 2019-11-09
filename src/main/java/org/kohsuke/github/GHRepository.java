@@ -295,7 +295,7 @@ public class GHRepository extends GHObject {
      */
     public GHRef createRef(String name, String sha) throws IOException {
         return new Requester(getRoot())
-                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class).wrap(getRoot());
+                .with("ref", name).with("sha", sha).method("POST").to(getApiTailUrl("git/refs"), GHRef.class);
     }
 
     /**
@@ -523,7 +523,6 @@ public class GHRepository extends GHObject {
      */
     public GHPermissionType getPermission(String user) throws IOException {
         GHPermission perm = getRoot().retrieve().to(getApiTailUrl("collaborators/" + user + "/permission"), GHPermission.class);
-        perm.wrapUp(getRoot());
         return perm.getPermissionType();
     }
 
@@ -901,7 +900,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-       return GHRef.wrap(getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs", getOwnerName(), name), GHRef[].class), getRoot());
+       return getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs", getOwnerName(), name), GHRef[].class);
     }
 
 
@@ -916,8 +915,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 url,
-                GHRef[].class,
-                item -> item.wrap(getRoot()) );
+                GHRef[].class);
     }
 
     /**
@@ -927,7 +925,7 @@ public class GHRepository extends GHObject {
      * @throws IOException on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return GHRef.wrap(getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType), GHRef[].class), getRoot());
+        return getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType), GHRef[].class);
     }
 
     /**
@@ -942,8 +940,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 url,
-                GHRef[].class,
-                item -> item.wrap(getRoot()));
+                GHRef[].class);
     }
 
     /**
@@ -961,7 +958,7 @@ public class GHRepository extends GHObject {
         // FIXME: how about other URL unsafe characters, like space, @, : etc? do we need to be using URLEncoder.encode()?
         // OTOH, '/' need no escaping
         refName = refName.replaceAll("#", "%23");
-        return getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refName), GHRef.class).wrap(getRoot());
+        return getRoot().retrieve().to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refName), GHRef.class);
     }
 
     /**
@@ -1167,8 +1164,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/repos/%s/%s/events", getOwnerName(), name),
-                GHEventInfo[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHEventInfo[].class);
     }
 
     /**
@@ -1221,8 +1217,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/repos/%s/%s/invitations", getOwnerName(), name),
-                GHInvitation[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHInvitation[].class);
     }
 
     /**
@@ -1537,8 +1532,7 @@ public class GHRepository extends GHObject {
      */
     public GHRepository getSource() throws IOException {
         if (source == null) return null;
-        if (source.getRoot() == null)
-            source = getRoot().getRepository(source.getFullName());
+        source = getRoot().getRepository(source.getFullName());
         return source;
     }
 
@@ -1554,8 +1548,7 @@ public class GHRepository extends GHObject {
      */
     public GHRepository getParent() throws IOException {
         if (parent == null) return null;
-        if (parent.getRoot() == null)
-            parent = getRoot().getRepository(parent.getFullName());
+        parent = getRoot().getRepository(parent.getFullName());
         return parent;
     }
 
@@ -1715,8 +1708,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
         return getRoot().retrieve().asPagedIterable(
             getApiTailUrl("issues/events"),
-            GHIssueEvent[].class,
-            item -> item.wrapUp(getRoot()) );
+            GHIssueEvent[].class);
     }
 
     /**
@@ -1724,7 +1716,7 @@ public class GHRepository extends GHObject {
      * See https://developer.github.com/v3/issues/events/#get-a-single-event
      */
     public GHIssueEvent getIssueEvent(long id) throws IOException {
-        return getRoot().retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class).wrapUp(getRoot());
+        return getRoot().retrieve().to(getApiTailUrl("issues/events/" + id), GHIssueEvent.class);
     }
 
     // Only used within listTopics().

@@ -106,10 +106,6 @@ public class GHProject extends GHObject {
         return this;
     }
 
-    public GHProject wrap(GitHub root) {
-        return this;
-    }
-
     private void edit(String key, Object value) throws IOException {
         new Requester(getRoot()).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
     }

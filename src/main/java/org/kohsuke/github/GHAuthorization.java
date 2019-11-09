@@ -98,10 +98,6 @@ public class GHAuthorization extends GHObject {
         return fingerprint;
     }
 
-    /*package*/ GHAuthorization wrap(GitHub root) {
-        return this;
-    }
-
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
         justification = "JSON API")
     private static class App {

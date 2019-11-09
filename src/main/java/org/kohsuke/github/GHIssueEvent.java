@@ -57,10 +57,6 @@ public class GHIssueEvent extends GHObjectBase {
         return issue;
     }
 
-    GHIssueEvent wrapUp(GitHub root) {
-        return this;
-    }
-
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
         return this;

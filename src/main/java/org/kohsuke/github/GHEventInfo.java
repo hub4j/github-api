@@ -50,10 +50,6 @@ public class GHEventInfo extends GHObjectBase {
         return null;    // unknown event type
     }
 
-    /*package*/ GHEventInfo wrapUp(GitHub root) {
-        return this;
-    }
-
     public long getId() {
         return id;
     }

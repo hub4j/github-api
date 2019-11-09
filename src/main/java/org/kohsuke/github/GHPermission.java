@@ -49,7 +49,4 @@ import java.util.Locale;
     public GHUser getUser() {
         return user;
     }
-
-    void wrapUp(GitHub root) {
-    }
 }

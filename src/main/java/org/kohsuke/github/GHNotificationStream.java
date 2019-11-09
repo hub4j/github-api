@@ -140,7 +140,7 @@ public class GHNotificationStream extends GHObjectBase implements Iterable<GHThr
                             long nt = n.getUpdatedAt().getTime();
                             if (nt >= lastUpdated) {
                                 lastUpdated = nt;
-                                return n.wrap(getRoot());
+                                return n;
                             }
                         }
 

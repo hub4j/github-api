@@ -20,10 +20,6 @@ public class GHProjectColumn extends GHObject {
 		return null;
 	}
 
-	public GHProjectColumn wrap(GitHub root) {
-		return this;
-	}
-
 	public GHProjectColumn wrap(GHProject project) {
 		this.project = project;
 		return this;
@@ -36,7 +32,7 @@ public class GHProjectColumn extends GHObject {
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = getRoot().retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(getRoot());
+				project = getRoot().retrieve().to(getProjectUrl().getPath(), GHProject.class);
 			} catch (FileNotFoundException e) {
 				return null;
 			}

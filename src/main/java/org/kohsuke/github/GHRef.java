@@ -56,7 +56,7 @@ public class GHRef extends GHObjectBase {
      */
     public void updateTo(String sha, Boolean force) throws IOException {
       new Requester(getRoot())
-          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(getRoot());
+          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class);
     }
 
     /**
@@ -64,17 +64,6 @@ public class GHRef extends GHObjectBase {
      */
     public void delete() throws IOException {
       new Requester(getRoot()).method("DELETE").to(url);
-    }
-
-    /*package*/ GHRef wrap(GitHub root) {
-        return this;
-    }
-
-    /*package*/ static GHRef[] wrap(GHRef[] in, GitHub root) {
-        for (GHRef r : in) {
-            r.wrap(root);
-        }
-        return in;
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 

@@ -24,10 +24,6 @@ public class GHProjectCard extends GHObject {
 		return null;
 	}
 
-	public GHProjectCard wrap(GitHub root) {
-		return this;
-	}
-
 	public GHProjectCard wrap(GHProjectColumn column) {
 		this.column = column;
 		this.project = column.project;
@@ -41,7 +37,7 @@ public class GHProjectCard extends GHObject {
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = getRoot().retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(getRoot());
+				project = getRoot().retrieve().to(getProjectUrl().getPath(), GHProject.class);
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -52,7 +48,7 @@ public class GHProjectCard extends GHObject {
 	public GHProjectColumn getColumn() throws IOException {
 		if(column == null) {
 			try {
-				column = getRoot().retrieve().to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(getRoot());
+				column = getRoot().retrieve().to(getColumnUrl().getPath(), GHProjectColumn.class);
 			} catch (FileNotFoundException e) {
 				return null;
 			}

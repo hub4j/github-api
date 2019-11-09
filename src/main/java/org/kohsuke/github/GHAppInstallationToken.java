@@ -82,8 +82,4 @@ public class GHAppInstallationToken extends GHObjectBase{
     private Object expiresAtStr(Date id, Class type) {
         return expires_at;
     }
-
-    /*package*/ GHAppInstallationToken wrapUp(GitHub root) {
-        return this;
-    }
 }

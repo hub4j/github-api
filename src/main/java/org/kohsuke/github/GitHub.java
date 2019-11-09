@@ -485,8 +485,7 @@ public class GitHub {
         return retrieve()
             .asPagedIterable(
                 "/licenses",
-                GHLicense[].class,
-                item -> item.wrap(GitHub.this) );
+                GHLicense[].class);
     }
 
     /**
@@ -515,9 +514,7 @@ public class GitHub {
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
         GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
-        for (GHInvitation i : invitations) {
-            i.wrapUp(this);
-        }
+
         return Arrays.asList(invitations);
     }
 
@@ -573,7 +570,6 @@ public class GitHub {
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
         for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
-            team.wrapUp(this);
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
             if (teamsPerOrg == null) {
@@ -589,7 +585,7 @@ public class GitHub {
      * Gets a sigle team by ID.
      */
     public GHTeam getTeam(int id) throws IOException {
-        return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
+        return retrieve().to("/teams/" + id, GHTeam.class);
     }
     
     /**
@@ -597,8 +593,6 @@ public class GitHub {
      */
     public List<GHEventInfo> getEvents() throws IOException {
         GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
-        for (GHEventInfo e : events)
-            e.wrapUp(this);
         return Arrays.asList(events);
     }
 
@@ -668,7 +662,7 @@ public class GitHub {
                 .with("note", note)
                 .with("note_url", noteUrl);
 
-        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+        return requester.method("POST").to("/authorizations", GHAuthorization.class);
     }
 
     /**
@@ -715,8 +709,7 @@ public class GitHub {
         return retrieve()
             .asPagedIterable(
                 "/authorizations",
-                GHAuthorization[].class,
-                item -> item.wrap(GitHub.this) );
+                GHAuthorization[].class);
     }
 
     /**
@@ -728,7 +721,7 @@ public class GitHub {
      */
     @Preview @Deprecated
     public GHApp getApp() throws IOException {
-        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
+        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class);
     }
 
     /**
@@ -758,15 +751,15 @@ public class GitHub {
     }
 
     public GHProject getProject(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/"+id, GHProject.class).wrap(this);
+        return retrieve().withPreview(INERTIA).to("/projects/"+id, GHProject.class);
     }
 
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class).wrap(this);
+        return retrieve().withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class);
     }
 
     public GHProjectCard getProjectCard(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class).wrap(this);
+        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class);
     }
 
     private static class GHApiInfo {

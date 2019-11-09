@@ -155,8 +155,7 @@ public class GHUser extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/users/%s/events", login),
-                GHEventInfo[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHEventInfo[].class);
     }
 
     /**

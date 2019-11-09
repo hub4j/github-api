@@ -42,10 +42,6 @@ public class GHKey extends GHObjectBase {
         return verified;
     }
 
-    /*package*/ GHKey wrap(GitHub root) {
-        return this;
-    }
-
     public String toString() {
         return new ToStringBuilder(this).append("title",title).append("id",id).append("key",key).toString();
     }

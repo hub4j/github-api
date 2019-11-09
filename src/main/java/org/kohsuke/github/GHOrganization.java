@@ -203,8 +203,7 @@ public class GHOrganization extends GHPerson {
                         .with("state", status)
                         .asPagedIterable(
                             String.format("/orgs/%s/projects", login),
-                            GHProject[].class,
-                            item -> item.wrap(getRoot()) );
+                            GHProject[].class);
     }
 
     /**
@@ -222,7 +221,7 @@ public class GHOrganization extends GHPerson {
                 .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)
-                .to(String.format("/orgs/%s/projects", login), GHProject.class).wrap(getRoot());
+                .to(String.format("/orgs/%s/projects", login), GHProject.class);
     }
 
     public enum Permission { ADMIN, PUSH, PULL }
@@ -279,8 +278,7 @@ public class GHOrganization extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/orgs/%s/events", login),
-                GHEventInfo[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHEventInfo[].class);
     }
 
     /**

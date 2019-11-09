@@ -46,7 +46,7 @@ public class GHAppCreateTokenBuilder extends GHObjectBase {
      */
     @Preview @Deprecated
     public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(getRoot());
+        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class);
     }
 
 }

@@ -33,10 +33,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
         return this;
     }
 
-    /*package*/ GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
-      return wrapUp(organization);
-    }
-
     /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
         for (GHTeam t : teams) {
             t.wrapUp(owner);
@@ -181,6 +177,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        getRoot().retrieve().to(api(""), this).wrapUp(getRoot());
+        getRoot().retrieve().to(api(""), this);
     }
 }

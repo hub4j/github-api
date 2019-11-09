@@ -92,10 +92,6 @@ public class GHApp extends GHObject {
         this.permissions = permissions;
     }
 
-    /*package*/ GHApp wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Obtains all the installations associated with this app.
      *

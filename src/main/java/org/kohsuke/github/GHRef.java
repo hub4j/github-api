@@ -55,7 +55,7 @@ public class GHRef extends GHObjectBase {
      *      Whether or not to force this ref update.
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-      new Requester(getRoot())
+      createRequest()
           .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class);
     }
 
@@ -63,7 +63,7 @@ public class GHRef extends GHObjectBase {
      * Deletes this ref from the repository using the GitHub API.
      */
     public void delete() throws IOException {
-      new Requester(getRoot()).method("DELETE").to(url);
+      createRequest().method("DELETE").to(url);
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 

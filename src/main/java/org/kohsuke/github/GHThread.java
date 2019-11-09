@@ -114,14 +114,14 @@ public class GHThread extends GHObject {
      * Marks this thread as read.
      */
     public void markAsRead() throws IOException {
-        new Requester(getRoot()).method("PATCH").to(url);
+        createRequest().method("PATCH").to(url);
     }
 
     /**
      * Subscribes to this conversation to get notifications.
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(getRoot())
+        return createRequest()
             .with("subscribed", subscribed)
             .with("ignored", ignored)
             .method("PUT").to(subscription_url, GHSubscription.class);
@@ -134,7 +134,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return new Requester(getRoot()).to(subscription_url, GHSubscription.class);
+            return createRequest().to(subscription_url, GHSubscription.class);
         } catch (FileNotFoundException e) {
             return null;
         }

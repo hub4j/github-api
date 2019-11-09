@@ -337,7 +337,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
-        return new Requester(getRoot()).method("POST")
+        return createRequest().method("POST")
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
@@ -346,7 +346,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
-        new Requester(getRoot()).method("POST")
+        createRequest().method("POST")
                 .withLogins("reviewers", reviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
@@ -356,7 +356,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         for (GHTeam team : teams) {
           teamReviewers.add(team.getSlug());
         }
-        new Requester(getRoot()).method("POST")
+        createRequest().method("POST")
                 .with("team_reviewers", teamReviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
@@ -398,7 +398,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *      SHA that pull request head must match to allow merge.
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-        new Requester(getRoot()).method("PUT")
+        createRequest().method("PUT")
                 .with("commit_message", msg)
                 .with("sha", sha)
                 .with("merge_method", method)
@@ -409,7 +409,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            new Requester(getRoot()).method("GET").to(getIssuesApiRoute(), this);
+            createRequest().method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

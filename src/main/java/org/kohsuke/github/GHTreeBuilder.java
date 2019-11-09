@@ -33,7 +33,7 @@ public class GHTreeBuilder {
 
     GHTreeBuilder(GHRepository repo) {
         this.repo = repo;
-        req = new Requester(repo.getRoot());
+        req = repo.createRequest();
     }
 
     /**

@@ -73,11 +73,11 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(getRoot())._with(key, value).method("PATCH").to(getApiRoute());
+        createRequest()._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void delete() throws IOException {
-        new Requester(getRoot()).method("DELETE").to(getApiRoute());
+        createRequest().method("DELETE").to(getApiRoute());
     }
 
 

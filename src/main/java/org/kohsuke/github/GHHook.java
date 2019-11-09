@@ -46,14 +46,14 @@ public abstract class GHHook extends GHObject {
      * @see <a href="https://developer.github.com/v3/repos/hooks/#ping-a-hook">Ping hook</a>
      */
     public void ping() throws IOException {
-        new Requester(getRoot()).method("POST").to(getApiRoute() + "/pings");
+        createRequest().method("POST").to(getApiRoute() + "/pings");
     }
 
     /**
      * Deletes this hook.
      */
     public void delete() throws IOException {
-        new Requester(getRoot()).method("DELETE").to(getApiRoute());
+        createRequest().method("DELETE").to(getApiRoute());
     }
 
     /**

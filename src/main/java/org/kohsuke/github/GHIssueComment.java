@@ -88,7 +88,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Updates the body of the issue comment.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.getRoot()).with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        owner.createRequest().with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
         this.body = body;
     }
 
@@ -96,12 +96,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Deletes this issue comment.
      */
     public void delete() throws IOException {
-        new Requester(owner.getRoot()).method("DELETE").to(getApiRoute());
+        owner.createRequest().method("DELETE").to(getApiRoute());
     }
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.getRoot())
+        return owner.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiRoute()+"/reactions", GHReaction.class);

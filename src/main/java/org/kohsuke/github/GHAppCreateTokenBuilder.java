@@ -21,7 +21,7 @@ public class GHAppCreateTokenBuilder extends GHObjectBase {
     /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         super(root);
         this.apiUrlTail = apiUrlTail;
-        this.builder = new Requester(root);
+        this.builder = root.createRequest();
         this.builder.withPermissions("permissions",permissions);
     }
 

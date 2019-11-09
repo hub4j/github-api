@@ -77,7 +77,7 @@ public class GHBranch extends GHObjectBase {
      * Disables branch protection and allows anyone with push access to push changes.
      */
     public void disableProtection() throws IOException {
-        new Requester(super.getRoot()).method("DELETE").to(protection_url);
+        createRequest().method("DELETE").to(protection_url);
     }
 
     /**

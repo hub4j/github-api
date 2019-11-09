@@ -51,7 +51,13 @@ public class GHAppInstallation extends GHObject {
         return super.getRoot();
     }
 
+    /**
+     * Sets the root {@link GitHub} instance.
+     * @param root a {@link GitHub} instance
+     * @deprecated No one should be setting the root from outside.
+     */
     @Override
+    @Deprecated
     public void setRoot(GitHub root) {
         //TODO: needs fixing
         //this.root = root;

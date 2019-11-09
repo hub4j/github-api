@@ -145,11 +145,11 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void lock() throws IOException {
-        new Requester(getRoot()).method("PUT").to(getApiRoute()+"/lock");
+        createRequest().method("PUT").to(getApiRoute()+"/lock");
     }
 
     public void unlock() throws IOException {
-        new Requester(getRoot()).method("PUT").to(getApiRoute()+"/lock");
+        createRequest().method("PUT").to(getApiRoute()+"/lock");
     }
 
     /**
@@ -160,16 +160,16 @@ public class GHIssue extends GHObject implements Reactable{
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = new Requester(getRoot()).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+        GHIssueComment r = createRequest().with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
         return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(getRoot())._with(key, value).method("PATCH").to(getApiRoute());
+        createRequest()._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        new Requester(getRoot())._with(key, value).method("PATCH").to(getIssuesApiRoute());
+        createRequest()._with(key, value).method("PATCH").to(getIssuesApiRoute());
     }
 
     /**
@@ -289,7 +289,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.getRoot())
+        return owner.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiRoute()+"/reactions", GHReaction.class);
@@ -316,7 +316,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        new Requester(getRoot()).withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
+        createRequest().withLogins(ASSIGNEES, assignees).method("PATCH").to(getIssuesApiRoute());
     }
 
     public void removeAssignees(GHUser... assignees) throws IOException {

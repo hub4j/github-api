@@ -16,7 +16,7 @@ public class GHGistBuilder extends GHObjectBase {
 
     public GHGistBuilder(GitHub root) {
         super(root);
-        req = new Requester(root);
+        req = createRequest();
     }
 
     public GHGistBuilder description(String desc) {

@@ -340,7 +340,7 @@ public class GHCommit {
      * I'm not sure how path/line/position parameters interact with each other.
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = new Requester(owner.getRoot())
+        GHCommitComment r = owner.createRequest()
                 .with("body",body)
                 .with("path",path)
                 .with("line",line)

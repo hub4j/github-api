@@ -118,7 +118,7 @@ public class GHPullRequestReview extends GHObject {
      * Updates the comment.
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.getRoot()).method("POST")
+        owner.createRequest().method("POST")
                 .with("body", body)
                 .with("event", event.action())
                 .to(getApiRoute()+"/events",this);
@@ -130,7 +130,7 @@ public class GHPullRequestReview extends GHObject {
      * Deletes this review.
      */
     public void delete() throws IOException {
-        new Requester(owner.getRoot()).method("DELETE")
+        owner.createRequest().method("DELETE")
                 .to(getApiRoute());
     }
 
@@ -138,7 +138,7 @@ public class GHPullRequestReview extends GHObject {
      * Dismisses this review.
      */
     public void dismiss(String message) throws IOException {
-        new Requester(owner.getRoot()).method("PUT")
+        owner.createRequest().method("PUT")
                 .with("message", message)
                 .to(getApiRoute()+"/dismissals");
         state = GHPullRequestReviewState.DISMISSED;

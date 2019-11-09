@@ -43,14 +43,14 @@ public class GHUser extends GHPerson {
      * Follow this user.
      */
     public void follow() throws IOException {
-        new Requester(getRoot()).method("PUT").to("/user/following/" + login);
+        createRequest().method("PUT").to("/user/following/" + login);
     }
 
     /**
      * Unfollow this user.
      */
     public void unfollow() throws IOException {
-        new Requester(getRoot()).method("DELETE").to("/user/following/" + login);
+        createRequest().method("DELETE").to("/user/following/" + login);
     }
 
     /**

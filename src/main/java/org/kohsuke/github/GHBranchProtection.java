@@ -72,7 +72,7 @@ public class GHBranchProtection extends GHObjectBase {
     }
 
     private Requester requester() {
-        return new Requester(getRoot()).withPreview(ZZZAX);
+        return createRequest().withPreview(ZZZAX);
     }
 
     public static class EnforceAdmins {

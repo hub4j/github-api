@@ -107,7 +107,7 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(getRoot()).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
+        createRequest().withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
     }
 
     protected String getApiRoute() {
@@ -154,7 +154,7 @@ public class GHProject extends GHObject {
     }
 
     public void delete() throws IOException {
-        new Requester(getRoot()).withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        createRequest().withPreview(INERTIA).method("DELETE").to(getApiRoute());
     }
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {

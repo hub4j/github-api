@@ -309,7 +309,11 @@ public class GitHub {
     }
 
     /*package*/ Requester retrieve() {
-        return new Requester(this).method("GET");
+        return createRequest().method("GET");
+    }
+
+    /*package*/ Requester createRequest() {
+        return new Requester(this);
     }
 
     /**
@@ -514,7 +518,6 @@ public class GitHub {
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
         GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
-
         return Arrays.asList(invitations);
     }
 
@@ -657,7 +660,7 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException{
-        Requester requester = new Requester(this)
+        Requester requester = createRequest()
                 .with("scopes", scope)
                 .with("note", note)
                 .with("note_url", noteUrl);
@@ -671,7 +674,7 @@ public class GitHub {
     public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
                                            String note_url)
             throws IOException {
-        Requester requester = new Requester(this)
+        Requester requester = createRequest()
                 .with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
@@ -917,7 +920,7 @@ public class GitHub {
      */
     public Reader renderMarkdown(String text) throws IOException {
         return new InputStreamReader(
-            new Requester(this)
+            createRequest()
                     .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
                     .contentType("text/plain;charset=UTF-8")
                     .asStream("/markdown/raw"),

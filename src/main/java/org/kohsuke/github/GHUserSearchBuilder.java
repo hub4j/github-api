@@ -64,7 +64,7 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
 
         @Override
         /*package*/ GHUser[] getItems(GitHub root) {
-            return GHUser.wrap(items,root);
+            return items;
         }
     }
 

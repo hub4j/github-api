@@ -79,14 +79,6 @@ public class GHIssue extends GHObject implements Reactable{
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if(milestone != null) milestone.wrap(owner);
-        return wrap(owner.getRoot());
-    }
-
-    /*package*/ GHIssue wrap(GitHub root) {
-        if(assignee != null) assignee.wrapUp(root);
-        if(assignees!=null)    GHUser.wrap(assignees,root);
-        if(user != null) user.wrapUp(root);
-        if(closed_by != null) closed_by.wrapUp(root);
         return this;
     }
 
@@ -300,7 +292,7 @@ public class GHIssue extends GHObject implements Reactable{
         return new Requester(owner.getRoot())
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(getRoot());
+                .to(getApiRoute()+"/reactions", GHReaction.class);
     }
 
     @Preview @Deprecated
@@ -308,8 +300,7 @@ public class GHIssue extends GHObject implements Reactable{
         return owner.getRoot().retrieve().withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.getRoot()) );
+                GHReaction[].class);
     }
 
     public void addAssignees(GHUser... assignees) throws IOException {

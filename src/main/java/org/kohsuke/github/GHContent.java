@@ -231,12 +231,6 @@ public class GHContent extends GHObjectBase implements Refreshable {
         this.repository = owner;
         return this;
     }
-    GHContent wrap(GitHub root) {
-        if (repository!=null)
-            repository.wrap(root);
-        return this;
-    }
-
 
     public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
         for (GHContent unwrappedContent : contents) {

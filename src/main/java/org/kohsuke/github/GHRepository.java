@@ -510,7 +510,7 @@ public class GHRepository extends GHObject {
      */
     public Set<String> getCollaboratorNames() throws IOException {
         Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(getRoot().retrieve().to(getApiTailUrl("collaborators"), GHUser[].class), getRoot()))
+        for (GHUser u : getRoot().retrieve().to(getApiTailUrl("collaborators"), GHUser[].class))
             r.add(u.login);
         return r;
     }
@@ -688,8 +688,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve().with("sort",sort)
             .asPagedIterable(
                 getApiTailUrl("forks"),
-                GHRepository[].class,
-                item -> item.wrap(getRoot()) );
+                GHRepository[].class);
     }
 
     /**
@@ -1124,8 +1123,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1),
-                GHCommitStatus[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHCommitStatus[].class);
     }
 
     /**
@@ -1152,7 +1150,7 @@ public class GHRepository extends GHObject {
                 .with("target_url", targetUrl)
                 .with("description", description)
                 .with("context", context)
-                .to(String.format("/repos/%s/%s/statuses/%s",getOwnerName(),this.name,sha1),GHCommitStatus.class).wrapUp(getRoot());
+                .to(String.format("/repos/%s/%s/statuses/%s",getOwnerName(),this.name,sha1),GHCommitStatus.class);
     }
 
     /**
@@ -1262,8 +1260,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl(suffix),
-                GHUser[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHUser[].class);
     }
 
     /**
@@ -1368,13 +1365,6 @@ public class GHRepository extends GHObject {
             }
         }
     };
-
-    /*package*/ GHRepository wrap(GitHub root) {
-        if (getRoot().isOffline()) {
-            owner.wrapUp(root);
-        }
-        return this;
-    }
 
     /**
      * Gets branches by {@linkplain GHBranch#getName() their names}.
@@ -1596,8 +1586,7 @@ public class GHRepository extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl("contributors"),
-                Contributor[].class,
-                item -> item.wrapUp(getRoot()) );
+                Contributor[].class);
     }
 
     public static class Contributor extends GHUser {

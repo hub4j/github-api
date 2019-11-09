@@ -87,8 +87,7 @@ public class GHUser extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl(suffix),
-                GHUser[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHUser[].class);
     }
 
     /**
@@ -111,8 +110,7 @@ public class GHUser extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 getApiTailUrl(suffix),
-                GHRepository[].class,
-                item -> item.wrap(getRoot()) );
+                GHRepository[].class);
     }
 
     /**
@@ -134,10 +132,6 @@ public class GHUser extends GHPerson {
      */
     public boolean isPublicMemberOf(GHOrganization org) {
         return org.hasPublicMember(this);
-    }
-
-    /*package*/ static GHUser[] wrap(GHUser[] users, GitHub root) {
-        return users;
     }
 
     /**
@@ -194,9 +188,5 @@ public class GHUser extends GHPerson {
     String getApiTailUrl(String tail) {
         if (tail.length()>0 && !tail.startsWith("/"))    tail='/'+tail;
         return "/users/" + login + tail;
-    }
-
-    /*package*/ GHUser wrapUp(GitHub root) {
-        return this;
     }
 }

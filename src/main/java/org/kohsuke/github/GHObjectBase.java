@@ -35,8 +35,10 @@ public abstract class GHObjectBase {
      * @param root
      */
     @JacksonInject(value = "org.kohsuke.github.GitHub")
-    void setRoot(@Nonnull GitHub root) {
-        this.root = root;
+    void setRoot(GitHub root) {
+        if (root != null) {
+            this.root = root;
+        }
     }
 
 }

@@ -15,10 +15,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
-    /*package*/ GHOrganization wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Creates a new repository.
      *
@@ -188,8 +184,7 @@ public class GHOrganization extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 String.format("/orgs/%s/%s%s", login, suffix, filterParams),
-                GHUser[].class,
-                item -> item.wrapUp(getRoot()) );
+                GHUser[].class);
     }
 
     /**
@@ -258,7 +253,6 @@ public class GHOrganization extends GHPerson {
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
         for (GHRepository repository : listRepositories(100)) {
-            repository.wrap(getRoot());
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {
                 r.add(repository);
@@ -301,8 +295,7 @@ public class GHOrganization extends GHPerson {
         return getRoot().retrieve()
             .asPagedIterable(
                 "/orgs/" + login + "/repos",
-                GHRepository[].class,
-                item -> item.wrap(getRoot())
+                GHRepository[].class
             ).withPageSize(pageSize);
     }
 

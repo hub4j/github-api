@@ -431,7 +431,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
+            o = retrieve().to("/orgs/" + name, GHOrganization.class);
             orgs.put(name,o);
         }
         return o;
@@ -454,8 +454,7 @@ public class GitHub {
             .with("since",since)
             .asPagedIterable(
                 "/organizations",
-                GHOrganization[].class,
-                item -> item.wrapUp(GitHub.this) );
+                GHOrganization[].class);
     }
 
     /**
@@ -465,14 +464,14 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
+        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class);
     }
 
     /**
      * Gets the repository object from its ID
      */
     public GHRepository getRepositoryById(String id) throws IOException {
-        return retrieve().to("/repositories/" + id, GHRepository.class).wrap(this);
+        return retrieve().to("/repositories/" + id, GHRepository.class);
     }
 
     /**
@@ -533,7 +532,7 @@ public class GitHub {
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(),o.wrapUp(this));
+            r.put(o.getLogin(),o);
         }
         return r;
     }
@@ -559,7 +558,7 @@ public class GitHub {
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(),o.wrapUp(this));
+            r.put(o.getLogin(),o);
         }
         return r;
     }
@@ -625,7 +624,6 @@ public class GitHub {
         InjectableValues.Std inject = new InjectableValues.Std();
         inject.addValue(GitHub.class.getName(), this);
         T t = MAPPER.reader(inject).forType(type).readValue(r);
-        t.wrapUp(this);
         return t;
     }
 
@@ -911,8 +909,7 @@ public class GitHub {
         return retrieve().with("since",since)
             .asPagedIterable(
                 "/repositories",
-                GHRepository[].class,
-                item -> item.wrap(GitHub.this) );
+                GHRepository[].class);
     }
 
     /**

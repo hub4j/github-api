@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCommitPointer {
+public class GHCommitPointer extends GHObjectBase {
     private String ref, sha, label;
     private GHUser user;
     private GHRepository repo;
@@ -77,9 +77,5 @@ public class GHCommitPointer {
      */
     public GHCommit getCommit() throws IOException {
         return getRepository().getCommit(getSha());
-    }
-
-    void wrapUp(GitHub root) {
-        if (repo!=null) repo.wrap(root);
     }
 }

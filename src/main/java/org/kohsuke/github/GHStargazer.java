@@ -10,7 +10,7 @@ import java.util.Date;
  * @author noctarius
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
-public class GHStargazer {
+public class GHStargazer extends GHObjectBase{
 
     private GHRepository repository;
     private String starred_at;
@@ -46,6 +46,5 @@ public class GHStargazer {
 
     void wrapUp(GHRepository repository) {
         this.repository = repository;
-        user.wrapUp(repository.getRoot());
     }
 }

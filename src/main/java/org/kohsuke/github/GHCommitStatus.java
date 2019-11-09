@@ -17,11 +17,6 @@ public class GHCommitStatus extends GHObject {
     String context;
     GHUser creator;
 
-    /*package*/ GHCommitStatus wrapUp(GitHub root) {
-        if (creator!=null)  creator.wrapUp(root);
-        return this;
-    }
-
     public GHCommitState getState() {
         for (GHCommitState s : GHCommitState.values()) {
             if (s.name().equalsIgnoreCase(state))

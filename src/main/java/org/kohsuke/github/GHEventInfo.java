@@ -101,7 +101,6 @@ public class GHEventInfo extends GHObjectBase {
         InjectableValues.Std inject = new InjectableValues.Std();
         inject.addValue(GitHub.class.getName(), this.getRoot());
         T v = GitHub.MAPPER.reader(inject).forType(type).readValue(payload.traverse());
-        v.wrapUp(getRoot());
         return v;
     }
 }

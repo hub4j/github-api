@@ -65,9 +65,9 @@ public class GHProjectCard extends GHObject {
 			return null;
 		try {
 			if(content_url.contains("/pulls")) {
-				return getRoot().retrieve().to(getContentUrl().getPath(), GHPullRequest.class).wrap(getRoot());
+				return getRoot().retrieve().to(getContentUrl().getPath(), GHPullRequest.class);
 			} else {
-				return getRoot().retrieve().to(getContentUrl().getPath(), GHIssue.class).wrap(getRoot());
+				return getRoot().retrieve().to(getContentUrl().getPath(), GHIssue.class);
 			}
 		} catch (FileNotFoundException e) {
 			return null;

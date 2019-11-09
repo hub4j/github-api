@@ -75,8 +75,7 @@ public abstract class GHPerson extends GHObject {
         return getRoot().retrieve()
             .asPagedIterable(
                 "/users/" + login + "/repos",
-                GHRepository[].class,
-                item -> item.wrap(getRoot())
+                GHRepository[].class
             ).withPageSize(pageSize);
     }
 
@@ -124,7 +123,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return getRoot().retrieve().to("/repos/" + login + '/' + name, GHRepository.class).wrap(getRoot());
+            return getRoot().retrieve().to("/repos/" + login + '/' + name, GHRepository.class);
         } catch (FileNotFoundException e) {
             return null;
         }

@@ -160,8 +160,7 @@ public class GHMyself extends GHUser {
             .with("type",repoType)
             .asPagedIterable(
                 "/user/repos",
-                GHRepository[].class,
-                item -> item.wrap(getRoot())
+                GHRepository[].class
             ).withPageSize(pageSize);
     }
 
@@ -191,15 +190,14 @@ public class GHMyself extends GHUser {
             .with("state",state)
             .asPagedIterable(
                 "/user/memberships/orgs",
-                GHMembership[].class,
-                item -> item.wrap(getRoot()) );
+                GHMembership[].class);
     }
 
     /**
      * Gets your membership in a specific organization.
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-        return getRoot().retrieve().to("/user/memberships/orgs/"+o.getLogin(),GHMembership.class).wrap(getRoot());
+        return getRoot().retrieve().to("/user/memberships/orgs/"+o.getLogin(),GHMembership.class);
     }
 
 //    public void addEmails(Collection<String> emails) throws IOException {

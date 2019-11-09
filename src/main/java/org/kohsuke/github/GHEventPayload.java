@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -33,12 +34,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         this.sender = sender;
     }
 
-    /*package*/ void wrapUp(GitHub root) {
-        if (sender != null) {
-            sender.wrapUp(root);
-        }
-    }
-
     /**
      * A pull request status has changed.
      *
@@ -61,6 +56,10 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHPullRequest getPullRequest() {
+            if (repository!=null) {
+                pull_request.wrapUp(repository);
+            }
+
             return pull_request;
         }
 
@@ -68,18 +67,13 @@ public abstract class GHEventPayload extends GHObjectBase {
             return repository;
         }
 
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        @JsonCreator
+        public PullRequest(@JsonProperty("pull_request")  GHPullRequest pull_request) {
+            this.pull_request = pull_request;
             if (pull_request==null)
                 throw new IllegalStateException("Expected pull_request payload, but got something else. Maybe we've got another type of event?");
-            if (repository!=null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
-            } else {
-                pull_request.wrapUp(root);
-            }
         }
+
     }
 
 
@@ -99,10 +93,15 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
         
         public GHPullRequestReview getReview() {
+            review.wrapUp(pull_request);
             return review;
         }
 
         public GHPullRequest getPullRequest() {
+            if (repository!=null) {
+                pull_request.wrapUp(repository);
+            }
+
             return pull_request;
         }
 
@@ -110,20 +109,11 @@ public abstract class GHEventPayload extends GHObjectBase {
             return repository;
         }
 
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        @JsonCreator
+        public PullRequestReview(@JsonProperty("review") GHPullRequestReview review) {
+            this.review = review;
             if (review==null)
                 throw new IllegalStateException("Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
-            
-            review.wrapUp(pull_request);
-            
-            if (repository!=null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
-            } else {
-                pull_request.wrapUp(root);
-            }
         }
     }
     
@@ -143,10 +133,15 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
         
         public GHPullRequestReviewComment getComment() {
+            comment.wrapUp(pull_request);
             return comment;
         }
 
         public GHPullRequest getPullRequest() {
+            if (repository!=null) {
+                pull_request.wrapUp(repository);
+            }
+
             return pull_request;
         }
 
@@ -154,20 +149,11 @@ public abstract class GHEventPayload extends GHObjectBase {
             return repository;
         }
 
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        @JsonCreator
+        public PullRequestReviewComment(@JsonProperty("comment") GHPullRequestReviewComment comment) {
+            this.comment = comment;
             if (comment==null)
                 throw new IllegalStateException("Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
-            
-            comment.wrapUp(pull_request);
-            
-            if (repository!=null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
-            } else {
-                pull_request.wrapUp(root);
-            }
         }
     }
 
@@ -189,6 +175,10 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHIssue getIssue() {
+            if (repository != null) {
+                issue.wrap(repository);
+            }
+
             return issue;
         }
 
@@ -202,17 +192,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-                issue.wrap(repository);
-            } else {
-                issue.wrap(root);
-            }
         }
     }
 
@@ -235,6 +214,7 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHIssueComment getComment() {
+            comment.wrapUp(issue);
             return comment;
         }
 
@@ -243,6 +223,10 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHIssue getIssue() {
+            if (repository != null) {
+                issue.wrap(repository);
+            }
+
             return issue;
         }
 
@@ -256,18 +240,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-                issue.wrap(repository);
-            } else {
-                issue.wrap(root);
-            }
-            comment.wrapUp(issue);
         }
     }
 
@@ -289,6 +261,10 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHCommitComment getComment() {
+            if (repository != null) {
+                comment.wrap(repository);
+            }
+
             return comment;
         }
 
@@ -302,15 +278,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-                comment.wrap(repository);
-            }
         }
     }
 
@@ -357,14 +324,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setRepository(GHRepository repository) {
             this.repository = repository;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -397,14 +356,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setRepository(GHRepository repository) {
             this.repository = repository;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -419,6 +370,9 @@ public abstract class GHEventPayload extends GHObjectBase {
         private GHRepository repository;
 
         public GHDeployment getDeployment() {
+            if (repository != null) {
+                deployment.wrap(repository);
+            }
             return deployment;
         }
 
@@ -432,15 +386,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-                deployment.wrap(repository);
-            }
         }
     }
 
@@ -458,6 +403,11 @@ public abstract class GHEventPayload extends GHObjectBase {
         private GHRepository repository;
 
         public GHDeploymentStatus getDeploymentStatus() {
+            if (repository != null) {
+                deployment.wrap(repository);
+                deploymentStatus.wrap(repository);
+            }
+
             return deploymentStatus;
         }
 
@@ -466,6 +416,11 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHDeployment getDeployment() {
+            if (repository != null) {
+                deployment.wrap(repository);
+                deploymentStatus.wrap(repository);
+            }
+
             return deployment;
         }
 
@@ -479,16 +434,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setRepository(GHRepository repository) {
             this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-                deployment.wrap(repository);
-                deploymentStatus.wrap(repository);
-            }
         }
     }
 
@@ -519,15 +464,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setRepository(GHRepository repository) {
             this.repository = repository;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            forkee.wrap(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -552,17 +488,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setOrganization(GHOrganization organization) {
             this.organization = organization;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository!=null)
-                repository.wrap(root);
-            if (organization != null) {
-                organization.wrapUp(root);
-            }
-        }
-
     }
 
     /**
@@ -580,14 +505,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public GHRepository getRepository() {
             return repository;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository!=null)
-                repository.wrap(root);
-        }
-
     }
 
     /**
@@ -670,13 +587,6 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public void setPusher(Pusher pusher) {
             this.pusher = pusher;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository!=null)
-                repository.wrap(root);
         }
 
         public static class Pusher {
@@ -790,14 +700,6 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setRepository(GHRepository repository) {
             this.repository = repository;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -831,15 +733,5 @@ public abstract class GHEventPayload extends GHObjectBase {
         public void setOrganization(GHOrganization organization) {
             this.organization = organization;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            repository.wrap(root);
-            if (organization != null) {
-                organization.wrapUp(root);
-            }
-        }
-
     }
 }

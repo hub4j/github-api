@@ -138,10 +138,6 @@ public class GHAppInstallation extends GHObject {
         this.repositorySelection = repositorySelection;
     }
 
-    /*package*/ GHAppInstallation wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Delete a Github App installation
      *

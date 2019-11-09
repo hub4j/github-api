@@ -111,8 +111,6 @@ public class GHThread extends GHObject {
     }
 
     /*package*/ GHThread wrap(GitHub root) {
-        if (this.repository!=null)
-            this.repository.wrap(root);
         return this;
     }
 

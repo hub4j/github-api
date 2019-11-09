@@ -93,7 +93,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         return new Requester(owner.getRoot())
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiTail()+"/reactions", GHReaction.class).wrap(owner.getRoot());
+                .to(getApiTail()+"/reactions", GHReaction.class);
     }
 
     @Preview @Deprecated
@@ -101,8 +101,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         return owner.getRoot().retrieve().withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiTail()+"/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.getRoot()) );
+                GHReaction[].class);
     }
 
     /**
@@ -116,12 +115,8 @@ public class GHCommitComment extends GHObject implements Reactable {
         return String.format("/repos/%s/%s/comments/%s",owner.getOwnerName(),owner.getName(),id);
     }
 
-
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
-        if (owner.getRoot().isOffline()) {
-            user.wrapUp(owner.getRoot());
-        }
         return this;
     }
 }

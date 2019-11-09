@@ -78,16 +78,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
-        return wrapUp(owner.getRoot());
-    }
-
-    GHPullRequest wrapUp(GitHub root) {
-        if (owner != null) owner.wrap(root);
-        if (base != null) base.wrapUp(root);
-        if (head != null) head.wrapUp(root);
-        if (merged_by != null) merged_by.wrapUp(root);
-        if (requested_reviewers != null) GHUser.wrap(requested_reviewers, root);
-        if (requested_teams != null) GHTeam.wrapUp(requested_teams, this);
         return this;
     }
 

@@ -46,18 +46,7 @@ public class GHMembership extends GHObjectBase {
     public void activate() throws IOException {
         getRoot().retrieve().method("PATCH").with("state",State.ACTIVE).to(url,this);
     }
-
-    /*package*/ GHMembership wrap(GitHub root) {
-        if (user!=null)     user = root.getUser(user.wrapUp(root));
-        if (organization!=null) organization.wrapUp(root);
-        return this;
-    }
-
-    /*package*/ static void wrap(GHMembership[] page, GitHub root) {
-        for (GHMembership m : page)
-            m.wrap(root);
-    }
-
+    
     /**
      * Role of a user in an organization.
      */

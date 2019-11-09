@@ -60,11 +60,11 @@ public class GHProject extends GHObject {
         if(owner == null) {
             try {
                 if(owner_url.contains("/orgs/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(getRoot());
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHOrganization.class);
                 } else if(owner_url.contains("/users/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(getRoot());
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHUser.class);
                 } else if(owner_url.contains("/repos/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(getRoot());
+                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHRepository.class);
                 }
             } catch (FileNotFoundException e) {
                 return null;

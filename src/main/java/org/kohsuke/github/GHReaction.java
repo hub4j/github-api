@@ -16,11 +16,6 @@ public class GHReaction extends GHObject {
     private GHUser user;
     private ReactionContent content;
 
-    /*package*/ GHReaction wrap(GitHub root) {
-        user.wrapUp(root);
-        return this;
-    }
-
     /**
      * The kind of reaction left.
      */

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -21,6 +22,8 @@ import java.util.List;
 @SuppressFBWarnings(value = {"NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"}, 
         justification = "JSON API")
 public class GHCommit {
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository owner;
     
     private ShortInfo commit;
@@ -327,11 +330,10 @@ public class GHCommit {
      * Lists up all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.getRoot().retrieve()
+        return owner.createRequest().method("GET")
             .asPagedIterable(
                 String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
-                GHCommitComment[].class,
-                item -> item.wrap(owner) );
+                GHCommitComment[].class);
     }
 
     /**
@@ -346,7 +348,7 @@ public class GHCommit {
                 .with("line",line)
                 .with("position",position)
                 .to(String.format("/repos/%s/%s/commits/%s/comments",owner.getOwnerName(),owner.getName(),sha),GHCommitComment.class);
-        return r.wrap(owner);
+        return r;
     }
 
     public GHCommitComment createComment(String body) throws IOException {
@@ -372,11 +374,6 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files==null && stats==null)
-            owner.getRoot().retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
-    }
-
-    GHCommit wrapUp(GHRepository owner) {
-        this.owner = owner;
-        return this;
+            owner.createRequest().method("GET").to(owner.getApiTailUrl("commits/" + sha), this);
     }
 }

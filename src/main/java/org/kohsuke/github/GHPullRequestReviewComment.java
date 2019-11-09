@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 import javax.annotation.CheckForNull;
@@ -37,6 +39,8 @@ import static org.kohsuke.github.Previews.*;
  * @see GHPullRequest#createReviewComment(String, String, String, int)
  */
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
+
+    @JacksonInject("org.kohsuke.github.GHPullRequest")
     GHPullRequest owner;
 
     private String body;
@@ -57,11 +61,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         result.path = path;
         result.position = position;
         return result;
-    }
-
-    /*package*/ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-        return this;
     }
 
     /**
@@ -134,8 +133,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return owner.createRequest().method("POST")
                 .with("body", body)
                 .with("in_reply_to", getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
-                .wrapUp(owner);
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class);
     }
 
     @Preview @Deprecated
@@ -148,7 +146,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().retrieve()
+        return owner.getRoot().createRequest().method("GET")
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute() + "/reactions",

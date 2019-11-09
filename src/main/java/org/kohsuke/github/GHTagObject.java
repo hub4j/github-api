@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -10,6 +11,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHTagObject extends GHObjectBase{
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository owner;
 
     private String tag;
@@ -18,11 +21,6 @@ public class GHTagObject extends GHObjectBase{
     private String message;
     private GitUser tagger;
     private GHRef.GHObject object;
-
-    /*package*/ GHTagObject wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
 
     public GHRepository getOwner() {
         return owner;

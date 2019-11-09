@@ -44,9 +44,9 @@ public class GHMembership extends GHObjectBase {
      * @see GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        getRoot().retrieve().method("PATCH").with("state",State.ACTIVE).to(url,this);
+        getRoot().createRequest().method("GET").method("PATCH").with("state",State.ACTIVE).to(url,this);
     }
-    
+
     /**
      * Role of a user in an organization.
      */

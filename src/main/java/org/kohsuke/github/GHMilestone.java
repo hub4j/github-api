@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.Locale;
  *
  */
 public class GHMilestone extends GHObject {
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     GHRepository owner;
 
     GHUser creator;
@@ -88,7 +92,7 @@ public class GHMilestone extends GHObject {
      * Deletes this milestone.
      */
     public void delete() throws IOException {
-        getRoot().retrieve().method("DELETE").to(getApiRoute());
+        getRoot().createRequest().method("GET").method("DELETE").to(getApiRoute());
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -109,10 +113,5 @@ public class GHMilestone extends GHObject {
 
     protected String getApiRoute() {
         return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/milestones/"+number;
-    }
-
-    public GHMilestone wrap(GHRepository repo) {
-        this.owner = repo;
-        return this;
     }
 }

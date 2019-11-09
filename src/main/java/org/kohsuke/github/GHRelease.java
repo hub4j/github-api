@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,6 +20,8 @@ import static java.lang.String.*;
  * @see GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     GHRepository owner;
 
     private String html_url;
@@ -103,18 +107,6 @@ public class GHRelease extends GHObject {
 
     public String getTarballUrl() {
         return tarball_url;
-    }
-
-    GHRelease wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {
-        for (GHRelease release : releases) {
-            release.wrap(owner);
-        }
-        return releases;
     }
 
     /**

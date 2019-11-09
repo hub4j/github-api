@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
@@ -14,6 +17,9 @@ import java.util.TreeMap;
 public class GHTeam extends GHObjectBase implements Refreshable {
     private String name,permission,slug,description;
     private int id;
+
+    @JacksonInject("org.kohsuke.github.GHOrganization")
+    @JsonProperty("organization")
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     /** Member's role in a team */
@@ -28,21 +34,10 @@ public class GHTeam extends GHObjectBase implements Refreshable {
         MAINTAINER
     }
 
-    /*package*/ GHTeam wrapUp(GHOrganization owner) {
-        this.organization = owner;
-        return this;
-    }
-
-    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
-        for (GHTeam t : teams) {
-            t.wrapUp(owner);
-        }
-        return teams;
-    }
-
-    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
-        return teams;
-    }
+    // TODO: BUGBUG check this code to make sure I haven't changed the beahvior
+//    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
+//        return teams;
+//    }
 
     public String getName() {
         return name;
@@ -61,7 +56,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void setDescription(String description) throws IOException {
-        getRoot().retrieve().method("PATCH")
+        getRoot().createRequest().method("GET").method("PATCH")
                 .with("description", description)
                 .to(api(""));
     }
@@ -74,7 +69,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * Retrieves the current members.
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 api("/members"),
                 GHUser[].class);
@@ -89,7 +84,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            getRoot().retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            getRoot().createRequest().method("GET").to("/teams/" + id + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -105,7 +100,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public PagedIterable<GHRepository> listRepositories() {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 api("/repos"),
                 GHRepository[].class);
@@ -119,7 +114,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        getRoot().retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
+        getRoot().createRequest().method("GET").method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**
@@ -133,7 +128,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        getRoot().retrieve().method("PUT")
+        getRoot().createRequest().method("GET").method("PUT")
                 .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
@@ -142,7 +137,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        getRoot().retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
+        getRoot().createRequest().method("GET").method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
@@ -150,20 +145,20 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        getRoot().retrieve().method("PUT")
+        getRoot().createRequest().method("GET").method("PUT")
                 .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        getRoot().retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        getRoot().createRequest().method("GET").method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
     
     /**
      * Deletes this team.
      */
     public void delete() throws IOException {
-        getRoot().retrieve().method("DELETE").to(api(""));
+        getRoot().createRequest().method("GET").method("DELETE").to(api(""));
     }
 
     private String api(String tail) {
@@ -177,6 +172,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        getRoot().retrieve().to(api(""), this);
+        getRoot().createRequest().method("GET").to(api(""), this);
     }
 }

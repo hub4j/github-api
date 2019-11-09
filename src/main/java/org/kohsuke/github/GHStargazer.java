@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHStargazer extends GHObjectBase{
 
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository repository;
     private String starred_at;
     private GHUser user;
@@ -42,9 +44,5 @@ public class GHStargazer extends GHObjectBase{
      */
     public GHUser getUser() {
         return user;
-    }
-
-    void wrapUp(GHRepository repository) {
-        this.repository = repository;
     }
 }

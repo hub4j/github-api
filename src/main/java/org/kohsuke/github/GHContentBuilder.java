@@ -68,9 +68,6 @@ public final class GHContentBuilder {
     public GHContentUpdateResponse commit() throws IOException {
         GHContentUpdateResponse response = req.to(repo.getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
 
-        response.getContent().wrap(repo);
-        response.getCommit().wrapUp(repo);
-
         return response;
     }
 }

@@ -24,7 +24,7 @@ public class GHCommitQueryBuilder {
 
     /*package*/ GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = repo.getRoot().retrieve();    // requester to build up
+        this.req = repo.createRequest().method("GET");    // requester to build up
     }
 
     /**
@@ -94,7 +94,6 @@ public class GHCommitQueryBuilder {
         return req
             .asPagedIterable(
                 repo.getApiTailUrl("commits"),
-                GHCommit[].class,
-                item -> item.wrapUp(repo) );
+                GHCommit[].class);
     }
 }

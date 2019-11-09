@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -15,6 +16,8 @@ import java.util.Collection;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
 public class GHBranch extends GHObjectBase {
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository owner;
 
     private String name;
@@ -63,7 +66,7 @@ public class GHBranch extends GHObjectBase {
     }
 
     public GHBranchProtection getProtection() throws IOException {
-        return super.getRoot().retrieve().to(protection_url, GHBranchProtection.class).wrap(this);
+        return super.getRoot().createRequest().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -115,10 +118,5 @@ public class GHBranch extends GHObjectBase {
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";
         return "Branch:" + name + " in " + url;
-    }
-
-    /*package*/ GHBranch wrap(GHRepository repo) {
-        this.owner = repo;
-        return this;
     }
 }

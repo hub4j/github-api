@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -18,7 +19,9 @@ import static org.kohsuke.github.Previews.*;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHCommitComment extends GHObject implements Reactable {
-    private GHRepository owner;
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
+    GHRepository owner;
 
     String body, html_url, commit_id;
     Integer line;
@@ -98,7 +101,7 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().retrieve().withPreview(SQUIRREL_GIRL)
+        return createRequest().method("GET").withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiTail()+"/reactions",
                 GHReaction[].class);
@@ -113,10 +116,5 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     private String getApiTail() {
         return String.format("/repos/%s/%s/comments/%s",owner.getOwnerName(),owner.getName(),id);
-    }
-
-    GHCommitComment wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
     }
 }

@@ -57,7 +57,8 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHPullRequest getPullRequest() {
             if (repository!=null) {
-                pull_request.wrapUp(repository);
+                // BUGBUG
+                pull_request.owner = repository;
             }
 
             return pull_request;
@@ -93,13 +94,13 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
         
         public GHPullRequestReview getReview() {
-            review.wrapUp(pull_request);
+            review.owner = pull_request;
             return review;
         }
 
         public GHPullRequest getPullRequest() {
             if (repository!=null) {
-                pull_request.wrapUp(repository);
+                pull_request.owner = repository;
             }
 
             return pull_request;
@@ -133,13 +134,13 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
         
         public GHPullRequestReviewComment getComment() {
-            comment.wrapUp(pull_request);
+            comment.owner = pull_request;
             return comment;
         }
 
         public GHPullRequest getPullRequest() {
             if (repository!=null) {
-                pull_request.wrapUp(repository);
+                pull_request.owner = repository;
             }
 
             return pull_request;
@@ -176,7 +177,7 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHIssue getIssue() {
             if (repository != null) {
-                issue.wrap(repository);
+                issue.owner = repository;
             }
 
             return issue;
@@ -214,7 +215,7 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHIssueComment getComment() {
-            comment.wrapUp(issue);
+            comment.owner = issue;
             return comment;
         }
 
@@ -224,7 +225,7 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHIssue getIssue() {
             if (repository != null) {
-                issue.wrap(repository);
+                issue.owner = repository;
             }
 
             return issue;
@@ -262,7 +263,7 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHCommitComment getComment() {
             if (repository != null) {
-                comment.wrap(repository);
+                comment.owner = repository;
             }
 
             return comment;
@@ -371,7 +372,7 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHDeployment getDeployment() {
             if (repository != null) {
-                deployment.wrap(repository);
+                deployment.owner = repository;
             }
             return deployment;
         }
@@ -404,8 +405,8 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHDeploymentStatus getDeploymentStatus() {
             if (repository != null) {
-                deployment.wrap(repository);
-                deploymentStatus.wrap(repository);
+                deployment.owner = repository;
+                deploymentStatus.owner = repository;
             }
 
             return deploymentStatus;
@@ -417,8 +418,8 @@ public abstract class GHEventPayload extends GHObjectBase {
 
         public GHDeployment getDeployment() {
             if (repository != null) {
-                deployment.wrap(repository);
-                deploymentStatus.wrap(repository);
+                deployment.owner = repository;
+                deploymentStatus.owner = repository;
             }
 
             return deployment;

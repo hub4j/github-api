@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
@@ -9,6 +10,8 @@ public class GHDeployKey {
     protected String url, key, title;
     protected boolean verified;
     protected long id;
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository owner;
 
     public long getId() {
@@ -29,11 +32,6 @@ public class GHDeployKey {
 
     public boolean isVerified() {
         return verified;
-    }
-
-    public GHDeployKey wrap(GHRepository repo) {
-        this.owner = repo;
-        return this;
     }
 
     public String toString() {

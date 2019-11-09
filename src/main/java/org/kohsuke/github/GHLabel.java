@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +16,8 @@ import static org.kohsuke.github.Previews.SYMMETRA;
  */
 public class GHLabel {
     private String url, name, color, description;
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository repo;
 
     public String getUrl() {
@@ -39,13 +43,8 @@ public class GHLabel {
         return description;
     }
 
-    /*package*/ GHLabel wrapUp(GHRepository repo) {
-        this.repo = repo;
-        return this;
-    }
-
     public void delete() throws IOException {
-        repo.getRoot().retrieve().method("DELETE").to(url);
+        repo.getRoot().createRequest().method("GET").method("DELETE").to(url);
     }
 
     /**
@@ -53,7 +52,7 @@ public class GHLabel {
      *      6-letter hex color code, like "f29513"
      */
     public void setColor(String newColor) throws IOException {
-        repo.getRoot().retrieve().method("PATCH")
+        repo.createRequest().method("GET").method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", newColor)
@@ -67,7 +66,7 @@ public class GHLabel {
      */
     @Preview @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.getRoot().retrieve().method("PATCH")
+        repo.createRequest().method("GET").method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)

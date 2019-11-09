@@ -87,6 +87,6 @@ public class GHCommitBuilder {
      */
     public GHCommit create() throws IOException {
         req._with("parents", parents);
-        return req.method("POST").to(getApiTail(), GHCommit.class).wrapUp(repo);
+        return req.method("POST").to(getApiTail(), GHCommit.class);
     }
 }

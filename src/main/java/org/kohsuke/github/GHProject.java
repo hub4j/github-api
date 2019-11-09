@@ -60,11 +60,11 @@ public class GHProject extends GHObject {
         if(owner == null) {
             try {
                 if(owner_url.contains("/orgs/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHOrganization.class);
+                    owner = getRoot().createRequest().method("GET").to(getOwnerUrl().getPath(), GHOrganization.class);
                 } else if(owner_url.contains("/users/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHUser.class);
+                    owner = getRoot().createRequest().method("GET").to(getOwnerUrl().getPath(), GHUser.class);
                 } else if(owner_url.contains("/repos/")) {
-                    owner = getRoot().retrieve().to(getOwnerUrl().getPath(), GHRepository.class);
+                    owner = getRoot().createRequest().method("GET").to(getOwnerUrl().getPath(), GHRepository.class);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -159,7 +159,7 @@ public class GHProject extends GHObject {
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .withPreview(INERTIA)
             .asPagedIterable(
                 String.format("/projects/%d/columns", id),
@@ -168,7 +168,7 @@ public class GHProject extends GHObject {
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return getRoot().retrieve().method("POST")
+        return getRoot().createRequest().method("GET").method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);

@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +18,9 @@ import java.util.List;
  * @see GHTreeEntry#asTree()
  */
 public class GHTree {
-    /* package almost final */GHRepository repo;
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
+    GHRepository repo;
 
     private boolean truncated;
     private String sha, url;
@@ -34,6 +39,15 @@ public class GHTree {
     public List<GHTreeEntry> getTree() {
         return Collections.unmodifiableList(Arrays.asList(tree));
     }
+
+    @JsonSetter("tree")
+    void setTree(GHTreeEntry[] tree) {
+        this.tree = tree;
+        for (GHTreeEntry e : tree) {
+            e.tree = this;
+        }
+    }
+
 
     /**
      * Finds a tree entry by its name.
@@ -62,14 +76,6 @@ public class GHTree {
      */
     public URL getUrl() {
         return GitHub.parseURL(url);
-    }
-
-    /* package */GHTree wrap(GHRepository repo) {
-        this.repo = repo;
-        for (GHTreeEntry e : tree) {
-            e.tree = this;
-        }
-        return this;
     }
 
 }

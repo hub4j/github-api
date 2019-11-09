@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -75,10 +76,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     private transient boolean fetchedIssueDetails;
 
-
-    GHPullRequest wrapUp(GHRepository owner) {
-        this.wrap(owner);
-        return this;
+    @Nonnull
+    @Override
+    Requester createRequest() {
+        return owner.createRequest().inject(this);
     }
 
     @Override
@@ -261,53 +262,49 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        getRoot().retrieve()
+        owner.createRequest().method("GET")
             .withPreview(SHADOW_CAT)
-            .to(url, this).wrapUp(owner);
+            .to(url, this);
     }
 
     /**
      * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 String.format("%s/files", getApiRoute()),
-                GHPullRequestFileDetail[].class,
-                null);
+                GHPullRequestFileDetail[].class);
     }
 
     /**
      * Retrieves all the reviews associated to this pull request.
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return getRoot().retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 String.format("%s/reviews", getApiRoute()),
-                GHPullRequestReview[].class,
-                item -> item.wrapUp(GHPullRequest.this));
+                GHPullRequestReview[].class);
     }
 
     /**
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return getRoot().retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 getApiRoute() + COMMENTS_ACTION,
-                        GHPullRequestReviewComment[].class,
-                        item -> item.wrapUp(GHPullRequest.this) );
+                        GHPullRequestReviewComment[].class);
     }
 
     /**
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                         String.format("%s/commits", getApiRoute()),
-                        GHPullRequestCommitDetail[].class,
-                        item -> item.wrapUp(GHPullRequest.this) );
+                        GHPullRequestCommitDetail[].class);
     }
 
     /**
@@ -342,7 +339,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .with("commit_id", sha)
                 .with("path", path)
                 .with("position", position)
-                .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class).wrapUp(this);
+                .to(getApiRoute() + COMMENTS_ACTION, GHPullRequestReviewComment.class);
     }
 
     public void requestReviewers(List<GHUser> reviewers) throws IOException {

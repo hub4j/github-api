@@ -8,9 +8,9 @@ package org.kohsuke.github;
 public abstract class GHQueryBuilder<T> extends GHObjectBase {
     protected final Requester req;
 
-    /*package*/ GHQueryBuilder(GitHub root) {
+    /*package*/ GHQueryBuilder(GitHub root, Requester requester) {
         super(root);
-        this.req = root.retrieve();
+        this.req = requester;
     }
 
     /**

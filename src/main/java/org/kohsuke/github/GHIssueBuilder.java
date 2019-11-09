@@ -55,6 +55,6 @@ public class GHIssueBuilder {
      * Creates a new issue.
      */
     public GHIssue create() throws IOException {
-        return builder.with("labels",labels).with("assignees",assignees).to(repo.getApiTailUrl("issues"),GHIssue.class).wrap(repo);
+        return builder.with("labels",labels).with("assignees",assignees).to(repo.getApiTailUrl("issues"),GHIssue.class);
     }
 }

@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -11,7 +13,10 @@ import java.net.URL;
  * @see GHRepository#getDeployment(long)
  */
 public class GHDeployment extends GHObject {
-    private GHRepository owner;
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
+    GHRepository owner;
+
     protected String sha;
     protected String ref;
     protected String task;
@@ -21,12 +26,6 @@ public class GHDeployment extends GHObject {
     protected String statuses_url;
     protected String repository_url;
     protected GHUser creator;
-
-
-    GHDeployment wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
 
     public URL getStatusesUrl() {
         return GitHub.parseURL(statuses_url);
@@ -68,7 +67,7 @@ public class GHDeployment extends GHObject {
     }
 
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 statuses_url,
                 GHDeploymentStatus[].class,

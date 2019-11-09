@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,6 +52,12 @@ public class GHOrganization extends GHPerson {
         return new GHCreateRepositoryBuilder(getRoot(),"/orgs/"+login+"/repos",name);
     }
 
+    @Nonnull
+    @Override
+    Requester createRequest() {
+        return super.createRequest().inject(this);
+    }
+
     /**
      * Teams by their names.
      */
@@ -66,11 +73,10 @@ public class GHOrganization extends GHPerson {
      * List up all the teams.
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
-        return getRoot().retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 String.format("/orgs/%s/teams", login),
-                GHTeam[].class,
-                item -> item.wrapUp(GHOrganization.this) );
+                GHTeam[].class);
     }
 
     /**
@@ -106,7 +112,7 @@ public class GHOrganization extends GHPerson {
      * @see <a href="https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
      */
     public void add(GHUser user, Role role) throws IOException {
-        getRoot().retrieve().method("PUT")
+        getRoot().createRequest().method("GET").method("PUT")
                 .with("role", role.name().toLowerCase())
                 .to("/orgs/" + login + "/memberships/" + user.getLogin());
     }
@@ -116,7 +122,7 @@ public class GHOrganization extends GHPerson {
      */
     public boolean hasMember(GHUser user) {
         try {
-            getRoot().retrieve().to("/orgs/" + login + "/members/"  + user.getLogin());
+            getRoot().createRequest().method("GET").to("/orgs/" + login + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -128,7 +134,7 @@ public class GHOrganization extends GHPerson {
      * all teams, and remove their access to the organization’s repositories.
      */
     public void remove(GHUser user) throws IOException {
-        getRoot().retrieve().method("DELETE").to("/orgs/" + login + "/members/"  + user.getLogin());
+        getRoot().createRequest().method("GET").method("DELETE").to("/orgs/" + login + "/members/"  + user.getLogin());
     }
 
     /**
@@ -136,7 +142,7 @@ public class GHOrganization extends GHPerson {
      */
     public boolean hasPublicMember(GHUser user) {
         try {
-            getRoot().retrieve().to("/orgs/" + login + "/public_members/" + user.getLogin());
+            getRoot().createRequest().method("GET").to("/orgs/" + login + "/public_members/" + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -147,7 +153,7 @@ public class GHOrganization extends GHPerson {
      * Publicizes the membership.
      */
     public void publicize(GHUser u) throws IOException {
-        getRoot().retrieve().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        getRoot().createRequest().method("GET").method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     /**
@@ -181,7 +187,7 @@ public class GHOrganization extends GHPerson {
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 String.format("/orgs/%s/%s%s", login, suffix, filterParams),
                 GHUser[].class);
@@ -191,7 +197,7 @@ public class GHOrganization extends GHPerson {
      * Conceals the membership.
      */
     public void conceal(GHUser u) throws IOException {
-        getRoot().retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        getRoot().createRequest().method("GET").method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     /**
@@ -199,7 +205,7 @@ public class GHOrganization extends GHPerson {
      * @param status The status filter (all, open or closed).
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-        return getRoot().retrieve().withPreview(INERTIA)
+        return getRoot().createRequest().method("GET").withPreview(INERTIA)
                         .with("state", status)
                         .asPagedIterable(
                             String.format("/orgs/%s/projects", login),
@@ -217,7 +223,7 @@ public class GHOrganization extends GHPerson {
      * Creates a project for the organization.
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return getRoot().retrieve().method("POST")
+        return getRoot().createRequest().method("GET").method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)
@@ -236,7 +242,7 @@ public class GHOrganization extends GHPerson {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names",repo_names);
-        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
+        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class);
     }
 
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
@@ -275,7 +281,7 @@ public class GHOrganization extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 String.format("/orgs/%s/events", login),
                 GHEventInfo[].class);
@@ -290,7 +296,7 @@ public class GHOrganization extends GHPerson {
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 "/orgs/" + login + "/repos",
                 GHRepository[].class

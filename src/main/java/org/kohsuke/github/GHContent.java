@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Base64InputStream;
@@ -21,6 +22,8 @@ public class GHContent extends GHObjectBase implements Refreshable {
         In normal use of this class, repository field is set via wrap(),
         but in the code search API, there's a nested 'repository' field that gets populated from JSON.
      */
+    // TODO: BUGBUG Check this
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository repository;
 
     private String type;
@@ -148,7 +151,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        getRoot().retrieve().to(url, this);
+        getRoot().createRequest().method("GET").to(url, this);
     }
 
     /**
@@ -158,11 +161,10 @@ public class GHContent extends GHObjectBase implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return getRoot().retrieve()
+        return  getOwner().createRequest().method("GET")
             .asPagedIterable(
                 url,
-                GHContent[].class,
-                item -> item.wrap(repository) );
+                GHContent[].class);
     }
 
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
@@ -182,7 +184,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = createRequest()
+        Requester requester =  getOwner().createRequest()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -195,9 +197,6 @@ public class GHContent extends GHObjectBase implements Refreshable {
 
         GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
 
-        response.getContent().wrap(repository);
-        response.getCommit().wrapUp(repository);
-
         this.content = encodedContent;
         return response;
     }
@@ -207,7 +206,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = createRequest()
+        Requester requester =  getOwner().createRequest()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -219,24 +218,11 @@ public class GHContent extends GHObjectBase implements Refreshable {
 
         GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
 
-        response.getCommit().wrapUp(repository);
         return response;
     }
 
     private String getApiRoute() {
         return "/repos/" + repository.getOwnerName() + "/" + repository.getName() + "/contents/" + path;
-    }
-
-    GHContent wrap(GHRepository owner) {
-        this.repository = owner;
-        return this;
-    }
-
-    public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
-        for (GHContent unwrappedContent : contents) {
-            unwrappedContent.wrap(repository);
-        }
-        return contents;
     }
 
     /**
@@ -246,6 +232,6 @@ public class GHContent extends GHObjectBase implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        getRoot().retrieve().to(url, this);
+        getOwner().createRequest().method("GET").to(url, this);
     }
 }

@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -9,6 +11,8 @@ import java.net.URL;
  * @see GHRelease#getAssets()
  */
 public class GHAsset extends GHObject {
+
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     GHRepository owner;
     private String name;
     private String label;

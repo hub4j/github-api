@@ -12,7 +12,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
     /*package*/ GHPullRequestQueryBuilder(GHRepository repo) {
-        super(repo.getRoot());
+        super(repo.getRoot(), repo.createRequest());
         this.repo = repo;
     }
 
@@ -52,7 +52,6 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
             .withPreview(SHADOW_CAT)
             .asPagedIterable(
             repo.getApiTailUrl("pulls"),
-            GHPullRequest[].class,
-            item -> item.wrapUp(repo) );
+            GHPullRequest[].class);
     }
 }

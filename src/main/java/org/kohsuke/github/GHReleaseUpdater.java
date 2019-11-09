@@ -14,7 +14,7 @@ public class GHReleaseUpdater {
 
     GHReleaseUpdater(GHRelease base) {
         this.base = base;
-        this.builder = base.createRequest();
+        this.builder = base.getOwner().createRequest();
     }
 
     public GHReleaseUpdater tag(String tag) {
@@ -75,7 +75,7 @@ public class GHReleaseUpdater {
     public GHRelease update() throws IOException {
         return builder
                 .method("PATCH")
-                .to(base.owner.getApiTailUrl("releases/"+base.id), GHRelease.class).wrap(base.owner);
+                .to(base.owner.getApiTailUrl("releases/"+base.id), GHRelease.class);
     }
 
 }

@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
@@ -38,6 +39,8 @@ import java.net.URL;
  */
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
+
+    @JacksonInject("org.kohsuke.github.GHPullRequest")
     GHPullRequest owner;
 
     private String body;
@@ -45,11 +48,6 @@ public class GHPullRequestReview extends GHObject {
     private String commit_id;
     private GHPullRequestReviewState state;
     private String submitted_at;
-
-    /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-        return this;
-    }
 
     /**
      * Gets the pull request to which this review is associated.
@@ -148,10 +146,9 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.getRoot().retrieve()
+        return owner.createRequest().method("GET")
             .asPagedIterable(
                 getApiRoute() + "/comments",
-                GHPullRequestReviewComment[].class,
-                item -> item.wrapUp(owner) );
+                GHPullRequestReviewComment[].class);
     }
 }

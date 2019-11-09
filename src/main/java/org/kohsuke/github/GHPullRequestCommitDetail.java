@@ -23,6 +23,7 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -37,11 +38,9 @@ import java.net.URL;
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
     "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
 public class GHPullRequestCommitDetail {
-    private GHPullRequest owner;
 
-    /*package*/ void wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-    }
+    @JacksonInject("org.kohsuke.github.GHPullRequest")
+    private GHPullRequest owner;
 
     /**
      * @deprecated Use {@link GitUser}

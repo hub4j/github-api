@@ -50,6 +50,6 @@ public class GHDeploymentBuilder {
     }
 
     public GHDeployment create() throws IOException {
-        return builder.to(repo.getApiTailUrl("deployments"),GHDeployment.class).wrap(repo);
+        return builder.to(repo.getApiTailUrl("deployments"),GHDeployment.class);
     }
 }

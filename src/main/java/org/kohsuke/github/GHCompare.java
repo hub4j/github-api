@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -19,6 +20,7 @@ public class GHCompare {
     private Commit[] commits;
     private GHCommit.File[] files;
 
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository owner;
 
     public URL getUrl() {
@@ -83,16 +85,6 @@ public class GHCompare {
         GHCommit.File[] newValue = new GHCommit.File[files.length];
         System.arraycopy(files, 0, newValue, 0, files.length);
         return newValue;
-    }
-
-    public GHCompare wrap(GHRepository owner) {
-        this.owner = owner;
-        for (Commit commit : commits) {
-            commit.wrapUp(owner);
-        }
-        merge_base_commit.wrapUp(owner);
-        base_commit.wrapUp(owner);
-        return this;
     }
 
     /**

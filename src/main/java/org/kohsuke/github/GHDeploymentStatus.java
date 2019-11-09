@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.Locale;
 
 public class GHDeploymentStatus extends GHObject {
-    private GHRepository owner;
+    GHRepository owner;
     protected GHUser creator;
     protected String state;
     protected String description;

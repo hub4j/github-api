@@ -110,7 +110,8 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
                 String repoName = getRepoName(commit.url);
                 try {
                     GHRepository repo = root.getRepository(repoName);
-                    commit.wrapUp(repo);
+                    // BUGBUG - late binding garbage
+                    // commit.wrapUp(repo);
                 } catch (IOException ioe) {}
             }
             return items;

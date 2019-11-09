@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -36,15 +38,12 @@ import static org.kohsuke.github.Previews.*;
  * @see GHIssue#listComments()
  */
 public class GHIssueComment extends GHObject implements Reactable {
+
+    @JacksonInject("org.kohsuke.github.GHIssue")
     GHIssue owner;
 
     private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
-
-    /*package*/ GHIssueComment wrapUp(GHIssue owner) {
-        this.owner = owner;
-        return this;
-    }
 
     /**
      * Gets the issue to which this comment is associated.
@@ -109,7 +108,7 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().retrieve()
+        return createRequest().method("GET")
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",

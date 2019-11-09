@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class GHSubscription extends GHObjectBase {
     private String created_at, url, repository_url, reason;
     private boolean subscribed, ignored;
 
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     private GHRepository repo;
 
     public Date getCreatedAt() {
@@ -49,10 +52,5 @@ public class GHSubscription extends GHObjectBase {
      */
     public void delete() throws IOException {
         createRequest().method("DELETE").to(repo.getApiTailUrl("subscription"));
-    }
-
-    GHSubscription wrapUp(GHRepository repo) {
-        this.repo = repo;
-        return this;
     }
 }

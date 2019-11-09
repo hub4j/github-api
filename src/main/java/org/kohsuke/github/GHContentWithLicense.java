@@ -10,9 +10,4 @@ package org.kohsuke.github;
 class GHContentWithLicense extends GHContent {
     GHLicense license;
 
-    @Override
-    GHContentWithLicense wrap(GHRepository owner) {
-        super.wrap(owner);
-        return this;
-    }
 }

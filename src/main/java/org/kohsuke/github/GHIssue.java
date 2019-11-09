@@ -26,8 +26,11 @@ package org.kohsuke.github;
 
 import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import java.util.Locale;
 public class GHIssue extends GHObject implements Reactable{
     private static final String ASSIGNEES = "assignees";
 
+    @JacksonInject(value = "org.kohsuke.github.GHRepository")
     GHRepository owner;
     
     // API v3
@@ -70,22 +74,16 @@ public class GHIssue extends GHObject implements Reactable{
     protected GHUser closed_by;
     protected boolean locked;
 
+    @Nonnull
+    @Override
+    Requester createRequest() {
+        return owner.createRequest().inject(this);
+    }
+
     /**
      * @deprecated use {@link GHLabel}
      */
     public static class Label extends GHLabel {
-    }
-    
-    /*package*/ GHIssue wrap(GHRepository owner) {
-        this.owner = owner;
-        if(milestone != null) milestone.wrap(owner);
-        return this;
-    }
-
-    /*package*/ static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
-        for (GHIssue i : issues)
-            i.wrap(owner);
-        return issues;
     }
 
     /**
@@ -161,7 +159,7 @@ public class GHIssue extends GHObject implements Reactable{
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
         GHIssueComment r = createRequest().with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
-        return r.wrapUp(this);
+        return r;
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -280,11 +278,10 @@ public class GHIssue extends GHObject implements Reactable{
      * Obtains all the comments associated with this issue.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return getRoot().retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 getIssuesApiRoute() + "/comments",
-                GHIssueComment[].class,
-                item -> item.wrapUp(GHIssue.this) );
+                GHIssueComment[].class);
     }
 
     @Preview @Deprecated
@@ -297,7 +294,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().retrieve().withPreview(SQUIRREL_GIRL)
+        return owner.getRoot().createRequest().method("GET").withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",
                 GHReaction[].class);
@@ -308,7 +305,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        getRoot().retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+        getRoot().createRequest().method("GET").method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -324,7 +321,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        getRoot().retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        getRoot().createRequest().method("GET").method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected String getApiRoute() {
@@ -412,7 +409,7 @@ public class GHIssue extends GHObject implements Reactable{
      * See https://developer.github.com/v3/issues/events/
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return getRoot().retrieve().asPagedIterable(
+        return getRoot().createRequest().method("GET").asPagedIterable(
             owner.getApiTailUrl(String.format("/issues/%s/events", number)),
             GHIssueEvent[].class,
             item -> item.wrapUp(GHIssue.this) );

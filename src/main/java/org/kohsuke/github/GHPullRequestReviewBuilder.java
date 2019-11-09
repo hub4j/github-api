@@ -61,8 +61,7 @@ public class GHPullRequestReviewBuilder {
 
     public GHPullRequestReview create() throws IOException {
         return builder.method("POST")._with("comments",comments)
-                .to(pr.getApiRoute() + "/reviews", GHPullRequestReview.class)
-                .wrapUp(pr);
+                .to(pr.getApiRoute() + "/reviews", GHPullRequestReview.class);
     }
 
     private static class DraftReviewComment {

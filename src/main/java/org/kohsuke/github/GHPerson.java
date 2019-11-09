@@ -37,7 +37,7 @@ public abstract class GHPerson extends GHObject {
         if (getRoot() == null || getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        getRoot().retrieve().to(url, this);
+        getRoot().createRequest().method("GET").to(url, this);
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return getRoot().retrieve()
+        return getRoot().createRequest().method("GET")
             .asPagedIterable(
                 "/users/" + login + "/repos",
                 GHRepository[].class
@@ -96,7 +96,7 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = getRoot().retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = getRoot().createRequest().method("GET").asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -123,7 +123,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return getRoot().retrieve().to("/repos/" + login + '/' + name, GHRepository.class);
+            return getRoot().createRequest().method("GET").to("/repos/" + login + '/' + name, GHRepository.class);
         } catch (FileNotFoundException e) {
             return null;
         }

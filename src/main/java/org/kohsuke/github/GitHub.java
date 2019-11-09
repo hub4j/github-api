@@ -672,7 +672,11 @@ public class GitHub {
         return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
     }
     /**
-     * Creates a new authorization.
+     * Creates a new authorization using an OTP.
+     * 
+     * Start by running createToken, if exception is thrown, prompt for OTP from user
+     * 
+     * Once OTP is recived, call this token request
      *
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *

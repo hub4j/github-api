@@ -99,7 +99,6 @@ public class GHAuthorization extends GHObject {
     }
 
     /*package*/ GHAuthorization wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 

@@ -16,6 +16,15 @@ public abstract class PagedIterable<T> extends GHObjectBase implements Iterable<
      */
     private int size = 0;
 
+
+    /*package*/ PagedIterable() {
+        super();
+    }
+
+    /*package*/ PagedIterable(GitHub root) {
+        super(root);
+    }
+
     /**
      * Sets the pagination size.
      *

@@ -102,7 +102,7 @@ class Requester extends GHObjectBase {
     }
 
     Requester(GitHub root) {
-        this.root = root;
+        super(root);
         inject.addValue("owner", null);
         inject.addValue(GitHub.class.getName(), root);
     }

@@ -107,7 +107,6 @@ public class GHRelease extends GHObject {
 
     GHRelease wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         return this;
     }
 

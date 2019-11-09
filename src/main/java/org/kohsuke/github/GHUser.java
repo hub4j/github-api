@@ -137,8 +137,6 @@ public class GHUser extends GHPerson {
     }
 
     /*package*/ static GHUser[] wrap(GHUser[] users, GitHub root) {
-        for (GHUser f : users)
-            f.root = root;
         return users;
     }
 

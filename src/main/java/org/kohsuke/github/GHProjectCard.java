@@ -25,14 +25,12 @@ public class GHProjectCard extends GHObject {
 	}
 
 	public GHProjectCard wrap(GitHub root) {
-		this.root = root;
 		return this;
 	}
 
 	public GHProjectCard wrap(GHProjectColumn column) {
 		this.column = column;
 		this.project = column.project;
-		this.root = column.root;
 		return this;
 	}
 

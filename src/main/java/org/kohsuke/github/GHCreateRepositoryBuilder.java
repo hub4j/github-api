@@ -13,7 +13,7 @@ public class GHCreateRepositoryBuilder extends GHObjectBase{
     private final String apiUrlTail;
 
     /*package*/ GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
-        this.root = root;
+        super(root);
         this.apiUrlTail = apiUrlTail;
         this.builder = new Requester(root);
         this.builder.with("name",name);

@@ -57,7 +57,6 @@ public class GHSubscription extends GHObjectBase {
     }
 
     GHSubscription wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 }

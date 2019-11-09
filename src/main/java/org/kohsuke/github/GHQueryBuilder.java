@@ -9,7 +9,7 @@ public abstract class GHQueryBuilder<T> extends GHObjectBase {
     protected final Requester req;
 
     /*package*/ GHQueryBuilder(GitHub root) {
-        this.root = root;
+        super(root);
         this.req = root.retrieve();
     }
 

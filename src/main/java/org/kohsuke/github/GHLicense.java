@@ -156,7 +156,6 @@ public class GHLicense extends GHObject {
     }
 
     /*package*/ GHLicense wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 }

@@ -121,7 +121,6 @@ public class GHBranch extends GHObjectBase {
 
     /*package*/ GHBranch wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
         return this;
     }
 }

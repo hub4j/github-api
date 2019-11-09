@@ -80,7 +80,6 @@ public class GHCommitPointer {
     }
 
     void wrapUp(GitHub root) {
-        if (user!=null) user.root = root;
         if (repo!=null) repo.wrap(root);
     }
 }

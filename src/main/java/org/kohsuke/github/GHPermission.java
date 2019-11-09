@@ -51,9 +51,5 @@ import java.util.Locale;
     }
 
     void wrapUp(GitHub root) {
-        if (user != null) {
-            user.root = root;
-        }
     }
-
 }

@@ -18,7 +18,7 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     private SearchResult<T> result;
 
     /*package*/ PagedSearchIterable(GitHub root) {
-        this.root = root;
+        super(root);
     }
 
     @Override

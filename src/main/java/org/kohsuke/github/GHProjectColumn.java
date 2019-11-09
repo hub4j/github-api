@@ -21,13 +21,11 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public GHProjectColumn wrap(GitHub root) {
-		this.root = root;
 		return this;
 	}
 
 	public GHProjectColumn wrap(GHProject project) {
 		this.project = project;
-		this.root = project.root;
 		return this;
 	}
 

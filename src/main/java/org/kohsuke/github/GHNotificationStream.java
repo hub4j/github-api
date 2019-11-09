@@ -35,7 +35,7 @@ public class GHNotificationStream extends GHObjectBase implements Iterable<GHThr
     private boolean nonBlocking = false;
 
     /*package*/ GHNotificationStream(GitHub root, String apiUrl) {
-        this.root = root;
+        super(root);
         this.apiUrl = apiUrl;
     }
 

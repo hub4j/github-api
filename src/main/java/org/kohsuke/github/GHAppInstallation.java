@@ -51,7 +51,8 @@ public class GHAppInstallation extends GHObject {
     }
 
     public void setRoot(GitHub root) {
-        this.root = root;
+        //TODO: needs fixing
+        //this.root = root;
     }
 
     public GHUser getAccount() {
@@ -135,7 +136,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     /*package*/ GHAppInstallation wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 

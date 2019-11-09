@@ -48,7 +48,6 @@ public class GHMembership extends GHObjectBase {
     }
 
     /*package*/ GHMembership wrap(GitHub root) {
-        this.root = root;
         if (user!=null)     user = root.getUser(user.wrapUp(root));
         if (organization!=null) organization.wrapUp(root);
         return this;

@@ -20,7 +20,6 @@ public class GHInvitation extends GHObject {
     private String html_url;
 
     /*package*/ GHInvitation wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 

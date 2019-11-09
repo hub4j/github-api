@@ -15,7 +15,7 @@ class GHHooks {
     static abstract class Context extends GHObjectBase  {
 
         private Context(GitHub root) {
-          this.root = root;
+            super(root);
         }
 
         public List<GHHook> getHooks() throws IOException {

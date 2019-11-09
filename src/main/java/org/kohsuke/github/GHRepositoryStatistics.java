@@ -24,8 +24,8 @@ public class GHRepositoryStatistics extends GHObjectBase {
     private static final int WAIT_SLEEP_INTERVAL = 5000;
 
     public GHRepositoryStatistics(GHRepository repo) {
+        super(repo.root);
         this.repo = repo;
-        this.root = repo.root;
     }
 
     /**
@@ -182,7 +182,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ ContributorStats wrapUp(GitHub root) {
-            this.root = root;
             return this;
         }
     }
@@ -229,7 +228,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ CommitActivity wrapUp(GitHub root) {
-            this.root = root;
             return this;
         }
 
@@ -355,7 +353,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ Participation wrapUp(GitHub root) {
-        this.root = root;
         return this;
         }
     }

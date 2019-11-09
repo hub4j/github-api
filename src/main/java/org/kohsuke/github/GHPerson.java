@@ -26,7 +26,6 @@ public abstract class GHPerson extends GHObject {
     protected int followers,following,public_repos,public_gists;
 
     /*package*/ GHPerson wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -111,8 +110,6 @@ public abstract class GHPerson extends GHObject {
 
                     public List<GHRepository> next() {
                         GHRepository[] batch = pager.next();
-                        for (GHRepository r : batch)
-                            r.root = root;
                         return Arrays.asList(batch);
                     }
 

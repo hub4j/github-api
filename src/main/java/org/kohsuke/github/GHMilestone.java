@@ -113,7 +113,6 @@ public class GHMilestone extends GHObject {
 
     public GHMilestone wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
         return this;
     }
 }

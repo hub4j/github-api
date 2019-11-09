@@ -43,7 +43,6 @@ public class GHKey extends GHObjectBase {
     }
 
     /*package*/ GHKey wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 

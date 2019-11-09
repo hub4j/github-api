@@ -25,7 +25,6 @@ public class GHDeployment extends GHObject {
 
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         if(creator != null) creator.wrapUp(root);
         return this;
     }

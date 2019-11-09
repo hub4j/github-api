@@ -26,12 +26,15 @@ public class GHAppInstallationToken extends GHObjectBase{
     @JsonProperty("repository_selection")
     private GHRepositorySelection repositorySelection;
 
+
+
     public GitHub getRoot() {
         return root;
     }
 
     public void setRoot(GitHub root) {
-        this.root = root;
+        //TODO: needs fixing
+        //this.root = root;
     }
 
     public Map<String, String> getPermissions() {
@@ -80,7 +83,6 @@ public class GHAppInstallationToken extends GHObjectBase{
     }
 
     /*package*/ GHAppInstallationToken wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 }

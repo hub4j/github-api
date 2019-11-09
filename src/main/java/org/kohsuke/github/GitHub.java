@@ -385,7 +385,6 @@ public class GitHub {
 
             GHMyself u = retrieve().to("/user", GHMyself.class);
 
-            u.root = this;
             this.myself = u;
             return u;
         }
@@ -398,7 +397,6 @@ public class GitHub {
         GHUser u = users.get(login);
         if (u == null) {
             u = retrieve().to("/users/" + login, GHUser.class);
-            u.root = this;
             users.put(u.getLogin(), u);
         }
         return u;
@@ -419,7 +417,8 @@ public class GitHub {
     protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
-            orig.root = this;
+            // TODO: Do not commit this without dealing with this.
+//            orig.root = this;
             users.put(orig.getLogin(),orig);
             return orig;
         }

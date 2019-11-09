@@ -30,7 +30,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
 
     /*package*/ GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
-        this.root = owner.root;
         return this;
     }
 
@@ -47,9 +46,6 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
-        for (GHTeam t : teams) {
-            t.root = owner.root;
-        }
         return teams;
     }
 

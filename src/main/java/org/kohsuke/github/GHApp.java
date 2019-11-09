@@ -93,7 +93,6 @@ public class GHApp extends GHObject {
     }
 
     /*package*/ GHApp wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 

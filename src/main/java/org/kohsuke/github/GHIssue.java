@@ -85,7 +85,6 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     /*package*/ GHIssue wrap(GitHub root) {
-        this.root = root;
         if(assignee != null) assignee.wrapUp(root);
         if(assignees!=null)    GHUser.wrap(assignees,root);
         if(user != null) user.wrapUp(root);

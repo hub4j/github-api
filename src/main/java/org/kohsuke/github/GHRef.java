@@ -67,7 +67,6 @@ public class GHRef extends GHObjectBase {
     }
 
     /*package*/ GHRef wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 

@@ -13,5 +13,13 @@ import org.kohsuke.github.GitHub;
 public abstract class GHObjectBase {
 
     @JacksonInject
-    GitHub root = null;
+    final GitHub root;
+
+    GHObjectBase() {
+        this(GitHub.offline());
+    }
+
+    GHObjectBase(GitHub root) {
+        this.root = root;
+    }
 }

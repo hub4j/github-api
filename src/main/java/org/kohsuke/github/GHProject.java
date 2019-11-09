@@ -103,12 +103,10 @@ public class GHProject extends GHObject {
 
     public GHProject wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
         return this;
     }
 
     public GHProject wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 

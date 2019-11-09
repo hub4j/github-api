@@ -15,7 +15,7 @@ public class GHGistBuilder extends GHObjectBase {
     private final LinkedHashMap<String,Object> files = new LinkedHashMap<String, Object>();
 
     public GHGistBuilder(GitHub root) {
-        this.root = root;
+        super(root);
         req = new Requester(root);
     }
 

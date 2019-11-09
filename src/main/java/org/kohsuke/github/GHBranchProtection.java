@@ -68,7 +68,6 @@ public class GHBranchProtection extends GHObjectBase {
     }
 
     GHBranchProtection wrap(GHBranch branch) {
-        this.root = branch.getRoot();
         return this;
     }
 

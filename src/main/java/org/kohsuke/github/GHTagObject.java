@@ -21,7 +21,6 @@ public class GHTagObject extends GHObjectBase{
 
     /*package*/ GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         return this;
     }
 

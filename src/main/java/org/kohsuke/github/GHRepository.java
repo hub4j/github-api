@@ -1374,7 +1374,6 @@ public class GHRepository extends GHObject {
     };
 
     /*package*/ GHRepository wrap(GitHub root) {
-        this.root = root;
         if (root.isOffline()) {
             owner.wrapUp(root);
         }
@@ -1442,7 +1441,6 @@ public class GHRepository extends GHObject {
         if (m == null) {
             m = root.retrieve().to(getApiTailUrl("milestones/" + number), GHMilestone.class);
             m.owner = this;
-            m.root = root;
             milestones.put(m.getNumber(), m);
         }
         return m;

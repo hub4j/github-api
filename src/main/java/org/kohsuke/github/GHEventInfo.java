@@ -51,7 +51,6 @@ public class GHEventInfo extends GHObjectBase {
     }
 
     /*package*/ GHEventInfo wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 

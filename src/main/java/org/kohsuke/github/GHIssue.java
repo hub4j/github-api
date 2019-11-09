@@ -50,7 +50,6 @@ import java.util.Locale;
 public class GHIssue extends GHObject implements Reactable{
     private static final String ASSIGNEES = "assignees";
 
-    GitHub root;
     GHRepository owner;
     
     // API v3

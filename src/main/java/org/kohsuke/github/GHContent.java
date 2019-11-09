@@ -16,14 +16,12 @@ import java.io.UnsupportedEncodingException;
  * @see GHRepository#getFileContent(String)
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class GHContent implements Refreshable {
+public class GHContent extends GHObjectBase implements Refreshable {
     /*
         In normal use of this class, repository field is set via wrap(),
         but in the code search API, there's a nested 'repository' field that gets populated from JSON.
      */
     private GHRepository repository;
-
-    private GitHub root;
 
     private String type;
     private String encoding;

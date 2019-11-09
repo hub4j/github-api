@@ -22,7 +22,6 @@ import static org.kohsuke.github.Previews.GAMBIT;
  */
 
 public class GHAppInstallation extends GHObject {
-    private GitHub root;
     private GHUser account;
 
     @JsonProperty("access_tokens_url")

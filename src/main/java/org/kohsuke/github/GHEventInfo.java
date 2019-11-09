@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -12,8 +13,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHEventInfo {
-    private GitHub root;
+public class GHEventInfo extends GHObjectBase {
 
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
@@ -99,7 +99,9 @@ public class GHEventInfo {
      *      This must match the {@linkplain #getType() event type}.
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHub.MAPPER.readValue(payload.traverse(), type);
+        InjectableValues.Std inject = new InjectableValues.Std();
+        inject.addValue(GitHub.class.getName(), this.root);
+        T v = GitHub.MAPPER.reader(inject).forType(type).readValue(payload.traverse());
         v.wrapUp(root);
         return v;
     }

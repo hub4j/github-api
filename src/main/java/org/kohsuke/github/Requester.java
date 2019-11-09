@@ -69,8 +69,7 @@ import static org.kohsuke.github.GitHub.MAPPER;
  *
  * @author Kohsuke Kawaguchi
  */
-class Requester {
-    private final GitHub root;
+class Requester extends GHObjectBase {
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String,String> headers = new LinkedHashMap<String, String>();
 

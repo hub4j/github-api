@@ -12,7 +12,6 @@ import java.net.URL;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     protected String sha;
     protected String ref;
     protected String task;

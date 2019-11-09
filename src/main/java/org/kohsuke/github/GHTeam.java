@@ -11,12 +11,10 @@ import java.util.TreeMap;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class GHTeam implements Refreshable {
+public class GHTeam extends GHObjectBase implements Refreshable {
     private String name,permission,slug,description;
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
-
-    protected /*final*/ GitHub root;
 
     /** Member's role in a team */
     public enum Role {

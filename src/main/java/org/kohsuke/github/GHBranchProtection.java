@@ -10,13 +10,12 @@ import java.util.Collection;
 
 @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
         "URF_UNREAD_FIELD"}, justification = "JSON API")
-public class GHBranchProtection {
+public class GHBranchProtection extends GHObjectBase {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
     @JsonProperty("enforce_admins")
     private EnforceAdmins enforceAdmins;
 
-    private GitHub root;
 
     @JsonProperty("required_pull_request_reviews")
     private RequiredReviews requiredReviews;

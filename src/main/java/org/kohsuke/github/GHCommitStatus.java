@@ -17,8 +17,6 @@ public class GHCommitStatus extends GHObject {
     String context;
     GHUser creator;
 
-    private GitHub root;
-
     /*package*/ GHCommitStatus wrapUp(GitHub root) {
         if (creator!=null)  creator.wrapUp(root);
         this.root = root;

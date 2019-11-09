@@ -14,8 +14,7 @@ import java.util.List;
  * @see GHEventInfo#getPayload(Class)
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class GHEventPayload {
-    protected GitHub root;
+public abstract class GHEventPayload extends GHObjectBase {
 
     private GHUser sender;
 
@@ -705,7 +704,7 @@ public abstract class GHEventPayload {
         /**
          * Commit in a push
          */
-        public static class PushCommit {
+        public static class PushCommit extends GHObjectBase {
             private GitUser author;
             private GitUser committer;
             private String url, sha, message;

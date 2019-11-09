@@ -20,8 +20,8 @@ import java.util.Map.Entry;
  * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
 public class GHGist extends GHObject {
+
     /*package almost final*/ GHUser owner;
-    /*package almost final*/ GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 

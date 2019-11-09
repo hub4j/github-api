@@ -36,7 +36,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Martin van Zijl
  */
 public class GHProject extends GHObject {
-    protected GitHub root;
     protected GHObject owner;
 
     private String owner_url;

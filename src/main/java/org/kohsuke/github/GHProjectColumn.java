@@ -10,7 +10,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Gunnar Skjold
  */
 public class GHProjectColumn extends GHObject {
-	protected GitHub root;
 	protected GHProject project;
 
 	private String name;

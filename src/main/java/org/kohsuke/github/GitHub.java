@@ -676,7 +676,7 @@ public class GitHub {
      * 
      * Start by running createToken, if exception is thrown, prompt for OTP from user
      * 
-     * Once OTP is recived, call this token request
+     * Once OTP is received, call this token request
      *
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *

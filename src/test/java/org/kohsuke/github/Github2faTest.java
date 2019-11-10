@@ -38,6 +38,7 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 			// we will prompt at the command line for the users 2fa code 
 			try {
 				//token = gitHub.createTokenOtp(asList, string, "", twoFactorAuthCodePrompt());// prompt at command line for 2fa OTP code
+				return;
 			} catch (Exception e) {
 				e.printStackTrace();
 				fail();

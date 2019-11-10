@@ -28,7 +28,7 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 		String timestamp = dateFormat.format(new Date());
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",
 				"user", "delete_repo");
-		String string = "Test2faTokenCreate-" + timestamp;// use time stamp to ensure the token creations do not collide with older tokens
+		String string = "Test2faTokenCreate-2019-11-10_12-09-51";// + timestamp;// use time stamp to ensure the token creations do not collide with older tokens
 		GHAuthorization token=null;
 		try {
 			token = gitHub.createToken(asList, string, "this is a test token created by a unit test");

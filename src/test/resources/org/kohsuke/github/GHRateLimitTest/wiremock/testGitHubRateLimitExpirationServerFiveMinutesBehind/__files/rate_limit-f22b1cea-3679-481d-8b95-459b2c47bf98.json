@@ -3,27 +3,27 @@
     "core": {
       "limit": 5000,
       "remaining": 4897,
-      "reset": 1570478899
+      "reset": {{now offset='-295 seconds' format='unix'}}
     },
     "search": {
       "limit": 30,
       "remaining": 30,
-      "reset": 1570478180
+      "reset": {{now offset='-295 seconds' format='unix'}}
     },
     "graphql": {
       "limit": 5000,
       "remaining": 5000,
-      "reset": 1570481642
+      "reset": {{now offset='-295 seconds' format='unix'}}
     },
     "integration_manifest": {
       "limit": 5000,
       "remaining": 5000,
-      "reset": 1570481642
+      "reset": {{now offset='-295 seconds' format='unix'}}
     }
   },
   "rate": {
     "limit": 5000,
     "remaining": 4897,
-    "reset": {{now offset='-295 seconds' format='unix'}}
+    "reset": 1570478899
   }
 }

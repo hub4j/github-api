@@ -166,8 +166,12 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // These are separate instances, but should be equal
         assertThat(gitHub.rateLimit(), not(sameInstance(rateLimit)));
 
-        // Verify different intstances can be compared
-        assertThat(gitHub.rateLimit(), equalTo(rateLimit));
+        // Verify different record instances can be compared
+        assertThat(gitHub.rateLimit().getCore(), equalTo(rateLimit.getCore()));
+
+        // Verify different instances can be compared
+        // TODO: This is not work currently because the header rate limit has unknowns for records other than core.
+        // assertThat(gitHub.rateLimit().getCore(), equalTo(rateLimit.getCore()));
 
         assertThat(gitHub.rateLimit(), not(sameInstance(headerRateLimit)));
         assertThat(gitHub.rateLimit(), sameInstance(gitHub.lastRateLimit()));
@@ -195,11 +199,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.lastRateLimit(), CoreMatchers.nullValue());
 
         rateLimit = gitHub.rateLimit();
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(1000000));
-        assertThat(rateLimit.getLimit(), equalTo(1000000));
-        assertThat(rateLimit.remaining, equalTo(1000000));
-        assertThat(rateLimit.getRemaining(), equalTo(1000000));
+        assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
+        assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
         lastReset = rateLimit.getResetDate();
 
@@ -222,11 +226,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.lastRateLimit(), CoreMatchers.nullValue());
 
         rateLimit = gitHub.rateLimit();
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(1000000));
-        assertThat(rateLimit.getLimit(), equalTo(1000000));
-        assertThat(rateLimit.remaining, equalTo(1000000));
-        assertThat(rateLimit.getRemaining(), equalTo(1000000));
+        assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
+        assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
         lastReset = rateLimit.getResetDate();
 
@@ -239,11 +243,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
 
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(1000000));
-        assertThat(rateLimit.getLimit(), equalTo(1000000));
-        assertThat(rateLimit.remaining, equalTo(1000000));
-        assertThat(rateLimit.getRemaining(), equalTo(1000000));
+        assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
+        assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
 
         // Give this a moment
@@ -290,11 +294,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
 
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(1000000));
-        assertThat(rateLimit.getLimit(), equalTo(1000000));
-        assertThat(rateLimit.remaining, equalTo(1000000));
-        assertThat(rateLimit.getRemaining(), equalTo(1000000));
+        assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
+        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
+        assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
 
         // ratelimit() should prefer headerRateLimit when getRateLimit fails and headerRateLimit is not expired
@@ -307,12 +311,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
     }
 
 
-    // These three tests should be have the same, showing server time adjustment working
-    @Test
-    public void testGitHubRateLimitExpiration() throws Exception {
-        executeExpirationTest();
-    }
-
+    // These tests should behave the same, showing server time adjustment working
     @Test
     public void testGitHubRateLimitExpirationServerFiveMinutesAhead() throws Exception {
         executeExpirationTest();

@@ -399,9 +399,9 @@ class Requester {
             return;
         }
 
-        GHRateLimit observed = new GHRateLimit(limit, remaining, reset, uc.getHeaderField("Date"));
+        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, uc.getHeaderField("Date"));
 
-        root.updateRateLimit(observed);
+        root.updateCoreRateLimit(observed);
     }
 
     public String getResponseHeader(String header) {
@@ -710,7 +710,7 @@ class Requester {
             setResponseHeaders((GHObject) readValue);
         } else if (readValue instanceof JsonRateLimit) {
             // if we're getting a GHRateLimit it needs the server date
-            ((JsonRateLimit)readValue).rate.recalculateResetDate(uc.getHeaderField("Date"));
+            ((JsonRateLimit)readValue).resources.getCore().recalculateResetDate(uc.getHeaderField("Date"));
         }
         return readValue;
     }

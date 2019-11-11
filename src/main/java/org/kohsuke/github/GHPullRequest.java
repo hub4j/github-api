@@ -79,7 +79,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @Nonnull
     @Override
     Requester createRequest() {
-        return owner.createRequest().inject(this);
+        return owner.createRequest()
+            .inject(this)
+            .inject(GHIssue.class.getName(), this);
     }
 
     @Override

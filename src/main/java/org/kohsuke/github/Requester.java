@@ -92,6 +92,19 @@ class Requester extends GHObjectBase {
     private HttpURLConnection uc;
     private boolean forceBody;
 
+    public void lateBinding() {
+        Requester.lateBinding(inject, getRoot());
+    }
+
+    public static void lateBinding(InjectableValues.Std inject, GitHub root) {
+        inject.addValue(GitHub.class.getName(), root);
+        inject.addValue(GHUser.class.getName(), null);
+        inject.addValue(GHOrganization.class.getName(), null);
+        inject.addValue(GHRepository.class.getName(), null);
+        inject.addValue(GHIssue.class.getName(), null);
+        inject.addValue(GHPullRequest.class.getName(), null);
+    }
+
     private static class Entry {
         String key;
         Object value;
@@ -104,7 +117,10 @@ class Requester extends GHObjectBase {
 
     Requester(GitHub root) {
         super(root);
-        inject.addValue("owner", null);
+
+        lateBinding();
+        inject.addValue(GHUser.class.getName(), null);
+
         inject.addValue(GitHub.class.getName(), root);
     }
 

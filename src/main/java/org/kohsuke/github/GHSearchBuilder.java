@@ -20,6 +20,8 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
     /*package*/ GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root, root.createRequest());
+
+        this.req.lateBinding();
         this.receiverType = receiverType;
     }
 

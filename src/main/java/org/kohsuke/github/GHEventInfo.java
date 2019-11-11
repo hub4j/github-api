@@ -94,8 +94,8 @@ public class GHEventInfo extends GHObjectBase {
      *      This must match the {@linkplain #getType() event type}.
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        InjectableValues.Std inject = new InjectableValues.Std();
-        inject.addValue(GitHub.class.getName(), this.getRoot());
+        final InjectableValues.Std inject = new InjectableValues.Std();
+        Requester.lateBinding(inject, this.getRoot());
         T v = GitHub.MAPPER.reader(inject).forType(type).readValue(payload.traverse());
         return v;
     }

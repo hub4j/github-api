@@ -41,7 +41,7 @@ public class GHGist extends GHObject {
     /**
      * User that owns this Gist.
      */
-    @JacksonInject(value = "owner")
+    @JacksonInject(value = "org.kohsuke.github.GHUser")
     @JsonProperty
     public GHUser getOwner() throws IOException {
         return getRoot().intern(owner);

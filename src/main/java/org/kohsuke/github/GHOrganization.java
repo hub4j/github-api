@@ -112,7 +112,7 @@ public class GHOrganization extends GHPerson {
      * @see <a href="https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
      */
     public void add(GHUser user, Role role) throws IOException {
-        getRoot().createRequest().method("GET").method("PUT")
+        getRoot().createRequest().method("PUT")
                 .with("role", role.name().toLowerCase())
                 .to("/orgs/" + login + "/memberships/" + user.getLogin());
     }
@@ -134,7 +134,7 @@ public class GHOrganization extends GHPerson {
      * all teams, and remove their access to the organization’s repositories.
      */
     public void remove(GHUser user) throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").to("/orgs/" + login + "/members/"  + user.getLogin());
+        getRoot().createRequest().method("DELETE").to("/orgs/" + login + "/members/"  + user.getLogin());
     }
 
     /**
@@ -153,7 +153,7 @@ public class GHOrganization extends GHPerson {
      * Publicizes the membership.
      */
     public void publicize(GHUser u) throws IOException {
-        getRoot().createRequest().method("GET").method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        getRoot().createRequest().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     /**
@@ -197,7 +197,7 @@ public class GHOrganization extends GHPerson {
      * Conceals the membership.
      */
     public void conceal(GHUser u) throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        getRoot().createRequest().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
     }
 
     /**
@@ -223,7 +223,7 @@ public class GHOrganization extends GHPerson {
      * Creates a project for the organization.
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return getRoot().createRequest().method("GET").method("POST")
+        return getRoot().createRequest().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)

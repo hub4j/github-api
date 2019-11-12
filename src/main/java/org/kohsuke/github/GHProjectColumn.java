@@ -75,14 +75,14 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public GHProjectCard createCard(String note) throws IOException {
-		return getRoot().createRequest().method("GET").method("POST")
+		return getRoot().createRequest().method("POST")
 				.withPreview(INERTIA)
 				.with("note", note)
 				.to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class).wrap(this);
 	}
 
 	public GHProjectCard createCard(GHIssue issue) throws IOException {
-		return getRoot().createRequest().method("GET").method("POST")
+		return getRoot().createRequest().method("POST")
 				.withPreview(INERTIA)
 				.with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
 				.with("content_id", issue.getId())

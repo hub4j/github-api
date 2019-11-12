@@ -56,7 +56,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void setDescription(String description) throws IOException {
-        getRoot().createRequest().method("GET").method("PATCH")
+        getRoot().createRequest().method("PATCH")
                 .with("description", description)
                 .to(api(""));
     }
@@ -114,7 +114,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        getRoot().createRequest().method("GET").method("PUT").to(api("/memberships/" + u.getLogin()), null);
+        getRoot().createRequest().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**
@@ -128,7 +128,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        getRoot().createRequest().method("GET").method("PUT")
+        getRoot().createRequest().method("PUT")
                 .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
@@ -137,7 +137,7 @@ public class GHTeam extends GHObjectBase implements Refreshable {
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").to(api("/members/" + u.getLogin()), null);
+        getRoot().createRequest().method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
@@ -145,20 +145,20 @@ public class GHTeam extends GHObjectBase implements Refreshable {
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        getRoot().createRequest().method("GET").method("PUT")
+        getRoot().createRequest().method("PUT")
                 .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        getRoot().createRequest().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
     
     /**
      * Deletes this team.
      */
     public void delete() throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").to(api(""));
+        getRoot().createRequest().method("DELETE").to(api(""));
     }
 
     private String api(String tail) {

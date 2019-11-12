@@ -1200,7 +1200,7 @@ public class GHRepository extends GHObject {
      */
     @Preview @Deprecated
     public GHLabel createLabel(String name, String color, String description) throws IOException {
-        return createRequest().method("GET").method("POST")
+        return createRequest().method("POST")
                 .withPreview(SYMMETRA)
                 .with("name",name)
                 .with("color", color)
@@ -1606,7 +1606,7 @@ public class GHRepository extends GHObject {
      * Create a project for this repository.
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return createRequest().method("GET").method("POST")
+        return createRequest().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)

@@ -168,7 +168,7 @@ public class GHProject extends GHObject {
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return getRoot().createRequest().method("GET").method("POST")
+        return getRoot().createRequest().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);

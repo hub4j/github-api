@@ -44,7 +44,7 @@ public class RepositoryMockTest {
         when(iterator.next()).thenReturn(new GHUser[] {user1}, new GHUser[] {user2});
 
         Requester requester = Mockito.mock(Requester.class);
-        when(mockGitHub.retrieve()).thenReturn(requester);
+        when(mockGitHub.createRequest()).thenReturn(requester);
 
 
         when(requester.asIterator("/repos/*/*/collaborators",

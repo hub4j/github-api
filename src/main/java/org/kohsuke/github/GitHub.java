@@ -321,7 +321,7 @@ public class GitHub {
      */
     public GHRateLimit getRateLimit() throws IOException {
         try {
-            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            return rateLimit = createRequest().method("GET").to("/rate_limit", JsonRateLimit.class).rate;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit, so in that case
             // return some big number that's not too big.
@@ -387,7 +387,7 @@ public class GitHub {
         synchronized (this) {
             if (this.myself != null) return myself;
 
-            GHMyself u = retrieve().to("/user", GHMyself.class);
+            GHMyself u = createRequest().method("GET").to("/user", GHMyself.class);
 
             this.myself = u;
             return u;
@@ -400,7 +400,7 @@ public class GitHub {
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u == null) {
-            u = retrieve().to("/users/" + login, GHUser.class);
+            u = createRequest().method("GET").to("/users/" + login, GHUser.class);
             users.put(u.getLogin(), u);
         }
         return u;
@@ -435,7 +435,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o==null) {
-            o = retrieve().to("/orgs/" + name, GHOrganization.class);
+            o = createRequest().method("GET").to("/orgs/" + name, GHOrganization.class);
             orgs.put(name,o);
         }
         return o;
@@ -454,7 +454,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
-        return retrieve()
+        return createRequest().method("GET")
             .with("since",since)
             .asPagedIterable(
                 "/organizations",
@@ -468,14 +468,14 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class);
+        return createRequest().method("GET").to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class);
     }
 
     /**
      * Gets the repository object from its ID
      */
     public GHRepository getRepositoryById(String id) throws IOException {
-        return retrieve().to("/repositories/" + id, GHRepository.class);
+        return createRequest().method("GET").to("/repositories/" + id, GHRepository.class);
     }
 
     /**
@@ -486,7 +486,7 @@ public class GitHub {
      * @return a list of popular open source licenses
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 "/licenses",
                 GHLicense[].class);
@@ -496,7 +496,7 @@ public class GitHub {
      * Returns a list of all users.
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 "/users",
                 GHUser[].class);
@@ -510,14 +510,14 @@ public class GitHub {
      * @see GHLicense#getKey()
      */
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve().to("/licenses/" + key, GHLicense.class);
+        return createRequest().method("GET").to("/licenses/" + key, GHLicense.class);
     }
 
     /**
      * Gets complete list of open invitations for current user.
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        GHInvitation[] invitations = createRequest().method("GET").to("/user/repository_invitations", GHInvitation[].class);
         return Arrays.asList(invitations);
     }
 
@@ -528,7 +528,7 @@ public class GitHub {
      * TODO: make this automatic.
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().method("GET").to("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -554,7 +554,7 @@ public class GitHub {
      * @return the public Organization memberships for the user
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
-        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().method("GET").to("/users/" + login + "/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -572,7 +572,7 @@ public class GitHub {
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+        for (GHTeam team : createRequest().method("GET").to("/user/teams", GHTeam[].class)) {
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
             if (teamsPerOrg == null) {
@@ -588,14 +588,14 @@ public class GitHub {
      * Gets a sigle team by ID.
      */
     public GHTeam getTeam(int id) throws IOException {
-        return retrieve().to("/teams/" + id, GHTeam.class);
+        return createRequest().method("GET").to("/teams/" + id, GHTeam.class);
     }
     
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
+        GHEventInfo[] events = createRequest().method("GET").to("/events", GHEventInfo[].class);
         return Arrays.asList(events);
     }
 
@@ -603,7 +603,7 @@ public class GitHub {
      * Gets a single gist by ID.
      */
     public GHGist getGist(String id) throws IOException {
-        return retrieve().to("/gists/"+id,GHGist.class);
+        return createRequest().method("GET").to("/gists/"+id,GHGist.class);
     }
 
     public GHGistBuilder createGist() {
@@ -619,7 +619,7 @@ public class GitHub {
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
         InjectableValues.Std inject = new InjectableValues.Std();
-        inject.addValue(GitHub.class.getName(), this);
+        Requester.lateBinding(inject, this);
         T t = MAPPER.reader(inject).forType(type).readValue(r);
         return t;
     }
@@ -687,21 +687,21 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an authorization</a>
      */
     public void deleteAuth(long id) throws IOException {
-        retrieve().method("DELETE").to("/authorizations/" + id);
+        createRequest().method("DELETE").to("/authorizations/" + id);
     }
 
     /**
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an authorization</a>
      */
     public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+        return createRequest().method("GET").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
     }
 
     /**
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an authorization</a>
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+        return createRequest().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
     }
 
     /**
@@ -709,7 +709,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return retrieve()
+        return createRequest().method("GET")
             .asPagedIterable(
                 "/authorizations",
                 GHAuthorization[].class);
@@ -724,7 +724,7 @@ public class GitHub {
      */
     @Preview @Deprecated
     public GHApp getApp() throws IOException {
-        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class);
+        return createRequest().method("GET").withPreview(MACHINE_MAN).to("/app", GHApp.class);
     }
 
     /**
@@ -732,7 +732,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() {
         try {
-            retrieve().to("/user", GHUser.class);
+            createRequest().method("GET").to("/user", GHUser.class);
             return true;
         } catch (IOException e) {
             if (LOGGER.isLoggable(FINE))
@@ -754,15 +754,15 @@ public class GitHub {
     }
 
     public GHProject getProject(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/"+id, GHProject.class);
+        return createRequest().method("GET").withPreview(INERTIA).to("/projects/"+id, GHProject.class);
     }
 
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class);
+        return createRequest().method("GET").withPreview(INERTIA).to("/projects/columns/"+id, GHProjectColumn.class);
     }
 
     public GHProjectCard getProjectCard(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class);
+        return createRequest().method("GET").withPreview(INERTIA).to("/projects/columns/cards/"+id, GHProjectCard.class);
     }
 
     private static class GHApiInfo {
@@ -789,7 +789,7 @@ public class GitHub {
      */
     public void checkApiUrlValidity() throws IOException {
         try {
-            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+            createRequest().method("GET").to("/", GHApiInfo.class).check(apiUrl);
         } catch (IOException e) {
             if (isPrivateModeEnabled()) {
                 throw (IOException)new IOException("GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
@@ -902,7 +902,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return retrieve().with("since",since)
+        return createRequest().method("GET").with("since",since)
             .asPagedIterable(
                 "/repositories",
                 GHRepository[].class);

@@ -305,7 +305,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        getRoot().createRequest().method("GET").method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+        getRoot().createRequest().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -321,7 +321,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        getRoot().createRequest().method("GET").method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        getRoot().createRequest().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected String getApiRoute() {

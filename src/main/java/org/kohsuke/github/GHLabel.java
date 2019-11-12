@@ -44,7 +44,7 @@ public class GHLabel {
     }
 
     public void delete() throws IOException {
-        repo.getRoot().createRequest().method("GET").method("DELETE").to(url);
+        repo.getRoot().createRequest().method("DELETE").to(url);
     }
 
     /**
@@ -52,7 +52,7 @@ public class GHLabel {
      *      6-letter hex color code, like "f29513"
      */
     public void setColor(String newColor) throws IOException {
-        repo.createRequest().method("GET").method("PATCH")
+        repo.createRequest().method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", newColor)
@@ -66,7 +66,7 @@ public class GHLabel {
      */
     @Preview @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.createRequest().method("GET").method("PATCH")
+        repo.createRequest().method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)

@@ -24,18 +24,19 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 	}
 	@Test
 	public void test2faToken() throws IOException {
-		assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
+		//assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",
 				"user", "delete_repo");
-		String nameOfToken = "Test2faTokenCreate-2019-11-12_14-50-03";//+timestamp;// use time stamp to ensure the token creations do not collide with older tokens
+		String nameOfToken = "Test2faTokenCreate";//+timestamp;// use time stamp to ensure the token creations do not collide with older tokens
 
 		GHAuthorization token=gitHub.createToken(
 		        asList, 
 		        nameOfToken,
 		        "this is a test token created by a unit test", () -> {
 		            // can be anything from automated processes to user interaction.
-		            return "908966"; 
+		        	String data = "535493";
+		            return data; 
 		        });
 		assert token!=null;
 		

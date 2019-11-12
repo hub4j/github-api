@@ -11,13 +11,9 @@ class GHOrgHook extends GHHook {
     /*package*/ transient GHOrganization organization;
 
     /*package*/ GHOrgHook wrap(GHOrganization owner) {
+        this.setRoot(owner.getRoot());
         this.organization = owner;
         return this;
-    }
-
-    @Override
-    GitHub getRoot() {
-        return organization.root;
     }
 
     @Override

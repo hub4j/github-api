@@ -49,22 +49,18 @@ public class GHIssueEvent extends GHObjectBase {
         return GitHub.parseDate(created_at);
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     public GHIssue getIssue() {
         return issue;
     }
 
     GHIssueEvent wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
-        this.root = parent.root;
+        this.setRoot(parent.getRoot());
         return this;
     }
 

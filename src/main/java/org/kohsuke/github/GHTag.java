@@ -17,7 +17,7 @@ public class GHTag extends GHObjectBase {
 
     /*package*/ GHTag wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         if (commit!=null)
             commit.wrapUp(owner);
         return this;
@@ -25,10 +25,6 @@ public class GHTag extends GHObjectBase {
 
     public GHRepository getOwner() {
         return owner;
-    }
-
-    public GitHub getRoot() {
-        return root;
     }
 
     public String getName() {

@@ -14,7 +14,7 @@ public class GHReleaseUpdater {
 
     GHReleaseUpdater(GHRelease base) {
         this.base = base;
-        this.builder = base.root.createRequester();
+        this.builder = base.getRoot().createRequester();
     }
 
     public GHReleaseUpdater tag(String tag) {

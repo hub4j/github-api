@@ -40,7 +40,7 @@ public class GHCommitPointer {
      * the {@link #getRepository()}.
      */
     public GHUser getUser() throws IOException {
-        if (user != null) return user.root.intern(user);
+        if (user != null) return user.getRoot().intern(user);
         return user;
     }
 
@@ -80,7 +80,7 @@ public class GHCommitPointer {
     }
 
     void wrapUp(GitHub root) {
-        if (user!=null) user.root = root;
+        if (user!=null) user.setRoot(root);
         if (repo!=null) repo.wrap(root);
     }
 }

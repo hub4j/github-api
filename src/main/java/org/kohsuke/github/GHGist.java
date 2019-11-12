@@ -40,7 +40,7 @@ public class GHGist extends GHObject {
      * User that owns this Gist.
      */
     public GHUser getOwner() throws IOException {
-        return root.intern(owner);
+        return getRoot().intern(owner);
     }
 
     public String getForksUrl() {
@@ -95,7 +95,7 @@ public class GHGist extends GHObject {
 
     /*package*/ GHGist wrapUp(GHUser owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         wrapUp();
         return this;
     }
@@ -105,8 +105,8 @@ public class GHGist extends GHObject {
      * A partially constructed owner object is interned.
      */
     /*package*/ GHGist wrapUp(GitHub root) {
-        this.owner = root.getUser(owner);
-        this.root = root;
+        this.setRoot(root);
+        this.owner = getRoot().getUser(owner);
         wrapUp();
         return this;
     }
@@ -126,37 +126,37 @@ public class GHGist extends GHObject {
     }
 
     public void star() throws IOException {
-        root.createRequester().method("PUT").to(getApiTailUrl("star"));
+        getRoot().createRequester().method("PUT").to(getApiTailUrl("star"));
     }
 
     public void unstar() throws IOException {
-        root.createRequester().method("DELETE").to(getApiTailUrl("star"));
+        getRoot().createRequester().method("DELETE").to(getApiTailUrl("star"));
     }
 
     public boolean isStarred() throws IOException {
-        return root.createRequester().method("GET").asHttpStatusCode(getApiTailUrl("star"))/100==2;
+        return getRoot().createRequester().method("GET").asHttpStatusCode(getApiTailUrl("star"))/100==2;
     }
 
     /**
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return root.createRequester().to(getApiTailUrl("forks"),GHGist.class).wrapUp(root);
+        return getRoot().createRequester().to(getApiTailUrl("forks"),GHGist.class).wrapUp(getRoot());
     }
 
     public PagedIterable<GHGist> listForks() {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("forks"),
                 GHGist[].class,
-                item -> item.wrapUp(root) );
+                item -> item.wrapUp(getRoot()) );
     }
 
     /**
      * Deletes this gist.
      */
     public void delete() throws IOException {
-        root.createRequester().method("DELETE").to("/gists/" + id);
+        getRoot().createRequester().method("DELETE").to("/gists/" + id);
     }
 
     /**
@@ -182,7 +182,7 @@ public class GHGist extends GHObject {
 
     GHGist wrap(GHUser owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         return this;
     }
 }

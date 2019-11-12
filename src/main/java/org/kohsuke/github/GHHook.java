@@ -64,7 +64,5 @@ public abstract class GHHook extends GHObject {
         return null;
     }
 
-    abstract GitHub getRoot();
-
     abstract String getApiRoute();
 }

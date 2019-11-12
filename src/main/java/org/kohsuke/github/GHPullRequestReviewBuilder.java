@@ -17,7 +17,7 @@ public class GHPullRequestReviewBuilder {
 
     /*package*/ GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
-        this.builder = pr.root.createRequester();
+        this.builder = pr.getRoot().createRequester();
     }
 
     //     public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,

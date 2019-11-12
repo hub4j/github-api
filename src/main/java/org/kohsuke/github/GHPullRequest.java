@@ -78,7 +78,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
-        return wrapUp(owner.root);
+        return wrapUp(owner.getRoot());
     }
 
     GHPullRequest wrapUp(GitHub root) {
@@ -268,10 +268,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Repopulates this object.
      */
     public void refresh() throws IOException {
-        if (root.isOffline()) {
+        if (getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequester().method("GET")
+        getRoot().createRequester().method("GET")
             .withPreview(SHADOW_CAT)
             .to(url, this).wrapUp(owner);
     }
@@ -280,7 +280,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 String.format("%s/files", getApiRoute()),
                 GHPullRequestFileDetail[].class,
@@ -291,7 +291,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the reviews associated to this pull request.
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 String.format("%s/reviews", getApiRoute()),
                 GHPullRequestReview[].class,
@@ -302,7 +302,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 getApiRoute() + COMMENTS_ACTION,
                         GHPullRequestReviewComment[].class,
@@ -313,7 +313,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                         String.format("%s/commits", getApiRoute()),
                         GHPullRequestCommitDetail[].class,
@@ -347,7 +347,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) throws IOException {
-        return root.createRequester().method("POST")
+        return getRoot().createRequester().method("POST")
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
@@ -357,7 +357,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
         List<String> logins = getLogins(reviewers);
-        root.createRequester().method("POST")
+        getRoot().createRequester().method("POST")
                 .with("reviewers", logins)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
@@ -367,7 +367,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         for (GHTeam team : teams) {
           teamReviewers.add(team.getSlug());
         }
-        root.createRequester().method("POST")
+        getRoot().createRequester().method("POST")
                 .with("team_reviewers", teamReviewers)
                 .to(getApiRoute() + REQUEST_REVIEWERS);
     }
@@ -409,7 +409,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *      SHA that pull request head must match to allow merge.
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-        root.createRequester().method("PUT")
+        getRoot().createRequester().method("PUT")
                 .with("commit_message", msg)
                 .with("sha", sha)
                 .with("merge_method", method)
@@ -420,7 +420,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            root.createRequester().method("GET").to(getIssuesApiRoute(), this);
+            getRoot().createRequester().method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

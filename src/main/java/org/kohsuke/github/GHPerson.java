@@ -26,7 +26,7 @@ public abstract class GHPerson extends GHObject {
     protected int followers,following,public_repos,public_gists;
 
     /*package*/ GHPerson wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 
@@ -39,10 +39,10 @@ public abstract class GHPerson extends GHObject {
         if (created_at!=null) {
             return; // already populated
         }
-        if (root == null || root.isOffline()) {
+        if (getRoot() == null || getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequester().method("GET").to(url, this);
+        getRoot().createRequester().method("GET").to(url, this);
     }
 
     /**
@@ -77,11 +77,11 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 "/users/" + login + "/repos",
                 GHRepository[].class,
-                item -> item.wrap(root)
+                item -> item.wrap(getRoot())
             ).withPageSize(pageSize);
     }
 
@@ -102,7 +102,7 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.createRequester().method("GET").asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = getRoot().createRequester().method("GET").asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -112,7 +112,7 @@ public abstract class GHPerson extends GHObject {
                     public List<GHRepository> next() {
                         GHRepository[] batch = pager.next();
                         for (GHRepository r : batch)
-                            r.root = root;
+                            r.setRoot(getRoot());
                         return Arrays.asList(batch);
                     }
 
@@ -131,7 +131,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.createRequester().method("GET").to("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+            return getRoot().createRequester().method("GET").to("/repos/" + login + '/' + name, GHRepository.class).wrap(getRoot());
         } catch (FileNotFoundException e) {
             return null;
         }

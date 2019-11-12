@@ -19,7 +19,7 @@ public class GHCommitStatus extends GHObject {
 
     /*package*/ GHCommitStatus wrapUp(GitHub root) {
         if (creator!=null)  creator.wrapUp(root);
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 
@@ -45,7 +45,7 @@ public class GHCommitStatus extends GHObject {
     }
 
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return getRoot().intern(creator);
     }
 
     public String getContext() {

@@ -25,8 +25,8 @@ public class GHDeployment extends GHObject {
 
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
-        if(creator != null) creator.wrapUp(root);
+        this.setRoot(owner.getRoot());
+        if(creator != null) creator.wrapUp(getRoot());
         return this;
     }
 
@@ -48,7 +48,7 @@ public class GHDeployment extends GHObject {
         return environment;
     }
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return getRoot().intern(creator);
     }
     public String getRef() {
         return ref;
@@ -70,7 +70,7 @@ public class GHDeployment extends GHObject {
     }
 
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 statuses_url,
                 GHDeploymentStatus[].class,

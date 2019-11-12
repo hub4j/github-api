@@ -111,7 +111,7 @@ public class GHThread extends GHObject {
     }
 
     /*package*/ GHThread wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         if (this.repository!=null)
             this.repository.wrap(root);
         return this;
@@ -121,17 +121,17 @@ public class GHThread extends GHObject {
      * Marks this thread as read.
      */
     public void markAsRead() throws IOException {
-        root.createRequester().method("PATCH").to(url);
+        getRoot().createRequester().method("PATCH").to(url);
     }
 
     /**
      * Subscribes to this conversation to get notifications.
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return root.createRequester()
+        return getRoot().createRequester()
             .with("subscribed", subscribed)
             .with("ignored", ignored)
-            .method("PUT").to(subscription_url, GHSubscription.class).wrapUp(root);
+            .method("PUT").to(subscription_url, GHSubscription.class).wrapUp(getRoot());
     }
 
     /**
@@ -141,7 +141,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return root.createRequester().to(subscription_url, GHSubscription.class).wrapUp(root);
+            return getRoot().createRequester().to(subscription_url, GHSubscription.class).wrapUp(getRoot());
         } catch (FileNotFoundException e) {
             return null;
         }

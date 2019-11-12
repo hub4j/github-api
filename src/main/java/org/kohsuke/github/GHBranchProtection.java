@@ -68,12 +68,12 @@ public class GHBranchProtection extends GHObjectBase {
     }
 
     GHBranchProtection wrap(GHBranch branch) {
-        this.root = branch.getRoot();
+        this.setRoot(branch.getRoot());
         return this;
     }
 
     private Requester requester() {
-        return root.createRequester().withPreview(ZZZAX);
+        return getRoot().createRequester().withPreview(ZZZAX);
     }
 
     public static class EnforceAdmins {

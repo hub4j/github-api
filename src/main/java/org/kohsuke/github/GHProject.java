@@ -52,19 +52,15 @@ public class GHProject extends GHObject {
         return GitHub.parseURL(html_url);
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     public GHObject getOwner() throws IOException {
         if(owner == null) {
             try {
                 if(owner_url.contains("/orgs/")) {
-                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                    owner = getRoot().createRequester().method("GET").to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(getRoot());
                 } else if(owner_url.contains("/users/")) {
-                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                    owner = getRoot().createRequester().method("GET").to(getOwnerUrl().getPath(), GHUser.class).wrapUp(getRoot());
                 } else if(owner_url.contains("/repos/")) {
-                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                    owner = getRoot().createRequester().method("GET").to(getOwnerUrl().getPath(), GHRepository.class).wrap(getRoot());
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -103,17 +99,17 @@ public class GHProject extends GHObject {
 
     public GHProject wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
+        this.setRoot(repo.getRoot());
         return this;
     }
 
     public GHProject wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester().withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+        getRoot().createRequester().withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
     }
 
     protected String getApiRoute() {
@@ -160,12 +156,12 @@ public class GHProject extends GHObject {
     }
 
     public void delete() throws IOException {
-        root.createRequester().withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        getRoot().createRequester().withPreview(INERTIA).method("DELETE").to(getApiRoute());
     }
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .withPreview(INERTIA)
             .asPagedIterable(
                 String.format("/projects/%d/columns", id),
@@ -174,7 +170,7 @@ public class GHProject extends GHObject {
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.createRequester().method("POST")
+        return getRoot().createRequester().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);

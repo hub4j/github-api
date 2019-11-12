@@ -13,9 +13,9 @@ public class GHCreateRepositoryBuilder extends GHObjectBase{
     private final String apiUrlTail;
 
     /*package*/ GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
-        this.root = root;
+        this.setRoot(root);
         this.apiUrlTail = apiUrlTail;
-        this.builder = root.createRequester();
+        this.builder = getRoot().createRequester();
         this.builder.with("name",name);
     }
 
@@ -131,7 +131,7 @@ public class GHCreateRepositoryBuilder extends GHObjectBase{
      * Creates a repository with all the parameters.
      */
     public GHRepository create() throws IOException {
-        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(root);
+        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(getRoot());
     }
 
 }

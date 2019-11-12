@@ -13,8 +13,8 @@ public class GHDeploymentStatus extends GHObject {
     protected String repository_url;
     public GHDeploymentStatus wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
-        if(creator != null) creator.wrapUp(root);
+        this.setRoot(owner.getRoot());
+        if(creator != null) creator.wrapUp(getRoot());
         return this;
     }
     public URL getTargetUrl() {

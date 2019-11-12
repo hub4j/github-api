@@ -13,7 +13,7 @@ public class GHReleaseBuilder {
 
     public GHReleaseBuilder(GHRepository ghRepository, String tag) {
         this.repo = ghRepository;
-        this.builder = repo.root.createRequester();
+        this.builder = repo.getRoot().createRequester();
         builder.with("tag_name", tag);
     }
 

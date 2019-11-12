@@ -55,19 +55,19 @@ public class GHRef extends GHObjectBase {
      *      Whether or not to force this ref update.
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-      root.createRequester()
-          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(root);
+      getRoot().createRequester()
+          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(getRoot());
     }
 
     /**
      * Deletes this ref from the repository using the GitHub API.
      */
     public void delete() throws IOException {
-      root.createRequester().method("DELETE").to(url);
+      getRoot().createRequester().method("DELETE").to(url);
     }
 
     /*package*/ GHRef wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 

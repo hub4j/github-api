@@ -34,16 +34,12 @@ public class GHKey extends GHObjectBase {
         return url;
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-    
     public boolean isVerified() {
         return verified;
     }
 
     /*package*/ GHKey wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 

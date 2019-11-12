@@ -48,16 +48,16 @@ public class GHSubscription extends GHObjectBase {
      * Removes this subscription.
      */
     public void delete() throws IOException {
-        root.createRequester().method("DELETE").to(repo.getApiTailUrl("subscription"));
+        getRoot().createRequester().method("DELETE").to(repo.getApiTailUrl("subscription"));
     }
 
     GHSubscription wrapUp(GHRepository repo) {
         this.repo = repo;
-        return wrapUp(repo.root);
+        return wrapUp(repo.getRoot());
     }
 
     GHSubscription wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 }

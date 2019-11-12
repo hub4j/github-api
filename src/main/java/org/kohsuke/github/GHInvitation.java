@@ -20,7 +20,7 @@ public class GHInvitation extends GHObject {
     private String html_url;
 
     /*package*/ GHInvitation wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 
@@ -28,14 +28,14 @@ public class GHInvitation extends GHObject {
      * Accept a repository invitation.
      */
     public void accept() throws IOException {
-        root.createRequester().method("PATCH").to("/user/repository_invitations/" + id);
+        getRoot().createRequester().method("PATCH").to("/user/repository_invitations/" + id);
     }
 
     /**
      * Decline a repository invitation.
      */
     public void decline() throws IOException {
-        root.createRequester().method("DELETE").to("/user/repository_invitations/" + id);
+        getRoot().createRequester().method("DELETE").to("/user/repository_invitations/" + id);
     }
 
     @Override

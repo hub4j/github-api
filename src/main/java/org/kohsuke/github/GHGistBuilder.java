@@ -15,8 +15,8 @@ public class GHGistBuilder extends GHObjectBase {
     private final LinkedHashMap<String,Object> files = new LinkedHashMap<String, Object>();
 
     public GHGistBuilder(GitHub root) {
-        this.root = root;
-        req = root.createRequester();
+        this.setRoot(root);
+        req = getRoot().createRequester();
     }
 
     public GHGistBuilder description(String desc) {
@@ -42,6 +42,6 @@ public class GHGistBuilder extends GHObjectBase {
      */
     public GHGist create() throws IOException {
         req.with("files",files);
-        return req.to("/gists",GHGist.class).wrapUp(root);
+        return req.to("/gists",GHGist.class).wrapUp(getRoot());
     }
 }

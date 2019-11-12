@@ -18,16 +18,12 @@ public class GHMilestone extends GHObject {
     private int closed_issues, open_issues, number;
     protected String closed_at;
 
-    public GitHub getRoot() {
-        return root;
-    }
-    
     public GHRepository getOwner() {
         return owner;
     }
     
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return getRoot().intern(creator);
     }
     
     public Date getDueOn() {
@@ -88,11 +84,11 @@ public class GHMilestone extends GHObject {
      * Deletes this milestone.
      */
     public void delete() throws IOException {
-        root.createRequester().method("DELETE").to(getApiRoute());
+        getRoot().createRequester().method("DELETE").to(getApiRoute());
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
+        getRoot().createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void setTitle(String title) throws IOException {
@@ -113,7 +109,7 @@ public class GHMilestone extends GHObject {
 
     public GHMilestone wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
+        this.setRoot(repo.getRoot());
         return this;
     }
 }

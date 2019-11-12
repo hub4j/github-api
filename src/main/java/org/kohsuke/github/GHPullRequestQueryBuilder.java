@@ -12,7 +12,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
     /*package*/ GHPullRequestQueryBuilder(GHRepository repo) {
-        super(repo.root);
+        super(repo.getRoot());
         this.repo = repo;
     }
 

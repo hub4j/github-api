@@ -16,7 +16,7 @@ public class GHGistUpdater {
 
     GHGistUpdater(GHGist base) {
         this.base = base;
-        this.builder = base.root.createRequester();
+        this.builder = base.getRoot().createRequester();
 
         files = new LinkedHashMap<>();
     }

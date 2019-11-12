@@ -415,7 +415,7 @@ public class GitHub {
 
             GHMyself u = this.createRequester().method("GET").to("/user", GHMyself.class);
 
-            u.root = this;
+            u.setRoot(this);
             this.myself = u;
             return u;
         }
@@ -428,7 +428,7 @@ public class GitHub {
         GHUser u = users.get(login);
         if (u == null) {
             u = this.createRequester().method("GET").to("/users/" + login, GHUser.class);
-            u.root = this;
+            u.setRoot(this);
             users.put(u.getLogin(), u);
         }
         return u;
@@ -449,7 +449,7 @@ public class GitHub {
     protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
         if (u==null) {
-            orig.root = this;
+            orig.setRoot(this);
             users.put(orig.getLogin(),orig);
             return orig;
         }

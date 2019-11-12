@@ -48,10 +48,6 @@ public class GHAsset extends GHObject {
         return owner;
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     public long getSize() {
         return size;
     }
@@ -73,11 +69,11 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequester().with(key, value).method("PATCH").to(getApiRoute());
+        getRoot().createRequester().with(key, value).method("PATCH").to(getApiRoute());
     }
 
     public void delete() throws IOException {
-        root.createRequester().method("DELETE").to(getApiRoute());
+        getRoot().createRequester().method("DELETE").to(getApiRoute());
     }
 
 
@@ -87,7 +83,7 @@ public class GHAsset extends GHObject {
 
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         return this;
     }
 

@@ -15,12 +15,12 @@ class GHHooks {
     static abstract class Context extends GHObjectBase  {
 
         private Context(GitHub root) {
-          this.root = root;
+          this.setRoot(root);
         }
 
         public List<GHHook> getHooks() throws IOException {
 
-            GHHook [] hookArray = root.createRequester().method("GET").to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
+            GHHook [] hookArray = getRoot().createRequester().method("GET").to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
               wrap(h);
@@ -28,7 +28,7 @@ class GHHooks {
         }
 
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.createRequester().method("GET").to(collection() + "/" + id, clazz());
+            GHHook hook = getRoot().createRequester().method("GET").to(collection() + "/" + id, clazz());
             return wrap(hook);
         }
 
@@ -40,7 +40,7 @@ class GHHooks {
                 ea.add(e.symbol());
             }
 
-            GHHook hook = root.createRequester()
+            GHHook hook = getRoot().createRequester()
                 .with("name", name)
                 .with("active", active)
                 .with("config", config)
@@ -64,7 +64,7 @@ class GHHooks {
         private final GHUser owner;
 
         private RepoContext(GHRepository repository, GHUser owner) {
-            super(repository.root);
+            super(repository.getRoot());
             this.repository = repository;
             this.owner = owner;
         }
@@ -94,7 +94,7 @@ class GHHooks {
         private final GHOrganization organization;
 
         private OrgContext(GHOrganization organization) {
-            super(organization.root);
+            super(organization.getRoot());
             this.organization = organization;
         }
 

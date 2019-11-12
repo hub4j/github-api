@@ -44,10 +44,6 @@ public class GHAuthorization extends GHObject {
     //TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
     //private GHUser user;
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     public List<String> getScopes() {
         return scopes;
     }
@@ -99,7 +95,7 @@ public class GHAuthorization extends GHObject {
     }
 
     /*package*/ GHAuthorization wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
     }
 

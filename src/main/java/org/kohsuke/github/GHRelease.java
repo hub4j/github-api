@@ -81,10 +81,6 @@ public class GHRelease extends GHObject {
         return new Date(published_at.getTime());
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     public String getTagName() {
         return tag_name;
     }
@@ -107,7 +103,7 @@ public class GHRelease extends GHObject {
 
     GHRelease wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         return this;
     }
 
@@ -134,7 +130,7 @@ public class GHRelease extends GHObject {
     }
     
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = owner.root.createRequester();
+        Requester builder = owner.getRoot().createRequester();
 
         String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
                 owner.getApiTailUrl(""), getId(), filename);
@@ -144,7 +140,7 @@ public class GHRelease extends GHObject {
     }
 
     public List<GHAsset> getAssets() throws IOException {
-        Requester builder = owner.root.createRequester();
+        Requester builder = owner.getRoot().createRequester();
 
         GHAsset[] assets = builder
                 .method("GET")
@@ -156,7 +152,7 @@ public class GHRelease extends GHObject {
      * Deletes this release.
      */
     public void delete() throws IOException {
-        root.createRequester().method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+        getRoot().createRequester().method("DELETE").to(owner.getApiTailUrl("releases/"+id));
     }
 
     /**

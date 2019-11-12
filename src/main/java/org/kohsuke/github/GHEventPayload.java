@@ -34,7 +34,7 @@ public abstract class GHEventPayload extends GHObjectBase {
     }
 
     /*package*/ void wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         if (sender != null) {
             sender.wrapUp(root);
         }
@@ -62,7 +62,7 @@ public abstract class GHEventPayload extends GHObjectBase {
         }
 
         public GHPullRequest getPullRequest() {
-            pull_request.root = root;
+            pull_request.setRoot(getRoot());
             return pull_request;
         }
 
@@ -210,7 +210,7 @@ public abstract class GHEventPayload extends GHObjectBase {
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             if (repository != null) {
-                repository.wrap(root);
+                repository.wrap(getRoot());
                 issue.wrap(repository);
             } else {
                 issue.wrap(root);

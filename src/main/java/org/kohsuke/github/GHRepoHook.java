@@ -8,12 +8,8 @@ class GHRepoHook extends GHHook {
 
     /*package*/ GHRepoHook wrap(GHRepository owner) {
         this.repository = owner;
+        this.setRoot(repository.getRoot());
         return this;
-    }
-
-    @Override
-    GitHub getRoot() {
-        return repository.root;
     }
 
     @Override

@@ -148,7 +148,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        root.createRequester().method("GET").to(url, this);
+        getRoot().createRequester().method("GET").to(url, this);
     }
 
     /**
@@ -158,7 +158,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 url,
                 GHContent[].class,
@@ -182,7 +182,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = root.createRequester()
+        Requester requester = getRoot().createRequester()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -207,7 +207,7 @@ public class GHContent extends GHObjectBase implements Refreshable {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = root.createRequester()
+        Requester requester = getRoot().createRequester()
             .with("path", path)
             .with("message", commitMessage)
             .with("sha", sha)
@@ -229,11 +229,11 @@ public class GHContent extends GHObjectBase implements Refreshable {
 
     GHContent wrap(GHRepository owner) {
         this.repository = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         return this;
     }
     GHContent wrap(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         if (repository!=null)
             repository.wrap(root);
         return this;
@@ -254,6 +254,6 @@ public class GHContent extends GHObjectBase implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.createRequester().method("GET").to(url, this);
+        getRoot().createRequester().method("GET").to(url, this);
     }
 }

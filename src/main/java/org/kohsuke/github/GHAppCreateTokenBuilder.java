@@ -20,9 +20,9 @@ public class GHAppCreateTokenBuilder extends GHObjectBase {
 
     @Preview @Deprecated
     /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
-        this.root = root;
+        this.setRoot(root);
         this.apiUrlTail = apiUrlTail;
-        this.builder = root.createRequester();
+        this.builder = getRoot().createRequester();
         withPermissions(builder, permissions);
     }
 
@@ -47,7 +47,7 @@ public class GHAppCreateTokenBuilder extends GHObjectBase {
      */
     @Preview @Deprecated
     public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(root);
+        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(getRoot());
     }
 
     private static Requester withPermissions(Requester builder, Map<String, GHPermissionType> value) {

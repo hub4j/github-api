@@ -25,7 +25,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
 
     public GHRepositoryStatistics(GHRepository repo) {
         this.repo = repo;
-        this.root = repo.root;
+        this.setRoot(repo.getRoot());
     }
 
     /**
@@ -67,11 +67,11 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("contributors"),
                 ContributorStats[].class,
-                item -> item.wrapUp(root) );
+                item -> item.wrapUp(getRoot()) );
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -84,10 +84,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public GitHub getRoot() {
-            return root;
         }
 
         /**
@@ -182,7 +178,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ ContributorStats wrapUp(GitHub root) {
-            this.root = root;
+            this.setRoot(root);
             return this;
         }
     }
@@ -192,11 +188,11 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return root.createRequester().method("GET")
+        return getRoot().createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("commit_activity"),
                 CommitActivity[].class,
-                item -> item.wrapUp(root) );
+                item -> item.wrapUp(getRoot()) );
     }
 
     @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -229,12 +225,8 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ CommitActivity wrapUp(GitHub root) {
-            this.root = root;
+            this.setRoot(root);
             return this;
-        }
-
-        public GitHub getRoot() {
-            return root;
         }
 
         @Override
@@ -251,7 +243,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = root.createRequester().method("GET").asStream(getApiTailUrl("code_frequency"));
+            InputStream stream = getRoot().createRequester().method("GET").asStream(getApiTailUrl("code_frequency"));
 
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
@@ -322,7 +314,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * See https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
      */
     public Participation getParticipation() throws IOException {
-        return root.createRequester().method("GET").to(getApiTailUrl("participation"), Participation.class);
+        return getRoot().createRequester().method("GET").to(getApiTailUrl("participation"), Participation.class);
     }
 
     public static class Participation extends GHObject {
@@ -332,10 +324,6 @@ public class GHRepositoryStatistics extends GHObjectBase {
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public GitHub getRoot() {
-            return root;
         }
 
         /**
@@ -355,7 +343,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         }
 
         /*package*/ Participation wrapUp(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
         return this;
         }
     }
@@ -367,7 +355,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.createRequester().method("GET").asStream(getApiTailUrl("punch_card"));
+        InputStream stream = getRoot().createRequester().method("GET").asStream(getApiTailUrl("punch_card"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<ArrayList<ArrayList<Integer> > > typeRef =

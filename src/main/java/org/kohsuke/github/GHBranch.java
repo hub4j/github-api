@@ -31,10 +31,6 @@ public class GHBranch extends GHObjectBase {
         String url;
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
     /**
      * Repository that this branch is in.
      */
@@ -63,7 +59,7 @@ public class GHBranch extends GHObjectBase {
     }
 
     public GHBranchProtection getProtection() throws IOException {
-        return root.createRequester().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
+        return super.getRoot().createRequester().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -77,7 +73,7 @@ public class GHBranch extends GHObjectBase {
      * Disables branch protection and allows anyone with push access to push changes.
      */
     public void disableProtection() throws IOException {
-        root.createRequester().method("DELETE").to(protection_url);
+        super.getRoot().createRequester().method("DELETE").to(protection_url);
     }
 
     /**
@@ -119,7 +115,7 @@ public class GHBranch extends GHObjectBase {
 
     /*package*/ GHBranch wrap(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
+        this.setRoot(repo.getRoot());
         return this;
     }
 }

@@ -97,7 +97,7 @@ class Requester extends GHObjectBase {
     }
 
     Requester(GitHub root) {
-        this.root = root;
+        this.setRoot(root);
     }
 
     /**
@@ -241,7 +241,7 @@ class Requester extends GHObjectBase {
         }
 
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -280,7 +280,7 @@ class Requester extends GHObjectBase {
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             method("GET");
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -296,7 +296,7 @@ class Requester extends GHObjectBase {
 
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(getRoot().getApiURL(tailApiUrl));
 
             buildRequest();
 
@@ -361,7 +361,7 @@ class Requester extends GHObjectBase {
 
         GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, uc.getHeaderField("Date"));
 
-        root.updateCoreRateLimit(observed);
+        getRoot().updateCoreRateLimit(observed);
     }
 
     public String getResponseHeader(String header) {
@@ -464,7 +464,7 @@ class Requester extends GHObjectBase {
         }
 
         try {
-            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
+            return new PagingIterator<T>(type, tailApiUrl, getRoot().getApiURL(s.toString()));
         } catch (IOException e) {
             throw new GHException("Unable to build github Api URL",e);
         }
@@ -556,14 +556,14 @@ class Requester extends GHObjectBase {
 
     private void setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+            LOGGER.log(FINE, "GitHub API request [" + (getRoot().login == null ? "anonymous" : getRoot().login) + "]: " + method + " " + url.toString());
         }
-        uc = root.getConnector().connect(url);
+        uc = getRoot().getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        if (root.encodedAuthorization!=null)
-            uc.setRequestProperty("Authorization", root.encodedAuthorization);
+        if (getRoot().encodedAuthorization!=null)
+            uc.setRequestProperty("Authorization", getRoot().encodedAuthorization);
 
         for (Map.Entry<String, String> e : headers.entrySet()) {
             String v = e.getValue();
@@ -727,14 +727,14 @@ class Requester extends GHObjectBase {
             throw e;
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            root.rateLimitHandler.onError(e,uc);
+            getRoot().rateLimitHandler.onError(e,uc);
             return;
         }
 
         // Retry-After is not documented but apparently that field exists
         if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
             uc.getHeaderField("Retry-After") != null) {
-            this.root.abuseLimitHandler.onError(e,uc);
+            this.getRoot().abuseLimitHandler.onError(e,uc);
             return;
         }
 

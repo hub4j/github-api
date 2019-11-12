@@ -25,25 +25,21 @@ public class GHProjectCard extends GHObject {
 	}
 
 	public GHProjectCard wrap(GitHub root) {
-		this.root = root;
+		this.setRoot(root);
 		return this;
 	}
 
 	public GHProjectCard wrap(GHProjectColumn column) {
 		this.column = column;
 		this.project = column.project;
-		this.root = column.root;
+		this.setRoot(column.getRoot());
 		return this;
-	}
-
-	public GitHub getRoot() {
-		return root;
 	}
 
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = root.createRequester().method("GET").to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+				project = getRoot().createRequester().method("GET").to(getProjectUrl().getPath(), GHProject.class).wrap(getRoot());
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -54,7 +50,7 @@ public class GHProjectCard extends GHObject {
 	public GHProjectColumn getColumn() throws IOException {
 		if(column == null) {
 			try {
-				column = root.createRequester().method("GET").to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(root);
+				column = getRoot().createRequester().method("GET").to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(getRoot());
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -67,9 +63,9 @@ public class GHProjectCard extends GHObject {
 			return null;
 		try {
 			if(content_url.contains("/pulls")) {
-				return root.createRequester().method("GET").to(getContentUrl().getPath(), GHPullRequest.class).wrap(root);
+				return getRoot().createRequester().method("GET").to(getContentUrl().getPath(), GHPullRequest.class).wrap(getRoot());
 			} else {
-				return root.createRequester().method("GET").to(getContentUrl().getPath(), GHIssue.class).wrap(root);
+				return getRoot().createRequester().method("GET").to(getContentUrl().getPath(), GHIssue.class).wrap(getRoot());
 			}
 		} catch (FileNotFoundException e) {
 			return null;
@@ -109,7 +105,7 @@ public class GHProjectCard extends GHObject {
 	}
 
 	private void edit(String key, Object value) throws IOException {
-		root.createRequester().withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+		getRoot().createRequester().withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
 	}
 
 	protected String getApiRoute() {
@@ -117,6 +113,6 @@ public class GHProjectCard extends GHObject {
 	}
 
 	public void delete() throws IOException {
-		root.createRequester().withPreview(INERTIA).method("DELETE").to(getApiRoute());
+		getRoot().createRequester().withPreview(INERTIA).method("DELETE").to(getApiRoute());
 	}
 }

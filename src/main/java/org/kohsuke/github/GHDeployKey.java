@@ -41,6 +41,6 @@ public class GHDeployKey {
     }
     
     public void delete() throws IOException {
-        owner.root.createRequester().method("DELETE").to(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id));
+        owner.getRoot().createRequester().method("DELETE").to(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id));
     }
 }

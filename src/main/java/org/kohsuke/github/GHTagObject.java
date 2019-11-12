@@ -21,16 +21,12 @@ public class GHTagObject extends GHObjectBase{
 
     /*package*/ GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.setRoot(owner.getRoot());
         return this;
     }
 
     public GHRepository getOwner() {
         return owner;
-    }
-
-    public GitHub getRoot() {
-        return root;
     }
 
     public String getTag() {

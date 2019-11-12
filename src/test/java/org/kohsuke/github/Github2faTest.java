@@ -23,22 +23,26 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 		}
 	}
 	@Test
-	public void test2faToken() {
+	public void test2faToken() throws IOException {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String timestamp = dateFormat.format(new Date());
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",
 				"user", "delete_repo");
-		String string = "Test2faTokenCreate-2019-11-10_12-09-51";// + timestamp;// use time stamp to ensure the token creations do not collide with older tokens
+		String string = "Test2faTokenCreate-"+timestamp;// + timestamp;// use time stamp to ensure the token creations do not collide with older tokens
+		System.out.println("Generating "+string+" for "+gitHub.getMyself().getLogin());
+		
 		GHAuthorization token=null;
 		try {
 			token = gitHub.createToken(asList, string, "this is a test token created by a unit test");
 		}catch (IOException ex) {
+			ex.printStackTrace();
 			// under 2fa mode this exception is expected, and is necessary
 			// as the exception is called, GitHub will generate and send an OTP to the users SMS
 			// we will prompt at the command line for the users 2fa code 
 			try {
-				//token = gitHub.createTokenOtp(asList, string, "", twoFactorAuthCodePrompt());// prompt at command line for 2fa OTP code
-				return;
+				String twofaCode = twoFactorAuthCodePrompt();	
+				token = gitHub.createTokenOtp(asList, string, "", twofaCode);// prompt at command line for 2fa OTP code
+				//return;
 			} catch (Exception e) {
 				e.printStackTrace();
 				fail();

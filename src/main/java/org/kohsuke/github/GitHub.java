@@ -31,6 +31,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -315,28 +316,58 @@ public class GitHub {
      * Gets the current rate limit.
      */
     public GHRateLimit getRateLimit() throws IOException {
+        GHRateLimit rateLimit;
         try {
-            return rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).rate;
+            rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).resources;
         } catch (FileNotFoundException e) {
-            // GitHub Enterprise doesn't have the rate limit, so in that case
-            // return some big number that's not too big.
-            // see issue #78
-            GHRateLimit r = new GHRateLimit();
-            r.limit = r.remaining = 1000000;
-            long hour = 60L * 60L; // this is madness, storing the date as seconds in a Date object
-            r.reset = new Date(System.currentTimeMillis() / 1000L + hour);
-            return rateLimit = r;
+            // GitHub Enterprise doesn't have the rate limit
+            // return a default rate limit that
+            rateLimit = GHRateLimit.Unknown();
+        }
+
+        return this.rateLimit = rateLimit;
+    }
+
+    /**
+     * Update the Rate Limit with the latest info from response header.
+     * Due to multi-threading requests might complete out of order, we want to pick the one with the most recent info from the server.
+     *
+     * @param observed {@link GHRateLimit.Record} constructed from the response header information
+     */
+    void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit == null || shouldReplace(observed, headerRateLimit.getCore())) {
+                headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
+                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
+            }
         }
     }
 
-    /*package*/ void updateRateLimit(@Nonnull GHRateLimit observed) {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit == null
-                    || headerRateLimit.getResetDate().getTime() < observed.getResetDate().getTime()
-                    || headerRateLimit.remaining > observed.remaining) {
-                headerRateLimit = observed;
-                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
-            }
+    /**
+     * Update the Rate Limit with the latest info from response header.
+     * Due to multi-threading requests might complete out of order, we want to pick the one with the most recent info from the server.
+     * Header date is only accurate to the second, so we look at the information in the record itself.
+     *
+     * {@link GHRateLimit.UnknownLimitRecord}s are always replaced by regular {@link GHRateLimit.Record}s.
+     * Regular {@link GHRateLimit.Record}s are never replaced by {@link GHRateLimit.UnknownLimitRecord}s.
+     * Candidates with resetEpochSeconds later than current record are more recent.
+     * Candidates with the same reset and a lower remaining count are more recent.
+     * Candidates with an earlier reset are older.
+     *
+     * @param candidate {@link GHRateLimit.Record} constructed from the response header information
+     * @param current the current {@link GHRateLimit.Record} record
+     */
+    static boolean shouldReplace(@Nonnull GHRateLimit.Record candidate, @Nonnull GHRateLimit.Record current) {
+        if (candidate instanceof GHRateLimit.UnknownLimitRecord && !(current instanceof GHRateLimit.UnknownLimitRecord)) {
+            // Unknown candidate never replaces a regular record
+            return false;
+        } else if (current instanceof GHRateLimit.UnknownLimitRecord && !(candidate instanceof GHRateLimit.UnknownLimitRecord)) {
+            // Any real record should replace an unknown Record.
+            return true;
+        } else {
+            // records of the same type compare to each other as normal.
+            return current.getResetEpochSeconds() < candidate.getResetEpochSeconds()
+                || (current.getResetEpochSeconds() == candidate.getResetEpochSeconds() && current.getRemaining() > candidate.getRemaining());
         }
     }
 
@@ -362,12 +393,12 @@ public class GitHub {
     @Nonnull
     public GHRateLimit rateLimit() throws IOException {
         synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null) {
+            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
                 return headerRateLimit;
             }
         }
         GHRateLimit rateLimit = this.rateLimit;
-        if (rateLimit == null || rateLimit.getResetDate().getTime() < System.currentTimeMillis()) {
+        if (rateLimit == null || rateLimit.isExpired()) {
             rateLimit = getRateLimit();
         }
         return rateLimit;

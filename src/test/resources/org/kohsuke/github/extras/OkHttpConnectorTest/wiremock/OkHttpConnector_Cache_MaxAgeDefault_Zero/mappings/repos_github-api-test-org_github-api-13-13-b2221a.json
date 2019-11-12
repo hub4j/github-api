@@ -13,19 +13,19 @@
   "response": {
     "status": 304,
     "headers": {
-      "Date": "{{now}}",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Server": "GitHub.com",
       "Status": "304 Not Modified",
       "X-RateLimit-Limit": "5000",
       "X-RateLimit-Remaining": "4966",
-      "X-RateLimit-Reset": "1569875630",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
       "ETag": "\"4f508593b64df214fee8f6ab42df633c\"",
-      "Last-Modified": "{{now offset='-3 seconds'}}",
+      "Last-Modified": "{{now offset='-3 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",

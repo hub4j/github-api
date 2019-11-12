@@ -24,6 +24,6 @@
   "rate": {
     "limit": 5000,
     "remaining": 4717,
-    "reset": 1569866107
+    "reset": {{now offset='1 hours' format='unix'}}
   }
 }

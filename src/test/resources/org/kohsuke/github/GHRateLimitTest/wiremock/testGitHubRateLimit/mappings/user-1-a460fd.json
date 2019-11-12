@@ -1,5 +1,5 @@
 {
-  "id": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
+  "id": "a460fd69-99f3-46c7-aeb1-888c34085d4a",
   "name": "user",
   "request": {
     "url": "/user",
@@ -7,15 +7,15 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-a0bafdae-2f0d-4d0b-966b-f2408c1240bd.json",
+    "bodyFileName": "user-a460fd69-99f3-46c7-aeb1-888c34085d4a.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 17:05:48 GMT",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4978",
-      "X-RateLimit-Reset": "1570470839",
+      "X-RateLimit-Remaining": "4897",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
@@ -34,12 +34,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C913:6B2C:1031318:13844F6:5D9B706B"
+      "X-GitHub-Request-Id": "E39F:3620:2D9D266:369B909:5D9B9848"
     }
   },
-  "uuid": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
+  "uuid": "a460fd69-99f3-46c7-aeb1-888c34085d4a",
   "persistent": true,
-  "scenarioName": "rate-limit-user",
-  "requiredScenarioState": "rate-limit-user-1",
   "insertionIndex": 1
 }

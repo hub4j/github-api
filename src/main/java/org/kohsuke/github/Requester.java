@@ -46,7 +46,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -352,54 +351,57 @@ class Requester {
     }
 
     private void noteRateLimit(String tailApiUrl) {
-        if ("/rate_limit".equals(tailApiUrl)) {
-            // the rate_limit API is "free"
-            return;
-        }
         if (tailApiUrl.startsWith("/search")) {
             // the search API uses a different rate limit
             return;
         }
-        String limit = uc.getHeaderField("X-RateLimit-Limit");
-        if (StringUtils.isBlank(limit)) {
+        String limitString = uc.getHeaderField("X-RateLimit-Limit");
+        if (StringUtils.isBlank(limitString)) {
             // if we are missing a header, return fast
             return;
         }
-        String remaining = uc.getHeaderField("X-RateLimit-Remaining");
-        if (StringUtils.isBlank(remaining)) {
+        String remainingString = uc.getHeaderField("X-RateLimit-Remaining");
+        if (StringUtils.isBlank(remainingString)) {
             // if we are missing a header, return fast
             return;
         }
-        String reset = uc.getHeaderField("X-RateLimit-Reset");
-        if (StringUtils.isBlank(reset)) {
+        String resetString = uc.getHeaderField("X-RateLimit-Reset");
+        if (StringUtils.isBlank(resetString)) {
             // if we are missing a header, return fast
             return;
         }
-        GHRateLimit observed = new GHRateLimit();
+
+        int limit, remaining;
+        long reset;
         try {
-            observed.limit = Integer.parseInt(limit);
+            limit = Integer.parseInt(limitString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limitString, e);
             }
             return;
         }
         try {
-            observed.remaining = Integer.parseInt(remaining);
+
+            remaining = Integer.parseInt(remainingString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remainingString, e);
             }
             return;
         }
         try {
-            observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
-            root.updateRateLimit(observed);
+            reset = Long.parseLong(resetString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + resetString, e);
             }
+            return;
         }
+
+        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, uc.getHeaderField("Date"));
+
+        root.updateCoreRateLimit(observed);
     }
 
     public String getResponseHeader(String header) {
@@ -706,6 +708,9 @@ class Requester {
             }
         } else if (readValue instanceof GHObject) {
             setResponseHeaders((GHObject) readValue);
+        } else if (readValue instanceof JsonRateLimit) {
+            // if we're getting a GHRateLimit it needs the server date
+            ((JsonRateLimit)readValue).resources.getCore().recalculateResetDate(uc.getHeaderField("Date"));
         }
         return readValue;
     }

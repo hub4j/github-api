@@ -1,22 +1,25 @@
 {
-  "id": "4e2fc33b-fb25-4dfc-9d56-34f9b4d707be",
-  "name": "rate_limit",
+  "id": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
+  "name": "user",
   "request": {
-    "url": "/rate_limit",
+    "url": "/user",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "bodyFileName": "rate_limit-4e2fc33b-fb25-4dfc-9d56-34f9b4d707be.json",
+    "bodyFileName": "user-a0bafdae-2f0d-4d0b-966b-f2408c1240bd.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 19:55:56 GMT",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4896",
-      "X-RateLimit-Reset": "1570478899",
-      "Cache-Control": "no-cache",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"af0c41afcacb8ceee14b7d896719c3bd\"",
+      "Last-Modified": "Tue, 24 Sep 2019 19:32:29 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -28,13 +31,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "Vary": "Accept-Encoding",
-      "X-GitHub-Request-Id": "E39F:3620:2D9D3D1:369BAD1:5D9B984C"
+      "X-GitHub-Request-Id": "C913:6B2C:1031318:13844F6:5D9B706B"
     }
   },
-  "uuid": "4e2fc33b-fb25-4dfc-9d56-34f9b4d707be",
+  "uuid": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
   "persistent": true,
-  "scenarioName": "scenario-1-rate_limit",
-  "requiredScenarioState": "scenario-1-rate_limit-3",
-  "insertionIndex": 5
+  "scenarioName": "rate-limit-user",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "rate-limit-user-1",
+  "insertionIndex": 0
 }

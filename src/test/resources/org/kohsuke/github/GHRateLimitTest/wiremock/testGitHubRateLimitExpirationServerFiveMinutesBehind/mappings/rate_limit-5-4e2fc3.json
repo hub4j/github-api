@@ -1,25 +1,22 @@
 {
-  "id": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
-  "name": "user",
+  "id": "4e2fc33b-fb25-4dfc-9d56-34f9b4d707be",
+  "name": "rate_limit",
   "request": {
-    "url": "/user",
+    "url": "/rate_limit",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-a0bafdae-2f0d-4d0b-966b-f2408c1240bd.json",
+    "bodyFileName": "rate_limit-4e2fc33b-fb25-4dfc-9d56-34f9b4d707be.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 17:05:48 GMT",
+      "Date": "{{now offset='-5 minutes' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
-      ],
-      "ETag": "W/\"af0c41afcacb8ceee14b7d896719c3bd\"",
-      "Last-Modified": "Tue, 24 Sep 2019 19:32:29 GMT",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4896",
+      "X-RateLimit-Reset": "{{now offset='-297 seconds' format='unix'}}",
+      "Cache-Control": "no-cache",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -31,13 +28,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C913:6B2C:1031318:13844F6:5D9B706B"
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "E39F:3620:2D9D3D1:369BAD1:5D9B984C"
     }
   },
-  "uuid": "a0bafdae-2f0d-4d0b-966b-f2408c1240bd",
+  "uuid": "4e2fc33b-fb25-4dfc-9d56-34f9b4d707be",
   "persistent": true,
-  "scenarioName": "rate-limit-user",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "rate-limit-user-1",
-  "insertionIndex": 0
+  "scenarioName": "scenario-1-rate_limit",
+  "requiredScenarioState": "scenario-1-rate_limit-3",
+  "insertionIndex": 5
 }

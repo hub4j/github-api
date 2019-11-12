@@ -118,7 +118,7 @@ public class GHPullRequestReview extends GHObject {
      * Updates the comment.
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        owner.getRoot().createRequester().method("POST")
+        owner.createRequester().method("POST")
                 .with("body", body)
                 .with("event", event.action())
                 .to(getApiRoute()+"/events",this);
@@ -130,7 +130,7 @@ public class GHPullRequestReview extends GHObject {
      * Deletes this review.
      */
     public void delete() throws IOException {
-        owner.getRoot().createRequester().method("DELETE")
+        owner.createRequester().method("DELETE")
                 .to(getApiRoute());
     }
 
@@ -138,7 +138,7 @@ public class GHPullRequestReview extends GHObject {
      * Dismisses this review.
      */
     public void dismiss(String message) throws IOException {
-        owner.getRoot().createRequester().method("PUT")
+        owner.createRequester().method("PUT")
                 .with("message", message)
                 .to(getApiRoute()+"/dismissals");
         state = GHPullRequestReviewState.DISMISSED;
@@ -148,7 +148,7 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.getRoot().createRequester().method("GET")
+        return owner.createRequester().method("GET")
             .asPagedIterable(
                 getApiRoute() + "/comments",
                 GHPullRequestReviewComment[].class,

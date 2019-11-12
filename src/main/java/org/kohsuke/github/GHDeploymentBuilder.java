@@ -10,7 +10,7 @@ public class GHDeploymentBuilder {
 
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.getRoot().createRequester();
+        this.builder = repo.createRequester();
     }
 
     public GHDeploymentBuilder(GHRepository repo, String ref) {

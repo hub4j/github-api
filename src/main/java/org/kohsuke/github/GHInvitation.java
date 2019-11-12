@@ -28,14 +28,14 @@ public class GHInvitation extends GHObject {
      * Accept a repository invitation.
      */
     public void accept() throws IOException {
-        getRoot().createRequester().method("PATCH").to("/user/repository_invitations/" + id);
+        createRequester().method("PATCH").to("/user/repository_invitations/" + id);
     }
 
     /**
      * Decline a repository invitation.
      */
     public void decline() throws IOException {
-        getRoot().createRequester().method("DELETE").to("/user/repository_invitations/" + id);
+        createRequester().method("DELETE").to("/user/repository_invitations/" + id);
     }
 
     @Override

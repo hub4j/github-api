@@ -42,7 +42,7 @@ public abstract class GHPerson extends GHObject {
         if (getRoot() == null || getRoot().isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        getRoot().createRequester().method("GET").to(url, this);
+        createRequester().method("GET").to(url, this);
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return getRoot().createRequester().method("GET")
+        return createRequester().method("GET")
             .asPagedIterable(
                 "/users/" + login + "/repos",
                 GHRepository[].class,
@@ -102,7 +102,7 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = getRoot().createRequester().method("GET").asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = createRequester().method("GET").asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -131,7 +131,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return getRoot().createRequester().method("GET").to("/repos/" + login + '/' + name, GHRepository.class).wrap(getRoot());
+            return createRequester().method("GET").to("/repos/" + login + '/' + name, GHRepository.class).wrap(getRoot());
         } catch (FileNotFoundException e) {
             return null;
         }

@@ -116,7 +116,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Updates the comment.
      */
     public void update(String body) throws IOException {
-        owner.getRoot().createRequester().method("PATCH").with("body", body).to(getApiRoute(),this);
+        owner.createRequester().method("PATCH").with("body", body).to(getApiRoute(),this);
         this.body = body;
     }
 
@@ -124,14 +124,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Deletes this review comment.
      */
     public void delete() throws IOException {
-        owner.getRoot().createRequester().method("DELETE").to(getApiRoute());
+        owner.createRequester().method("DELETE").to(getApiRoute());
     }
 
     /**
      * Create a new comment that replies to this comment.
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-        return owner.getRoot().createRequester().method("POST")
+        return owner.createRequester().method("POST")
                 .with("body", body)
                 .with("in_reply_to", getId())
                 .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
@@ -140,7 +140,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.getRoot().createRequester()
+        return owner.createRequester()
             .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.getRoot());
@@ -148,7 +148,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().createRequester().method("GET")
+        return owner.createRequester().method("GET")
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute() + "/reactions",

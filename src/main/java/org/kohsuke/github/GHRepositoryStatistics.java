@@ -67,7 +67,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return getRoot().createRequester().method("GET")
+        return createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("contributors"),
                 ContributorStats[].class,
@@ -188,7 +188,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return getRoot().createRequester().method("GET")
+        return createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("commit_activity"),
                 CommitActivity[].class,
@@ -243,7 +243,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = getRoot().createRequester().method("GET").asStream(getApiTailUrl("code_frequency"));
+            InputStream stream = createRequester().method("GET").asStream(getApiTailUrl("code_frequency"));
 
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
@@ -314,7 +314,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
      * See https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
      */
     public Participation getParticipation() throws IOException {
-        return getRoot().createRequester().method("GET").to(getApiTailUrl("participation"), Participation.class);
+        return createRequester().method("GET").to(getApiTailUrl("participation"), Participation.class);
     }
 
     public static class Participation extends GHObject {
@@ -355,7 +355,7 @@ public class GHRepositoryStatistics extends GHObjectBase {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = getRoot().createRequester().method("GET").asStream(getApiTailUrl("punch_card"));
+        InputStream stream = createRequester().method("GET").asStream(getApiTailUrl("punch_card"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<ArrayList<ArrayList<Integer> > > typeRef =

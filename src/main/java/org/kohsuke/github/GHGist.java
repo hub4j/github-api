@@ -126,26 +126,26 @@ public class GHGist extends GHObject {
     }
 
     public void star() throws IOException {
-        getRoot().createRequester().method("PUT").to(getApiTailUrl("star"));
+        createRequester().method("PUT").to(getApiTailUrl("star"));
     }
 
     public void unstar() throws IOException {
-        getRoot().createRequester().method("DELETE").to(getApiTailUrl("star"));
+        createRequester().method("DELETE").to(getApiTailUrl("star"));
     }
 
     public boolean isStarred() throws IOException {
-        return getRoot().createRequester().method("GET").asHttpStatusCode(getApiTailUrl("star"))/100==2;
+        return createRequester().method("GET").asHttpStatusCode(getApiTailUrl("star"))/100==2;
     }
 
     /**
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return getRoot().createRequester().to(getApiTailUrl("forks"),GHGist.class).wrapUp(getRoot());
+        return createRequester().to(getApiTailUrl("forks"),GHGist.class).wrapUp(getRoot());
     }
 
     public PagedIterable<GHGist> listForks() {
-        return getRoot().createRequester().method("GET")
+        return createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("forks"),
                 GHGist[].class,
@@ -156,7 +156,7 @@ public class GHGist extends GHObject {
      * Deletes this gist.
      */
     public void delete() throws IOException {
-        getRoot().createRequester().method("DELETE").to("/gists/" + id);
+        createRequester().method("DELETE").to("/gists/" + id);
     }
 
     /**

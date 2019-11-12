@@ -100,7 +100,7 @@ class Requester {
     Requester(GitHub root) {
         this.root = root;
     }
-    
+
     /**
      * Sets the request HTTP header.
      *

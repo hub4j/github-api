@@ -16,7 +16,7 @@ public class GHGistBuilder extends GHObjectBase {
 
     public GHGistBuilder(GitHub root) {
         this.setRoot(root);
-        req = getRoot().createRequester();
+        req = createRequester();
     }
 
     public GHGistBuilder description(String desc) {

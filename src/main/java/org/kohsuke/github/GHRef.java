@@ -55,7 +55,7 @@ public class GHRef extends GHObjectBase {
      *      Whether or not to force this ref update.
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-      getRoot().createRequester()
+      createRequester()
           .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(getRoot());
     }
 
@@ -63,7 +63,7 @@ public class GHRef extends GHObjectBase {
      * Deletes this ref from the repository using the GitHub API.
      */
     public void delete() throws IOException {
-      getRoot().createRequester().method("DELETE").to(url);
+      createRequester().method("DELETE").to(url);
     }
 
     /*package*/ GHRef wrap(GitHub root) {

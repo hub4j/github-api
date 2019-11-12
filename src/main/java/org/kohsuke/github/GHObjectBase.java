@@ -18,4 +18,8 @@ public abstract class GHObjectBase {
     void setRoot(GitHub root) {
         this.root = root;
     }
+
+    Requester createRequester() {
+        return getRoot().createRequester();
+    }
 }

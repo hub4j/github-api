@@ -48,6 +48,6 @@ public class GHReaction extends GHObject {
      * Removes this reaction.
      */
     public void delete() throws IOException {
-        getRoot().createRequester().method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/"+id);
+        createRequester().method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/"+id);
     }
 }

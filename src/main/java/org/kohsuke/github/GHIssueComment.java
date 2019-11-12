@@ -88,7 +88,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Updates the body of the issue comment.
      */
     public void update(String body) throws IOException {
-        owner.getRoot().createRequester().with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        owner.createRequester().with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
         this.body = body;
     }
 
@@ -96,12 +96,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      * Deletes this issue comment.
      */
     public void delete() throws IOException {
-        owner.getRoot().createRequester().method("DELETE").to(getApiRoute());
+        owner.createRequester().method("DELETE").to(getApiRoute());
     }
 
     @Preview @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.getRoot().createRequester()
+        return owner.createRequester()
             .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.getRoot());
@@ -109,7 +109,7 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.getRoot().createRequester().method("GET")
+        return owner.createRequester().method("GET")
             .withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",

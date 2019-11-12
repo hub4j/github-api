@@ -150,7 +150,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Preview @Deprecated
     public void deleteInstallation() throws IOException {
-        getRoot().createRequester().method("DELETE").withPreview(GAMBIT).to(String.format("/app/installations/%d", id));
+        createRequester().method("DELETE").withPreview(GAMBIT).to(String.format("/app/installations/%d", id));
     }
 
 

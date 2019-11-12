@@ -59,7 +59,7 @@ public class GHBranch extends GHObjectBase {
     }
 
     public GHBranchProtection getProtection() throws IOException {
-        return super.getRoot().createRequester().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
+        return super.createRequester().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -73,7 +73,7 @@ public class GHBranch extends GHObjectBase {
      * Disables branch protection and allows anyone with push access to push changes.
      */
     public void disableProtection() throws IOException {
-        super.getRoot().createRequester().method("DELETE").to(protection_url);
+        super.createRequester().method("DELETE").to(protection_url);
     }
 
     /**

@@ -10,7 +10,7 @@ public abstract class GHQueryBuilder<T> extends GHObjectBase {
 
     /*package*/ GHQueryBuilder(GitHub root) {
         this.setRoot(root);
-        this.req = getRoot().createRequester().method("GET");
+        this.req = createRequester().method("GET");
     }
 
     /**

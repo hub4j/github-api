@@ -44,7 +44,7 @@ public class GHMembership extends GHObjectBase {
      * @see GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        getRoot().createRequester().method("PATCH").with("state",State.ACTIVE).to(url,this);
+        createRequester().method("PATCH").with("state",State.ACTIVE).to(url,this);
     }
 
     /*package*/ GHMembership wrap(GitHub root) {

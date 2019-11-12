@@ -15,7 +15,7 @@ public class GHCreateRepositoryBuilder extends GHObjectBase{
     /*package*/ GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.setRoot(root);
         this.apiUrlTail = apiUrlTail;
-        this.builder = getRoot().createRequester();
+        this.builder = createRequester();
         this.builder.with("name",name);
     }
 

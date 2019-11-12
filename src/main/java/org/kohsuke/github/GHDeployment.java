@@ -70,7 +70,7 @@ public class GHDeployment extends GHObject {
     }
 
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return getRoot().createRequester().method("GET")
+        return createRequester().method("GET")
             .asPagedIterable(
                 statuses_url,
                 GHDeploymentStatus[].class,

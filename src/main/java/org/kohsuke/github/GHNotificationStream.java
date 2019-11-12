@@ -80,7 +80,7 @@ public class GHNotificationStream extends GHObjectBase implements Iterable<GHThr
      */
     public Iterator<GHThread> iterator() {
         // capture the configuration setting here
-        final Requester req = getRoot().createRequester().method("GET")
+        final Requester req = createRequester().method("GET")
                 .with("all", all).with("participating", participating).with("since", since);
 
         return new Iterator<GHThread>() {
@@ -197,7 +197,7 @@ public class GHNotificationStream extends GHObjectBase implements Iterable<GHThr
      * Marks all the notifications as read.
      */
     public void markAsRead(long timestamp) throws IOException {
-        final Requester req = getRoot().createRequester().method("PUT");
+        final Requester req = createRequester().method("PUT");
         if (timestamp>=0)
             req.with("last_read_at", GitHub.printDate(new Date(timestamp)));
         req.asHttpStatusCode(apiUrl);

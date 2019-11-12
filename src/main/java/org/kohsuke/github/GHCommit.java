@@ -327,7 +327,7 @@ public class GHCommit {
      * Lists up all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.getRoot().createRequester().method("GET")
+        return owner.createRequester().method("GET")
             .asPagedIterable(
                 String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
                 GHCommitComment[].class,
@@ -340,7 +340,7 @@ public class GHCommit {
      * I'm not sure how path/line/position parameters interact with each other.
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = owner.getRoot().createRequester()
+        GHCommitComment r = owner.createRequester()
             .with("body",body)
                 .with("path",path)
                 .with("line",line)
@@ -372,7 +372,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files==null && stats==null)
-            owner.getRoot().createRequester().method("GET").to(owner.getApiTailUrl("commits/" + sha), this);
+            owner.createRequester().method("GET").to(owner.getApiTailUrl("commits/" + sha), this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

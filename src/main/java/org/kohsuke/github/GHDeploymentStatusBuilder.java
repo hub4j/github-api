@@ -24,7 +24,7 @@ public class GHDeploymentStatusBuilder {
     /*package*/ GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.getRoot().createRequester();
+        this.builder = repo.createRequester();
         this.builder.with("state",state);
     }
 

@@ -141,7 +141,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGetIssues() throws Exception {
         List<GHIssue> closedIssues = gitHub.getOrganization("github-api").getRepository("github-api").getIssues(GHIssueState.CLOSED);
-        // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
+        // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve2 30 issues
         assertTrue(closedIssues.size() > 150);
     }
 

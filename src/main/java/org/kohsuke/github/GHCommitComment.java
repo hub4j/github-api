@@ -98,7 +98,7 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL)
+        return owner.root.createRequester().method("GET").withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiTail()+"/reactions",
                 GHReaction[].class,

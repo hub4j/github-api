@@ -205,7 +205,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return
      *      null if the state has not been determined yet, for example when a PR is newly created.
      *      If this method is called on an instance whose mergeable state is not yet known,
-     *      API call is made to retrieve the latest state.
+     *      API call is made to retrieve2 the latest state.
      */
     public Boolean getMergeable() throws IOException {
         refresh(mergeable);
@@ -271,7 +271,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve()
+        root.createRequester().method("GET")
             .withPreview(SHADOW_CAT)
             .to(url, this).wrapUp(owner);
     }
@@ -280,7 +280,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the files associated to this pull request.
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 String.format("%s/files", getApiRoute()),
                 GHPullRequestFileDetail[].class,
@@ -291,7 +291,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the reviews associated to this pull request.
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 String.format("%s/reviews", getApiRoute()),
                 GHPullRequestReview[].class,
@@ -302,7 +302,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Obtains all the review comments associated with this pull request.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiRoute() + COMMENTS_ACTION,
                         GHPullRequestReviewComment[].class,
@@ -313,7 +313,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Retrieves all the commits associated to this pull request.
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                         String.format("%s/commits", getApiRoute()),
                         GHPullRequestCommitDetail[].class,

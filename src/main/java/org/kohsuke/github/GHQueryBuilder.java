@@ -11,7 +11,7 @@ public abstract class GHQueryBuilder<T> {
 
     /*package*/ GHQueryBuilder(GitHub root) {
         this.root = root;
-        this.req = root.retrieve();
+        this.req = root.createRequester().method("GET");
     }
 
     /**

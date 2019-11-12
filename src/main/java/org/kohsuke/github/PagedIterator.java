@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * Iterator over a paginated data source.
  *
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()}
- * that allows the caller to retrieve items per page.
+ * that allows the caller to retrieve2 items per page.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -41,7 +41,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
 
     private void fetch() {
         while (current==null || current.length<=pos) {
-            if (!base.hasNext()) {// no more to retrieve
+            if (!base.hasNext()) {// no more to retrieve2
                 current = null;
                 pos = 0;
                 return;
@@ -51,7 +51,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
             wrapUp(current);
             pos = 0;
         }
-        // invariant at the end: there's some data to retrieve
+        // invariant at the end: there's some data to retrieve2
     }
 
     public void remove() {

@@ -68,7 +68,7 @@ public class GHRepositoryStatistics {
      * are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("contributors"),
                 ContributorStats[].class,
@@ -194,7 +194,7 @@ public class GHRepositoryStatistics {
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("commit_activity"),
                 CommitActivity[].class,
@@ -254,7 +254,7 @@ public class GHRepositoryStatistics {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = root.retrieve().asStream(getApiTailUrl("code_frequency"));
+            InputStream stream = root.createRequester().method("GET").asStream(getApiTailUrl("code_frequency"));
 
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<ArrayList<ArrayList<Integer> > > typeRef =
@@ -325,7 +325,7 @@ public class GHRepositoryStatistics {
      * See https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
      */
     public Participation getParticipation() throws IOException {
-        return root.retrieve().to(getApiTailUrl("participation"), Participation.class);
+        return root.createRequester().method("GET").to(getApiTailUrl("participation"), Participation.class);
     }
 
     public static class Participation extends GHObject {
@@ -371,7 +371,7 @@ public class GHRepositoryStatistics {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.retrieve().asStream(getApiTailUrl("punch_card"));
+        InputStream stream = root.createRequester().method("GET").asStream(getApiTailUrl("punch_card"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<ArrayList<ArrayList<Integer> > > typeRef =

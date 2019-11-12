@@ -19,7 +19,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
-            fail("Statistics took too long to retrieve.");
+            fail("Statistics took too long to retrieve2.");
             return;
         }
 
@@ -78,7 +78,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
-            fail("Statistics took too long to retrieve.");
+            fail("Statistics took too long to retrieve2.");
             return;
         }
 
@@ -124,7 +124,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
-            fail("Statistics took too long to retrieve.");
+            fail("Statistics took too long to retrieve2.");
             return;
         }
 
@@ -160,7 +160,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
-            fail("Statistics took too long to retrieve.");
+            fail("Statistics took too long to retrieve2.");
             return;
         }
 
@@ -192,7 +192,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
-            fail("Statistics took too long to retrieve.");
+            fail("Statistics took too long to retrieve2.");
             return;
         }
 

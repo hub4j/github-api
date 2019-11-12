@@ -129,7 +129,7 @@ public class GHContent implements Refreshable {
     }
 
     /**
-     * URL to retrieve the raw content of the file. Null if this is a directory.
+     * URL to retrieve2 the raw content of the file. Null if this is a directory.
      */
     public String getDownloadUrl() throws IOException {
         refresh(download_url);
@@ -150,7 +150,7 @@ public class GHContent implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        root.retrieve().to(url, this);
+        root.createRequester().method("GET").to(url, this);
     }
 
     /**
@@ -160,7 +160,7 @@ public class GHContent implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path+" is not a directory");
 
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 url,
                 GHContent[].class,
@@ -256,6 +256,6 @@ public class GHContent implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.retrieve().to(url, this);
+        root.createRequester().method("GET").to(url, this);
     }
 }

@@ -72,7 +72,7 @@ public class GHTeam implements Refreshable {
     }
 
     public void setDescription(String description) throws IOException {
-        root.retrieve().method("PATCH")
+        root.createRequester().method("PATCH")
                 .with("description", description)
                 .to(api(""));
     }
@@ -85,7 +85,7 @@ public class GHTeam implements Refreshable {
      * Retrieves the current members.
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 api("/members"),
                 GHUser[].class,
@@ -101,7 +101,7 @@ public class GHTeam implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            root.createRequester().method("GET").to("/teams/" + id + "/members/"  + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
@@ -117,7 +117,7 @@ public class GHTeam implements Refreshable {
     }
 
     public PagedIterable<GHRepository> listRepositories() {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 api("/repos"),
                 GHRepository[].class,
@@ -132,7 +132,7 @@ public class GHTeam implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()), null);
+        root.createRequester().method("PUT").to(api("/memberships/" + u.getLogin()), null);
     }
 
     /**
@@ -146,7 +146,7 @@ public class GHTeam implements Refreshable {
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT")
+        root.createRequester().method("PUT")
                 .with("role", role)
                 .to(api("/memberships/" + user.getLogin()), null);
     }
@@ -155,7 +155,7 @@ public class GHTeam implements Refreshable {
      * Removes a member to the team.
      */
     public void remove(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").to(api("/members/" + u.getLogin()), null);
+        root.createRequester().method("DELETE").to(api("/members/" + u.getLogin()), null);
     }
 
     public void add(GHRepository r) throws IOException {
@@ -163,20 +163,20 @@ public class GHTeam implements Refreshable {
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        root.retrieve().method("PUT")
+        root.createRequester().method("PUT")
                 .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 
     public void remove(GHRepository r) throws IOException {
-        root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
+        root.createRequester().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
     
     /**
      * Deletes this team.
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(api(""));
+        root.createRequester().method("DELETE").to(api(""));
     }
 
     private String api(String tail) {
@@ -190,6 +190,6 @@ public class GHTeam implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        root.retrieve().to(api(""), this).wrapUp(root);
+        root.createRequester().method("GET").to(api(""), this).wrapUp(root);
     }
 }

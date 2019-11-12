@@ -36,7 +36,7 @@ import java.util.*;
 public class GHUser extends GHPerson {
 
     public List<GHKey> getKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to(getApiTailUrl("keys"), GHKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(root.createRequester().method("GET").to(getApiTailUrl("keys"), GHKey[].class)));
     }
 
     /**
@@ -84,7 +84,7 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHUser> listUser(final String suffix) {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl(suffix),
                 GHUser[].class,
@@ -108,7 +108,7 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl(suffix),
                 GHRepository[].class,
@@ -149,7 +149,7 @@ public class GHUser extends GHPerson {
     public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/users/" + login + "/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.createRequester().method("GET").to("/users/" + login + "/orgs", GHOrganization[].class)) {
             if (names.add(o.getLogin()))    // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -160,7 +160,7 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 String.format("/users/%s/events", login),
                 GHEventInfo[].class,
@@ -171,7 +171,7 @@ public class GHUser extends GHPerson {
      * Lists Gists created by this user.
      */
     public PagedIterable<GHGist> listGists() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 String.format("/users/%s/gists", login),
                 GHGist[].class,

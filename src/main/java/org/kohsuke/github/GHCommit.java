@@ -327,7 +327,7 @@ public class GHCommit {
      * Lists up all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.retrieve()
+        return owner.root.createRequester().method("GET")
             .asPagedIterable(
                 String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
                 GHCommitComment[].class,
@@ -372,7 +372,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files==null && stats==null)
-            owner.root.retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
+            owner.root.createRequester().method("GET").to(owner.getApiTailUrl("commits/" + sha), this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

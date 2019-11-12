@@ -64,7 +64,7 @@ public class GHBranch {
     }
 
     public GHBranchProtection getProtection() throws IOException {
-        return root.retrieve().to(protection_url, GHBranchProtection.class).wrap(this);
+        return root.createRequester().method("GET").to(protection_url, GHBranchProtection.class).wrap(this);
     }
 
     /**

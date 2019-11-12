@@ -290,7 +290,7 @@ public class GHIssue extends GHObject implements Reactable{
      * Obtains all the comments associated with this issue.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getIssuesApiRoute() + "/comments",
                 GHIssueComment[].class,
@@ -307,7 +307,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     @Preview @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL)
+        return owner.root.createRequester().method("GET").withPreview(SQUIRREL_GIRL)
             .asPagedIterable(
                 getApiRoute()+"/reactions",
                 GHReaction[].class,
@@ -320,7 +320,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
         List<String> logins = getLogins(assignees);
-        root.retrieve().method("POST").with(ASSIGNEES,logins).to(getIssuesApiRoute()+"/assignees",this);
+        root.createRequester().method("POST").with(ASSIGNEES,logins).to(getIssuesApiRoute()+"/assignees",this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -338,7 +338,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
         List<String> logins = getLogins(assignees);
-        root.retrieve().method("DELETE").with(ASSIGNEES,logins).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        root.createRequester().method("DELETE").with(ASSIGNEES,logins).inBody().to(getIssuesApiRoute()+"/assignees",this);
     }
 
     protected static List<String> getLogins(Collection<GHUser> users) {
@@ -434,7 +434,7 @@ public class GHIssue extends GHObject implements Reactable{
      * See https://developer.github.com/v3/issues/events/
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(
+        return root.createRequester().method("GET").asPagedIterable(
             owner.getApiTailUrl(String.format("/issues/%s/events", number)),
             GHIssueEvent[].class,
             item -> item.wrapUp(GHIssue.this) );

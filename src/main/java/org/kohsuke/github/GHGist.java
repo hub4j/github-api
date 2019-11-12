@@ -134,7 +134,7 @@ public class GHGist extends GHObject {
     }
 
     public boolean isStarred() throws IOException {
-        return root.retrieve().asHttpStatusCode(getApiTailUrl("star"))/100==2;
+        return root.createRequester().method("GET").asHttpStatusCode(getApiTailUrl("star"))/100==2;
     }
 
     /**
@@ -145,7 +145,7 @@ public class GHGist extends GHObject {
     }
 
     public PagedIterable<GHGist> listForks() {
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .asPagedIterable(
                 getApiTailUrl("forks"),
                 GHGist[].class,

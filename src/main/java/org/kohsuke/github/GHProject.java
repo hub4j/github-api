@@ -61,11 +61,11 @@ public class GHProject extends GHObject {
         if(owner == null) {
             try {
                 if(owner_url.contains("/orgs/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
                 } else if(owner_url.contains("/users/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
                 } else if(owner_url.contains("/repos/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                    owner = root.createRequester().method("GET").to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -166,7 +166,7 @@ public class GHProject extends GHObject {
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.retrieve()
+        return root.createRequester().method("GET")
             .withPreview(INERTIA)
             .asPagedIterable(
                 String.format("/projects/%d/columns", id),
@@ -175,7 +175,7 @@ public class GHProject extends GHObject {
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.retrieve().method("POST")
+        return root.createRequester().method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);

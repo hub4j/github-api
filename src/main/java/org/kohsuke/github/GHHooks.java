@@ -20,8 +20,8 @@ class GHHooks {
         }
 
         public List<GHHook> getHooks() throws IOException {
-        	
-            GHHook [] hookArray = root.retrieve().to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
+
+            GHHook [] hookArray = root.createRequester().method("GET").to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
               wrap(h);
@@ -29,7 +29,7 @@ class GHHooks {
         }
 
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.retrieve().to(collection() + "/" + id, clazz());
+            GHHook hook = root.createRequester().method("GET").to(collection() + "/" + id, clazz());
             return wrap(hook);
         }
 

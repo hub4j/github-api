@@ -148,7 +148,7 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.retrieve()
+        return owner.root.createRequester().method("GET")
             .asPagedIterable(
                 getApiRoute() + "/comments",
                 GHPullRequestReviewComment[].class,

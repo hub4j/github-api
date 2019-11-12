@@ -39,7 +39,7 @@ public abstract class GHObject {
      * Some of the HTTP headers have nothing to do with the object, for example "Cache-Control"
      * and others are different depending on how this object was retrieved.
      *
-     * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such.
+     * This method was added as a kind of hack to allow the caller to retrieve2 OAuth scopes and such.
      * Use with caution. The method might be removed in the future.
      */
     @CheckForNull @Deprecated

@@ -89,7 +89,7 @@ public class GHMilestone extends GHObject {
      * Deletes this milestone.
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(getApiRoute());
+        root.createRequester().method("DELETE").to(getApiRoute());
     }
 
     private void edit(String key, Object value) throws IOException {

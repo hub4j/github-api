@@ -45,7 +45,7 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
      * @see GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.retrieve().method("PATCH").with("state",State.ACTIVE).to(url,this);
+        root.createRequester().method("PATCH").with("state",State.ACTIVE).to(url,this);
     }
 
     /*package*/ GHMembership wrap(GitHub root) {

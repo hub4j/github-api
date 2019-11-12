@@ -39,7 +39,7 @@ public class GHProjectColumn extends GHObject {
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+				project = root.createRequester().method("GET").to(getProjectUrl().getPath(), GHProject.class).wrap(root);
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -73,7 +73,7 @@ public class GHProjectColumn extends GHObject {
 
 	public PagedIterable<GHProjectCard> listCards() throws IOException {
 		final GHProjectColumn column = this;
-		return root.retrieve()
+		return root.createRequester().method("GET")
 			.withPreview(INERTIA)
 			.asPagedIterable(
 				String.format("/projects/columns/%d/cards", id),
@@ -82,14 +82,14 @@ public class GHProjectColumn extends GHObject {
 	}
 
 	public GHProjectCard createCard(String note) throws IOException {
-		return root.retrieve().method("POST")
+		return root.createRequester().method("POST")
 				.withPreview(INERTIA)
 				.with("note", note)
 				.to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class).wrap(this);
 	}
 
 	public GHProjectCard createCard(GHIssue issue) throws IOException {
-		return root.retrieve().method("POST")
+		return root.createRequester().method("POST")
 				.withPreview(INERTIA)
 				.with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
 				.with("content_id", issue.getId())

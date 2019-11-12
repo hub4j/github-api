@@ -24,7 +24,7 @@ public class GHCommitQueryBuilder {
 
     /*package*/ GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = repo.root.retrieve();    // requester to build up
+        this.req = repo.root.createRequester().method("GET");    // requester to build up
     }
 
     /**

@@ -20,7 +20,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * Sets the pagination size.
      *
      * <p>
-     * When set to non-zero, each API call will retrieve this many entries.
+     * When set to non-zero, each API call will retrieve2 this many entries.
      */
     public PagedIterable<T> withPageSize(int size) {
         this.size = size;

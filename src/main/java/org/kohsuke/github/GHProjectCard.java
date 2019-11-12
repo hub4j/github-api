@@ -44,7 +44,7 @@ public class GHProjectCard extends GHObject {
 	public GHProject getProject() throws IOException {
 		if(project == null) {
 			try {
-				project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+				project = root.createRequester().method("GET").to(getProjectUrl().getPath(), GHProject.class).wrap(root);
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -55,7 +55,7 @@ public class GHProjectCard extends GHObject {
 	public GHProjectColumn getColumn() throws IOException {
 		if(column == null) {
 			try {
-				column = root.retrieve().to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(root);
+				column = root.createRequester().method("GET").to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(root);
 			} catch (FileNotFoundException e) {
 				return null;
 			}
@@ -68,9 +68,9 @@ public class GHProjectCard extends GHObject {
 			return null;
 		try {
 			if(content_url.contains("/pulls")) {
-				return root.retrieve().to(getContentUrl().getPath(), GHPullRequest.class).wrap(root);
+				return root.createRequester().method("GET").to(getContentUrl().getPath(), GHPullRequest.class).wrap(root);
 			} else {
-				return root.retrieve().to(getContentUrl().getPath(), GHIssue.class).wrap(root);
+				return root.createRequester().method("GET").to(getContentUrl().getPath(), GHIssue.class).wrap(root);
 			}
 		} catch (FileNotFoundException e) {
 			return null;

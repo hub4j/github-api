@@ -19,8 +19,8 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 		        asList, 
 		        nameOfToken,
 		        "this is a test token created by a unit test", () -> {
-		            // can be anything from automated processes to user interaction.
 		        	String data = "111878";
+		        	// TO UPDATE run this in debugger mode, put a breakpoint here, and enter the OTP you get into the value of Data
 		            return data; 
 		        });
 		assert token!=null;

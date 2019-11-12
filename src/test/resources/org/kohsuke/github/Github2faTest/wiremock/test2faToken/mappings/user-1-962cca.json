@@ -1,0 +1,35 @@
+{
+  "id": "962cca36-7da0-4425-8529-30555894cb49",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET"
+  },
+  "response": {
+    "status": 401,
+    "body": "{\"message\":\"Must specify two-factor authentication OTP code.\",\"documentation_url\":\"https://developer.github.com/v3/auth#working-with-two-factor-authentication\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 12 Nov 2019 19:49:03 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "401 Unauthorized",
+      "X-GitHub-OTP": "required; sms",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "59",
+      "X-RateLimit-Reset": "1573591743",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F344:716B:87A0B2:1300506:5DCB0CAF"
+    }
+  },
+  "uuid": "962cca36-7da0-4425-8529-30555894cb49",
+  "persistent": true,
+  "insertionIndex": 1
+}

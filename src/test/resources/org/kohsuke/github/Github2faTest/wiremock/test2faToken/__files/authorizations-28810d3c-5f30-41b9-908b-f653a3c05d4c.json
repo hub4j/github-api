@@ -1,0 +1,26 @@
+{
+  "id": 350859530,
+  "url": "https://api.github.com/authorizations/350859530",
+  "app": {
+    "name": "Test2faTokenCreate-2019-11-12_14-50-03",
+    "url": "https://developer.github.com/v3/oauth_authorizations/",
+    "client_id": "00000000000000000000"
+  },
+  "token": "b630826ec41dd640651d01f8fe13b32fd01cef56",
+  "hashed_token": "d26aef448208fb464739812b513076fc6ba2a477e605242c07a3ecae050525f0",
+  "token_last_eight": "d01cef56",
+  "note": "Test2faTokenCreate-2019-11-12_14-50-03",
+  "note_url": "",
+  "created_at": "2019-11-12T19:50:49Z",
+  "updated_at": "2019-11-12T19:50:49Z",
+  "scopes": [
+    "repo",
+    "gist",
+    "write:packages",
+    "read:packages",
+    "delete:packages",
+    "user",
+    "delete_repo"
+  ],
+  "fingerprint": null
+}

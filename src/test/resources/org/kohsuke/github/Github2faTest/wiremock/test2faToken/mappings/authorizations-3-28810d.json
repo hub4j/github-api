@@ -1,0 +1,45 @@
+{
+  "id": "28810d3c-5f30-41b9-908b-f653a3c05d4c",
+  "name": "authorizations",
+  "request": {
+    "url": "/authorizations",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"note\":\"Test2faTokenCreate-2019-11-12_14-50-03\",\"note_url\":\"\",\"scopes\":[\"repo\",\"gist\",\"write:packages\",\"read:packages\",\"delete:packages\",\"user\",\"delete_repo\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "authorizations-28810d3c-5f30-41b9-908b-f653a3c05d4c.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 12 Nov 2019 19:50:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4999",
+      "X-RateLimit-Reset": "1573591849",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "\"22e369bf56fde64143a724d34a894d2b\"",
+      "Location": "https://api.github.com/authorizations/350859530",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F365:31AB:29C272:62A0E3:5DCB0CF0"
+    }
+  },
+  "uuid": "28810d3c-5f30-41b9-908b-f653a3c05d4c",
+  "persistent": true,
+  "insertionIndex": 3
+}

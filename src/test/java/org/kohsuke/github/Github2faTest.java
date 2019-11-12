@@ -24,6 +24,8 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 	}
 	@Test
 	public void test2faToken() throws IOException {
+		assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
+		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String timestamp = dateFormat.format(new Date());
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",

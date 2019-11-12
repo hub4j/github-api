@@ -25,16 +25,14 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 	@Test
 	public void test2faToken() throws IOException {
 		assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
-		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		String timestamp = dateFormat.format(new Date());
+
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",
 				"user", "delete_repo");
-		String string = "Test2faTokenCreate-2019-11-12_14-50-03";//+timestamp;// + timestamp;// use time stamp to ensure the token creations do not collide with older tokens
+		String nameOfToken = "Test2faTokenCreate-2019-11-12_14-50-03";//+timestamp;// use time stamp to ensure the token creations do not collide with older tokens
 
 		GHAuthorization token=null;
 		try {
-			token = gitHub.createToken(asList, string, "this is a test token created by a unit test");
+			token = gitHub.createToken(asList, nameOfToken, "this is a test token created by a unit test");
 		}catch (IOException ex) {
 			//ex.printStackTrace();
 			// under 2fa mode this exception is expected, and is necessary
@@ -42,7 +40,7 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 			// we will prompt at the command line for the users 2fa code 
 			try {
 				String twofaCode = "908966";//twoFactorAuthCodePrompt();	
-				token = gitHub.createTokenOtp(asList, string, "", twofaCode);// prompt at command line for 2fa OTP code
+				token = gitHub.createTokenOtp(asList, nameOfToken, "", twofaCode);// prompt at command line for 2fa OTP code
 				//return;
 			} catch (Exception e) {
 				e.printStackTrace();

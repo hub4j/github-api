@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GistTest extends AbstractGitHubWireMockTest {
+public class GHGistTest extends AbstractGitHubWireMockTest {
     /**
      * CRUD operation.
      */

@@ -1,0 +1,47 @@
+{
+  "id": "3f50c6b0-2730-45e7-9c94-f4f71bf61db2",
+  "name": "authorizations",
+  "request": {
+    "url": "/authorizations",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"note\":\"Test2faTokenCreate\",\"note_url\":\"this is a test token created by a unit test\",\"scopes\":[\"repo\",\"gist\",\"write:packages\",\"read:packages\",\"delete:packages\",\"user\",\"delete_repo\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "authorizations-3f50c6b0-2730-45e7-9c94-f4f71bf61db2.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 12 Nov 2019 23:04:13 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4999",
+      "X-RateLimit-Reset": "1573603453",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "\"a13c56b386b13166f07b380d02243b12\"",
+      "Location": "https://api.github.com/authorizations/350917110",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EA5C:557C:1271445:29480C8:5DCB3A59"
+    }
+  },
+  "uuid": "3f50c6b0-2730-45e7-9c94-f4f71bf61db2",
+  "persistent": true,
+  "scenarioName": "scenario-1-authorizations",
+  "requiredScenarioState": "scenario-1-authorizations-2",
+  "insertionIndex": 2
+}

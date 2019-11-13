@@ -763,8 +763,13 @@ class Requester {
                 IOUtils.closeQuietly(es);
             }
         }
-        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
-            throw e;
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 Unauthorized == bad creds or OTP request
+        	// In the case of a user with 2fa enabled, a header with X-GitHub-OTP 
+        	// will be returned indicating the user needs to respond with an otp
+            if(uc.getHeaderField("X-GitHub-OTP") != null)
+                throw (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
+            else
+                throw e; // usually org.kohsuke.github.HttpException (which extends IOException)
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
             root.rateLimitHandler.onError(e,uc);

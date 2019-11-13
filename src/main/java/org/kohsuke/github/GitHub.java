@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -702,7 +703,31 @@ public class GitHub {
 
         return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
     }
-
+    /**
+     * Creates a new authorization using an OTP.
+     * 
+     * Start by running createToken, if exception is thrown, prompt for OTP from user
+     * 
+     * Once OTP is received, call this token request
+     *
+     * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
+     *
+     * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
+     */
+    public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl, Supplier<String> OTP) throws IOException{
+    	try {
+    		return createToken(scope, note, noteUrl);
+    	}catch (GHOTPRequiredException ex){
+    		String OTPstring=OTP.get();
+    		Requester requester = new Requester(this)
+                    .with("scopes", scope)
+                    .with("note", note)
+                    .with("note_url", noteUrl);
+            // Add the OTP from the user
+            requester.setHeader("x-github-otp", OTPstring);
+            return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+    	}
+    }
     /**
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
      */

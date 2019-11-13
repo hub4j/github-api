@@ -1,0 +1,45 @@
+{
+  "id": "cdda4d8e-7412-4b68-84ea-4d691fc8ccb8",
+  "name": "authorizations",
+  "request": {
+    "url": "/authorizations",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"note\":\"Test2faTokenCreate\",\"note_url\":\"this is a test token created by a unit test\",\"scopes\":[\"repo\",\"gist\",\"write:packages\",\"read:packages\",\"delete:packages\",\"user\",\"delete_repo\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 401,
+    "body": "{\"message\":\"Must specify two-factor authentication OTP code.\",\"documentation_url\":\"https://developer.github.com/v3/auth#working-with-two-factor-authentication\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 12 Nov 2019 23:03:53 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "401 Unauthorized",
+      "X-GitHub-OTP": "required; sms",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "59",
+      "X-RateLimit-Reset": "1573603433",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EA5C:557C:1271013:29480B4:5DCB3A59"
+    }
+  },
+  "uuid": "cdda4d8e-7412-4b68-84ea-4d691fc8ccb8",
+  "persistent": true,
+  "scenarioName": "scenario-1-authorizations",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-authorizations-2",
+  "insertionIndex": 1
+}

@@ -62,7 +62,7 @@ public class GHCommit {
         }
 
         /**
-         * Commit message.
+         * @return Commit message.
          */
         public String getMessage() {
             return message;
@@ -95,35 +95,35 @@ public class GHCommit {
         String filename, previous_filename;
 
         /**
-         * Number of lines added + removed.
+         * @return Number of lines added + removed.
          */
         public int getLinesChanged() {
             return changes;
         }
 
         /**
-         * Number of lines added.
+         * @return Number of lines added.
          */
         public int getLinesAdded() {
             return additions;
         }
 
         /**
-         * Number of lines removed.
+         * @return Number of lines removed.
          */
         public int getLinesDeleted() {
             return deletions;
         }
 
         /**
-         * "modified", "added", or "removed"
+         * @return "modified", "added", or "removed"
          */
         public String getStatus() {
             return status;
         }
 
         /**
-         * Full path in the repository.
+         * @return Full path in the repository.
          */
         @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library's API and cannot be renamed")
         public String getFileName() {
@@ -131,37 +131,39 @@ public class GHCommit {
         }
 
         /**
-         * Previous path, in case file has moved.
+         * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
             return previous_filename;
         }
 
         /**
-         * The actual change.
+         * @return The actual change.
          */
         public String getPatch() {
             return patch;
         }
 
         /**
-         * URL like 'https://raw.github.com/jenkinsci/jenkins/4eb17c197dfdcf8ef7ff87eb160f24f6a20b7f0e/core/pom.xml'
-         * that resolves to the actual content of the file.
+         * @return URL like
+         *         'https://raw.github.com/jenkinsci/jenkins/4eb17c197dfdcf8ef7ff87eb160f24f6a20b7f0e/core/pom.xml' that
+         *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
             return GitHub.parseURL(raw_url);
         }
 
         /**
-         * URL like 'https://github.com/jenkinsci/jenkins/blob/1182e2ebb1734d0653142bd422ad33c21437f7cf/core/pom.xml'
-         * that resolves to the HTML page that describes this file.
+         * @return URL like
+         *         'https://github.com/jenkinsci/jenkins/blob/1182e2ebb1734d0653142bd422ad33c21437f7cf/core/pom.xml'
+         *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
             return GitHub.parseURL(blob_url);
         }
 
         /**
-         * [0-9a-f]{40} SHA1 checksum.
+         * @return [0-9a-f]{40} SHA1 checksum.
          */
         public String getSha() {
             return sha;
@@ -197,14 +199,16 @@ public class GHCommit {
     }
 
     /**
-     * The repository that contains the commit.
+     * @return the repository that contains the commit.
      */
     public GHRepository getOwner() {
         return owner;
     }
 
     /**
-     * Number of lines added + removed.
+     * @return the number of lines added + removed.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
      */
     public int getLinesChanged() throws IOException {
         populate();
@@ -212,7 +216,9 @@ public class GHCommit {
     }
 
     /**
-     * Number of lines added.
+     * @return Number of lines added.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
      */
     public int getLinesAdded() throws IOException {
         populate();
@@ -220,7 +226,9 @@ public class GHCommit {
     }
 
     /**
-     * Number of lines removed.
+     * @return Number of lines removed.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
      */
     public int getLinesDeleted() throws IOException {
         populate();
@@ -228,21 +236,26 @@ public class GHCommit {
     }
 
     /**
-     * Use this method to walk the tree
+     * Use this method to walk the tree.
+     *
+     * @return a GHTree to walk
+     * @throws IOException
+     *             on error
      */
     public GHTree getTree() throws IOException {
         return owner.getTree(getCommitShortInfo().tree.sha);
     }
 
     /**
-     * URL of this commit like "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
+     * @return URL of this commit like
+     *         "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
      */
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
     }
 
     /**
-     * [0-9a-f]{40} SHA1 checksum.
+     * @return [0-9a-f]{40} SHA1 checksum.
      */
     public String getSHA1() {
         return sha;
@@ -252,6 +265,8 @@ public class GHCommit {
      * List of files changed/added/removed in this commit.
      *
      * @return Can be empty but never null.
+     * @throws IOException
+     *             on error
      */
     public List<File> getFiles() throws IOException {
         populate();
@@ -259,7 +274,7 @@ public class GHCommit {
     }
 
     /**
-     * Returns the SHA1 of parent commit objects.
+     * @return SHA1 of parent commit objects.
      */
     public List<String> getParentSHA1s() {
         if (parents == null)
@@ -279,6 +294,10 @@ public class GHCommit {
 
     /**
      * Resolves the parent commit objects and return them.
+     *
+     * @return parent commit objects
+     * @throws IOException
+     *             on error
      */
     public List<GHCommit> getParents() throws IOException {
         List<GHCommit> r = new ArrayList<GHCommit>();
@@ -324,7 +343,7 @@ public class GHCommit {
     }
 
     /**
-     * Lists up all the commit comments in this repository.
+     * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
         return owner.root.retrieve().asPagedIterable(
@@ -336,6 +355,19 @@ public class GHCommit {
      * Creates a commit comment.
      *
      * I'm not sure how path/line/position parameters interact with each other.
+     *
+     * @param body
+     *            body of the comment
+     * @param path
+     *            path of file being commented on
+     * @param line
+     *            target line for comment
+     * @param position
+     *            position on line
+     *
+     * @return created GHCommitComment
+     * @throws IOException
+     *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
         GHCommitComment r = new Requester(owner.root).with("body", body).with("path", path).with("line", line)
@@ -350,14 +382,18 @@ public class GHCommit {
     }
 
     /**
-     * Gets the status of this commit, newer ones first.
+     * @return status of this commit, newer ones first.
+     * @throws IOException
+     *             if statuses cannot be read
      */
     public PagedIterable<GHCommitStatus> listStatuses() throws IOException {
         return owner.listCommitStatuses(sha);
     }
 
     /**
-     * Gets the last status of this commit, which is what gets shown in the UI.
+     * @return the last status of this commit, which is what gets shown in the UI.
+     * @throws IOException
+     *             on error
      */
     public GHCommitStatus getLastStatus() throws IOException {
         return owner.getLastCommitStatus(sha);
@@ -365,6 +401,9 @@ public class GHCommit {
 
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
+     * 
+     * @throws IOException
+     *             on error
      */
     void populate() throws IOException {
         if (files == null && stats == null)

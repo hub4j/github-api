@@ -41,6 +41,8 @@ public abstract class GHObject {
      *
      * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such. Use with caution.
      * The method might be removed in the future.
+     *
+     * @return a map of header names to value lists
      */
     @CheckForNull
     @Deprecated
@@ -50,6 +52,10 @@ public abstract class GHObject {
 
     /**
      * When was this resource created?
+     *
+     * @return date created
+     * @throws IOException
+     *             on error
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
@@ -62,7 +68,7 @@ public abstract class GHObject {
     }
 
     /**
-     * API URL of this object.
+     * @return API URL of this object.
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
@@ -70,20 +76,26 @@ public abstract class GHObject {
     }
 
     /**
-     * URL of this object for humans, which renders some HTML.
+     * @return URL of this object for humans, which renders some HTML.
+     * @throws IOException
+     *             on error
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public abstract URL getHtmlUrl() throws IOException;
 
     /**
      * When was this resource last updated?
+     *
+     * @return updated date
+     * @throws IOException
+     *             on error
      */
     public Date getUpdatedAt() throws IOException {
         return GitHub.parseDate(updated_at);
     }
 
     /**
-     * Unique ID number of this resource.
+     * @return Unique ID number of this resource.
      */
     @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = "longToStringOrInt")
     public long getId() {

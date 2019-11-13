@@ -37,7 +37,7 @@ public class GHGist extends GHObject {
     private Map<String, GHGistFile> files = new HashMap<String, GHGistFile>();
 
     /**
-     * User that owns this Gist.
+     * @return User that owns this Gist.
      */
     public GHUser getOwner() throws IOException {
         return root.intern(owner);
@@ -52,7 +52,7 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * URL like https://gist.github.com/gists/12345.git
+     * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
         return git_pull_url;
@@ -79,7 +79,7 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * API URL of listing comments.
+     * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
         return comments_url;

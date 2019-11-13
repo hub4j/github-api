@@ -145,6 +145,8 @@ public class GHAppInstallation extends GHObject {
      *
      * You must use a JWT to access this endpoint.
      *
+     * @throws IOException
+     *             on error
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
     @Preview
@@ -159,6 +161,10 @@ public class GHAppInstallation extends GHObject {
      * <p>
      * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
      * finally create an access token.
+     *
+     * @param permissions
+     *            map of permissions for the created token
+     * @return a GHAppCreateTokenBuilder on error
      */
     @Preview
     @Deprecated

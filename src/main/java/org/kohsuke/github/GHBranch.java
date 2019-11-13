@@ -38,7 +38,7 @@ public class GHBranch {
     }
 
     /**
-     * Repository that this branch is in.
+     * @return the repository that this branch is in.
      */
     public GHRepository getOwner() {
         return owner;
@@ -49,7 +49,7 @@ public class GHBranch {
     }
 
     /**
-     * Returns true if the push to this branch is restricted via branch protection.
+     * @return true if the push to this branch is restricted via branch protection.
      */
     @Preview
     @Deprecated
@@ -58,7 +58,7 @@ public class GHBranch {
     }
 
     /**
-     * Returns API URL that deals with the protection of this branch.
+     * @return API URL that deals with the protection of this branch.
      */
     @Preview
     @Deprecated
@@ -71,7 +71,7 @@ public class GHBranch {
     }
 
     /**
-     * The commit that this branch currently points to.
+     * @return The SHA1 of the commit that this branch currently points to.
      */
     public String getSHA1() {
         return commit.sha;
@@ -79,6 +79,9 @@ public class GHBranch {
 
     /**
      * Disables branch protection and allows anyone with push access to push changes.
+     *
+     * @throws IOException
+     *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
         new Requester(root).method("DELETE").to(protection_url);
@@ -87,6 +90,7 @@ public class GHBranch {
     /**
      * Enables branch protection to control what commit statuses are required to push.
      *
+     * @return GHBranchProtectionBuilder for enabling protection
      * @see GHCommitStatus#getContext()
      */
     @Preview

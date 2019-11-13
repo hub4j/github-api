@@ -35,6 +35,7 @@ public class GHAppCreateTokenBuilder {
      * @param repositoryIds
      *            Array containing the repositories Ids
      *
+     * @return a GHAppCreateTokenBuilder
      */
     @Preview
     @Deprecated
@@ -47,6 +48,10 @@ public class GHAppCreateTokenBuilder {
      * Creates an app token with all the parameters.
      *
      * You must use a JWT to access this endpoint.
+     * 
+     * @return a GHAppInstallationToken
+     * @throws IOException
+     *             on error
      */
     @Preview
     @Deprecated

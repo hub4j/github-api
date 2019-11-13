@@ -28,6 +28,7 @@ public abstract class AbuseLimitHandler {
      * @param uc
      *            Connection that resulted in an error. Useful for accessing other response headers.
      * @throws IOException
+     *             on failure
      */
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 

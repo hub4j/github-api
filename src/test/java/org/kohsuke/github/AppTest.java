@@ -848,12 +848,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         gitHub.listNotifications().markAsRead();
     }
 
-    /**
-     * Just basic code coverage to make sure toString() doesn't blow up
-     */
     @Ignore("Needs mocking check")
     @Test
     public void checkToString() throws Exception {
+        // Just basic code coverage to make sure toString() doesn't blow up
         GHUser u = gitHub.getUser("rails");
         // System.out.println(u);
         GHRepository r = u.getRepository("rails");

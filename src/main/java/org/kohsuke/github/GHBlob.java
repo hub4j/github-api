@@ -19,7 +19,7 @@ public class GHBlob {
     private long size;
 
     /**
-     * API URL of this blob.
+     * @return API URL of this blob.
      */
     public URL getUrl() {
         return GitHub.parseURL(url);
@@ -30,7 +30,7 @@ public class GHBlob {
     }
 
     /**
-     * Number of bytes in this blob.
+     * @return Number of bytes in this blob.
      */
     public long getSize() {
         return size;
@@ -41,14 +41,14 @@ public class GHBlob {
     }
 
     /**
-     * Encoded content. You probably want {@link #read()}
+     * @return Encoded content. You probably want {@link #read()}
      */
     public String getContent() {
         return content;
     }
 
     /**
-     * Retrieves the actual bytes of the blob.
+     * @return the actual bytes of the blob.
      */
     public InputStream read() {
         if (encoding.equals("base64")) {

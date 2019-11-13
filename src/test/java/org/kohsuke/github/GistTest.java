@@ -12,11 +12,9 @@ import static org.hamcrest.core.Is.is;
  * @author Kohsuke Kawaguchi
  */
 public class GistTest extends AbstractGitHubWireMockTest {
-    /**
-     * CRUD operation.
-     */
     @Test
     public void lifecycleTest() throws Exception {
+        // CRUD operation
         GHGist gist = gitHub.createGist().public_(false).description("Test Gist").file("abc.txt", "abc")
                 .file("def.txt", "def").create();
 

@@ -31,7 +31,7 @@ public class GHGistBuilder {
     }
 
     /**
-     * Adds a new file.
+     * @return Adds a new file.
      */
     public GHGistBuilder file(String fileName, String content) {
         files.put(fileName, Collections.singletonMap("content", content));
@@ -40,6 +40,10 @@ public class GHGistBuilder {
 
     /**
      * Creates a Gist based on the parameters specified thus far.
+     * 
+     * @return created Gist
+     * @throws IOException
+     *             if Gist cannot be created.
      */
     public GHGist create() throws IOException {
         req._with("files", files);

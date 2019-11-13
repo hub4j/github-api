@@ -139,14 +139,26 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     }
 
     /**
+     * Creates a temporary repository that will be deleted at the end of the test. Repository name is based on the
+     * current test method.
      *
+     * @return a temporary repository
+     * @throws IOException
+     *             if repository could not be created or retrieved.
      */
     protected GHRepository getTempRepository() throws IOException {
         return getTempRepository("temp-" + this.mockGitHub.getMethodName());
     }
 
     /**
-     * Creates
+     * Creates a temporary repository that will be deleted at the end of the test.
+     *
+     * @param name
+     *            string name of the the repository
+     *
+     * @return a temporary repository
+     * @throws IOException
+     *             if repository could not be created or retrieved.
      */
     protected GHRepository getTempRepository(String name) throws IOException {
         String fullName = GITHUB_API_TEST_ORG + '/' + name;

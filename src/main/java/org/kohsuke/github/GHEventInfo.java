@@ -65,7 +65,9 @@ public class GHEventInfo {
     }
 
     /**
-     * Repository where the change was made.
+     * @return Repository where the change was made.
+     * @throws IOException
+     *             on error
      */
     @SuppressFBWarnings(value = {
             "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
@@ -73,6 +75,11 @@ public class GHEventInfo {
         return root.getRepository(repo.name);
     }
 
+    /**
+     * @return the {@link GHUser} actor for this event.
+     * @throws IOException
+     *             on error
+     */
     @SuppressFBWarnings(value = {
             "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
@@ -80,7 +87,9 @@ public class GHEventInfo {
     }
 
     /**
-     * Quick way to just get the actor of the login.
+     * @return the login of the actor.
+     * @throws IOException
+     *             on error
      */
     public String getActorLogin() throws IOException {
         return actor.getLogin();
@@ -98,6 +107,10 @@ public class GHEventInfo {
      * @param type
      *            Specify one of the {@link GHEventPayload} subtype that defines a type-safe access to the payload. This
      *            must match the {@linkplain #getType() event type}.
+     *
+     * @return parsed event payload
+     * @throws IOException
+     *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
         T v = GitHub.MAPPER.readValue(payload.traverse(), type);

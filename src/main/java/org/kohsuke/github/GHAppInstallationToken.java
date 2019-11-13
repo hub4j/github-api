@@ -68,7 +68,9 @@ public class GHAppInstallationToken {
     }
 
     /**
-     * When was this tokens expires?
+     * @return date when this token expires
+     * @throws IOException
+     *             on error
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "expiresAtStr")
     public Date getExpiresAt() throws IOException {

@@ -39,6 +39,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void listLicenses() throws IOException {
@@ -50,6 +51,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * Tests that {@link GitHub#listLicenses()} returns the MIT license in the expected manner.
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void listLicensesCheckIndividualLicense() throws IOException {
@@ -68,6 +70,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * (not all properties are checked)
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void getLicense() throws IOException {
@@ -84,6 +87,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * correct
      *
      * @throws IOException
+     *             if test failss
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
@@ -100,6 +104,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * Accesses the 'atom/atom' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicenseAtom() throws IOException {
@@ -116,6 +121,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicensePomes() throws IOException {
@@ -133,6 +139,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * is returned as the repo doesn't have one
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryWithoutLicense() throws IOException {
@@ -146,6 +153,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * {@link GHRepository#getLicense()} and checks that certain properties are correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
@@ -165,6 +173,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * {@link GHRepository#getLicenseContent()} and checks that certain properties are correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicenseContent() throws IOException {

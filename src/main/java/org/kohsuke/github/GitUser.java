@@ -18,21 +18,21 @@ public class GitUser {
     private String name, email, date;
 
     /**
-     * Human readable name of the user, such as "Kohsuke Kawaguchi"
+     * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
      */
     public String getName() {
         return name;
     }
 
     /**
-     * E-mail address, such as "foo@example.com"
+     * @return E-mail address, such as "foo@example.com"
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * This field doesn't appear to be consistently available in all the situations where this class is used.
+     * @return This field doesn't appear to be consistently available in all the situations where this class is used.
      */
     public Date getDate() {
         return GitHub.parseDate(date);

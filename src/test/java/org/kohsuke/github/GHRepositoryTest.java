@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -46,6 +47,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    //Issue #607
+    @Test
+    public void getBranchNonExistentBut200Status() throws Exception {
+        //Manually changed the returned status to 200 so dont take a new snapshot
+        this.snapshotNotAllowed();
+
+        GHRepository repo = getRepository();
+        try{
+            GHBranch branch = repo.getBranch("test/NonExistent");
+            fail();
+        }
+        catch(GHFileNotFoundException e){
+            assertEquals("{\"message\":\"Branch not found\",\"documentation_url\":\"https://developer.github.com/v3/repos/branches/#get-branch\"}", e.getMessage());
+        }
     }
 
     @Test
@@ -268,6 +285,4 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(r.isAllowRebaseMerge());
         assertFalse(r.isAllowSquashMerge());
     }
-
-
 }

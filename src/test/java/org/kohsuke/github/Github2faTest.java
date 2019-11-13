@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 /**
- * @author Kevin Harrington <mad.hephaestus@gmail.com>
+ * @author Kevin Harrington mad.hephaestus@gmail.com
  */
 public class Github2faTest  extends AbstractGitHubWireMockTest {
 

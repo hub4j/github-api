@@ -9,7 +9,7 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 
 	@Test
 	public void test2faToken() throws IOException {
-		//assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
+		assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
 		List<String> asList = Arrays.asList("repo", "gist", "write:packages", "read:packages", "delete:packages",
 				"user", "delete_repo");

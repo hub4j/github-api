@@ -31,15 +31,10 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -842,7 +837,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(GHUser... users) throws IOException {
-        addCollaborators(asList(users));
+        addCollaborators(GHCollaboratorPermission.PUSH, asList(users));
     }
 
     /**
@@ -854,7 +849,15 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT");
+        addCollaborators(GHCollaboratorPermission.PUSH, users);
+    }
+
+    public void addCollaborators(GHCollaboratorPermission permission, GHUser... users) throws IOException {
+        addCollaborators(permission, asList(users));
+    }
+
+    public void addCollaborators(GHCollaboratorPermission permission, Collection<GHUser> users) throws IOException {
+        modifyCollaborators(users, "PUT", permission);
     }
 
     /**
@@ -878,12 +881,21 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE");
+        modifyCollaborators(users, "DELETE", null);
     }
 
-    private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
+    private void modifyCollaborators(Collection<GHUser> users, String method, GHCollaboratorPermission permission)
+            throws IOException {
         for (GHUser user : users) {
-            new Requester(root).method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
+            if ("DELETE".equals(method)) {
+                new Requester(root).method(method).to(getApiTailUrl("collaborators/" + user.getLogin()));
+            } else {
+                Requester r = new Requester(root).method(method);
+
+                r.with(new ByteArrayInputStream(permission.toString().getBytes(Charset.forName("UTF-8"))));
+                r.contentType("application/json;charset=UTF-8");
+                r.to(getApiTailUrl("collaborators/" + user.getLogin()));
+            }
         }
     }
 
@@ -1979,7 +1991,7 @@ public class GHRepository extends GHObject {
     /**
      * Replace special characters (e.g. #) with standard values (e.g. %23) so GitHub understands what is being
      * requested.
-     * 
+     *
      * @param value
      *            string to be encoded.
      * @return The encoded string.

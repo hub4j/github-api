@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -682,11 +683,11 @@ public class GitHub {
      *
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
-    public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl, OTPReceiverLambda OTP) throws IOException{
+    public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl, Supplier<String> OTP) throws IOException{
     	try {
     		return createToken(scope, note, noteUrl);
     	}catch (GHOTPRequiredException ex){
-    		String OTPstring=OTP.run();
+    		String OTPstring=OTP.get();
     		Requester requester = new Requester(this)
                     .with("scopes", scope)
                     .with("note", note)

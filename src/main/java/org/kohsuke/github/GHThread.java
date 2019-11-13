@@ -14,7 +14,7 @@ import java.util.Date;
  * @see GHNotificationStream
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
 public class GHThread extends GHObject {
     private GitHub root;
@@ -71,14 +71,14 @@ public class GHThread extends GHObject {
     public String getType() {
         return subject.type;
     }
-    
+
     public String getLastCommentUrl() {
         return subject.latest_comment_url;
     }
 
     /**
      * If this thread is about an issue, return that issue.
-     * 
+     *
      * @return null if this thread is not about an issue.
      */
     public GHIssue getBoundIssue() throws IOException {

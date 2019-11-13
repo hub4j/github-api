@@ -18,24 +18,24 @@ import java.util.List;
  * @see GHRepository#getCommit(String)
  * @see GHCommitComment#getCommit()
  */
-@SuppressFBWarnings(value = {"NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+@SuppressFBWarnings(value = {"NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"},
         justification = "JSON API")
 public class GHCommit {
     private GHRepository owner;
-    
+
     private ShortInfo commit;
 
     /**
      * Short summary of this commit.
      */
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
     public static class ShortInfo {
         private GHAuthor author;
         private GHAuthor committer;
-        
+
         private String message;
-        
+
         private int comment_count;
 
         static class Tree {
@@ -88,7 +88,7 @@ public class GHCommit {
     /**
      * A file that was modified.
      */
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", 
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD",
             justification = "It's being initilized by JSON deserialization")
     public static class File {
         String status;
@@ -173,7 +173,7 @@ public class GHCommit {
 
     public static class Parent {
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url;  
+        String url;
         String sha;
     }
 
@@ -183,7 +183,7 @@ public class GHCommit {
         String url,avatar_url,gravatar_id;
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         int id;
-        
+
         String login;
     }
 

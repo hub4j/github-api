@@ -37,7 +37,7 @@ public class GHBranchProtectionBuilder {
         getStatusChecks().contexts.addAll(checks);
         return this;
     }
-    
+
     public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
         addRequiredChecks(Arrays.asList(checks));
         return this;
@@ -148,7 +148,7 @@ public class GHBranchProtectionBuilder {
         }
         return this;
     }
-    
+
     public GHBranchProtectionBuilder userPushAccess(GHUser... users) {
         for (GHUser user : users) {
             getRestrictions().users.add(user.getLogin());
@@ -173,7 +173,7 @@ public class GHBranchProtectionBuilder {
     private void addReviewRestriction(String restriction, boolean isTeam) {
         restrictReviewDismissals();
         Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
-        
+
         if (isTeam) {
             restrictions.teams.add(restriction);
         } else {

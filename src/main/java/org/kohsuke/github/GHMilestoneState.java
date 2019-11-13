@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
 /**
- * 
+ *
  * @author Yusuke Kokubo
  *
  */

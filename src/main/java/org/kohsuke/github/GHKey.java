@@ -38,7 +38,7 @@ public class GHKey {
     public GitHub getRoot() {
         return root;
     }
-    
+
     public boolean isVerified() {
         return verified;
     }

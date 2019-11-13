@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Base type for types used in databinding of the event payload.
- * 
+ *
  * @see GitHub#parseEventPayload(Reader, Class)
  * @see GHEventInfo#getPayload(Class)
  */
@@ -46,7 +46,7 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pullrequestevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
     "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
         private String action;
@@ -100,7 +100,7 @@ public abstract class GHEventPayload {
         public String getAction() {
             return action;
         }
-        
+
         public GHPullRequestReview getReview() {
             return review;
         }
@@ -118,9 +118,9 @@ public abstract class GHEventPayload {
             super.wrapUp(root);
             if (review==null)
                 throw new IllegalStateException("Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
-            
+
             review.wrapUp(pull_request);
-            
+
             if (repository!=null) {
                 repository.wrap(root);
                 pull_request.wrapUp(repository);
@@ -129,7 +129,7 @@ public abstract class GHEventPayload {
             }
         }
     }
-    
+
     /**
      * A review comment was added to a pull request
      *
@@ -144,7 +144,7 @@ public abstract class GHEventPayload {
         public String getAction() {
             return action;
         }
-        
+
         public GHPullRequestReviewComment getComment() {
             return comment;
         }
@@ -162,9 +162,9 @@ public abstract class GHEventPayload {
             super.wrapUp(root);
             if (comment==null)
                 throw new IllegalStateException("Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
-            
+
             comment.wrapUp(pull_request);
-            
+
             if (repository!=null) {
                 repository.wrap(root);
                 pull_request.wrapUp(repository);
@@ -224,7 +224,7 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" }, 
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
     public static class IssueComment extends GHEventPayload {
         private String action;

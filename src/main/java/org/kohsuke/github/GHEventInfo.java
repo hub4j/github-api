@@ -66,13 +66,13 @@ public class GHEventInfo {
     /**
      * Repository where the change was made.
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
         return root.getRepository(repo.name);
     }
-    
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
         return root.getUser(actor.getLogin());
@@ -85,7 +85,7 @@ public class GHEventInfo {
         return actor.getLogin();
     }
 
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, 
+    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
         return (org==null || org.getLogin()==null) ? null : root.getOrganization(org.getLogin());
@@ -93,7 +93,7 @@ public class GHEventInfo {
 
     /**
      * Retrieves the payload.
-     * 
+     *
      * @param type
      *      Specify one of the {@link GHEventPayload} subtype that defines a type-safe access to the payload.
      *      This must match the {@linkplain #getType() event type}.

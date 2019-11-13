@@ -58,7 +58,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertNotEquals(0L, r.getId());
         }
     }
-    
+
     @Test
     public void searchContent() throws Exception {
         PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();

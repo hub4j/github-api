@@ -39,7 +39,7 @@ public class GHDeployKey {
     public String toString() {
         return new ToStringBuilder(this).append("title",title).append("id",id).append("key",key).toString();
     }
-    
+
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE").to(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id));
     }

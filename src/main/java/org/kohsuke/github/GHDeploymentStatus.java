@@ -29,7 +29,7 @@ public class GHDeploymentStatus extends GHObject {
     public URL getRepositoryUrl() {
         return GitHub.parseURL(repository_url);
     }
-    
+
     public GHDeploymentState getState() {
         return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));
     }

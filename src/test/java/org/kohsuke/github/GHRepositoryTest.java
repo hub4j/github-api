@@ -234,7 +234,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
     }
-    
+
     @Test
     public void getMergeOptions() throws IOException {
         GHRepository r = getTempRepository();
@@ -242,7 +242,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertNotNull(r.isAllowRebaseMerge());
         assertNotNull(r.isAllowSquashMerge());
     }
-    
+
     @Test
     public void setMergeOptions() throws IOException {
         // String repoName = "github-api-test-org/test-mergeoptions";

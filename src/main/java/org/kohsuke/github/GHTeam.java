@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 /**
  * A team in GitHub organization.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam implements Refreshable {
@@ -171,7 +171,7 @@ public class GHTeam implements Refreshable {
     public void remove(GHRepository r) throws IOException {
         root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
-    
+
     /**
      * Deletes this team.
      */

@@ -54,7 +54,7 @@ public class GHIssue extends GHObject implements Reactable{
 
     GitHub root;
     GHRepository owner;
-    
+
     // API v3
     protected GHUser assignee;  // not sure what this field is now that 'assignees' exist
     protected GHUser[] assignees;
@@ -78,7 +78,7 @@ public class GHIssue extends GHObject implements Reactable{
      */
     public static class Label extends GHLabel {
     }
-    
+
     /*package*/ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if(milestone != null) milestone.wrap(owner);
@@ -281,13 +281,13 @@ public class GHIssue extends GHObject implements Reactable{
 
     /**
      * Obtains all the comments associated with this issue.
-     * 
-     * @see #listComments() 
+     *
+     * @see #listComments()
      */
     public List<GHIssueComment> getComments() throws IOException {
         return listComments().asList();
     }
-    
+
     /**
      * Obtains all the comments associated with this issue.
      */
@@ -382,7 +382,7 @@ public class GHIssue extends GHObject implements Reactable{
         */
         return root.intern(closed_by);
     }
-    
+
     public int getCommentsCount(){
         return comments;
     }
@@ -402,19 +402,19 @@ public class GHIssue extends GHObject implements Reactable{
         return milestone;
     }
 
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"}, 
+    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"},
         justification = "JSON API")
     public static class PullRequest{
         private String diff_url, patch_url, html_url;
-        
+
         public URL getDiffUrl() {
             return GitHub.parseURL(diff_url);
         }
-        
+
         public URL getPatchUrl() {
             return GitHub.parseURL(patch_url);
         }
-        
+
         public URL getUrl() {
             return GitHub.parseURL(html_url);
         }

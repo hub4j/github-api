@@ -116,7 +116,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
             return items;
         }
     }
-    
+
     /**
      * @param commitUrl a commit URL
      * @return the repo name ("username/reponame")

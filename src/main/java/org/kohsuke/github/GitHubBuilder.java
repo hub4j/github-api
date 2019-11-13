@@ -144,10 +144,10 @@ public class GitHubBuilder implements Cloneable {
         } finally {
             IOUtils.closeQuietly(in);
         }
-     
+
         return fromProperties(props);
     }
-    
+
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
         self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));

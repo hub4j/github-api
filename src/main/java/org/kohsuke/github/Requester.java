@@ -190,10 +190,10 @@ class Requester {
         return this;
     }
 
-	public Requester withNullable(String key, Object value) {
-		args.add(new Entry(key, value));
-		return this;
-	}
+    public Requester withNullable(String key, Object value) {
+        args.add(new Entry(key, value));
+        return this;
+    }
 
     public Requester _with(String key, Object value) {
         if (value!=null) {
@@ -764,8 +764,8 @@ class Requester {
             }
         }
         if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 Unauthorized == bad creds or OTP request
-        	// In the case of a user with 2fa enabled, a header with X-GitHub-OTP 
-        	// will be returned indicating the user needs to respond with an otp
+            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
+            // will be returned indicating the user needs to respond with an otp
             if(uc.getHeaderField("X-GitHub-OTP") != null)
                 throw (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
             else

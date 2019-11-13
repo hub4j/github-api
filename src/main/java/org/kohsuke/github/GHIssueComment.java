@@ -74,7 +74,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     public GHUser getUser() throws IOException {
         return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
-    
+
     @Override
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
@@ -83,7 +83,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     public GHCommentAuthorAssociation getAuthorAssociation() {
         return GHCommentAuthorAssociation.valueOf(author_association);
     }
-    
+
     /**
      * Updates the body of the issue comment.
      */

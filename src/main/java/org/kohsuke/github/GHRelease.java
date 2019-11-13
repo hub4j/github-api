@@ -133,7 +133,7 @@ public class GHRelease extends GHObject {
             s.close();
         }
     }
-    
+
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 

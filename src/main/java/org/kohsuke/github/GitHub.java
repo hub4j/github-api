@@ -570,7 +570,7 @@ public class GitHub {
         }
         return r;
     }
-    
+
     /**
      * Alias for {@link #getUserPublicOrganizations(String)}.
      */
@@ -625,7 +625,7 @@ public class GitHub {
     public GHTeam getTeam(int id) throws IOException {
         return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
     }
-    
+
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      */
@@ -705,9 +705,9 @@ public class GitHub {
     }
     /**
      * Creates a new authorization using an OTP.
-     * 
+     *
      * Start by running createToken, if exception is thrown, prompt for OTP from user
-     * 
+     *
      * Once OTP is received, call this token request
      *
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
@@ -715,18 +715,18 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl, Supplier<String> OTP) throws IOException{
-    	try {
-    		return createToken(scope, note, noteUrl);
-    	}catch (GHOTPRequiredException ex){
-    		String OTPstring=OTP.get();
-    		Requester requester = new Requester(this)
+        try {
+            return createToken(scope, note, noteUrl);
+        }catch (GHOTPRequiredException ex){
+            String OTPstring=OTP.get();
+            Requester requester = new Requester(this)
                     .with("scopes", scope)
                     .with("note", note)
                     .with("note_url", noteUrl);
             // Add the OTP from the user
             requester.setHeader("x-github-otp", OTPstring);
             return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
-    	}
+        }
     }
     /**
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>

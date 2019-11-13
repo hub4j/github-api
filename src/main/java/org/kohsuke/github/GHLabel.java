@@ -41,7 +41,7 @@ public class GHLabel {
         return description;
     }
 
-    /* package */ GHLabel wrapUp(GHRepository repo) {
+    GHLabel wrapUp(GHRepository repo) {
         this.repo = repo;
         return this;
     }
@@ -70,7 +70,7 @@ public class GHLabel {
                 .with("description", newDescription).to(url);
     }
 
-    /* package */ static Collection<String> toNames(Collection<GHLabel> labels) {
+    static Collection<String> toNames(Collection<GHLabel> labels) {
         List<String> r = new ArrayList<String>();
         for (GHLabel l : labels) {
             r.add(l.getName());

@@ -92,18 +92,18 @@ public class GHApp extends GHObject {
         this.permissions = permissions;
     }
 
-    /* package */ GHApp wrapUp(GitHub root) {
+    GHApp wrapUp(GitHub root) {
         this.root = root;
         return this;
     }
 
     /**
      * Obtains all the installations associated with this app.
-     *
+     * <p>
      * You must use a JWT to access this endpoint.
      *
-     * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      * @return a list of App installations
+     * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
     @Preview
     @Deprecated
@@ -113,15 +113,15 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Obtain an installation associated with this app. You must use a JWT to access this endpoint.
+     * Obtain an installation associated with this app.
+     * <p>
+     * You must use a JWT to access this endpoint.
      *
      * @param id
      *            Installation Id
-     *
      * @return a GHAppInstallation
      * @throws IOException
      *             on error
-     *
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
     @Preview
@@ -132,15 +132,15 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Obtain an organization installation associated with this app. You must use a JWT to access this endpoint.
+     * Obtain an organization installation associated with this app.
+     * <p>
+     * You must use a JWT to access this endpoint.
      *
      * @param name
      *            Organization name
-     *
      * @return a GHAppInstallation
      * @throws IOException
      *             on error
-     *
      * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization
      *      installation</a>
      */
@@ -152,17 +152,17 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Obtain an repository installation associated with this app You must use a JWT to access this endpoint.
+     * Obtain an repository installation associated with this app.
+     * <p>
+     * You must use a JWT to access this endpoint.
      *
      * @param ownerName
      *            Organization or user name
      * @param repositoryName
      *            Repository name
-     *
      * @return a GHAppInstallation
      * @throws IOException
      *             on error
-     *
      * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository
      *      installation</a>
      */
@@ -175,15 +175,15 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Obtain a user installation associated with this app You must use a JWT to access this endpoint.
+     * Obtain a user installation associated with this app.
+     * <p>
+     * You must use a JWT to access this endpoint.
      *
      * @param name
      *            user name
-     *
      * @return a GHAppInstallation
      * @throws IOException
      *             on error
-     *
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
     @Preview

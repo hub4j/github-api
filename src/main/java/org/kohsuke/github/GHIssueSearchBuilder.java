@@ -7,7 +7,7 @@ package org.kohsuke.github;
  * @see GitHub#searchIssues()
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
-    /* package */ GHIssueSearchBuilder(GitHub root) {
+    GHIssueSearchBuilder(GitHub root) {
         super(root, IssueSearchResult.class);
     }
 
@@ -57,7 +57,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
         private GHIssue[] items;
 
         @Override
-        /* package */ GHIssue[] getItems(GitHub root) {
+        GHIssue[] getItems(GitHub root) {
             for (GHIssue i : items)
                 i.wrap(root);
             return items;

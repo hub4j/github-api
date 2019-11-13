@@ -20,7 +20,7 @@ public class GHAppCreateTokenBuilder {
 
     @Preview
     @Deprecated
-    /* package */ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
+    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = new Requester(root);

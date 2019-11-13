@@ -93,7 +93,7 @@ public class GHGist extends GHObject {
         return Collections.unmodifiableMap(files);
     }
 
-    /* package */ GHGist wrapUp(GHUser owner) {
+    GHGist wrapUp(GHUser owner) {
         this.owner = owner;
         this.root = owner.root;
         wrapUp();
@@ -104,7 +104,7 @@ public class GHGist extends GHObject {
      * Used when caller obtains {@link GHGist} without knowing its owner. A partially constructed owner object is
      * interned.
      */
-    /* package */ GHGist wrapUp(GitHub root) {
+    GHGist wrapUp(GitHub root) {
         this.owner = root.getUser(owner);
         this.root = root;
         wrapUp();

@@ -46,7 +46,7 @@ public class GHPullRequestReview extends GHObject {
     private GHPullRequestReviewState state;
     private String submitted_at;
 
-    /* package */ GHPullRequestReview wrapUp(GHPullRequest owner) {
+    GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }

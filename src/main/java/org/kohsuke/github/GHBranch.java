@@ -123,7 +123,7 @@ public class GHBranch {
         return "Branch:" + name + " in " + url;
     }
 
-    /* package */ GHBranch wrap(GHRepository repo) {
+    GHBranch wrap(GHRepository repo) {
         this.owner = repo;
         this.root = repo.root;
         return this;

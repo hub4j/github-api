@@ -19,7 +19,7 @@ public class GHReaction extends GHObject {
     private GHUser user;
     private ReactionContent content;
 
-    /* package */ GHReaction wrap(GitHub root) {
+    GHReaction wrap(GitHub root) {
         this.root = root;
         user.wrapUp(root);
         return this;

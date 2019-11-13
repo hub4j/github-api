@@ -43,7 +43,7 @@ public class GHKey {
         return verified;
     }
 
-    /* package */ GHKey wrap(GitHub root) {
+    GHKey wrap(GitHub root) {
         this.root = root;
         return this;
     }

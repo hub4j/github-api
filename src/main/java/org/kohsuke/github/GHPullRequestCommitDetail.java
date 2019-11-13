@@ -39,7 +39,7 @@ import java.net.URL;
 public class GHPullRequestCommitDetail {
     private GHPullRequest owner;
 
-    /* package */ void wrapUp(GHPullRequest owner) {
+    void wrapUp(GHPullRequest owner) {
         this.owner = owner;
     }
 

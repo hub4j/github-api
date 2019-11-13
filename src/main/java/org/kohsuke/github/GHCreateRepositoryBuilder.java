@@ -13,7 +13,7 @@ public class GHCreateRepositoryBuilder {
     protected final Requester builder;
     private final String apiUrlTail;
 
-    /* package */ GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
+    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = new Requester(root);

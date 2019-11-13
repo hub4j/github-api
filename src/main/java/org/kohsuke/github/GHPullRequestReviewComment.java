@@ -57,7 +57,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return result;
     }
 
-    /* package */ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }

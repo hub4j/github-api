@@ -19,7 +19,7 @@ public abstract class GHEventPayload {
 
     private GHUser sender;
 
-    /* package */ GHEventPayload() {
+    GHEventPayload() {
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class GHEventPayload {
         this.sender = sender;
     }
 
-    /* package */ void wrapUp(GitHub root) {
+    void wrapUp(GitHub root) {
         this.root = root;
         if (sender != null) {
             sender.wrapUp(root);

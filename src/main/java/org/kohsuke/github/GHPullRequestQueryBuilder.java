@@ -11,7 +11,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
 public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
-    /* package */ GHPullRequestQueryBuilder(GHRepository repo) {
+    GHPullRequestQueryBuilder(GHRepository repo) {
         super(repo.root);
         this.repo = repo;
     }

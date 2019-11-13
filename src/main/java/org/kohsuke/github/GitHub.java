@@ -67,12 +67,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @author Kohsuke Kawaguchi
  */
 public class GitHub {
-    /* package */ final String login;
+    final String login;
 
     /**
      * Value of the authorization header to be sent with the request.
      */
-    /* package */ final String encodedAuthorization;
+    final String encodedAuthorization;
 
     private final ConcurrentMap<String, GHUser> users;
     private final ConcurrentMap<String, GHOrganization> orgs;
@@ -80,8 +80,8 @@ public class GitHub {
     private GHMyself myself;
     private final String apiUrl;
 
-    /* package */ final RateLimitHandler rateLimitHandler;
-    /* package */ final AbuseLimitHandler abuseLimitHandler;
+    final RateLimitHandler rateLimitHandler;
+    final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector = HttpConnector.DEFAULT;
 
@@ -130,7 +130,7 @@ public class GitHub {
      * @param connector
      *            HttpConnector to use. Pass null to use default connector.
      */
-    /* package */ GitHub(String apiUrl, String login, String oauthAccessToken, String jwtToken, String password,
+    GitHub(String apiUrl, String login, String oauthAccessToken, String jwtToken, String password,
             HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler)
             throws IOException {
         if (apiUrl.endsWith("/"))
@@ -297,13 +297,13 @@ public class GitHub {
         this.connector = connector;
     }
 
-    /* package */ void requireCredential() {
+    void requireCredential() {
         if (isAnonymous())
             throw new IllegalStateException(
                     "This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    /* package */ URL getApiURL(String tailApiUrl) throws IOException {
+    URL getApiURL(String tailApiUrl) throws IOException {
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
                 return new URL(GITHUB_URL + tailApiUrl);
@@ -315,7 +315,7 @@ public class GitHub {
         }
     }
 
-    /* package */ Requester retrieve() {
+    Requester retrieve() {
         return new Requester(this).method("GET");
     }
 
@@ -802,7 +802,7 @@ public class GitHub {
         }
     }
 
-    /* package */ GHUser intern(GHUser user) throws IOException {
+    GHUser intern(GHUser user) throws IOException {
         if (user == null)
             return user;
 
@@ -988,7 +988,7 @@ public class GitHub {
                 .contentType("text/plain;charset=UTF-8").asStream("/markdown/raw"), "UTF-8");
     }
 
-    /* package */ static URL parseURL(String s) {
+    static URL parseURL(String s) {
         try {
             return s == null ? null : new URL(s);
         } catch (MalformedURLException e) {
@@ -996,7 +996,7 @@ public class GitHub {
         }
     }
 
-    /* package */ static Date parseDate(String timestamp) {
+    static Date parseDate(String timestamp) {
         if (timestamp == null)
             return null;
         for (String f : TIME_FORMATS) {
@@ -1011,13 +1011,13 @@ public class GitHub {
         throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
     }
 
-    /* package */ static String printDate(Date dt) {
+    static String printDate(Date dt) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(dt);
     }
 
-    /* package */ static final ObjectMapper MAPPER = new ObjectMapper();
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String[] TIME_FORMATS = { "yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
             "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
@@ -1029,7 +1029,7 @@ public class GitHub {
         MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
     }
 
-    /* package */ static final String GITHUB_URL = "https://api.github.com";
+    static final String GITHUB_URL = "https://api.github.com";
 
     private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
 }

@@ -19,7 +19,7 @@ public enum GHPullRequestReviewState {
         return e == null ? null : e.action();
     }
 
-    /* package */ GHPullRequestReviewEvent toEvent() {
+    GHPullRequestReviewEvent toEvent() {
         switch (this) {
         case PENDING:
             return GHPullRequestReviewEvent.PENDING;

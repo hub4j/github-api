@@ -64,7 +64,7 @@ public class GHTree {
         return GitHub.parseURL(url);
     }
 
-    /* package */GHTree wrap(GHRepository repo) {
+    GHTree wrap(GHRepository repo) {
         this.repo = repo;
         for (GHTreeEntry e : tree) {
             e.tree = this;

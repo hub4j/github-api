@@ -8,9 +8,9 @@ class GHOrgHook extends GHHook {
     /**
      * Organization that the hook belongs to.
      */
-    /* package */ transient GHOrganization organization;
+    transient GHOrganization organization;
 
-    /* package */ GHOrgHook wrap(GHOrganization owner) {
+    GHOrgHook wrap(GHOrganization owner) {
         this.organization = owner;
         return this;
     }

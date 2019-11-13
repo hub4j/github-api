@@ -117,7 +117,7 @@ class Requester {
         return this;
     }
 
-    /* package */ Requester withPreview(String name) {
+    Requester withPreview(String name) {
         return withHeader("Accept", name);
     }
 
@@ -232,7 +232,7 @@ class Requester {
      * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
      * forces the parameters to be sent as a body.
      */
-    /* package */ Requester inBody() {
+    Requester inBody() {
         forceBody = true;
         return this;
     }
@@ -443,7 +443,7 @@ class Requester {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
-    /* package */ <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
+    <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
         return new PagedIterableWithConsumer(type, this, tailApiUrl, consumer);
     }
 
@@ -483,7 +483,7 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /* package */ <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
+    <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
         method("GET");
 
         if (pageSize != 0)
@@ -742,7 +742,7 @@ class Requester {
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    /* package */ void handleApiError(IOException e) throws IOException {
+    void handleApiError(IOException e) throws IOException {
         int responseCode;
         try {
             responseCode = uc.getResponseCode();

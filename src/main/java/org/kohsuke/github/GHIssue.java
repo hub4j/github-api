@@ -79,14 +79,14 @@ public class GHIssue extends GHObject implements Reactable {
     public static class Label extends GHLabel {
     }
 
-    /* package */ GHIssue wrap(GHRepository owner) {
+    GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if (milestone != null)
             milestone.wrap(owner);
         return wrap(owner.root);
     }
 
-    /* package */ GHIssue wrap(GitHub root) {
+    GHIssue wrap(GitHub root) {
         this.root = root;
         if (assignee != null)
             assignee.wrapUp(root);
@@ -99,7 +99,7 @@ public class GHIssue extends GHObject implements Reactable {
         return this;
     }
 
-    /* package */ static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
+    static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
         for (GHIssue i : issues)
             i.wrap(owner);
         return issues;

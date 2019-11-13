@@ -7,7 +7,7 @@ package org.kohsuke.github;
  * @see GitHub#searchRepositories()
  */
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
-    /* package */ GHRepositorySearchBuilder(GitHub root) {
+    GHRepositorySearchBuilder(GitHub root) {
         super(root, RepositorySearchResult.class);
     }
 
@@ -77,7 +77,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         private GHRepository[] items;
 
         @Override
-        /* package */ GHRepository[] getItems(GitHub root) {
+        GHRepository[] getItems(GitHub root) {
             for (GHRepository item : items)
                 item.wrap(root);
             return items;

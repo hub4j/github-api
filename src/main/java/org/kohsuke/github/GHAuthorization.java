@@ -98,7 +98,7 @@ public class GHAuthorization extends GHObject {
         return fingerprint;
     }
 
-    /* package */ GHAuthorization wrap(GitHub root) {
+    GHAuthorization wrap(GitHub root) {
         this.root = root;
         return this;
     }

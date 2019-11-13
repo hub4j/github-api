@@ -22,7 +22,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     private T[] current;
     private int pos;
 
-    /* package */ PagedIterator(Iterator<T[]> base) {
+    PagedIterator(Iterator<T[]> base) {
         this.base = base;
     }
 

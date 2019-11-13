@@ -31,7 +31,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
     private String apiUrl;
     private boolean nonBlocking = false;
 
-    /* package */ GHNotificationStream(GitHub root, String apiUrl) {
+    GHNotificationStream(GitHub root, String apiUrl) {
         this.root = root;
         this.apiUrl = apiUrl;
     }

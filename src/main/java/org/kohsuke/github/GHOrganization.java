@@ -15,7 +15,7 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
-    /* package */ GHOrganization wrapUp(GitHub root) {
+    GHOrganization wrapUp(GitHub root) {
         return (GHOrganization) super.wrapUp(root);
     }
 

@@ -19,7 +19,7 @@ public class GHCommitStatus extends GHObject {
 
     private GitHub root;
 
-    /* package */ GHCommitStatus wrapUp(GitHub root) {
+    GHCommitStatus wrapUp(GitHub root) {
         if (creator != null)
             creator.wrapUp(root);
         this.root = root;

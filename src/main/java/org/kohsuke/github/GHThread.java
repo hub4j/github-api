@@ -109,7 +109,7 @@ public class GHThread extends GHObject {
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
     }
 
-    /* package */ GHThread wrap(GitHub root) {
+    GHThread wrap(GitHub root) {
         this.root = root;
         if (this.repository != null)
             this.repository.wrap(root);

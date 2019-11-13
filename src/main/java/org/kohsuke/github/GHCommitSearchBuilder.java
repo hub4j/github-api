@@ -13,7 +13,7 @@ import java.io.IOException;
 @Preview
 @Deprecated
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
-    /* package */ GHCommitSearchBuilder(GitHub root) {
+    GHCommitSearchBuilder(GitHub root) {
         super(root, CommitSearchResult.class);
         req.withPreview(Previews.CLOAK);
     }
@@ -108,7 +108,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
         private GHCommit[] items;
 
         @Override
-        /* package */ GHCommit[] getItems(GitHub root) {
+        GHCommit[] getItems(GitHub root) {
             for (GHCommit commit : items) {
                 String repoName = getRepoName(commit.url);
                 try {

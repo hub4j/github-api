@@ -29,14 +29,14 @@ package org.kohsuke.github;
 public enum GHPullRequestReviewEvent {
     PENDING, APPROVE, REQUEST_CHANGES, COMMENT;
 
-    /* package */ String action() {
+    String action() {
         return this == PENDING ? null : name();
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
      */
-    /* package */ GHPullRequestReviewState toState() {
+    GHPullRequestReviewState toState() {
         switch (this) {
         case PENDING:
             return GHPullRequestReviewState.PENDING;

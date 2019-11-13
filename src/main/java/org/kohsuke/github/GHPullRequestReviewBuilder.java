@@ -15,7 +15,7 @@ public class GHPullRequestReviewBuilder {
     private final Requester builder;
     private final List<DraftReviewComment> comments = new ArrayList<DraftReviewComment>();
 
-    /* package */ GHPullRequestReviewBuilder(GHPullRequest pr) {
+    GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
         this.builder = new Requester(pr.root);
     }

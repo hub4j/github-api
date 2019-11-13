@@ -7,7 +7,7 @@ package org.kohsuke.github;
  * @see GitHub#searchContent()
  */
 public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
-    /* package */ GHContentSearchBuilder(GitHub root) {
+    GHContentSearchBuilder(GitHub root) {
         super(root, ContentSearchResult.class);
     }
 
@@ -59,7 +59,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         private GHContent[] items;
 
         @Override
-        /* package */ GHContent[] getItems(GitHub root) {
+        GHContent[] getItems(GitHub root) {
             for (GHContent item : items)
                 item.wrap(root);
             return items;

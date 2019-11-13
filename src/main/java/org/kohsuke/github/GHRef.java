@@ -66,12 +66,12 @@ public class GHRef {
         new Requester(root).method("DELETE").to(url);
     }
 
-    /* package */ GHRef wrap(GitHub root) {
+    GHRef wrap(GitHub root) {
         this.root = root;
         return this;
     }
 
-    /* package */ static GHRef[] wrap(GHRef[] in, GitHub root) {
+    static GHRef[] wrap(GHRef[] in, GitHub root) {
         for (GHRef r : in) {
             r.wrap(root);
         }

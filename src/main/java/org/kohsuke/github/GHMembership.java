@@ -48,7 +48,7 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
         root.retrieve().method("PATCH").with("state", State.ACTIVE).to(url, this);
     }
 
-    /* package */ GHMembership wrap(GitHub root) {
+    GHMembership wrap(GitHub root) {
         this.root = root;
         if (user != null)
             user = root.getUser(user.wrapUp(root));
@@ -57,7 +57,7 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
         return this;
     }
 
-    /* package */ static void wrap(GHMembership[] page, GitHub root) {
+    static void wrap(GHMembership[] page, GitHub root) {
         for (GHMembership m : page)
             m.wrap(root);
     }

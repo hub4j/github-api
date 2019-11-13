@@ -20,7 +20,7 @@ public class GHTagObject {
     private GitUser tagger;
     private GHRef.GHObject object;
 
-    /* package */ GHTagObject wrap(GHRepository owner) {
+    GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
         return this;

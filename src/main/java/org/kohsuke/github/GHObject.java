@@ -29,7 +29,7 @@ public abstract class GHObject {
     protected String created_at;
     protected String updated_at;
 
-    /* package */ GHObject() {
+    GHObject() {
     }
 
     /**

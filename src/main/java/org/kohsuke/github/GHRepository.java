@@ -1320,7 +1320,7 @@ public class GHRepository extends GHObject {
         }
     };
 
-    /* package */ GHRepository wrap(GitHub root) {
+    GHRepository wrap(GitHub root) {
         this.root = root;
         if (root.isOffline()) {
             owner.wrapUp(root);

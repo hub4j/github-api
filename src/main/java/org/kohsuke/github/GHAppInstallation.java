@@ -135,7 +135,7 @@ public class GHAppInstallation extends GHObject {
         this.repositorySelection = repositorySelection;
     }
 
-    /* package */ GHAppInstallation wrapUp(GitHub root) {
+    GHAppInstallation wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

@@ -41,7 +41,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
-    /* package */ GHIssueComment wrapUp(GHIssue owner) {
+    GHIssueComment wrapUp(GHIssue owner) {
         this.owner = owner;
         return this;
     }

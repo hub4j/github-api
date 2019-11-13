@@ -19,7 +19,7 @@ public class GHDeploymentStatusBuilder {
         this(repo, (long) deploymentId, state);
     }
 
-    /* package */ GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
+    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
         this.builder = new Requester(repo.root);

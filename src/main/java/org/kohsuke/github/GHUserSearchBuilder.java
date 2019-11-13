@@ -7,7 +7,7 @@ package org.kohsuke.github;
  * @see GitHub#searchUsers()
  */
 public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
-    /* package */ GHUserSearchBuilder(GitHub root) {
+    GHUserSearchBuilder(GitHub root) {
         super(root, UserSearchResult.class);
     }
 
@@ -65,7 +65,7 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
         private GHUser[] items;
 
         @Override
-        /* package */ GHUser[] getItems(GitHub root) {
+        GHUser[] getItems(GitHub root) {
             return GHUser.wrap(items, root);
         }
     }

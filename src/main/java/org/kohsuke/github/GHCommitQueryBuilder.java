@@ -22,7 +22,7 @@ public class GHCommitQueryBuilder {
     private final Requester req;
     private final GHRepository repo;
 
-    /* package */ GHCommitQueryBuilder(GHRepository repo) {
+    GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
         this.req = repo.root.retrieve(); // requester to build up
     }

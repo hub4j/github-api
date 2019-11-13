@@ -51,7 +51,7 @@ public class GHEventInfo {
         return null; // unknown event type
     }
 
-    /* package */ GHEventInfo wrapUp(GitHub root) {
+    GHEventInfo wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

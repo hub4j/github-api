@@ -27,7 +27,7 @@ public abstract class GHPerson extends GHObject {
     protected String html_url;
     protected int followers, following, public_repos, public_gists;
 
-    /* package */ GHPerson wrapUp(GitHub root) {
+    GHPerson wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

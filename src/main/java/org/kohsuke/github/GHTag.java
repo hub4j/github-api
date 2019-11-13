@@ -16,7 +16,7 @@ public class GHTag {
     private String name;
     private GHCommit commit;
 
-    /* package */ GHTag wrap(GHRepository owner) {
+    GHTag wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
         if (commit != null)

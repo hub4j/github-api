@@ -128,7 +128,7 @@ public class GHUser extends GHPerson {
         return org.hasPublicMember(this);
     }
 
-    /* package */ static GHUser[] wrap(GHUser[] users, GitHub root) {
+    static GHUser[] wrap(GHUser[] users, GitHub root) {
         for (GHUser f : users)
             f.root = root;
         return users;
@@ -184,7 +184,7 @@ public class GHUser extends GHPerson {
         return "/users/" + login + tail;
     }
 
-    /* package */ GHUser wrapUp(GitHub root) {
+    GHUser wrapUp(GitHub root) {
         super.wrapUp(root);
         return this;
     }

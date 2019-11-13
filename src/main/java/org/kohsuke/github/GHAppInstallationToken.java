@@ -82,7 +82,7 @@ public class GHAppInstallationToken {
         return expires_at;
     }
 
-    /* package */ GHAppInstallationToken wrapUp(GitHub root) {
+    GHAppInstallationToken wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

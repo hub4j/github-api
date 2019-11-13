@@ -178,7 +178,7 @@ public class GHRepositoryStatistics {
             }
         }
 
-        /* package */ ContributorStats wrapUp(GitHub root) {
+        ContributorStats wrapUp(GitHub root) {
             this.root = root;
             return this;
         }
@@ -222,7 +222,7 @@ public class GHRepositoryStatistics {
             return week;
         }
 
-        /* package */ CommitActivity wrapUp(GitHub root) {
+        CommitActivity wrapUp(GitHub root) {
             this.root = root;
             return this;
         }
@@ -345,7 +345,7 @@ public class GHRepositoryStatistics {
             return owner;
         }
 
-        /* package */ Participation wrapUp(GitHub root) {
+        Participation wrapUp(GitHub root) {
             this.root = root;
             return this;
         }

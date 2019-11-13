@@ -31,25 +31,25 @@ public class GHTeam implements Refreshable {
         MAINTAINER
     }
 
-    /* package */ GHTeam wrapUp(GHOrganization owner) {
+    GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
         this.root = owner.root;
         return this;
     }
 
-    /* package */ GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
+    GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
         this.organization.wrapUp(root);
         return wrapUp(organization);
     }
 
-    /* package */ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
+    static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
         for (GHTeam t : teams) {
             t.wrapUp(owner);
         }
         return teams;
     }
 
-    /* package */ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
+    static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
         for (GHTeam t : teams) {
             t.root = owner.root;
         }

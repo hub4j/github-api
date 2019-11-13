@@ -17,5 +17,5 @@ abstract class SearchResult<T> {
     /**
      * Wraps up the retrieved object and return them. Only called once.
      */
-    /* package */ abstract T[] getItems(GitHub root);
+    abstract T[] getItems(GitHub root);
 }

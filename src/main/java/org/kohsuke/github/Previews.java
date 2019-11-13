@@ -7,7 +7,7 @@ package org.kohsuke.github;
  *
  * @author Kohsuke Kawaguchi
  */
-/* package */ class Previews {
+class Previews {
 
     /**
      * Commit Search

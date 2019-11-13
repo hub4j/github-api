@@ -81,7 +81,6 @@ public class GHAsset extends GHObject {
         new Requester(root).method("DELETE").to(getApiRoute());
     }
 
-
     private String getApiRoute() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + id;
     }

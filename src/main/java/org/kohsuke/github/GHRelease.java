@@ -47,8 +47,7 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * @deprecated
-     *      Use {@link #update()}
+     * @deprecated Use {@link #update()}
      */
     public GHRelease setDraft(boolean draft) throws IOException {
         return update().draft(draft).update();
@@ -121,10 +120,10 @@ public class GHRelease extends GHObject {
 
     /**
      * Because github relies on SNI (http://en.wikipedia.org/wiki/Server_Name_Indication) this method will only work on
-     * Java 7 or greater.  Options for fixing this for earlier JVMs can be found here
+     * Java 7 or greater. Options for fixing this for earlier JVMs can be found here
      * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
      * handling of the HTTP requests to github's API.
-         */
+     */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
         FileInputStream s = new FileInputStream(file);
         try {
@@ -137,19 +136,15 @@ public class GHRelease extends GHObject {
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 
-        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""), getId(), filename);
-        return builder.contentType(contentType)
-                .with(stream)
-                .to(url, GHAsset.class).wrap(this);
+        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s", owner.getApiTailUrl(""), getId(),
+                filename);
+        return builder.contentType(contentType).with(stream).to(url, GHAsset.class).wrap(this);
     }
 
     public List<GHAsset> getAssets() throws IOException {
         Requester builder = new Requester(owner.root);
 
-        GHAsset[] assets = builder
-                .method("GET")
-                .to(getApiTailUrl("assets"), GHAsset[].class);
+        GHAsset[] assets = builder.method("GET").to(getApiTailUrl("assets"), GHAsset[].class);
         return Arrays.asList(GHAsset.wrap(assets, this));
     }
 
@@ -157,7 +152,7 @@ public class GHRelease extends GHObject {
      * Deletes this release.
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/"+id));
+        new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/" + id));
     }
 
     /**
@@ -168,6 +163,6 @@ public class GHRelease extends GHObject {
     }
 
     private String getApiTailUrl(String end) {
-        return owner.getApiTailUrl(format("releases/%s/%s",id,end));
+        return owner.getApiTailUrl(format("releases/%s/%s", id, end));
     }
 }

@@ -1,4 +1,5 @@
 package org.kohsuke.github;
+
 /**
  * This exception is thrown when GitHub is requesting an OTP from the user
  *
@@ -6,5 +7,5 @@ package org.kohsuke.github;
  *
  */
 public class GHOTPRequiredException extends GHIOException {
-//...
+    // ...
 }

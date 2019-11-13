@@ -70,7 +70,7 @@ public class GHAppInstallationToken {
     /**
      * When was this tokens expires?
      */
-    @WithBridgeMethods(value=String.class, adapterMethod="expiresAtStr")
+    @WithBridgeMethods(value = String.class, adapterMethod = "expiresAtStr")
     public Date getExpiresAt() throws IOException {
         return GitHub.parseDate(expires_at);
     }
@@ -80,7 +80,7 @@ public class GHAppInstallationToken {
         return expires_at;
     }
 
-    /*package*/ GHAppInstallationToken wrapUp(GitHub root) {
+    /* package */ GHAppInstallationToken wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

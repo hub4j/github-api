@@ -44,9 +44,8 @@ public class PayloadRule implements TestRule {
     }
 
     public InputStream asInputStream() throws FileNotFoundException {
-        String name = resourceName.startsWith("/")
-            ? resourceName + type
-            : testClass.getSimpleName() + "/" + resourceName + type;
+        String name = resourceName.startsWith("/") ? resourceName + type
+                : testClass.getSimpleName() + "/" + resourceName + type;
         InputStream stream = testClass.getResourceAsStream(name);
         if (stream == null) {
             throw new FileNotFoundException(String.format("Resource %s from class %s", name, testClass));

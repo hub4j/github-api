@@ -41,29 +41,22 @@ public class GitHubStaticTest extends Assert {
         String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
 
-
         assertThat(GitHub.parseDate(GitHub.printDate(instantSeconds)),
-            equalTo(GitHub.parseDate(GitHub.printDate(instantMillis))));
+                equalTo(GitHub.parseDate(GitHub.printDate(instantMillis))));
 
-        assertThat(instantSeconds,
-            equalTo(GitHub.parseDate(GitHub.printDate(instantSeconds))));
+        assertThat(instantSeconds, equalTo(GitHub.parseDate(GitHub.printDate(instantSeconds))));
 
         // printDate will truncate to the nearest second, so it should not be equal
-        assertThat(instantMillis,
-            not(equalTo(GitHub.parseDate(GitHub.printDate(instantMillis)))));
+        assertThat(instantMillis, not(equalTo(GitHub.parseDate(GitHub.printDate(instantMillis)))));
 
-        assertThat(instantSeconds,
-            equalTo(GitHub.parseDate(instantFormatSlash)));
+        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantFormatSlash)));
 
-        assertThat(instantSeconds,
-            equalTo(GitHub.parseDate(instantFormatDash)));
+        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantFormatDash)));
 
         // This parser does not truncate to the nearest second, so it will be equal
-        assertThat(instantMillis,
-            equalTo(GitHub.parseDate(instantFormatMillis)));
+        assertThat(instantMillis, equalTo(GitHub.parseDate(instantFormatMillis)));
 
-        assertThat(instantSeconds,
-            equalTo(GitHub.parseDate(instantSecondsFormatMillis)));
+        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantSecondsFormatMillis)));
 
         try {
             GitHub.parseDate(instantBadFormat);
@@ -79,15 +72,11 @@ public class GitHubStaticTest extends Assert {
         GHRateLimit.Record unknown0 = GHRateLimit.Unknown().getCore();
         GHRateLimit.Record unknown1 = GHRateLimit.Unknown().getCore();
 
-
-
-
         GHRateLimit.Record record0 = new GHRateLimit.Record(10, 10, 10L);
         GHRateLimit.Record record1 = new GHRateLimit.Record(10, 9, 10L);
         GHRateLimit.Record record2 = new GHRateLimit.Record(10, 2, 10L);
         GHRateLimit.Record record3 = new GHRateLimit.Record(10, 10, 20L);
         GHRateLimit.Record record4 = new GHRateLimit.Record(10, 5, 20L);
-
 
         Thread.sleep(2000);
 
@@ -109,7 +98,8 @@ public class GitHubStaticTest extends Assert {
         assertThat("Unknown should not replace worst record", GitHub.shouldReplace(unknown1, recordWorst), is(false));
 
         assertThat("Earlier record should replace later worst", GitHub.shouldReplace(record0, recordWorst), is(true));
-        assertThat("Later worst record should not replace earlier", GitHub.shouldReplace(recordWorst, record0), is(false));
+        assertThat("Later worst record should not replace earlier", GitHub.shouldReplace(recordWorst, record0),
+                is(false));
 
         assertThat("Equivalent record should not replace", GitHub.shouldReplace(record0, record00), is(false));
         assertThat("Equivalent record should not replace", GitHub.shouldReplace(record00, record0), is(false));
@@ -119,16 +109,14 @@ public class GitHubStaticTest extends Assert {
 
         assertThat("Higher limit record should not replace lower", GitHub.shouldReplace(record1, record2), is(false));
 
-        assertThat("Higher limit record with later reset should  replace lower", GitHub.shouldReplace(record3, record2), is(true));
+        assertThat("Higher limit record with later reset should  replace lower", GitHub.shouldReplace(record3, record2),
+                is(true));
 
-        assertThat("Lower limit record with later reset should replace higher", GitHub.shouldReplace(record4, record1), is(true));
+        assertThat("Lower limit record with later reset should replace higher", GitHub.shouldReplace(record4, record1),
+                is(true));
 
-        assertThat("Lower limit record with earlier reset should not replace higher", GitHub.shouldReplace(record2, record4), is(false));
-
-
-
-
-
+        assertThat("Lower limit record with earlier reset should not replace higher",
+                GitHub.shouldReplace(record2, record4), is(false));
 
     }
 

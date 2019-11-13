@@ -53,13 +53,10 @@ public class GHBranchProtectionBuilder {
     }
 
     public GHBranchProtection enable() throws IOException {
-        return requester().method("PUT")
-                .withNullable("required_status_checks", statusChecks)
-                .withNullable("required_pull_request_reviews", prReviews)
-                .withNullable("restrictions", restrictions)
+        return requester().method("PUT").withNullable("required_status_checks", statusChecks)
+                .withNullable("required_pull_request_reviews", prReviews).withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
-                .wrap(branch);
+                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class).wrap(branch);
     }
 
     public GHBranchProtectionBuilder includeAdmins() {

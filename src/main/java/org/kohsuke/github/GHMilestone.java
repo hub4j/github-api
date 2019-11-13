@@ -32,7 +32,8 @@ public class GHMilestone extends GHObject {
     }
 
     public Date getDueOn() {
-        if (due_on == null) return null;
+        if (due_on == null)
+            return null;
         return GitHub.parseDate(due_on);
     }
 
@@ -109,7 +110,7 @@ public class GHMilestone extends GHObject {
     }
 
     protected String getApiRoute() {
-        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/milestones/"+number;
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/milestones/" + number;
     }
 
     public GHMilestone wrap(GHRepository repo) {

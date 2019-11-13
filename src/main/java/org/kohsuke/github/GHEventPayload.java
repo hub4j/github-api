@@ -19,11 +19,12 @@ public abstract class GHEventPayload {
 
     private GHUser sender;
 
-    /*package*/ GHEventPayload() {
+    /* package */ GHEventPayload() {
     }
 
     /**
      * Gets the sender or {@code null} if accessed via the events API.
+     * 
      * @return the sender or {@code null} if accessed via the events API.
      */
     public GHUser getSender() {
@@ -34,7 +35,7 @@ public abstract class GHEventPayload {
         this.sender = sender;
     }
 
-    /*package*/ void wrapUp(GitHub root) {
+    /* package */ void wrapUp(GitHub root) {
         this.root = root;
         if (sender != null) {
             sender.wrapUp(root);
@@ -46,8 +47,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pullrequestevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+            "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
         private String action;
         private int number;
@@ -74,9 +75,10 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (pull_request==null)
-                throw new IllegalStateException("Expected pull_request payload, but got something else. Maybe we've got another type of event?");
-            if (repository!=null) {
+            if (pull_request == null)
+                throw new IllegalStateException(
+                        "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
+            if (repository != null) {
                 repository.wrap(root);
                 pull_request.wrapUp(repository);
             } else {
@@ -85,11 +87,11 @@ public abstract class GHEventPayload {
         }
     }
 
-
     /**
      * A review was added to a pull request
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent">authoritative source</a>
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent">authoritative
+     *      source</a>
      */
     public static class PullRequestReview extends GHEventPayload {
         private String action;
@@ -116,12 +118,13 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (review==null)
-                throw new IllegalStateException("Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
+            if (review == null)
+                throw new IllegalStateException(
+                        "Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
 
             review.wrapUp(pull_request);
 
-            if (repository!=null) {
+            if (repository != null) {
                 repository.wrap(root);
                 pull_request.wrapUp(repository);
             } else {
@@ -133,7 +136,8 @@ public abstract class GHEventPayload {
     /**
      * A review comment was added to a pull request
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent">authoritative source</a>
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent">authoritative
+     *      source</a>
      */
     public static class PullRequestReviewComment extends GHEventPayload {
         private String action;
@@ -160,12 +164,13 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (comment==null)
-                throw new IllegalStateException("Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
+            if (comment == null)
+                throw new IllegalStateException(
+                        "Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
 
             comment.wrapUp(pull_request);
 
-            if (repository!=null) {
+            if (repository != null) {
                 repository.wrap(root);
                 pull_request.wrapUp(repository);
             } else {
@@ -175,12 +180,13 @@ public abstract class GHEventPayload {
     }
 
     /**
-     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or reopened.
+     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or
+     * reopened.
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issueevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Issue extends GHEventPayload {
         private String action;
         private GHIssue issue;
@@ -224,8 +230,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class IssueComment extends GHEventPayload {
         private String action;
         private GHIssueComment comment;
@@ -279,8 +285,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#commitcommentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class CommitComment extends GHEventPayload {
         private String action;
         private GHCommitComment comment;
@@ -322,8 +328,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#createevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Create extends GHEventPayload {
         private String ref;
         @JsonProperty("ref_type")
@@ -375,8 +381,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#deleteevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Delete extends GHEventPayload {
         private String ref;
         @JsonProperty("ref_type")
@@ -415,8 +421,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Deployment extends GHEventPayload {
         private GHDeployment deployment;
         private GHRepository repository;
@@ -450,10 +456,11 @@ public abstract class GHEventPayload {
     /**
      * A deployment
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentstatusevent">authoritative source</a>
+     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentstatusevent">authoritative
+     *      source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class DeploymentStatus extends GHEventPayload {
         @JsonProperty("deployment_status")
         private GHDeploymentStatus deploymentStatus;
@@ -500,12 +507,11 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#forkevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Fork extends GHEventPayload {
         private GHRepository forkee;
         private GHRepository repository;
-
 
         public GHRepository getForkee() {
             return forkee;
@@ -559,7 +565,7 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (repository!=null)
+            if (repository != null)
                 repository.wrap(root);
             if (organization != null) {
                 organization.wrapUp(root);
@@ -587,7 +593,7 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (repository!=null)
+            if (repository != null)
                 repository.wrap(root);
         }
 
@@ -598,8 +604,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD"},
-                        justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD",
+            "UUF_UNUSED_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Push extends GHEventPayload {
         private String head, before;
         private boolean created, deleted, forced;
@@ -617,8 +623,8 @@ public abstract class GHEventPayload {
         }
 
         /**
-         * This is undocumented, but it looks like this captures the commit that the ref was pointing to
-         * before the push.
+         * This is undocumented, but it looks like this captures the commit that the ref was pointing to before the
+         * push.
          */
         public String getBefore() {
             return before;
@@ -637,8 +643,7 @@ public abstract class GHEventPayload {
         }
 
         /**
-         * The number of commits in the push.
-         * Is this always the same as {@code getCommits().size()}?
+         * The number of commits in the push. Is this always the same as {@code getCommits().size()}?
          */
         public int getSize() {
             return size;
@@ -678,7 +683,7 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (repository!=null)
+            if (repository != null)
                 repository.wrap(root);
         }
 
@@ -766,8 +771,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#releaseevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Release extends GHEventPayload {
         private String action;
         private GHRelease release;
@@ -808,8 +813,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = {"UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD"},
-                        justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD",
+            "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Repository extends GHEventPayload {
         private String action;
         private GHRepository repository;

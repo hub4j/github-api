@@ -55,10 +55,10 @@ public class GHBlob {
             try {
                 return new Base64InputStream(new ByteArrayInputStream(content.getBytes("US-ASCII")), false);
             } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e);    // US-ASCII is mandatory
+                throw new AssertionError(e); // US-ASCII is mandatory
             }
         }
 
-        throw new UnsupportedOperationException("Unrecognized encoding: "+encoding);
+        throw new UnsupportedOperationException("Unrecognized encoding: " + encoding);
     }
 }

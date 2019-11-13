@@ -9,10 +9,10 @@ import java.net.URL;
  * @see GitHub#getMyInvitations()
  * @see GHRepository#listInvitations()
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-    "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+        "UUF_UNUSED_FIELD" }, justification = "JSON API")
 public class GHInvitation extends GHObject {
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GitHub root;
 
     private int id;
     private GHRepository repository;
@@ -20,7 +20,7 @@ public class GHInvitation extends GHObject {
     private String permissions;
     private String html_url;
 
-    /*package*/ GHInvitation wrapUp(GitHub root) {
+    /* package */ GHInvitation wrapUp(GitHub root) {
         this.root = root;
         return this;
     }

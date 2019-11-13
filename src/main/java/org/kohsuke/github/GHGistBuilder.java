@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 public class GHGistBuilder {
     private final GitHub root;
     private final Requester req;
-    private final LinkedHashMap<String,Object> files = new LinkedHashMap<String, Object>();
+    private final LinkedHashMap<String, Object> files = new LinkedHashMap<String, Object>();
 
     public GHGistBuilder(GitHub root) {
         this.root = root;
@@ -21,12 +21,12 @@ public class GHGistBuilder {
     }
 
     public GHGistBuilder description(String desc) {
-        req.with("description",desc);
+        req.with("description", desc);
         return this;
     }
 
     public GHGistBuilder public_(boolean v) {
-        req.with("public",v);
+        req.with("public", v);
         return this;
     }
 
@@ -42,7 +42,7 @@ public class GHGistBuilder {
      * Creates a Gist based on the parameters specified thus far.
      */
     public GHGist create() throws IOException {
-        req._with("files",files);
-        return req.to("/gists",GHGist.class).wrapUp(root);
+        req._with("files", files);
+        return req.to("/gists", GHGist.class).wrapUp(root);
     }
 }

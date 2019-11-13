@@ -6,8 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Provides information for Git Trees
- * https://developer.github.com/v3/git/trees/
+ * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHCommit#getTree()
@@ -50,6 +49,7 @@ public class GHTree {
 
     /**
      * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     * 
      * @return true true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
      */
     public boolean isTruncated() {
@@ -57,8 +57,8 @@ public class GHTree {
     }
 
     /**
-     * The API URL of this tag, such as
-     * "url": "https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7",
+     * The API URL of this tag, such as "url":
+     * "https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7",
      */
     public URL getUrl() {
         return GitHub.parseURL(url);

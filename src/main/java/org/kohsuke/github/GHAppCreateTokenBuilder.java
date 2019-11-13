@@ -18,12 +18,13 @@ public class GHAppCreateTokenBuilder {
     protected final Requester builder;
     private final String apiUrlTail;
 
-    @Preview @Deprecated
-    /*package*/ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
+    @Preview
+    @Deprecated
+    /* package */ GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = new Requester(root);
-        this.builder.withPermissions("permissions",permissions);
+        this.builder.withPermissions("permissions", permissions);
     }
 
     /**
@@ -31,12 +32,14 @@ public class GHAppCreateTokenBuilder {
      * the access to specific repositories, you can provide the repository_ids when creating the token. When you omit
      * repository_ids, the response does not contain neither the repositories nor the permissions key.
      *
-     * @param repositoryIds - Array containing the repositories Ids
+     * @param repositoryIds
+     *            Array containing the repositories Ids
      *
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
-        this.builder.with("repository_ids",repositoryIds);
+        this.builder.with("repository_ids", repositoryIds);
         return this;
     }
 
@@ -45,9 +48,11 @@ public class GHAppCreateTokenBuilder {
      *
      * You must use a JWT to access this endpoint.
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class).wrapUp(root);
+        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class)
+                .wrapUp(root);
     }
 
 }

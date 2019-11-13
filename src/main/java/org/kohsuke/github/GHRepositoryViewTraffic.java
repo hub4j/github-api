@@ -10,10 +10,10 @@ import java.util.List;
 public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
     private List<DailyInfo> views;
 
-    /*package*/ GHRepositoryViewTraffic() {
+    /* package */ GHRepositoryViewTraffic() {
     }
 
-    /*package*/ GHRepositoryViewTraffic(int count, int uniques, List<DailyInfo> views) {
+    /* package */ GHRepositoryViewTraffic(int count, int uniques, List<DailyInfo> views) {
         super(count, uniques);
         this.views = views;
     }
@@ -27,10 +27,10 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
     }
 
     public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
-        /*package*/ DailyInfo() {
+        /* package */ DailyInfo() {
         }
 
-        /*package*/ DailyInfo(String timestamp, int count, int uniques) {
+        /* package */ DailyInfo(String timestamp, int count, int uniques) {
             super(timestamp, count, uniques);
         }
     }

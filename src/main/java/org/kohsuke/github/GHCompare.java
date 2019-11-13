@@ -67,6 +67,7 @@ public class GHCompare {
 
     /**
      * Gets an array of commits.
+     * 
      * @return A copy of the array being stored in the class.
      */
     public Commit[] getCommits() {
@@ -77,6 +78,7 @@ public class GHCompare {
 
     /**
      * Gets an array of commits.
+     * 
      * @return A copy of the array being stored in the class.
      */
     public GHCommit.File[] getFiles() {
@@ -96,11 +98,11 @@ public class GHCompare {
     }
 
     /**
-     * Compare commits had a child commit element with additional details we want to capture.
-     * This extenstion of GHCommit provides that.
+     * Compare commits had a child commit element with additional details we want to capture. This extenstion of
+     * GHCommit provides that.
      */
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"},
-            justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
+            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class Commit extends GHCommit {
 
         private InnerCommit commit;
@@ -109,7 +111,6 @@ public class GHCompare {
             return commit;
         }
     }
-
 
     public static class InnerCommit {
         private String url, sha, message;
@@ -128,12 +129,12 @@ public class GHCompare {
             return message;
         }
 
-        @WithBridgeMethods(value=User.class,castRequired=true)
+        @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
 
-        @WithBridgeMethods(value=User.class,castRequired=true)
+        @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
         }

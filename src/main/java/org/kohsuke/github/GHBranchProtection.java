@@ -8,8 +8,8 @@ import static org.kohsuke.github.Previews.ZZZAX;
 import java.io.IOException;
 import java.util.Collection;
 
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+        "URF_UNREAD_FIELD" }, justification = "JSON API")
 public class GHBranchProtection {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
@@ -30,16 +30,16 @@ public class GHBranchProtection {
     @JsonProperty
     private String url;
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public void enabledSignedCommits() throws IOException {
-        requester().method("POST")
-                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
+        requester().method("POST").to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public void disableSignedCommits() throws IOException {
-        requester().method("DELETE")
-                .to(url + REQUIRE_SIGNATURES_URI);
+        requester().method("DELETE").to(url + REQUIRE_SIGNATURES_URI);
     }
 
     public EnforceAdmins getEnforceAdmins() {
@@ -50,10 +50,10 @@ public class GHBranchProtection {
         return requiredReviews;
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public boolean getRequiredSignatures() throws IOException {
-        return requester().method("GET")
-                .to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class).enabled;
+        return requester().method("GET").to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class).enabled;
     }
 
     public RequiredStatusChecks getRequiredStatusChecks() {

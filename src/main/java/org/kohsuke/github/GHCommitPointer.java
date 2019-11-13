@@ -36,11 +36,11 @@ public class GHCommitPointer {
     private GHRepository repo;
 
     /**
-     * This points to the user who owns
-     * the {@link #getRepository()}.
+     * This points to the user who owns the {@link #getRepository()}.
      */
     public GHUser getUser() throws IOException {
-        if (user != null) return user.root.intern(user);
+        if (user != null)
+            return user.root.intern(user);
         return user;
     }
 
@@ -80,7 +80,9 @@ public class GHCommitPointer {
     }
 
     void wrapUp(GitHub root) {
-        if (user!=null) user.root = root;
-        if (repo!=null) repo.wrap(root);
+        if (user != null)
+            user.root = root;
+        if (repo != null)
+            repo.wrap(root);
     }
 }

@@ -85,8 +85,7 @@ public class GHPullRequestFileDetail {
         return patch;
     }
 
-    public String getPreviousFilename()
-    {
+    public String getPreviousFilename() {
         return previous_filename;
     }
 }

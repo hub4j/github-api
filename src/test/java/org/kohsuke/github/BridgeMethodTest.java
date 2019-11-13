@@ -24,7 +24,7 @@ public class BridgeMethodTest extends Assert {
         List<Method> createdAtMethods = new ArrayList<>();
         for (Method method : obj.getClass().getMethods()) {
             if (method.getName().equalsIgnoreCase("getCreatedAt")) {
-                if(method.getReturnType() == Date.class) {
+                if (method.getReturnType() == Date.class) {
                     createdAtMethods.add(0, method);
                 } else {
                     createdAtMethods.add(method);

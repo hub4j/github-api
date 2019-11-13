@@ -7,7 +7,7 @@ package org.kohsuke.github;
  *
  * @author Kohsuke Kawaguchi
  */
-/*package*/ class Previews {
+/* package */ class Previews {
 
     /**
      * Commit Search
@@ -33,7 +33,8 @@ package org.kohsuke.github;
     /**
      * Require multiple approving reviews
      *
-     * @see <a href="https://developer.github.com/v3/previews/#require-multiple-approving-reviews">GitHub API Previews</a>
+     * @see <a href="https://developer.github.com/v3/previews/#require-multiple-approving-reviews">GitHub API
+     *      Previews</a>
      */
     static final String LUKE_CAGE = "application/vnd.github.luke-cage-preview+json";
 
@@ -68,7 +69,8 @@ package org.kohsuke.github;
     /**
      * Label emoji, search, and descriptions
      *
-     * @see <a href="https://developer.github.com/v3/previews/#label-emoji-search-and-descriptions">GitHub API Previews</a>
+     * @see <a href="https://developer.github.com/v3/previews/#label-emoji-search-and-descriptions">GitHub API
+     *      Previews</a>
      */
     static final String SYMMETRA = "application/vnd.github.symmetra-preview+json";
 

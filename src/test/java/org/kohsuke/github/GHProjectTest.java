@@ -16,9 +16,7 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
 
     @Before
     public void setUp() throws Exception {
-        project = gitHub
-            .getOrganization(GITHUB_API_TEST_ORG)
-            .createProject("test-project", "This is a test project");
+        project = gitHub.getOrganization(GITHUB_API_TEST_ORG).createProject("test-project", "This is a test project");
     }
 
     @Test
@@ -71,8 +69,7 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (project != null) {
-                project = gitHubBeforeAfter
-                    .getProject(project.getId());
+                project = gitHubBeforeAfter.getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

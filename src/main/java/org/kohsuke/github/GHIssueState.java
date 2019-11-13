@@ -28,7 +28,5 @@ package org.kohsuke.github;
  * @see GHPullRequestQueryBuilder#state(GHIssueState)
  */
 public enum GHIssueState {
-    OPEN,
-    CLOSED,
-    ALL
+    OPEN, CLOSED, ALL
 }

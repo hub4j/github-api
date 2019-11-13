@@ -9,7 +9,7 @@ public abstract class GHQueryBuilder<T> {
     protected final GitHub root;
     protected final Requester req;
 
-    /*package*/ GHQueryBuilder(GitHub root) {
+    /* package */ GHQueryBuilder(GitHub root) {
         this.root = root;
         this.req = root.retrieve();
     }

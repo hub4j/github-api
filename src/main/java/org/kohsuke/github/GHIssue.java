@@ -49,14 +49,14 @@ import java.util.Set;
  * @see GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-public class GHIssue extends GHObject implements Reactable{
+public class GHIssue extends GHObject implements Reactable {
     private static final String ASSIGNEES = "assignees";
 
     GitHub root;
     GHRepository owner;
 
     // API v3
-    protected GHUser assignee;  // not sure what this field is now that 'assignees' exist
+    protected GHUser assignee; // not sure what this field is now that 'assignees' exist
     protected GHUser[] assignees;
     protected String state;
     protected int number;
@@ -79,22 +79,27 @@ public class GHIssue extends GHObject implements Reactable{
     public static class Label extends GHLabel {
     }
 
-    /*package*/ GHIssue wrap(GHRepository owner) {
+    /* package */ GHIssue wrap(GHRepository owner) {
         this.owner = owner;
-        if(milestone != null) milestone.wrap(owner);
+        if (milestone != null)
+            milestone.wrap(owner);
         return wrap(owner.root);
     }
 
-    /*package*/ GHIssue wrap(GitHub root) {
+    /* package */ GHIssue wrap(GitHub root) {
         this.root = root;
-        if(assignee != null) assignee.wrapUp(root);
-        if(assignees!=null)    GHUser.wrap(assignees,root);
-        if(user != null) user.wrapUp(root);
-        if(closed_by != null) closed_by.wrapUp(root);
+        if (assignee != null)
+            assignee.wrapUp(root);
+        if (assignees != null)
+            GHUser.wrap(assignees, root);
+        if (user != null)
+            user.wrapUp(root);
+        if (closed_by != null)
+            closed_by.wrapUp(root);
         return this;
     }
 
-    /*package*/ static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
+    /* package */ static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
         for (GHIssue i : issues)
             i.wrap(owner);
         return issues;
@@ -122,8 +127,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     /**
-     * The HTML page of this issue,
-     * like https://github.com/jenkinsci/jenkins/issues/100
+     * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
      */
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
@@ -142,37 +146,37 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public Collection<GHLabel> getLabels() throws IOException {
-        if(labels == null){
+        if (labels == null) {
             return Collections.emptyList();
         }
-        return Collections.<GHLabel>unmodifiableList(labels);
+        return Collections.<GHLabel> unmodifiableList(labels);
     }
 
     public Date getClosedAt() {
         return GitHub.parseDate(closed_at);
     }
 
-    public URL getApiURL(){
+    public URL getApiURL() {
         return GitHub.parseURL(url);
     }
 
     public void lock() throws IOException {
-        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+        new Requester(root).method("PUT").to(getApiRoute() + "/lock");
     }
 
     public void unlock() throws IOException {
-        new Requester(root).method("PUT").to(getApiRoute()+"/lock");
+        new Requester(root).method("PUT").to(getApiRoute() + "/lock");
     }
 
     /**
      * Updates the issue by adding a comment.
      *
-     * @return
-     *      Newly posted comment.
+     * @return Newly posted comment.
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = new Requester(root).with("body",message).to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+        GHIssueComment r = new Requester(root).with("body", message).to(getIssuesApiRoute() + "/comments",
+                GHIssueComment.class);
         return r.wrapUp(this);
     }
 
@@ -199,15 +203,15 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setTitle(String title) throws IOException {
-        edit("title",title);
+        edit("title", title);
     }
 
     public void setBody(String body) throws IOException {
-        edit("body",body);
+        edit("body", body);
     }
 
     public void setMilestone(GHMilestone milestone) throws IOException {
-        edit("milestone",milestone.getNumber());
+        edit("milestone", milestone.getNumber());
     }
 
     public void assignTo(GHUser user) throws IOException {
@@ -215,13 +219,14 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void setLabels(String... labels) throws IOException {
-        editIssue("labels",labels);
+        editIssue("labels", labels);
     }
 
     /**
      * Adds labels to the issue.
      *
-     * @param names Names of the label
+     * @param names
+     *            Names of the label
      */
     public void addLabels(String... names) throws IOException {
         _addLabels(Arrays.asList(names));
@@ -292,28 +297,22 @@ public class GHIssue extends GHObject implements Reactable{
      * Obtains all the comments associated with this issue.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return root.retrieve()
-            .asPagedIterable(
-                getIssuesApiRoute() + "/comments",
-                GHIssueComment[].class,
-                item -> item.wrapUp(GHIssue.this) );
+        return root.retrieve().asPagedIterable(getIssuesApiRoute() + "/comments", GHIssueComment[].class,
+                item -> item.wrapUp(GHIssue.this));
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
-                .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(root);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL)
-            .asPagedIterable(
-                getApiRoute()+"/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.root) );
+        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
+                GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     public void addAssignees(GHUser... assignees) throws IOException {
@@ -321,7 +320,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("POST").withLogins(ASSIGNEES,assignees).to(getIssuesApiRoute()+"/assignees",this);
+        root.retrieve().method("POST").withLogins(ASSIGNEES, assignees).to(getIssuesApiRoute() + "/assignees", this);
     }
 
     public void setAssignees(GHUser... assignees) throws IOException {
@@ -337,7 +336,8 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("DELETE").withLogins(ASSIGNEES,assignees).inBody().to(getIssuesApiRoute()+"/assignees",this);
+        root.retrieve().method("DELETE").withLogins(ASSIGNEES, assignees).inBody()
+                .to(getIssuesApiRoute() + "/assignees", this);
     }
 
     protected String getApiRoute() {
@@ -345,7 +345,7 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     protected String getIssuesApiRoute() {
-        return "/repos/"+owner.getOwnerName()+"/"+owner.getName()+"/issues/"+number;
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
     }
 
     public GHUser getAssignee() throws IOException {
@@ -367,23 +367,21 @@ public class GHIssue extends GHObject implements Reactable{
      * Reports who has closed the issue.
      *
      * <p>
-     * Note that GitHub doesn't always seem to report this information
-     * even for an issue that's already closed. See
+     * Note that GitHub doesn't always seem to report this information even for an issue that's already closed. See
      * https://github.com/kohsuke/github-api/issues/60.
      */
     public GHUser getClosedBy() throws IOException {
-        if(!"closed".equals(state)) return null;
+        if (!"closed".equals(state))
+            return null;
 
-        //TODO
+        // TODO
         /*
-        if (closed_by==null) {
-            closed_by = owner.getIssue(number).getClosed_by();
-        }
-        */
+         * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
+         */
         return root.intern(closed_by);
     }
 
-    public int getCommentsCount(){
+    public int getCommentsCount() {
         return comments;
     }
 
@@ -395,16 +393,16 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     public boolean isPullRequest() {
-        return pull_request!=null;
+        return pull_request != null;
     }
 
     public GHMilestone getMilestone() {
         return milestone;
     }
 
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"},
-        justification = "JSON API")
-    public static class PullRequest{
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
+            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class PullRequest {
         private String diff_url, patch_url, html_url;
 
         public URL getDiffUrl() {
@@ -421,13 +419,10 @@ public class GHIssue extends GHObject implements Reactable{
     }
 
     /**
-     * Lists events for this issue.
-     * See https://developer.github.com/v3/issues/events/
+     * Lists events for this issue. See https://developer.github.com/v3/issues/events/
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(
-            owner.getApiTailUrl(String.format("/issues/%s/events", number)),
-            GHIssueEvent[].class,
-            item -> item.wrapUp(GHIssue.this) );
+        return root.retrieve().asPagedIterable(owner.getApiTailUrl(String.format("/issues/%s/events", number)),
+                GHIssueEvent[].class, item -> item.wrapUp(GHIssue.this));
     }
 }

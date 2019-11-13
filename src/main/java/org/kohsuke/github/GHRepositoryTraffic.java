@@ -7,10 +7,10 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
     private int count;
     private int uniques;
 
-    /*package*/ GHRepositoryTraffic() {
+    /* package */ GHRepositoryTraffic() {
     }
 
-    /*package*/ GHRepositoryTraffic(int count, int uniques) {
+    /* package */ GHRepositoryTraffic(int count, int uniques) {
         this.count = count;
         this.uniques = uniques;
     }
@@ -42,10 +42,10 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
             return uniques;
         }
 
-        /*package*/ DailyInfo() {
+        /* package */ DailyInfo() {
         }
 
-        /*package*/ DailyInfo(String timestamp, Integer count, Integer uniques) {
+        /* package */ DailyInfo(String timestamp, Integer count, Integer uniques) {
             this.timestamp = timestamp;
             this.count = count;
             this.uniques = uniques;

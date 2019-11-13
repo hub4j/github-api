@@ -9,8 +9,8 @@ import java.util.Iterator;
  *
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-    "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"}, justification = "Constructed by JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "Constructed by JSON API")
 public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     private final GitHub root;
 
@@ -19,13 +19,13 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     private SearchResult<T> result;
 
-    /*package*/ PagedSearchIterable(GitHub root) {
+    /* package */ PagedSearchIterable(GitHub root) {
         this.root = root;
     }
 
     @Override
     public PagedSearchIterable<T> withPageSize(int size) {
-        return (PagedSearchIterable<T>)super.withPageSize(size);
+        return (PagedSearchIterable<T>) super.withPageSize(size);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     private void populate() {
-        if (result==null)
+        if (result == null)
             iterator().hasNext();
     }
 
@@ -57,7 +57,8 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
 
             public T[] next() {
                 SearchResult<T> v = base.next();
-                if (result==null)   result = v;
+                if (result == null)
+                    result = v;
                 return v.getItems(root);
             }
 

@@ -45,17 +45,19 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
      * @see GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.retrieve().method("PATCH").with("state",State.ACTIVE).to(url,this);
+        root.retrieve().method("PATCH").with("state", State.ACTIVE).to(url, this);
     }
 
-    /*package*/ GHMembership wrap(GitHub root) {
+    /* package */ GHMembership wrap(GitHub root) {
         this.root = root;
-        if (user!=null)     user = root.getUser(user.wrapUp(root));
-        if (organization!=null) organization.wrapUp(root);
+        if (user != null)
+            user = root.getUser(user.wrapUp(root));
+        if (organization != null)
+            organization.wrapUp(root);
         return this;
     }
 
-    /*package*/ static void wrap(GHMembership[] page, GitHub root) {
+    /* package */ static void wrap(GHMembership[] page, GitHub root) {
         for (GHMembership m : page)
             m.wrap(root);
     }
@@ -78,7 +80,6 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
      * Whether a role is currently active or waiting for acceptance (pending)
      */
     public enum State {
-        ACTIVE,
-        PENDING;
+        ACTIVE, PENDING;
     }
 }

@@ -37,16 +37,18 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * First check if the credentials are configured in the environment.
-     * We use environment first because users are not likely to give required (full) permissions to their default key.
+     * First check if the credentials are configured in the environment. We use environment first because users are not
+     * likely to give required (full) permissions to their default key.
      *
      * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
      **
      * If there is still no user it means there are no credentials defined and throw an IOException.
      *
-     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns null.
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns
+     *         null.
      *
-     * @throws IOException If there are no credentials defined in the ~/.github properties file or the process environment.
+     * @throws IOException
+     *             If there are no credentials defined in the ~/.github properties file or the process environment.
      */
     static GitHubBuilder fromCredentials() throws IOException {
         Exception cause = null;
@@ -54,7 +56,7 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.oauthToken != null || builder.user != null  || builder.jwtToken != null)
+        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
             return builder;
 
         try {
@@ -66,35 +68,36 @@ public class GitHubBuilder implements Cloneable {
             // fall through
             cause = e;
         }
-        throw (IOException)new IOException("Failed to resolve credentials from ~/.github or the environment.").initCause(cause);
+        throw (IOException) new IOException("Failed to resolve credentials from ~/.github or the environment.")
+                .initCause(cause);
     }
 
     /**
-     * @deprecated
-     *      Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that
-     *      different clients of this library will all recognize one consistent set of coordinates.
+     * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
+     *             clients of this library will all recognize one consistent set of coordinates.
      */
-    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName) throws IOException {
+    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName,
+            String oauthVariableName) throws IOException {
         return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, "");
     }
 
     private static void loadIfSet(String envName, Properties p, String propName) {
         String v = System.getenv(envName);
-           if (v != null)
-               p.put(propName, v);
+        if (v != null)
+            p.put(propName, v);
     }
 
     /**
-     * @deprecated
-     *      Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that
-     *      different clients of this library will all recognize one consistent set of coordinates.
+     * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
+     *             clients of this library will all recognize one consistent set of coordinates.
      */
-    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName, String oauthVariableName, String endpointVariableName) throws IOException {
+    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName,
+            String oauthVariableName, String endpointVariableName) throws IOException {
         Properties env = new Properties();
-        loadIfSet(loginVariableName,env,"login");
-        loadIfSet(passwordVariableName,env,"password");
-        loadIfSet(oauthVariableName,env,"oauth");
-        loadIfSet(endpointVariableName,env,"endpoint");
+        loadIfSet(loginVariableName, env, "login");
+        loadIfSet(passwordVariableName, env, "password");
+        loadIfSet(oauthVariableName, env, "oauth");
+        loadIfSet(endpointVariableName, env, "endpoint");
         return fromProperties(env);
     }
 
@@ -105,26 +108,27 @@ public class GitHubBuilder implements Cloneable {
      * The following environment variables are recognized:
      *
      * <ul>
-     *     <li>GITHUB_LOGIN: username like 'kohsuke'
-     *     <li>GITHUB_PASSWORD: raw password
-     *     <li>GITHUB_OAUTH: OAuth token to login
-     *     <li>GITHUB_ENDPOINT: URL of the API endpoint
-     *     <li>GITHUB_JWT: JWT token to login
+     * <li>GITHUB_LOGIN: username like 'kohsuke'
+     * <li>GITHUB_PASSWORD: raw password
+     * <li>GITHUB_OAUTH: OAuth token to login
+     * <li>GITHUB_ENDPOINT: URL of the API endpoint
+     * <li>GITHUB_JWT: JWT token to login
      * </ul>
      *
      * <p>
      * See class javadoc for the relationship between these coordinates.
      *
      * <p>
-     * For backward compatibility, the following environment variables are recognized but discouraged:
-     * login, password, oauth
+     * For backward compatibility, the following environment variables are recognized but discouraged: login, password,
+     * oauth
      */
     public static GitHubBuilder fromEnvironment() throws IOException {
         Properties props = new Properties();
         for (Entry<String, String> e : System.getenv().entrySet()) {
             String name = e.getKey().toLowerCase(Locale.ENGLISH);
-            if (name.startsWith("github_")) name=name.substring(7);
-            props.put(name,e.getValue());
+            if (name.startsWith("github_"))
+                name = name.substring(7);
+            props.put(name, e.getValue());
         }
         return fromProperties(props);
     }
@@ -159,22 +163,26 @@ public class GitHubBuilder implements Cloneable {
 
     /**
      * @param endpoint
-     *      The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
-     *      "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL.
-     *      For historical reasons, this parameter still accepts the bare domain name, but that's considered deprecated.
+     *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
+     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
+     *            deprecated.
      */
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
     }
+
     public GitHubBuilder withPassword(String user, String password) {
         this.user = user;
         this.password = password;
         return this;
     }
+
     public GitHubBuilder withOAuthToken(String oauthToken) {
         return withOAuthToken(oauthToken, null);
     }
+
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
         this.oauthToken = oauthToken;
         this.user = user;
@@ -184,35 +192,38 @@ public class GitHubBuilder implements Cloneable {
     /**
      * Configures {@link GitHubBuilder} with Installation Token generated by the GitHub Application
      *
-     * @param appInstallationToken A string containing the GitHub App installation token
+     * @param appInstallationToken
+     *            A string containing the GitHub App installation token
      * @return the configured Builder from given GitHub App installation token.
      * @see GHAppInstallation#createToken(java.util.Map)
      */
-    public GitHubBuilder withAppInstallationToken(String appInstallationToken){
+    public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
         return withOAuthToken(appInstallationToken, "");
     }
 
-    public GitHubBuilder withJwtToken(String jwtToken){
+    public GitHubBuilder withJwtToken(String jwtToken) {
         this.jwtToken = jwtToken;
         return this;
     }
+
     public GitHubBuilder withConnector(HttpConnector connector) {
         this.connector = connector;
         return this;
     }
+
     public GitHubBuilder withRateLimitHandler(RateLimitHandler handler) {
         this.rateLimitHandler = handler;
         return this;
     }
+
     public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
         this.abuseLimitHandler = handler;
         return this;
     }
 
     /**
-     * Configures {@linkplain #withConnector(HttpConnector) connector}
-     * that uses HTTP library in JRE but use a specific proxy, instead of
-     * the system default one.
+     * Configures {@linkplain #withConnector(HttpConnector) connector} that uses HTTP library in JRE but use a specific
+     * proxy, instead of the system default one.
      */
     public GitHubBuilder withProxy(final Proxy p) {
         return withConnector(new ImpatientHttpConnector(new HttpConnector() {
@@ -223,7 +234,8 @@ public class GitHubBuilder implements Cloneable {
     }
 
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler, abuseLimitHandler);
+        return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler,
+                abuseLimitHandler);
     }
 
     @Override

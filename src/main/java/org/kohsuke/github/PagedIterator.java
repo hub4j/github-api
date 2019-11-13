@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 /**
  * Iterator over a paginated data source.
  *
- * Aside from the normal iterator operation, this method exposes {@link #nextPage()}
- * that allows the caller to retrieve items per page.
+ * Aside from the normal iterator operation, this method exposes {@link #nextPage()} that allows the caller to retrieve
+ * items per page.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -22,7 +22,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     private T[] current;
     private int pos;
 
-    /*package*/ PagedIterator(Iterator<T[]> base) {
+    /* package */ PagedIterator(Iterator<T[]> base) {
         this.base = base;
     }
 
@@ -30,17 +30,18 @@ public abstract class PagedIterator<T> implements Iterator<T> {
 
     public boolean hasNext() {
         fetch();
-        return current!=null;
+        return current != null;
     }
 
     public T next() {
         fetch();
-        if (current==null)  throw new NoSuchElementException();
+        if (current == null)
+            throw new NoSuchElementException();
         return current[pos++];
     }
 
     private void fetch() {
-        while (current==null || current.length<=pos) {
+        while (current == null || current.length <= pos) {
             if (!base.hasNext()) {// no more to retrieve
                 current = null;
                 pos = 0;
@@ -64,7 +65,7 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     public List<T> nextPage() {
         fetch();
         List<T> r = Arrays.asList(current);
-        r = r.subList(pos,r.size());
+        r = r.subList(pos, r.size());
         current = null;
         pos = 0;
         return r;

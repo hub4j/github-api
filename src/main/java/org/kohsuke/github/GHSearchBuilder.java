@@ -18,7 +18,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
      */
     private final Class<? extends SearchResult<T>> receiverType;
 
-    /*package*/ GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
+    /* package */ GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
     }

@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
- * Builder pattern for creating a new commit.
- * Based on https://developer.github.com/v3/git/commits/#create-a-commit
+ * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
 public class GHCommitBuilder {
     private final GHRepository repo;
@@ -39,7 +38,8 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param message the commit message
+     * @param message
+     *            the commit message
      */
     public GHCommitBuilder message(String message) {
         req.with("message", message);
@@ -47,7 +47,8 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param tree the SHA of the tree object this commit points to
+     * @param tree
+     *            the SHA of the tree object this commit points to
      */
     public GHCommitBuilder tree(String tree) {
         req.with("tree", tree);
@@ -55,7 +56,8 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param parent the SHA of a parent commit.
+     * @param parent
+     *            the SHA of a parent commit.
      */
     public GHCommitBuilder parent(String parent) {
         parents.add(parent);

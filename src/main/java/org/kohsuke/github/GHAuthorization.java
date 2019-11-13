@@ -42,8 +42,8 @@ public class GHAuthorization extends GHObject {
     private String note;
     private String note_url;
     private String fingerprint;
-    //TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
-    //private GHUser user;
+    // TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
+    // private GHUser user;
 
     public GitHub getRoot() {
         return root;
@@ -73,8 +73,7 @@ public class GHAuthorization extends GHObject {
         return app.name;
     }
 
-    @SuppressFBWarnings(value = "NM_CONFUSING",
-            justification = "It's a part of the library API, cannot be changed")
+    @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library API, cannot be changed")
     public URL getApiURL() {
         return GitHub.parseURL(url);
     }
@@ -99,13 +98,13 @@ public class GHAuthorization extends GHObject {
         return fingerprint;
     }
 
-    /*package*/ GHAuthorization wrap(GitHub root) {
+    /* package */ GHAuthorization wrap(GitHub root) {
         this.root = root;
         return this;
     }
 
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD"},
-        justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
+            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     private static class App {
         private String url;
         private String name;

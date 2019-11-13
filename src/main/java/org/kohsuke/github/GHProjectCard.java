@@ -42,7 +42,7 @@ public class GHProjectCard extends GHObject {
     }
 
     public GHProject getProject() throws IOException {
-        if(project == null) {
+        if (project == null) {
             try {
                 project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
             } catch (FileNotFoundException e) {
@@ -53,7 +53,7 @@ public class GHProjectCard extends GHObject {
     }
 
     public GHProjectColumn getColumn() throws IOException {
-        if(column == null) {
+        if (column == null) {
             try {
                 column = root.retrieve().to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(root);
             } catch (FileNotFoundException e) {
@@ -64,10 +64,10 @@ public class GHProjectCard extends GHObject {
     }
 
     public GHIssue getContent() throws IOException {
-        if(StringUtils.isEmpty(content_url))
+        if (StringUtils.isEmpty(content_url))
             return null;
         try {
-            if(content_url.contains("/pulls")) {
+            if (content_url.contains("/pulls")) {
                 return root.retrieve().to(getContentUrl().getPath(), GHPullRequest.class).wrap(root);
             } else {
                 return root.retrieve().to(getContentUrl().getPath(), GHIssue.class).wrap(root);

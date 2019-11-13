@@ -20,8 +20,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
-                .withPassword(null, null)
-                .withJwtToken("bogus");
+                .withPassword(null, null).withJwtToken("bogus");
     }
 
     @Test
@@ -40,7 +39,6 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(app.getEvents().size(), is(2));
         assertThat(app.getInstallationsCount(), is((long) 1));
     }
-
 
     @Test
     public void listInstallations() throws IOException {
@@ -103,12 +101,11 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         permissions.put("metadata", GHPermissionType.READ);
 
         GHAppInstallationToken installationToken = installation.createToken(permissions)
-                .repositoryIds(Arrays.asList((long)111111111))
-                .create();
+                .repositoryIds(Arrays.asList((long) 111111111)).create();
 
         assertThat(installationToken.getToken(), is("bogus"));
         assertThat(installation.getPermissions(), is(permissions));
-        assertThat(installationToken.getRepositorySelection(),is(GHRepositorySelection.SELECTED));
+        assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
         assertThat(installationToken.getExpiresAt(), is(GitHub.parseDate("2019-08-10T05:54:58Z")));
 
         GHRepository repository = installationToken.getRepositories().get(0);

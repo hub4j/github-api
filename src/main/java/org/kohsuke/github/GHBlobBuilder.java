@@ -5,8 +5,7 @@ import org.apache.commons.codec.binary.Base64;
 import java.io.IOException;
 
 /**
- * Builder pattern for creating a new blob.
- * Based on https://developer.github.com/v3/git/blobs/#create-a-blob
+ * Builder pattern for creating a new blob. Based on https://developer.github.com/v3/git/blobs/#create-a-blob
  */
 public class GHBlobBuilder {
     private final GHRepository repo;

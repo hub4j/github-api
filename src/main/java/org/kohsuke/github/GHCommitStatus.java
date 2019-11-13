@@ -13,14 +13,15 @@ import java.net.URL;
  */
 public class GHCommitStatus extends GHObject {
     String state;
-    String target_url,description;
+    String target_url, description;
     String context;
     GHUser creator;
 
     private GitHub root;
 
-    /*package*/ GHCommitStatus wrapUp(GitHub root) {
-        if (creator!=null)  creator.wrapUp(root);
+    /* package */ GHCommitStatus wrapUp(GitHub root) {
+        if (creator != null)
+            creator.wrapUp(root);
         this.root = root;
         return this;
     }
@@ -30,7 +31,7 @@ public class GHCommitStatus extends GHObject {
             if (s.name().equalsIgnoreCase(state))
                 return s;
         }
-        throw new IllegalStateException("Unexpected state: "+state);
+        throw new IllegalStateException("Unexpected state: " + state);
     }
 
     /**

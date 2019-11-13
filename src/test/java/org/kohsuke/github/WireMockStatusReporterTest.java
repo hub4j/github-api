@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
-
 /**
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
  * <p>
@@ -25,8 +24,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         requireProxy("Tests proper configuration when proxying.");
 
         assertThat(
-            "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
-            gitHub.isAnonymous(), is(false));
+                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
+                gitHub.isAnonymous(), is(false));
 
         assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
 
@@ -37,7 +36,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat(user.getLogin(), notNullValue());
 
         // System.out.println();
-        // System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
+        // System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user
+        // login: " + user.getLogin());
         // System.out.println();
     }
 
@@ -80,7 +80,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
+        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(), containsString("Request was not matched"));
 
         // Invalid repository, without stub - fails 404 when not proxying
@@ -92,7 +92,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
+        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(), containsString("Request was not matched"));
     }
 
@@ -120,13 +120,15 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
-        assertThat(e.getMessage(), equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
+        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
+        assertThat(e.getMessage(), equalTo(
+                "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
     }
 
     @Test
     public void whenSnapshot_EnsureProxy() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", mockGitHub.isTakeSnapshot());
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
+                mockGitHub.isTakeSnapshot());
 
         assertTrue("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
     }
@@ -134,7 +136,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     @Ignore("Not implemented yet")
     @Test
     public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {
-        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)", mockGitHub.isTakeSnapshot());
+        assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
+                mockGitHub.isTakeSnapshot());
 
     }
 }

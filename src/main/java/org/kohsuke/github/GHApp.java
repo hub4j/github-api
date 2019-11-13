@@ -25,13 +25,12 @@ public class GHApp extends GHObject {
     private String description;
     @JsonProperty("external_url")
     private String externalUrl;
-    private Map<String,String> permissions;
+    private Map<String, String> permissions;
     private List<GHEvent> events;
     @JsonProperty("installations_count")
     private long installationsCount;
     @JsonProperty("html_url")
     private String htmlUrl;
-
 
     public GHUser getOwner() {
         return owner;
@@ -93,7 +92,7 @@ public class GHApp extends GHObject {
         this.permissions = permissions;
     }
 
-    /*package*/ GHApp wrapUp(GitHub root) {
+    /* package */ GHApp wrapUp(GitHub root) {
         this.root = root;
         return this;
     }
@@ -106,67 +105,84 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      * @return a list of App installations
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
-        return root.retrieve().withPreview(MACHINE_MAN)
-            .asPagedIterable(
-                "/app/installations",
-                GHAppInstallation[].class,
-                item -> item.wrapUp(root) );
+        return root.retrieve().withPreview(MACHINE_MAN).asPagedIterable("/app/installations", GHAppInstallation[].class,
+                item -> item.wrapUp(root));
     }
 
     /**
      * Obtain an installation associated with this app
-     * @param id - Installation Id
+     * 
+     * @param id
+     *            Installation Id
      *
-     * You must use a JWT to access this endpoint.
+     *            You must use a JWT to access this endpoint.
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
-        return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/app/installations/%d", id), GHAppInstallation.class).wrapUp(root);
+        return root.retrieve().withPreview(MACHINE_MAN)
+                .to(String.format("/app/installations/%d", id), GHAppInstallation.class).wrapUp(root);
     }
 
     /**
      * Obtain an organization installation associated with this app
-     * @param name - Organization name
+     * 
+     * @param name
+     *            Organization name
      *
-     * You must use a JWT to access this endpoint.
+     *            You must use a JWT to access this endpoint.
      *
-     * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization installation</a>
+     * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization
+     *      installation</a>
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-        return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/orgs/%s/installation", name), GHAppInstallation.class).wrapUp(root);
+        return root.retrieve().withPreview(MACHINE_MAN)
+                .to(String.format("/orgs/%s/installation", name), GHAppInstallation.class).wrapUp(root);
     }
 
     /**
      * Obtain an repository installation associated with this app
-     * @param ownerName - Organization or user name
-     * @param repositoryName - Repository name
+     * 
+     * @param ownerName
+     *            Organization or user name
+     * @param repositoryName
+     *            Repository name
      *
-     * You must use a JWT to access this endpoint.
+     *            You must use a JWT to access this endpoint.
      *
-     * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository installation</a>
+     * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository
+     *      installation</a>
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-        return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/repos/%s/%s/installation", ownerName, repositoryName), GHAppInstallation.class).wrapUp(root);
+        return root.retrieve().withPreview(MACHINE_MAN)
+                .to(String.format("/repos/%s/%s/installation", ownerName, repositoryName), GHAppInstallation.class)
+                .wrapUp(root);
     }
 
     /**
      * Obtain a user installation associated with this app
-     * @param name - user name
+     * 
+     * @param name
+     *            user name
      *
-     * You must use a JWT to access this endpoint.
+     *            You must use a JWT to access this endpoint.
      *
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-        return root.retrieve().withPreview(MACHINE_MAN).to(String.format("/users/%s/installation", name), GHAppInstallation.class).wrapUp(root);
+        return root.retrieve().withPreview(MACHINE_MAN)
+                .to(String.format("/users/%s/installation", name), GHAppInstallation.class).wrapUp(root);
     }
 
 }
-

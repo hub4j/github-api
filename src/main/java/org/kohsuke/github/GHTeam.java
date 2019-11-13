@@ -12,11 +12,11 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam implements Refreshable {
-    private String name,permission,slug,description;
+    private String name, permission, slug, description;
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
-    protected /*final*/ GitHub root;
+    protected /* final */ GitHub root;
 
     /** Member's role in a team */
     public enum Role {
@@ -25,30 +25,31 @@ public class GHTeam implements Refreshable {
          */
         MEMBER,
         /**
-         * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's name and description.
+         * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
+         * name and description.
          */
         MAINTAINER
     }
 
-    /*package*/ GHTeam wrapUp(GHOrganization owner) {
+    /* package */ GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
         this.root = owner.root;
         return this;
     }
 
-    /*package*/ GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
-      this.organization.wrapUp(root);
-      return wrapUp(organization);
+    /* package */ GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
+        this.organization.wrapUp(root);
+        return wrapUp(organization);
     }
 
-    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
+    /* package */ static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
         for (GHTeam t : teams) {
             t.wrapUp(owner);
         }
         return teams;
     }
 
-    /*package*/ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
+    /* package */ static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
         for (GHTeam t : teams) {
             t.root = owner.root;
         }
@@ -72,9 +73,7 @@ public class GHTeam implements Refreshable {
     }
 
     public void setDescription(String description) throws IOException {
-        root.retrieve().method("PATCH")
-                .with("description", description)
-                .to(api(""));
+        root.retrieve().method("PATCH").with("description", description).to(api(""));
     }
 
     public int getId() {
@@ -85,11 +84,7 @@ public class GHTeam implements Refreshable {
      * Retrieves the current members.
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.retrieve()
-            .asPagedIterable(
-                api("/members"),
-                GHUser[].class,
-                item -> item.wrapUp(root) );
+        return root.retrieve().asPagedIterable(api("/members"), GHUser[].class, item -> item.wrapUp(root));
     }
 
     public Set<GHUser> getMembers() throws IOException {
@@ -101,15 +96,15 @@ public class GHTeam implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/teams/" + id + "/members/"  + user.getLogin());
+            root.retrieve().to("/teams/" + id + "/members/" + user.getLogin());
             return true;
         } catch (IOException ignore) {
             return false;
         }
     }
 
-    public Map<String,GHRepository> getRepositories() throws IOException {
-        Map<String,GHRepository> m = new TreeMap<String, GHRepository>();
+    public Map<String, GHRepository> getRepositories() throws IOException {
+        Map<String, GHRepository> m = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories()) {
             m.put(r.getName(), r);
         }
@@ -117,11 +112,7 @@ public class GHTeam implements Refreshable {
     }
 
     public PagedIterable<GHRepository> listRepositories() {
-        return root.retrieve()
-            .asPagedIterable(
-                api("/repos"),
-                GHRepository[].class,
-                item -> item.wrap(root) );
+        return root.retrieve().asPagedIterable(api("/repos"), GHRepository[].class, item -> item.wrap(root));
     }
 
     /**
@@ -140,15 +131,15 @@ public class GHTeam implements Refreshable {
      *
      * The user will be invited to the organization if required.
      *
-     * @param user github user
-     * @param role role for the new member
+     * @param user
+     *            github user
+     * @param role
+     *            role for the new member
      *
      * @throws IOException
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT")
-                .with("role", role)
-                .to(api("/memberships/" + user.getLogin()), null);
+        root.retrieve().method("PUT").with("role", role).to(api("/memberships/" + user.getLogin()), null);
     }
 
     /**
@@ -159,12 +150,11 @@ public class GHTeam implements Refreshable {
     }
 
     public void add(GHRepository r) throws IOException {
-        add(r,null);
+        add(r, null);
     }
 
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        root.retrieve().method("PUT")
-                .with("permission", permission)
+        root.retrieve().method("PUT").with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 

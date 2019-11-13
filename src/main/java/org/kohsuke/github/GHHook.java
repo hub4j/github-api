@@ -13,13 +13,13 @@ import java.util.Map;
 /**
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public abstract class GHHook extends GHObject {
     String name;
     List<String> events;
     boolean active;
-    Map<String,String> config;
+    Map<String, String> config;
 
     public String getName() {
         return name;
@@ -28,8 +28,10 @@ public abstract class GHHook extends GHObject {
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
         for (String e : events) {
-            if (e.equals("*"))  s.add(GHEvent.ALL);
-            else                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
+            if (e.equals("*"))
+                s.add(GHEvent.ALL);
+            else
+                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
         }
         return s;
     }

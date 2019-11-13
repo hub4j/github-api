@@ -24,6 +24,9 @@ public class Github2faTest  extends AbstractGitHubWireMockTest {
 		            return data; 
 		        });
 		assert token!=null;
+		for(int i=0;i<asList.size();i++) {
+			assertTrue(token.getScopes().get(i).contentEquals(asList.get(i)));
+		}
 		
 		String p = token.getToken();
 		

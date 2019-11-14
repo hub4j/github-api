@@ -28,7 +28,7 @@ public class GHMeta {
         return verifiablePasswordAuthentication;
     }
 
-    public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+    void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
         this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
     }
 
@@ -36,7 +36,7 @@ public class GHMeta {
         return hooks;
     }
 
-    public void setHooks(List<String> hooks) {
+    void setHooks(List<String> hooks) {
         this.hooks = hooks;
     }
 
@@ -44,7 +44,7 @@ public class GHMeta {
         return git;
     }
 
-    public void setGit(List<String> git) {
+    void setGit(List<String> git) {
         this.git = git;
     }
 
@@ -52,7 +52,7 @@ public class GHMeta {
         return web;
     }
 
-    public void setWeb(List<String> web) {
+    void setWeb(List<String> web) {
         this.web = web;
     }
 
@@ -60,7 +60,7 @@ public class GHMeta {
         return api;
     }
 
-    public void setApi(List<String> api) {
+    void setApi(List<String> api) {
         this.api = api;
     }
 
@@ -68,7 +68,7 @@ public class GHMeta {
         return pages;
     }
 
-    public void setPages(List<String> pages) {
+    void setPages(List<String> pages) {
         this.pages = pages;
     }
 
@@ -76,7 +76,7 @@ public class GHMeta {
         return importer;
     }
 
-    public void setImporter(List<String> importer) {
+    void setImporter(List<String> importer) {
         this.importer = importer;
     }
 

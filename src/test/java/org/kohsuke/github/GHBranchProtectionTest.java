@@ -48,14 +48,9 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
     @Test
     public void testEnableBranchProtections() throws Exception {
         // team/user restrictions require an organization repo to test against
-        GHBranchProtection protection = branch.enableProtection()
-            .addRequiredChecks("test-status-check")
-            .requireBranchIsUpToDate()
-            .requireCodeOwnReviews()
-            .dismissStaleReviews()
-            .requiredReviewers(2)
-            .includeAdmins()
-            .enable();
+        GHBranchProtection protection = branch.enableProtection().addRequiredChecks("test-status-check")
+                .requireBranchIsUpToDate().requireCodeOwnReviews().dismissStaleReviews().requiredReviewers(2)
+                .includeAdmins().enable();
 
         RequiredStatusChecks statusChecks = protection.getRequiredStatusChecks();
         assertNotNull(statusChecks);
@@ -81,9 +76,7 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testEnableRequireReviewsOnly() throws Exception {
-        GHBranchProtection protection = branch.enableProtection()
-            .requireReviews()
-            .enable();
+        GHBranchProtection protection = branch.enableProtection().requireReviews().enable();
 
         assertNotNull(protection.getRequiredReviews());
     }

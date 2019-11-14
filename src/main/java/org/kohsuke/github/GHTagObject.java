@@ -7,8 +7,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @see GHRepository#getTagObject(String)
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHTagObject {
     private GHRepository owner;
     private GitHub root;
@@ -20,7 +20,7 @@ public class GHTagObject {
     private GitUser tagger;
     private GHRef.GHObject object;
 
-    /*package*/ GHTagObject wrap(GHRepository owner) {
+    GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
         return this;

@@ -18,12 +18,13 @@ public class GHReleaseUpdater {
     }
 
     public GHReleaseUpdater tag(String tag) {
-        builder.with("tag_name",tag);
+        builder.with("tag_name", tag);
         return this;
     }
 
     /**
-     * @param body The release notes body.
+     * @param body
+     *            The release notes body.
      */
     public GHReleaseUpdater body(String body) {
         builder.with("body", body);
@@ -31,11 +32,10 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * Specifies the commitish value that determines where the Git tag is created from. Can be any branch or
-     * commit SHA.
+     * Specifies the commitish value that determines where the Git tag is created from. Can be any branch or commit SHA.
      *
-     * @param commitish Defaults to the repository’s default branch (usually "master"). Unused if the Git tag
-     *                  already exists.
+     * @param commitish
+     *            Defaults to the repository’s default branch (usually "master"). Unused if the Git tag already exists.
      */
     public GHReleaseUpdater commitish(String commitish) {
         builder.with("target_commitish", commitish);
@@ -45,8 +45,9 @@ public class GHReleaseUpdater {
     /**
      * Optional.
      *
-     * @param draft {@code true} to create a draft (unpublished) release, {@code false} to create a published one.
-     *                          Default is {@code false}.
+     * @param draft
+     *            {@code true} to create a draft (unpublished) release, {@code false} to create a published one. Default
+     *            is {@code false}.
      */
     public GHReleaseUpdater draft(boolean draft) {
         builder.with("draft", draft);
@@ -54,7 +55,8 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * @param name the name of the release
+     * @param name
+     *            the name of the release
      */
     public GHReleaseUpdater name(String name) {
         builder.with("name", name);
@@ -64,8 +66,9 @@ public class GHReleaseUpdater {
     /**
      * Optional
      *
-     * @param prerelease {@code true} to identify the release as a prerelease. {@code false} to identify the release
-     *                               as a full release. Default is {@code false}.
+     * @param prerelease
+     *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
+     *            release. Default is {@code false}.
      */
     public GHReleaseUpdater prerelease(boolean prerelease) {
         builder.with("prerelease", prerelease);
@@ -73,9 +76,8 @@ public class GHReleaseUpdater {
     }
 
     public GHRelease update() throws IOException {
-        return builder
-                .method("PATCH")
-                .to(base.owner.getApiTailUrl("releases/"+base.id), GHRelease.class).wrap(base.owner);
+        return builder.method("PATCH").to(base.owner.getApiTailUrl("releases/" + base.id), GHRelease.class)
+                .wrap(base.owner);
     }
 
 }

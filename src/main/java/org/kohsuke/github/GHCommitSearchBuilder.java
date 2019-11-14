@@ -10,10 +10,11 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits()
  */
-@Preview @Deprecated
+@Preview
+@Deprecated
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
-    /*package*/ GHCommitSearchBuilder(GitHub root) {
-        super(root,CommitSearchResult.class);
+    GHCommitSearchBuilder(GitHub root) {
+        super(root, CommitSearchResult.class);
         req.withPreview(Previews.CLOAK);
     }
 
@@ -26,99 +27,103 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     }
 
     public GHCommitSearchBuilder author(String v) {
-        return q("author:"+v);
+        return q("author:" + v);
     }
 
     public GHCommitSearchBuilder committer(String v) {
-        return q("committer:"+v);
+        return q("committer:" + v);
     }
 
     public GHCommitSearchBuilder authorName(String v) {
-        return q("author-name:"+v);
+        return q("author-name:" + v);
     }
 
     public GHCommitSearchBuilder committerName(String v) {
-        return q("committer-name:"+v);
+        return q("committer-name:" + v);
     }
 
     public GHCommitSearchBuilder authorEmail(String v) {
-        return q("author-email:"+v);
+        return q("author-email:" + v);
     }
 
     public GHCommitSearchBuilder committerEmail(String v) {
-        return q("committer-email:"+v);
+        return q("committer-email:" + v);
     }
 
     public GHCommitSearchBuilder authorDate(String v) {
-        return q("author-date:"+v);
+        return q("author-date:" + v);
     }
 
     public GHCommitSearchBuilder committerDate(String v) {
-        return q("committer-date:"+v);
+        return q("committer-date:" + v);
     }
 
     public GHCommitSearchBuilder merge(boolean merge) {
-        return q("merge:"+Boolean.valueOf(merge).toString().toLowerCase());
+        return q("merge:" + Boolean.valueOf(merge).toString().toLowerCase());
     }
 
     public GHCommitSearchBuilder hash(String v) {
-        return q("hash:"+v);
+        return q("hash:" + v);
     }
 
     public GHCommitSearchBuilder parent(String v) {
-        return q("parent:"+v);
+        return q("parent:" + v);
     }
 
     public GHCommitSearchBuilder tree(String v) {
-        return q("tree:"+v);
+        return q("tree:" + v);
     }
 
     public GHCommitSearchBuilder is(String v) {
-        return q("is:"+v);
+        return q("is:" + v);
     }
 
     public GHCommitSearchBuilder user(String v) {
-        return q("user:"+v);
+        return q("user:" + v);
     }
 
     public GHCommitSearchBuilder org(String v) {
-        return q("org:"+v);
+        return q("org:" + v);
     }
 
     public GHCommitSearchBuilder repo(String v) {
-        return q("repo:"+v);
+        return q("repo:" + v);
     }
 
     public GHCommitSearchBuilder order(GHDirection v) {
-        req.with("order",v);
+        req.with("order", v);
         return this;
     }
 
     public GHCommitSearchBuilder sort(Sort sort) {
-        req.with("sort",sort);
+        req.with("sort", sort);
         return this;
     }
 
-    public enum Sort { AUTHOR_DATE, COMMITTER_DATE }
+    public enum Sort {
+        AUTHOR_DATE, COMMITTER_DATE
+    }
 
     private static class CommitSearchResult extends SearchResult<GHCommit> {
         private GHCommit[] items;
 
         @Override
-        /*package*/ GHCommit[] getItems(GitHub root) {
+        GHCommit[] getItems(GitHub root) {
             for (GHCommit commit : items) {
                 String repoName = getRepoName(commit.url);
                 try {
                     GHRepository repo = root.getRepository(repoName);
                     commit.wrapUp(repo);
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
             }
             return items;
         }
     }
-    
+
     /**
-     * @param commitUrl a commit URL
+     * @param commitUrl
+     *            a commit URL
      * @return the repo name ("username/reponame")
      */
     private static String getRepoName(String commitUrl) {

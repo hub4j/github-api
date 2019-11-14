@@ -20,8 +20,8 @@ import java.util.Map.Entry;
  * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
 public class GHGist extends GHObject {
-    /*package almost final*/ GHUser owner;
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GHUser owner;
+    /* package almost final */ GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
@@ -34,10 +34,10 @@ public class GHGist extends GHObject {
 
     private String comments_url;
 
-    private Map<String,GHGistFile> files = new HashMap<String, GHGistFile>();
+    private Map<String, GHGistFile> files = new HashMap<String, GHGistFile>();
 
     /**
-     * User that owns this Gist.
+     * @return User that owns this Gist.
      */
     public GHUser getOwner() throws IOException {
         return root.intern(owner);
@@ -52,7 +52,7 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * URL like https://gist.github.com/gists/12345.git
+     * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
         return git_pull_url;
@@ -79,7 +79,7 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * API URL of listing comments.
+     * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
         return comments_url;
@@ -89,11 +89,11 @@ public class GHGist extends GHObject {
         return files.get(name);
     }
 
-    public Map<String,GHGistFile> getFiles() {
+    public Map<String, GHGistFile> getFiles() {
         return Collections.unmodifiableMap(files);
     }
 
-    /*package*/ GHGist wrapUp(GHUser owner) {
+    GHGist wrapUp(GHUser owner) {
         this.owner = owner;
         this.root = owner.root;
         wrapUp();
@@ -101,10 +101,10 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * Used when caller obtains {@link GHGist} without knowing its owner.
-     * A partially constructed owner object is interned.
+     * Used when caller obtains {@link GHGist} without knowing its owner. A partially constructed owner object is
+     * interned.
      */
-    /*package*/ GHGist wrapUp(GitHub root) {
+    GHGist wrapUp(GitHub root) {
         this.owner = root.getUser(owner);
         this.root = root;
         wrapUp();
@@ -134,22 +134,18 @@ public class GHGist extends GHObject {
     }
 
     public boolean isStarred() throws IOException {
-        return root.retrieve().asHttpStatusCode(getApiTailUrl("star"))/100==2;
+        return root.retrieve().asHttpStatusCode(getApiTailUrl("star")) / 100 == 2;
     }
 
     /**
      * Forks this gist into your own.
      */
     public GHGist fork() throws IOException {
-        return new Requester(root).to(getApiTailUrl("forks"),GHGist.class).wrapUp(root);
+        return new Requester(root).to(getApiTailUrl("forks"), GHGist.class).wrapUp(root);
     }
 
     public PagedIterable<GHGist> listForks() {
-        return root.retrieve()
-            .asPagedIterable(
-                getApiTailUrl("forks"),
-                GHGist[].class,
-                item -> item.wrapUp(root) );
+        return root.retrieve().asPagedIterable(getApiTailUrl("forks"), GHGist[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -168,8 +164,10 @@ public class GHGist extends GHObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         GHGist ghGist = (GHGist) o;
         return id.equals(ghGist.id);
 

@@ -38,7 +38,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      */
     public List<T> asList() {
         List<T> r = new ArrayList<T>();
-        for(PagedIterator<T> i = iterator(); i.hasNext();) {
+        for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }
         return r;
@@ -49,7 +49,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      */
     public Set<T> asSet() {
         LinkedHashSet<T> r = new LinkedHashSet<T>();
-        for(PagedIterator<T> i = iterator(); i.hasNext();) {
+        for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }
         return r;

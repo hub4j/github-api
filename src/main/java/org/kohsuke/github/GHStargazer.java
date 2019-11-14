@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author noctarius
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHStargazer {
 
     private GHRepository repository;
@@ -26,8 +26,8 @@ public class GHStargazer {
     }
 
     /**
-     * Gets the date when the repository was starred, however old stars before
-     * August 2012, will all show the date the API was changed to support starred_at.
+     * Gets the date when the repository was starred, however old stars before August 2012, will all show the date the
+     * API was changed to support starred_at.
      *
      * @return the date the stargazer was added
      */

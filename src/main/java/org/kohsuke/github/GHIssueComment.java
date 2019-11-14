@@ -41,7 +41,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
-    /*package*/ GHIssueComment wrapUp(GHIssue owner) {
+    GHIssueComment wrapUp(GHIssue owner) {
         this.owner = owner;
         return this;
     }
@@ -74,7 +74,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     public GHUser getUser() throws IOException {
         return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
     }
-    
+
     @Override
     public URL getHtmlUrl() {
         return GitHub.parseURL(html_url);
@@ -83,7 +83,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     public GHCommentAuthorAssociation getAuthorAssociation() {
         return GHCommentAuthorAssociation.valueOf(author_association);
     }
-    
+
     /**
      * Updates the body of the issue comment.
      */
@@ -99,25 +99,22 @@ public class GHIssueComment extends GHObject implements Reactable {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
-                .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(owner.root);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
-            .withPreview(SQUIRREL_GIRL)
-            .asPagedIterable(
-                getApiRoute()+"/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.root) );
+        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
+                GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     private String getApiRoute() {
-        return "/repos/"+owner.getRepository().getOwnerName()+"/"+owner.getRepository().getName()+"/issues/comments/" + id;
+        return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
+                + "/issues/comments/" + id;
     }
 }

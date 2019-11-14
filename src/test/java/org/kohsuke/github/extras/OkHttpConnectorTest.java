@@ -26,16 +26,16 @@ import static org.junit.Assume.assumeTrue;
  * Key take aways:
  *
  * <ul>
- * <li>These tests are artificial and intended to highlight the differences
- * in behavior between scenarios. However, the differences they indicate are stark.</li>
+ * <li>These tests are artificial and intended to highlight the differences in behavior between scenarios. However, the
+ * differences they indicate are stark.</li>
  * <li>Caching reduces rate limit consumption by at least a factor of two in even the simplest case.</li>
- * <li>The OkHttp cache is pretty smart and will often connect read and write requests made
- * on the same client and invalidate caches.</li>
- * <li>Changes made outside the current client cause the OkHttp cache to return stale data.
- * This is expected and correct behavior.</li>
- * <li>"max-age=0" addresses the problem of external changes by revalidating caches for each request.
- * This produces the same number of requests as OkHttp without caching, but those requests only
- * count towards the GitHub rate limit if data has changes.</li>
+ * <li>The OkHttp cache is pretty smart and will often connect read and write requests made on the same client and
+ * invalidate caches.</li>
+ * <li>Changes made outside the current client cause the OkHttp cache to return stale data. This is expected and correct
+ * behavior.</li>
+ * <li>"max-age=0" addresses the problem of external changes by revalidating caches for each request. This produces the
+ * same number of requests as OkHttp without caching, but those requests only count towards the GitHub rate limit if
+ * data has changes.</li>
  * </ul>
  *
  * @author Liam Newman
@@ -69,11 +69,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
-            .extensions(ResponseTemplateTransformer.builder()
-                .global(true)
-                .maxCacheEntries(0L)
-                .build()
-            );
+                .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
     }
 
     @Before
@@ -91,9 +87,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     @Test
     public void DefaultConnector() throws Exception {
 
-        this.gitHub = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl())
-            .build();
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
 
         doTestActions();
 
@@ -110,10 +104,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(false);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
-        this.gitHub = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl())
-            .withConnector(connector)
-            .build();
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+                .build();
 
         doTestActions();
 
@@ -137,15 +129,13 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
 
-        this.gitHub = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl())
-            .withConnector(connector)
-            .build();
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+                .build();
 
         doTestActions();
 
         // Testing behavior after change
-        // NOTE: this is wrong!  The live data changed!
+        // NOTE: this is wrong! The live data changed!
         // Due to max-age (default 60 from response) the cache returns the old data.
         assertThat(getRepository(gitHub).getDescription(), is(mockGitHub.getMethodName()));
 
@@ -166,14 +156,11 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assumeFalse("Test only valid when not taking a snapshot", mockGitHub.isTakeSnapshot());
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", mockGitHub.isUseProxy());
 
-
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), 3);
 
-        this.gitHub = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl())
-            .withConnector(connector)
-            .build();
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+                .build();
 
         doTestActions();
 
@@ -197,10 +184,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
-        this.gitHub = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl())
-            .withConnector(connector)
-            .build();
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+                .build();
 
         doTestActions();
 
@@ -216,14 +201,11 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
         GHRateLimit rateLimitAfter = gitHub.rateLimit();
-        assertThat("Request Count",
-            mockGitHub.getRequestCount(),
-            is(networkRequestCount + userRequestCount));
+        assertThat("Request Count", mockGitHub.getRequestCount(), is(networkRequestCount + userRequestCount));
 
         // Rate limit must be under this value, but if it wiggles we don't care
-        assertThat("Rate Limit Change",
-            rateLimitBefore.remaining - rateLimitAfter.remaining,
-            is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
+        assertThat("Rate Limit Change", rateLimitBefore.remaining - rateLimitAfter.remaining,
+                is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
 
     }
 
@@ -242,7 +224,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         return client;
     }
 
-
     /**
      * This is a standard set of actions to be performed with each connector
      *
@@ -252,7 +233,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         rateLimitBefore = gitHub.getRateLimit();
 
         String name = mockGitHub.getMethodName();
-
 
         GHRepository repo = getRepository(gitHub);
 
@@ -266,7 +246,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         // Test behavior after change
         assertThat(getRepository(gitHub).getDescription(), is(name));
-
 
         // Get Tricky - make a change via a different client
         if (mockGitHub.isUseProxy()) {
@@ -282,14 +261,14 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         getRepository(gitHub).getDescription();
         Thread.sleep(500);
         getRepository(gitHub).getDescription();
-        //This is only interesting when running the max-age=3 test which currently only runs with proxy
-        //Disabled to speed up the tests
+        // This is only interesting when running the max-age=3 test which currently only runs with proxy
+        // Disabled to speed up the tests
         if (mockGitHub.isUseProxy()) {
             Thread.sleep(1000);
         }
         getRepository(gitHub).getDescription();
-        //This is only interesting when running the max-age=3 test which currently only runs with proxy
-        //Disabled to speed up the tests
+        // This is only interesting when running the max-age=3 test which currently only runs with proxy
+        // Disabled to speed up the tests
         if (mockGitHub.isUseProxy()) {
             Thread.sleep(4000);
         }

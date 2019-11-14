@@ -32,6 +32,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * A GitHub project.
+ * 
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  * @author Martin van Zijl
  */
@@ -58,13 +59,13 @@ public class GHProject extends GHObject {
     }
 
     public GHObject getOwner() throws IOException {
-        if(owner == null) {
+        if (owner == null) {
             try {
-                if(owner_url.contains("/orgs/")) {
+                if (owner_url.contains("/orgs/")) {
                     owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
-                } else if(owner_url.contains("/users/")) {
+                } else if (owner_url.contains("/users/")) {
                     owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
-                } else if(owner_url.contains("/repos/")) {
+                } else if (owner_url.contains("/repos/")) {
                     owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
                 }
             } catch (FileNotFoundException e) {
@@ -130,8 +131,7 @@ public class GHProject extends GHObject {
     }
 
     public enum ProjectState {
-        OPEN,
-        CLOSED
+        OPEN, CLOSED
     }
 
     public void setState(ProjectState state) throws IOException {
@@ -139,22 +139,19 @@ public class GHProject extends GHObject {
     }
 
     public static enum ProjectStateFilter {
-        ALL,
-        OPEN,
-        CLOSED
+        ALL, OPEN, CLOSED
     }
 
     /**
-     * Set the permission level that all members of the project's organization will have on this project.
-     * Only applicable for organization-owned projects.
+     * Set the permission level that all members of the project's organization will have on this project. Only
+     * applicable for organization-owned projects.
      */
     public void setOrganizationPermission(GHPermissionType permission) throws IOException {
         edit("organization_permission", permission.toString().toLowerCase());
     }
 
     /**
-     * Sets visibility of the project within the organization.
-     * Only applicable for organization-owned projects.
+     * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
      */
     public void setPublic(boolean isPublic) throws IOException {
         edit("public", isPublic);
@@ -166,18 +163,12 @@ public class GHProject extends GHObject {
 
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.retrieve()
-            .withPreview(INERTIA)
-            .asPagedIterable(
-                String.format("/projects/%d/columns", id),
-                GHProjectColumn[].class,
-                item -> item.wrap(project) );
+        return root.retrieve().withPreview(INERTIA).asPagedIterable(String.format("/projects/%d/columns", id),
+                GHProjectColumn[].class, item -> item.wrap(project));
     }
 
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.retrieve().method("POST")
-                .withPreview(INERTIA)
-                .with("name", name)
+        return root.retrieve().method("POST").withPreview(INERTIA).with("name", name)
                 .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);
     }
 }

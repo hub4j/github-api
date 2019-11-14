@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHKey {
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GitHub root;
 
     protected String url, key, title;
     protected boolean verified;
@@ -38,17 +38,17 @@ public class GHKey {
     public GitHub getRoot() {
         return root;
     }
-    
+
     public boolean isVerified() {
         return verified;
     }
 
-    /*package*/ GHKey wrap(GitHub root) {
+    GHKey wrap(GitHub root) {
         this.root = root;
         return this;
     }
 
     public String toString() {
-        return new ToStringBuilder(this).append("title",title).append("id",id).append("key",key).toString();
+        return new ToStringBuilder(this).append("title", title).append("id", id).append("key", key).toString();
     }
 }

@@ -93,9 +93,7 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         return new Statement() {
             public void evaluate() throws Throwable {
                 WireMockRule.this.methodName = methodName;
-                final Options localOptions = new WireMockRuleConfiguration(
-                    WireMockRule.this.options,
-                    methodName);
+                final Options localOptions = new WireMockRuleConfiguration(WireMockRule.this.options, methodName);
 
                 new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
                 new File(localOptions.filesRoot().getPath(), "__files").mkdirs();

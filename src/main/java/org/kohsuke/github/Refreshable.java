@@ -18,7 +18,6 @@ public interface Refreshable {
      */
     void refresh() throws IOException;
 
-
     /**
      * Calls refresh if the provided value is null
      */

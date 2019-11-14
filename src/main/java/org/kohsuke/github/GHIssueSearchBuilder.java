@@ -7,8 +7,8 @@ package org.kohsuke.github;
  * @see GitHub#searchIssues()
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
-    /*package*/ GHIssueSearchBuilder(GitHub root) {
-        super(root,IssueSearchResult.class);
+    GHIssueSearchBuilder(GitHub root) {
+        super(root, IssueSearchResult.class);
     }
 
     /**
@@ -24,7 +24,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     public GHIssueSearchBuilder mentions(String login) {
-        return q("mentions:"+login);
+        return q("mentions:" + login);
     }
 
     public GHIssueSearchBuilder isOpen() {
@@ -40,22 +40,24 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     public GHIssueSearchBuilder order(GHDirection v) {
-        req.with("order",v);
+        req.with("order", v);
         return this;
     }
 
     public GHIssueSearchBuilder sort(Sort sort) {
-        req.with("sort",sort);
+        req.with("sort", sort);
         return this;
     }
 
-    public enum Sort { COMMENTS, CREATED, UPDATED }
+    public enum Sort {
+        COMMENTS, CREATED, UPDATED
+    }
 
     private static class IssueSearchResult extends SearchResult<GHIssue> {
         private GHIssue[] items;
 
         @Override
-        /*package*/ GHIssue[] getItems(GitHub root) {
+        GHIssue[] getItems(GitHub root) {
             for (GHIssue i : items)
                 i.wrap(root);
             return items;

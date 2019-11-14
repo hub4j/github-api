@@ -33,15 +33,13 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     protected final Set<String> tempGitHubRepositories = new HashSet<>();
 
     /**
-     * {@link GitHub} instance for use during test.
-     * Traffic will be part of snapshot when taken.
+     * {@link GitHub} instance for use during test. Traffic will be part of snapshot when taken.
      */
     protected GitHub gitHub;
 
     /**
-     * {@link GitHub} instance for use before/after test.
-     * Traffic will not be part of snapshot when taken.
-     * Should only be used when isUseProxy() or isTakeSnapShot().
+     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
+     * be used when isUseProxy() or isTakeSnapShot().
      */
     protected GitHub gitHubBeforeAfter;
 
@@ -52,15 +50,11 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     public final GitHubWireMockRule mockGitHub;
 
     public AbstractGitHubWireMockTest() {
-        mockGitHub = new GitHubWireMockRule(
-            this.getWireMockOptions()
-        );
+        mockGitHub = new GitHubWireMockRule(this.getWireMockOptions());
     }
 
     protected WireMockConfiguration getWireMockOptions() {
-        return WireMockConfiguration.options()
-            .dynamicPort()
-            .usingFilesUnderDirectory(baseRecordPath);
+        return WireMockConfiguration.options().dynamicPort().usingFilesUnderDirectory(baseRecordPath);
     }
 
     private static GitHubBuilder createGitHubBuilder() {
@@ -109,29 +103,27 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     @Before
     public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder()
-            .withEndpoint(mockGitHub.apiServer().baseUrl());
+        GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
 
         if (useDefaultGitHub) {
-            gitHub = builder
-                .build();
+            gitHub = builder.build();
         }
 
         if (mockGitHub.isUseProxy()) {
-            gitHubBeforeAfter = getGitHubBuilder()
-                .withEndpoint("https://api.github.com/")
-                .build();
+            gitHubBeforeAfter = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
         } else {
             gitHubBeforeAfter = null;
         }
     }
 
     protected void snapshotNotAllowed() {
-        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.", mockGitHub.isTakeSnapshot());
+        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.",
+                mockGitHub.isTakeSnapshot());
     }
 
     protected void requireProxy(String reason) {
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason, mockGitHub.isUseProxy());
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason,
+                mockGitHub.isUseProxy());
     }
 
     protected GHUser getUser() {
@@ -147,26 +139,35 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     }
 
     /**
+     * Creates a temporary repository that will be deleted at the end of the test. Repository name is based on the
+     * current test method.
      *
+     * @return a temporary repository
+     * @throws IOException
+     *             if repository could not be created or retrieved.
      */
-    protected GHRepository getTempRepository() throws IOException{
+    protected GHRepository getTempRepository() throws IOException {
         return getTempRepository("temp-" + this.mockGitHub.getMethodName());
     }
 
     /**
-     * Creates
+     * Creates a temporary repository that will be deleted at the end of the test.
+     *
+     * @param name
+     *            string name of the the repository
+     *
+     * @return a temporary repository
+     * @throws IOException
+     *             if repository could not be created or retrieved.
      */
     protected GHRepository getTempRepository(String name) throws IOException {
-        String fullName = GITHUB_API_TEST_ORG +'/' + name;
+        String fullName = GITHUB_API_TEST_ORG + '/' + name;
         if (mockGitHub.isUseProxy()) {
             cleanupRepository(fullName);
 
-            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
-                .createRepository(name)
-                .description("A test repository for testing the github-api project: " + name)
-                .homepage("http://github-api.kohsuke.org/")
-                .autoInit(true)
-                .create();
+            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).createRepository(name)
+                    .description("A test repository for testing the github-api project: " + name)
+                    .homepage("http://github-api.kohsuke.org/").autoInit(true).create();
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -189,7 +190,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     @After
     public void cleanupTempRepositories() throws IOException {
         if (mockGitHub.isUseProxy()) {
-            for(String fullName : tempGitHubRepositories) {
+            for (String fullName : tempGitHubRepositories) {
                 cleanupRepository(fullName);
             }
         }
@@ -215,8 +216,8 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         // Generally this means the test is doing something that requires additional access rights
         // Not always clear which ones.
         // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
-//        String login = getUserTest().getLogin();
-//        assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+        // String login = getUserTest().getLogin();
+        // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
 }

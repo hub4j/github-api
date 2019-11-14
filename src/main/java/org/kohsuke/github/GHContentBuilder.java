@@ -26,7 +26,7 @@ public final class GHContentBuilder {
 
     public GHContentBuilder path(String path) {
         this.path = path;
-        req.with("path",path);
+        req.with("path", path);
         return this;
     }
 
@@ -36,8 +36,7 @@ public final class GHContentBuilder {
     }
 
     /**
-     * Used when updating (but not creating a new content) to specify
-     * Thetblob SHA of the file being replaced.
+     * Used when updating (but not creating a new content) to specify Thetblob SHA of the file being replaced.
      */
     public GHContentBuilder sha(String sha) {
         req.with("sha", sha);
@@ -66,7 +65,8 @@ public final class GHContentBuilder {
      * Commits a new content.
      */
     public GHContentUpdateResponse commit() throws IOException {
-        GHContentUpdateResponse response = req.to(repo.getApiTailUrl("contents/" + path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = req.to(repo.getApiTailUrl("contents/" + path),
+                GHContentUpdateResponse.class);
 
         response.getContent().wrap(repo);
         response.getCommit().wrapUp(repo);

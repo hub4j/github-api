@@ -36,7 +36,7 @@ import java.net.URL;
  * @see GHPullRequest#listReviews()
  * @see GHPullRequestReviewBuilder
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
     GHPullRequest owner;
 
@@ -46,7 +46,7 @@ public class GHPullRequestReview extends GHObject {
     private GHPullRequestReviewState state;
     private String submitted_at;
 
-    /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
+    GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
@@ -87,7 +87,7 @@ public class GHPullRequestReview extends GHObject {
     }
 
     protected String getApiRoute() {
-        return owner.getApiRoute()+"/reviews/"+id;
+        return owner.getApiRoute() + "/reviews/" + id;
     }
 
     /**
@@ -106,22 +106,19 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
-     * @deprecated
-     *      Former preview method that changed when it got public. Left here for backward compatibility.
-     *      Use {@link #submit(String, GHPullRequestReviewEvent)}
+     * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
+     *             {@link #submit(String, GHPullRequestReviewEvent)}
      */
     public void submit(String body, GHPullRequestReviewState state) throws IOException {
-        submit(body,state.toEvent());
+        submit(body, state.toEvent());
     }
 
     /**
      * Updates the comment.
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.root).method("POST")
-                .with("body", body)
-                .with("event", event.action())
-                .to(getApiRoute()+"/events",this);
+        new Requester(owner.root).method("POST").with("body", body).with("event", event.action())
+                .to(getApiRoute() + "/events", this);
         this.body = body;
         this.state = event.toState();
     }
@@ -130,17 +127,14 @@ public class GHPullRequestReview extends GHObject {
      * Deletes this review.
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE")
-                .to(getApiRoute());
+        new Requester(owner.root).method("DELETE").to(getApiRoute());
     }
 
     /**
      * Dismisses this review.
      */
     public void dismiss(String message) throws IOException {
-        new Requester(owner.root).method("PUT")
-                .with("message", message)
-                .to(getApiRoute()+"/dismissals");
+        new Requester(owner.root).method("PUT").with("message", message).to(getApiRoute() + "/dismissals");
         state = GHPullRequestReviewState.DISMISSED;
     }
 
@@ -148,10 +142,7 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.retrieve()
-            .asPagedIterable(
-                getApiRoute() + "/comments",
-                GHPullRequestReviewComment[].class,
-                item -> item.wrapUp(owner) );
+        return owner.root.retrieve().asPagedIterable(getApiRoute() + "/comments", GHPullRequestReviewComment[].class,
+                item -> item.wrapUp(owner));
     }
 }

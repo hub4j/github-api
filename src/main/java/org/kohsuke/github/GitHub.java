@@ -829,7 +829,8 @@ public class GitHub {
      *             if the credentials supplied are invalid or if you're trying to access it as a GitHub App via the JWT
      *             authentication
      */
-    <T extends GHMetaExamples.GHMetaExample> GHMetaExamples.GHMetaExample getMetaExample(Class<T> clazz) throws IOException {
+    <T extends GHMetaExamples.GHMetaExample> GHMetaExamples.GHMetaExample getMetaExample(Class<T> clazz)
+            throws IOException {
         return retrieve().to("/meta", clazz);
     }
 

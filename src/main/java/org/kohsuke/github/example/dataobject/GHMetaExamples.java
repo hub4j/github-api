@@ -13,13 +13,14 @@ import java.util.List;
 /**
  * {@link org.kohsuke.github.GHMeta} wraps the list of GitHub's IP addresses.
  * <p>
- * This class is used to show examples of different ways to create simple read-only data objects.
- * For data objects that can be modified, perform actions, or get other objects we'll need other examples.
+ * This class is used to show examples of different ways to create simple read-only data objects. For data objects that
+ * can be modified, perform actions, or get other objects we'll need other examples.
  * <p>
  * IMPORTANT: There is no one right way to do this, but there are better and worse.
  * <ul>
- *     <li>Better: {@link GHMetaGettersUnmodifiable} is a good balance of clarity and brevity</li>
- *     <li>Worse: {@link GHMetaPublic} exposes setters that are not needed, making it unclear that fields are actually read-only</li>
+ * <li>Better: {@link GHMetaGettersUnmodifiable} is a good balance of clarity and brevity</li>
+ * <li>Worse: {@link GHMetaPublic} exposes setters that are not needed, making it unclear that fields are actually
+ * read-only</li>
  *
  * @author Liam Newman
  *
@@ -55,15 +56,15 @@ public final class GHMetaExamples {
      * <p>
      * Pro:
      * <ul>
-     *     <li>Easy to create</li>
-     *     <li>Not much code</li>
-     *     <li>Mininal annotations</li>
+     * <li>Easy to create</li>
+     * <li>Not much code</li>
+     * <li>Mininal annotations</li>
      * </ul>
      * Con:
      * <ul>
-     *     <li>Exposes public setters for fields that should not be changed</li>
-     *     <li>Lists modifiable when they should not be changed</li>
-     *     <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
+     * <li>Exposes public setters for fields that should not be changed</li>
+     * <li>Lists modifiable when they should not be changed</li>
+     * <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
      * </ul>
      *
      * @author Paulo Miguel Almeida
@@ -140,20 +141,20 @@ public final class GHMetaExamples {
     }
 
     /**
-     * This version uses public getters and shows that package or private setters both can be used by jackson.
-     * You can check this by running in debug and setting break points in the setters.
+     * This version uses public getters and shows that package or private setters both can be used by jackson. You can
+     * check this by running in debug and setting break points in the setters.
      *
      * <p>
      * Pro:
      * <ul>
-     *     <li>Easy to create</li>
-     *     <li>Not much code</li>
-     *     <li>Some annotations</li>
+     * <li>Easy to create</li>
+     * <li>Not much code</li>
+     * <li>Some annotations</li>
      * </ul>
      * Con:
      * <ul>
-     *     <li>Exposes some package setters for fields that should not be changed, better than public</li>
-     *     <li>Lists modifiable when they should not be changed</li>
+     * <li>Exposes some package setters for fields that should not be changed, better than public</li>
+     * <li>Lists modifiable when they should not be changed</li>
      * </ul>
      *
      * @author Liam Newman
@@ -170,12 +171,10 @@ public final class GHMetaExamples {
         private List<String> pages;
 
         /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore
-         * getters and setters.
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          */
         @JsonProperty
         private List<String> importer;
-
 
         @JsonProperty("verifiable_password_authentication")
         public boolean isVerifiablePasswordAuthentication() {
@@ -192,10 +191,11 @@ public final class GHMetaExamples {
         }
 
         /**
-         * Setters can be private (or package local) and will still be called by Jackson.
-         * The {@link JsonProperty} can got on the getter or setter and still work.
+         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
+         * got on the getter or setter and still work.
          *
-         * @param hooks list of hooks
+         * @param hooks
+         *            list of hooks
          */
         private void setHooks(List<String> hooks) {
             this.hooks = hooks;
@@ -206,10 +206,11 @@ public final class GHMetaExamples {
         }
 
         /**
-         * Since we mostly use Jackson for deserialization, {@link JsonSetter} is also okay, but
-         * {@link JsonProperty} is preferred.
+         * Since we mostly use Jackson for deserialization, {@link JsonSetter} is also okay, but {@link JsonProperty} is
+         * preferred.
          *
-         * @param git list of git addresses
+         * @param git
+         *            list of git addresses
          */
         @JsonSetter
         void setGit(List<String> git) {
@@ -223,7 +224,8 @@ public final class GHMetaExamples {
         /**
          * The {@link JsonProperty} can got on the getter or setter and still work.
          *
-         * @param web list of web addresses
+         * @param web
+         *            list of web addresses
          */
         void setWeb(List<String> web) {
             this.web = web;
@@ -248,8 +250,7 @@ public final class GHMetaExamples {
         }
 
         /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore
-         * getters and setters.
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          *
          * @return list of importer addresses
          */
@@ -258,10 +259,10 @@ public final class GHMetaExamples {
         }
 
         /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore
-         * getters and setters.
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          *
-         * @param importer list of importer addresses
+         * @param importer
+         *            list of importer addresses
          */
         void setImporter(List<String> importer) {
             this.importer = importer;
@@ -276,15 +277,16 @@ public final class GHMetaExamples {
      * <p>
      * Pro:
      * <ul>
-     *     <li>Very Easy to create</li>
-     *     <li>Minimal code</li>
-     *     <li>Mininal annotations</li>
-     *     <li>Fields effectively final and lists unmodifiable</li>
+     * <li>Very Easy to create</li>
+     * <li>Minimal code</li>
+     * <li>Mininal annotations</li>
+     * <li>Fields effectively final and lists unmodifiable</li>
      * </ul>
      * Con:
      * <ul>
-     *     <li>Effectively final is not quite really final</li>
-     *     <li>If one of the lists were missing (an option member, for example), it will throw NPE but we could mitigate by checking for null or assigning a default.</li>
+     * <li>Effectively final is not quite really final</li>
+     * <li>If one of the lists were missing (an option member, for example), it will throw NPE but we could mitigate by
+     * checking for null or assigning a default.</li>
      * </ul>
      *
      * @author Liam Newman
@@ -338,15 +340,15 @@ public final class GHMetaExamples {
      * <p>
      * Pro:
      * <ul>
-     *     <li>Moderate amount of code</li>
-     *     <li>More annotations</li>
-     *     <li>Fields final and lists unmodifiable</li>
+     * <li>Moderate amount of code</li>
+     * <li>More annotations</li>
+     * <li>Fields final and lists unmodifiable</li>
      * </ul>
      * Con:
      * <ul>
-     *     <li>Extra allocations - default array lists will be replaced by Jackson (yes, even though they are final)</li>
-     *     <li>Added constructor is annoying</li>
-     *     <li>If this object could be refreshed or populated, then the final is misleading (and possibly buggy)</li>
+     * <li>Extra allocations - default array lists will be replaced by Jackson (yes, even though they are final)</li>
+     * <li>Added constructor is annoying</li>
+     * <li>If this object could be refreshed or populated, then the final is misleading (and possibly buggy)</li>
      * </ul>
      *
      * @author Liam Newman
@@ -363,8 +365,8 @@ public final class GHMetaExamples {
         private final List<String> importer = new ArrayList<>();
 
         @JsonCreator
-        private GHMetaGettersFinal(@JsonProperty("verifiable_password_authentication")
-                                   boolean verifiablePasswordAuthentication) {
+        private GHMetaGettersFinal(
+                @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
             // boolean fields when final seem to be really final, so we have to switch to constructor
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
         }
@@ -403,14 +405,15 @@ public final class GHMetaExamples {
      * <p>
      * Pro:
      * <ul>
-     *     <li>Fields final and lists unmodifiable</li>
-     *     <li>Construction behavior can be controlled - if values depended on each other or needed to be set in a specific order, this could do that.</li>
+     * <li>Fields final and lists unmodifiable</li>
+     * <li>Construction behavior can be controlled - if values depended on each other or needed to be set in a specific
+     * order, this could do that.</li>
      * </ul>
      * Con:
      * <ul>
-     *     <li>There is no way you'd know about this without some research</li>
-     *     <li>Specific annotations needed</li>
-     *     <li>Brittle and verbose - not friendly to optional fields or large number of fields</li>
+     * <li>There is no way you'd know about this without some research</li>
+     * <li>Specific annotations needed</li>
+     * <li>Brittle and verbose - not friendly to optional fields or large number of fields</li>
      * </ul>
      *
      * @author Liam Newman
@@ -428,12 +431,10 @@ public final class GHMetaExamples {
 
         @JsonCreator
         private GHMetaGettersFinalCreator(@Nonnull @JsonProperty("hooks") List<String> hooks,
-            @Nonnull @JsonProperty("git") List<String> git,
-            @Nonnull @JsonProperty("web") List<String>web,
-            @Nonnull @JsonProperty("api")List<String> api,
-            @Nonnull @JsonProperty("pages") List<String>pages,
-            @Nonnull @JsonProperty("importer")List<String> importer,
-            @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
+                @Nonnull @JsonProperty("git") List<String> git, @Nonnull @JsonProperty("web") List<String> web,
+                @Nonnull @JsonProperty("api") List<String> api, @Nonnull @JsonProperty("pages") List<String> pages,
+                @Nonnull @JsonProperty("importer") List<String> importer,
+                @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
             this.hooks = Collections.unmodifiableList(hooks);
             this.git = Collections.unmodifiableList(git);
@@ -442,7 +443,6 @@ public final class GHMetaExamples {
             this.pages = Collections.unmodifiableList(pages);
             this.importer = Collections.unmodifiableList(importer);
         }
-
 
         public boolean isVerifiablePasswordAuthentication() {
             return verifiablePasswordAuthentication;

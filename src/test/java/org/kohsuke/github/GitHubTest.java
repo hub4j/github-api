@@ -87,13 +87,9 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertEquals(19, meta.getWeb().size());
 
         // Also test examples here
-        Class[] examples = new Class[] {
-            GHMetaExamples.GHMetaPublic.class,
-            GHMetaExamples.GHMetaPackage.class,
-            GHMetaExamples.GHMetaGettersUnmodifiable.class,
-            GHMetaExamples.GHMetaGettersFinal.class,
-            GHMetaExamples.GHMetaGettersFinalCreator.class,
-        };
+        Class[] examples = new Class[] { GHMetaExamples.GHMetaPublic.class, GHMetaExamples.GHMetaPackage.class,
+                GHMetaExamples.GHMetaGettersUnmodifiable.class, GHMetaExamples.GHMetaGettersFinal.class,
+                GHMetaExamples.GHMetaGettersFinalCreator.class, };
 
         for (Class metaClass : examples) {
             GHMetaExamples.GHMetaExample metaExample = gitHub.getMetaExample(metaClass);

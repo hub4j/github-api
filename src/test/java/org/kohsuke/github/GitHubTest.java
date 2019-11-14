@@ -1,18 +1,12 @@
 package org.kohsuke.github;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 
 import com.google.common.collect.Iterables;
-import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
@@ -78,5 +72,17 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         for (GHAuthorization auth: list) {
             assertNotNull(auth.getAppName());
         }
+    }
+
+    @Test
+    public void getMeta() throws IOException{
+        GHMeta meta = gitHub.getMeta();
+        assertTrue(meta.isVerifiablePasswordAuthentication());
+        assertEquals(19, meta.getApi().size());
+        assertEquals(19, meta.getGit().size());
+        assertEquals(3, meta.getHooks().size());
+        assertEquals(6, meta.getImporter().size());
+        assertEquals(6, meta.getPages().size());
+        assertEquals(19, meta.getWeb().size());
     }
 }

@@ -808,8 +808,9 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      *
      * @return an instance of {@link GHMeta}
-     * @throws IOException if the credentials supplied are invalid or if you're trying to access it as a GitHub App
-     * via the JWT authentication
+     * @throws IOException
+     *             if the credentials supplied are invalid or if you're trying to access it as a GitHub App via the JWT
+     *             authentication
      */
     public GHMeta getMeta() throws IOException {
         return retrieve().to("/meta", GHMeta.class);

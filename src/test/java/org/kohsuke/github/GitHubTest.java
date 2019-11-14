@@ -75,7 +75,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void getMeta() throws IOException{
+    public void getMeta() throws IOException {
         GHMeta meta = gitHub.getMeta();
         assertTrue(meta.isVerifiablePasswordAuthentication());
         assertEquals(19, meta.getApi().size());

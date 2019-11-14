@@ -10,6 +10,7 @@ import java.util.List;
  * @author Paulo Miguel Almeida
  *
  * @see GitHub#getMeta()
+ * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
  */
 
 public class GHMeta {

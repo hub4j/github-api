@@ -6,12 +6,12 @@ import java.util.HashSet;
 
 /**
  * Set of {@link GHPerson} with helper lookup methods.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
     private static final long serialVersionUID = 1L;
- 
+
     public GHPersonSet() {
     }
 
@@ -39,5 +39,5 @@ public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
             if (t.getLogin().equals(login))
                 return t;
         return null;
-    }    
+    }
 }

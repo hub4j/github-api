@@ -58,10 +58,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertNotEquals(0L, r.getId());
         }
     }
-    
+
     @Test
     public void searchContent() throws Exception {
-        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
+        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js")
+                .repo("jquery/jquery").list();
         GHContent c = r.iterator().next();
         // System.out.println(c.getName());
         assertNotNull(c.getDownloadUrl());
@@ -71,11 +72,10 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testListMyAuthorizations() throws IOException
-    {
+    public void testListMyAuthorizations() throws IOException {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
 
-        for (GHAuthorization auth: list) {
+        for (GHAuthorization auth : list) {
             assertNotNull(auth.getAppName());
         }
     }

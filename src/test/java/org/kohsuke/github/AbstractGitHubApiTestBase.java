@@ -21,7 +21,8 @@ public abstract class AbstractGitHubApiTestBase extends AbstractGitHubWireMockTe
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy", mockGitHub.isUseProxy());
+        assumeTrue("All tests inheriting from this class are not guaranteed to work without proxy",
+                mockGitHub.isUseProxy());
     }
 
     protected void kohsuke() {

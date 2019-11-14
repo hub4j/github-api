@@ -34,20 +34,18 @@ public class GHRateLimit {
     /**
      * Allotted API call per hour.
      *
-     * @deprecated This value should never have been made public.  Use {@link #getLimit()}
+     * @deprecated This value should never have been made public. Use {@link #getLimit()}
      */
     @Deprecated
     public int limit;
 
     /**
-     * The time at which the current rate limit window resets in UTC epoch seconds.
-     * NOTE: that means to
+     * The time at which the current rate limit window resets in UTC epoch seconds. NOTE: that means to
      *
      * @deprecated This value should never have been made public. Use {@link #getResetDate()}
      */
     @Deprecated
     public Date reset;
-
 
     @Nonnull
     private final Record core;
@@ -62,7 +60,8 @@ public class GHRateLimit {
     private final Record integrationManifest;
 
     static GHRateLimit Unknown() {
-        return new GHRateLimit(new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord());
+        return new GHRateLimit(new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord(),
+                new UnknownLimitRecord());
     }
 
     static GHRateLimit fromHeaderRecord(Record header) {
@@ -70,10 +69,9 @@ public class GHRateLimit {
     }
 
     @JsonCreator
-    GHRateLimit(@Nonnull @JsonProperty("core") Record core,
-                       @Nonnull @JsonProperty("search") Record search,
-                       @Nonnull @JsonProperty("graphql") Record graphql,
-                       @Nonnull @JsonProperty("integration_manifest") Record integrationManifest) {
+    GHRateLimit(@Nonnull @JsonProperty("core") Record core, @Nonnull @JsonProperty("search") Record search,
+            @Nonnull @JsonProperty("graphql") Record graphql,
+            @Nonnull @JsonProperty("integration_manifest") Record integrationManifest) {
         this.core = core;
         this.search = search;
         this.graphql = graphql;
@@ -84,7 +82,6 @@ public class GHRateLimit {
         this.limit = core.getLimit();
         this.reset = new Date(core.getResetEpochSeconds());
     }
-
 
     /**
      * Returns the date at which the Core API rate limit will reset.
@@ -115,7 +112,6 @@ public class GHRateLimit {
     public int getLimit() {
         return getCore().getLimit();
     }
-
 
     /**
      * Gets the time in epoch seconds when the Core API rate limit will reset.
@@ -149,8 +145,8 @@ public class GHRateLimit {
     }
 
     /**
-     * The search object provides your rate limit status for the Search API.
-     * TODO: integrate with header limit updating. Issue #605.
+     * The search object provides your rate limit status for the Search API. TODO: integrate with header limit updating.
+     * Issue #605.
      *
      * @return a rate limit record
      */
@@ -160,8 +156,8 @@ public class GHRateLimit {
     }
 
     /**
-     * The graphql object provides your rate limit status for the GraphQL API.
-     * TODO: integrate with header limit updating. Issue #605.
+     * The graphql object provides your rate limit status for the GraphQL API. TODO: integrate with header limit
+     * updating. Issue #605.
      *
      * @return a rate limit record
      */
@@ -171,8 +167,8 @@ public class GHRateLimit {
     }
 
     /**
-     * The integration_manifest object provides your rate limit status for the GitHub App Manifest code conversion endpoint.
-     * TODO: integrate with header limit updating. Issue #605.
+     * The integration_manifest object provides your rate limit status for the GitHub App Manifest code conversion
+     * endpoint. TODO: integrate with header limit updating. Issue #605.
      *
      * @return a rate limit record
      */
@@ -183,12 +179,8 @@ public class GHRateLimit {
 
     @Override
     public String toString() {
-        return "GHRateLimit {" +
-            "core " + getCore().toString() +
-            "search " + getSearch().toString() +
-            "graphql " + getGraphQL().toString() +
-            "integrationManifest " + getIntegrationManifest().toString() +
-            '}';
+        return "GHRateLimit {" + "core " + getCore().toString() + "search " + getSearch().toString() + "graphql "
+                + getGraphQL().toString() + "integrationManifest " + getIntegrationManifest().toString() + '}';
     }
 
     @Override
@@ -200,10 +192,9 @@ public class GHRateLimit {
             return false;
         }
         GHRateLimit rateLimit = (GHRateLimit) o;
-        return getCore().equals(rateLimit.getCore()) &&
-            getSearch().equals(rateLimit.getSearch()) &&
-            getGraphQL().equals(rateLimit.getGraphQL()) &&
-            getIntegrationManifest().equals(rateLimit.getIntegrationManifest());
+        return getCore().equals(rateLimit.getCore()) && getSearch().equals(rateLimit.getSearch())
+                && getGraphQL().equals(rateLimit.getGraphQL())
+                && getIntegrationManifest().equals(rateLimit.getIntegrationManifest());
     }
 
     @Override
@@ -233,6 +224,7 @@ public class GHRateLimit {
 
     /**
      * A rate limit record.
+     * 
      * @since 1.100
      */
     public static class Record {
@@ -257,21 +249,19 @@ public class GHRateLimit {
         private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
-         * The calculated time at which the rate limit will reset.
-         * Recalculated if {@link #recalculateResetDate} is called.
+         * The calculated time at which the rate limit will reset. Recalculated if {@link #recalculateResetDate} is
+         * called.
          */
         @Nonnull
         private Date resetDate;
 
         @JsonCreator
-        public Record(@JsonProperty("limit") int limit,
-                           @JsonProperty("remaining") int remaining,
-                           @JsonProperty("reset")long resetEpochSeconds) {
+        public Record(@JsonProperty("limit") int limit, @JsonProperty("remaining") int remaining,
+                @JsonProperty("reset") long resetEpochSeconds) {
             this(limit, remaining, resetEpochSeconds, null);
         }
 
-        @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
-            justification = "Deprecated")
+        @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "Deprecated")
         public Record(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
             this.limit = limit;
             this.remaining = remaining;
@@ -280,10 +270,11 @@ public class GHRateLimit {
         }
 
         /**
-         * Recalculates the reset date using the server response date to calculate a time duration
-         * and then add that to the local created time for this record.
+         * Recalculates the reset date using the server response date to calculate a time duration and then add that to
+         * the local created time for this record.
          *
-         * @param updatedAt a string date in RFC 1123
+         * @param updatedAt
+         *            a string date in RFC 1123
          * @return reset date based on the passed date
          */
         Date recalculateResetDate(String updatedAt) {
@@ -291,7 +282,8 @@ public class GHRateLimit {
             if (!StringUtils.isBlank(updatedAt)) {
                 try {
                     // Get the server date and reset data, will always return a time in GMT
-                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME).toEpochSecond();
+                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)
+                            .toEpochSecond();
                 } catch (DateTimeParseException e) {
                     if (LOGGER.isLoggable(FINEST)) {
                         LOGGER.log(FINEST, "Malformed Date header value " + updatedAt, e);
@@ -353,11 +345,8 @@ public class GHRateLimit {
 
         @Override
         public String toString() {
-            return "{" +
-                "remaining=" + getRemaining() +
-                ", limit=" + getLimit() +
-                ", resetDate=" + getResetDate() +
-                '}';
+            return "{" + "remaining=" + getRemaining() + ", limit=" + getLimit() + ", resetDate=" + getResetDate()
+                    + '}';
         }
 
         @Override
@@ -369,10 +358,9 @@ public class GHRateLimit {
                 return false;
             }
             Record record = (Record) o;
-            return getRemaining() == record.getRemaining() &&
-                getLimit() == record.getLimit() &&
-                getResetEpochSeconds() == record.getResetEpochSeconds() &&
-                getResetDate().equals(record.getResetDate());
+            return getRemaining() == record.getRemaining() && getLimit() == record.getLimit()
+                    && getResetEpochSeconds() == record.getResetEpochSeconds()
+                    && getResetDate().equals(record.getResetDate());
         }
 
         @Override

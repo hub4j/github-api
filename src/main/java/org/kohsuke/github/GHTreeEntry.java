@@ -5,8 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Provides information for Git Trees
- * https://developer.github.com/v3/git/trees/
+ * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHTree
@@ -18,8 +17,7 @@ public class GHTreeEntry {
     private long size;
 
     /**
-     * Get the path such as
-     * "subdir/file.txt"
+     * Get the path such as "subdir/file.txt"
      *
      * @return the path
      */
@@ -28,8 +26,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * Get mode such as
-     * 100644
+     * Get mode such as 100644
      *
      * @return the mode
      */
@@ -38,8 +35,8 @@ public class GHTreeEntry {
     }
 
     /**
-     * Gets the size of the file, such as
-     * 132
+     * Gets the size of the file, such as 132
+     * 
      * @return The size of the path or 0 if it is a directory
      */
     public long getSize() {
@@ -47,15 +44,13 @@ public class GHTreeEntry {
     }
 
     /**
-     * Gets the type such as:
-     * "blob", "tree", etc.
+     * Gets the type such as: "blob", "tree", etc.
      *
      * @return The type
      */
     public String getType() {
         return type;
     }
-
 
     /**
      * SHA1 of this object.
@@ -65,8 +60,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * API URL to this Git data, such as
-     * https://api.github.com/repos/jenkinsci
+     * API URL to this Git data, such as https://api.github.com/repos/jenkinsci
      * /jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
      */
     public URL getUrl() {
@@ -74,8 +68,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * If this tree entry represents a file, then return its information.
-     * Otherwise null.
+     * If this tree entry represents a file, then return its information. Otherwise null.
      */
     public GHBlob asBlob() throws IOException {
         if (type.equals("blob"))
@@ -85,8 +78,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * If this tree entry represents a file, then return its content.
-     * Otherwise null.
+     * If this tree entry represents a file, then return its content. Otherwise null.
      */
     public InputStream readAsBlob() throws IOException {
         if (type.equals("blob"))
@@ -96,8 +88,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * If this tree entry represents a directory, then return it.
-     * Otherwise null.
+     * If this tree entry represents a directory, then return it. Otherwise null.
      */
     public GHTree asTree() throws IOException {
         if (type.equals("tree"))

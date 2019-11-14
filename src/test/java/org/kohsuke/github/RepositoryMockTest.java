@@ -25,7 +25,6 @@ public class RepositoryMockTest {
     @Mock
     GHRepository mockRepository;
 
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -39,17 +38,13 @@ public class RepositoryMockTest {
         GHUser user2 = new GHUser();
         user2.login = "login2";
 
-
         when(iterator.hasNext()).thenReturn(true, false, true);
-        when(iterator.next()).thenReturn(new GHUser[] {user1}, new GHUser[] {user2});
+        when(iterator.next()).thenReturn(new GHUser[] { user1 }, new GHUser[] { user2 });
 
         Requester requester = Mockito.mock(Requester.class);
         when(mockGitHub.retrieve()).thenReturn(requester);
 
-
-        when(requester.asIterator("/repos/*/*/collaborators",
-            GHUser[].class, 0)).thenReturn(iterator, iterator);
-
+        when(requester.asIterator("/repos/*/*/collaborators", GHUser[].class, 0)).thenReturn(iterator, iterator);
 
         PagedIterable<GHUser> pagedIterable = Mockito.mock(PagedIterable.class);
         when(mockRepository.listCollaborators()).thenReturn(pagedIterable);
@@ -67,20 +62,16 @@ public class RepositoryMockTest {
             }
         };
 
-
         when(pagedIterable.iterator()).thenReturn(userPagedIterator, userPagedIterator2);
 
         Iterator<GHUser> returnIterator1 = mockRepository.listCollaborators().iterator();
-
 
         Assert.assertTrue(returnIterator1.hasNext());
         GHUser user = returnIterator1.next();
         Assert.assertEquals(user, user1);
         Assert.assertFalse(returnIterator1.hasNext());
 
-
         Iterator returnIterator2 = mockRepository.listCollaborators().iterator();
-
 
         Assert.assertTrue(returnIterator2.hasNext());
         user = returnIterator1.next();

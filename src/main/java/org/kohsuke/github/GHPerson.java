@@ -13,21 +13,21 @@ import java.util.TreeMap;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url, gravatar_id;
 
     // other fields (that only show up in full data)
-    protected String location,blog,email,name,company;
+    protected String location, blog, email, name, company;
     protected String html_url;
-    protected int followers,following,public_repos,public_gists;
+    protected int followers, following, public_repos, public_gists;
 
-    /*package*/ GHPerson wrapUp(GitHub root) {
+    GHPerson wrapUp(GitHub root) {
         this.root = root;
         return this;
     }
@@ -38,7 +38,7 @@ public abstract class GHPerson extends GHObject {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     protected synchronized void populate() throws IOException {
-        if (created_at!=null) {
+        if (created_at != null) {
             return; // already populated
         }
         if (root == null || root.isOffline()) {
@@ -51,13 +51,12 @@ public abstract class GHPerson extends GHObject {
      * Gets the public repositories this user owns.
      *
      * <p>
-     * To list your own repositories, including private repositories,
-     * use {@link GHMyself#listRepositories()}
+     * To list your own repositories, including private repositories, use {@link GHMyself#listRepositories()}
      */
-    public synchronized Map<String,GHRepository> getRepositories() throws IOException {
-        Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
+    public synchronized Map<String, GHRepository> getRepositories() throws IOException {
+        Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories(100)) {
-            repositories.put(r.getName(),r);
+            repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
     }
@@ -68,43 +67,41 @@ public abstract class GHPerson extends GHObject {
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories() {
-      return listRepositories(30);
+        return listRepositories(30);
     }
 
     /**
      * Lists up all the repositories using the specified page size.
      *
-     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
+     * @param pageSize
+     *            size for each page of items returned by GitHub. Maximum page size is 100.
      *
-     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     *            Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root.retrieve()
-            .asPagedIterable(
-                "/users/" + login + "/repos",
-                GHRepository[].class,
-                item -> item.wrap(root)
-            ).withPageSize(pageSize);
+                .asPagedIterable("/users/" + login + "/repos", GHRepository[].class, item -> item.wrap(root))
+                .withPageSize(pageSize);
     }
 
     /**
      * Loads repository list in a paginated fashion.
      *
      * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion.
-     * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
+     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion. Unlike
+     * {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
      *
-     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
-     * into {@link Error}.
+     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped into
+     * {@link Error}.
      *
-     * @deprecated
-     *      Use {@link #listRepositories()}
+     * @deprecated Use {@link #listRepositories()}
      */
     @Deprecated
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",
+                        GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -128,8 +125,7 @@ public abstract class GHPerson extends GHObject {
 
     /**
      *
-     * @return
-     *      null if the repository was not found
+     * @return null if the repository was not found
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
@@ -147,22 +143,21 @@ public abstract class GHPerson extends GHObject {
     /**
      * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105
      *
-     * @deprecated
-     *      No longer available in the v3 API.
+     * @deprecated No longer available in the v3 API.
      */
     public String getGravatarId() {
         return gravatar_id;
     }
 
     /**
-     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105'
-     * that indicates the avatar image URL.
+     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105' that indicates the
+     * avatar image URL.
      */
     public String getAvatarUrl() {
-        if (avatar_url!=null)
+        if (avatar_url != null)
             return avatar_url;
-        if (gravatar_id!=null)
-            return "https://secure.gravatar.com/avatar/"+gravatar_id;
+        if (gravatar_id != null)
+            return "https://secure.gravatar.com/avatar/" + gravatar_id;
         return null;
     }
 

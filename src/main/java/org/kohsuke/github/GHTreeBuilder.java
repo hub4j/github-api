@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builder pattern for creating a new tree.
- * Based on https://developer.github.com/v3/git/trees/#create-a-tree
+ * Builder pattern for creating a new tree. Based on https://developer.github.com/v3/git/trees/#create-a-tree
  */
 public class GHTreeBuilder {
     private final GHRepository repo;
@@ -37,7 +36,8 @@ public class GHTreeBuilder {
     }
 
     /**
-     * @param baseTree the SHA of tree you want to update with new data
+     * @param baseTree
+     *            the SHA of tree you want to update with new data
      */
     public GHTreeBuilder baseTree(String baseTree) {
         req.with("base_tree", baseTree);
@@ -45,8 +45,7 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Adds a new entry to the tree.
-     * Exactly one of the parameters {@code sha} and {@code content} must be non-null.
+     * Adds a new entry to the tree. Exactly one of the parameters {@code sha} and {@code content} must be non-null.
      */
     public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
         TreeEntry entry = new TreeEntry(path, mode, type);
@@ -57,7 +56,8 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob referred by its SHA.
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
+     * referred by its SHA.
      */
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");
@@ -67,7 +67,8 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the specified {@code content}.
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the
+     * specified {@code content}.
      */
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");

@@ -46,10 +46,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private int original_position = -1;
     private long in_reply_to_id = -1L;
 
-
     /**
-     * @deprecated
-     *      You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
+     * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
      */
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
@@ -59,7 +57,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return result;
     }
 
-    /*package*/ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
@@ -109,14 +107,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     protected String getApiRoute() {
-        return "/repos/"+owner.getRepository().getFullName()+"/pulls/comments/"+id;
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + id;
     }
 
     /**
      * Updates the comment.
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
+        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(), this);
         this.body = body;
     }
 
@@ -131,28 +129,21 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * Create a new comment that replies to this comment.
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-        return new Requester(owner.root).method("POST")
-                .with("body", body)
-                .with("in_reply_to", getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
-                .wrapUp(owner);
+        return new Requester(owner.root).method("POST").with("body", body).with("in_reply_to", getId())
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class).wrapUp(owner);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
-                .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(owner.root);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
-            .withPreview(SQUIRREL_GIRL)
-            .asPagedIterable(
-                getApiRoute() + "/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.root) );
+        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
+                GHReaction[].class, item -> item.wrap(owner.root));
     }
 }

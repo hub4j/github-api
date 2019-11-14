@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 public class GHGistUpdater {
     private final GHGist base;
     private final Requester builder;
-    LinkedHashMap<String,Object> files;
+    LinkedHashMap<String, Object> files;
 
     GHGistUpdater(GHGist base) {
         this.base = base;
@@ -26,14 +26,13 @@ public class GHGistUpdater {
         return this;
     }
 
-//    // This method does not work.
-//    public GHGistUpdater deleteFile(String fileName) throws IOException {
-//        files.put(fileName, Collections.singletonMap("filename", null));
-//        return this;
-//    }
+    // // This method does not work.
+    // public GHGistUpdater deleteFile(String fileName) throws IOException {
+    // files.put(fileName, Collections.singletonMap("filename", null));
+    // return this;
+    // }
 
-    public GHGistUpdater renameFile(String fileName, String newFileName) throws IOException
-    {
+    public GHGistUpdater renameFile(String fileName, String newFileName) throws IOException {
         files.put(fileName, Collections.singletonMap("filename", newFileName));
         return this;
     }
@@ -44,7 +43,7 @@ public class GHGistUpdater {
     }
 
     public GHGistUpdater description(String desc) {
-        builder.with("description",desc);
+        builder.with("description", desc);
         return this;
     }
 
@@ -53,8 +52,6 @@ public class GHGistUpdater {
      */
     public GHGist update() throws IOException {
         builder._with("files", files);
-        return builder
-                .method("PATCH")
-                .to(base.getApiTailUrl(""), GHGist.class).wrap(base.owner);
+        return builder.method("PATCH").to(base.getApiTailUrl(""), GHGist.class).wrap(base.owner);
     }
 }

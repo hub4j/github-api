@@ -23,11 +23,11 @@ public class GHDeployment extends GHObject {
     protected String repository_url;
     protected GHUser creator;
 
-
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
         this.root = owner.root;
-        if(creator != null) creator.wrapUp(root);
+        if (creator != null)
+            creator.wrapUp(root);
         return this;
     }
 
@@ -42,19 +42,24 @@ public class GHDeployment extends GHObject {
     public String getTask() {
         return task;
     }
+
     public String getPayload() {
         return (String) payload;
     }
+
     public String getEnvironment() {
         return environment;
     }
+
     public GHUser getCreator() throws IOException {
         return root.intern(creator);
     }
+
     public String getRef() {
         return ref;
     }
-    public String getSha(){
+
+    public String getSha() {
         return sha;
     }
 
@@ -67,15 +72,11 @@ public class GHDeployment extends GHObject {
     }
 
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-        return new GHDeploymentStatusBuilder(owner,id,state);
+        return new GHDeploymentStatusBuilder(owner, id, state);
     }
 
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return root.retrieve()
-            .asPagedIterable(
-                statuses_url,
-                GHDeploymentStatus[].class,
-                item -> item.wrap(owner) );
+        return root.retrieve().asPagedIterable(statuses_url, GHDeploymentStatus[].class, item -> item.wrap(owner));
     }
 
 }

@@ -4,9 +4,9 @@ class GHRepoHook extends GHHook {
     /**
      * Repository that the hook belongs to.
      */
-    /*package*/ transient GHRepository repository;
+    transient GHRepository repository;
 
-    /*package*/ GHRepoHook wrap(GHRepository owner) {
+    GHRepoHook wrap(GHRepository owner) {
         this.repository = owner;
         return this;
     }

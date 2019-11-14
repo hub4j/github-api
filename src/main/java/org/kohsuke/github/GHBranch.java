@@ -14,8 +14,8 @@ import static org.kohsuke.github.Previews.*;
  *
  * @author Yusuke Kokubo
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-    "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+        "URF_UNREAD_FIELD" }, justification = "JSON API")
 public class GHBranch {
     private GitHub root;
     private GHRepository owner;
@@ -25,7 +25,6 @@ public class GHBranch {
     @JsonProperty("protected")
     private boolean protection;
     private String protection_url;
-
 
     public static class Commit {
         String sha;
@@ -39,7 +38,7 @@ public class GHBranch {
     }
 
     /**
-     * Repository that this branch is in.
+     * @return the repository that this branch is in.
      */
     public GHRepository getOwner() {
         return owner;
@@ -50,17 +49,19 @@ public class GHBranch {
     }
 
     /**
-     * Returns true if the push to this branch is restricted via branch protection.
+     * @return true if the push to this branch is restricted via branch protection.
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public boolean isProtected() {
         return protection;
     }
 
     /**
-     * Returns API URL that deals with the protection of this branch.
+     * @return API URL that deals with the protection of this branch.
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public URL getProtectionUrl() {
         return GitHub.parseURL(protection_url);
     }
@@ -70,7 +71,7 @@ public class GHBranch {
     }
 
     /**
-     * The commit that this branch currently points to.
+     * @return The SHA1 of the commit that this branch currently points to.
      */
     public String getSHA1() {
         return commit.sha;
@@ -78,6 +79,9 @@ public class GHBranch {
 
     /**
      * Disables branch protection and allows anyone with push access to push changes.
+     *
+     * @throws IOException
+     *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
         new Requester(root).method("DELETE").to(protection_url);
@@ -86,9 +90,11 @@ public class GHBranch {
     /**
      * Enables branch protection to control what commit statuses are required to push.
      *
+     * @return GHBranchProtectionBuilder for enabling protection
      * @see GHCommitStatus#getContext()
      */
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
     }
@@ -102,16 +108,13 @@ public class GHBranch {
             break;
         case NON_ADMINS:
         case EVERYONE:
-            enableProtection()
-                .addRequiredChecks(contexts)
-                .includeAdmins(level==EnforcementLevel.EVERYONE)
-                .enable();
+            enableProtection().addRequiredChecks(contexts).includeAdmins(level == EnforcementLevel.EVERYONE).enable();
             break;
         }
     }
 
     String getApiRoute() {
-        return owner.getApiTailUrl("/branches/"+name);
+        return owner.getApiTailUrl("/branches/" + name);
     }
 
     @Override
@@ -120,7 +123,7 @@ public class GHBranch {
         return "Branch:" + name + " in " + url;
     }
 
-    /*package*/ GHBranch wrap(GHRepository repo) {
+    GHBranch wrap(GHRepository repo) {
         this.owner = repo;
         this.root = repo.root;
         return this;

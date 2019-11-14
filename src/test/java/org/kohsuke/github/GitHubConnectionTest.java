@@ -39,11 +39,13 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
         assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
     }
+
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
         assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
     }
+
     @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
 
@@ -76,29 +78,31 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         setupEnvironment(props);
 
-        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
+        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth",
+                "customEndpoint");
 
         assertEquals("bogusLogin", builder.user);
         assertEquals("bogusOauth", builder.oauthToken);
         assertEquals("bogusPassword", builder.password);
         assertEquals("bogusEndpoint", builder.endpoint);
     }
+
     @Test
-    public void testGithubBuilderWithAppInstallationToken() throws Exception{
+    public void testGithubBuilderWithAppInstallationToken() throws Exception {
         GitHubBuilder builder = new GitHubBuilder().withAppInstallationToken("bogus");
         assertEquals("bogus", builder.oauthToken);
         assertEquals("", builder.user);
 
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();
-        assertEquals("token bogus",github.encodedAuthorization);
-        assertEquals("",github.login);
+        assertEquals("token bogus", github.encodedAuthorization);
+        assertEquals("", github.login);
     }
 
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         GitHub hub = GitHub.connectAnonymously();
-        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        // GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
         try {
             hub.checkApiUrlValidity();
         } catch (IOException ioe) {
@@ -111,7 +115,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
      *
      * This allows changing the in memory process environment.
      *
-     * Its used to wire in values for the github credentials to test that the GitHubBuilder works properly to resolve them.
+     * Its used to wire in values for the github credentials to test that the GitHubBuilder works properly to resolve
+     * them.
      */
     private void setupEnvironment(Map<String, String> newenv) {
         try {
@@ -120,7 +125,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
             theEnvironmentField.setAccessible(true);
             Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
             env.putAll(newenv);
-            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass
+                    .getDeclaredField("theCaseInsensitiveEnvironment");
             theCaseInsensitiveEnvironmentField.setAccessible(true);
             Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
             cienv.putAll(newenv);

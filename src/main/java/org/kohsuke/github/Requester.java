@@ -444,18 +444,17 @@ class Requester {
     }
 
     <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return new PagedIterableWithConsumer(type, this, tailApiUrl, consumer);
+        return new PagedIterableWithConsumer<>(type, this, tailApiUrl, consumer);
     }
 
-    private static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
+    static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
 
         private final Class<S[]> clazz;
         private final Requester requester;
         private final String tailApiUrl;
         private final Consumer<S> consumer;
 
-        public PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl,
-                Consumer<S> consumer) {
+        PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
             this.clazz = clazz;
             this.tailApiUrl = tailApiUrl;
             this.requester = requester;

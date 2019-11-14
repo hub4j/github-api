@@ -111,14 +111,32 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
     private OkHttpClient client;
 
+    /**
+     * Instantiates a new Obsolete url factory.
+     *
+     * @param client
+     *            the client
+     */
     public ObsoleteUrlFactory(OkHttpClient client) {
         this.client = client;
     }
 
+    /**
+     * Client ok http client.
+     *
+     * @return the ok http client
+     */
     public OkHttpClient client() {
         return client;
     }
 
+    /**
+     * Sets client.
+     *
+     * @param client
+     *            the client
+     * @return the client
+     */
     public ObsoleteUrlFactory setClient(OkHttpClient client) {
         this.client = client;
         return this;
@@ -133,6 +151,13 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         return new ObsoleteUrlFactory(client);
     }
 
+    /**
+     * Open http url connection.
+     *
+     * @param url
+     *            the url
+     * @return the http url connection
+     */
     public HttpURLConnection open(URL url) {
         return open(url, client.proxy());
     }
@@ -752,6 +777,9 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             // Guarded by HttpUrlConnection.this.
             private boolean proceed;
 
+            /**
+             * Proceed.
+             */
             public void proceed() {
                 synchronized (lock) {
                     this.proceed = true;
@@ -867,6 +895,15 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return null; // Let the caller provide this in a regular header.
         }
 
+        /**
+         * Prepare to send request request.
+         *
+         * @param request
+         *            the request
+         * @return the request
+         * @throws IOException
+         *             the io exception
+         */
         public Request prepareToSendRequest(Request request) throws IOException {
             return request;
         }
@@ -930,6 +967,11 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             this.delegate = delegate;
         }
 
+        /**
+         * Handshake handshake.
+         *
+         * @return the handshake
+         */
         protected abstract Handshake handshake();
 
         @Override

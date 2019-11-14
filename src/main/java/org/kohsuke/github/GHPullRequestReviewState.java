@@ -12,6 +12,9 @@ public enum GHPullRequestReviewState {
     REQUEST_CHANGES, COMMENTED, DISMISSED;
 
     /**
+     * Action string.
+     *
+     * @return the string
      * @deprecated This was an internal method accidentally exposed. Left here for compatibility.
      */
     public String action() {

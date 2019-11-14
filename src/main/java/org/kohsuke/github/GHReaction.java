@@ -27,6 +27,8 @@ public class GHReaction extends GHObject {
 
     /**
      * The kind of reaction left.
+     *
+     * @return the content
      */
     public ReactionContent getContent() {
         return content;
@@ -34,6 +36,8 @@ public class GHReaction extends GHObject {
 
     /**
      * User who left the reaction.
+     *
+     * @return the user
      */
     public GHUser getUser() {
         return user;
@@ -49,6 +53,9 @@ public class GHReaction extends GHObject {
 
     /**
      * Removes this reaction.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
         new Requester(root).method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/" + id);

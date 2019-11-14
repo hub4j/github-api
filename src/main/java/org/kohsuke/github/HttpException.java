@@ -19,6 +19,8 @@ public class HttpException extends IOException {
     private final String url;
 
     /**
+     * Instantiates a new Http exception.
+     *
      * @param message
      *            The detail message (which is saved for later retrieval by the {@link #getMessage()} method)
      * @param responseCode
@@ -27,8 +29,8 @@ public class HttpException extends IOException {
      *            Http response message
      * @param url
      *            The url that was invoked
-     * @see HttpURLConnection#getResponseCode()
-     * @see HttpURLConnection#getResponseMessage()
+     * @see HttpURLConnection#getResponseCode() HttpURLConnection#getResponseCode()
+     * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url) {
         super(message);
@@ -38,6 +40,8 @@ public class HttpException extends IOException {
     }
 
     /**
+     * Instantiates a new Http exception.
+     *
      * @param message
      *            The detail message (which is saved for later retrieval by the {@link #getMessage()} method)
      * @param responseCode
@@ -49,8 +53,8 @@ public class HttpException extends IOException {
      * @param cause
      *            The cause (which is saved for later retrieval by the {@link #getCause()} method). (A null value is
      *            permitted, and indicates that the cause is nonexistent or unknown.)
-     * @see HttpURLConnection#getResponseCode()
-     * @see HttpURLConnection#getResponseMessage()
+     * @see HttpURLConnection#getResponseCode() HttpURLConnection#getResponseCode()
+     * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url, Throwable cause) {
         super(message);
@@ -61,6 +65,8 @@ public class HttpException extends IOException {
     }
 
     /**
+     * Instantiates a new Http exception.
+     *
      * @param responseCode
      *            Http response code. {@code -1} if no code can be discerned.
      * @param responseMessage
@@ -70,8 +76,8 @@ public class HttpException extends IOException {
      * @param cause
      *            The cause (which is saved for later retrieval by the {@link #getCause()} method). (A null value is
      *            permitted, and indicates that the cause is nonexistent or unknown.)
-     * @see HttpURLConnection#getResponseCode()
-     * @see HttpURLConnection#getResponseMessage()
+     * @see HttpURLConnection#getResponseCode() HttpURLConnection#getResponseCode()
+     * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(int responseCode, String responseMessage, String url, Throwable cause) {
         super("Server returned HTTP response code: " + responseCode + ", message: '" + responseMessage + "'"
@@ -83,6 +89,8 @@ public class HttpException extends IOException {
     }
 
     /**
+     * Instantiates a new Http exception.
+     *
      * @param responseCode
      *            Http response code. {@code -1} if no code can be discerned.
      * @param responseMessage
@@ -92,8 +100,8 @@ public class HttpException extends IOException {
      * @param cause
      *            The cause (which is saved for later retrieval by the {@link #getCause()} method). (A null value is
      *            permitted, and indicates that the cause is nonexistent or unknown.)
-     * @see HttpURLConnection#getResponseCode()
-     * @see HttpURLConnection#getResponseMessage()
+     * @see HttpURLConnection#getResponseCode() HttpURLConnection#getResponseCode()
+     * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(int responseCode, String responseMessage, @CheckForNull URL url, Throwable cause) {
         this(responseCode, responseMessage, url == null ? null : url.toString(), cause);
@@ -120,7 +128,7 @@ public class HttpException extends IOException {
     /**
      * The http URL that caused the exception
      *
-     * @return url
+     * @return url url
      */
     public String getUrl() {
         return url;

@@ -10,18 +10,24 @@ import java.net.URL;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
- *
+ * <p>
  * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
  * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
- * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
+ * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
  */
 @Deprecated
 public class OkHttp3Connector implements HttpConnector {
     private final OkUrlFactory urlFactory;
 
+    /**
+     * Instantiates a new Ok http 3 connector.
+     *
+     * @param urlFactory
+     *            the url factory
+     */
     /*
      * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
      */

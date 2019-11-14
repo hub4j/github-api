@@ -13,10 +13,8 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * A Github App.
  *
  * @author Paulo Miguel Almeida
- *
- * @see GitHub#getApp()
+ * @see GitHub#getApp() GitHub#getApp()
  */
-
 public class GHApp extends GHObject {
 
     private GitHub root;
@@ -32,50 +30,116 @@ public class GHApp extends GHObject {
     @JsonProperty("html_url")
     private String htmlUrl;
 
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
     public GHUser getOwner() {
         return owner;
     }
 
+    /**
+     * Sets owner.
+     *
+     * @param owner
+     *            the owner
+     */
     public void setOwner(GHUser owner) {
         this.owner = owner;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets description.
+     *
+     * @param description
+     *            the description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Gets external url.
+     *
+     * @return the external url
+     */
     public String getExternalUrl() {
         return externalUrl;
     }
 
+    /**
+     * Sets external url.
+     *
+     * @param externalUrl
+     *            the external url
+     */
     public void setExternalUrl(String externalUrl) {
         this.externalUrl = externalUrl;
     }
 
+    /**
+     * Gets events.
+     *
+     * @return the events
+     */
     public List<GHEvent> getEvents() {
         return events;
     }
 
+    /**
+     * Sets events.
+     *
+     * @param events
+     *            the events
+     */
     public void setEvents(List<GHEvent> events) {
         this.events = events;
     }
 
+    /**
+     * Gets installations count.
+     *
+     * @return the installations count
+     */
     public long getInstallationsCount() {
         return installationsCount;
     }
 
+    /**
+     * Sets installations count.
+     *
+     * @param installationsCount
+     *            the installations count
+     */
     public void setInstallationsCount(long installationsCount) {
         this.installationsCount = installationsCount;
     }
@@ -84,10 +148,21 @@ public class GHApp extends GHObject {
         return GitHub.parseURL(htmlUrl);
     }
 
+    /**
+     * Gets permissions.
+     *
+     * @return the permissions
+     */
     public Map<String, String> getPermissions() {
         return permissions;
     }
 
+    /**
+     * Sets permissions.
+     *
+     * @param permissions
+     *            the permissions
+     */
     public void setPermissions(Map<String, String> permissions) {
         this.permissions = permissions;
     }

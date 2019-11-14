@@ -38,8 +38,11 @@ public class GHCommitBuilder {
     }
 
     /**
+     * Message gh commit builder.
+     *
      * @param message
      *            the commit message
+     * @return the gh commit builder
      */
     public GHCommitBuilder message(String message) {
         req.with("message", message);
@@ -47,8 +50,11 @@ public class GHCommitBuilder {
     }
 
     /**
+     * Tree gh commit builder.
+     *
      * @param tree
      *            the SHA of the tree object this commit points to
+     * @return the gh commit builder
      */
     public GHCommitBuilder tree(String tree) {
         req.with("tree", tree);
@@ -56,8 +62,11 @@ public class GHCommitBuilder {
     }
 
     /**
+     * Parent gh commit builder.
+     *
      * @param parent
      *            the SHA of a parent commit.
+     * @return the gh commit builder
      */
     public GHCommitBuilder parent(String parent) {
         parents.add(parent);
@@ -66,6 +75,14 @@ public class GHCommitBuilder {
 
     /**
      * Configures the author of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Date date) {
         req._with("author", new UserInfo(name, email, date));
@@ -74,6 +91,14 @@ public class GHCommitBuilder {
 
     /**
      * Configures the committer of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
         req._with("committer", new UserInfo(name, email, date));
@@ -86,6 +111,10 @@ public class GHCommitBuilder {
 
     /**
      * Creates a blob based on the parameters specified thus far.
+     *
+     * @return the gh commit
+     * @throws IOException
+     *             the io exception
      */
     public GHCommit create() throws IOException {
         req._with("parents", parents);

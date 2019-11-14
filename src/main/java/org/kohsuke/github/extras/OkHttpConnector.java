@@ -24,7 +24,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
- *
+ * <p>
  * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
  * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
@@ -37,6 +37,12 @@ public class OkHttpConnector implements HttpConnector {
 
     private final String maxAgeHeaderValue;
 
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param urlFactory
+     *            the url factory
+     */
     public OkHttpConnector(OkUrlFactory urlFactory) {
         this(urlFactory, 0);
     }

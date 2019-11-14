@@ -49,7 +49,7 @@ public class GHBlobBuilder {
 
     /**
      * Creates a blob based on the parameters specified thus far.
-     * 
+     *
      * @return a GHBlob
      * @throws IOException
      *             if the blob cannot be created.

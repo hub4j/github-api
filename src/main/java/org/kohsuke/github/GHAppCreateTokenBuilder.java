@@ -10,8 +10,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * Creates a access token for a GitHub App Installation
  *
  * @author Paulo Miguel Almeida
- *
- * @see GHAppInstallation#createToken(Map)
+ * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  */
 public class GHAppCreateTokenBuilder {
     private final GitHub root;
@@ -34,7 +33,6 @@ public class GHAppCreateTokenBuilder {
      *
      * @param repositoryIds
      *            Array containing the repositories Ids
-     *
      * @return a GHAppCreateTokenBuilder
      */
     @Preview
@@ -46,9 +44,9 @@ public class GHAppCreateTokenBuilder {
 
     /**
      * Creates an app token with all the parameters.
-     *
+     * <p>
      * You must use a JWT to access this endpoint.
-     * 
+     *
      * @return a GHAppInstallationToken
      * @throws IOException
      *             on error

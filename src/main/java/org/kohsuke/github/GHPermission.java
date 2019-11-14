@@ -37,16 +37,28 @@ class GHPermission {
     private GHUser user;
 
     /**
+     * Gets permission.
+     *
      * @return one of {@code admin}, {@code write}, {@code read}, or {@code none}
      */
     public String getPermission() {
         return permission;
     }
 
+    /**
+     * Gets permission type.
+     *
+     * @return the permission type
+     */
     public GHPermissionType getPermissionType() {
         return Enum.valueOf(GHPermissionType.class, permission.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     public GHUser getUser() {
         return user;
     }

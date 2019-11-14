@@ -7,6 +7,8 @@ import java.util.Iterator;
 /**
  * {@link PagedIterable} enhanced to report search result specific information.
  *
+ * @param <T>
+ *            the type parameter
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -30,12 +32,19 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
 
     /**
      * Returns the total number of hit, including the results that's not yet fetched.
+     *
+     * @return the total count
      */
     public int getTotalCount() {
         populate();
         return result.total_count;
     }
 
+    /**
+     * Is incomplete boolean.
+     *
+     * @return the boolean
+     */
     public boolean isIncomplete() {
         populate();
         return result.incomplete_results;
@@ -48,6 +57,10 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
 
     /**
      * Adapts {@link Iterator}.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
      */
     protected Iterator<T[]> adapt(final Iterator<? extends SearchResult<T>> base) {
         return new Iterator<T[]>() {

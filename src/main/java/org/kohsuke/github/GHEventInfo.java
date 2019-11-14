@@ -40,6 +40,11 @@ public class GHEventInfo {
         private String name; // owner/repo
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public GHEvent getType() {
         String t = type;
         if (t.endsWith("Event"))
@@ -56,15 +61,27 @@ public class GHEventInfo {
         return this;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Gets created at.
+     *
+     * @return the created at
+     */
     public Date getCreatedAt() {
         return GitHub.parseDate(created_at);
     }
 
     /**
+     * Gets repository.
+     *
      * @return Repository where the change was made.
      * @throws IOException
      *             on error
@@ -76,6 +93,8 @@ public class GHEventInfo {
     }
 
     /**
+     * Gets actor.
+     *
      * @return the {@link GHUser} actor for this event.
      * @throws IOException
      *             on error
@@ -87,6 +106,8 @@ public class GHEventInfo {
     }
 
     /**
+     * Gets actor login.
+     *
      * @return the login of the actor.
      * @throws IOException
      *             on error
@@ -95,6 +116,13 @@ public class GHEventInfo {
         return actor.getLogin();
     }
 
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     * @throws IOException
+     *             the io exception
+     */
     @SuppressFBWarnings(value = {
             "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
@@ -104,10 +132,11 @@ public class GHEventInfo {
     /**
      * Retrieves the payload.
      *
+     * @param <T>
+     *            the type parameter
      * @param type
      *            Specify one of the {@link GHEventPayload} subtype that defines a type-safe access to the payload. This
      *            must match the {@linkplain #getType() event type}.
-     *
      * @return parsed event payload
      * @throws IOException
      *             if payload cannot be parsed

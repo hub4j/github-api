@@ -36,8 +36,11 @@ public class GHTreeBuilder {
     }
 
     /**
+     * Base tree gh tree builder.
+     *
      * @param baseTree
      *            the SHA of tree you want to update with new data
+     * @return the gh tree builder
      */
     public GHTreeBuilder baseTree(String baseTree) {
         req.with("base_tree", baseTree);
@@ -46,6 +49,18 @@ public class GHTreeBuilder {
 
     /**
      * Adds a new entry to the tree. Exactly one of the parameters {@code sha} and {@code content} must be non-null.
+     *
+     * @param path
+     *            the path
+     * @param mode
+     *            the mode
+     * @param type
+     *            the type
+     * @param sha
+     *            the sha
+     * @param content
+     *            the content
+     * @return the gh tree builder
      */
     public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
         TreeEntry entry = new TreeEntry(path, mode, type);
@@ -58,6 +73,14 @@ public class GHTreeBuilder {
     /**
      * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
      * referred by its SHA.
+     *
+     * @param path
+     *            the path
+     * @param sha
+     *            the sha
+     * @param executable
+     *            the executable
+     * @return the gh tree builder
      */
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");
@@ -69,6 +92,14 @@ public class GHTreeBuilder {
     /**
      * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the
      * specified {@code content}.
+     *
+     * @param path
+     *            the path
+     * @param content
+     *            the content
+     * @param executable
+     *            the executable
+     * @return the gh tree builder
      */
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");
@@ -83,6 +114,10 @@ public class GHTreeBuilder {
 
     /**
      * Creates a tree based on the parameters specified thus far.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
      */
     public GHTree create() throws IOException {
         req._with("tree", treeEntries);

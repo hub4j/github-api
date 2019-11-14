@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Repository clone statistics.
  *
- * @see GHRepository#getCloneTraffic()
+ * @see GHRepository#getCloneTraffic() GHRepository#getCloneTraffic()
  */
 public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
     private List<DailyInfo> clones;
@@ -18,6 +18,11 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
         this.clones = clones;
     }
 
+    /**
+     * Gets clones.
+     *
+     * @return the clones
+     */
     public List<DailyInfo> getClones() {
         return clones;
     }
@@ -26,6 +31,9 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
         return getClones();
     }
 
+    /**
+     * The type DailyInfo.
+     */
     public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
         DailyInfo() {
         }

@@ -3,6 +3,9 @@ package org.kohsuke.github;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type GHRepositoryTraffic.
+ */
 public abstract class GHRepositoryTraffic implements TrafficInfo {
     private int count;
     private int uniques;
@@ -23,13 +26,26 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
         return uniques;
     }
 
+    /**
+     * Gets daily info.
+     *
+     * @return the daily info
+     */
     public abstract List<? extends DailyInfo> getDailyInfo();
 
+    /**
+     * The type DailyInfo.
+     */
     public static abstract class DailyInfo implements TrafficInfo {
         private String timestamp;
         private int count;
         private int uniques;
 
+        /**
+         * Gets timestamp.
+         *
+         * @return the timestamp
+         */
         public Date getTimestamp() {
             return GitHub.parseDate(timestamp);
         }

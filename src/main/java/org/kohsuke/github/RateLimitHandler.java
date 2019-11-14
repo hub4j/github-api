@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
  * @author Kohsuke Kawaguchi
- * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler)
+ * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
  * @see AbuseLimitHandler
  */
 public abstract class RateLimitHandler {
@@ -20,12 +20,14 @@ public abstract class RateLimitHandler {
      * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
      * implementation needs to wait for some time.
      *
-     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      * @param e
      *            Exception from Java I/O layer. If you decide to fail the processing, you can throw this exception (or
      *            wrap this exception into another exception and throw it.)
      * @param uc
      *            Connection that resulted in an error. Useful for accessing other response headers.
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 

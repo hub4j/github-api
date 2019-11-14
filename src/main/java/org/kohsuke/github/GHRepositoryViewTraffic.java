@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Repository view statistics.
  *
- * @see GHRepository#getViewTraffic()
+ * @see GHRepository#getViewTraffic() GHRepository#getViewTraffic()
  */
 public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
     private List<DailyInfo> views;
@@ -18,6 +18,11 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
         this.views = views;
     }
 
+    /**
+     * Gets views.
+     *
+     * @return the views
+     */
     public List<DailyInfo> getViews() {
         return views;
     }
@@ -26,6 +31,9 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
         return getViews();
     }
 
+    /**
+     * The type DailyInfo.
+     */
     public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
         DailyInfo() {
         }

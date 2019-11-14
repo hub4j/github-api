@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
- *
+ * <p>
  * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
  * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
@@ -30,10 +30,24 @@ public class OkHttpConnector implements HttpConnector {
     private final OkHttpClient client;
     private final ObsoleteUrlFactory urlFactory;
 
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     */
     public OkHttpConnector(OkHttpClient client) {
         this(client, 0);
     }
 
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     * @param cacheMaxAge
+     *            the cache max age
+     */
     public OkHttpConnector(OkHttpClient client, int cacheMaxAge) {
 
         OkHttpClient.Builder builder = client.newBuilder();

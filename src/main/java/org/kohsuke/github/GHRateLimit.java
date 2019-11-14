@@ -204,10 +204,10 @@ public class GHRateLimit {
 
     /**
      * A limit record used as a placeholder when the the actual limit is not known.
-     *
+     * <p>
      * Has a large limit and long duration so that it will doesn't expire too often.
      *
-     * @since 1.100*
+     * @since 1.100
      */
     public static class UnknownLimitRecord extends Record {
 
@@ -224,7 +224,7 @@ public class GHRateLimit {
 
     /**
      * A rate limit record.
-     * 
+     *
      * @since 1.100
      */
     public static class Record {
@@ -255,12 +255,34 @@ public class GHRateLimit {
         @Nonnull
         private Date resetDate;
 
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         */
         @JsonCreator
         public Record(@JsonProperty("limit") int limit, @JsonProperty("remaining") int remaining,
                 @JsonProperty("reset") long resetEpochSeconds) {
             this(limit, remaining, resetEpochSeconds, null);
         }
 
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         * @param updatedAt
+         *            the updated at
+         */
         @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "Deprecated")
         public Record(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
             this.limit = limit;

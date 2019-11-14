@@ -38,14 +38,29 @@ public class GHEmail {
     protected boolean primary;
     protected boolean verified;
 
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Is primary boolean.
+     *
+     * @return the boolean
+     */
     public boolean isPrimary() {
         return primary;
     }
 
+    /**
+     * Is verified boolean.
+     *
+     * @return the boolean
+     */
     public boolean isVerified() {
         return verified;
     }

@@ -25,7 +25,6 @@ public class GHCreateRepositoryBuilder {
      *
      * @param description
      *            description of repository
-     *
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder description(String description) {
@@ -38,7 +37,6 @@ public class GHCreateRepositoryBuilder {
      *
      * @param homepage
      *            homepage of repository
-     *
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder homepage(URL homepage) {
@@ -47,10 +45,9 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Homepage for repository
-     * 
+     *
      * @param homepage
      *            homepage of repository
-     *
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder homepage(String homepage) {
@@ -72,7 +69,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Enables issue tracker
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -84,7 +81,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Enables wiki
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -96,7 +93,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Enables downloads
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -108,7 +105,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * If true, create an initial commit with empty README.
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -120,7 +117,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Allow or disallow squash-merging pull requests.
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -132,7 +129,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Allow or disallow merging pull requests with a merge commit.
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -144,7 +141,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Allow or disallow rebase-merging pull requests.
-     * 
+     *
      * @param enabled
      *            true if enabled
      * @return a builder to continue with building
@@ -156,12 +153,10 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Creates a default .gitignore
-     * 
+     *
      * @param language
      *            template to base the ignore file on
-     * @return a builder to continue with building
-     *
-     *         See https://developer.github.com/v3/repos/#create
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
      */
     public GHCreateRepositoryBuilder gitignoreTemplate(String language) {
         this.builder.with("gitignore_template", language);
@@ -170,12 +165,10 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Desired license template to apply
-     * 
+     *
      * @param license
      *            template to base the license file on
-     * @return a builder to continue with building
-     *
-     *         See https://developer.github.com/v3/repos/#create
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) {
         this.builder.with("license_template", license);
@@ -184,7 +177,7 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * The team that gets granted access to this repository. Only valid for creating a repository in an organization.
-     * 
+     *
      * @param team
      *            team to grant access to
      * @return a builder to continue with building
@@ -197,7 +190,8 @@ public class GHCreateRepositoryBuilder {
 
     /**
      * Creates a repository with all the parameters.
-     * 
+     *
+     * @return the gh repository
      * @throws IOException
      *             if repsitory cannot be created
      */

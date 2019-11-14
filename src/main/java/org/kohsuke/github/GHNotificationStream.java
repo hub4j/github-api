@@ -20,8 +20,8 @@ import java.util.NoSuchElementException;
  * then quit. This is useful for a batch application to process the current set of notifications.
  *
  * @author Kohsuke Kawaguchi
- * @see GitHub#listNotifications()
- * @see GHRepository#listNotifications()
+ * @see GitHub#listNotifications() GitHub#listNotifications()
+ * @see GHRepository#listNotifications() GHRepository#listNotifications()
  */
 public class GHNotificationStream implements Iterable<GHThread> {
     private final GitHub root;
@@ -38,6 +38,10 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
     /**
      * Should the stream include notifications that are already read?
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
      */
     public GHNotificationStream read(boolean v) {
         all = v;
@@ -46,16 +50,34 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
     /**
      * Should the stream be restricted to notifications in which the user is directly participating or mentioned?
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
      */
     public GHNotificationStream participating(boolean v) {
         participating = v;
         return this;
     }
 
+    /**
+     * Since gh notification stream.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh notification stream
+     */
     public GHNotificationStream since(long timestamp) {
         return since(new Date(timestamp));
     }
 
+    /**
+     * Since gh notification stream.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh notification stream
+     */
     public GHNotificationStream since(Date dt) {
         since = GitHub.printDate(dt);
         return this;
@@ -64,6 +86,10 @@ public class GHNotificationStream implements Iterable<GHThread> {
     /**
      * If set to true, {@link #iterator()} will stop iterating instead of blocking and waiting for the updates to
      * arrive.
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
      */
     public GHNotificationStream nonBlocking(boolean v) {
         this.nonBlocking = v;
@@ -185,12 +211,23 @@ public class GHNotificationStream implements Iterable<GHThread> {
         };
     }
 
+    /**
+     * Mark as read.
+     *
+     * @throws IOException
+     *             the io exception
+     */
     public void markAsRead() throws IOException {
         markAsRead(-1);
     }
 
     /**
      * Marks all the notifications as read.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @throws IOException
+     *             the io exception
      */
     public void markAsRead(long timestamp) throws IOException {
         final Requester req = new Requester(root).method("PUT");

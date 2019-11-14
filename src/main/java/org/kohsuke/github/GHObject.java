@@ -38,7 +38,7 @@ public abstract class GHObject {
      * <p>
      * Some of the HTTP headers have nothing to do with the object, for example "Cache-Control" and others are different
      * depending on how this object was retrieved.
-     *
+     * <p>
      * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such. Use with caution.
      * The method might be removed in the future.
      *
@@ -68,6 +68,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets url.
+     *
      * @return API URL of this object.
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
@@ -76,6 +78,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets html url.
+     *
      * @return URL of this object for humans, which renders some HTML.
      * @throws IOException
      *             on error
@@ -95,6 +99,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets id.
+     *
      * @return Unique ID number of this resource.
      */
     @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = "longToStringOrInt")

@@ -105,13 +105,27 @@ class Requester {
 
     /**
      * Sets the request HTTP header.
-     *
+     * <p>
      * If a header of the same name is already set, this method overrides it.
+     *
+     * @param name
+     *            the name
+     * @param value
+     *            the value
      */
     public void setHeader(String name, String value) {
         headers.put(name, value);
     }
 
+    /**
+     * With header requester.
+     *
+     * @param name
+     *            the name
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester withHeader(String name, String value) {
         setHeader(name, value);
         return this;
@@ -123,6 +137,8 @@ class Requester {
 
     /**
      * Makes a request with authentication credential.
+     *
+     * @return the requester
      */
     @Deprecated
     public Requester withCredential() {
@@ -131,42 +147,123 @@ class Requester {
         return this;
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, int value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, long value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Integer value) {
         if (value != null)
             _with(key, value);
         return this;
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, boolean value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Boolean value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param e
+     *            the e
+     * @return the requester
+     */
     public Requester with(String key, Enum e) {
         if (e == null)
             return _with(key, null);
         return with(key, transformEnum(e));
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, String value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Collection<?> value) {
         return _with(key, value);
     }
 
+    /**
+     * With logins requester.
+     *
+     * @param key
+     *            the key
+     * @param users
+     *            the users
+     * @return the requester
+     */
     public Requester withLogins(String key, Collection<GHUser> users) {
         List<String> names = new ArrayList<String>(users.size());
         for (GHUser a : users) {
@@ -175,10 +272,28 @@ class Requester {
         return with(key, names);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Map<String, String> value) {
         return _with(key, value);
     }
 
+    /**
+     * With permissions requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
         Map<String, String> retMap = new HashMap<String, String>();
         for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
@@ -187,16 +302,41 @@ class Requester {
         return _with(key, retMap);
     }
 
+    /**
+     * With requester.
+     *
+     * @param body
+     *            the body
+     * @return the requester
+     */
     public Requester with(@WillClose /* later */ InputStream body) {
         this.body = body;
         return this;
     }
 
+    /**
+     * With nullable requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester withNullable(String key, Object value) {
         args.add(new Entry(key, value));
         return this;
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester _with(String key, Object value) {
         if (value != null) {
             args.add(new Entry(key, value));
@@ -206,6 +346,12 @@ class Requester {
 
     /**
      * Unlike {@link #with(String, String)}, overrides the existing value
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
      */
     public Requester set(String key, Object value) {
         for (Entry e : args) {
@@ -217,11 +363,25 @@ class Requester {
         return _with(key, value);
     }
 
+    /**
+     * Method requester.
+     *
+     * @param method
+     *            the method
+     * @return the requester
+     */
     public Requester method(String method) {
         this.method = method;
         return this;
     }
 
+    /**
+     * Content type requester.
+     *
+     * @param contentType
+     *            the content type
+     * @return the requester
+     */
     public Requester contentType(String contentType) {
         this.contentType = contentType;
         return this;
@@ -237,6 +397,14 @@ class Requester {
         return this;
     }
 
+    /**
+     * To.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @throws IOException
+     *             the io exception
+     */
     public void to(String tailApiUrl) throws IOException {
         to(tailApiUrl, null);
     }
@@ -244,9 +412,15 @@ class Requester {
     /**
      * Sends a request to the specified URL, and parses the response into the given type via databinding.
      *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
-     * @return {@link Reader} that reads the response.
      */
     public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
         return _to(tailApiUrl, type, null);
@@ -254,6 +428,16 @@ class Requester {
 
     /**
      * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param existingInstance
+     *            the existing instance
+     * @return the t
+     * @throws IOException
+     *             the io exception
      */
     public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
         return _to(tailApiUrl, null, existingInstance);
@@ -261,6 +445,18 @@ class Requester {
 
     /**
      * Short for {@code method(method).to(tailApiUrl,type)}
+     *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param type
+     *            the type
+     * @param method
+     *            the method
+     * @return the t
+     * @throws IOException
+     *             the io exception
      */
     @Deprecated
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
@@ -318,6 +514,12 @@ class Requester {
 
     /**
      * Makes a request and just obtains the HTTP status code.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @return the int
+     * @throws IOException
+     *             the io exception
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
@@ -336,6 +538,15 @@ class Requester {
         }
     }
 
+    /**
+     * As stream input stream.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
@@ -406,6 +617,13 @@ class Requester {
         root.updateCoreRateLimit(observed);
     }
 
+    /**
+     * Gets response header.
+     *
+     * @param header
+     *            the header
+     * @return the response header
+     */
     public String getResponseHeader(String header) {
         return uc.getHeaderField(header);
     }

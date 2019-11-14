@@ -23,11 +23,9 @@ import java.util.List;
  * </ul>
  *
  * @author Liam Newman
- *
  * @see org.kohsuke.github.GHMeta
  * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
  */
-
 public final class ReadOnlyObjects {
 
     /**
@@ -36,18 +34,53 @@ public final class ReadOnlyObjects {
      * @author Liam Newman
      */
     public interface GHMetaExample {
+        /**
+         * Is verifiable password authentication boolean.
+         *
+         * @return the boolean
+         */
         boolean isVerifiablePasswordAuthentication();
 
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         */
         List<String> getHooks();
 
+        /**
+         * Gets git.
+         *
+         * @return the git
+         */
         List<String> getGit();
 
+        /**
+         * Gets web.
+         *
+         * @return the web
+         */
         List<String> getWeb();
 
+        /**
+         * Gets api.
+         *
+         * @return the api
+         */
         List<String> getApi();
 
+        /**
+         * Gets pages.
+         *
+         * @return the pages
+         */
         List<String> getPages();
 
+        /**
+         * Gets importer.
+         *
+         * @return the importer
+         */
         List<String> getImporter();
     }
 
@@ -70,7 +103,6 @@ public final class ReadOnlyObjects {
      * @author Paulo Miguel Almeida
      * @see org.kohsuke.github.GHMeta
      */
-
     public static class GHMetaPublic implements GHMetaExample {
 
         @JsonProperty("verifiable_password_authentication")
@@ -86,6 +118,12 @@ public final class ReadOnlyObjects {
             return verifiablePasswordAuthentication;
         }
 
+        /**
+         * Sets verifiable password authentication.
+         *
+         * @param verifiablePasswordAuthentication
+         *            the verifiable password authentication
+         */
         public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
         }
@@ -94,6 +132,12 @@ public final class ReadOnlyObjects {
             return hooks;
         }
 
+        /**
+         * Sets hooks.
+         *
+         * @param hooks
+         *            the hooks
+         */
         public void setHooks(List<String> hooks) {
             this.hooks = hooks;
         }
@@ -102,6 +146,12 @@ public final class ReadOnlyObjects {
             return git;
         }
 
+        /**
+         * Sets git.
+         *
+         * @param git
+         *            the git
+         */
         public void setGit(List<String> git) {
             this.git = git;
         }
@@ -110,6 +160,12 @@ public final class ReadOnlyObjects {
             return web;
         }
 
+        /**
+         * Sets web.
+         *
+         * @param web
+         *            the web
+         */
         public void setWeb(List<String> web) {
             this.web = web;
         }
@@ -118,6 +174,12 @@ public final class ReadOnlyObjects {
             return api;
         }
 
+        /**
+         * Sets api.
+         *
+         * @param api
+         *            the api
+         */
         public void setApi(List<String> api) {
             this.api = api;
         }
@@ -126,6 +188,12 @@ public final class ReadOnlyObjects {
             return pages;
         }
 
+        /**
+         * Sets pages.
+         *
+         * @param pages
+         *            the pages
+         */
         public void setPages(List<String> pages) {
             this.pages = pages;
         }
@@ -134,6 +202,12 @@ public final class ReadOnlyObjects {
             return importer;
         }
 
+        /**
+         * Sets importer.
+         *
+         * @param importer
+         *            the importer
+         */
         public void setImporter(List<String> importer) {
             this.importer = importer;
         }
@@ -160,7 +234,6 @@ public final class ReadOnlyObjects {
      * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
-
     public static class GHMetaPackage implements GHMetaExample {
 
         private boolean verifiablePasswordAuthentication;

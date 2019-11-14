@@ -26,13 +26,11 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -266,7 +264,7 @@ public class GitHub {
 
     /**
      * Is this an anonymous connection
-     * 
+     *
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
@@ -275,7 +273,7 @@ public class GitHub {
 
     /**
      * Is this an always offline "connection".
-     * 
+     *
      * @return {@code true} if this is an always offline "connection".
      */
     public boolean isOffline() {
@@ -764,7 +762,7 @@ public class GitHub {
 
     /**
      * Returns a list of all authorizations.
-     * 
+     *
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your
      *      authorizations</a>
      */
@@ -800,6 +798,20 @@ public class GitHub {
                         e);
             return false;
         }
+    }
+
+    /**
+     * Provides a list of GitHub's IP addresses.
+     *
+     * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
+     *
+     * @return an instance of {@link GHMeta}
+     * @throws IOException
+     *             if the credentials supplied are invalid or if you're trying to access it as a GitHub App via the JWT
+     *             authentication
+     */
+    public GHMeta getMeta() throws IOException {
+        return retrieve().to("/meta", GHMeta.class);
     }
 
     GHUser intern(GHUser user) throws IOException {
@@ -866,7 +878,7 @@ public class GitHub {
      * Checks if a GitHub Enterprise server is configured in private mode.
      *
      * In private mode response looks like:
-     * 
+     *
      * <pre>
      *  $ curl -i https://github.mycompany.com/api/v3/
      *     HTTP/1.1 401 Unauthorized
@@ -955,7 +967,7 @@ public class GitHub {
 
     /**
      * This provides a dump of every public repository, in the order that they were created.
-     * 
+     *
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories() {

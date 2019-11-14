@@ -1,18 +1,13 @@
 package org.kohsuke.github;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 
 import com.google.common.collect.Iterables;
-import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link GitHub}.
@@ -77,6 +72,35 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
         for (GHAuthorization auth : list) {
             assertNotNull(auth.getAppName());
+        }
+    }
+
+    @Test
+    public void getMeta() throws IOException {
+        GHMeta meta = gitHub.getMeta();
+        assertTrue(meta.isVerifiablePasswordAuthentication());
+        assertEquals(19, meta.getApi().size());
+        assertEquals(19, meta.getGit().size());
+        assertEquals(3, meta.getHooks().size());
+        assertEquals(6, meta.getImporter().size());
+        assertEquals(6, meta.getPages().size());
+        assertEquals(19, meta.getWeb().size());
+
+        // Also test examples here
+        Class[] examples = new Class[] { ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
+                ReadOnlyObjects.GHMetaGettersUnmodifiable.class, ReadOnlyObjects.GHMetaGettersFinal.class,
+                ReadOnlyObjects.GHMetaGettersFinalCreator.class, };
+
+        for (Class metaClass : examples) {
+            ReadOnlyObjects.GHMetaExample metaExample = gitHub.retrieve().to("/meta",
+                    (Class<ReadOnlyObjects.GHMetaExample>) metaClass);
+            assertTrue(metaExample.isVerifiablePasswordAuthentication());
+            assertEquals(19, metaExample.getApi().size());
+            assertEquals(19, metaExample.getGit().size());
+            assertEquals(3, metaExample.getHooks().size());
+            assertEquals(6, metaExample.getImporter().size());
+            assertEquals(6, metaExample.getPages().size());
+            assertEquals(19, metaExample.getWeb().size());
         }
     }
 }

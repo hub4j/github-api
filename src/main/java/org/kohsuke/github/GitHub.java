@@ -26,14 +26,11 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.kohsuke.github.example.dataobject.GHMetaExamples;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -815,23 +812,6 @@ public class GitHub {
      */
     public GHMeta getMeta() throws IOException {
         return retrieve().to("/meta", GHMeta.class);
-    }
-
-    /**
-     * TEST-ONLY
-     * <p>
-     * Provides a list of GitHub's IP addresses. For testing and example purposes only.
-     *
-     * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
-     *
-     * @return an instance of {@link GHMeta}
-     * @throws IOException
-     *             if the credentials supplied are invalid or if you're trying to access it as a GitHub App via the JWT
-     *             authentication
-     */
-    <T extends GHMetaExamples.GHMetaExample> GHMetaExamples.GHMetaExample getMetaExample(Class<T> clazz)
-            throws IOException {
-        return retrieve().to("/meta", clazz);
     }
 
     GHUser intern(GHUser user) throws IOException {

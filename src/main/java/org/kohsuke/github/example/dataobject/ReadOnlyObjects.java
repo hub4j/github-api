@@ -3,7 +3,6 @@ package org.kohsuke.github.example.dataobject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import org.kohsuke.github.GitHub;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import java.util.List;
  * <li>Better: {@link GHMetaGettersUnmodifiable} is a good balance of clarity and brevity</li>
  * <li>Worse: {@link GHMetaPublic} exposes setters that are not needed, making it unclear that fields are actually
  * read-only</li>
+ * </ul>
  *
  * @author Liam Newman
  *
@@ -28,7 +28,7 @@ import java.util.List;
  * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
  */
 
-public final class GHMetaExamples {
+public final class ReadOnlyObjects {
 
     /**
      * All GHMeta data objects should expose these values.

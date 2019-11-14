@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,62 +24,33 @@ public class GHMeta {
     private List<String> web;
     private List<String> api;
     private List<String> pages;
-    private List<String> importer;
+    private List<String> importer = new ArrayList<>();
 
     public boolean isVerifiablePasswordAuthentication() {
         return verifiablePasswordAuthentication;
     }
 
-    void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-        this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
-    }
-
     public List<String> getHooks() {
-        return hooks;
-    }
-
-    void setHooks(List<String> hooks) {
-        this.hooks = hooks;
+        return Collections.unmodifiableList(hooks);
     }
 
     public List<String> getGit() {
-        return git;
-    }
-
-    void setGit(List<String> git) {
-        this.git = git;
+        return Collections.unmodifiableList(git);
     }
 
     public List<String> getWeb() {
-        return web;
-    }
-
-    void setWeb(List<String> web) {
-        this.web = web;
+        return Collections.unmodifiableList(web);
     }
 
     public List<String> getApi() {
-        return api;
-    }
-
-    void setApi(List<String> api) {
-        this.api = api;
+        return Collections.unmodifiableList(api);
     }
 
     public List<String> getPages() {
-        return pages;
-    }
-
-    void setPages(List<String> pages) {
-        this.pages = pages;
+        return Collections.unmodifiableList(pages);
     }
 
     public List<String> getImporter() {
-        return importer;
+        return Collections.unmodifiableList(importer);
     }
-
-    void setImporter(List<String> importer) {
-        this.importer = importer;
-    }
-
 }

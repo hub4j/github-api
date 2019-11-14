@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.google.common.collect.Iterables;
 import org.junit.Test;
+import org.kohsuke.github.example.dataobject.GHMetaExamples;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -84,5 +85,25 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertEquals(6, meta.getImporter().size());
         assertEquals(6, meta.getPages().size());
         assertEquals(19, meta.getWeb().size());
+
+        // Also test examples here
+        Class[] examples = new Class[] {
+            GHMetaExamples.GHMetaPublic.class,
+            GHMetaExamples.GHMetaPackage.class,
+            GHMetaExamples.GHMetaGettersUnmodifiable.class,
+            GHMetaExamples.GHMetaGettersFinal.class,
+            GHMetaExamples.GHMetaGettersFinalCreator.class,
+        };
+
+        for (Class metaClass : examples) {
+            GHMetaExamples.GHMetaExample metaExample = gitHub.getMetaExample(metaClass);
+            assertTrue(metaExample.isVerifiablePasswordAuthentication());
+            assertEquals(19, metaExample.getApi().size());
+            assertEquals(19, metaExample.getGit().size());
+            assertEquals(3, metaExample.getHooks().size());
+            assertEquals(6, metaExample.getImporter().size());
+            assertEquals(6, metaExample.getPages().size());
+            assertEquals(19, metaExample.getWeb().size());
+        }
     }
 }

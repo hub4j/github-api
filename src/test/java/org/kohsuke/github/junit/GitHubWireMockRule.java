@@ -94,11 +94,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     protected void after() {
         super.after();
         if (isTakeSnapshot()) {
-            this.apiServer().snapshotRecord(recordSpec().forTarget("https://api.github.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+            this.apiServer()
+                    .snapshotRecord(recordSpec().forTarget("https://api.github.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
 
-            this.rawServer().snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+            this.rawServer()
+                    .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
 
             // After taking the snapshot, format the output
             formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
@@ -118,7 +122,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     private void formatJsonFiles(Path path) {
         // The more consistent we can make the json output the more meaningful it will be.
-        Gson g = new Gson().newBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting()
+        Gson g = new Gson().newBuilder()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .setPrettyPrinting()
                 .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override
                     public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
@@ -128,7 +135,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             return new JsonPrimitive(src.longValue());
                         return new JsonPrimitive(src);
                     }
-                }).create();
+                })
+                .create();
 
         try {
             Files.walk(path).forEach(filePath -> {

@@ -55,7 +55,9 @@ public class GHAppCreateTokenBuilder {
     @Preview
     @Deprecated
     public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST").withPreview(MACHINE_MAN).to(apiUrlTail, GHAppInstallationToken.class)
+        return builder.method("POST")
+                .withPreview(MACHINE_MAN)
+                .to(apiUrlTail, GHAppInstallationToken.class)
                 .wrapUp(root);
     }
 

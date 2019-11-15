@@ -91,7 +91,8 @@ public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testGetViews() throws IOException {
-        GHRepositoryViewTraffic expectedResult = new GHRepositoryViewTraffic(21523359, 65534,
+        GHRepositoryViewTraffic expectedResult = new GHRepositoryViewTraffic(21523359,
+                65534,
                 Arrays.asList(new GHRepositoryViewTraffic.DailyInfo("2016-10-10T00:00:00Z", 3, 2),
                         new GHRepositoryViewTraffic.DailyInfo("2016-10-11T00:00:00Z", 9, 4),
                         new GHRepositoryViewTraffic.DailyInfo("2016-10-12T00:00:00Z", 27, 8),
@@ -112,7 +113,8 @@ public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
 
     @Test
     public void testGetClones() throws IOException {
-        GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(1500, 455,
+        GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(1500,
+                455,
                 Arrays.asList(new GHRepositoryCloneTraffic.DailyInfo("2016-10-10T00:00:00Z", 10, 3),
                         new GHRepositoryCloneTraffic.DailyInfo("2016-10-11T00:00:00Z", 20, 6),
                         new GHRepositoryCloneTraffic.DailyInfo("2016-10-12T00:00:00Z", 30, 5),

@@ -2,10 +2,12 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Objects;
 
 import static org.kohsuke.github.Previews.*;
 
@@ -27,12 +29,9 @@ public class GHBranch {
     private String protection_url;
 
     @JsonCreator
-    GHBranch(@JsonProperty("name") String name) throws Exception {
-        if (name != null) {
-            this.name = name;
-        } else {
-            throw new GHFileNotFoundException("Branch Not Found");
-        }
+    GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
+        Objects.requireNonNull(name);
+        this.name = name;
     }
 
     /**

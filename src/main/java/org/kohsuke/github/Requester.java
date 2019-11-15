@@ -46,6 +46,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -60,9 +61,7 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import static java.util.Arrays.asList;
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.FINEST;
-import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.kohsuke.github.GitHub.MAPPER;
 
@@ -131,20 +130,8 @@ class Requester {
         return this;
     }
 
-    Requester withPreview(String name) {
+    public Requester withPreview(String name) {
         return withHeader("Accept", name);
-    }
-
-    /**
-     * Makes a request with authentication credential.
-     *
-     * @return the requester
-     */
-    @Deprecated
-    public Requester withCredential() {
-        // keeping it inline with retrieveWithAuth not to enforce the check
-        // root.requireCredential();
-        return this;
     }
 
     /**
@@ -157,7 +144,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, int value) {
-        return _with(key, value);
+        return with(key, (Object) value);
     }
 
     /**
@@ -170,22 +157,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, long value) {
-        return _with(key, value);
-    }
-
-    /**
-     * With requester.
-     *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     * @return the requester
-     */
-    public Requester with(String key, Integer value) {
-        if (value != null)
-            _with(key, value);
-        return this;
+        return with(key, (Object) value);
     }
 
     /**
@@ -198,20 +170,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, boolean value) {
-        return _with(key, value);
-    }
-
-    /**
-     * With requester.
-     *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     * @return the requester
-     */
-    public Requester with(String key, Boolean value) {
-        return _with(key, value);
+        return with(key, (Object) value);
     }
 
     /**
@@ -225,7 +184,7 @@ class Requester {
      */
     public Requester with(String key, Enum e) {
         if (e == null)
-            return _with(key, null);
+            return with(key, (Object) null);
         return with(key, transformEnum(e));
     }
 
@@ -239,7 +198,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, String value) {
-        return _with(key, value);
+        return with(key, (Object) value);
     }
 
     /**
@@ -252,24 +211,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, Collection<?> value) {
-        return _with(key, value);
-    }
-
-    /**
-     * With logins requester.
-     *
-     * @param key
-     *            the key
-     * @param users
-     *            the users
-     * @return the requester
-     */
-    public Requester withLogins(String key, Collection<GHUser> users) {
-        List<String> names = new ArrayList<String>(users.size());
-        for (GHUser a : users) {
-            names.add(a.getLogin());
-        }
-        return with(key, names);
+        return with(key, (Object) value);
     }
 
     /**
@@ -282,24 +224,7 @@ class Requester {
      * @return the requester
      */
     public Requester with(String key, Map<String, String> value) {
-        return _with(key, value);
-    }
-
-    /**
-     * With permissions requester.
-     *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     * @return the requester
-     */
-    public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
-        Map<String, String> retMap = new HashMap<String, String>();
-        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
-            retMap.put(entry.getKey(), transformEnum(entry.getValue()));
-        }
-        return _with(key, retMap);
+        return with(key, (Object) value);
     }
 
     /**
@@ -337,7 +262,7 @@ class Requester {
      *            the value
      * @return the requester
      */
-    public Requester _with(String key, Object value) {
+    public Requester with(String key, Object value) {
         if (value != null) {
             args.add(new Entry(key, value));
         }
@@ -360,7 +285,7 @@ class Requester {
                 return this;
             }
         }
-        return _with(key, value);
+        return with(key, value);
     }
 
     /**
@@ -392,7 +317,7 @@ class Requester {
      * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
      * forces the parameters to be sent as a body.
      */
-    Requester inBody() {
+    public Requester inBody() {
         forceBody = true;
         return this;
     }
@@ -406,7 +331,7 @@ class Requester {
      *             the io exception
      */
     public void to(String tailApiUrl) throws IOException {
-        to(tailApiUrl, null);
+        _to(tailApiUrl, null, null);
     }
 
     /**
@@ -441,26 +366,6 @@ class Requester {
      */
     public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
         return _to(tailApiUrl, null, existingInstance);
-    }
-
-    /**
-     * Short for {@code method(method).to(tailApiUrl,type)}
-     *
-     * @param <T>
-     *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
-     * @param type
-     *            the type
-     * @param method
-     *            the method
-     * @return the t
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
-        return method(method).to(tailApiUrl, type);
     }
 
     @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
@@ -1017,7 +922,7 @@ class Requester {
      *            Enum to be transformed
      * @return a String containing the value of a Github constant
      */
-    private String transformEnum(Enum en) {
+    static String transformEnum(Enum en) {
         // by convention Java constant names are upper cases, but github uses
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace by '_'

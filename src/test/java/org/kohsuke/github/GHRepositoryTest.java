@@ -50,19 +50,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(branch.getName(), is("test/#UrlEncode"));
     }
 
-    //Issue #607
+    // Issue #607
     @Test
     public void getBranchNonExistentBut200Status() throws Exception {
-        //Manually changed the returned status to 200 so dont take a new snapshot
+        // Manually changed the returned status to 200 so dont take a new snapshot
         this.snapshotNotAllowed();
 
         GHRepository repo = getRepository();
-        try{
+        try {
             GHBranch branch = repo.getBranch("test/NonExistent");
             fail();
-        }
-        catch(Exception e){
-            //I dont really love this but I wanted to get to the root wrapped cause
+        } catch (Exception e) {
+            // I dont really love this but I wanted to get to the root wrapped cause
             assertEquals("Branch Not Found", e.getCause().getCause().getCause().getMessage());
         }
     }

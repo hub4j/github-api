@@ -27,14 +27,14 @@ public class GHBranch {
     private String protection_url;
 
     @JsonCreator
-    GHBranch(@JsonProperty("name") String name) throws Exception{
+    GHBranch(@JsonProperty("name") String name) throws Exception {
         if (name != null) {
             this.name = name;
-        }
-        else{
+        } else {
             throw new GHFileNotFoundException("Branch Not Found");
         }
     }
+
     /**
      * The type Commit.
      */

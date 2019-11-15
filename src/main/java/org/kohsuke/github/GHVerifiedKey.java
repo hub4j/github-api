@@ -1,13 +1,19 @@
 package org.kohsuke.github;
 
+/**
+ * The type GHVerifiedKey.
+ */
 public class GHVerifiedKey extends GHKey {
 
-  public GHVerifiedKey() {
-    this.verified = true;
-  }
+    /**
+     * Instantiates a new Gh verified key.
+     */
+    public GHVerifiedKey() {
+        this.verified = true;
+    }
 
-  @Override
-  public String getTitle() {
-    return (title == null ? "key-" + id : title);
-  }
+    @Override
+    public String getTitle() {
+        return (title == null ? "key-" + id : title);
+    }
 }

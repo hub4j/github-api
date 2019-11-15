@@ -24,11 +24,9 @@ import javax.net.ssl.SSLSocketFactory;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
- *
- * Unlike {@link #DEFAULT}, OkHttp does response caching.
- * Making a conditional request against GitHubAPI and receiving a 304
- * response does not count against the rate limit.
- * See http://developer.github.com/v3/#conditional-requests
+ * <p>
+ * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
+ * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
@@ -39,12 +37,19 @@ public class OkHttpConnector implements HttpConnector {
 
     private final String maxAgeHeaderValue;
 
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param urlFactory
+     *            the url factory
+     */
     public OkHttpConnector(OkUrlFactory urlFactory) {
         this(urlFactory, 0);
     }
 
     /**
      * package private for tests to be able to change max-age for cache.
+     * 
      * @param urlFactory
      * @param cacheMaxAge
      */
@@ -54,15 +59,11 @@ public class OkHttpConnector implements HttpConnector {
         this.urlFactory = urlFactory;
 
         if (cacheMaxAge >= 0 && urlFactory.client() != null && urlFactory.client().getCache() != null) {
-            maxAgeHeaderValue =  new CacheControl.Builder()
-                .maxAge(cacheMaxAge, TimeUnit.SECONDS)
-                .build()
-                .toString();
+            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();
         } else {
             maxAgeHeaderValue = null;
         }
     }
-
 
     public HttpURLConnection connect(URL url) throws IOException {
         HttpURLConnection urlConnection = urlFactory.open(url);

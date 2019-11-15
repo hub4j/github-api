@@ -6,8 +6,10 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
@@ -24,7 +26,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     private GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
     }
-
 
     @Test
     public void archive() throws Exception {
@@ -126,7 +127,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             r.getPermission("jglick");
             fail();
         } catch (HttpException x) {
-            //x.printStackTrace(); // good
+            // x.printStackTrace(); // good
             assertEquals(403, x.getResponseCode());
         }
 
@@ -141,7 +142,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             }
         }
     }
-
 
     @Test
     public void LatestRepositoryExist() {
@@ -215,14 +215,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void searchRepositories() throws Exception {
-        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly").sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS).list();
         GHRepository u = r.iterator().next();
         // System.out.println(u.getName());
         assertNotNull(u.getId());
         assertEquals("Assembly", u.getLanguage());
         assertTrue(r.getTotalCount() > 0);
     }
-
 
     @Test // issue #162
     public void testIssue162() throws Exception {
@@ -242,7 +242,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void markDown() throws Exception {
         assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
 
-        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
+        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api")
+                .renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
         // System.out.println(actual);
         assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
         assertTrue(actual.contains("href=\"https://github.com/github-api/github-api/pull/1\""));
@@ -250,7 +251,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
     }
-    
+
     @Test
     public void getMergeOptions() throws IOException {
         GHRepository r = getTempRepository();
@@ -258,7 +259,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertNotNull(r.isAllowRebaseMerge());
         assertNotNull(r.isAllowSquashMerge());
     }
-    
+
     @Test
     public void setMergeOptions() throws IOException {
         // String repoName = "github-api-test-org/test-mergeoptions";
@@ -285,5 +286,37 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(r.isAllowMergeCommit());
         assertTrue(r.isAllowRebaseMerge());
         assertFalse(r.isAllowSquashMerge());
+    }
+
+    @Test
+    public void testSetTopics() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+
+        List<String> topics = new ArrayList<>();
+
+        topics.add("java");
+        topics.add("api-test-dummy");
+        repo.setTopics(topics);
+        assertThat("Topics retain input order (are not sort when stored)", repo.listTopics(),
+                contains("java", "api-test-dummy"));
+
+        topics = new ArrayList<>();
+        topics.add("ordered-state");
+        topics.add("api-test-dummy");
+        topics.add("java");
+        repo.setTopics(topics);
+        assertThat("Topics behave as a set and retain order from previous calls", repo.listTopics(),
+                contains("java", "api-test-dummy", "ordered-state"));
+
+        topics = new ArrayList<>();
+        topics.add("ordered-state");
+        topics.add("api-test-dummy");
+        repo.setTopics(topics);
+        assertThat("Topics retain order even when some are removed", repo.listTopics(),
+                contains("api-test-dummy", "ordered-state"));
+
+        topics = new ArrayList<>();
+        repo.setTopics(topics);
+        assertTrue("Topics can be set to empty", repo.listTopics().isEmpty());
     }
 }

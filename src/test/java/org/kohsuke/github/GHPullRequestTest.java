@@ -57,16 +57,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p2.isDraft(), is(true));
 
-        p = repo.queryPullRequests()
-            .state(GHIssueState.OPEN)
-            .head("test/stable")
-            .list().asList().get(0);
+        p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().asList().get(0);
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p.isDraft(), is(true));
-
-
-
-
 
     }
 
@@ -88,15 +81,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertEquals(GHIssueState.CLOSED, getRepository().getPullRequest(p.getNumber()).getState());
     }
 
-
     @Test
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        GHPullRequestReview draftReview = p.createReview()
-            .body("Some draft review")
-            .comment("Some niggle", "README.md", 1)
-            .create();
+        GHPullRequestReview draftReview = p.createReview().body("Some draft review")
+                .comment("Some niggle", "README.md", 1).create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
@@ -111,10 +101,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Some niggle", comment.getBody());
-        draftReview = p.createReview()
-            .body("Some new review")
-            .comment("Some niggle", "README.md", 1)
-            .create();
+        draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }
 
@@ -169,14 +156,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         int baseRequestCount = mockGitHub.getRequestCount();
         p.refresh();
         assertThat("We should not eagerly load organizations for teams",
-            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+                mockGitHub.getRequestCount() - baseRequestCount, equalTo(1));
         assertThat(p.getRequestedTeams().size(), equalTo(1));
         assertThat("We should not eagerly load organizations for teams",
-            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+                mockGitHub.getRequestCount() - baseRequestCount, equalTo(1));
         assertThat("Org should be queried for automatically if asked for",
-            p.getRequestedTeams().get(0).getOrganization(), notNullValue());
-        assertThat("Request count should show lazy load occurred",
-            mockGitHub.getRequestCount() - baseRequestCount , equalTo(2));
+                p.getRequestedTeams().get(0).getOrganization(), notNullValue());
+        assertThat("Request count should show lazy load occurred", mockGitHub.getRequestCount() - baseRequestCount,
+                equalTo(2));
     }
 
     @Test
@@ -186,25 +173,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequest p = repo.createPullRequest(name, "test/mergeable_branch", "master", "## test");
         int baseRequestCount = mockGitHub.getRequestCount();
         assertThat(p.getMergeableNoRefresh(), nullValue());
-        assertThat("Used existing value",
-            mockGitHub.getRequestCount() - baseRequestCount , equalTo(0));
+        assertThat("Used existing value", mockGitHub.getRequestCount() - baseRequestCount, equalTo(0));
 
         // mergeability computation takes time, this should still be null immediately after creation
         assertThat(p.getMergeable(), nullValue());
-        assertThat("Asked for PR information",
-            mockGitHub.getRequestCount() - baseRequestCount , equalTo(1));
+        assertThat("Asked for PR information", mockGitHub.getRequestCount() - baseRequestCount, equalTo(1));
 
         for (int i = 2; i <= 10; i++) {
             if (Boolean.TRUE.equals(p.getMergeable()) && p.getMergeCommitSha() != null) {
-                assertThat("Asked for PR information",
-                    mockGitHub.getRequestCount() - baseRequestCount , equalTo(i));
+                assertThat("Asked for PR information", mockGitHub.getRequestCount() - baseRequestCount, equalTo(i));
 
                 // make sure commit exists
                 GHCommit commit = repo.getCommit(p.getMergeCommitSha());
                 assertNotNull(commit);
 
-                assertThat("Asked for PR information",
-                    mockGitHub.getRequestCount() - baseRequestCount , equalTo(i + 1));
+                assertThat("Asked for PR information", mockGitHub.getRequestCount() - baseRequestCount, equalTo(i + 1));
 
                 return;
             }
@@ -241,13 +224,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHContentUpdateResponse response = getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
 
-        getRepository().createContent()
-            .content(name + name)
-            .path(name)
-            .branch(branchName)
-            .message(name)
-            .sha(response.getContent().getSha())
-            .commit();
+        getRepository().createContent().content(name + name).path(name).branch(branchName).message(name)
+                .sha(response.getContent().getSha()).commit();
         GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
@@ -261,7 +239,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
-        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("github-api-test-org:test/stable").base("master").list().asList();
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN)
+                .head("github-api-test-org:test/stable").base("master").list().asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
@@ -275,7 +254,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
-        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master").list().asList();
+        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master")
+                .list().asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());

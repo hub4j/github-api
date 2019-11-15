@@ -8,6 +8,8 @@ import java.util.Set;
 /**
  * {@link Iterable} that returns {@link PagedIterator}
  *
+ * @param <T>
+ *            the type parameter
  * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
@@ -21,6 +23,10 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      *
      * <p>
      * When set to non-zero, each API call will retrieve this many entries.
+     *
+     * @param size
+     *            the size
+     * @return the paged iterable
      */
     public PagedIterable<T> withPageSize(int size) {
         this.size = size;
@@ -31,14 +37,23 @@ public abstract class PagedIterable<T> implements Iterable<T> {
         return _iterator(size);
     }
 
+    /**
+     * Iterator paged iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
     public abstract PagedIterator<T> _iterator(int pageSize);
 
     /**
      * Eagerly walk {@link Iterable} and return the result in a list.
+     *
+     * @return the list
      */
     public List<T> asList() {
         List<T> r = new ArrayList<T>();
-        for(PagedIterator<T> i = iterator(); i.hasNext();) {
+        for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }
         return r;
@@ -46,10 +61,12 @@ public abstract class PagedIterable<T> implements Iterable<T> {
 
     /**
      * Eagerly walk {@link Iterable} and return the result in a set.
+     *
+     * @return the set
      */
     public Set<T> asSet() {
         LinkedHashSet<T> r = new LinkedHashSet<T>();
-        for(PagedIterator<T> i = iterator(); i.hasNext();) {
+        for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }
         return r;

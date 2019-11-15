@@ -78,13 +78,12 @@ public class WireMockRuleConfiguration implements Options {
 
     public <T extends Extension> Map<String, T> extensionsOfType(Class<T> extensionType) {
         Map<String, T> result = Maps.newLinkedHashMap(this.parent.extensionsOfType(extensionType));
-        result.putAll((Map<String, T>)Maps.filterEntries(this.extensions, ExtensionLoader.valueAssignableFrom(extensionType)));
+        result.putAll((Map<String, T>) Maps.filterEntries(this.extensions,
+                ExtensionLoader.valueAssignableFrom(extensionType)));
         return result;
     }
 
-
     // Simple wrappers
-
 
     public int portNumber() {
         return parent.portNumber();

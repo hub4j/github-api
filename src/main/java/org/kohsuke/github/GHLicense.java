@@ -34,19 +34,19 @@ import java.util.List;
 
 /**
  * The GitHub Preview API's license information
- * <p>
  *
  * @author Duncan Dickinson
- * @see GitHub#getLicense(String)
- * @see GHRepository#getLicense()
+ * @see GitHub#getLicense(String) GitHub#getLicense(String)
+ * @see GHRepository#getLicense() GHRepository#getLicense()
  * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>
  */
-@SuppressWarnings({"UnusedDeclaration"})
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressWarnings({ "UnusedDeclaration" })
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHLicense extends GHObject {
-    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC") // root is set before the object is returned to the app
-    /*package almost final*/ GitHub root;
+    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC")
+    // root is set before the object is returned to the app
+    /* package almost final */ GitHub root;
 
     // these fields are always present, even in the short form
     protected String key, name;
@@ -61,6 +61,8 @@ public class GHLicense extends GHObject {
     protected List<String> forbidden = new ArrayList<String>();
 
     /**
+     * Gets key.
+     *
      * @return a mnemonic for the license
      */
     public String getKey() {
@@ -68,6 +70,8 @@ public class GHLicense extends GHObject {
     }
 
     /**
+     * Gets name.
+     *
      * @return the license name
      */
     public String getName() {
@@ -86,6 +90,8 @@ public class GHLicense extends GHObject {
      * Featured licenses are bold in the new repository drop-down
      *
      * @return True if the license is featured, false otherwise
+     * @throws IOException
+     *             the io exception
      */
     public Boolean isFeatured() throws IOException {
         populate();
@@ -97,36 +103,85 @@ public class GHLicense extends GHObject {
         return GitHub.parseURL(html_url);
     }
 
+    /**
+     * Gets description.
+     *
+     * @return the description
+     * @throws IOException
+     *             the io exception
+     */
     public String getDescription() throws IOException {
         populate();
         return description;
     }
 
+    /**
+     * Gets category.
+     *
+     * @return the category
+     * @throws IOException
+     *             the io exception
+     */
     public String getCategory() throws IOException {
         populate();
         return category;
     }
 
+    /**
+     * Gets implementation.
+     *
+     * @return the implementation
+     * @throws IOException
+     *             the io exception
+     */
     public String getImplementation() throws IOException {
         populate();
         return implementation;
     }
 
+    /**
+     * Gets required.
+     *
+     * @return the required
+     * @throws IOException
+     *             the io exception
+     */
     public List<String> getRequired() throws IOException {
         populate();
         return required;
     }
 
+    /**
+     * Gets permitted.
+     *
+     * @return the permitted
+     * @throws IOException
+     *             the io exception
+     */
     public List<String> getPermitted() throws IOException {
         populate();
         return permitted;
     }
 
+    /**
+     * Gets forbidden.
+     *
+     * @return the forbidden
+     * @throws IOException
+     *             the io exception
+     */
     public List<String> getForbidden() throws IOException {
         populate();
         return forbidden;
     }
 
+    /**
+     * Gets body.
+     *
+     * @return the body
+     * @throws IOException
+     *             the io exception
+     */
     public String getBody() throws IOException {
         populate();
         return body;
@@ -134,19 +189,25 @@ public class GHLicense extends GHObject {
 
     /**
      * Fully populate the data by retrieving missing data.
-     *
+     * <p>
      * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        if (description!=null)    return; // already populated
+        if (description != null)
+            return; // already populated
 
         root.retrieve().to(url, this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GHLicense)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof GHLicense))
+            return false;
 
         GHLicense that = (GHLicense) o;
         return this.url.equals(that.url);
@@ -157,7 +218,7 @@ public class GHLicense extends GHObject {
         return url.hashCode();
     }
 
-    /*package*/ GHLicense wrap(GitHub root) {
+    GHLicense wrap(GitHub root) {
         this.root = root;
         return this;
     }

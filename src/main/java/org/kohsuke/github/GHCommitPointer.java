@@ -36,16 +36,22 @@ public class GHCommitPointer {
     private GHRepository repo;
 
     /**
-     * This points to the user who owns
-     * the {@link #getRepository()}.
+     * This points to the user who owns the {@link #getRepository()}.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
-        if (user != null) return user.root.intern(user);
+        if (user != null)
+            return user.root.intern(user);
         return user;
     }
 
     /**
      * The repository that contains the commit.
+     *
+     * @return the repository
      */
     public GHRepository getRepository() {
         return repo;
@@ -53,6 +59,8 @@ public class GHCommitPointer {
 
     /**
      * Named ref to the commit. This appears to be a "short ref" that doesn't include "refs/heads/" portion.
+     *
+     * @return the ref
      */
     public String getRef() {
         return ref;
@@ -60,6 +68,8 @@ public class GHCommitPointer {
 
     /**
      * SHA1 of the commit.
+     *
+     * @return the sha
      */
     public String getSha() {
         return sha;
@@ -67,6 +77,8 @@ public class GHCommitPointer {
 
     /**
      * String that looks like "USERNAME:REF".
+     *
+     * @return the label
      */
     public String getLabel() {
         return label;
@@ -74,13 +86,19 @@ public class GHCommitPointer {
 
     /**
      * Obtains the commit that this pointer is referring to.
+     *
+     * @return the commit
+     * @throws IOException
+     *             the io exception
      */
     public GHCommit getCommit() throws IOException {
         return getRepository().getCommit(getSha());
     }
 
     void wrapUp(GitHub root) {
-        if (user!=null) user.root = root;
-        if (repo!=null) repo.wrap(root);
+        if (user != null)
+            user.root = root;
+        if (repo != null)
+            repo.wrap(root);
     }
 }

@@ -27,24 +27,25 @@ package org.kohsuke.github;
  * Action to perform on {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewEvent {
-    PENDING,
-    APPROVE,
-    REQUEST_CHANGES,
-    COMMENT;
+    PENDING, APPROVE, REQUEST_CHANGES, COMMENT;
 
-    /*package*/ String action() {
-        return this==PENDING ? null : name();
+    String action() {
+        return this == PENDING ? null : name();
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
      */
-    /*package*/ GHPullRequestReviewState toState() {
+    GHPullRequestReviewState toState() {
         switch (this) {
-        case PENDING:           return GHPullRequestReviewState.PENDING;
-        case APPROVE:           return GHPullRequestReviewState.APPROVED;
-        case REQUEST_CHANGES:   return GHPullRequestReviewState.CHANGES_REQUESTED;
-        case COMMENT:           return GHPullRequestReviewState.COMMENTED;
+        case PENDING:
+            return GHPullRequestReviewState.PENDING;
+        case APPROVE:
+            return GHPullRequestReviewState.APPROVED;
+        case REQUEST_CHANGES:
+            return GHPullRequestReviewState.CHANGES_REQUESTED;
+        case COMMENT:
+            return GHPullRequestReviewState.COMMENTED;
         }
         throw new IllegalStateException();
     }

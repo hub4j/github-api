@@ -14,8 +14,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void commit_comment() throws Exception {
-        GHEventPayload.CommitComment event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.CommitComment.class);
+        GHEventPayload.CommitComment event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.CommitComment.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getComment().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getComment().getUser().getLogin(), is("baxterthehacker"));
@@ -26,8 +26,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void create() throws Exception {
-        GHEventPayload.Create event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Create.class);
+        GHEventPayload.Create event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.Create.class);
         assertThat(event.getRef(), is("0.0.1"));
         assertThat(event.getRefType(), is("tag"));
         assertThat(event.getMasterBranch(), is("master"));
@@ -39,8 +39,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void delete() throws Exception {
-        GHEventPayload.Delete event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Delete.class);
+        GHEventPayload.Delete event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.Delete.class);
         assertThat(event.getRef(), is("simple-tag"));
         assertThat(event.getRefType(), is("tag"));
         assertThat(event.getRepository().getName(), is("public-repo"));
@@ -50,8 +50,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void deployment() throws Exception {
-        GHEventPayload.Deployment event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Deployment.class);
+        GHEventPayload.Deployment event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.Deployment.class);
         assertThat(event.getDeployment().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getDeployment().getEnvironment(), is("production"));
         assertThat(event.getDeployment().getCreator().getLogin(), is("baxterthehacker"));
@@ -62,8 +62,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void deployment_status() throws Exception {
-        GHEventPayload.DeploymentStatus event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.DeploymentStatus.class);
+        GHEventPayload.DeploymentStatus event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.DeploymentStatus.class);
         assertThat(event.getDeploymentStatus().getState(), is(GHDeploymentState.SUCCESS));
         assertThat(event.getDeploymentStatus().getTargetUrl(), nullValue());
         assertThat(event.getDeployment().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
@@ -76,8 +76,7 @@ public class GHEventPayloadTest {
 
     @Test
     public void fork() throws Exception {
-        GHEventPayload.Fork event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Fork.class);
+        GHEventPayload.Fork event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Fork.class);
         assertThat(event.getForkee().getName(), is("public-repo"));
         assertThat(event.getForkee().getOwner().getLogin(), is("baxterandthehackers"));
         assertThat(event.getRepository().getName(), is("public-repo"));
@@ -85,28 +84,28 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterandthehackers"));
     }
 
-// TODO uncomment when we have GHPage implemented
-//    @Test
-//    public void gollum() throws Exception {
-//        GHEventPayload.Gollum event =
-//                GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Gollum.class);
-//        assertThat(event.getPages().size(), is(1));
-//        GHPage page = event.getPages().get(0);
-//        assertThat(page.getName(), is("Home"));
-//        assertThat(page.getTitle(), is("Home"));
-//        assertThat(page.getSummary(), nullValue());
-//        assertThat(page.getAction(), is("created"));
-//        assertThat(page.getSha(), is("91ea1bd42aa2ba166b86e8aefe049e9837214e67"));
-//        assertThat(page.getHtmlUrl(), is("https://github.com/baxterthehacker/public-repo/wiki/Home"));
-//        assertThat(event.getRepository().getName(), is("public-repo"));
-//        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
-//        assertThat(event.getSender().getLogin(), is("baxterthehacker"));
-//    }
+    // TODO uncomment when we have GHPage implemented
+    // @Test
+    // public void gollum() throws Exception {
+    // GHEventPayload.Gollum event =
+    // GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Gollum.class);
+    // assertThat(event.getPages().size(), is(1));
+    // GHPage page = event.getPages().get(0);
+    // assertThat(page.getName(), is("Home"));
+    // assertThat(page.getTitle(), is("Home"));
+    // assertThat(page.getSummary(), nullValue());
+    // assertThat(page.getAction(), is("created"));
+    // assertThat(page.getSha(), is("91ea1bd42aa2ba166b86e8aefe049e9837214e67"));
+    // assertThat(page.getHtmlUrl(), is("https://github.com/baxterthehacker/public-repo/wiki/Home"));
+    // assertThat(event.getRepository().getName(), is("public-repo"));
+    // assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+    // assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    // }
 
     @Test
     public void issue_comment() throws Exception {
-        GHEventPayload.IssueComment event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.IssueComment.class);
+        GHEventPayload.IssueComment event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.IssueComment.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getIssue().getNumber(), is(2));
         assertThat(event.getIssue().getTitle(), is("Spelling error in the README file"));
@@ -134,31 +133,31 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void label() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void label() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void member() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void member() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void membership() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void membership() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void milestone() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void milestone() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void page_build() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void page_build() throws Exception {}
 
     @Test
     @Payload("public")
     public void public_() throws Exception {
-        GHEventPayload.Public event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Public.class);
+        GHEventPayload.Public event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.Public.class);
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
@@ -166,14 +165,14 @@ public class GHEventPayloadTest {
 
     @Test
     public void pull_request() throws Exception {
-        GHEventPayload.PullRequest event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+        GHEventPayload.PullRequest event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.PullRequest.class);
         assertThat(event.getAction(), is("opened"));
         assertThat(event.getNumber(), is(1));
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
-        assertThat(event.getPullRequest().getBody(), is("This is a pretty simple change that we need to pull into "
-            + "master."));
+        assertThat(event.getPullRequest().getBody(),
+                is("This is a pretty simple change that we need to pull into " + "master."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
@@ -199,8 +198,8 @@ public class GHEventPayloadTest {
 
     @Test
     public void pull_request_review() throws Exception {
-        GHEventPayload.PullRequestReview event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReview.class);
+        GHEventPayload.PullRequestReview event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.PullRequestReview.class);
         assertThat(event.getAction(), is("submitted"));
 
         assertThat(event.getReview().getId(), is(2626884L));
@@ -228,15 +227,16 @@ public class GHEventPayloadTest {
 
     @Test
     public void pull_request_review_comment() throws Exception {
-        GHEventPayload.PullRequestReviewComment event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReviewComment.class);
+        GHEventPayload.PullRequestReviewComment event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.PullRequestReviewComment.class);
         assertThat(event.getAction(), is("created"));
 
         assertThat(event.getComment().getBody(), is("Maybe you should use more emojji on this line."));
 
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
-        assertThat(event.getPullRequest().getBody(), is("This is a pretty simple change that we need to pull into master."));
+        assertThat(event.getPullRequest().getBody(),
+                is("This is a pretty simple change that we need to pull into master."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
@@ -255,8 +255,7 @@ public class GHEventPayloadTest {
 
     @Test
     public void push() throws Exception {
-        GHEventPayload.Push event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
+        GHEventPayload.Push event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
         assertThat(event.getRef(), is("refs/heads/changes"));
         assertThat(event.getBefore(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getHead(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
@@ -273,20 +272,21 @@ public class GHEventPayloadTest {
         assertThat(event.getCommits().get(0).getModified().get(0), is("README.md"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwnerName(), is("baxterthehacker"));
-        assertThat(event.getRepository().getUrl().toExternalForm(), is("https://github.com/baxterthehacker/public-repo"));
+        assertThat(event.getRepository().getUrl().toExternalForm(),
+                is("https://github.com/baxterthehacker/public-repo"));
         assertThat(event.getPusher().getName(), is("baxterthehacker"));
         assertThat(event.getPusher().getEmail(), is("baxterthehacker@users.noreply.github.com"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void release() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void release() throws Exception {}
 
     @Test
     public void repository() throws Exception {
-        GHEventPayload.Repository event =
-            GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
+        GHEventPayload.Repository event = GitHub.offline().parseEventPayload(payload.asReader(),
+                GHEventPayload.Repository.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getRepository().getName(), is("new-repository"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterandthehackers"));
@@ -294,16 +294,16 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-// TODO implement support classes and write test
-//    @Test
-//    public void status() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void status() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void team_add() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void team_add() throws Exception {}
 
-// TODO implement support classes and write test
-//    @Test
-//    public void watch() throws Exception {}
+    // TODO implement support classes and write test
+    // @Test
+    // public void watch() throws Exception {}
 
 }

@@ -13,7 +13,7 @@ class GHContentWithLicense extends GHContent {
     @Override
     GHContentWithLicense wrap(GHRepository owner) {
         super.wrap(owner);
-        if (license!=null)
+        if (license != null)
             license.wrap(owner.root);
         return this;
     }

@@ -11,14 +11,15 @@ import static org.kohsuke.github.Previews.*;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-@Preview @Deprecated
+@Preview
+@Deprecated
 public class GHReaction extends GHObject {
     private GitHub root;
 
     private GHUser user;
     private ReactionContent content;
 
-    /*package*/ GHReaction wrap(GitHub root) {
+    GHReaction wrap(GitHub root) {
         this.root = root;
         user.wrapUp(root);
         return this;
@@ -26,6 +27,8 @@ public class GHReaction extends GHObject {
 
     /**
      * The kind of reaction left.
+     *
+     * @return the content
      */
     public ReactionContent getContent() {
         return content;
@@ -33,6 +36,8 @@ public class GHReaction extends GHObject {
 
     /**
      * User who left the reaction.
+     *
+     * @return the user
      */
     public GHUser getUser() {
         return user;
@@ -48,8 +53,11 @@ public class GHReaction extends GHObject {
 
     /**
      * Removes this reaction.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/"+id);
+        new Requester(root).method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/" + id);
     }
 }

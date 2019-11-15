@@ -33,8 +33,9 @@ import static org.kohsuke.github.Previews.*;
  * Review comment to the pull request
  *
  * @author Julien Henry
- * @see GHPullRequest#listReviewComments()
- * @see GHPullRequest#createReviewComment(String, String, String, int)
+ * @see GHPullRequest#listReviewComments() GHPullRequest#listReviewComments()
+ * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
+ *      String, int)
  */
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
     GHPullRequest owner;
@@ -46,10 +47,17 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private int original_position = -1;
     private long in_reply_to_id = -1L;
 
-
     /**
-     * @deprecated
-     *      You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
+     * Draft gh pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @param path
+     *            the path
+     * @param position
+     *            the position
+     * @return the gh pull request review comment
+     * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
      */
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
@@ -59,13 +67,15 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return result;
     }
 
-    /*package*/ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
 
     /**
      * Gets the pull request to which this review comment is associated.
+     *
+     * @return the parent
      */
     public GHPullRequest getParent() {
         return owner;
@@ -73,6 +83,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * The comment itself.
+     *
+     * @return the body
      */
     public String getBody() {
         return body;
@@ -80,24 +92,48 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * Gets the user who posted this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
         return owner.root.getUser(user.getLogin());
     }
 
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
     @CheckForNull
     public int getPosition() {
         return position;
     }
 
+    /**
+     * Gets original position.
+     *
+     * @return the original position
+     */
     public int getOriginalPosition() {
         return original_position;
     }
 
+    /**
+     * Gets in reply to id.
+     *
+     * @return the in reply to id
+     */
     @CheckForNull
     public long getInReplyToId() {
         return in_reply_to_id;
@@ -108,20 +144,33 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return null;
     }
 
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
     protected String getApiRoute() {
-        return "/repos/"+owner.getRepository().getFullName()+"/pulls/comments/"+id;
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + id;
     }
 
     /**
      * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
+        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(), this);
         this.body = body;
     }
 
     /**
      * Deletes this review comment.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
@@ -129,30 +178,29 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * Create a new comment that replies to this comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-        return new Requester(owner.root).method("POST")
-                .with("body", body)
-                .with("in_reply_to", getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
-                .wrapUp(owner);
+        return new Requester(owner.root).method("POST").with("body", body).with("in_reply_to", getId())
+                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class).wrapUp(owner);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
-                .withPreview(SQUIRREL_GIRL)
-                .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(owner.root);
     }
 
-    @Preview @Deprecated
+    @Preview
+    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
-            .withPreview(SQUIRREL_GIRL)
-            .asPagedIterable(
-                getApiRoute() + "/reactions",
-                GHReaction[].class,
-                item -> item.wrap(owner.root) );
+        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
+                GHReaction[].class, item -> item.wrap(owner.root));
     }
 }

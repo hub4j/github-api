@@ -1,11 +1,10 @@
 package org.kohsuke.github;
 
 /**
- * 
- * @author Yusuke Kokubo
+ * The enum GHMilestoneState.
  *
+ * @author Yusuke Kokubo
  */
 public enum GHMilestoneState {
-    OPEN,
-    CLOSED
+    OPEN, CLOSED
 }

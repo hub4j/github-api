@@ -14,8 +14,8 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     @Test
     public void testContributorStats() throws IOException, InterruptedException {
         // get the statistics
-        PagedIterable<GHRepositoryStatistics.ContributorStats> stats =
-                getRepository().getStatistics().getContributorStats();
+        PagedIterable<GHRepositoryStatistics.ContributorStats> stats = getRepository().getStatistics()
+                .getContributorStats();
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
@@ -31,25 +31,22 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         // TODO: Add an accessor method for this instead of having use a loop.
         boolean developerFound = false;
         final String authorLogin = "kohsuke";
-        for (GHRepositoryStatistics.ContributorStats statsForAuthor: list) {
+        for (GHRepositoryStatistics.ContributorStats statsForAuthor : list) {
             if (authorLogin.equals(statsForAuthor.getAuthor().getLogin())) {
                 assertEquals(715, statsForAuthor.getTotal());
 
-                List<GHRepositoryStatistics.ContributorStats.Week> weeks =
-                        statsForAuthor.getWeeks();
+                List<GHRepositoryStatistics.ContributorStats.Week> weeks = statsForAuthor.getWeeks();
                 assertEquals(494, weeks.size());
 
                 try {
                     // check a particular week
                     // TODO: Maybe add a convenience method to get the week
                     // containing a certain date (Java.Util.Date).
-                    GHRepositoryStatistics.ContributorStats.Week week =
-                            statsForAuthor.getWeek(1541289600);
+                    GHRepositoryStatistics.ContributorStats.Week week = statsForAuthor.getWeek(1541289600);
                     assertEquals(63, week.getNumberOfAdditions());
                     assertEquals(56, week.getNumberOfDeletions());
                     assertEquals(5, week.getNumberOfCommits());
-                }
-                catch(NoSuchElementException e) {
+                } catch (NoSuchElementException e) {
                     fail("Did not find week 1546128000");
                 }
                 developerFound = true;
@@ -68,10 +65,9 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         for (int i = 0; i < MAX_ITERATIONS; i += 1) {
             stats = getRepository().getStatistics().getCommitActivity();
-            if(stats == null) {
+            if (stats == null) {
                 Thread.sleep(SLEEP_INTERVAL);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -88,17 +84,17 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         // TODO: Return this as a map with the timestamp as the key.
         // Either that or wrap in an object an accessor method.
         Boolean foundWeek = false;
-        for (GHRepositoryStatistics.CommitActivity item: list) {
+        for (GHRepositoryStatistics.CommitActivity item : list) {
             if (item.getWeek() == 1566691200) {
                 assertEquals(6, item.getTotal());
                 List<Integer> days = item.getDays();
-                assertEquals(0, (long)days.get(0));
-                assertEquals(0, (long)days.get(1));
-                assertEquals(1, (long)days.get(2));
-                assertEquals(0, (long)days.get(3));
-                assertEquals(0, (long)days.get(4));
-                assertEquals(1, (long)days.get(5));
-                assertEquals(4, (long)days.get(6));
+                assertEquals(0, (long) days.get(0));
+                assertEquals(0, (long) days.get(1));
+                assertEquals(1, (long) days.get(2));
+                assertEquals(0, (long) days.get(3));
+                assertEquals(0, (long) days.get(4));
+                assertEquals(1, (long) days.get(5));
+                assertEquals(4, (long) days.get(6));
                 foundWeek = true;
                 break;
             }
@@ -114,10 +110,9 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         for (int i = 0; i < MAX_ITERATIONS; i += 1) {
             stats = getRepository().getStatistics().getCodeFrequency();
-            if(stats == null) {
+            if (stats == null) {
                 Thread.sleep(SLEEP_INTERVAL);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -132,7 +127,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         // TODO: Perhaps return this as a map with the timestamp as the key?
         // Either that or wrap in an object with accessor methods.
         Boolean foundWeek = false;
-        for (GHRepositoryStatistics.CodeFrequency item: stats) {
+        for (GHRepositoryStatistics.CodeFrequency item : stats) {
             if (item.getWeekTimestamp() == 1535241600) {
                 assertEquals(185, item.getAdditions());
                 assertEquals(-243, item.getDeletions());
@@ -150,10 +145,9 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         for (int i = 0; i < MAX_ITERATIONS; i += 1) {
             stats = getRepository().getStatistics().getParticipation();
-            if(stats == null) {
+            if (stats == null) {
                 Thread.sleep(SLEEP_INTERVAL);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -167,7 +161,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         // check the statistics are accurate
         List<Integer> allCommits = stats.getAllCommits();
         assertEquals(52, allCommits.size());
-        assertEquals(2, (int)allCommits.get(2));
+        assertEquals(2, (int) allCommits.get(2));
 
         List<Integer> ownerCommits = stats.getOwnerCommits();
         assertEquals(52, ownerCommits.size());
@@ -181,11 +175,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         List<GHRepositoryStatistics.PunchCardItem> stats = null;
 
         for (int i = 0; i < MAX_ITERATIONS; i += 1) {
-             stats = getRepository().getStatistics().getPunchCard();
-            if(stats == null) {
+            stats = getRepository().getStatistics().getPunchCard();
+            if (stats == null) {
                 Thread.sleep(SLEEP_INTERVAL);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -198,8 +191,8 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check the statistics are accurate
         Boolean hourFound = false;
-        for (GHRepositoryStatistics.PunchCardItem item: stats) {
-            if(item.getDayOfWeek() == 2 && item.getHourOfDay() == 10) {
+        for (GHRepositoryStatistics.PunchCardItem item : stats) {
+            if (item.getDayOfWeek() == 2 && item.getHourOfDay() == 10) {
                 // TODO: Make an easier access method. Perhaps wrap in an
                 // object and have a method such as GetCommits(1, 16).
                 assertEquals(16, item.getNumberOfCommits());

@@ -7,21 +7,34 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Request/responce contains useful metadata.
- * Custom exception allows store info for next diagnostics.
+ * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */
 public class GHFileNotFoundException extends FileNotFoundException {
     protected Map<String, List<String>> responseHeaderFields;
 
+    /**
+     * Instantiates a new Gh file not found exception.
+     */
     public GHFileNotFoundException() {
     }
 
+    /**
+     * Instantiates a new Gh file not found exception.
+     *
+     * @param s
+     *            the s
+     */
     public GHFileNotFoundException(String s) {
         super(s);
     }
 
+    /**
+     * Gets response header fields.
+     *
+     * @return the response header fields
+     */
     @CheckForNull
     public Map<String, List<String>> getResponseHeaderFields() {
         return responseHeaderFields;

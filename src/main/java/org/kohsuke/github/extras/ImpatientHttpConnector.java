@@ -18,10 +18,14 @@ public class ImpatientHttpConnector implements HttpConnector {
     private final int readTimeout, connectTimeout;
 
     /**
+     * Instantiates a new Impatient http connector.
+     *
+     * @param base
+     *            the base
      * @param connectTimeout
-     *      HTTP connection timeout in milliseconds
+     *            HTTP connection timeout in milliseconds
      * @param readTimeout
-     *      HTTP read timeout in milliseconds
+     *            HTTP read timeout in milliseconds
      */
     public ImpatientHttpConnector(HttpConnector base, int connectTimeout, int readTimeout) {
         this.base = base;
@@ -29,12 +33,26 @@ public class ImpatientHttpConnector implements HttpConnector {
         this.readTimeout = readTimeout;
     }
 
+    /**
+     * Instantiates a new Impatient http connector.
+     *
+     * @param base
+     *            the base
+     * @param timeout
+     *            the timeout
+     */
     public ImpatientHttpConnector(HttpConnector base, int timeout) {
-        this(base,timeout,timeout);
+        this(base, timeout, timeout);
     }
 
+    /**
+     * Instantiates a new Impatient http connector.
+     *
+     * @param base
+     *            the base
+     */
     public ImpatientHttpConnector(HttpConnector base) {
-        this(base,CONNECT_TIMEOUT,READ_TIMEOUT);
+        this(base, CONNECT_TIMEOUT, READ_TIMEOUT);
     }
 
     public HttpURLConnection connect(URL url) throws IOException {

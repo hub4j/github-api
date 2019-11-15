@@ -13,32 +13,35 @@ import java.util.TreeMap;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url, gravatar_id;
 
     // other fields (that only show up in full data)
-    protected String location,blog,email,name,company;
+    protected String location, blog, email, name, company;
     protected String html_url;
-    protected int followers,following,public_repos,public_gists;
+    protected int followers, following, public_repos, public_gists;
 
-    /*package*/ GHPerson wrapUp(GitHub root) {
+    GHPerson wrapUp(GitHub root) {
         this.root = root;
         return this;
     }
 
     /**
      * Fully populate the data by retrieving missing data.
-     *
+     * <p>
      * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        if (created_at!=null) {
+        if (created_at != null) {
             return; // already populated
         }
         if (root == null || root.isOffline()) {
@@ -51,60 +54,66 @@ public abstract class GHPerson extends GHObject {
      * Gets the public repositories this user owns.
      *
      * <p>
-     * To list your own repositories, including private repositories,
-     * use {@link GHMyself#listRepositories()}
+     * To list your own repositories, including private repositories, use {@link GHMyself#listRepositories()}
+     *
+     * @return the repositories
+     * @throws IOException
+     *             the io exception
      */
-    public synchronized Map<String,GHRepository> getRepositories() throws IOException {
-        Map<String,GHRepository> repositories = new TreeMap<String, GHRepository>();
+    public synchronized Map<String, GHRepository> getRepositories() throws IOException {
+        Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories(100)) {
-            repositories.put(r.getName(),r);
+            repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
     }
 
     /**
      * Lists up all the repositories using a 30 items page size.
-     *
+     * <p>
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-      return listRepositories(30);
+        return listRepositories(30);
     }
 
     /**
      * Lists up all the repositories using the specified page size.
      *
-     * @param pageSize size for each page of items returned by GitHub. Maximum page size is 100.
-     *
-     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @param pageSize
+     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root.retrieve()
-            .asPagedIterable(
-                "/users/" + login + "/repos",
-                GHRepository[].class,
-                item -> item.wrap(root)
-            ).withPageSize(pageSize);
+                .asPagedIterable("/users/" + login + "/repos", GHRepository[].class, item -> item.wrap(root))
+                .withPageSize(pageSize);
     }
 
     /**
      * Loads repository list in a paginated fashion.
      *
      * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion.
-     * Unlike {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
+     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion. Unlike
+     * {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
+     * <p>
+     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped into
+     * {@link Error}.
      *
-     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped
-     * into {@link Error}.
-     *
-     * @deprecated
-     *      Use {@link #listRepositories()}
+     * @param pageSize
+     *            the page size
+     * @return the iterable
+     * @deprecated Use {@link #listRepositories()}
      */
     @Deprecated
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = root.retrieve().asIterator("/users/" + login + "/repos",
+                        GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {
@@ -127,9 +136,13 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
+     * Gets repository.
      *
-     * @return
-     *      null if the repository was not found
+     * @param name
+     *            the name
+     * @return null if the repository was not found
+     * @throws IOException
+     *             the io exception
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
@@ -141,33 +154,41 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Lists events for an organization or an user.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
 
     /**
      * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105
      *
-     * @deprecated
-     *      No longer available in the v3 API.
+     * @return the gravatar id
+     * @deprecated No longer available in the v3 API.
      */
     public String getGravatarId() {
         return gravatar_id;
     }
 
     /**
-     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105'
-     * that indicates the avatar image URL.
+     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105' that indicates the
+     * avatar image URL.
+     *
+     * @return the avatar url
      */
     public String getAvatarUrl() {
-        if (avatar_url!=null)
+        if (avatar_url != null)
             return avatar_url;
-        if (gravatar_id!=null)
-            return "https://secure.gravatar.com/avatar/"+gravatar_id;
+        if (gravatar_id != null)
+            return "https://secure.gravatar.com/avatar/" + gravatar_id;
         return null;
     }
 
     /**
      * Gets the login ID of this user, like 'kohsuke'
+     *
+     * @return the login
      */
     public String getLogin() {
         return login;
@@ -175,6 +196,10 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the human-readable name of the user, like "Kohsuke Kawaguchi"
+     *
+     * @return the name
+     * @throws IOException
+     *             the io exception
      */
     public String getName() throws IOException {
         populate();
@@ -183,6 +208,10 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the company name of this user, like "Sun Microsystems, Inc."
+     *
+     * @return the company
+     * @throws IOException
+     *             the io exception
      */
     public String getCompany() throws IOException {
         populate();
@@ -191,6 +220,10 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the location of this user, like "Santa Clara, California"
+     *
+     * @return the location
+     * @throws IOException
+     *             the io exception
      */
     public String getLocation() throws IOException {
         populate();
@@ -209,6 +242,10 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the blog URL of this user.
+     *
+     * @return the blog
+     * @throws IOException
+     *             the io exception
      */
     public String getBlog() throws IOException {
         populate();
@@ -222,27 +259,59 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the e-mail address of the user.
+     *
+     * @return the email
+     * @throws IOException
+     *             the io exception
      */
     public String getEmail() throws IOException {
         populate();
         return email;
     }
 
+    /**
+     * Gets public gist count.
+     *
+     * @return the public gist count
+     * @throws IOException
+     *             the io exception
+     */
     public int getPublicGistCount() throws IOException {
         populate();
         return public_gists;
     }
 
+    /**
+     * Gets public repo count.
+     *
+     * @return the public repo count
+     * @throws IOException
+     *             the io exception
+     */
     public int getPublicRepoCount() throws IOException {
         populate();
         return public_repos;
     }
 
+    /**
+     * Gets following count.
+     *
+     * @return the following count
+     * @throws IOException
+     *             the io exception
+     */
     public int getFollowingCount() throws IOException {
         populate();
         return following;
     }
 
+    /**
+     * Gets followers count.
+     *
+     * @return the followers count
+     * @throws IOException
+     *             the io exception
+     */
     public int getFollowersCount() throws IOException {
         populate();
         return followers;

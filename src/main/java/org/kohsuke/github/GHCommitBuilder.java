@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
- * Builder pattern for creating a new commit.
- * Based on https://developer.github.com/v3/git/commits/#create-a-commit
+ * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
 public class GHCommitBuilder {
     private final GHRepository repo;
@@ -39,7 +38,11 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param message the commit message
+     * Message gh commit builder.
+     *
+     * @param message
+     *            the commit message
+     * @return the gh commit builder
      */
     public GHCommitBuilder message(String message) {
         req.with("message", message);
@@ -47,7 +50,11 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param tree the SHA of the tree object this commit points to
+     * Tree gh commit builder.
+     *
+     * @param tree
+     *            the SHA of the tree object this commit points to
+     * @return the gh commit builder
      */
     public GHCommitBuilder tree(String tree) {
         req.with("tree", tree);
@@ -55,7 +62,11 @@ public class GHCommitBuilder {
     }
 
     /**
-     * @param parent the SHA of a parent commit.
+     * Parent gh commit builder.
+     *
+     * @param parent
+     *            the SHA of a parent commit.
+     * @return the gh commit builder
      */
     public GHCommitBuilder parent(String parent) {
         parents.add(parent);
@@ -64,6 +75,14 @@ public class GHCommitBuilder {
 
     /**
      * Configures the author of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Date date) {
         req._with("author", new UserInfo(name, email, date));
@@ -72,6 +91,14 @@ public class GHCommitBuilder {
 
     /**
      * Configures the committer of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
         req._with("committer", new UserInfo(name, email, date));
@@ -84,6 +111,10 @@ public class GHCommitBuilder {
 
     /**
      * Creates a blob based on the parameters specified thus far.
+     *
+     * @return the gh commit
+     * @throws IOException
+     *             the io exception
      */
     public GHCommit create() throws IOException {
         req._with("parents", parents);

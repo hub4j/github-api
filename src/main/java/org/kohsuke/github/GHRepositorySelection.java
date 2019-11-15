@@ -6,12 +6,10 @@ import java.util.Locale;
  * App installation repository selection.
  *
  * @author Paulo Miguel Almeida
- *
  * @see GHAppInstallation
  */
 public enum GHRepositorySelection {
-    SELECTED,
-    ALL;
+    SELECTED, ALL;
 
     /**
      * Returns GitHub's internal representation of this event.

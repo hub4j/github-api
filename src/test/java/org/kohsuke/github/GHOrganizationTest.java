@@ -11,7 +11,21 @@ import java.io.IOException;
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
+    public static final String TEAM_NAME_CREATE = "create-team-test";
 
+    @Before
+    @After
+    public void cleanUpTeam() throws IOException {
+        // Cleanup is only needed when proxying
+        if (!mockGitHub.isUseProxy()) {
+            return;
+        }
+
+        GHTeam team = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getTeamByName(TEAM_NAME_CREATE);
+        if (team != null) {
+            team.delete();
+        }
+    }
 
     @Test
     public void testCreateRepository() throws IOException {
@@ -19,7 +33,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST,
-            "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/", "Core Developers", true);
+                "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/",
+                "Core Developers", true);
         Assert.assertNotNull(repository);
     }
 
@@ -29,10 +44,9 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST)
-            .description("a test repository used to test kohsuke's github-api")
-            .homepage("http://github-api.kohsuke.org/")
-            .team(org.getTeamByName("Core Developers"))
-            .autoInit(true).create();
+                .description("a test repository used to test kohsuke's github-api")
+                .homepage("http://github-api.kohsuke.org/").team(org.getTeamByName("Core Developers")).autoInit(true)
+                .create();
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());
     }
@@ -56,5 +70,17 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Check the invitation has worked.
         // assertTrue(org.hasMember(user));
+    }
+
+    @Test
+    public void testCreateTeamWithRepoAccess() throws IOException {
+        String REPO_NAME = "github-api";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Create team with access to repository. Check access was granted.
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
+        Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
     }
 }

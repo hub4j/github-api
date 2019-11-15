@@ -11,13 +11,15 @@ import java.net.URL;
  * @author Michael Clarke
  */
 public class GHRef {
-    /*package almost final*/ GitHub root;
+    /* package almost final */ GitHub root;
 
     private String ref, url;
     private GHObject object;
 
     /**
      * Name of the ref, such as "refs/tags/abc"
+     *
+     * @return the ref
      */
     public String getRef() {
         return ref;
@@ -25,6 +27,8 @@ public class GHRef {
 
     /**
      * The API URL of this tag, such as https://api.github.com/repos/jenkinsci/jenkins/git/refs/tags/1.312
+     *
+     * @return the url
      */
     public URL getUrl() {
         return GitHub.parseURL(url);
@@ -32,6 +36,8 @@ public class GHRef {
 
     /**
      * The object that this ref points to.
+     *
+     * @return the object
      */
     public GHObject getObject() {
         return object;
@@ -41,51 +47,62 @@ public class GHRef {
      * Updates this ref to the specified commit.
      *
      * @param sha
-     *      The SHA1 value to set this reference to
+     *            The SHA1 value to set this reference to
+     * @throws IOException
+     *             the io exception
      */
     public void updateTo(String sha) throws IOException {
-      updateTo(sha, false);
+        updateTo(sha, false);
     }
 
     /**
      * Updates this ref to the specified commit.
      *
      * @param sha
-     *      The SHA1 value to set this reference to
+     *            The SHA1 value to set this reference to
      * @param force
-     *      Whether or not to force this ref update.
+     *            Whether or not to force this ref update.
+     * @throws IOException
+     *             the io exception
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-      new Requester(root)
-          .with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(root);
+        new Requester(root).with("sha", sha).with("force", force).method("PATCH").to(url, GHRef.class).wrap(root);
     }
 
     /**
      * Deletes this ref from the repository using the GitHub API.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
-      new Requester(root).method("DELETE").to(url);
+        new Requester(root).method("DELETE").to(url);
     }
 
-    /*package*/ GHRef wrap(GitHub root) {
+    GHRef wrap(GitHub root) {
         this.root = root;
         return this;
     }
 
-    /*package*/ static GHRef[] wrap(GHRef[] in, GitHub root) {
+    static GHRef[] wrap(GHRef[] in, GitHub root) {
         for (GHRef r : in) {
             r.wrap(root);
         }
         return in;
     }
 
-    @SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+    /**
+     * The type GHObject.
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+            "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class GHObject {
-         private String type, sha, url;
+        private String type, sha, url;
 
         /**
          * Type of the object, such as "commit"
+         *
+         * @return the type
          */
         public String getType() {
             return type;
@@ -93,13 +110,18 @@ public class GHRef {
 
         /**
          * SHA1 of this object.
+         *
+         * @return the sha
          */
         public String getSha() {
             return sha;
         }
 
         /**
-         * API URL to this Git data, such as https://api.github.com/repos/jenkinsci/jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
+         * API URL to this Git data, such as
+         * https://api.github.com/repos/jenkinsci/jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
+         *
+         * @return the url
          */
         public URL getUrl() {
             return GitHub.parseURL(url);

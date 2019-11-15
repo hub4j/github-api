@@ -21,8 +21,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         }
 
         for (GHMilestone milestone : getRepository(gitHubBeforeAfter).listMilestones(GHIssueState.ALL)) {
-            if ("Original Title".equals(milestone.getTitle()) ||
-                "Updated Title".equals(milestone.getTitle())) {
+            if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())) {
                 milestone.delete();
             }
         }
@@ -31,8 +30,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     @Test
     public void testUpdateMilestone() throws Exception {
         GHRepository repo = getRepository();
-        GHMilestone milestone = repo.createMilestone("Original Title",
-                "To test the update methods");
+        GHMilestone milestone = repo.createMilestone("Original Title", "To test the update methods");
 
         String NEW_TITLE = "Updated Title";
         String NEW_DESCRIPTION = "Updated Description";

@@ -8,12 +8,10 @@ import java.util.Locale;
  * App installation target type.
  *
  * @author Paulo Miguel Almeida
- *
  * @see GHAppInstallation
  */
 public enum GHTargetType {
-    ORGANIZATION,
-    USER;
+    ORGANIZATION, USER;
 
     /**
      * Returns GitHub's internal representation of this event.

@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * Base class for various search builders.
  *
+ * @param <T>
+ *            the type parameter
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
@@ -18,13 +20,17 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
      */
     private final Class<? extends SearchResult<T>> receiverType;
 
-    /*package*/ GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
+    GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
     }
 
     /**
      * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the gh query builder
      */
     public GHQueryBuilder<T> q(String term) {
         terms.add(term);
@@ -48,5 +54,10 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         };
     }
 
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
     protected abstract String getApiUrl();
 }

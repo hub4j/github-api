@@ -46,7 +46,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -75,7 +74,7 @@ import static org.kohsuke.github.GitHub.MAPPER;
 class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
-    private final Map<String,String> headers = new LinkedHashMap<String, String>();
+    private final Map<String, String> headers = new LinkedHashMap<String, String>();
 
     /**
      * Request method.
@@ -106,24 +105,40 @@ class Requester {
 
     /**
      * Sets the request HTTP header.
-     *
+     * <p>
      * If a header of the same name is already set, this method overrides it.
+     *
+     * @param name
+     *            the name
+     * @param value
+     *            the value
      */
     public void setHeader(String name, String value) {
-        headers.put(name,value);
+        headers.put(name, value);
     }
 
+    /**
+     * With header requester.
+     *
+     * @param name
+     *            the name
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester withHeader(String name, String value) {
-        setHeader(name,value);
+        setHeader(name, value);
         return this;
     }
 
-    /*package*/ Requester withPreview(String name) {
-        return withHeader("Accept",name);
+    Requester withPreview(String name) {
+        return withHeader("Accept", name);
     }
 
     /**
      * Makes a request with authentication credential.
+     *
+     * @return the requester
      */
     @Deprecated
     public Requester withCredential() {
@@ -132,79 +147,211 @@ class Requester {
         return this;
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, int value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, long value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Integer value) {
-        if (value!=null)
+        if (value != null)
             _with(key, value);
         return this;
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, boolean value) {
         return _with(key, value);
     }
+
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Boolean value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param e
+     *            the e
+     * @return the requester
+     */
     public Requester with(String key, Enum e) {
-        if (e==null)    return _with(key, null);
+        if (e == null)
+            return _with(key, null);
         return with(key, transformEnum(e));
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, String value) {
         return _with(key, value);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Collection<?> value) {
         return _with(key, value);
     }
 
+    /**
+     * With logins requester.
+     *
+     * @param key
+     *            the key
+     * @param users
+     *            the users
+     * @return the requester
+     */
     public Requester withLogins(String key, Collection<GHUser> users) {
         List<String> names = new ArrayList<String>(users.size());
         for (GHUser a : users) {
             names.add(a.getLogin());
         }
-        return with(key,names);
+        return with(key, names);
     }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester with(String key, Map<String, String> value) {
         return _with(key, value);
     }
 
+    /**
+     * With permissions requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester withPermissions(String key, Map<String, GHPermissionType> value) {
-        Map<String,String> retMap = new HashMap<String, String>();
+        Map<String, String> retMap = new HashMap<String, String>();
         for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
             retMap.put(entry.getKey(), transformEnum(entry.getValue()));
         }
         return _with(key, retMap);
     }
 
-    public Requester with(@WillClose/*later*/ InputStream body) {
+    /**
+     * With requester.
+     *
+     * @param body
+     *            the body
+     * @return the requester
+     */
+    public Requester with(@WillClose /* later */ InputStream body) {
         this.body = body;
         return this;
     }
 
-	public Requester withNullable(String key, Object value) {
-		args.add(new Entry(key, value));
-		return this;
-	}
+    /**
+     * With nullable requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
+    public Requester withNullable(String key, Object value) {
+        args.add(new Entry(key, value));
+        return this;
+    }
 
+    /**
+     * With requester.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
+     */
     public Requester _with(String key, Object value) {
-        if (value!=null) {
-            args.add(new Entry(key,value));
+        if (value != null) {
+            args.add(new Entry(key, value));
         }
         return this;
     }
 
     /**
      * Unlike {@link #with(String, String)}, overrides the existing value
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @return the requester
      */
     public Requester set(String key, Object value) {
         for (Entry e : args) {
@@ -213,14 +360,28 @@ class Requester {
                 return this;
             }
         }
-        return _with(key,value);
+        return _with(key, value);
     }
 
+    /**
+     * Method requester.
+     *
+     * @param method
+     *            the method
+     * @return the requester
+     */
     public Requester method(String method) {
         this.method = method;
         return this;
     }
 
+    /**
+     * Content type requester.
+     *
+     * @param contentType
+     *            the content type
+     * @return the requester
+     */
     public Requester contentType(String contentType) {
         this.contentType = contentType;
         return this;
@@ -228,25 +389,38 @@ class Requester {
 
     /**
      * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
-     * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use,
-     * but this method forces the parameters to be sent as a body.
+     * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
+     * forces the parameters to be sent as a body.
      */
-    /*package*/ Requester inBody() {
+    Requester inBody() {
         forceBody = true;
         return this;
     }
 
+    /**
+     * To.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @throws IOException
+     *             the io exception
+     */
     public void to(String tailApiUrl) throws IOException {
-        to(tailApiUrl,null);
+        to(tailApiUrl, null);
     }
 
     /**
      * Sends a request to the specified URL, and parses the response into the given type via databinding.
      *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
      * @throws IOException
-     *      if the server returns 4xx/5xx responses.
-     * @return
-     *      {@link Reader} that reads the response.
+     *             if the server returns 4xx/5xx responses.
      */
     public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
         return _to(tailApiUrl, type, null);
@@ -254,6 +428,16 @@ class Requester {
 
     /**
      * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param existingInstance
+     *            the existing instance
+     * @return the t
+     * @throws IOException
+     *             the io exception
      */
     public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
         return _to(tailApiUrl, null, existingInstance);
@@ -261,6 +445,18 @@ class Requester {
 
     /**
      * Short for {@code method(method).to(tailApiUrl,type)}
+     *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param type
+     *            the type
+     * @param method
+     *            the method
+     * @return the t
+     * @throws IOException
+     *             the io exception
      */
     @Deprecated
     public <T> T to(String tailApiUrl, Class<T> type, String method) throws IOException {
@@ -274,7 +470,7 @@ class Requester {
             tailApiUrl += questionMarkFound ? '&' : '?';
             for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
                 Entry arg = it.next();
-                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(),"UTF-8");
+                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(), "UTF-8");
                 if (it.hasNext()) {
                     tailApiUrl += '&';
                 }
@@ -299,7 +495,8 @@ class Requester {
                             setResponseHeaders(nextResult);
                             final int resultLength = Array.getLength(result);
                             final int nextResultLength = Array.getLength(nextResult);
-                            T concatResult = (T) Array.newInstance(type.getComponentType(), resultLength + nextResultLength);
+                            T concatResult = (T) Array.newInstance(type.getComponentType(),
+                                    resultLength + nextResultLength);
                             System.arraycopy(result, 0, concatResult, 0, resultLength);
                             System.arraycopy(nextResult, 0, concatResult, resultLength, nextResultLength);
                             result = concatResult;
@@ -317,6 +514,12 @@ class Requester {
 
     /**
      * Makes a request and just obtains the HTTP status code.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @return the int
+     * @throws IOException
+     *             the io exception
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
@@ -335,6 +538,15 @@ class Requester {
         }
     }
 
+    /**
+     * As stream input stream.
+     *
+     * @param tailApiUrl
+     *            the tail api url
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
@@ -352,60 +564,69 @@ class Requester {
     }
 
     private void noteRateLimit(String tailApiUrl) {
-        if ("/rate_limit".equals(tailApiUrl)) {
-            // the rate_limit API is "free"
-            return;
-        }
         if (tailApiUrl.startsWith("/search")) {
             // the search API uses a different rate limit
             return;
         }
-        String limit = uc.getHeaderField("X-RateLimit-Limit");
-        if (StringUtils.isBlank(limit)) {
+        String limitString = uc.getHeaderField("X-RateLimit-Limit");
+        if (StringUtils.isBlank(limitString)) {
             // if we are missing a header, return fast
             return;
         }
-        String remaining = uc.getHeaderField("X-RateLimit-Remaining");
-        if (StringUtils.isBlank(remaining)) {
+        String remainingString = uc.getHeaderField("X-RateLimit-Remaining");
+        if (StringUtils.isBlank(remainingString)) {
             // if we are missing a header, return fast
             return;
         }
-        String reset = uc.getHeaderField("X-RateLimit-Reset");
-        if (StringUtils.isBlank(reset)) {
+        String resetString = uc.getHeaderField("X-RateLimit-Reset");
+        if (StringUtils.isBlank(resetString)) {
             // if we are missing a header, return fast
             return;
         }
-        GHRateLimit observed = new GHRateLimit();
+
+        int limit, remaining;
+        long reset;
         try {
-            observed.limit = Integer.parseInt(limit);
+            limit = Integer.parseInt(limitString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limit, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limitString, e);
             }
             return;
         }
         try {
-            observed.remaining = Integer.parseInt(remaining);
+
+            remaining = Integer.parseInt(remainingString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remaining, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remainingString, e);
             }
             return;
         }
         try {
-            observed.reset = new Date(Long.parseLong(reset)); // this is madness, storing the date as seconds
-            root.updateRateLimit(observed);
+            reset = Long.parseLong(resetString);
         } catch (NumberFormatException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + reset, e);
+                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + resetString, e);
             }
+            return;
         }
+
+        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, uc.getHeaderField("Date"));
+
+        root.updateCoreRateLimit(observed);
     }
 
+    /**
+     * Gets response header.
+     *
+     * @param header
+     *            the header
+     * @return the response header
+     */
     public String getResponseHeader(String header) {
         return uc.getHeaderField(header);
     }
-
 
     /**
      * Set up the request parameters or POST payload.
@@ -415,14 +636,14 @@ class Requester {
             uc.setDoOutput(true);
 
             if (body == null) {
-                uc.setRequestProperty("Content-type", defaultString(contentType,"application/json"));
+                uc.setRequestProperty("Content-type", defaultString(contentType, "application/json"));
                 Map json = new HashMap();
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
                 MAPPER.writeValue(uc.getOutputStream(), json);
             } else {
-                uc.setRequestProperty("Content-type", defaultString(contentType,"application/x-www-form-urlencoded"));
+                uc.setRequestProperty("Content-type", defaultString(contentType, "application/x-www-form-urlencoded"));
                 try {
                     byte[] bytes = new byte[32768];
                     int read;
@@ -440,18 +661,18 @@ class Requester {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
-    /*package*/  <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return new PagedIterableWithConsumer(type, this, tailApiUrl, consumer);
+    <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
+        return new PagedIterableWithConsumer<>(type, this, tailApiUrl, consumer);
     }
 
-    private static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
+    static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
 
         private final Class<S[]> clazz;
         private final Requester requester;
         private final String tailApiUrl;
         private final Consumer<S> consumer;
 
-        public PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
+        PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
             this.clazz = clazz;
             this.tailApiUrl = tailApiUrl;
             this.requester = requester;
@@ -479,11 +700,11 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    /*package*/ <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
+    <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
         method("GET");
 
-        if (pageSize!=0)
-            args.add(new Entry("per_page",pageSize));
+        if (pageSize != 0)
+            args.add(new Entry("per_page", pageSize));
 
         StringBuilder s = new StringBuilder(tailApiUrl);
         if (!args.isEmpty()) {
@@ -497,14 +718,14 @@ class Requester {
                     s.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
                 }
             } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e);    // UTF-8 is mandatory
+                throw new AssertionError(e); // UTF-8 is mandatory
             }
         }
 
         try {
             return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
         } catch (IOException e) {
-            throw new GHException("Unable to build github Api URL",e);
+            throw new GHException("Unable to build github Api URL", e);
         }
     }
 
@@ -531,13 +752,14 @@ class Requester {
 
         public boolean hasNext() {
             fetch();
-            return next!=null;
+            return next != null;
         }
 
         public T next() {
             fetch();
             T r = next;
-            if (r==null)    throw new NoSuchElementException();
+            if (r == null)
+                throw new NoSuchElementException();
             next = null;
             return r;
         }
@@ -547,15 +769,17 @@ class Requester {
         }
 
         private void fetch() {
-            if (next!=null) return; // already fetched
-            if (url==null)  return; // no more data to fetch
+            if (next != null)
+                return; // already fetched
+            if (url == null)
+                return; // no more data to fetch
 
             try {
                 while (true) {// loop while API rate limit is hit
                     setupConnection(url);
                     try {
-                        next = parse(type,null);
-                        assert next!=null;
+                        next = parse(type, null);
+                        assert next != null;
                         findNextURL();
                         return;
                     } catch (IOException e) {
@@ -575,14 +799,15 @@ class Requester {
         private void findNextURL() throws MalformedURLException {
             url = null; // start defensively
             String link = uc.getHeaderField("Link");
-            if (link==null) return;
+            if (link == null)
+                return;
 
             for (String token : link.split(", ")) {
                 if (token.endsWith("rel=\"next\"")) {
                     // found the next page. This should look something like
                     // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
                     int idx = token.indexOf('>');
-                    url = new URL(token.substring(1,idx));
+                    url = new URL(token.substring(1, idx));
                     return;
                 }
             }
@@ -591,21 +816,21 @@ class Requester {
         }
     }
 
-
     private void setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " " + url.toString());
+            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method
+                    + " " + url.toString());
         }
         uc = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        if (root.encodedAuthorization!=null)
+        if (root.encodedAuthorization != null)
             uc.setRequestProperty("Authorization", root.encodedAuthorization);
 
         for (Map.Entry<String, String> e : headers.entrySet()) {
             String v = e.getValue();
-            if (v!=null)
+            if (v != null)
                 uc.setRequestProperty(e.getKey(), v);
         }
 
@@ -621,9 +846,9 @@ class Requester {
             try {
                 Field $method = HttpURLConnection.class.getDeclaredField("method");
                 $method.setAccessible(true);
-                $method.set(uc,method);
+                $method.set(uc, method);
             } catch (Exception x) {
-                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
             }
             // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
             try {
@@ -637,11 +862,11 @@ class Requester {
             } catch (NoSuchFieldException x) {
                 // no problem
             } catch (IllegalAccessException x) {
-                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
+                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
             }
         }
         if (!uc.getRequestMethod().equals(method))
-            throw new IllegalStateException("Failed to set the request method to "+method);
+            throw new IllegalStateException("Failed to set the request method to " + method);
     }
 
     @CheckForNull
@@ -657,11 +882,11 @@ class Requester {
             responseCode = uc.getResponseCode();
             responseMessage = uc.getResponseMessage();
             if (responseCode == 304) {
-                return null;    // special case handling for 304 unmodified, as the content will be ""
+                return null; // special case handling for 304 unmodified, as the content will be ""
             }
-            if (responseCode == 204 && type!=null && type.isArray()) {
+            if (responseCode == 204 && type != null && type.isArray()) {
                 // no content
-                return type.cast(Array.newInstance(type.getComponentType(),0));
+                return type.cast(Array.newInstance(type.getComponentType(), 0));
             }
 
             // Response code 202 means the statistics are still being cached.
@@ -674,18 +899,19 @@ class Requester {
 
             r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
             String data = IOUtils.toString(r);
-            if (type!=null)
+            if (type != null)
                 try {
                     return setResponseHeaders(MAPPER.readValue(data, type));
                 } catch (JsonMappingException e) {
-                    throw (IOException)new IOException("Failed to deserialize " +data).initCause(e);
+                    throw (IOException) new IOException("Failed to deserialize " + data).initCause(e);
                 }
-            if (instance!=null) {
-                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
+            if (instance != null) {
+                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T> readValue(data));
             }
             return null;
         } catch (FileNotFoundException e) {
-            // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in HttpException
+            // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in
+            // HttpException
             // to preserve backward compatibility
             throw e;
         } catch (IOException e) {
@@ -706,6 +932,9 @@ class Requester {
             }
         } else if (readValue instanceof GHObject) {
             setResponseHeaders((GHObject) readValue);
+        } else if (readValue instanceof JsonRateLimit) {
+            // if we're getting a GHRateLimit it needs the server date
+            ((JsonRateLimit) readValue).resources.getCore().recalculateResetDate(uc.getHeaderField("Date"));
         }
         return readValue;
     }
@@ -719,16 +948,18 @@ class Requester {
      */
     private InputStream wrapStream(InputStream in) throws IOException {
         String encoding = uc.getContentEncoding();
-        if (encoding==null || in==null) return in;
-        if (encoding.equals("gzip"))    return new GZIPInputStream(in);
+        if (encoding == null || in == null)
+            return in;
+        if (encoding.equals("gzip"))
+            return new GZIPInputStream(in);
 
-        throw new UnsupportedOperationException("Unexpected Content-Encoding: "+encoding);
+        throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
     }
 
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    /*package*/ void handleApiError(IOException e) throws IOException {
+    void handleApiError(IOException e) throws IOException {
         int responseCode;
         try {
             responseCode = uc.getResponseCode();
@@ -736,8 +967,8 @@ class Requester {
             // likely to be a network exception (e.g. SSLHandshakeException),
             // uc.getResponseCode() and any other getter on the response will cause an exception
             if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'" +
-                        " handling exception " + e, e);
+                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
+                        + " handling exception " + e, e);
             throw e;
         }
         InputStream es = wrapStream(uc.getErrorStream());
@@ -749,8 +980,7 @@ class Requester {
                     e = (IOException) new GHFileNotFoundException(error).withResponseHeaderFields(uc).initCause(e);
                 } else if (e instanceof HttpException) {
                     HttpException http = (HttpException) e;
-                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(),
-                            http.getUrl(), e);
+                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
                 } else {
                     e = (IOException) new GHIOException(error).withResponseHeaderFields(uc).initCause(e);
                 }
@@ -758,18 +988,22 @@ class Requester {
                 IOUtils.closeQuietly(es);
             }
         }
-        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 / Unauthorized == bad creds
-            throw e;
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 Unauthorized == bad creds or OTP request
+            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
+            // will be returned indicating the user needs to respond with an otp
+            if (uc.getHeaderField("X-GitHub-OTP") != null)
+                throw (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
+            else
+                throw e; // usually org.kohsuke.github.HttpException (which extends IOException)
 
         if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            root.rateLimitHandler.onError(e,uc);
+            root.rateLimitHandler.onError(e, uc);
             return;
         }
 
         // Retry-After is not documented but apparently that field exists
-        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN &&
-            uc.getHeaderField("Retry-After") != null) {
-            this.root.abuseLimitHandler.onError(e,uc);
+        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN && uc.getHeaderField("Retry-After") != null) {
+            this.root.abuseLimitHandler.onError(e, uc);
             return;
         }
 
@@ -778,10 +1012,12 @@ class Requester {
 
     /**
      * Transform Java Enum into Github constants given its conventions
-     * @param en - Enum to be transformed
+     * 
+     * @param en
+     *            Enum to be transformed
      * @return a String containing the value of a Github constant
      */
-    private String transformEnum(Enum en){
+    private String transformEnum(Enum en) {
         // by convention Java constant names are upper cases, but github uses
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace by '_'

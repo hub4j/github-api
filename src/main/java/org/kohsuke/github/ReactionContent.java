@@ -11,12 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @see GHReaction
  */
 public enum ReactionContent {
-    PLUS_ONE("+1"),
-    MINUS_ONE("-1"),
-    LAUGH("laugh"),
-    CONFUSED("confused"),
-    HEART("heart"),
-    HOORAY("hooray");
+    PLUS_ONE("+1"), MINUS_ONE("-1"), LAUGH("laugh"), CONFUSED("confused"), HEART("heart"), HOORAY("hooray");
 
     private final String content;
 
@@ -24,11 +19,23 @@ public enum ReactionContent {
         this.content = content;
     }
 
+    /**
+     * Gets content.
+     *
+     * @return the content
+     */
     @JsonValue
     public String getContent() {
         return content;
     }
 
+    /**
+     * For content reaction content.
+     *
+     * @param content
+     *            the content
+     * @return the reaction content
+     */
     @JsonCreator
     public static ReactionContent forContent(String content) {
         for (ReactionContent c : ReactionContent.values()) {

@@ -60,8 +60,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             GHBranch branch = repo.getBranch("test/NonExistent");
             fail();
         }
-        catch(GHFileNotFoundException e){
-            assertEquals("{\"message\":\"Branch not found\",\"documentation_url\":\"https://developer.github.com/v3/repos/branches/#get-branch\"}", e.getMessage());
+        catch(Exception e){
+            //I dont really love this but I wanted to get to the root wrapped cause
+            assertEquals("Branch Not Found", e.getCause().getCause().getCause().getMessage());
         }
     }
 

@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -26,7 +26,15 @@ public class GHBranch {
     private boolean protection;
     private String protection_url;
 
-
+    @JsonCreator
+    GHBranch(@JsonProperty("name") String name) throws Exception{
+        if (name != null) {
+            this.name = name;
+        }
+        else{
+            throw new GHFileNotFoundException("Branch Not Found");
+        }
+    }
     public static class Commit {
         String sha;
 

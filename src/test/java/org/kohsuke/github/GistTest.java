@@ -15,8 +15,12 @@ public class GistTest extends AbstractGitHubWireMockTest {
     @Test
     public void lifecycleTest() throws Exception {
         // CRUD operation
-        GHGist gist = gitHub.createGist().public_(false).description("Test Gist").file("abc.txt", "abc")
-                .file("def.txt", "def").create();
+        GHGist gist = gitHub.createGist()
+                .public_(false)
+                .description("Test Gist")
+                .file("abc.txt", "abc")
+                .file("def.txt", "def")
+                .create();
 
         assertThat(gist.getCreatedAt(), is(notNullValue()));
 

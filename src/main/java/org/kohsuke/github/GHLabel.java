@@ -81,8 +81,13 @@ public class GHLabel {
      *             the io exception
      */
     public void setColor(String newColor) throws IOException {
-        repo.root.retrieve().method("PATCH").withPreview(SYMMETRA).with("name", name).with("color", newColor)
-                .with("description", description).to(url);
+        repo.root.retrieve()
+                .method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", newColor)
+                .with("description", description)
+                .to(url);
     }
 
     /**
@@ -96,8 +101,13 @@ public class GHLabel {
     @Preview
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.root.retrieve().method("PATCH").withPreview(SYMMETRA).with("name", name).with("color", color)
-                .with("description", newDescription).to(url);
+        repo.root.retrieve()
+                .method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", color)
+                .with("description", newDescription)
+                .to(url);
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

@@ -125,15 +125,18 @@ public class GHIssueComment extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
-                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(owner.root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class)
+                .wrap(owner.root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
-                GHReaction[].class, item -> item.wrap(owner.root));
+        return owner.root.retrieve()
+                .withPreview(SQUIRREL_GIRL)
+                .asPagedIterable(getApiRoute() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     private String getApiRoute() {

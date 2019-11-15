@@ -158,8 +158,8 @@ public class GHAuthorization extends GHObject {
         return this;
     }
 
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
-            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     private static class App {
         private String url;
         private String name;

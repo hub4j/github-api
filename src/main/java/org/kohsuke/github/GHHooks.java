@@ -74,8 +74,11 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root).with("name", name).with("active", active)._with("config", config)
-                    ._with("events", ea).to(collection(), clazz());
+            GHHook hook = new Requester(root).with("name", name)
+                    .with("active", active)
+                    .with("config", config)
+                    .with("events", ea)
+                    .to(collection(), clazz());
 
             return wrap(hook);
         }

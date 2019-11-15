@@ -135,7 +135,7 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root)._with(key, value).method("PATCH").to(getApiRoute());
+        new Requester(root).with(key, value).method("PATCH").to(getApiRoute());
     }
 
     /**

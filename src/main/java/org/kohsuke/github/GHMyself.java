@@ -175,8 +175,10 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-        return root.retrieve().with("type", repoType)
-                .asPagedIterable("/user/repos", GHRepository[].class, item -> item.wrap(root)).withPageSize(pageSize);
+        return root.retrieve()
+                .with("type", repoType)
+                .asPagedIterable("/user/repos", GHRepository[].class, item -> item.wrap(root))
+                .withPageSize(pageSize);
     }
 
     /**
@@ -206,8 +208,9 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return root.retrieve().with("state", state).asPagedIterable("/user/memberships/orgs", GHMembership[].class,
-                item -> item.wrap(root));
+        return root.retrieve()
+                .with("state", state)
+                .asPagedIterable("/user/memberships/orgs", GHMembership[].class, item -> item.wrap(root));
     }
 
     /**

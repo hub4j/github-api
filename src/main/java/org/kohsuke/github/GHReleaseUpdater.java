@@ -99,7 +99,8 @@ public class GHReleaseUpdater {
      *             the io exception
      */
     public GHRelease update() throws IOException {
-        return builder.method("PATCH").to(base.owner.getApiTailUrl("releases/" + base.id), GHRelease.class)
+        return builder.method("PATCH")
+                .to(base.owner.getApiTailUrl("releases/" + base.id), GHRelease.class)
                 .wrap(base.owner);
     }
 

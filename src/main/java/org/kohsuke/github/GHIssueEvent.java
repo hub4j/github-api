@@ -124,7 +124,10 @@ public class GHIssueEvent {
 
     @Override
     public String toString() {
-        return String.format("Issue %d was %s by %s on %s", getIssue().getNumber(), getEvent(), getActor().getLogin(),
+        return String.format("Issue %d was %s by %s on %s",
+                getIssue().getNumber(),
+                getEvent(),
+                getActor().getLogin(),
                 getCreatedAt().toString());
     }
 }

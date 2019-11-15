@@ -72,7 +72,7 @@ public class GHGistBuilder {
      *             if Gist cannot be created.
      */
     public GHGist create() throws IOException {
-        req._with("files", files);
+        req.with("files", files);
         return req.to("/gists", GHGist.class).wrapUp(root);
     }
 }

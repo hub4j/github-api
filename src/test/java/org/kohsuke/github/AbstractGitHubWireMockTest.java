@@ -165,9 +165,12 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         if (mockGitHub.isUseProxy()) {
             cleanupRepository(fullName);
 
-            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).createRepository(name)
+            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
+                    .createRepository(name)
                     .description("A test repository for testing the github-api project: " + name)
-                    .homepage("http://github-api.kohsuke.org/").autoInit(true).create();
+                    .homepage("http://github-api.kohsuke.org/")
+                    .autoInit(true)
+                    .create();
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

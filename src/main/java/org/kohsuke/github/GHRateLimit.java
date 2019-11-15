@@ -60,7 +60,9 @@ public class GHRateLimit {
     private final Record integrationManifest;
 
     static GHRateLimit Unknown() {
-        return new GHRateLimit(new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord(),
+        return new GHRateLimit(new UnknownLimitRecord(),
+                new UnknownLimitRecord(),
+                new UnknownLimitRecord(),
                 new UnknownLimitRecord());
     }
 
@@ -69,7 +71,8 @@ public class GHRateLimit {
     }
 
     @JsonCreator
-    GHRateLimit(@Nonnull @JsonProperty("core") Record core, @Nonnull @JsonProperty("search") Record search,
+    GHRateLimit(@Nonnull @JsonProperty("core") Record core,
+            @Nonnull @JsonProperty("search") Record search,
             @Nonnull @JsonProperty("graphql") Record graphql,
             @Nonnull @JsonProperty("integration_manifest") Record integrationManifest) {
         this.core = core;
@@ -266,7 +269,8 @@ public class GHRateLimit {
          *            the reset epoch seconds
          */
         @JsonCreator
-        public Record(@JsonProperty("limit") int limit, @JsonProperty("remaining") int remaining,
+        public Record(@JsonProperty("limit") int limit,
+                @JsonProperty("remaining") int remaining,
                 @JsonProperty("reset") long resetEpochSeconds) {
             this(limit, remaining, resetEpochSeconds, null);
         }

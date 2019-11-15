@@ -176,7 +176,7 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root).withPreview(INERTIA)._with(key, value).method("PATCH").to(getApiRoute());
+        new Requester(root).withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
     }
 
     /**
@@ -282,8 +282,11 @@ public class GHProject extends GHObject {
      */
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.retrieve().withPreview(INERTIA).asPagedIterable(String.format("/projects/%d/columns", id),
-                GHProjectColumn[].class, item -> item.wrap(project));
+        return root.retrieve()
+                .withPreview(INERTIA)
+                .asPagedIterable(String.format("/projects/%d/columns", id),
+                        GHProjectColumn[].class,
+                        item -> item.wrap(project));
     }
 
     /**
@@ -296,7 +299,11 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.retrieve().method("POST").withPreview(INERTIA).with("name", name)
-                .to(String.format("/projects/%d/columns", id), GHProjectColumn.class).wrap(this);
+        return root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .to(String.format("/projects/%d/columns", id), GHProjectColumn.class)
+                .wrap(this);
     }
 }

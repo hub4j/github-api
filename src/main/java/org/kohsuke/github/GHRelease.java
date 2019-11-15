@@ -241,7 +241,9 @@ public class GHRelease extends GHObject {
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
 
-        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s", owner.getApiTailUrl(""), getId(),
+        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
+                owner.getApiTailUrl(""),
+                getId(),
                 filename);
         return builder.contentType(contentType).with(stream).to(url, GHAsset.class).wrap(this);
     }

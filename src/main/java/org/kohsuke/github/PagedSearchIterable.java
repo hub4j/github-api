@@ -11,8 +11,10 @@ import java.util.Iterator;
  *            the type parameter
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "Constructed by JSON API")
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+                "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+        justification = "Constructed by JSON API")
 public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     private final GitHub root;
 

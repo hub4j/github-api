@@ -86,15 +86,17 @@ public class GHRepositoryStatistics {
      * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return root.retrieve().asPagedIterable(getApiTailUrl("contributors"), ContributorStats[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(getApiTailUrl("contributors"), ContributorStats[].class, item -> item.wrapUp(root));
     }
 
     /**
      * The type ContributorStats.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                    "URF_UNREAD_FIELD" },
+            justification = "JSON API")
     public static class ContributorStats extends GHObject {
         /* package almost final */ private GitHub root;
         private GHUser author;
@@ -172,8 +174,10 @@ public class GHRepositoryStatistics {
         /**
          * The type Week.
          */
-        @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-                "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" }, justification = "JSON API")
+        @SuppressFBWarnings(
+                value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                        "URF_UNREAD_FIELD" },
+                justification = "JSON API")
         public static class Week {
 
             private long w;
@@ -238,15 +242,16 @@ public class GHRepositoryStatistics {
      *             the io exception
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return root.retrieve().asPagedIterable(getApiTailUrl("commit_activity"), CommitActivity[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(getApiTailUrl("commit_activity"), CommitActivity[].class, item -> item.wrapUp(root));
     }
 
     /**
      * The type CommitActivity.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class CommitActivity extends GHObject {
         /* package almost final */ private GitHub root;
         private List<Integer> days;

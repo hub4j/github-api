@@ -39,7 +39,10 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
-    public GHRepository createRepository(String name, String description, String homepage, String team,
+    public GHRepository createRepository(String name,
+            String description,
+            String homepage,
+            String team,
             boolean isPublic) throws IOException {
         GHTeam t = getTeams().get(team);
         if (t == null)
@@ -65,11 +68,17 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
-    public GHRepository createRepository(String name, String description, String homepage, GHTeam team,
+    public GHRepository createRepository(String name,
+            String description,
+            String homepage,
+            GHTeam team,
             boolean isPublic) throws IOException {
         if (team == null)
             throw new IllegalArgumentException("Invalid team");
-        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).team(team)
+        return createRepository(name).description(description)
+                .homepage(homepage)
+                .private_(!isPublic)
+                .team(team)
                 .create();
     }
 
@@ -111,8 +120,10 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/teams", login), GHTeam[].class,
-                item -> item.wrapUp(GHOrganization.this));
+        return root.retrieve()
+                .asPagedIterable(String.format("/orgs/%s/teams", login),
+                        GHTeam[].class,
+                        item -> item.wrapUp(GHOrganization.this));
     }
 
     /**
@@ -171,7 +182,9 @@ public class GHOrganization extends GHPerson {
      *      "https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT").with("role", role.name().toLowerCase())
+        root.retrieve()
+                .method("PUT")
+                .with("role", role.name().toLowerCase())
                 .to("/orgs/" + login + "/memberships/" + user.getLogin());
     }
 
@@ -285,8 +298,10 @@ public class GHOrganization extends GHPerson {
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
-                GHUser[].class, item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
+                        GHUser[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**
@@ -311,7 +326,9 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-        return root.retrieve().withPreview(INERTIA).with("state", status)
+        return root.retrieve()
+                .withPreview(INERTIA)
+                .with("state", status)
                 .asPagedIterable(String.format("/orgs/%s/projects", login), GHProject[].class, item -> item.wrap(root));
     }
 
@@ -338,8 +355,13 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return root.retrieve().method("POST").withPreview(INERTIA).with("name", name).with("body", body)
-                .to(String.format("/orgs/%s/projects", login), GHProject.class).wrap(root);
+        return root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .with("body", body)
+                .to(String.format("/orgs/%s/projects", login), GHProject.class)
+                .wrap(root);
     }
 
     /**
@@ -430,8 +452,10 @@ public class GHOrganization extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/events", login), GHEventInfo[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(String.format("/orgs/%s/events", login),
+                        GHEventInfo[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**

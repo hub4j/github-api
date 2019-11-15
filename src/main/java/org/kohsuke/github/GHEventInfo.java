@@ -30,8 +30,10 @@ public class GHEventInfo {
     /**
      * Inside the event JSON model, GitHub uses a slightly different format.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "JSON API")
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+                    "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "JSON API")
     public static class GHEventRepository {
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private long id;
@@ -86,8 +88,8 @@ public class GHEventInfo {
      * @throws IOException
      *             on error
      */
-    @SuppressFBWarnings(value = {
-            "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
         return root.getRepository(repo.name);
     }
@@ -99,8 +101,8 @@ public class GHEventInfo {
      * @throws IOException
      *             on error
      */
-    @SuppressFBWarnings(value = {
-            "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
         return root.getUser(actor.getLogin());
     }
@@ -123,8 +125,8 @@ public class GHEventInfo {
      * @throws IOException
      *             the io exception
      */
-    @SuppressFBWarnings(value = {
-            "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" }, justification = "The field comes from JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
         return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());
     }

@@ -14,8 +14,8 @@ import java.util.Date;
  * @see <a href="https://developer.github.com/v3/activity/notifications/">documentation</a>
  * @see GHNotificationStream
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 public class GHThread extends GHObject {
     private GitHub root;
     private GHRepository repository;
@@ -176,8 +176,11 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(root).with("subscribed", subscribed).with("ignored", ignored).method("PUT")
-                .to(subscription_url, GHSubscription.class).wrapUp(root);
+        return new Requester(root).with("subscribed", subscribed)
+                .with("ignored", ignored)
+                .method("PUT")
+                .to(subscription_url, GHSubscription.class)
+                .wrapUp(root);
     }
 
     /**

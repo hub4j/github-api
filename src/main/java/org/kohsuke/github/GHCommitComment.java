@@ -16,8 +16,8 @@ import static org.kohsuke.github.Previews.*;
  * @see GHCommit#createComment(String, String, Integer, Integer) GHCommit#createComment(String, String, Integer,
  *      Integer)
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 public class GHCommitComment extends GHObject implements Reactable {
     private GHRepository owner;
 
@@ -120,15 +120,18 @@ public class GHCommitComment extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
-                .to(getApiTail() + "/reactions", GHReaction.class).wrap(owner.root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiTail() + "/reactions", GHReaction.class)
+                .wrap(owner.root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiTail() + "/reactions",
-                GHReaction[].class, item -> item.wrap(owner.root));
+        return owner.root.retrieve()
+                .withPreview(SQUIRREL_GIRL)
+                .asPagedIterable(getApiTail() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     /**

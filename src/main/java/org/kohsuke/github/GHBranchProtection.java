@@ -11,8 +11,10 @@ import java.util.Collection;
 /**
  * The type GHBranchProtection.
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHBranchProtection {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 

@@ -14,8 +14,10 @@ import static org.kohsuke.github.Previews.*;
  *
  * @author Yusuke Kokubo
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHBranch {
     private GitHub root;
     private GHRepository owner;
@@ -141,13 +143,15 @@ public class GHBranch {
     @Deprecated
     public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
         switch (level) {
-        case OFF:
-            disableProtection();
-            break;
-        case NON_ADMINS:
-        case EVERYONE:
-            enableProtection().addRequiredChecks(contexts).includeAdmins(level == EnforcementLevel.EVERYONE).enable();
-            break;
+            case OFF :
+                disableProtection();
+                break;
+            case NON_ADMINS :
+            case EVERYONE :
+                enableProtection().addRequiredChecks(contexts)
+                        .includeAdmins(level == EnforcementLevel.EVERYONE)
+                        .enable();
+                break;
         }
     }
 

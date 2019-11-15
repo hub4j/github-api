@@ -101,7 +101,9 @@ public class GHNotificationStream implements Iterable<GHThread> {
      */
     public Iterator<GHThread> iterator() {
         // capture the configuration setting here
-        final Requester req = new Requester(root).method("GET").with("all", all).with("participating", participating)
+        final Requester req = new Requester(root).method("GET")
+                .with("all", all)
+                .with("participating", participating)
                 .with("since", since);
 
         return new Iterator<GHThread>() {

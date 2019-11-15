@@ -88,7 +88,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
 
     @Override
     public PagedIterable<GHPullRequest> list() {
-        return req.withPreview(SHADOW_CAT).asPagedIterable(repo.getApiTailUrl("pulls"), GHPullRequest[].class,
-                item -> item.wrapUp(repo));
+        return req.withPreview(SHADOW_CAT)
+                .asPagedIterable(repo.getApiTailUrl("pulls"), GHPullRequest[].class, item -> item.wrapUp(repo));
     }
 }

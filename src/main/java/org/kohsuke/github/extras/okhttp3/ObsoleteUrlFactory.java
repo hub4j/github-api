@@ -263,7 +263,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         if (networkResponse == null) {
             return response.cacheResponse() == null ? "NONE" : "CACHE " + response.code();
         } else {
-            return response.cacheResponse() == null ? "NETWORK " + response.code()
+            return response.cacheResponse() == null
+                    ? "NETWORK " + response.code()
                     : "CONDITIONAL_CACHE " + networkResponse.code();
         }
     }
@@ -414,8 +415,10 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             if (responseHeaders == null) {
                 Response response = getResponse(true);
                 Headers headers = response.headers();
-                responseHeaders = headers.newBuilder().add(SELECTED_PROTOCOL, response.protocol().toString())
-                        .add(RESPONSE_SOURCE, responseSourceHeader(response)).build();
+                responseHeaders = headers.newBuilder()
+                        .add(SELECTED_PROTOCOL, response.protocol().toString())
+                        .add(RESPONSE_SOURCE, responseSourceHeader(response))
+                        .build();
             }
             return responseHeaders;
         }
@@ -471,7 +474,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return toMultimap(requestHeaders.build(), null);
         }
 
-        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "Good request will have body")
+        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                justification = "Good request will have body")
         @Override
         public InputStream getInputStream() throws IOException {
             if (!doInput) {
@@ -503,7 +507,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return requestBody.outputStream;
         }
 
-        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "usingProxy() handles this")
+        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                justification = "usingProxy() handles this")
         @Override
         public Permission getPermission() {
             URL url = getURL();
@@ -604,7 +609,9 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
                 throw malformedUrl;
             }
 
-            Request request = new Request.Builder().url(url).headers(requestHeaders.build()).method(method, requestBody)
+            Request request = new Request.Builder().url(url)
+                    .headers(requestHeaders.build())
+                    .method(method, requestBody)
                     .build();
 
             OkHttpClient.Builder clientBuilder = client.newBuilder();
@@ -787,7 +794,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
                 }
             }
 
-            @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "If we get here there is a connection and request.body() is checked")
+            @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                    justification = "If we get here there is a connection and request.body() is checked")
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
@@ -843,7 +851,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
                 @Override
                 public void write(int b) throws IOException {
-                    write(new byte[] { (byte) b }, 0, 1);
+                    write(new byte[]{ (byte) b }, 0, 1);
                 }
 
                 @Override
@@ -929,8 +937,10 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
             outputStream.close();
             contentLength = buffer.size();
-            return request.newBuilder().removeHeader("Transfer-Encoding")
-                    .header("Content-Length", Long.toString(buffer.size())).build();
+            return request.newBuilder()
+                    .removeHeader("Transfer-Encoding")
+                    .header("Content-Length", Long.toString(buffer.size()))
+                    .build();
         }
 
         @Override

@@ -90,7 +90,8 @@ public class GitHubBuilder implements Cloneable {
      * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
      *             clients of this library will all recognize one consistent set of coordinates.
      */
-    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName,
+    public static GitHubBuilder fromEnvironment(String loginVariableName,
+            String passwordVariableName,
             String oauthVariableName) throws IOException {
         return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, "");
     }
@@ -118,8 +119,10 @@ public class GitHubBuilder implements Cloneable {
      * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
      *             clients of this library will all recognize one consistent set of coordinates.
      */
-    public static GitHubBuilder fromEnvironment(String loginVariableName, String passwordVariableName,
-            String oauthVariableName, String endpointVariableName) throws IOException {
+    public static GitHubBuilder fromEnvironment(String loginVariableName,
+            String passwordVariableName,
+            String oauthVariableName,
+            String endpointVariableName) throws IOException {
         Properties env = new Properties();
         loadIfSet(loginVariableName, env, "login");
         loadIfSet(passwordVariableName, env, "password");
@@ -355,7 +358,13 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public GitHub build() throws IOException {
-        return new GitHub(endpoint, user, oauthToken, jwtToken, password, connector, rateLimitHandler,
+        return new GitHub(endpoint,
+                user,
+                oauthToken,
+                jwtToken,
+                password,
+                connector,
+                rateLimitHandler,
                 abuseLimitHandler);
     }
 

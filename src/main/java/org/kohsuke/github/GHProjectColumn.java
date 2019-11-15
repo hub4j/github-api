@@ -137,8 +137,11 @@ public class GHProjectColumn extends GHObject {
      */
     public PagedIterable<GHProjectCard> listCards() throws IOException {
         final GHProjectColumn column = this;
-        return root.retrieve().withPreview(INERTIA).asPagedIterable(String.format("/projects/columns/%d/cards", id),
-                GHProjectCard[].class, item -> item.wrap(column));
+        return root.retrieve()
+                .withPreview(INERTIA)
+                .asPagedIterable(String.format("/projects/columns/%d/cards", id),
+                        GHProjectCard[].class,
+                        item -> item.wrap(column));
     }
 
     /**
@@ -151,8 +154,12 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-        return root.retrieve().method("POST").withPreview(INERTIA).with("note", note)
-                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class).wrap(this);
+        return root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with("note", note)
+                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class)
+                .wrap(this);
     }
 
     /**
@@ -165,9 +172,12 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-        return root.retrieve().method("POST").withPreview(INERTIA)
+        return root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
                 .with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
                 .with("content_id", issue.getId())
-                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class).wrap(this);
+                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class)
+                .wrap(this);
     }
 }

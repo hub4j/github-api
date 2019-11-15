@@ -176,7 +176,7 @@
               <goal>${formatter-maven-plugin.goal}</goal>
             </goals>
             <configuration>
-              <configFile>eclipse/formatter.xml</configFile>
+              <configFile>src/main/resources/eclipse/formatter.xml</configFile>
             </configuration>
           </execution>
         </executions>

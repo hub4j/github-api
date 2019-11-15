@@ -243,7 +243,9 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        root.retrieve().method("PUT").with("permission", permission)
+        root.retrieve()
+                .method("PUT")
+                .with("permission", permission)
                 .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()), null);
     }
 

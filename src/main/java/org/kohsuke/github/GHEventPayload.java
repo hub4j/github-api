@@ -53,8 +53,9 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pullrequestevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
         private String action;
         private int number;
@@ -251,8 +252,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issueevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Issue extends GHEventPayload {
         private String action;
         private GHIssue issue;
@@ -323,8 +324,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class IssueComment extends GHEventPayload {
         private String action;
         private GHIssueComment comment;
@@ -416,8 +417,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#commitcommentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class CommitComment extends GHEventPayload {
         private String action;
         private GHCommitComment comment;
@@ -486,8 +487,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#createevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Create extends GHEventPayload {
         private String ref;
         @JsonProperty("ref_type")
@@ -570,8 +571,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#deleteevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Delete extends GHEventPayload {
         private String ref;
         @JsonProperty("ref_type")
@@ -631,8 +632,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Deployment extends GHEventPayload {
         private GHDeployment deployment;
         private GHRepository repository;
@@ -691,8 +692,8 @@ public abstract class GHEventPayload {
      * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentstatusevent">authoritative
      *      source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class DeploymentStatus extends GHEventPayload {
         @JsonProperty("deployment_status")
         private GHDeploymentStatus deploymentStatus;
@@ -772,8 +773,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#forkevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Fork extends GHEventPayload {
         private GHRepository forkee;
         private GHRepository repository;
@@ -924,8 +925,9 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD",
-            "UUF_UNUSED_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(
+            value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Push extends GHEventPayload {
         private String head, before;
         private boolean created, deleted, forced;
@@ -1196,8 +1198,8 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#releaseevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
-            "NP_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Release extends GHEventPayload {
         private String action;
         private GHRelease release;
@@ -1265,8 +1267,9 @@ public abstract class GHEventPayload {
      *
      * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD",
-            "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    @SuppressFBWarnings(
+            value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "Constructed by JSON deserialization")
     public static class Repository extends GHEventPayload {
         private String action;
         private GHRepository repository;

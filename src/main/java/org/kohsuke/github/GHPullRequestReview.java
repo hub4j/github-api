@@ -159,7 +159,9 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.root).method("POST").with("body", body).with("event", event.action())
+        new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("event", event.action())
                 .to(getApiRoute() + "/events", this);
         this.body = body;
         this.state = event.toState();
@@ -196,7 +198,9 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.retrieve().asPagedIterable(getApiRoute() + "/comments", GHPullRequestReviewComment[].class,
-                item -> item.wrapUp(owner));
+        return owner.root.retrieve()
+                .asPagedIterable(getApiRoute() + "/comments",
+                        GHPullRequestReviewComment[].class,
+                        item -> item.wrapUp(owner));
     }
 }

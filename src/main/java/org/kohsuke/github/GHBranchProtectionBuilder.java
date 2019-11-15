@@ -19,8 +19,10 @@ import static org.kohsuke.github.Previews.*;
  *
  * @see GHBranch#enableProtection() GHBranch#enableProtection()
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHBranchProtectionBuilder {
     private final GHBranch branch;
 
@@ -86,10 +88,13 @@ public class GHBranchProtectionBuilder {
      *             the io exception
      */
     public GHBranchProtection enable() throws IOException {
-        return requester().method("PUT").withNullable("required_status_checks", statusChecks)
-                .withNullable("required_pull_request_reviews", prReviews).withNullable("restrictions", restrictions)
+        return requester().method("PUT")
+                .withNullable("required_status_checks", statusChecks)
+                .withNullable("required_pull_request_reviews", prReviews)
+                .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class).wrap(branch);
+                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
+                .wrap(branch);
     }
 
     /**

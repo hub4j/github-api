@@ -27,8 +27,10 @@ public class GHCommit {
     /**
      * Short summary of this commit.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                    "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class ShortInfo {
         private GHAuthor author;
         private GHAuthor committer;
@@ -167,7 +169,8 @@ public class GHCommit {
          *
          * @return Full path in the repository.
          */
-        @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library's API and cannot be renamed")
+        @SuppressFBWarnings(value = "NM_CONFUSING",
+                justification = "It's a part of the library's API and cannot be renamed")
         public String getFileName() {
             return filename;
         }
@@ -344,7 +347,7 @@ public class GHCommit {
      */
     public List<File> getFiles() throws IOException {
         populate();
-        return files != null ? Collections.unmodifiableList(files) : Collections.<File> emptyList();
+        return files != null ? Collections.unmodifiableList(files) : Collections.<File>emptyList();
     }
 
     /**
@@ -438,9 +441,11 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.retrieve().asPagedIterable(
-                String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
-                GHCommitComment[].class, item -> item.wrap(owner));
+        return owner.root.retrieve()
+                .asPagedIterable(
+                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
+                        GHCommitComment[].class,
+                        item -> item.wrap(owner));
     }
 
     /**
@@ -461,7 +466,9 @@ public class GHCommit {
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = new Requester(owner.root).with("body", body).with("path", path).with("line", line)
+        GHCommitComment r = new Requester(owner.root).with("body", body)
+                .with("path", path)
+                .with("line", line)
                 .with("position", position)
                 .to(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
                         GHCommitComment.class);

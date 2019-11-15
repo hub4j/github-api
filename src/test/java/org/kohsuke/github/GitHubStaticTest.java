@@ -98,7 +98,8 @@ public class GitHubStaticTest extends Assert {
         assertThat("Unknown should not replace worst record", GitHub.shouldReplace(unknown1, recordWorst), is(false));
 
         assertThat("Earlier record should replace later worst", GitHub.shouldReplace(record0, recordWorst), is(true));
-        assertThat("Later worst record should not replace earlier", GitHub.shouldReplace(recordWorst, record0),
+        assertThat("Later worst record should not replace earlier",
+                GitHub.shouldReplace(recordWorst, record0),
                 is(false));
 
         assertThat("Equivalent record should not replace", GitHub.shouldReplace(record0, record00), is(false));
@@ -109,14 +110,17 @@ public class GitHubStaticTest extends Assert {
 
         assertThat("Higher limit record should not replace lower", GitHub.shouldReplace(record1, record2), is(false));
 
-        assertThat("Higher limit record with later reset should  replace lower", GitHub.shouldReplace(record3, record2),
+        assertThat("Higher limit record with later reset should  replace lower",
+                GitHub.shouldReplace(record3, record2),
                 is(true));
 
-        assertThat("Lower limit record with later reset should replace higher", GitHub.shouldReplace(record4, record1),
+        assertThat("Lower limit record with later reset should replace higher",
+                GitHub.shouldReplace(record4, record1),
                 is(true));
 
         assertThat("Lower limit record with earlier reset should not replace higher",
-                GitHub.shouldReplace(record2, record4), is(false));
+                GitHub.shouldReplace(record2, record4),
+                is(false));
 
     }
 

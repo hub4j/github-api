@@ -163,8 +163,8 @@ public class GHCompare {
      * Compare commits had a child commit element with additional details we want to capture. This extenstion of
      * GHCommit provides that.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
-            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class Commit extends GHCommit {
 
         private InnerCommit commit;

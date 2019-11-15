@@ -197,8 +197,10 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/users/%s/events", login), GHEventInfo[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(String.format("/users/%s/events", login),
+                        GHEventInfo[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**
@@ -209,8 +211,10 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHGist> listGists() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/users/%s/gists", login), GHGist[].class,
-                item -> item.wrapUp(GHUser.this));
+        return root.retrieve()
+                .asPagedIterable(String.format("/users/%s/gists", login),
+                        GHGist[].class,
+                        item -> item.wrapUp(GHUser.this));
     }
 
     @Override

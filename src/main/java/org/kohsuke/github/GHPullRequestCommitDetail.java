@@ -34,8 +34,10 @@ import java.net.URL;
  * @author Luca Milanesio
  * @see GHPullRequest#listCommits() GHPullRequest#listCommits()
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHPullRequestCommitDetail {
     private GHPullRequest owner;
 

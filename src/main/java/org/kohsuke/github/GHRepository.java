@@ -195,14 +195,14 @@ public class GHRepository extends GHObject {
     /**
      * Enum with the possible collaborator permissions. Used in
      * {@link #addCollaborators(GHCollaboratorPermission, GHUser...)} and
-     * {@link #addCollaborators(GHCollaboratorPermission, Collection<GHUser>)}.
+     * {@link #addCollaborators(GHCollaboratorPermission, Collection)}.
      *
      * Request body of the resulting request is encoded within the toString method of this enum.
      *
      * @author Christoph Rieser
      *
      * @see #addCollaborators(GHCollaboratorPermission, GHUser...)
-     * @see #addCollaborators(GHCollaboratorPermission, Collection<GHUser>)
+     * @see #addCollaborators(GHCollaboratorPermission, Collection)
      * @see <a href=
      *      "https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator">https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator</a>
      **/
@@ -864,12 +864,19 @@ public class GHRepository extends GHObject {
      * @param users
      *            user(s) to add
      * @throws IOException
+     *             the io exception
      */
     public void addCollaborators(GHUser... users) throws IOException {
         addCollaborators(asList(users));
     }
 
     /**
+     * Adds GHUser(s) as collaborator(s) to this GHRepository with push permission.
+     *
+     * @param users
+     *            user(s) to add
+     * @throws IOException
+     *             the io exception
      * @see #addCollaborators(GHUser...)
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
@@ -885,6 +892,7 @@ public class GHRepository extends GHObject {
      * @param users
      *            user(s) to add
      * @throws IOException
+     *             the io exception
      * @see <a href=
      *      "https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator">https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator</a>
      */
@@ -893,6 +901,17 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Adds GHUser(s) as collaborator(s) to this GHRepository with the given permission. Only valid on organisation-owed
+     * repositories!
+     *
+     * @param permission
+     *            permission the user(s) should get.
+     * @param users
+     *            user(s) to add
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator">https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator</a>
      * @see #addCollaborators(GHCollaboratorPermission, GHUser...)
      */
     public void addCollaborators(GHCollaboratorPermission permission, Collection<GHUser> users) throws IOException {
@@ -905,12 +924,19 @@ public class GHRepository extends GHObject {
      * @param users
      *            user(s) to remove
      * @throws IOException
+     *             the io exception
      */
     public void removeCollaborators(GHUser... users) throws IOException {
         removeCollaborators(asList(users));
     }
 
     /**
+     * removes the given user(s) as collaborators from this repository
+     *
+     * @param users
+     *            user(s) to remove
+     * @throws IOException
+     *             the io exception
      * @see #removeCollaborators(GHUser...)
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {

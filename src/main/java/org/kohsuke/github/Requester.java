@@ -795,10 +795,20 @@ class Requester {
                 return type.cast(Array.newInstance(type.getComponentType(), 0));
             }
 
-            // Response code 202 means the statistics are still being cached.
+            // Response code 202 means data is being generated still being cached.
+            // This happens in for statistics:
             // See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
+            // And for fork creation:
+            // See https://developer.github.com/v3/repos/forks/#create-a-fork
             if (responseCode == 202) {
-                LOGGER.log(INFO, "The statistics are still being generated. Please try again in 5 seconds.");
+                if (uc.getURL().toString().endsWith("/forks")) {
+                    LOGGER.log(INFO, "The fork is being created. Please try again in 5 seconds.");
+                } else if (uc.getURL().toString().endsWith("/statistics")) {
+                    LOGGER.log(INFO, "The statistics are being generated. Please try again in 5 seconds.");
+                } else {
+                    LOGGER.log(INFO,
+                            "Received 202 from " + uc.getURL().toString() + " . Please try again in 5 seconds.");
+                }
                 // Maybe throw an exception instead?
                 return null;
             }

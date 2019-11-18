@@ -1,0 +1,89 @@
+{
+  "name": "master",
+  "commit": {
+    "sha": "d32e320555f9d47f78e64fc3889e567d5eebee8e",
+    "node_id": "MDY6Q29tbWl0MjIyNTk2MDU3OmQzMmUzMjA1NTVmOWQ0N2Y3OGU2NGZjMzg4OWU1NjdkNWVlYmVlOGU=",
+    "commit": {
+      "author": {
+        "name": "Liam Newman",
+        "email": "bitwiseman@gmail.com",
+        "date": "2019-11-19T03:01:35Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2019-11-19T03:01:35Z"
+      },
+      "message": "Initial commit",
+      "tree": {
+        "sha": "32d1abb4db4e0b5f067f13f8ec544e62126ef47a",
+        "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/git/trees/32d1abb4db4e0b5f067f13f8ec544e62126ef47a"
+      },
+      "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/git/commits/d32e320555f9d47f78e64fc3889e567d5eebee8e",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJd01sPCRBK7hj4Ov3rIwAAdHIIADGTF2CM1Q6wUw3RB/sKFvl2\npKkcGV3+0W4+Clnx1k1b60TbjD8hnq+ZtkWxvo3QmUplUapunHoj4zrUkqmzwOVg\nKrCwsvBzSJoRxbKN5j04wCTwB9oUSCEPxs9UxolqCOumwa+GzLv2t4EjGeDEf09S\n18C9Dg9+eiIMaXbO+HXOkltj4V9BTI8+IWA/0EMHVBqeh8daWcbyhQcaHBdkNgR6\nDq9UKMz0Ny2S6/A2v+y8YBj6ftXs+q5/fAPSu6hI4SMAVz26nl1SvkJmR8N79PQ9\nbiybCEzd5is507e8ufr7ElJ/1bfV2z0c0wkXfV6nNX+xYSKP+IfOLAfUljeoCZM=\n=RhfP\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 32d1abb4db4e0b5f067f13f8ec544e62126ef47a\nauthor Liam Newman <bitwiseman@gmail.com> 1574132495 -0800\ncommitter GitHub <noreply@github.com> 1574132495 -0800\n\nInitial commit"
+      }
+    },
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/commits/d32e320555f9d47f78e64fc3889e567d5eebee8e",
+    "html_url": "https://github.com/github-api-test-org/temp-testEnableRequireReviewsOnly/commit/d32e320555f9d47f78e64fc3889e567d5eebee8e",
+    "comments_url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/commits/d32e320555f9d47f78e64fc3889e567d5eebee8e/comments",
+    "author": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": []
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master",
+    "html": "https://github.com/github-api-test-org/temp-testEnableRequireReviewsOnly/tree/master"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection"
+}

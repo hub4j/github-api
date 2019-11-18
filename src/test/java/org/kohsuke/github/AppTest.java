@@ -2,13 +2,11 @@ package org.kohsuke.github;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
-import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -550,7 +548,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     private void tryTeamCreation(GitHub gitHub) throws IOException {
         GHOrganization o = gitHub.getOrganization("HudsonLabs");
-        GHTeam t = o.createTeam("auto team", Permission.PUSH);
+        GHTeam t = o.createTeam("auto team");
         t.add(o.getRepository("auto-test"));
     }
 

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -491,9 +490,7 @@ public abstract class GHEventPayload {
             justification = "Constructed by JSON deserialization")
     public static class Create extends GHEventPayload {
         private String ref;
-        @JsonProperty("ref_type")
         private String refType;
-        @JsonProperty("master_branch")
         private String masterBranch;
         private String description;
         private GHRepository repository;
@@ -575,7 +572,6 @@ public abstract class GHEventPayload {
             justification = "Constructed by JSON deserialization")
     public static class Delete extends GHEventPayload {
         private String ref;
-        @JsonProperty("ref_type")
         private String refType;
         private GHRepository repository;
 
@@ -695,7 +691,6 @@ public abstract class GHEventPayload {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
     public static class DeploymentStatus extends GHEventPayload {
-        @JsonProperty("deployment_status")
         private GHDeploymentStatus deploymentStatus;
         private GHDeployment deployment;
         private GHRepository repository;

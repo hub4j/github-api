@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.codec.Charsets;
@@ -1379,9 +1380,10 @@ public class GitHub {
     };
 
     static {
-        MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));
+        MAPPER.setVisibility(new Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     }
 
     static final String GITHUB_URL = "https://api.github.com";

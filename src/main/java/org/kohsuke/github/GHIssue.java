@@ -24,10 +24,9 @@
 
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
-
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,10 +34,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 
 /**
  * Represents an issue on GitHub.
@@ -179,7 +178,7 @@ public class GHIssue extends GHObject implements Reactable {
         if (labels == null) {
             return Collections.emptyList();
         }
-        return Collections.<GHLabel> unmodifiableList(labels);
+        return Collections.<GHLabel>unmodifiableList(labels);
     }
 
     /**
@@ -231,8 +230,8 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = new Requester(root).with("body", message).to(getIssuesApiRoute() + "/comments",
-                GHIssueComment.class);
+        GHIssueComment r = new Requester(root).with("body", message)
+                .to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
         return r.wrapUp(this);
     }
 
@@ -443,22 +442,27 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return root.retrieve().asPagedIterable(getIssuesApiRoute() + "/comments", GHIssueComment[].class,
-                item -> item.wrapUp(GHIssue.this));
+        return root.retrieve()
+                .asPagedIterable(getIssuesApiRoute() + "/comments",
+                        GHIssueComment[].class,
+                        item -> item.wrapUp(GHIssue.this));
     }
 
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root).withPreview(SQUIRREL_GIRL).with("content", content.getContent())
-                .to(getApiRoute() + "/reactions", GHReaction.class).wrap(root);
+        return new Requester(owner.root).withPreview(SQUIRREL_GIRL)
+                .with("content", content.getContent())
+                .to(getApiRoute() + "/reactions", GHReaction.class)
+                .wrap(root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve().withPreview(SQUIRREL_GIRL).asPagedIterable(getApiRoute() + "/reactions",
-                GHReaction[].class, item -> item.wrap(owner.root));
+        return owner.root.retrieve()
+                .withPreview(SQUIRREL_GIRL)
+                .asPagedIterable(getApiRoute() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     /**
@@ -482,8 +486,10 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("POST").with(ASSIGNEES, getLogins(assignees)).to(getIssuesApiRoute() + "/assignees",
-                this);
+        root.retrieve()
+                .method("POST")
+                .with(ASSIGNEES, getLogins(assignees))
+                .to(getIssuesApiRoute() + "/assignees", this);
     }
 
     /**
@@ -531,7 +537,10 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("DELETE").with(ASSIGNEES, getLogins(assignees)).inBody()
+        root.retrieve()
+                .method("DELETE")
+                .with(ASSIGNEES, getLogins(assignees))
+                .inBody()
                 .to(getIssuesApiRoute() + "/assignees", this);
     }
 
@@ -645,8 +654,8 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * The type PullRequest.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
-            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class PullRequest {
         private String diff_url, patch_url, html_url;
 
@@ -694,7 +703,9 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(owner.getApiTailUrl(String.format("/issues/%s/events", number)),
-                GHIssueEvent[].class, item -> item.wrapUp(GHIssue.this));
+        return root.retrieve()
+                .asPagedIterable(owner.getApiTailUrl(String.format("/issues/%s/events", number)),
+                        GHIssueEvent[].class,
+                        item -> item.wrapUp(GHIssue.this));
     }
 }

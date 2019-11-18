@@ -1,10 +1,8 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.VerificationException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.FileSource;
-import com.github.tomakehurst.wiremock.core.Options;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
@@ -12,11 +10,6 @@ import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.verification.*;
 import com.google.gson.*;
-import org.junit.rules.MethodRule;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +17,6 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -94,11 +86,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     protected void after() {
         super.after();
         if (isTakeSnapshot()) {
-            this.apiServer().snapshotRecord(recordSpec().forTarget("https://api.github.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+            this.apiServer()
+                    .snapshotRecord(recordSpec().forTarget("https://api.github.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
 
-            this.rawServer().snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+            this.rawServer()
+                    .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
 
             // After taking the snapshot, format the output
             formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
@@ -118,7 +114,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     private void formatJsonFiles(Path path) {
         // The more consistent we can make the json output the more meaningful it will be.
-        Gson g = new Gson().newBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting()
+        Gson g = new Gson().newBuilder()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .setPrettyPrinting()
                 .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override
                     public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
@@ -128,7 +127,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             return new JsonPrimitive(src.longValue());
                         return new JsonPrimitive(src);
                     }
-                }).create();
+                })
+                .create();
 
         try {
             Files.walk(path).forEach(filePath -> {

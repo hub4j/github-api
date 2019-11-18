@@ -28,8 +28,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.WillClose;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +44,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -59,6 +56,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
 import static java.util.logging.Level.*;
@@ -723,8 +723,9 @@ class Requester {
 
     private void setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method
-                    + " " + url.toString());
+            LOGGER.log(FINE,
+                    "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " "
+                            + url.toString());
         }
         uc = root.getConnector().connect(url);
 
@@ -811,7 +812,7 @@ class Requester {
                     throw (IOException) new IOException("Failed to deserialize " + data).initCause(e);
                 }
             if (instance != null) {
-                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T> readValue(data));
+                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
             }
             return null;
         } catch (FileNotFoundException e) {
@@ -872,8 +873,10 @@ class Requester {
             // likely to be a network exception (e.g. SSLHandshakeException),
             // uc.getResponseCode() and any other getter on the response will cause an exception
             if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
-                        + " handling exception " + e, e);
+                LOGGER.log(FINE,
+                        "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
+                                + " handling exception " + e,
+                        e);
             throw e;
         }
         InputStream es = wrapStream(uc.getErrorStream());

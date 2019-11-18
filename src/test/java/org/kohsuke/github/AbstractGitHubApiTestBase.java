@@ -1,16 +1,7 @@
 package org.kohsuke.github;
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.kohsuke.randname.RandomNameGenerator;
-
-import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assume.assumeTrue;
 

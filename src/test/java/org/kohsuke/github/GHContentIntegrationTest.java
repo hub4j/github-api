@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +72,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCRUDContent() throws Exception {
         GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n",
-                "Creating a file for integration tests.", createdFilename);
+                "Creating a file for integration tests.",
+                createdFilename);
         GHContent createdContent = created.getContent();
 
         assertNotNull(created.getCommit());

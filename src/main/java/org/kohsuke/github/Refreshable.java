@@ -1,9 +1,6 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.extras.ImpatientHttpConnector;
-
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**

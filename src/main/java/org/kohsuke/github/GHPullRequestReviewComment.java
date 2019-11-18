@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
+
 import javax.annotation.CheckForNull;
 
 import static org.kohsuke.github.Previews.*;

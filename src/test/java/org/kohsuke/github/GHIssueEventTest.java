@@ -1,8 +1,9 @@
 package org.kohsuke.github;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.List;
-import org.junit.Test;
 
 /**
  * @author Martin van Zijl

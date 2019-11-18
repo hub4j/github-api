@@ -3,10 +3,10 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import static org.kohsuke.github.Previews.ZZZAX;
-
 import java.io.IOException;
 import java.util.Collection;
+
+import static org.kohsuke.github.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.

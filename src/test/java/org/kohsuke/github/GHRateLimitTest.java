@@ -2,16 +2,10 @@ package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
-import org.apache.commons.io.FileUtils;
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 

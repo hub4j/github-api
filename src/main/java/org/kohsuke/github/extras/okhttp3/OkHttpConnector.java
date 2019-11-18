@@ -3,13 +3,11 @@ package org.kohsuke.github.extras.okhttp3;
 import com.squareup.okhttp.CacheControl;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
-
 import org.kohsuke.github.HttpConnector;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

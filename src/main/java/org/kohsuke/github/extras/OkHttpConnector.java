@@ -4,17 +4,13 @@ import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.ConnectionSpec;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
-
 import org.kohsuke.github.HttpConnector;
 
 import java.io.IOException;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

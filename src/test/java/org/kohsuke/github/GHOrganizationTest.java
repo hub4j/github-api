@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.jcraft.jsch.IO;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,8 +32,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST,
-                "a test repository used to test kohsuke's github-api", "http://github-api.kohsuke.org/",
-                "Core Developers", true);
+                "a test repository used to test kohsuke's github-api",
+                "http://github-api.kohsuke.org/",
+                "Core Developers",
+                true);
         Assert.assertNotNull(repository);
     }
 
@@ -45,7 +46,9 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHRepository repository = org.createRepository(GITHUB_API_TEST)
                 .description("a test repository used to test kohsuke's github-api")
-                .homepage("http://github-api.kohsuke.org/").team(org.getTeamByName("Core Developers")).autoInit(true)
+                .homepage("http://github-api.kohsuke.org/")
+                .team(org.getTeamByName("Core Developers"))
+                .autoInit(true)
                 .create();
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());

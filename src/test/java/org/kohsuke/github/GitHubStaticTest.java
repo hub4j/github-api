@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.eclipse.jgit.api.Git;
 import org.junit.Assert;
 import org.junit.Test;
 

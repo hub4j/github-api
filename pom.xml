@@ -36,6 +36,7 @@
     <okhttp3.version>4.2.2</okhttp3.version>
     <okio.version>2.4.1</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
+    <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <jacoco.coverage.target.class>.80</jacoco.coverage.target.class>
     <jacoco.coverage.target.method>0.20</jacoco.coverage.target.method>
     <jacoco.coverage.target.line>0.50</jacoco.coverage.target.line>
@@ -178,6 +179,23 @@
             <configuration>
               <configFile>src/main/resources/eclipse/formatter.xml</configFile>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>net.revelc.code</groupId>
+        <artifactId>impsort-maven-plugin</artifactId>
+        <version>1.3.2</version>
+        <configuration>
+          <groups>*,java.,javax.</groups>
+          <removeUnused>true</removeUnused>
+          <staticAfter>true</staticAfter>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>${impsort-maven-plugin.goal}</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -359,6 +377,7 @@
       <id>ci</id>
       <properties>
         <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
+        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
       </properties>
       <build>
       </build>
@@ -406,44 +425,44 @@
                       <limits>
                         <!-- These limits can be overridden, in the form of `0.50` for          -->
                         <!-- 50%, as necessary. Using a property just puts it in one spot.      -->
-<!--
-                        <limit>
-                          <counter>LINE</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.lines}</minimum>
-                        </limit>
--->
-<!--
-                        <limit>
-                          <counter>BRANCH</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.other}</minimum>
-                        </limit>
--->
-<!--
-                        <limit>
-                          <counter>INSTRUCTION</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.other}</minimum>
-                        </limit>
--->
-<!--
-                        <limit>
-                          <counter>COMPLEXITY</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.other}</minimum>
-                        </limit>
--->
+                        <!--
+                                                <limit>
+                                                  <counter>LINE</counter>
+                                                  <value>COVEREDRATIO</value>
+                                                  <minimum>${jacoco.coverage.target.lines}</minimum>
+                                                </limit>
+                        -->
+                        <!--
+                                                <limit>
+                                                  <counter>BRANCH</counter>
+                                                  <value>COVEREDRATIO</value>
+                                                  <minimum>${jacoco.coverage.target.other}</minimum>
+                                                </limit>
+                        -->
+                        <!--
+                                                <limit>
+                                                  <counter>INSTRUCTION</counter>
+                                                  <value>COVEREDRATIO</value>
+                                                  <minimum>${jacoco.coverage.target.other}</minimum>
+                                                </limit>
+                        -->
+                        <!--
+                                                <limit>
+                                                  <counter>COMPLEXITY</counter>
+                                                  <value>COVEREDRATIO</value>
+                                                  <minimum>${jacoco.coverage.target.other}</minimum>
+                                                </limit>
+                        -->
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
                           <minimum>${jacoco.coverage.target.method}</minimum>
                         </limit>
-<!--                        <limit>-->
-<!--                          <counter>CLASS</counter>-->
-<!--                          <value>COVEREDRATIO</value>-->
-<!--                          <minimum>${jacoco.coverage.target.class}</minimum>-->
-<!--                        </limit>-->
+                        <!--                        <limit>-->
+                        <!--                          <counter>CLASS</counter>-->
+                        <!--                          <value>COVEREDRATIO</value>-->
+                        <!--                          <minimum>${jacoco.coverage.target.class}</minimum>-->
+                        <!--                        </limit>-->
                       </limits>
                       <excludes>
                         <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
@@ -461,7 +480,7 @@
       </build>
     </profile>
     <profile>
-    <id>release</id>
+      <id>release</id>
       <build>
         <plugins>
           <plugin>

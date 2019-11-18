@@ -11,7 +11,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
 
 /**
  * @author Liam Newman
@@ -197,8 +196,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void searchRepositories() throws Exception {
-        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly")
-                .sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories()
+                .q("tetris")
+                .language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS)
+                .list();
         GHRepository u = r.iterator().next();
         // System.out.println(u.getName());
         assertNotNull(u.getId());
@@ -279,7 +281,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         topics.add("java");
         topics.add("api-test-dummy");
         repo.setTopics(topics);
-        assertThat("Topics retain input order (are not sort when stored)", repo.listTopics(),
+        assertThat("Topics retain input order (are not sort when stored)",
+                repo.listTopics(),
                 contains("java", "api-test-dummy"));
 
         topics = new ArrayList<>();
@@ -287,14 +290,16 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         topics.add("api-test-dummy");
         topics.add("java");
         repo.setTopics(topics);
-        assertThat("Topics behave as a set and retain order from previous calls", repo.listTopics(),
+        assertThat("Topics behave as a set and retain order from previous calls",
+                repo.listTopics(),
                 contains("java", "api-test-dummy", "ordered-state"));
 
         topics = new ArrayList<>();
         topics.add("ordered-state");
         topics.add("api-test-dummy");
         repo.setTopics(topics);
-        assertThat("Topics retain order even when some are removed", repo.listTopics(),
+        assertThat("Topics retain order even when some are removed",
+                repo.listTopics(),
                 contains("api-test-dummy", "ordered-state"));
 
         topics = new ArrayList<>();

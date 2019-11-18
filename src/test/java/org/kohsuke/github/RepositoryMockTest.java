@@ -39,7 +39,7 @@ public class RepositoryMockTest {
         user2.login = "login2";
 
         when(iterator.hasNext()).thenReturn(true, false, true);
-        when(iterator.next()).thenReturn(new GHUser[] { user1 }, new GHUser[] { user2 });
+        when(iterator.next()).thenReturn(new GHUser[]{ user1 }, new GHUser[]{ user2 });
 
         Requester requester = Mockito.mock(Requester.class);
         when(mockGitHub.retrieve()).thenReturn(requester);

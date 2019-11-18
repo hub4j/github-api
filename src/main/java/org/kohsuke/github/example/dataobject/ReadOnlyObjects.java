@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 /**
  * {@link org.kohsuke.github.GHMeta} wraps the list of GitHub's IP addresses.
@@ -504,8 +505,10 @@ public final class ReadOnlyObjects {
 
         @JsonCreator
         private GHMetaGettersFinalCreator(@Nonnull @JsonProperty("hooks") List<String> hooks,
-                @Nonnull @JsonProperty("git") List<String> git, @Nonnull @JsonProperty("web") List<String> web,
-                @Nonnull @JsonProperty("api") List<String> api, @Nonnull @JsonProperty("pages") List<String> pages,
+                @Nonnull @JsonProperty("git") List<String> git,
+                @Nonnull @JsonProperty("web") List<String> web,
+                @Nonnull @JsonProperty("api") List<String> api,
+                @Nonnull @JsonProperty("pages") List<String> pages,
                 @Nonnull @JsonProperty("importer") List<String> importer,
                 @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;

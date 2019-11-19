@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -8,8 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
 
 /**
@@ -46,6 +47,27 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    // Issue #607
+    @Test
+    public void getBranchNonExistentBut200Status() throws Exception {
+        // Manually changed the returned status to 200 so dont take a new snapshot
+        this.snapshotNotAllowed();
+
+        // This should *never* happen but with mocking it was discovered
+        GHRepository repo = getRepository();
+        try {
+            GHBranch branch = repo.getBranch("test/NonExistent");
+            fail();
+        } catch (Exception e) {
+            // I dont really love this but I wanted to get to the root wrapped cause
+            assertThat(e, instanceOf(IOException.class));
+            assertThat(e.getMessage(),
+                    equalTo("Server returned HTTP response code: 200, message: 'OK' for URL: "
+                            + mockGitHub.apiServer().baseUrl()
+                            + "/repos/github-api-test-org/github-api/branches/test%2FNonExistent"));
+        }
     }
 
     @Test

@@ -58,8 +58,8 @@ public class GHHookTest {
 
         try {
             // fails because application isn't approved in organisation and you can find it only after doing real call
-            final GHHook hook = repository.createHook("my-hook", singletonMap("url", "http://localhost"),
-                    singletonList(GHEvent.PUSH), true);
+            final GHHook hook = repository
+                    .createHook("my-hook", singletonMap("url", "http://localhost"), singletonList(GHEvent.PUSH), true);
         } catch (IOException ex) {
             assertThat(ex, instanceOf(GHFileNotFoundException.class));
             final GHFileNotFoundException ghFileNotFoundException = (GHFileNotFoundException) ex;

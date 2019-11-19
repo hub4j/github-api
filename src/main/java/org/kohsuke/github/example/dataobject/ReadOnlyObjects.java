@@ -504,8 +504,10 @@ public final class ReadOnlyObjects {
 
         @JsonCreator
         private GHMetaGettersFinalCreator(@Nonnull @JsonProperty("hooks") List<String> hooks,
-                @Nonnull @JsonProperty("git") List<String> git, @Nonnull @JsonProperty("web") List<String> web,
-                @Nonnull @JsonProperty("api") List<String> api, @Nonnull @JsonProperty("pages") List<String> pages,
+                @Nonnull @JsonProperty("git") List<String> git,
+                @Nonnull @JsonProperty("web") List<String> web,
+                @Nonnull @JsonProperty("api") List<String> api,
+                @Nonnull @JsonProperty("pages") List<String> pages,
                 @Nonnull @JsonProperty("importer") List<String> importer,
                 @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;

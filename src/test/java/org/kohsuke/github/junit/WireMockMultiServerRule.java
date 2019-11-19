@@ -88,7 +88,8 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
             directoryName += "_" + serverId;
         }
 
-        final Options localOptions = new WireMockRuleConfiguration(WireMockMultiServerRule.this.options, directoryName,
+        final Options localOptions = new WireMockRuleConfiguration(WireMockMultiServerRule.this.options,
+                directoryName,
                 extensions);
 
         new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();

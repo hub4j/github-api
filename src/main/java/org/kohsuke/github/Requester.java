@@ -723,8 +723,9 @@ class Requester {
 
     private void setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method
-                    + " " + url.toString());
+            LOGGER.log(FINE,
+                    "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " "
+                            + url.toString());
         }
         uc = root.getConnector().connect(url);
 
@@ -811,7 +812,7 @@ class Requester {
                     throw (IOException) new IOException("Failed to deserialize " + data).initCause(e);
                 }
             if (instance != null) {
-                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T> readValue(data));
+                return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
             }
             return null;
         } catch (FileNotFoundException e) {
@@ -872,8 +873,10 @@ class Requester {
             // likely to be a network exception (e.g. SSLHandshakeException),
             // uc.getResponseCode() and any other getter on the response will cause an exception
             if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE, "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
-                        + " handling exception " + e, e);
+                LOGGER.log(FINE,
+                        "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
+                                + " handling exception " + e,
+                        e);
             throw e;
         }
         InputStream es = wrapStream(uc.getErrorStream());

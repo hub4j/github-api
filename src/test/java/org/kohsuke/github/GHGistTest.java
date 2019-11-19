@@ -9,7 +9,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class GistTest extends AbstractGitHubWireMockTest {
+public class GHGistTest extends AbstractGitHubWireMockTest {
     @Test
     public void lifecycleTest() throws Exception {
         // CRUD operation

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -22,7 +21,6 @@ public class GHAppInstallationToken {
     protected String expires_at;
     private Map<String, String> permissions;
     private List<GHRepository> repositories;
-    @JsonProperty("repository_selection")
     private GHRepositorySelection repositorySelection;
 
     /**

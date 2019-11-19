@@ -24,10 +24,9 @@
 
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
-
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,10 +34,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+
+import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 
 /**
  * Represents an issue on GitHub.

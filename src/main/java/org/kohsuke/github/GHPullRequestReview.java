@@ -25,10 +25,11 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
+
+import javax.annotation.CheckForNull;
 
 /**
  * Review to a pull request.

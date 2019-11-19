@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.jcraft.jsch.IO;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

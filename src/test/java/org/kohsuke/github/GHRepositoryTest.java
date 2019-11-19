@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -12,7 +11,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
 
 /**
  * @author Liam Newman

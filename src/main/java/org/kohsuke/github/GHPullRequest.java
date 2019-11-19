@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +31,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import javax.annotation.CheckForNull;
 
 import static org.kohsuke.github.Previews.SHADOW_CAT;
 

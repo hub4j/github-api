@@ -1,10 +1,11 @@
 package org.kohsuke.github;
 
-import javax.annotation.CheckForNull;
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.CheckForNull;
 
 /**
  * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.

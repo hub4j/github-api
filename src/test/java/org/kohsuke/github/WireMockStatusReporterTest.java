@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.junit.WireMockRule;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;

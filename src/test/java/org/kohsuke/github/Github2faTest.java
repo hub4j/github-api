@@ -1,10 +1,10 @@
 package org.kohsuke.github;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
 
 /**
  * @author Kevin Harrington mad.hephaestus@gmail.com

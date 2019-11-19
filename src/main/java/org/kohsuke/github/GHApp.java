@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -21,13 +19,10 @@ public class GHApp extends GHObject {
     private GHUser owner;
     private String name;
     private String description;
-    @JsonProperty("external_url")
     private String externalUrl;
     private Map<String, String> permissions;
     private List<GHEvent> events;
-    @JsonProperty("installations_count")
     private long installationsCount;
-    @JsonProperty("html_url")
     private String htmlUrl;
 
     /**

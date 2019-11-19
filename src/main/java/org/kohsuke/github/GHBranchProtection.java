@@ -3,10 +3,10 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import static org.kohsuke.github.Previews.ZZZAX;
-
 import java.io.IOException;
 import java.util.Collection;
+
+import static org.kohsuke.github.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.
@@ -18,7 +18,7 @@ import java.util.Collection;
 public class GHBranchProtection {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
-    @JsonProperty("enforce_admins")
+    @JsonProperty
     private EnforceAdmins enforceAdmins;
 
     private GitHub root;
@@ -26,7 +26,7 @@ public class GHBranchProtection {
     @JsonProperty("required_pull_request_reviews")
     private RequiredReviews requiredReviews;
 
-    @JsonProperty("required_status_checks")
+    @JsonProperty
     private RequiredStatusChecks requiredStatusChecks;
 
     @JsonProperty
@@ -162,10 +162,8 @@ public class GHBranchProtection {
         @JsonProperty("dismissal_restrictions")
         private Restrictions dismissalRestriction;
 
-        @JsonProperty("dismiss_stale_reviews")
         private boolean dismissStaleReviews;
 
-        @JsonProperty("require_code_owner_reviews")
         private boolean requireCodeOwnerReviews;
 
         @JsonProperty("required_approving_review_count")
@@ -294,7 +292,6 @@ public class GHBranchProtection {
         @JsonProperty
         private Collection<GHTeam> teams;
 
-        @JsonProperty("teams_url")
         private String teamsUrl;
 
         @JsonProperty
@@ -303,7 +300,6 @@ public class GHBranchProtection {
         @JsonProperty
         private Collection<GHUser> users;
 
-        @JsonProperty("users_url")
         private String usersUrl;
 
         /**

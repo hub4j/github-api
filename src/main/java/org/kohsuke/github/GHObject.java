@@ -5,13 +5,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.CheckForNull;
 
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.

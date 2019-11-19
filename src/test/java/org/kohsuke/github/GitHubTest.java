@@ -1,11 +1,11 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.google.common.collect.Iterables;
 import org.junit.Test;
 import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
+
+import java.io.IOException;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 

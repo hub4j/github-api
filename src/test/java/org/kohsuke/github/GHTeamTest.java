@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 

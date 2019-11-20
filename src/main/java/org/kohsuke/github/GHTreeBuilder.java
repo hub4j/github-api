@@ -105,7 +105,6 @@ public class GHTreeBuilder {
      * @param executable
      *            the executable
      * @return the gh tree builder
-     * @apiNote It seems that GitHub no longer supports the 'content' parameter.
      * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
      */
     @Deprecated

@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 
@@ -85,5 +86,20 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
         Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
+        Assert.assertEquals(Permission.PUSH.toString().toLowerCase(), team.getPermission());
+    }
+
+    @Test
+    public void testCreateTeam() throws IOException {
+        String REPO_NAME = "github-api";
+        String DEFAULT_PERMISSION = Permission.PULL.toString().toLowerCase();
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Create team with no permission field. Verify that default permission is pull
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE, repo);
+        Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
+        Assert.assertEquals(DEFAULT_PERMISSION, team.getPermission());
     }
 }

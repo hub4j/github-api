@@ -384,7 +384,10 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
+     *             {@link #createTeam(String, Collection)}
      */
+    @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
         Requester post = new Requester(root).with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
@@ -407,9 +410,48 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
+     *             {@link #createTeam(String, GHRepository...)}
      */
+    @Deprecated
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
         return createTeam(name, p, Arrays.asList(repositories));
+    }
+
+    /**
+     * Creates a new team and assigns the repositories.
+     *
+     * @param name
+     *            the name
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
+        Requester post = new Requester(root).with("name", name);
+        List<String> repo_names = new ArrayList<String>();
+        for (GHRepository r : repositories) {
+            repo_names.add(login + "/" + r.getName());
+        }
+        post.with("repo_names", repo_names);
+        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
+    }
+
+    /**
+     * Create team gh team.
+     *
+     * @param name
+     *            the name
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
+        return createTeam(name, Arrays.asList(repositories));
     }
 
     /**

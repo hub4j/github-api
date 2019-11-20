@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,9 @@ public class GHTreeBuilder {
      * @param content
      *            the content
      * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
      */
+    @Deprecated
     public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
         TreeEntry entry = new TreeEntry(path, mode, type);
         entry.sha = sha;
@@ -81,7 +84,9 @@ public class GHTreeBuilder {
      * @param executable
      *            the executable
      * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
      */
+    @Deprecated
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");
         entry.sha = sha;
@@ -100,12 +105,50 @@ public class GHTreeBuilder {
      * @param executable
      *            the executable
      * @return the gh tree builder
+     * @apiNote It seems that GitHub no longer supports the 'content' parameter.
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
      */
+    @Deprecated
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
         TreeEntry entry = new TreeEntry(path, executable ? "100755" : "100644", "blob");
         entry.content = content;
         treeEntries.add(entry);
         return this;
+    }
+
+    /**
+     * Adds a new entry with the given binary content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as byte array
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, byte[] content, boolean executable) {
+        try {
+            String dataSha = repo.createBlob().binaryContent(content).create().getSha();
+            return shaEntry(path, dataSha, executable);
+        } catch (IOException e) {
+            throw new GHException("Cannot create binary content of '" + path + "'", e);
+        }
+    }
+
+    /**
+     * Adds a new entry with the given text content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as UTF-8 encoded string
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, String content, boolean executable) {
+        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);
     }
 
     private String getApiTail() {

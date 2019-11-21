@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,8 +54,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
@@ -370,46 +367,31 @@ class Requester {
         return _to(tailApiUrl, null, existingInstance);
     }
 
-    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        if (!isMethodWithBody() && !args.isEmpty()) {
-            boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
-            tailApiUrl += questionMarkFound ? '&' : '?';
-            for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
-                Entry arg = it.next();
-                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(), "UTF-8");
-                if (it.hasNext()) {
-                    tailApiUrl += '&';
-                }
+        T result;
+
+        if (type != null && type.isArray()) {
+            // for arrays we might have to loop for pagination
+            // use the iterator to handle it
+            List<T> pages = new ArrayList<>();
+            int totalSize = 0;
+            for (Iterator<T> iterator = asIterator(tailApiUrl, type, 0); iterator.hasNext();) {
+                T nextResult = iterator.next();
+                totalSize += Array.getLength(nextResult);
+                pages.add(nextResult);
             }
+
+            result = concatenatePages(type, pages, totalSize);
+            return setResponseHeaders(result);
         }
 
+        tailApiUrl = buildTailApiUrl(tailApiUrl);
+        setupConnection(root.getApiURL(tailApiUrl));
+        buildRequest();
+
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
-
-            buildRequest();
-
             try {
-                T result = parse(type, instance);
-                if (type != null && type.isArray()) { // we might have to loop for pagination - done through recursion
-                    final String links = uc.getHeaderField("link");
-                    if (links != null && links.contains("rel=\"next\"")) {
-                        Pattern nextLinkPattern = Pattern.compile(".*<(.*)>; rel=\"next\"");
-                        Matcher nextLinkMatcher = nextLinkPattern.matcher(links);
-                        if (nextLinkMatcher.find()) {
-                            final String link = nextLinkMatcher.group(1);
-                            T nextResult = _to(link, type, instance);
-                            setResponseHeaders(nextResult);
-                            final int resultLength = Array.getLength(result);
-                            final int nextResultLength = Array.getLength(nextResult);
-                            T concatResult = (T) Array.newInstance(type.getComponentType(),
-                                    resultLength + nextResultLength);
-                            System.arraycopy(result, 0, concatResult, 0, resultLength);
-                            System.arraycopy(nextResult, 0, concatResult, resultLength, nextResultLength);
-                            result = concatResult;
-                        }
-                    }
-                }
+                result = parse(type, instance);
                 return setResponseHeaders(result);
             } catch (IOException e) {
                 handleApiError(e);
@@ -417,6 +399,43 @@ class Requester {
                 noteRateLimit(tailApiUrl);
             }
         }
+    }
+
+    private <T> T concatenatePages(Class<T> type, List<T> pages, int totalLength) {
+
+        T result = (T) Array.newInstance(type.getComponentType(), totalLength);
+
+        int position = 0;
+        for (T page : pages) {
+            final int pageLength = Array.getLength(page);
+            System.arraycopy(page, 0, result, position, pageLength);
+            position += pageLength;
+        }
+        return result;
+    }
+
+    private String buildTailApiUrl(String tailApiUrl) {
+        if (!isMethodWithBody() && !args.isEmpty()) {
+            try {
+                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
+                StringBuilder argString = new StringBuilder();
+                argString.append(questionMarkFound ? '&' : '?');
+
+                for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
+                    Entry arg = it.next();
+                    argString.append(URLEncoder.encode(arg.key, "UTF-8"));
+                    argString.append('=');
+                    argString.append(URLEncoder.encode(arg.value.toString(), "UTF-8"));
+                    if (it.hasNext()) {
+                        argString.append('&');
+                    }
+                }
+                tailApiUrl += argString;
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError(e); // UTF-8 is mandatory
+            }
+        }
+        return tailApiUrl;
     }
 
     /**
@@ -471,10 +490,14 @@ class Requester {
     }
 
     private void noteRateLimit(String tailApiUrl) {
+        if (uc == null) {
+            return;
+        }
         if (tailApiUrl.startsWith("/search")) {
             // the search API uses a different rate limit
             return;
         }
+
         String limitString = uc.getHeaderField("X-RateLimit-Limit");
         if (StringUtils.isBlank(limitString)) {
             // if we are missing a header, return fast
@@ -613,24 +636,10 @@ class Requester {
         if (pageSize != 0)
             args.add(new Entry("per_page", pageSize));
 
-        StringBuilder s = new StringBuilder(tailApiUrl);
-        if (!args.isEmpty()) {
-            boolean first = true;
-            try {
-                for (Entry a : args) {
-                    s.append(first ? '?' : '&');
-                    first = false;
-                    s.append(URLEncoder.encode(a.key, "UTF-8"));
-                    s.append('=');
-                    s.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
-                }
-            } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e); // UTF-8 is mandatory
-            }
-        }
+        tailApiUrl = buildTailApiUrl(tailApiUrl);
 
         try {
-            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
+            return new PagingIterator<>(type, tailApiUrl, root.getApiURL(tailApiUrl));
         } catch (IOException e) {
             throw new GHException("Unable to build github Api URL", e);
         }

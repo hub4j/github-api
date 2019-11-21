@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -240,11 +241,10 @@ public class GHRelease extends GHObject {
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
         Requester builder = new Requester(owner.root);
-
-        String url = format("https://uploads.github.com%s/releases/%d/assets?name=%s",
-                owner.getApiTailUrl(""),
-                getId(),
-                filename);
+        String url = getUploadUrl();
+        // strip the helpful garbage from the url
+        url = url.substring(0, url.indexOf('{'));
+        url += "?name=" + URLEncoder.encode(filename, "UTF-8");
         return builder.contentType(contentType).with(stream).to(url, GHAsset.class).wrap(this);
     }
 

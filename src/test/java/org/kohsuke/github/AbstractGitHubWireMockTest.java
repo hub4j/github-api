@@ -170,23 +170,19 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
                     .description("A test repository for testing the github-api project: " + name)
                     .homepage("http://github-api.kohsuke.org/")
                     .autoInit(true)
+                    .wiki(true)
+                    .downloads(true)
+                    .issues(true)
+                    .private_(false)
                     .create();
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
-
-            configureTempRepository(repository);
         }
 
         return gitHub.getRepository(fullName);
-    }
-
-    protected void configureTempRepository(GHRepository repository) throws IOException {
-        repository.enableIssueTracker(true);
-        repository.enableDownloads(true);
-        repository.enableWiki(true);
     }
 
     @Before

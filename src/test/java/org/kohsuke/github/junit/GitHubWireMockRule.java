@@ -58,6 +58,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return servers.get("raw");
     }
 
+    public WireMockServer uploadsServer() {
+        return servers.get("uploads");
+    }
+
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
@@ -69,6 +73,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void initializeServers() {
         super.initializeServers();
+        initializeServer("uploads");
         initializeServer("raw");
         initializeServer("default", new GitHubApiResponseTransformer(this));
     }
@@ -77,6 +82,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     protected void before() {
         super.before();
         if (isUseProxy()) {
+            this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
             this.apiServer().stubFor(proxyAllTo("https://api.github.com").atPriority(100));
             this.rawServer().stubFor(proxyAllTo("https://raw.githubusercontent.com").atPriority(100));
         }
@@ -96,11 +102,20 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             .captureHeader("If-None-Match")
                             .extractTextBodiesOver(255));
 
+            this.uploadsServer()
+                    .snapshotRecord(recordSpec().forTarget("https://uploads.github.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
+
             // After taking the snapshot, format the output
             formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
 
             // For raw server, only fix up mapping files
             formatJsonFiles(new File(this.rawServer().getOptions().filesRoot().child("mappings").getPath()).toPath());
+
+            // For uploads server, only fix up mapping files
+            formatJsonFiles(
+                    new File(this.uploadsServer().getOptions().filesRoot().child("mappings").getPath()).toPath());
         }
     }
 
@@ -138,6 +153,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         // while recording responses we replaced all github calls localhost
                         // now we reverse that for storage.
                         fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com")
+                                .replace(this.uploadsServer().baseUrl(), "https://uploads.github.com")
                                 .replace(this.rawServer().baseUrl(), "https://raw.githubusercontent.com");
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
@@ -198,6 +214,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 body = getBodyAsString(response, headers);
 
                 builder.body(body.replace("https://api.github.com", rule.apiServer().baseUrl())
+                        .replace("https://uploads.github.com", rule.uploadsServer().baseUrl())
                         .replace("https://raw.githubusercontent.com", rule.rawServer().baseUrl()));
 
             }

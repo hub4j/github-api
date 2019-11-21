@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/master",
+  "node_id": "MDM6UmVmMjIyODc0Mzk2Om1hc3Rlcg==",
+  "url": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/refs/heads/master",
+  "object": {
+    "sha": "c2066e756eb2185ed12419f790af4375c8b91e7b",
+    "type": "commit",
+    "url": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/commits/c2066e756eb2185ed12419f790af4375c8b91e7b"
+  }
+}

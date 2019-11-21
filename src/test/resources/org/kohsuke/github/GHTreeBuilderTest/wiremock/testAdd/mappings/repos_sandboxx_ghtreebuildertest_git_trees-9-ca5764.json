@@ -1,0 +1,50 @@
+{
+  "id": "ca576479-28d9-4c2d-8ecb-743fc3cce5c5",
+  "name": "repos_sandboxx_ghtreebuildertest_git_trees",
+  "request": {
+    "url": "/repos/sandboxx/GHTreeBuilderTest/git/trees",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"base_tree\":\"737e00d471104660a7e8177fd5deb58fc46bbbec\",\"tree\":[{\"path\":\"app/run.sh\",\"mode\":\"100755\",\"type\":\"blob\",\"sha\":\"e9ba7ba07276a794d493db90e0384940ce2b757b\",\"content\":null},{\"path\":\"doc/readme.txt\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"fbbc875b17d1e17da06b4ee8fda46e2596c41f3c\",\"content\":null},{\"path\":\"data/val1.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74\",\"content\":null},{\"path\":\"data/val2.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"5bd8bb897b13225c93a1d26baa88c96b7bd5d817\",\"content\":null}]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_sandboxx_ghtreebuildertest_git_trees-ca576479-28d9-4c2d-8ecb-743fc3cce5c5.json",
+    "headers": {
+      "Date": "Wed, 20 Nov 2019 22:34:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4708",
+      "X-RateLimit-Reset": "1574292484",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"92cf0d1a217625c7fe445408ddf2b0d6\"",
+      "X-OAuth-Scopes": "public_repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/trees/b09a1698f3aeb1d462c3492007760e2579734c74",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F6ED:87DD:3B6DADC:473C49F:5DD5BF8E"
+    }
+  },
+  "uuid": "ca576479-28d9-4c2d-8ecb-743fc3cce5c5",
+  "persistent": true,
+  "insertionIndex": 9
+}

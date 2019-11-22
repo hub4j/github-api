@@ -1,67 +1,42 @@
 package org.kohsuke.github;
 
-import org.apache.commons.io.IOUtils;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.dircache.DirCache;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Properties;
 
-public class LifecycleTest extends AbstractGitHubApiTestBase {
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+
+public class LifecycleTest extends AbstractGitHubWireMockTest {
     @Test
-    public void testCreateRepository() throws IOException, GitAPIException, InterruptedException {
+    public void testCreateRepository() throws IOException {
         GHMyself myself = gitHub.getMyself();
-        GHOrganization org = gitHub.getOrganization("github-api-test-org");
-        GHRepository repository = org.getRepository("github-api-test");
-        if (repository != null) {
-            repository.delete();
-            Thread.sleep(1000);
-        }
-        repository = org.createRepository("github-api-test",
-                "a test repository used to test kohsuke's github-api",
-                "http://github-api.kohsuke.org/",
-                "Core Developers",
-                true);
-        Thread.sleep(1000); // wait for the repository to become ready
+        // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
+        GHRepository repository = getTempRepository();
         assertTrue(repository.getReleases().isEmpty());
-        try {
-            GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
-            GHIssue issue = repository.createIssue("Test Issue")
-                    .body("issue body just for grins")
-                    .milestone(milestone)
-                    .assignee(myself)
-                    .label("bug")
-                    .create();
-            File repoDir = new File(System.getProperty("java.io.tmpdir"), "github-api-test");
-            delete(repoDir);
-            Git origin = Git.cloneRepository()
-                    .setBare(false)
-                    .setURI(repository.getSshUrl())
-                    .setDirectory(repoDir)
-                    .setCredentialsProvider(getCredentialsProvider(myself))
-                    .call();
 
-            commitTestFile(myself, repoDir, origin);
+        GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
+        GHIssue issue = repository.createIssue("Test Issue")
+                .body("issue body just for grins")
+                .milestone(milestone)
+                .assignee(myself)
+                .label("bug")
+                .create();
 
-            GHRelease release = createRelease(repository);
+        assertThat(issue, is(notNullValue()));
 
-            GHAsset asset = uploadAsset(release);
+        GHRelease release = createRelease(repository);
 
-            updateAsset(release, asset);
+        GHAsset asset = uploadAsset(release);
 
-            deleteAsset(release, asset);
-        } finally {
-            repository.delete();
-        }
+        updateAsset(release, asset);
+
+        deleteAsset(release, asset);
     }
 
     private void updateAsset(GHRelease release, GHAsset asset) throws IOException {
@@ -94,25 +69,6 @@ public class LifecycleTest extends AbstractGitHubApiTestBase {
         GHRelease release = releases.get(0);
         assertEquals("Test Release", release.getName());
         return release;
-    }
-
-    private void commitTestFile(GHMyself myself, File repoDir, Git origin) throws IOException, GitAPIException {
-        File dummyFile = createDummyFile(repoDir);
-        DirCache cache = origin.add().addFilepattern(dummyFile.getName()).call();
-        origin.commit().setMessage("test commit").call();
-        origin.push().setCredentialsProvider(getCredentialsProvider(myself)).call();
-    }
-
-    private UsernamePasswordCredentialsProvider getCredentialsProvider(GHMyself myself) throws IOException {
-        Properties props = new Properties();
-        File homeDir = new File(System.getProperty("user.home"));
-        FileInputStream in = new FileInputStream(new File(homeDir, ".github"));
-        try {
-            props.load(in);
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-        return new UsernamePasswordCredentialsProvider(props.getProperty("login"), props.getProperty("oauth"));
     }
 
     private void delete(File toDelete) {

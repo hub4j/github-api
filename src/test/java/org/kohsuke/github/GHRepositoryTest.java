@@ -65,7 +65,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getMessage(),
                     equalTo("Server returned HTTP response code: 200, message: 'OK' for URL: "
                             + mockGitHub.apiServer().baseUrl()
-                            + "/repos/github-api-test-org/github-api/branches/test%2FNonExistent"));
+                            + "/repos/github-api-test-org/github-api/branches/test/NonExistent"));
         }
     }
 

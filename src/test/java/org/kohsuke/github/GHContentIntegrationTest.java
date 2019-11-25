@@ -9,13 +9,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.*;
+
 /**
  * Integration test for {@link GHContent}.
  */
 public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     private GHRepository repo;
-    private String createdFilename = "test-file-to-create.txt";
+
+    // file name with spaces and other chars
+    private final String createdDirectory = "test+directory #50";
+    private final String createdFilename = createdDirectory + "/test file-to+create-#1.txt";
 
     @Before
     @After
@@ -79,7 +84,22 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertNotNull(created.getCommit());
         assertNotNull(created.getContent());
         assertNotNull(createdContent.getContent());
+        assertThat(createdContent.getPath(), equalTo(createdFilename));
         assertEquals("this is an awesome file I created\n", createdContent.getContent());
+
+        GHContent content = repo.getFileContent(createdFilename);
+        assertThat(content, is(notNullValue()));
+        assertThat(content.getSha(), equalTo(createdContent.getSha()));
+        assertThat(content.getContent(), equalTo(createdContent.getContent()));
+        assertThat(content.getPath(), equalTo(createdContent.getPath()));
+
+        List<GHContent> directoryContents = repo.getDirectoryContent(createdDirectory);
+        assertThat(directoryContents, is(notNullValue()));
+        assertThat(directoryContents.size(), equalTo(1));
+        content = directoryContents.get(0);
+        assertThat(content.getSha(), is(created.getContent().getSha()));
+        assertThat(content.getContent(), is(created.getContent().getContent()));
+        assertThat(content.getPath(), equalTo(createdFilename));
 
         GHContentUpdateResponse updatedContentResponse = createdContent.update("this is some new content\n",
                 "Updated file for integration tests.");
@@ -96,5 +116,13 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertNotNull(deleteResponse.getCommit());
         assertNull(deleteResponse.getContent());
+
+        try {
+            repo.getFileContent(createdFilename);
+            fail("Delete didn't work!");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(),
+                    equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
+        }
     }
 }

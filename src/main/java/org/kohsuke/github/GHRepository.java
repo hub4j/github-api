@@ -34,9 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +49,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
@@ -1460,14 +1456,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-        // hashes in branch names must be replaced with the url encoded equivalent or this call will fail
-        // FIXME: how about other URL unsafe characters, like space, @, : etc? do we need to be using
-        // URLEncoder.encode()?
-        // OTOH, '/' need no escaping
-        refName = refName.replaceAll("#", "%23");
-        return root.retrieve()
-                .to(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refName), GHRef.class)
-                .wrap(root);
+        return root.retrieve().to(getApiTailUrl(String.format("git/refs/%s", refName)), GHRef.class).wrap(root);
     }
 
     /**
@@ -2032,25 +2021,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Replace special characters (e.g. #) with standard values (e.g. %23) so GitHub understands what is being
-     * requested.
-     * 
-     * @param value
-     *            string to be encoded.
-     * @return The encoded string.
-     */
-    private String UrlEncode(String value) {
-        try {
-            return URLEncoder.encode(value, org.apache.commons.codec.CharEncoding.UTF_8);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GHRepository.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Something went wrong - just return original value as is.
-        return value;
-    }
-
-    /**
      * Gets branch.
      *
      * @param name
@@ -2060,7 +2030,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHBranch getBranch(String name) throws IOException {
-        return root.retrieve().to(getApiTailUrl("branches/" + UrlEncode(name)), GHBranch.class).wrap(this);
+        return root.retrieve().to(getApiTailUrl("branches/" + name), GHBranch.class).wrap(this);
     }
 
     /**
@@ -2576,7 +2546,7 @@ public class GHRepository extends GHObject {
     String getApiTailUrl(String tail) {
         if (tail.length() > 0 && !tail.startsWith("/"))
             tail = '/' + tail;
-        return "/repos/" + getOwnerName() + "/" + name + tail;
+        return Requester.urlPathEncode("/repos/" + getOwnerName() + "/" + name + tail);
     }
 
     /**

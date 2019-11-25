@@ -108,8 +108,7 @@ public final class GHContentBuilder {
      *             the io exception
      */
     public GHContentUpdateResponse commit() throws IOException {
-        GHContentUpdateResponse response = req.to(repo.getApiTailUrl("contents/" + path),
-                GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = req.to(GHContent.getApiRoute(repo, path), GHContentUpdateResponse.class);
 
         response.getContent().wrap(repo);
         response.getCommit().wrapUp(repo);

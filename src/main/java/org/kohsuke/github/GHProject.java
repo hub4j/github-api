@@ -74,11 +74,11 @@ public class GHProject extends GHObject {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                    owner = root.retrieve().withUrlPath(getOwnerUrl().getPath()).to(GHOrganization.class).wrapUp(root);
                 } else if (owner_url.contains("/users/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                    owner = root.retrieve().withUrlPath(getOwnerUrl().getPath()).to(GHUser.class).wrapUp(root);
                 } else if (owner_url.contains("/repos/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                    owner = root.retrieve().withUrlPath(getOwnerUrl().getPath()).to(GHRepository.class).wrap(root);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -176,7 +176,13 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+        root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with(key, value)
+                .method("PATCH")
+                .withUrlPath(getApiRoute())
+                .to();
     }
 
     /**
@@ -270,7 +276,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).to();
     }
 
     /**
@@ -303,7 +309,8 @@ public class GHProject extends GHObject {
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
-                .to(String.format("/projects/%d/columns", id), GHProjectColumn.class)
+                .withUrlPath(String.format("/projects/%d/columns", id))
+                .to(GHProjectColumn.class)
                 .wrap(this);
     }
 }

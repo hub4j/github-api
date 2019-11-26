@@ -472,8 +472,9 @@ public class GHCommit {
                 .with("path", path)
                 .with("line", line)
                 .with("position", position)
-                .to(String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
-                        GHCommitComment.class);
+                .withUrlPath(
+                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
+                .to(GHCommitComment.class);
         return r.wrap(owner);
     }
 
@@ -520,7 +521,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files == null && stats == null)
-            owner.root.retrieve().to(owner.getApiTailUrl("commits/" + sha), this);
+            owner.root.retrieve().withUrlPath(owner.getApiTailUrl("commits/" + sha)).to(this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

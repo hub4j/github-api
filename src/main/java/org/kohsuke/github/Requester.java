@@ -379,69 +379,6 @@ class Requester {
     /**
      * To.
      *
-     * @param tailApiUrl
-     *            the tail api url
-     * @throws IOException
-     *             the io exception
-     */
-    public void to(@Nonnull String tailApiUrl) throws IOException {
-        withUrlPath(tailApiUrl).to();
-    }
-
-    /**
-     * Sends a request to the specified URL, and parses the response into the given type via databinding.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
-     * @param type
-     *            the type
-     * @return {@link Reader} that reads the response.
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public <T> T to(@Nonnull String tailApiUrl, @Nonnull Class<T> type) throws IOException {
-        return withUrlPath(tailApiUrl).to(type);
-    }
-
-    /**
-     * Sends a request to the specified URL, and parses the response into the given type via databinding.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
-     * @param type
-     *            the type
-     * @return {@link Reader} that reads the response.
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public <T> T[] toArray(@Nonnull String tailApiUrl, @Nonnull Class<T[]> type) throws IOException {
-        return withUrlPath(tailApiUrl).toArray(type);
-    }
-
-    /**
-     * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
-     * @param existingInstance
-     *            the existing instance
-     * @return the t
-     * @throws IOException
-     *             the io exception
-     */
-    public <T> T to(@Nonnull String tailApiUrl, @Nonnull T existingInstance) throws IOException {
-        return withUrlPath(tailApiUrl).to(existingInstance);
-    }
-
-    /**
-     * To.
-     *
      * @throws IOException
      *             the io exception
      */
@@ -493,7 +430,7 @@ class Requester {
     }
 
     /**
-     * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     * Like {@link #to(Class)} but updates an existing object instead of creating a new instance.
      *
      * @param <T>
      *            the type parameter

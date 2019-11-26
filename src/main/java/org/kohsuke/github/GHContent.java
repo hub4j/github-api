@@ -223,7 +223,7 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        root.retrieve().to(url, this);
+        root.retrieve().withUrlPath(url).to(this);
     }
 
     /**
@@ -318,7 +318,8 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
+                .to(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repository);
         response.getCommit().wrapUp(repository);
@@ -363,7 +364,8 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
+                .to(GHContentUpdateResponse.class);
 
         response.getCommit().wrapUp(repository);
         return response;

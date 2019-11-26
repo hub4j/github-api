@@ -57,7 +57,8 @@ public class GHAppCreateTokenBuilder {
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST")
                 .withPreview(MACHINE_MAN)
-                .to(apiUrlTail, GHAppInstallationToken.class)
+                .withUrlPath(apiUrlTail)
+                .to(GHAppInstallationToken.class)
                 .wrapUp(root);
     }
 

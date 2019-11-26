@@ -181,7 +181,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
                         req.setHeader("If-Modified-Since", lastModified);
 
-                        threads = req.toArray(apiUrl, GHThread[].class);
+                        threads = req.withUrlPath(apiUrl).toArray(GHThread[].class);
                         if (threads == null) {
                             threads = EMPTY_ARRAY; // if unmodified, we get empty array
                         } else {

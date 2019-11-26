@@ -200,7 +200,8 @@ public class GHApp extends GHObject {
     public GHAppInstallation getInstallationById(long id) throws IOException {
         return root.retrieve()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/app/installations/%d", id), GHAppInstallation.class)
+                .withUrlPath(String.format("/app/installations/%d", id))
+                .to(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -222,7 +223,8 @@ public class GHApp extends GHObject {
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
         return root.retrieve()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/orgs/%s/installation", name), GHAppInstallation.class)
+                .withUrlPath(String.format("/orgs/%s/installation", name))
+                .to(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -246,7 +248,8 @@ public class GHApp extends GHObject {
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
         return root.retrieve()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/repos/%s/%s/installation", ownerName, repositoryName), GHAppInstallation.class)
+                .withUrlPath(String.format("/repos/%s/%s/installation", ownerName, repositoryName))
+                .to(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -267,7 +270,8 @@ public class GHApp extends GHObject {
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
         return root.retrieve()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/users/%s/installation", name), GHAppInstallation.class)
+                .withUrlPath(String.format("/users/%s/installation", name))
+                .to(GHAppInstallation.class)
                 .wrapUp(root);
     }
 

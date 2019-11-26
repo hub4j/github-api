@@ -71,7 +71,8 @@ public class GHRef {
                 .with("sha", sha)
                 .with("force", force)
                 .method("PATCH")
-                .to(url, GHRef.class)
+                .withUrlPath(url)
+                .to(GHRef.class)
                 .wrap(root);
     }
 
@@ -82,7 +83,7 @@ public class GHRef {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(url);
+        root.retrieve().method("DELETE").withUrlPath(url).to();
     }
 
     GHRef wrap(GitHub root) {

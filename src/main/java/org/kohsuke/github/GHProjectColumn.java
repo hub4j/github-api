@@ -67,7 +67,7 @@ public class GHProjectColumn extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+                project = root.retrieve().withUrlPath(getProjectUrl().getPath()).to(GHProject.class).wrap(root);
             } catch (FileNotFoundException e) {
                 return null;
             }
@@ -106,7 +106,13 @@ public class GHProjectColumn extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+        root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with(key, value)
+                .method("PATCH")
+                .withUrlPath(getApiRoute())
+                .to();
     }
 
     /**
@@ -125,7 +131,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).to();
     }
 
     /**
@@ -158,7 +164,8 @@ public class GHProjectColumn extends GHObject {
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("note", note)
-                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class)
+                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .to(GHProjectCard.class)
                 .wrap(this);
     }
 
@@ -177,7 +184,8 @@ public class GHProjectColumn extends GHObject {
                 .withPreview(INERTIA)
                 .with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
                 .with("content_id", issue.getId())
-                .to(String.format("/projects/columns/%d/cards", id), GHProjectCard.class)
+                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .to(GHProjectCard.class)
                 .wrap(this);
     }
 }

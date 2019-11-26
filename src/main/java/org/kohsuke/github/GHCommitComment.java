@@ -113,7 +113,12 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve().method("POST").with("body", body).method("PATCH").to(getApiTail(), GHCommitComment.class);
+        owner.root.retrieve()
+                .method("POST")
+                .with("body", body)
+                .method("PATCH")
+                .withUrlPath(getApiTail())
+                .to(GHCommitComment.class);
         this.body = body;
     }
 
@@ -124,7 +129,8 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiTail() + "/reactions", GHReaction.class)
+                .withUrlPath(getApiTail() + "/reactions")
+                .to(GHReaction.class)
                 .wrap(owner.root);
     }
 
@@ -143,7 +149,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.retrieve().method("DELETE").to(getApiTail());
+        owner.root.retrieve().method("DELETE").withUrlPath(getApiTail()).to();
     }
 
     private String getApiTail() {

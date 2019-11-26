@@ -95,7 +95,8 @@ public class GHIssueBuilder {
     public GHIssue create() throws IOException {
         return builder.with("labels", labels)
                 .with("assignees", assignees)
-                .to(repo.getApiTailUrl("issues"), GHIssue.class)
+                .withUrlPath(repo.getApiTailUrl("issues"))
+                .to(GHIssue.class)
                 .wrap(repo);
     }
 }

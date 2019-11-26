@@ -55,6 +55,6 @@ public class GHBlobBuilder {
      *             if the blob cannot be created.
      */
     public GHBlob create() throws IOException {
-        return req.method("POST").to(getApiTail(), GHBlob.class);
+        return req.method("POST").withUrlPath(getApiTail()).to(GHBlob.class);
     }
 }

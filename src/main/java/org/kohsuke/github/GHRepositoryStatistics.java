@@ -400,7 +400,7 @@ public class GHRepositoryStatistics {
      *             the io exception
      */
     public Participation getParticipation() throws IOException {
-        return root.retrieve().to(getApiTailUrl("participation"), Participation.class);
+        return root.retrieve().withUrlPath(getApiTailUrl("participation")).to(Participation.class);
     }
 
     /**

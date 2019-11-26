@@ -47,7 +47,7 @@ public abstract class GHPerson extends GHObject {
         if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve().to(url, this);
+        root.retrieve().withUrlPath(url).to(this);
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.retrieve().to("/repos/" + login + '/' + name, GHRepository.class).wrap(root);
+            return root.retrieve().withUrlPath("/repos/" + login + '/' + name).to(GHRepository.class).wrap(root);
         } catch (FileNotFoundException e) {
             return null;
         }

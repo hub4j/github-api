@@ -44,7 +44,7 @@ public class GHBranchProtection {
     @Preview
     @Deprecated
     public void enabledSignedCommits() throws IOException {
-        requester().method("POST").to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class);
+        requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).to(RequiredSignatures.class);
     }
 
     /**
@@ -56,7 +56,7 @@ public class GHBranchProtection {
     @Preview
     @Deprecated
     public void disableSignedCommits() throws IOException {
-        requester().method("DELETE").to(url + REQUIRE_SIGNATURES_URI);
+        requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).to();
     }
 
     /**
@@ -87,7 +87,7 @@ public class GHBranchProtection {
     @Preview
     @Deprecated
     public boolean getRequiredSignatures() throws IOException {
-        return requester().method("GET").to(url + REQUIRE_SIGNATURES_URI, RequiredSignatures.class).enabled;
+        return requester().method("GET").withUrlPath(url + REQUIRE_SIGNATURES_URI).to(RequiredSignatures.class).enabled;
     }
 
     /**

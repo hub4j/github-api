@@ -163,7 +163,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve().method("PATCH").with("body", body).to(getApiRoute(), this);
+        owner.root.retrieve().method("PATCH").with("body", body).withUrlPath(getApiRoute()).to(this);
         this.body = body;
     }
 
@@ -174,7 +174,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.retrieve().method("DELETE").to(getApiRoute());
+        owner.root.retrieve().method("DELETE").withUrlPath(getApiRoute()).to();
     }
 
     /**
@@ -191,7 +191,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .method("POST")
                 .with("body", body)
                 .with("in_reply_to", getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
+                .withUrlPath(getApiRoute() + "/comments")
+                .to(GHPullRequestReviewComment.class)
                 .wrapUp(owner);
     }
 
@@ -202,7 +203,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute() + "/reactions", GHReaction.class)
+                .withUrlPath(getApiRoute() + "/reactions")
+                .to(GHReaction.class)
                 .wrap(owner.root);
     }
 

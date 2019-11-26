@@ -72,7 +72,7 @@ public class GHProjectCard extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.retrieve().to(getProjectUrl().getPath(), GHProject.class).wrap(root);
+                project = root.retrieve().withUrlPath(getProjectUrl().getPath()).to(GHProject.class).wrap(root);
             } catch (FileNotFoundException e) {
                 return null;
             }
@@ -90,7 +90,7 @@ public class GHProjectCard extends GHObject {
     public GHProjectColumn getColumn() throws IOException {
         if (column == null) {
             try {
-                column = root.retrieve().to(getColumnUrl().getPath(), GHProjectColumn.class).wrap(root);
+                column = root.retrieve().withUrlPath(getColumnUrl().getPath()).to(GHProjectColumn.class).wrap(root);
             } catch (FileNotFoundException e) {
                 return null;
             }
@@ -110,9 +110,9 @@ public class GHProjectCard extends GHObject {
             return null;
         try {
             if (content_url.contains("/pulls")) {
-                return root.retrieve().to(getContentUrl().getPath(), GHPullRequest.class).wrap(root);
+                return root.retrieve().withUrlPath(getContentUrl().getPath()).to(GHPullRequest.class).wrap(root);
             } else {
-                return root.retrieve().to(getContentUrl().getPath(), GHIssue.class).wrap(root);
+                return root.retrieve().withUrlPath(getContentUrl().getPath()).to(GHIssue.class).wrap(root);
             }
         } catch (FileNotFoundException e) {
             return null;
@@ -198,7 +198,13 @@ public class GHProjectCard extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+        root.retrieve()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with(key, value)
+                .method("PATCH")
+                .withUrlPath(getApiRoute())
+                .to();
     }
 
     /**
@@ -217,6 +223,6 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).to();
     }
 }

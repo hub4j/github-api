@@ -182,7 +182,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root.retrieve().method("PUT").to(getApiTailUrl("star"));
+        root.retrieve().method("PUT").withUrlPath(getApiTailUrl("star")).to();
     }
 
     /**
@@ -192,7 +192,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root.retrieve().method("DELETE").to(getApiTailUrl("star"));
+        root.retrieve().method("DELETE").withUrlPath(getApiTailUrl("star")).to();
     }
 
     /**
@@ -214,7 +214,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGist fork() throws IOException {
-        return root.retrieve().method("POST").to(getApiTailUrl("forks"), GHGist.class).wrapUp(root);
+        return root.retrieve().method("POST").withUrlPath(getApiTailUrl("forks")).to(GHGist.class).wrapUp(root);
     }
 
     /**
@@ -233,7 +233,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to("/gists/" + id);
+        root.retrieve().method("DELETE").withUrlPath("/gists/" + id).to();
     }
 
     /**

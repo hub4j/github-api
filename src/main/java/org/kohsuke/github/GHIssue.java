@@ -206,7 +206,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void lock() throws IOException {
-        root.retrieve().method("PUT").to(getApiRoute() + "/lock");
+        root.retrieve().method("PUT").withUrlPath(getApiRoute() + "/lock").to();
     }
 
     /**
@@ -216,7 +216,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void unlock() throws IOException {
-        root.retrieve().method("PUT").to(getApiRoute() + "/lock");
+        root.retrieve().method("PUT").withUrlPath(getApiRoute() + "/lock").to();
     }
 
     /**
@@ -233,16 +233,17 @@ public class GHIssue extends GHObject implements Reactable {
         GHIssueComment r = root.retrieve()
                 .method("POST")
                 .with("body", message)
-                .to(getIssuesApiRoute() + "/comments", GHIssueComment.class);
+                .withUrlPath(getIssuesApiRoute() + "/comments")
+                .to(GHIssueComment.class);
         return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").with(key, value).method("PATCH").to(getApiRoute());
+        root.retrieve().method("POST").with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.retrieve().method("POST").with(key, value).method("PATCH").to(getIssuesApiRoute());
+        root.retrieve().method("POST").with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).to();
     }
 
     /**
@@ -457,7 +458,8 @@ public class GHIssue extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute() + "/reactions", GHReaction.class)
+                .withUrlPath(getApiRoute() + "/reactions")
+                .to(GHReaction.class)
                 .wrap(root);
     }
 
@@ -493,7 +495,8 @@ public class GHIssue extends GHObject implements Reactable {
         root.retrieve()
                 .method("POST")
                 .with(ASSIGNEES, getLogins(assignees))
-                .to(getIssuesApiRoute() + "/assignees", this);
+                .withUrlPath(getIssuesApiRoute() + "/assignees")
+                .to(this);
     }
 
     /**
@@ -517,7 +520,12 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("POST").with(ASSIGNEES, getLogins(assignees)).method("PATCH").to(getIssuesApiRoute());
+        root.retrieve()
+                .method("POST")
+                .with(ASSIGNEES, getLogins(assignees))
+                .method("PATCH")
+                .withUrlPath(getIssuesApiRoute())
+                .to();
     }
 
     /**
@@ -545,7 +553,8 @@ public class GHIssue extends GHObject implements Reactable {
                 .method("DELETE")
                 .with(ASSIGNEES, getLogins(assignees))
                 .inBody()
-                .to(getIssuesApiRoute() + "/assignees", this);
+                .withUrlPath(getIssuesApiRoute() + "/assignees")
+                .to(this);
     }
 
     /**

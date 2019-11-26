@@ -108,7 +108,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve().method("POST").with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        owner.root.retrieve()
+                .method("POST")
+                .with("body", body)
+                .method("PATCH")
+                .withUrlPath(getApiRoute())
+                .to(GHIssueComment.class);
         this.body = body;
     }
 
@@ -119,7 +124,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.retrieve().method("DELETE").to(getApiRoute());
+        owner.root.retrieve().method("DELETE").withUrlPath(getApiRoute()).to();
     }
 
     @Preview
@@ -129,7 +134,8 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute() + "/reactions", GHReaction.class)
+                .withUrlPath(getApiRoute() + "/reactions")
+                .to(GHReaction.class)
                 .wrap(owner.root);
     }
 

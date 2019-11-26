@@ -93,7 +93,8 @@ public class GHBranchProtectionBuilder {
                 .withNullable("required_pull_request_reviews", prReviews)
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
+                .withUrlPath(branch.getProtectionUrl().toString())
+                .to(GHBranchProtection.class)
                 .wrap(branch);
     }
 

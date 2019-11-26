@@ -103,7 +103,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void setDescription(String description) throws IOException {
-        root.retrieve().method("PATCH").with("description", description).to(api(""));
+        root.retrieve().method("PATCH").with("description", description).withUrlPath(api("")).to();
     }
 
     /**
@@ -146,7 +146,7 @@ public class GHTeam implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/teams/" + id + "/members/" + user.getLogin());
+            root.retrieve().withUrlPath("/teams/" + id + "/members/" + user.getLogin()).to();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -189,7 +189,7 @@ public class GHTeam implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        root.retrieve().method("PUT").to(api("/memberships/" + u.getLogin()));
+        root.retrieve().method("PUT").withUrlPath(api("/memberships/" + u.getLogin())).to();
     }
 
     /**
@@ -205,7 +205,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT").with("role", role).to(api("/memberships/" + user.getLogin()));
+        root.retrieve().method("PUT").with("role", role).withUrlPath(api("/memberships/" + user.getLogin())).to();
     }
 
     /**
@@ -217,7 +217,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").to(api("/members/" + u.getLogin()));
+        root.retrieve().method("DELETE").withUrlPath(api("/members/" + u.getLogin())).to();
     }
 
     /**
@@ -246,7 +246,8 @@ public class GHTeam implements Refreshable {
         root.retrieve()
                 .method("PUT")
                 .with("permission", permission)
-                .to(api("/repos/" + r.getOwnerName() + '/' + r.getName()));
+                .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
+                .to();
     }
 
     /**
@@ -258,7 +259,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-        root.retrieve().method("DELETE").to(api("/repos/" + r.getOwnerName() + '/' + r.getName()));
+        root.retrieve().method("DELETE").withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName())).to();
     }
 
     /**
@@ -268,7 +269,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(api(""));
+        root.retrieve().method("DELETE").withUrlPath(api("")).to();
     }
 
     private String api(String tail) {
@@ -289,6 +290,6 @@ public class GHTeam implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        root.retrieve().to(api(""), this).wrapUp(root);
+        root.retrieve().withUrlPath(api("")).to(this).wrapUp(root);
     }
 }

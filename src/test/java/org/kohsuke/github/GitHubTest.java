@@ -97,7 +97,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
         for (Class metaClass : examples) {
             ReadOnlyObjects.GHMetaExample metaExample = gitHub.retrieve()
-                    .to("/meta", (Class<ReadOnlyObjects.GHMetaExample>) metaClass);
+                    .withUrlPath("/meta")
+                    .to((Class<ReadOnlyObjects.GHMetaExample>) metaClass);
             assertTrue(metaExample.isVerifiablePasswordAuthentication());
             assertEquals(19, metaExample.getApi().size());
             assertEquals(19, metaExample.getGit().size());

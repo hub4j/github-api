@@ -196,7 +196,7 @@ public class GHCreateRepositoryBuilder {
      *             if repsitory cannot be created
      */
     public GHRepository create() throws IOException {
-        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(root);
+        return builder.method("POST").withUrlPath(apiUrlTail).to(GHRepository.class).wrap(root);
     }
 
 }

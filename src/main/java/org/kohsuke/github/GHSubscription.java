@@ -87,7 +87,7 @@ public class GHSubscription {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(repo.getApiTailUrl("subscription"));
+        root.retrieve().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).to();
     }
 
     GHSubscription wrapUp(GHRepository repo) {

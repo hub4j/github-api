@@ -163,6 +163,6 @@ public class GHTreeBuilder {
      */
     public GHTree create() throws IOException {
         req.with("tree", treeEntries);
-        return req.method("POST").to(getApiTail(), GHTree.class).wrap(repo);
+        return req.method("POST").withUrlPath(getApiTail()).to(GHTree.class).wrap(repo);
     }
 }

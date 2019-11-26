@@ -66,7 +66,8 @@ public class GHDeploymentStatusBuilder {
      *             the io exception
      */
     public GHDeploymentStatus create() throws IOException {
-        return builder.to(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"), GHDeploymentStatus.class)
+        return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
+                .to(GHDeploymentStatus.class)
                 .wrap(repo);
     }
 }

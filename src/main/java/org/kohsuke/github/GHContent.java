@@ -316,7 +316,7 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
 
         response.getContent().wrap(repository);
         response.getCommit().wrapUp(repository);
@@ -359,14 +359,14 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
 
         response.getCommit().wrapUp(repository);
         return response;
     }
 
-    private String getApiRoute() {
-        return "/repos/" + repository.getOwnerName() + "/" + repository.getName() + "/contents/" + path;
+    static String getApiRoute(GHRepository repository, String path) {
+        return repository.getApiTailUrl("contents/" + path);
     }
 
     GHContent wrap(GHRepository owner) {

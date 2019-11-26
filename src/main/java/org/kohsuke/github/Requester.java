@@ -40,6 +40,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -940,6 +942,21 @@ class Requester {
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace by '_'
         return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
+    }
+
+    /**
+     * Encode the path to url safe string.
+     *
+     * @param value
+     *            string to be path encoded.
+     * @return The encoded string.
+     */
+    public static String urlPathEncode(String value) {
+        try {
+            return new URI(null, null, value, null, null).toString();
+        } catch (URISyntaxException ex) {
+            throw new AssertionError(ex);
+        }
     }
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");

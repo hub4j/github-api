@@ -69,7 +69,7 @@ public class GHLabel {
      *             the io exception
      */
     public void delete() throws IOException {
-        repo.root.retrieve().method("DELETE").to(url);
+        repo.root.retrieve().method("DELETE").setRawUrlPath(url).to();
     }
 
     /**
@@ -87,7 +87,8 @@ public class GHLabel {
                 .with("name", name)
                 .with("color", newColor)
                 .with("description", description)
-                .to(url);
+                .setRawUrlPath(url)
+                .to();
     }
 
     /**
@@ -107,7 +108,8 @@ public class GHLabel {
                 .with("name", name)
                 .with("color", color)
                 .with("description", newDescription)
-                .to(url);
+                .setRawUrlPath(url)
+                .to();
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

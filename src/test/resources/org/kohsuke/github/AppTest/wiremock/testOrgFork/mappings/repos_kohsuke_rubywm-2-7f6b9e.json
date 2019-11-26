@@ -1,29 +1,30 @@
 {
-  "id": "b4bcdadb-a708-4509-9382-479f300eb172",
-  "name": "repos_github-api-test-org_github-api-test_deployments",
+  "id": "7f6b9ed5-222f-4c89-95a7-e45ef24d78a7",
+  "name": "repos_kohsuke_rubywm",
   "request": {
-    "url": "/repos/github-api-test-org/github-api-test/deployments?ref=master&environment=unittest",
+    "url": "/repos/kohsuke/rubywm",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_github-api-test_deployments-b4bcdadb-a708-4509-9382-479f300eb172.json",
+    "bodyFileName": "repos_kohsuke_rubywm-7f6b9ed5-222f-4c89-95a7-e45ef24d78a7.json",
     "headers": {
-      "Date": "Thu, 03 Oct 2019 18:57:58 GMT",
+      "Date": "Tue, 26 Nov 2019 22:05:40 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4748",
-      "X-RateLimit-Reset": "1570132527",
+      "X-RateLimit-Remaining": "4914",
+      "X-RateLimit-Reset": "1574809159",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"b47f03577f96c1081341944009009f7f\"",
+      "ETag": "W/\"956ce297c162ac69efaf4ba1328b1cdb\"",
+      "Last-Modified": "Tue, 13 Aug 2019 14:29:25 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "repo, repo_deployment",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -33,10 +34,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F3AD:3618:10E8E2:149FF2:5D9644B5"
+      "X-GitHub-Request-Id": "F26C:3C0B:7D58DD:93D7F2:5DDDA1B3"
     }
   },
-  "uuid": "b4bcdadb-a708-4509-9382-479f300eb172",
+  "uuid": "7f6b9ed5-222f-4c89-95a7-e45ef24d78a7",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 2
 }

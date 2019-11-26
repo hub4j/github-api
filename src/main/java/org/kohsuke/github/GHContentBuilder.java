@@ -50,7 +50,7 @@ public final class GHContentBuilder {
     }
 
     /**
-     * Used when updating (but not creating a new content) to specify Thetblob SHA of the file being replaced.
+     * Used when updating (but not creating a new content) to specify the blob SHA of the file being replaced.
      *
      * @param sha
      *            the sha

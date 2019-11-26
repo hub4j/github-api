@@ -312,11 +312,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(keys.isEmpty());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgFork() throws Exception {
-        kohsuke();
-
+        cleanupRepository(GITHUB_API_TEST_ORG + "/rubywm");
         gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization(GITHUB_API_TEST_ORG));
     }
 

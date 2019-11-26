@@ -134,13 +134,14 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHDeployment> listDeployments(String sha, String ref, String task, String environment) {
-        List<String> params = Arrays.asList(getParam("sha", sha),
-                getParam("ref", ref),
-                getParam("task", task),
-                getParam("environment", environment));
-        final String deploymentsUrl = getApiTailUrl("deployments") + "?" + join(params, "&");
         return root.retrieve()
-                .asPagedIterable(deploymentsUrl, GHDeployment[].class, item -> item.wrap(GHRepository.this));
+                .with("sha", sha)
+                .with("ref", ref)
+                .with("task", task)
+                .with("environment", environment)
+                .asPagedIterable(getApiTailUrl("deployments"),
+                        GHDeployment[].class,
+                        item -> item.wrap(GHRepository.this));
     }
 
     /**
@@ -154,20 +155,6 @@ public class GHRepository extends GHObject {
      */
     public GHDeployment getDeployment(long id) throws IOException {
         return root.retrieve().to(getApiTailUrl("deployments/" + id), GHDeployment.class).wrap(this);
-    }
-
-    private String join(List<String> params, String joinStr) {
-        StringBuilder output = new StringBuilder();
-        for (String param : params) {
-            if (param != null) {
-                output.append(param + joinStr);
-            }
-        }
-        return output.toString();
-    }
-
-    private String getParam(String name, String value) {
-        return StringUtils.trimToNull(value) == null ? null : name + "=" + value;
     }
 
     /**
@@ -1152,7 +1139,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        root.retrieve().method("POST").to(getApiTailUrl("forks?org=" + org.getLogin()));
+        root.retrieve().method("POST").with("organization", org.getLogin()).to(getApiTailUrl("forks"));
 
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
@@ -1513,8 +1500,8 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
      */
     public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
-        String url = String.format("/repos/%s/%s/git/trees/%s?recursive=%d", getOwnerName(), name, sha, recursive);
-        return root.retrieve().to(url, GHTree.class).wrap(this);
+        String url = String.format("/repos/%s/%s/git/trees/%s", getOwnerName(), name, sha);
+        return root.retrieve().with("recursive", recursive).to(url, GHTree.class).wrap(this);
     }
 
     /**
@@ -2562,7 +2549,7 @@ public class GHRepository extends GHObject {
     String getApiTailUrl(String tail) {
         if (tail.length() > 0 && !tail.startsWith("/"))
             tail = '/' + tail;
-        return Requester.urlPathEncode("/repos/" + getOwnerName() + "/" + name + tail);
+        return "/repos/" + getOwnerName() + "/" + name + tail;
     }
 
     /**

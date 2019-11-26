@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -74,6 +75,9 @@ class Requester {
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String, String> headers = new LinkedHashMap<String, String>();
+
+    @Nonnull
+    private String urlPath = "/";
 
     /**
      * Request method.
@@ -313,6 +317,56 @@ class Requester {
     }
 
     /**
+     * NOT FOR PUBLIC USE. Do not make this method public.
+     * <p>
+     * Sets the path component of api URL without URI encoding.
+     * <p>
+     * Should only be used when passing a literal URL field from a GHObject, such as {@link GHContent#refresh()} or when
+     * needing to set query parameters on requests methods that don't usually have them, such as
+     * {@link GHRelease#uploadAsset(String, InputStream, String)}.
+     *
+     * @param urlOrPath
+     *            the content type
+     * @return the requester
+     */
+    Requester setRawUrlPath(String urlOrPath) {
+        Objects.requireNonNull(urlOrPath);
+        this.urlPath = urlOrPath;
+        return this;
+    }
+
+    /**
+     * Path component of api URL. Appended to api url.
+     * <p>
+     * If urlPath starts with a slash, it will be URI encoded as a path. If it starts with anything else, it will be
+     * used as is.
+     *
+     * @param urlPathItems
+     *            the content type
+     * @return the requester
+     */
+    public Requester withUrlPath(String... urlPathItems) {
+        if (!this.urlPath.startsWith("/")) {
+            throw new GHException("Cannot append to url path after setting a raw path");
+        }
+
+        if (urlPathItems.length == 1 && !urlPathItems[0].startsWith("/")) {
+            return setRawUrlPath(urlPathItems[0]);
+        }
+
+        String tailUrlPath = String.join("/", urlPathItems);
+
+        if (this.urlPath.endsWith("/")) {
+            tailUrlPath = StringUtils.stripStart(tailUrlPath, "/");
+        } else {
+            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
+        }
+
+        this.urlPath += urlPathEncode(tailUrlPath);
+        return this;
+    }
+
+    /**
      * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
      * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
      * forces the parameters to be sent as a body.
@@ -331,7 +385,7 @@ class Requester {
      *             the io exception
      */
     public void to(@Nonnull String tailApiUrl) throws IOException {
-        _to(tailApiUrl, null, null);
+        withUrlPath(tailApiUrl).to();
     }
 
     /**
@@ -348,7 +402,7 @@ class Requester {
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T to(@Nonnull String tailApiUrl, @Nonnull Class<T> type) throws IOException {
-        return _to(tailApiUrl, type, null);
+        return withUrlPath(tailApiUrl).to(type);
     }
 
     /**
@@ -365,20 +419,7 @@ class Requester {
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T[] toArray(@Nonnull String tailApiUrl, @Nonnull Class<T[]> type) throws IOException {
-        T[] result;
-
-        // for arrays we might have to loop for pagination
-        // use the iterator to handle it
-        List<T[]> pages = new ArrayList<>();
-        int totalSize = 0;
-        for (Iterator<T[]> iterator = asIterator(tailApiUrl, type, 0); iterator.hasNext();) {
-            T[] nextResult = iterator.next();
-            totalSize += Array.getLength(nextResult);
-            pages.add(nextResult);
-        }
-
-        result = concatenatePages(type, pages, totalSize);
-        return setResponseHeaders(result);
+        return withUrlPath(tailApiUrl).toArray(type);
     }
 
     /**
@@ -395,13 +436,81 @@ class Requester {
      *             the io exception
      */
     public <T> T to(@Nonnull String tailApiUrl, @Nonnull T existingInstance) throws IOException {
-        return _to(tailApiUrl, null, existingInstance);
+        return withUrlPath(tailApiUrl).to(existingInstance);
     }
 
-    private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
+    /**
+     * To.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void to() throws IOException {
+        _to(null, null);
+    }
+
+    /**
+     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T> T to(@Nonnull Class<T> type) throws IOException {
+        return _to(type, null);
+    }
+
+    /**
+     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T> T[] toArray(@Nonnull Class<T[]> type) throws IOException {
+        T[] result;
+
+        // for arrays we might have to loop for pagination
+        // use the iterator to handle it
+        List<T[]> pages = new ArrayList<>();
+        int totalSize = 0;
+        for (Iterator<T[]> iterator = asIterator(type, 0); iterator.hasNext();) {
+            T[] nextResult = iterator.next();
+            totalSize += Array.getLength(nextResult);
+            pages.add(nextResult);
+        }
+
+        result = concatenatePages(type, pages, totalSize);
+        return setResponseHeaders(result);
+    }
+
+    /**
+     * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param existingInstance
+     *            the existing instance
+     * @return the t
+     * @throws IOException
+     *             the io exception
+     */
+    public <T> T to(@Nonnull T existingInstance) throws IOException {
+        return _to(null, existingInstance);
+    }
+
+    private <T> T _to(Class<T> type, T instance) throws IOException {
         T result;
 
-        tailApiUrl = buildTailApiUrl(tailApiUrl);
+        String tailApiUrl = buildTailApiUrl(urlPath);
         setupConnection(root.getApiURL(tailApiUrl));
 
         while (true) {// loop while API rate limit is hit
@@ -464,6 +573,7 @@ class Requester {
      */
     public int asHttpStatusCode(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
+
             method("GET");
             setupConnection(root.getApiURL(tailApiUrl));
 
@@ -603,24 +713,26 @@ class Requester {
     }
 
     <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return new PagedIterableWithConsumer<>(type, tailApiUrl, consumer);
+        return withUrlPath(tailApiUrl).asPagedIterable(type, consumer);
+    }
+
+    <T> PagedIterable<T> asPagedIterable(Class<T[]> type, Consumer<T> consumer) {
+        return new PagedIterableWithConsumer<>(type, consumer);
     }
 
     class PagedIterableWithConsumer<T> extends PagedIterable<T> {
 
         private final Class<T[]> clazz;
-        private final String tailApiUrl;
         private final Consumer<T> consumer;
 
-        PagedIterableWithConsumer(Class<T[]> clazz, String tailApiUrl, Consumer<T> consumer) {
+        PagedIterableWithConsumer(Class<T[]> clazz, Consumer<T> consumer) {
             this.clazz = clazz;
-            this.tailApiUrl = tailApiUrl;
             this.consumer = consumer;
         }
 
         @Override
         public PagedIterator<T> _iterator(int pageSize) {
-            final Iterator<T[]> iterator = asIterator(tailApiUrl, clazz, pageSize);
+            final Iterator<T[]> iterator = asIterator(clazz, pageSize);
             return new PagedIterator<T>(iterator) {
                 @Override
                 protected void wrapUp(T[] page) {
@@ -639,13 +751,13 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
+    <T> Iterator<T> asIterator(Class<T> type, int pageSize) {
         method("GET");
 
         if (pageSize != 0)
             args.add(new Entry("per_page", pageSize));
 
-        tailApiUrl = buildTailApiUrl(tailApiUrl);
+        String tailApiUrl = buildTailApiUrl(urlPath);
 
         try {
             return new PagingIterator<>(type, tailApiUrl, root.getApiURL(tailApiUrl));

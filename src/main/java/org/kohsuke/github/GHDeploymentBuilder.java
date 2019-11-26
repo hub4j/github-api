@@ -19,7 +19,7 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = new Requester(repo.root);
+        this.builder = repo.root.retrieve().method("POST");
     }
 
     /**

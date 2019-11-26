@@ -57,6 +57,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
@@ -77,7 +78,7 @@ class Requester {
     /**
      * Request method.
      */
-    private String method = "POST";
+    private String method = "GET";
     private String contentType = null;
     private InputStream body;
 
@@ -88,8 +89,8 @@ class Requester {
     private boolean forceBody;
 
     private static class Entry {
-        String key;
-        Object value;
+        final String key;
+        final Object value;
 
         private Entry(String key, Object value) {
             this.key = key;
@@ -278,9 +279,9 @@ class Requester {
      * @return the requester
      */
     public Requester set(String key, Object value) {
-        for (Entry e : args) {
-            if (e.key.equals(key)) {
-                e.value = value;
+        for (int index = 0; index < args.size(); index++) {
+            if (args.get(index).key.equals(key)) {
+                args.set(index, new Entry(key, value));
                 return this;
             }
         }
@@ -329,7 +330,7 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public void to(String tailApiUrl) throws IOException {
+    public void to(@Nonnull String tailApiUrl) throws IOException {
         _to(tailApiUrl, null, null);
     }
 
@@ -346,8 +347,38 @@ class Requester {
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
-    public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
+    public <T> T to(@Nonnull String tailApiUrl, @Nonnull Class<T> type) throws IOException {
         return _to(tailApiUrl, type, null);
+    }
+
+    /**
+     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param tailApiUrl
+     *            the tail api url
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T> T[] toArray(@Nonnull String tailApiUrl, @Nonnull Class<T[]> type) throws IOException {
+        T[] result;
+
+        // for arrays we might have to loop for pagination
+        // use the iterator to handle it
+        List<T[]> pages = new ArrayList<>();
+        int totalSize = 0;
+        for (Iterator<T[]> iterator = asIterator(tailApiUrl, type, 0); iterator.hasNext();) {
+            T[] nextResult = iterator.next();
+            totalSize += Array.getLength(nextResult);
+            pages.add(nextResult);
+        }
+
+        result = concatenatePages(type, pages, totalSize);
+        return setResponseHeaders(result);
     }
 
     /**
@@ -363,31 +394,15 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
+    public <T> T to(@Nonnull String tailApiUrl, @Nonnull T existingInstance) throws IOException {
         return _to(tailApiUrl, null, existingInstance);
     }
 
     private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
         T result;
 
-        if (type != null && type.isArray()) {
-            // for arrays we might have to loop for pagination
-            // use the iterator to handle it
-            List<T> pages = new ArrayList<>();
-            int totalSize = 0;
-            for (Iterator<T> iterator = asIterator(tailApiUrl, type, 0); iterator.hasNext();) {
-                T nextResult = iterator.next();
-                totalSize += Array.getLength(nextResult);
-                pages.add(nextResult);
-            }
-
-            result = concatenatePages(type, pages, totalSize);
-            return setResponseHeaders(result);
-        }
-
         tailApiUrl = buildTailApiUrl(tailApiUrl);
         setupConnection(root.getApiURL(tailApiUrl));
-        buildRequest();
 
         while (true) {// loop while API rate limit is hit
             try {
@@ -401,12 +416,12 @@ class Requester {
         }
     }
 
-    private <T> T concatenatePages(Class<T> type, List<T> pages, int totalLength) {
+    private <T> T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
 
-        T result = (T) Array.newInstance(type.getComponentType(), totalLength);
+        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
 
         int position = 0;
-        for (T page : pages) {
+        for (T[] page : pages) {
             final int pageLength = Array.getLength(page);
             System.arraycopy(page, 0, result, position, pageLength);
             position += pageLength;
@@ -452,8 +467,6 @@ class Requester {
             method("GET");
             setupConnection(root.getApiURL(tailApiUrl));
 
-            buildRequest();
-
             try {
                 return uc.getResponseCode();
             } catch (IOException e) {
@@ -476,8 +489,6 @@ class Requester {
     public InputStream asStream(String tailApiUrl) throws IOException {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(tailApiUrl));
-
-            buildRequest();
 
             try {
                 return wrapStream(uc.getInputStream());
@@ -592,31 +603,29 @@ class Requester {
     }
 
     <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return new PagedIterableWithConsumer<>(type, this, tailApiUrl, consumer);
+        return new PagedIterableWithConsumer<>(type, tailApiUrl, consumer);
     }
 
-    static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
+    class PagedIterableWithConsumer<T> extends PagedIterable<T> {
 
-        private final Class<S[]> clazz;
-        private final Requester requester;
+        private final Class<T[]> clazz;
         private final String tailApiUrl;
-        private final Consumer<S> consumer;
+        private final Consumer<T> consumer;
 
-        PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
+        PagedIterableWithConsumer(Class<T[]> clazz, String tailApiUrl, Consumer<T> consumer) {
             this.clazz = clazz;
             this.tailApiUrl = tailApiUrl;
-            this.requester = requester;
             this.consumer = consumer;
         }
 
         @Override
-        public PagedIterator<S> _iterator(int pageSize) {
-            final Iterator<S[]> iterator = requester.asIterator(tailApiUrl, clazz, pageSize);
-            return new PagedIterator<S>(iterator) {
+        public PagedIterator<T> _iterator(int pageSize) {
+            final Iterator<T[]> iterator = asIterator(tailApiUrl, clazz, pageSize);
+            return new PagedIterator<T>(iterator) {
                 @Override
-                protected void wrapUp(S[] page) {
+                protected void wrapUp(T[] page) {
                     if (consumer != null) {
-                        for (S item : page) {
+                        for (T item : page) {
                             consumer.accept(item);
                         }
                     }
@@ -645,6 +654,15 @@ class Requester {
         }
     }
 
+    /**
+     * May be used for any item that has pagination information.
+     *
+     * Works for array responses, also works for search results which are single instances with an array of items
+     * inside.
+     *
+     * @param <T>
+     *            type of each page (not the items in the page).
+     */
     class PagingIterator<T> implements Iterator<T> {
 
         private final Class<T> type;
@@ -753,6 +771,7 @@ class Requester {
 
         setRequestMethod(uc);
         uc.setRequestProperty("Accept-Encoding", "gzip");
+        buildRequest();
     }
 
     private void setRequestMethod(HttpURLConnection uc) throws IOException {

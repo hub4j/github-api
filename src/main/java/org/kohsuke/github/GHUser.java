@@ -43,7 +43,8 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public List<GHKey> getKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to(getApiTailUrl("keys"), GHKey[].class)));
+        return Collections
+                .unmodifiableList(Arrays.asList(root.retrieve().toArray(getApiTailUrl("keys"), GHKey[].class)));
     }
 
     /**
@@ -53,7 +54,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public void follow() throws IOException {
-        new Requester(root).method("PUT").to("/user/following/" + login);
+        root.retrieve().method("PUT").to("/user/following/" + login);
     }
 
     /**
@@ -63,7 +64,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public void unfollow() throws IOException {
-        new Requester(root).method("DELETE").to("/user/following/" + login);
+        root.retrieve().method("DELETE").to("/user/following/" + login);
     }
 
     /**
@@ -186,7 +187,7 @@ public class GHUser extends GHPerson {
     public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/users/" + login + "/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.retrieve().toArray("/users/" + login + "/orgs", GHOrganization[].class)) {
             if (names.add(o.getLogin())) // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }

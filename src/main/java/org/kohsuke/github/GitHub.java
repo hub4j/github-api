@@ -425,7 +425,7 @@ public class GitHub {
     }
 
     Requester retrieve() {
-        return new Requester(this).method("GET");
+        return new Requester(this);
     }
 
     /**
@@ -709,7 +709,7 @@ public class GitHub {
      *             the io exception
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        GHInvitation[] invitations = retrieve().toArray("/user/repository_invitations", GHInvitation[].class);
         for (GHInvitation i : invitations) {
             i.wrapUp(this);
         }
@@ -727,7 +727,7 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = retrieve().toArray("/user/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -761,7 +761,7 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
-        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = retrieve().toArray("/users/" + login + "/orgs", GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -782,7 +782,7 @@ public class GitHub {
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+        for (GHTeam team : retrieve().toArray("/user/teams", GHTeam[].class)) {
             team.wrapUp(this);
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
@@ -816,7 +816,7 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
+        GHEventInfo[] events = retrieve().toArray("/events", GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
@@ -924,7 +924,10 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
-        Requester requester = new Requester(this).with("scopes", scope).with("note", note).with("note_url", noteUrl);
+        Requester requester = retrieve().method("POST")
+                .with("scopes", scope)
+                .with("note", note)
+                .with("note_url", noteUrl);
 
         return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
     }
@@ -957,7 +960,8 @@ public class GitHub {
             return createToken(scope, note, noteUrl);
         } catch (GHOTPRequiredException ex) {
             String OTPstring = OTP.get();
-            Requester requester = new Requester(this).with("scopes", scope)
+            Requester requester = retrieve().method("POST")
+                    .with("scopes", scope)
                     .with("note", note)
                     .with("note_url", noteUrl);
             // Add the OTP from the user
@@ -990,7 +994,8 @@ public class GitHub {
             List<String> scopes,
             String note,
             String note_url) throws IOException {
-        Requester requester = new Requester(this).with("client_secret", clientSecret)
+        Requester requester = retrieve().method("POST")
+                .with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
                 .with("note_url", note_url);
@@ -1339,9 +1344,12 @@ public class GitHub {
      * @see GHRepository#renderMarkdown(String, MarkdownMode) GHRepository#renderMarkdown(String, MarkdownMode)
      */
     public Reader renderMarkdown(String text) throws IOException {
-        return new InputStreamReader(new Requester(this).with(new ByteArrayInputStream(text.getBytes("UTF-8")))
-                .contentType("text/plain;charset=UTF-8")
-                .asStream("/markdown/raw"), "UTF-8");
+        return new InputStreamReader(
+                retrieve().method("POST")
+                        .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
+                        .contentType("text/plain;charset=UTF-8")
+                        .asStream("/markdown/raw"),
+                "UTF-8");
     }
 
     static URL parseURL(String s) {

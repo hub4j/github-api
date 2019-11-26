@@ -71,7 +71,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        GHEmail[] addresses = root.retrieve().to("/user/emails", GHEmail[].class);
+        GHEmail[] addresses = root.retrieve().toArray("/user/emails", GHEmail[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 
@@ -86,7 +86,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/user/keys", GHKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(root.retrieve().toArray("/user/keys", GHKey[].class)));
     }
 
     /**
@@ -101,7 +101,7 @@ public class GHMyself extends GHUser {
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
         return Collections.unmodifiableList(
-                Arrays.asList(root.retrieve().to("/users/" + getLogin() + "/keys", GHVerifiedKey[].class)));
+                Arrays.asList(root.retrieve().toArray("/users/" + getLogin() + "/keys", GHVerifiedKey[].class)));
     }
 
     /**
@@ -114,7 +114,7 @@ public class GHMyself extends GHUser {
     public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/user/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.retrieve().toArray("/user/orgs", GHOrganization[].class)) {
             if (names.add(o.getLogin())) // in case of rumoured duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }

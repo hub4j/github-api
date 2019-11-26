@@ -240,7 +240,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = new Requester(owner.root);
+        Requester builder = owner.root.retrieve().method("POST");
         String url = getUploadUrl();
         // strip the helpful garbage from the url
         url = url.substring(0, url.indexOf('{'));
@@ -256,9 +256,9 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public List<GHAsset> getAssets() throws IOException {
-        Requester builder = new Requester(owner.root);
+        Requester builder = owner.root.retrieve().method("POST");
 
-        GHAsset[] assets = builder.method("GET").to(getApiTailUrl("assets"), GHAsset[].class);
+        GHAsset[] assets = builder.method("GET").toArray(getApiTailUrl("assets"), GHAsset[].class);
         return Arrays.asList(GHAsset.wrap(assets, this));
     }
 
@@ -269,7 +269,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to(owner.getApiTailUrl("releases/" + id));
+        root.retrieve().method("DELETE").to(owner.getApiTailUrl("releases/" + id));
     }
 
     /**

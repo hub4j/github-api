@@ -30,7 +30,7 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = new Requester(repo.root);
+        this.builder = repo.root.retrieve().method("POST");
         this.builder.with("state", state);
     }
 

@@ -74,7 +74,9 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root).with("name", name)
+            GHHook hook = root.retrieve()
+                    .method("POST")
+                    .with("name", name)
                     .with("active", active)
                     .with("config", config)
                     .with("events", ea)

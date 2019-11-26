@@ -306,7 +306,9 @@ public class GHContent implements Refreshable {
             throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = new Requester(root).with("path", path)
+        Requester requester = root.retrieve()
+                .method("POST")
+                .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
                 .with("content", encodedContent)
@@ -350,7 +352,9 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(root).with("path", path)
+        Requester requester = root.retrieve()
+                .method("POST")
+                .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
                 .method("DELETE");

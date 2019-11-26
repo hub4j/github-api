@@ -16,7 +16,7 @@ public class GHCreateRepositoryBuilder {
     GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
-        this.builder = new Requester(root);
+        this.builder = root.retrieve().method("POST");
         this.builder.with("name", name);
     }
 

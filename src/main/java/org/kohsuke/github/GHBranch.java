@@ -9,8 +9,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Objects;
 
-import static org.kohsuke.github.Previews.*;
-
 /**
  * A branch in a repository.
  *
@@ -122,7 +120,7 @@ public class GHBranch {
      *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
-        new Requester(root).method("DELETE").to(protection_url);
+        root.retrieve().method("DELETE").to(protection_url);
     }
 
     /**

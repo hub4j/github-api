@@ -123,7 +123,7 @@ public class GHBranchProtection {
     }
 
     private Requester requester() {
-        return new Requester(root).withPreview(ZZZAX);
+        return root.retrieve().method("POST").withPreview(ZZZAX);
     }
 
     /**

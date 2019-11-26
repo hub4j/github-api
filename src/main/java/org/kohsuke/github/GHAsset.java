@@ -135,7 +135,7 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root).with(key, value).method("PATCH").to(getApiRoute());
+        root.retrieve().method("POST").with(key, value).method("PATCH").to(getApiRoute());
     }
 
     /**
@@ -145,7 +145,7 @@ public class GHAsset extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").to(getApiRoute());
+        root.retrieve().method("DELETE").to(getApiRoute());
     }
 
     private String getApiRoute() {

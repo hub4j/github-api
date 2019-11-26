@@ -505,7 +505,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-        return new Requester(root).method("POST")
+        return root.retrieve()
+                .method("POST")
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
@@ -523,9 +524,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
-        new Requester(root).method("POST")
-                .with("reviewers", getLogins(reviewers))
-                .to(getApiRoute() + REQUEST_REVIEWERS);
+        root.retrieve().method("POST").with("reviewers", getLogins(reviewers)).to(getApiRoute() + REQUEST_REVIEWERS);
     }
 
     /**
@@ -541,7 +540,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         for (GHTeam team : teams) {
             teamReviewers.add(team.getSlug());
         }
-        new Requester(root).method("POST").with("team_reviewers", teamReviewers).to(getApiRoute() + REQUEST_REVIEWERS);
+        root.retrieve().method("POST").with("team_reviewers", teamReviewers).to(getApiRoute() + REQUEST_REVIEWERS);
     }
 
     /**
@@ -589,7 +588,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-        new Requester(root).method("PUT")
+        root.retrieve()
+                .method("PUT")
                 .with("commit_message", msg)
                 .with("sha", sha)
                 .with("merge_method", method)
@@ -605,7 +605,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            new Requester(root).method("GET").to(getIssuesApiRoute(), this);
+            root.retrieve().method("GET").to(getIssuesApiRoute(), this);
             fetchedIssueDetails = true;
         }
     }

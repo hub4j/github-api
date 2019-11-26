@@ -17,7 +17,7 @@ public class GHPullRequestReviewBuilder {
 
     GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
-        this.builder = new Requester(pr.root);
+        this.builder = pr.root.retrieve().method("POST");
     }
 
     // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,

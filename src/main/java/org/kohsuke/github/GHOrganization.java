@@ -243,7 +243,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieve().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        root.retrieve().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin());
     }
 
     /**
@@ -314,7 +314,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        root.retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin());
     }
 
     /**
@@ -389,7 +389,7 @@ public class GHOrganization extends GHPerson {
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Requester post = new Requester(root).with("name", name).with("permission", p);
+        Requester post = root.retrieve().method("POST").with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());
@@ -430,7 +430,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
-        Requester post = new Requester(root).with("name", name);
+        Requester post = root.retrieve().method("POST").with("name", name);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());

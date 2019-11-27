@@ -47,15 +47,13 @@ public abstract class GHEventPayload {
         }
     }
 
-    /*
-     * List of events that still need to be added:
-     * CheckRunEvent CheckSuiteEvent ContentReferenceEvent DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent
-     * GitHubAppAuthorizationEvent GistEvent GollumEvent InstallationEvent InstallationRepositoriesEvent IssuesEvent
-     * LabelEvent MarketplacePurchaseEvent MemberEvent MembershipEvent MetaEvent MilestoneEvent OrganizationEvent
-     * OrgBlockEvent PackageEvent PageBuildEvent ProjectCardEvent ProjectColumnEvent ProjectEvent
-     * RepositoryDispatchEvent RepositoryImportEvent RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent
-     * StatusEvent TeamEvent TeamAddEvent WatchEvent
-     */
+    // List of events that still need to be added:
+    // CheckRunEvent CheckSuiteEvent ContentReferenceEvent
+    // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
+    // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
+    // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
+    // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
+    // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
 
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.

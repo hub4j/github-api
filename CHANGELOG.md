@@ -6,24 +6,24 @@
 
 ### Features and Fixes
 
-- Add method to set repository topics @martinvanzijl (#594)
-- Adjust GHRateLimit to system time instead of depending on synchronization @bitwiseman (#595)
-- Add Functionality of OTP to support user 2fa @madhephaestus (#603)
-- Implement Meta endpoint @PauloMigAlmeida (#611)
-- fix and unit tests for issue #504 @siordache (#620)
-- Fixed GHContent to allow spaces in path @bitwiseman (#625)
+- Add method to set repository topics @martinvanzijl [\#594](https://github.com/github-api/github-api/issues/594)
+- Adjust GHRateLimit to system time instead of depending on synchronization @bitwiseman [#595](https://github.com/github-api/github-api/issues/595)
+- Add Functionality of OTP to support user 2fa @madhephaestus [\#603](https://github.com/github-api/github-api/issues/603)
+- Implement Meta endpoint @PauloMigAlmeida [\#611](https://github.com/github-api/github-api/issues/611)
+- fix and unit tests for issue #504 @siordache [\#620](https://github.com/github-api/github-api/issues/620)
+- Fixed GHContent to allow spaces in path @bitwiseman [\#625](https://github.com/github-api/github-api/issues/625)
 
 ### Internals
 
-- Clean up Requester interface a bit @bitwiseman (#614)
-- Javadoc fail on warning during CI build @bitwiseman (#613)
-- Code style fixes @bitwiseman (#609)
-- Re-enable Lifecycle test @bitwiseman (#621)
-- Removed permission field in createTeam. It is deprecated in the API @asthinasthi (#619)
-- Cleanup imports @bitwiseman (#616)
-- Branch missing @alexanderrtaylor (#615)
-- jackson 2.10.1 @sullis (#604)
-- Bump okhttp from 3.14.2 to 4.2.2 @dependabot-preview (#593)
+- Bump okhttp3 from 3.14.2 to 4.2.2 @dependabot-preview [\#593](https://github.com/github-api/github-api/issues/593)
+- jackson 2.10.1 @sullis [\#604](https://github.com/github-api/github-api/issues/604)
+- Code style fixes @bitwiseman [\#609](https://github.com/github-api/github-api/issues/609)
+- Javadoc fail on warning during CI build @bitwiseman [\#613](https://github.com/github-api/github-api/issues/613)
+- Clean up Requester interface a bit @bitwiseman [\#614](https://github.com/github-api/github-api/issues/614)
+- Branch missing @alexanderrtaylor [\#615](https://github.com/github-api/github-api/issues/615)
+- Cleanup imports @bitwiseman [\#616](https://github.com/github-api/github-api/issues/616)
+- Removed permission field in createTeam. It is deprecated in the API @asthinasthi [\#619](https://github.com/github-api/github-api/issues/619)
+- Re-enable Lifecycle test @bitwiseman [\#621](https://github.com/github-api/github-api/issues/621)
 
 
 ## [github-api-1.99](https://github.com/github-api/github-api/tree/github-api-1.99) (2019-11-04)

@@ -1,11 +1,11 @@
 [
   {
-    "url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21671831",
-    "assets_url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21671831/assets",
-    "upload_url": "https://uploads.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21671831/assets{?name,label}",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21786739",
+    "assets_url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21786739/assets",
+    "upload_url": "https://uploads.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21786739/assets{?name,label}",
     "html_url": "https://github.com/github-api-test-org/temp-testCreateRepository/releases/tag/release_tag",
-    "id": 21671831,
-    "node_id": "MDc6UmVsZWFzZTIxNjcxODMx",
+    "id": 21786739,
+    "node_id": "MDc6UmVsZWFzZTIxNzg2NzM5",
     "tag_name": "release_tag",
     "target_commitish": "master",
     "name": "Test Release",
@@ -31,8 +31,8 @@
       "site_admin": false
     },
     "prerelease": false,
-    "created_at": "2019-11-21T23:50:50Z",
-    "published_at": "2019-11-21T23:50:58Z",
+    "created_at": "2019-11-27T01:45:22Z",
+    "published_at": "2019-11-27T01:45:29Z",
     "assets": [],
     "tarball_url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/tarball/release_tag",
     "zipball_url": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/zipball/release_tag",

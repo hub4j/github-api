@@ -1,27 +1,28 @@
 {
-  "id": "86627e83-0d3a-4cc0-bc55-d549388fd7c7",
-  "name": "repos_github-api-test-org_temp-testcreaterepository_releases_21671831_assets",
+  "id": "7e3d0849-0e5e-4f69-a836-1dddb01af7e0",
+  "name": "repos_github-api-test-org_temp-testcreaterepository",
   "request": {
-    "url": "/repos/github-api-test-org/temp-testCreateRepository/releases/21671831/assets",
+    "url": "/repos/github-api-test-org/temp-testCreateRepository",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "body": "[]",
+    "bodyFileName": "repos_github-api-test-org_temp-testcreaterepository-7e3d0849-0e5e-4f69-a836-1dddb01af7e0.json",
     "headers": {
-      "Date": "Thu, 21 Nov 2019 23:51:00 GMT",
+      "Date": "Wed, 27 Nov 2019 01:45:27 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4931",
-      "X-RateLimit-Reset": "1574383121",
+      "X-RateLimit-Remaining": "4958",
+      "X-RateLimit-Reset": "1574822592",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "\"ad5808b0a5d75d70a16a73b8e9763e19\"",
+      "ETag": "W/\"26a7f16664bd9308808198d8736328f3\"",
+      "Last-Modified": "Wed, 27 Nov 2019 01:45:25 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -33,12 +34,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C262:5E20:385EBD:41BE43:5DD722E4"
+      "X-GitHub-Request-Id": "D729:3497:963C68:B1F2CA:5DDDD530"
     }
   },
-  "uuid": "86627e83-0d3a-4cc0-bc55-d549388fd7c7",
+  "uuid": "7e3d0849-0e5e-4f69-a836-1dddb01af7e0",
   "persistent": true,
-  "scenarioName": "scenario-2-repos-github-api-test-org-temp-testCreateRepository-releases-21671831-assets",
-  "requiredScenarioState": "scenario-2-repos-github-api-test-org-temp-testCreateRepository-releases-21671831-assets-3",
-  "insertionIndex": 12
+  "insertionIndex": 2
 }

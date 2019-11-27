@@ -306,4 +306,14 @@ public class GHEventPayloadTest {
     // @Test
     // public void watch() throws Exception {}
 
+    @Test
+    @Payload("check-run")
+    public void checkRunEvent() throws Exception {
+        GHEventPayload.CheckRun event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.CheckRun.class);
+        assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getAction(), is("created"));
+        assertThat(event.getCheckRun().getName(), is("Octocoders-linter"));
+    }
+
 }

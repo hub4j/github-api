@@ -47,6 +47,106 @@ public abstract class GHEventPayload {
         }
     }
 
+    /*
+     * List of events that still need to be added:
+     * CheckRunEvent CheckSuiteEvent ContentReferenceEvent DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent
+     * GitHubAppAuthorizationEvent GistEvent GollumEvent InstallationEvent InstallationRepositoriesEvent IssuesEvent
+     * LabelEvent MarketplacePurchaseEvent MemberEvent MembershipEvent MetaEvent MilestoneEvent OrganizationEvent
+     * OrgBlockEvent PackageEvent PageBuildEvent ProjectCardEvent ProjectColumnEvent ProjectEvent
+     * RepositoryDispatchEvent RepositoryImportEvent RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent
+     * StatusEvent TeamEvent TeamAddEvent WatchEvent
+     */
+
+    /**
+     * A check run event has been created, rerequested, completed, or has a requested_action.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
+     */
+    public static class CheckRun extends GHEventPayload {
+        private String action;
+        private int number;
+        private GHCheckRun checkRun;
+        private GHRequestedAction requestedAction;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
+        public int getNumber() {
+            return number;
+        }
+
+        /**
+         * Sets Check Run object
+         *
+         * @return the pull request
+         */
+        public void setCheckRun(GHCheckRun currentCheckRun) {
+            this.checkRun = currentCheckRun;
+        }
+
+        /**
+         * Gets Check Run object
+         *
+         * @return the pull request
+         */
+        public GHCheckRun getCheckRun() {
+            return checkRun;
+        }
+
+        /**
+         * Sets the Requested Action object
+         *
+         * @return the pull request
+         */
+        public void setCheckRun(GHRequestedAction currentRequestedAction) {
+            this.requestedAction = currentRequestedAction;
+        }
+
+        /**
+         * Gets the Requested Action object
+         *
+         * @return the pull request
+         */
+        public GHRequestedAction getRequestedAction() {
+            return requestedAction;
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (checkRun == null)
+                throw new IllegalStateException(
+                        "Expected check_run payload, but got something else. Maybe we've got another type of event?");
+            if (repository != null) {
+                repository.wrap(root);
+                checkRun.wrap(repository);
+            } else {
+                checkRun.wrap(root);
+            }
+        }
+    }
+
     /**
      * A pull request status has changed.
      *

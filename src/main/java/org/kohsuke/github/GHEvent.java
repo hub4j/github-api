@@ -67,12 +67,12 @@ public enum GHEvent {
      */
     ALL;
 
-
     /**
      * Returns GitHub's internal representation of this event.
      */
     String symbol() {
-        if (this==ALL)  return "*";
+        if (this == ALL)
+            return "*";
         return name().toLowerCase(Locale.ENGLISH);
     }
 }

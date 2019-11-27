@@ -1,0 +1,4 @@
+org.kohsuke.github
+org.kohsuke.github.example.dataobject
+org.kohsuke.github.extras
+org.kohsuke.github.extras.okhttp3

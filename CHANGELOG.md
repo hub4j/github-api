@@ -1,5 +1,31 @@
 # Changelog
 
+## [github-api-1.100](https://github.com/github-api/github-api/tree/github-api-1.100) (2019-11-27)
+
+[Full Changelog](https://github.com/github-api/github-api/compare/github-api-1.99...github-api-1.100)
+
+### Features and Fixes
+
+- Add method to set repository topics @martinvanzijl (#594)
+- Adjust GHRateLimit to system time instead of depending on synchronization @bitwiseman (#595)
+- Add Functionality of OTP to support user 2fa @madhephaestus (#603)
+- Implement Meta endpoint @PauloMigAlmeida (#611)
+- fix and unit tests for issue #504 @siordache (#620)
+- Fixed GHContent to allow spaces in path @bitwiseman (#625)
+
+### Internals
+
+- Clean up Requester interface a bit @bitwiseman (#614)
+- Javadoc fail on warning during CI build @bitwiseman (#613)
+- Code style fixes @bitwiseman (#609)
+- Re-enable Lifecycle test @bitwiseman (#621)
+- Removed permission field in createTeam. It is deprecated in the API @asthinasthi (#619)
+- Cleanup imports @bitwiseman (#616)
+- Branch missing @alexanderrtaylor (#615)
+- jackson 2.10.1 @sullis (#604)
+- Bump okhttp from 3.14.2 to 4.2.2 @dependabot-preview (#593)
+
+
 ## [github-api-1.99](https://github.com/github-api/github-api/tree/github-api-1.99) (2019-11-04)
 
 [Full Changelog](https://github.com/github-api/github-api/compare/github-api-1.95...github-api-1.99)

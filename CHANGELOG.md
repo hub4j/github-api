@@ -1,6 +1,14 @@
 # Changelog
 
-## [github-api-1.100](https://github.com/github-api/github-api/tree/github-api-1.100) (2019-11-27)
+## [github-api-1.101](https://github.com/github-api/github-api/tree/github-api-1.101) (2019-11-27)
+
+[Full Changelog](https://github.com/github-api/github-api/compare/github-api-1.100...github-api-1.101)
+
+### Fixes
+
+- Fixed `ClassNotFoundException` when creating `okhttp3.OkHttpConnector` with `Cache` @alecharp [\#627](https://github.com/github-api/github-api/issues/627)
+
+## [github-api-1.100](https://github.com/github-api/github-api/tree/github-api-1.100) (2019-11-26)
 
 [Full Changelog](https://github.com/github-api/github-api/compare/github-api-1.99...github-api-1.100)
 

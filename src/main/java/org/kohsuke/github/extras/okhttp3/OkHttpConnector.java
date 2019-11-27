@@ -1,6 +1,6 @@
 package org.kohsuke.github.extras.okhttp3;
 
-import com.squareup.okhttp.CacheControl;
+import okhttp3.CacheControl;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import org.kohsuke.github.HttpConnector;

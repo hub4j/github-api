@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>github-api</artifactId>
-  <version>1.101-SNAPSHOT</version>
+  <version>1.101</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com/github-api/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/github-api/${project.artifactId}.git</developerConnection>
     <url>https://${project.artifactId}.kohsuke.org/</url>
-    <tag>HEAD</tag>
+    <tag>github-api-1.101</tag>
   </scm>
 
   <distributionManagement>

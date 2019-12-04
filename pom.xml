@@ -464,6 +464,9 @@
                         <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
                         <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                         <exclude>org.kohsuke.github.example.*</exclude>
+                        <!-- Deprecated iterateRepositories -->
+                        <exclude>org.kohsuke.github.GHPerson.1</exclude>
+                        <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
                       </excludes>
                     </rule>
                   </rules>

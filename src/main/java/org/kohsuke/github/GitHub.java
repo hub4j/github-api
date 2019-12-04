@@ -29,17 +29,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Base64;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
@@ -151,9 +151,9 @@ public class GitHub {
                 encodedAuthorization = "Bearer " + jwtToken;
             } else if (password != null) {
                 String authorization = (login + ':' + password);
-                String charsetName = Charsets.UTF_8.name();
+                String charsetName = StandardCharsets.UTF_8.name();
                 encodedAuthorization = "Basic "
-                        + new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
+                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
             } else {// anonymous access
                 encodedAuthorization = null;
             }

@@ -1,11 +1,9 @@
 package org.kohsuke.github;
 
-import org.apache.commons.codec.binary.Base64InputStream;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.Base64;
 
 /**
  * The type GHBlob.
@@ -73,8 +71,9 @@ public class GHBlob {
     public InputStream read() {
         if (encoding.equals("base64")) {
             try {
-                return new Base64InputStream(new ByteArrayInputStream(content.getBytes("US-ASCII")), false);
-            } catch (UnsupportedEncodingException e) {
+                Base64.Decoder decoder = Base64.getMimeDecoder();
+                return new ByteArrayInputStream(decoder.decode(content));
+            } catch (IllegalArgumentException e) {
                 throw new AssertionError(e); // US-ASCII is mandatory
             }
         }

@@ -17,12 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
-    final private String login = "kohsuke", repositoryName = "github-api";
+public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
+    final private String repositoryName = "github-api";
 
     @Override
     protected GitHubBuilder getGitHubBuilder() {
-        return new GitHubBuilder().withPassword(login, null);
+        return new GitHubBuilder().withPassword(GITHUB_API_TEST_ORG, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,7 +55,8 @@ public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
         String mockedResponse = mapper.writeValueAsString(expectedResult);
 
         GitHub gitHubSpy = Mockito.spy(gitHub);
-        GHRepository repo = gitHubSpy.getUser(login).getRepository(repositoryName);
+        GHRepository repo = Mockito.spy(gitHubSpy.getOrganization(GITHUB_API_TEST_ORG).getRepository(repositoryName));
+        Mockito.doReturn(GITHUB_API_TEST_ORG).when(repo).getOwnerName();
 
         // accessing traffic info requires push access to the repo
         // since we don't have that, let the mocking begin...
@@ -70,7 +71,7 @@ public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
         Mockito.doReturn("GET").when(mockHttpURLConnection).getRequestMethod();
 
         // this covers calls on "uc" in Requester.setupConnection and Requester.buildRequest
-        URL trafficURL = gitHub.getApiURL("/repos/" + login + "/" + repositoryName + "/traffic/"
+        URL trafficURL = gitHub.getApiURL("/repos/" + GITHUB_API_TEST_ORG + "/" + repositoryName + "/traffic/"
                 + ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones"));
         Mockito.doReturn(mockHttpURLConnection).when(connectorSpy).connect(Mockito.eq(trafficURL));
 
@@ -137,7 +138,7 @@ public class RepositoryTrafficTest extends AbstractGitHubApiTestBase {
     public void testGetTrafficStatsAccessFailureDueToInsufficientPermissions() throws IOException {
         String errorMsg = "Exception should be thrown, since we don't have permission to access repo traffic info.";
 
-        GHRepository repo = gitHub.getUser(login).getRepository(repositoryName);
+        GHRepository repo = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository(repositoryName);
         try {
             repo.getViewTraffic();
             Assert.fail(errorMsg);

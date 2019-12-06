@@ -1963,9 +1963,6 @@ public class GHRepository extends GHObject {
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     public Set<URL> getPostCommitHooks() {
-        if (postCommitHooks == null) {
-
-        }
         return postCommitHooks;
     }
 

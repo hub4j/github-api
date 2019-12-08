@@ -15,7 +15,7 @@ public enum GHMarketplacePriceModel {
     /**
      * Returns GitHub's internal representation of this event.
      */
-    public String symbol(){
+    public String symbol() {
         return internalName;
     }
 }

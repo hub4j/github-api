@@ -15,11 +15,11 @@ import java.io.UnsupportedEncodingException;
  * @author Alexandre COLLIGNON
  * @see GHRepository#getFileContent(String)
  */
-@SuppressWarnings({"UnusedDeclaration"})
+@SuppressWarnings({ "UnusedDeclaration" })
 public class GHContent implements Refreshable {
     /*
-        In normal use of this class, repository field is set via wrap(),
-        but in the code search API, there's a nested 'repository' field that gets populated from JSON.
+     * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
+     * 'repository' field that gets populated from JSON.
      */
     private GHRepository repository;
 
@@ -33,8 +33,8 @@ public class GHContent implements Refreshable {
     private String path;
     private String content;
     private String url; // this is the API url
-    private String git_url;    // this is the Blob url
-    private String html_url;    // this is the UI
+    private String git_url; // this is the Blob url
+    private String html_url; // this is the UI
     private String download_url;
 
     public GHRepository getOwner() {
@@ -69,12 +69,10 @@ public class GHContent implements Refreshable {
      * Retrieve the decoded content that is stored at this location.
      *
      * <p>
-     * Due to the nature of GitHub's API, you're not guaranteed that
-     * the content will already be populated, so this may trigger
-     * network activity, and can throw an IOException.
+     * Due to the nature of GitHub's API, you're not guaranteed that the content will already be populated, so this may
+     * trigger network activity, and can throw an IOException.
      *
-     * @deprecated
-     *      Use {@link #read()}
+     * @deprecated Use {@link #read()}
      */
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
@@ -85,12 +83,10 @@ public class GHContent implements Refreshable {
      * Retrieve the base64-encoded content that is stored at this location.
      *
      * <p>
-     * Due to the nature of GitHub's API, you're not guaranteed that
-     * the content will already be populated, so this may trigger
-     * network activity, and can throw an IOException.
+     * Due to the nature of GitHub's API, you're not guaranteed that the content will already be populated, so this may
+     * trigger network activity, and can throw an IOException.
      *
-     * @deprecated
-     *      Use {@link #read()}
+     * @deprecated Use {@link #read()}
      */
     public String getEncodedContent() throws IOException {
         refresh(content);
@@ -121,11 +117,11 @@ public class GHContent implements Refreshable {
             try {
                 return new Base64InputStream(new ByteArrayInputStream(content.getBytes("US-ASCII")), false);
             } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e);    // US-ASCII is mandatory
+                throw new AssertionError(e); // US-ASCII is mandatory
             }
         }
 
-        throw new UnsupportedOperationException("Unrecognized encoding: "+encoding);
+        throw new UnsupportedOperationException("Unrecognized encoding: " + encoding);
     }
 
     /**
@@ -158,13 +154,9 @@ public class GHContent implements Refreshable {
      */
     public PagedIterable<GHContent> listDirectoryContent() throws IOException {
         if (!isDirectory())
-            throw new IllegalStateException(path+" is not a directory");
+            throw new IllegalStateException(path + " is not a directory");
 
-        return root.retrieve()
-            .asPagedIterable(
-                url,
-                GHContent[].class,
-                item -> item.wrap(repository) );
+        return root.retrieve().asPagedIterable(url, GHContent[].class, item -> item.wrap(repository));
     }
 
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
@@ -181,15 +173,12 @@ public class GHContent implements Refreshable {
         return update(newContentBytes, commitMessage, null);
     }
 
-    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) throws IOException {
+    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
+            throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = new Requester(root)
-            .with("path", path)
-            .with("message", commitMessage)
-            .with("sha", sha)
-            .with("content", encodedContent)
-            .method("PUT");
+        Requester requester = new Requester(root).with("path", path).with("message", commitMessage).with("sha", sha)
+                .with("content", encodedContent).method("PUT");
 
         if (branch != null) {
             requester.with("branch", branch);
@@ -209,11 +198,8 @@ public class GHContent implements Refreshable {
     }
 
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(root)
-            .with("path", path)
-            .with("message", commitMessage)
-            .with("sha", sha)
-            .method("DELETE");
+        Requester requester = new Requester(root).with("path", path).with("message", commitMessage).with("sha", sha)
+                .method("DELETE");
 
         if (branch != null) {
             requester.with("branch", branch);
@@ -234,13 +220,13 @@ public class GHContent implements Refreshable {
         this.root = owner.root;
         return this;
     }
+
     GHContent wrap(GitHub root) {
         this.root = root;
-        if (repository!=null)
+        if (repository != null)
             repository.wrap(root);
         return this;
     }
-
 
     public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
         for (GHContent unwrappedContent : contents) {

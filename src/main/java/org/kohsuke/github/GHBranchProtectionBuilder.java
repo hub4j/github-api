@@ -37,7 +37,7 @@ public class GHBranchProtectionBuilder {
         getStatusChecks().contexts.addAll(checks);
         return this;
     }
-    
+
     public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
         addRequiredChecks(Arrays.asList(checks));
         return this;
@@ -53,13 +53,10 @@ public class GHBranchProtectionBuilder {
     }
 
     public GHBranchProtection enable() throws IOException {
-        return requester().method("PUT")
-                .withNullable("required_status_checks", statusChecks)
-                .withNullable("required_pull_request_reviews", prReviews)
-                .withNullable("restrictions", restrictions)
+        return requester().method("PUT").withNullable("required_status_checks", statusChecks)
+                .withNullable("required_pull_request_reviews", prReviews).withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
-                .wrap(branch);
+                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class).wrap(branch);
     }
 
     public GHBranchProtectionBuilder includeAdmins() {
@@ -148,7 +145,7 @@ public class GHBranchProtectionBuilder {
         }
         return this;
     }
-    
+
     public GHBranchProtectionBuilder userPushAccess(GHUser... users) {
         for (GHUser user : users) {
             getRestrictions().users.add(user.getLogin());
@@ -173,7 +170,7 @@ public class GHBranchProtectionBuilder {
     private void addReviewRestriction(String restriction, boolean isTeam) {
         restrictReviewDismissals();
         Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
-        
+
         if (isTeam) {
             restrictions.teams.add(restriction);
         } else {

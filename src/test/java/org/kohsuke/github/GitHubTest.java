@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.google.common.collect.Iterables;
 import org.junit.Test;
+import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -52,10 +53,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertNotEquals(0L, r.getId());
         }
     }
-    
+
     @Test
     public void searchContent() throws Exception {
-        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js").repo("jquery/jquery").list();
+        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js")
+                .repo("jquery/jquery").list();
         GHContent c = r.iterator().next();
         // System.out.println(c.getName());
         assertNotNull(c.getDownloadUrl());
@@ -65,17 +67,16 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testListMyAuthorizations() throws IOException
-    {
+    public void testListMyAuthorizations() throws IOException {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
 
-        for (GHAuthorization auth: list) {
+        for (GHAuthorization auth : list) {
             assertNotNull(auth.getAppName());
         }
     }
 
     @Test
-    public void getMeta() throws IOException{
+    public void getMeta() throws IOException {
         GHMeta meta = gitHub.getMeta();
         assertTrue(meta.isVerifiablePasswordAuthentication());
         assertEquals(19, meta.getApi().size());
@@ -84,5 +85,22 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertEquals(6, meta.getImporter().size());
         assertEquals(6, meta.getPages().size());
         assertEquals(19, meta.getWeb().size());
+
+        // Also test examples here
+        Class[] examples = new Class[] { ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
+                ReadOnlyObjects.GHMetaGettersUnmodifiable.class, ReadOnlyObjects.GHMetaGettersFinal.class,
+                ReadOnlyObjects.GHMetaGettersFinalCreator.class, };
+
+        for (Class metaClass : examples) {
+            ReadOnlyObjects.GHMetaExample metaExample = gitHub.retrieve().to("/meta",
+                    (Class<ReadOnlyObjects.GHMetaExample>) metaClass);
+            assertTrue(metaExample.isVerifiablePasswordAuthentication());
+            assertEquals(19, metaExample.getApi().size());
+            assertEquals(19, metaExample.getGit().size());
+            assertEquals(3, metaExample.getHooks().size());
+            assertEquals(6, metaExample.getImporter().size());
+            assertEquals(6, metaExample.getPages().size());
+            assertEquals(19, metaExample.getWeb().size());
+        }
     }
 }

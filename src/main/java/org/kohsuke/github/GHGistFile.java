@@ -8,12 +8,11 @@ package org.kohsuke.github;
  * @see GHGist#getFiles()
  */
 public class GHGistFile {
-    /*package almost final*/ String fileName;
+    /* package almost final */ String fileName;
 
     private int size;
     private String raw_url, type, language, content;
     private boolean truncated;
-
 
     public String getFileName() {
         return fileName;

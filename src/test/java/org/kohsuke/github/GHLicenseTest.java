@@ -39,6 +39,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void listLicenses() throws IOException {
@@ -47,10 +48,10 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Tests that {@link GitHub#listLicenses()} returns the MIT license
-     * in the expected manner.
+     * Tests that {@link GitHub#listLicenses()} returns the MIT license in the expected manner.
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void listLicensesCheckIndividualLicense() throws IOException {
@@ -65,10 +66,11 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Checks that the request for an individual license using {@link GitHub#getLicense(String)}
-     * returns expected values (not all properties are checked)
+     * Checks that the request for an individual license using {@link GitHub#getLicense(String)} returns expected values
+     * (not all properties are checked)
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void getLicense() throws IOException {
@@ -76,14 +78,16 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         GHLicense license = gitHub.getLicense(key);
         assertNotNull(license);
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
+        assertTrue("The HTML URL is correct",
+                license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
 
     /**
-     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)}
-     * and checks that the license is correct
+     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and checks that the license is
+     * correct
      *
      * @throws IOException
+     *             if test failss
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
@@ -92,14 +96,15 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
+        assertTrue("The URL is correct",
+                license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
     }
 
     /**
-     * Accesses the 'atom/atom' repo using {@link GitHub#getRepository(String)}
-     * and checks that the license is correct
+     * Accesses the 'atom/atom' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicenseAtom() throws IOException {
@@ -108,14 +113,15 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
+        assertTrue("The URL is correct",
+                license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
     }
 
     /**
-     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)}
-     * and checks that the license is correct
+     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicensePomes() throws IOException {
@@ -124,14 +130,16 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("apache-2.0"));
         assertTrue("The name is correct", license.getName().equals("Apache License 2.0"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/apache-2.0")));
+        assertTrue("The URL is correct",
+                license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/apache-2.0")));
     }
 
     /**
-     * Accesses the 'dedickinson/test-repo' repo using {@link GitHub#getRepository(String)}
-     * and checks that *no* license is returned as the repo doesn't have one
+     * Accesses the 'dedickinson/test-repo' repo using {@link GitHub#getRepository(String)} and checks that *no* license
+     * is returned as the repo doesn't have one
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryWithoutLicense() throws IOException {
@@ -141,11 +149,11 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)}
-     * and then calls {@link GHRepository#getLicense()} and checks that certain
-     * properties are correct
+     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and then calls
+     * {@link GHRepository#getLicense()} and checks that certain properties are correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
@@ -154,16 +162,18 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
         assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The URL is correct", license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
-        assertTrue("The HTML URL is correct", license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
+        assertTrue("The URL is correct",
+                license.getUrl().equals(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
+        assertTrue("The HTML URL is correct",
+                license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
     }
 
     /**
-     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)}
-     * and then calls {@link GHRepository#getLicenseContent()} and checks that certain
-     * properties are correct
+     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and then calls
+     * {@link GHRepository#getLicenseContent()} and checks that certain properties are correct
      *
      * @throws IOException
+     *             if test fails
      */
     @Test
     public void checkRepositoryLicenseContent() throws IOException {

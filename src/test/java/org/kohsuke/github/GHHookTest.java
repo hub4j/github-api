@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.hasValue;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 
-
 /**
  * @author Kanstantsin Shautsou
  */
@@ -59,20 +58,15 @@ public class GHHookTest {
 
         try {
             // fails because application isn't approved in organisation and you can find it only after doing real call
-            final GHHook hook = repository.createHook(
-                "my-hook",
-                singletonMap("url", "http://localhost"),
-                singletonList(GHEvent.PUSH),
-                true
-            );
+            final GHHook hook = repository.createHook("my-hook", singletonMap("url", "http://localhost"),
+                    singletonList(GHEvent.PUSH), true);
         } catch (IOException ex) {
             assertThat(ex, instanceOf(GHFileNotFoundException.class));
             final GHFileNotFoundException ghFileNotFoundException = (GHFileNotFoundException) ex;
             final Map<String, List<String>> responseHeaderFields = ghFileNotFoundException.getResponseHeaderFields();
             assertThat(responseHeaderFields, hasKey("X-Accepted-OAuth-Scopes"));
             assertThat(responseHeaderFields.get("X-Accepted-OAuth-Scopes"),
-                hasItem("admin:repo_hook, public_repo, repo, write:repo_hook")
-            );
+                    hasItem("admin:repo_hook, public_repo, repo, write:repo_hook"));
         }
     }
 }

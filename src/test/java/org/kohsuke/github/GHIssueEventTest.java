@@ -45,7 +45,8 @@ public class GHIssueEventTest extends AbstractGitHubApiTestBase {
         int i = 0;
         for (GHIssueEvent event : list) {
             assertNotNull(event.getIssue());
-            if (i++ > 10) break;
+            if (i++ > 10)
+                break;
         }
     }
 

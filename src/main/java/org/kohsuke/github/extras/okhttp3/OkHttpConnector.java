@@ -14,14 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
  *
- * Unlike {@link #DEFAULT}, OkHttp does response caching.
- * Making a conditional request against GitHubAPI and receiving a 304
- * response does not count against the rate limit.
- * See http://developer.github.com/v3/#conditional-requests
+ * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
+ * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
  * @author Liam Newman
  * @author Kohsuke Kawaguchi
@@ -32,7 +29,6 @@ public class OkHttpConnector implements HttpConnector {
 
     private final OkHttpClient client;
     private final ObsoleteUrlFactory urlFactory;
-
 
     public OkHttpConnector(OkHttpClient client) {
         this(client, 0);
@@ -45,10 +41,7 @@ public class OkHttpConnector implements HttpConnector {
         builder.connectionSpecs(TlsConnectionSpecs());
         this.client = builder.build();
         if (cacheMaxAge >= 0 && this.client != null && this.client.cache() != null) {
-            maxAgeHeaderValue =  new CacheControl.Builder()
-                .maxAge(cacheMaxAge, TimeUnit.SECONDS)
-                .build()
-                .toString();
+            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();
         } else {
             maxAgeHeaderValue = null;
         }

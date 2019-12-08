@@ -35,6 +35,7 @@
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.2.2</okhttp3.version>
     <okio.version>2.4.1</okio.version>
+    <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <jacoco.coverage.target.class>.80</jacoco.coverage.target.class>
     <jacoco.coverage.target.method>0.20</jacoco.coverage.target.method>
     <jacoco.coverage.target.line>0.50</jacoco.coverage.target.line>
@@ -152,17 +153,29 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>	
-        <groupId>com.infradna.tool</groupId>	
-        <artifactId>bridge-method-injector</artifactId>	
-        <version>1.18</version>	
-        <executions>	
-          <execution>	
-            <goals>	
-              <goal>process</goal>	
-            </goals>	
-          </execution>	
-        </executions>	
+      <plugin>
+        <groupId>com.infradna.tool</groupId>
+        <artifactId>bridge-method-injector</artifactId>
+        <version>1.18</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
+        <version>2.11.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>${formatter-maven-plugin.goal}</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
@@ -338,6 +351,14 @@
     </pluginRepository>
   </pluginRepositories>
   <profiles>
+    <profile>
+      <id>ci</id>
+      <properties>
+        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
+      </properties>
+      <build>
+      </build>
+    </profile>
     <profile>
       <id>jacoco</id>
       <activation>

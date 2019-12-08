@@ -19,10 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The standard WireMockRule eagerly initializes a WireMockServer.
- * This version supports multiple servers in one rule and
- * takes a lazy approach to intitialization allowing us to
- * isolate files snapshots for each method.
+ * The standard WireMockRule eagerly initializes a WireMockServer. This version supports multiple servers in one rule
+ * and takes a lazy approach to intitialization allowing us to isolate files snapshots for each method.
  *
  * @author Liam Newman
  */
@@ -37,7 +35,6 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
     }
 
     private String methodName = null;
-
 
     public WireMockMultiServerRule(Options options) {
         this(options, true);
@@ -65,8 +62,7 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
             public void evaluate() throws Throwable {
                 WireMockMultiServerRule.this.methodName = methodName;
                 initializeServers();
-                WireMock.configureFor("localhost",
-                    WireMockMultiServerRule.this.servers.get("default").port());
+                WireMock.configureFor("localhost", WireMockMultiServerRule.this.servers.get("default").port());
 
                 try {
                     WireMockMultiServerRule.this.before();
@@ -92,9 +88,8 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
             directoryName += "_" + serverId;
         }
 
-        final Options localOptions = new WireMockRuleConfiguration(
-            WireMockMultiServerRule.this.options,
-            directoryName, extensions);
+        final Options localOptions = new WireMockRuleConfiguration(WireMockMultiServerRule.this.options, directoryName,
+                extensions);
 
         new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
         new File(localOptions.filesRoot().getPath(), "__files").mkdirs();
@@ -159,7 +154,5 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
             deleteEmptyFolders(new File(server.getOptions().filesRoot().getPath()));
         });
     }
-
-
 
 }

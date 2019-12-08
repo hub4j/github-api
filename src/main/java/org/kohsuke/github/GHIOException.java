@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Request/responce contains useful metadata.
- * Custom exception allows store info for next diagnostics.
+ * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */

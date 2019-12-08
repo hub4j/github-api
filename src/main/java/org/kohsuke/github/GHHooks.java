@@ -16,15 +16,16 @@ class GHHooks {
         private final GitHub root;
 
         private Context(GitHub root) {
-          this.root = root;
+            this.root = root;
         }
 
         public List<GHHook> getHooks() throws IOException {
-        	
-            GHHook [] hookArray = root.retrieve().to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
+
+            GHHook[] hookArray = root.retrieve().to(collection(), collectionClass()); // jdk/eclipse bug requires this
+                                                                                      // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
-              wrap(h);
+                wrap(h);
             return list;
         }
 
@@ -33,20 +34,17 @@ class GHHooks {
             return wrap(hook);
         }
 
-        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active) throws IOException {
+        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
+                throws IOException {
             List<String> ea = null;
-            if (events!=null) {
-              ea = new ArrayList<String>();
-              for (GHEvent e : events)
-                ea.add(e.symbol());
+            if (events != null) {
+                ea = new ArrayList<String>();
+                for (GHEvent e : events)
+                    ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root)
-                .with("name", name)
-                .with("active", active)
-                ._with("config", config)
-                ._with("events", ea)
-                .to(collection(), clazz());
+            GHHook hook = new Requester(root).with("name", name).with("active", active)._with("config", config)
+                    ._with("events", ea).to(collection(), clazz());
 
             return wrap(hook);
         }
@@ -87,7 +85,7 @@ class GHHooks {
 
         @Override
         GHHook wrap(GHHook hook) {
-            return ((GHRepoHook)hook).wrap(repository);
+            return ((GHRepoHook) hook).wrap(repository);
         }
     }
 
@@ -116,15 +114,15 @@ class GHHooks {
 
         @Override
         GHHook wrap(GHHook hook) {
-            return ((GHOrgHook)hook).wrap(organization);
+            return ((GHOrgHook) hook).wrap(organization);
         }
     }
 
-      static Context repoContext(GHRepository repository, GHUser owner) {
-          return new RepoContext(repository, owner);
-      }
+    static Context repoContext(GHRepository repository, GHUser owner) {
+        return new RepoContext(repository, owner);
+    }
 
-      static Context orgContext(GHOrganization organization) {
-          return new OrgContext(organization);
-      }
+    static Context orgContext(GHOrganization organization) {
+        return new OrgContext(organization);
+    }
 }

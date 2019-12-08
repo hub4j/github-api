@@ -14,8 +14,8 @@ import java.util.Date;
  * @see GHNotificationStream
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
+        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHThread extends GHObject {
     private GitHub root;
     private GHRepository repository;
@@ -23,7 +23,7 @@ public class GHThread extends GHObject {
     private String reason;
     private boolean unread;
     private String last_read_at;
-    private String url,subscription_url;
+    private String url, subscription_url;
 
     static class Subject {
         String title;
@@ -71,21 +71,20 @@ public class GHThread extends GHObject {
     public String getType() {
         return subject.type;
     }
-    
+
     public String getLastCommentUrl() {
         return subject.latest_comment_url;
     }
 
     /**
      * If this thread is about an issue, return that issue.
-     * 
+     *
      * @return null if this thread is not about an issue.
      */
     public GHIssue getBoundIssue() throws IOException {
         if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
             return null;
-        return repository.getIssue(
-                Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+        return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
     }
 
     /**
@@ -96,8 +95,7 @@ public class GHThread extends GHObject {
     public GHPullRequest getBoundPullRequest() throws IOException {
         if (!"PullRequest".equals(subject.type))
             return null;
-        return repository.getPullRequest(
-                Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+        return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
     }
 
     /**
@@ -111,9 +109,9 @@ public class GHThread extends GHObject {
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
     }
 
-    /*package*/ GHThread wrap(GitHub root) {
+    GHThread wrap(GitHub root) {
         this.root = root;
-        if (this.repository!=null)
+        if (this.repository != null)
             this.repository.wrap(root);
         return this;
     }
@@ -129,10 +127,8 @@ public class GHThread extends GHObject {
      * Subscribes to this conversation to get notifications.
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(root)
-            .with("subscribed", subscribed)
-            .with("ignored", ignored)
-            .method("PUT").to(subscription_url, GHSubscription.class).wrapUp(root);
+        return new Requester(root).with("subscribed", subscribed).with("ignored", ignored).method("PUT")
+                .to(subscription_url, GHSubscription.class).wrapUp(root);
     }
 
     /**

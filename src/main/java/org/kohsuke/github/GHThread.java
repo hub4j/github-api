@@ -10,12 +10,12 @@ import java.util.Date;
 /**
  * A conversation in the notification API.
  *
+ * @author Kohsuke Kawaguchi
  * @see <a href="https://developer.github.com/v3/activity/notifications/">documentation</a>
  * @see GHNotificationStream
- * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 public class GHThread extends GHObject {
     private GitHub root;
     private GHRepository repository;
@@ -37,6 +37,8 @@ public class GHThread extends GHObject {
 
     /**
      * Returns null if the entire thread has never been read.
+     *
+     * @return the last read at
      */
     public Date getLastReadAt() {
         return GitHub.parseDate(last_read_at);
@@ -50,28 +52,58 @@ public class GHThread extends GHObject {
         return null;
     }
 
+    /**
+     * Gets reason.
+     *
+     * @return the reason
+     */
     public String getReason() {
         return reason;
     }
 
+    /**
+     * Gets repository.
+     *
+     * @return the repository
+     */
     public GHRepository getRepository() {
         return repository;
     }
 
     // TODO: how to expose the subject?
 
+    /**
+     * Is read boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRead() {
         return !unread;
     }
 
+    /**
+     * Gets title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return subject.title;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public String getType() {
         return subject.type;
     }
 
+    /**
+     * Gets last comment url.
+     *
+     * @return the last comment url
+     */
     public String getLastCommentUrl() {
         return subject.latest_comment_url;
     }
@@ -80,6 +112,8 @@ public class GHThread extends GHObject {
      * If this thread is about an issue, return that issue.
      *
      * @return null if this thread is not about an issue.
+     * @throws IOException
+     *             the io exception
      */
     public GHIssue getBoundIssue() throws IOException {
         if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
@@ -91,6 +125,8 @@ public class GHThread extends GHObject {
      * If this thread is about a pull request, return that pull request.
      *
      * @return null if this thread is not about a pull request.
+     * @throws IOException
+     *             the io exception
      */
     public GHPullRequest getBoundPullRequest() throws IOException {
         if (!"PullRequest".equals(subject.type))
@@ -102,6 +138,8 @@ public class GHThread extends GHObject {
      * If this thread is about a commit, return that commit.
      *
      * @return null if this thread is not about a commit.
+     * @throws IOException
+     *             the io exception
      */
     public GHCommit getBoundCommit() throws IOException {
         if (!"Commit".equals(subject.type))
@@ -118,6 +156,9 @@ public class GHThread extends GHObject {
 
     /**
      * Marks this thread as read.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void markAsRead() throws IOException {
         new Requester(root).method("PATCH").to(url);
@@ -125,16 +166,29 @@ public class GHThread extends GHObject {
 
     /**
      * Subscribes to this conversation to get notifications.
+     *
+     * @param subscribed
+     *            the subscribed
+     * @param ignored
+     *            the ignored
+     * @return the gh subscription
+     * @throws IOException
+     *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(root).with("subscribed", subscribed).with("ignored", ignored).method("PUT")
-                .to(subscription_url, GHSubscription.class).wrapUp(root);
+        return new Requester(root).with("subscribed", subscribed)
+                .with("ignored", ignored)
+                .method("PUT")
+                .to(subscription_url, GHSubscription.class)
+                .wrapUp(root);
     }
 
     /**
      * Returns the current subscription for this thread.
      *
      * @return null if no subscription exists.
+     * @throws IOException
+     *             the io exception
      */
     public GHSubscription getSubscription() throws IOException {
         try {

@@ -19,6 +19,13 @@ class GHHooks {
             this.root = root;
         }
 
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         * @throws IOException
+         *             the io exception
+         */
         public List<GHHook> getHooks() throws IOException {
 
             GHHook[] hookArray = root.retrieve().to(collection(), collectionClass()); // jdk/eclipse bug requires this
@@ -29,11 +36,35 @@ class GHHooks {
             return list;
         }
 
+        /**
+         * Gets hook.
+         *
+         * @param id
+         *            the id
+         * @return the hook
+         * @throws IOException
+         *             the io exception
+         */
         public GHHook getHook(int id) throws IOException {
             GHHook hook = root.retrieve().to(collection() + "/" + id, clazz());
             return wrap(hook);
         }
 
+        /**
+         * Create hook gh hook.
+         *
+         * @param name
+         *            the name
+         * @param config
+         *            the config
+         * @param events
+         *            the events
+         * @param active
+         *            the active
+         * @return the gh hook
+         * @throws IOException
+         *             the io exception
+         */
         public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
                 throws IOException {
             List<String> ea = null;
@@ -43,8 +74,11 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root).with("name", name).with("active", active)._with("config", config)
-                    ._with("events", ea).to(collection(), clazz());
+            GHHook hook = new Requester(root).with("name", name)
+                    .with("active", active)
+                    .with("config", config)
+                    .with("events", ea)
+                    .to(collection(), clazz());
 
             return wrap(hook);
         }

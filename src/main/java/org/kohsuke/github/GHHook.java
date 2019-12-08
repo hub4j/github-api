@@ -11,20 +11,32 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * The type GHHook.
+ *
  * @author Kohsuke Kawaguchi
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 public abstract class GHHook extends GHObject {
     String name;
     List<String> events;
     boolean active;
     Map<String, String> config;
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets events.
+     *
+     * @return the events
+     */
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
         for (String e : events) {
@@ -36,15 +48,29 @@ public abstract class GHHook extends GHObject {
         return s;
     }
 
+    /**
+     * Is active boolean.
+     *
+     * @return the boolean
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Gets config.
+     *
+     * @return the config
+     */
     public Map<String, String> getConfig() {
         return Collections.unmodifiableMap(config);
     }
 
     /**
+     * Ping.
+     *
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/repos/hooks/#ping-a-hook">Ping hook</a>
      */
     public void ping() throws IOException {
@@ -53,6 +79,9 @@ public abstract class GHHook extends GHObject {
 
     /**
      * Deletes this hook.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
         new Requester(getRoot()).method("DELETE").to(getApiRoute());

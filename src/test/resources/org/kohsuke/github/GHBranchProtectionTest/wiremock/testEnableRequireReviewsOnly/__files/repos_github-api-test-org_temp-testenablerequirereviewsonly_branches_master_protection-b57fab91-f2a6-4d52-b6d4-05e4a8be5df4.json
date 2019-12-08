@@ -1,0 +1,13 @@
+{
+  "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection",
+  "required_pull_request_reviews": {
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection/required_pull_request_reviews",
+    "dismiss_stale_reviews": false,
+    "require_code_owner_reviews": false,
+    "required_approving_review_count": 1
+  },
+  "enforce_admins": {
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection/enforce_admins",
+    "enabled": false
+  }
+}

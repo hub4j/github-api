@@ -1,11 +1,11 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.google.common.collect.Iterables;
 import org.junit.Test;
 import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
+
+import java.io.IOException;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -56,8 +56,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void searchContent() throws Exception {
-        PagedSearchIterable<GHContent> r = gitHub.searchContent().q("addClass").in("file").language("js")
-                .repo("jquery/jquery").list();
+        PagedSearchIterable<GHContent> r = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .list();
         GHContent c = r.iterator().next();
         // System.out.println(c.getName());
         assertNotNull(c.getDownloadUrl());
@@ -87,13 +91,13 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertEquals(19, meta.getWeb().size());
 
         // Also test examples here
-        Class[] examples = new Class[] { ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
+        Class[] examples = new Class[]{ ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
                 ReadOnlyObjects.GHMetaGettersUnmodifiable.class, ReadOnlyObjects.GHMetaGettersFinal.class,
                 ReadOnlyObjects.GHMetaGettersFinalCreator.class, };
 
         for (Class metaClass : examples) {
-            ReadOnlyObjects.GHMetaExample metaExample = gitHub.retrieve().to("/meta",
-                    (Class<ReadOnlyObjects.GHMetaExample>) metaClass);
+            ReadOnlyObjects.GHMetaExample metaExample = gitHub.retrieve()
+                    .to("/meta", (Class<ReadOnlyObjects.GHMetaExample>) metaClass);
             assertTrue(metaExample.isVerifiablePasswordAuthentication());
             assertEquals(19, metaExample.getApi().size());
             assertEquals(19, metaExample.getGit().size());

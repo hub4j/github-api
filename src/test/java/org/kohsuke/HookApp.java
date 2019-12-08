@@ -26,8 +26,8 @@ public class HookApp {
     public void doIndex(StaplerRequest req) throws IOException {
         String str = req.getParameter("payload");
         // System.out.println(str);
-        GHEventPayload.PullRequest o = GitHub.connect().parseEventPayload(new StringReader(str),
-                GHEventPayload.PullRequest.class);
+        GHEventPayload.PullRequest o = GitHub.connect()
+                .parseEventPayload(new StringReader(str), GHEventPayload.PullRequest.class);
         // System.out.println(o);
     }
 }

@@ -25,15 +25,16 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
+
+import javax.annotation.CheckForNull;
 
 /**
  * Review to a pull request.
  *
- * @see GHPullRequest#listReviews()
+ * @see GHPullRequest#listReviews() GHPullRequest#listReviews()
  * @see GHPullRequestReviewBuilder
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
@@ -53,6 +54,8 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Gets the pull request to which this review is associated.
+     *
+     * @return the parent
      */
     public GHPullRequest getParent() {
         return owner;
@@ -60,6 +63,8 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * The comment itself.
+     *
+     * @return the body
      */
     public String getBody() {
         return body;
@@ -67,15 +72,29 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Gets the user who posted this review.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
         return owner.root.getUser(user.getLogin());
     }
 
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
     public String getCommitId() {
         return commit_id;
     }
 
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
     @CheckForNull
     public GHPullRequestReviewState getState() {
         return state;
@@ -86,12 +105,21 @@ public class GHPullRequestReview extends GHObject {
         return null;
     }
 
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
     protected String getApiRoute() {
         return owner.getApiRoute() + "/reviews/" + id;
     }
 
     /**
      * When was this resource created?
+     *
+     * @return the submitted at
+     * @throws IOException
+     *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
         return GitHub.parseDate(submitted_at);
@@ -106,6 +134,14 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
+     * Submit.
+     *
+     * @param body
+     *            the body
+     * @param state
+     *            the state
+     * @throws IOException
+     *             the io exception
      * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
      *             {@link #submit(String, GHPullRequestReviewEvent)}
      */
@@ -115,9 +151,18 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @param event
+     *            the event
+     * @throws IOException
+     *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.root).method("POST").with("body", body).with("event", event.action())
+        new Requester(owner.root).method("POST")
+                .with("body", body)
+                .with("event", event.action())
                 .to(getApiRoute() + "/events", this);
         this.body = body;
         this.state = event.toState();
@@ -125,6 +170,9 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Deletes this review.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
         new Requester(owner.root).method("DELETE").to(getApiRoute());
@@ -132,6 +180,11 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Dismisses this review.
+     *
+     * @param message
+     *            the message
+     * @throws IOException
+     *             the io exception
      */
     public void dismiss(String message) throws IOException {
         new Requester(owner.root).method("PUT").with("message", message).to(getApiRoute() + "/dismissals");
@@ -140,9 +193,15 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Obtains all the review comments associated with this pull request review.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.retrieve().asPagedIterable(getApiRoute() + "/comments", GHPullRequestReviewComment[].class,
-                item -> item.wrapUp(owner));
+        return owner.root.retrieve()
+                .asPagedIterable(getApiRoute() + "/comments",
+                        GHPullRequestReviewComment[].class,
+                        item -> item.wrapUp(owner));
     }
 }

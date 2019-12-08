@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,6 +25,12 @@ public class GHRepositoryStatistics {
     private static final int MAX_WAIT_ITERATIONS = 3;
     private static final int WAIT_SLEEP_INTERVAL = 5000;
 
+    /**
+     * Instantiates a new Gh repository statistics.
+     *
+     * @param repo
+     *            the repo
+     */
     public GHRepositoryStatistics(GHRepository repo) {
         this.repo = repo;
         this.root = repo.root;
@@ -32,14 +39,27 @@ public class GHRepositoryStatistics {
     /**
      * Get contributors list with additions, deletions, and commit count. See
      * https://developer.github.com/v3/repos/statistics/#get-contributors-list-with-additions-deletions-and-commit-counts
+     *
+     * @return the contributor stats
+     * @throws IOException
+     *             the io exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     public PagedIterable<ContributorStats> getContributorStats() throws IOException, InterruptedException {
         return getContributorStats(true);
     }
 
     /**
+     * Gets contributor stats.
+     *
      * @param waitTillReady
      *            Whether to sleep the thread if necessary until the statistics are ready. This is true by default.
+     * @return the contributor stats
+     * @throws IOException
+     *             the io exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Preview
     @Deprecated
@@ -67,12 +87,17 @@ public class GHRepositoryStatistics {
      * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return root.retrieve().asPagedIterable(getApiTailUrl("contributors"), ContributorStats[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(getApiTailUrl("contributors"), ContributorStats[].class, item -> item.wrapUp(root));
     }
 
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" }, justification = "JSON API")
+    /**
+     * The type ContributorStats.
+     */
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                    "URF_UNREAD_FIELD" },
+            justification = "JSON API")
     public static class ContributorStats extends GHObject {
         /* package almost final */ private GitHub root;
         private GHUser author;
@@ -84,11 +109,18 @@ public class GHRepositoryStatistics {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
         public GitHub getRoot() {
             return root;
         }
 
         /**
+         * Gets author.
+         *
          * @return The author described by these statistics.
          */
         public GHUser getAuthor() {
@@ -96,6 +128,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets total.
+         *
          * @return The total number of commits authored by the contributor.
          */
         public int getTotal() {
@@ -109,6 +143,7 @@ public class GHRepositoryStatistics {
          *            The timestamp to look for.
          * @return The week starting with the given timestamp. Throws an exception if it is not found.
          * @throws NoSuchElementException
+         *             the no such element exception
          */
         public Week getWeek(long timestamp) throws NoSuchElementException {
             // maybe store the weeks in a map to make this more efficient?
@@ -123,6 +158,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets weeks.
+         *
          * @return The total number of commits authored by the contributor.
          */
         public List<Week> getWeeks() {
@@ -135,8 +172,13 @@ public class GHRepositoryStatistics {
                     + String.valueOf(weeks.size()) + " weeks";
         }
 
-        @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-                "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" }, justification = "JSON API")
+        /**
+         * The type Week.
+         */
+        @SuppressFBWarnings(
+                value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                        "URF_UNREAD_FIELD" },
+                justification = "JSON API")
         public static class Week {
 
             private long w;
@@ -145,6 +187,8 @@ public class GHRepositoryStatistics {
             private int c;
 
             /**
+             * Gets week timestamp.
+             *
              * @return Start of the week, as a UNIX timestamp.
              */
             public long getWeekTimestamp() {
@@ -152,6 +196,8 @@ public class GHRepositoryStatistics {
             }
 
             /**
+             * Gets number of additions.
+             *
              * @return The number of additions for the week.
              */
             public int getNumberOfAdditions() {
@@ -159,6 +205,8 @@ public class GHRepositoryStatistics {
             }
 
             /**
+             * Gets number of deletions.
+             *
              * @return The number of deletions for the week.
              */
             public int getNumberOfDeletions() {
@@ -166,6 +214,8 @@ public class GHRepositoryStatistics {
             }
 
             /**
+             * Gets number of commits.
+             *
              * @return The number of commits for the week.
              */
             public int getNumberOfCommits() {
@@ -187,14 +237,22 @@ public class GHRepositoryStatistics {
     /**
      * Get the last year of commit activity data. See
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
+     *
+     * @return the commit activity
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return root.retrieve().asPagedIterable(getApiTailUrl("commit_activity"), CommitActivity[].class,
-                item -> item.wrapUp(root));
+        return root.retrieve()
+                .asPagedIterable(getApiTailUrl("commit_activity"), CommitActivity[].class, item -> item.wrapUp(root));
     }
 
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-            "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+    /**
+     * The type CommitActivity.
+     */
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class CommitActivity extends GHObject {
         /* package almost final */ private GitHub root;
         private List<Integer> days;
@@ -202,6 +260,8 @@ public class GHRepositoryStatistics {
         private long week;
 
         /**
+         * Gets days.
+         *
          * @return The number of commits for each day of the week. 0 = Sunday, 1 = Monday, etc.
          */
         public List<Integer> getDays() {
@@ -209,6 +269,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets total.
+         *
          * @return The total number of commits for the week.
          */
         public int getTotal() {
@@ -216,6 +278,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets week.
+         *
          * @return The start of the week as a UNIX timestamp.
          */
         public long getWeek() {
@@ -227,6 +291,11 @@ public class GHRepositoryStatistics {
             return this;
         }
 
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
         public GitHub getRoot() {
             return root;
         }
@@ -240,6 +309,10 @@ public class GHRepositoryStatistics {
     /**
      * Get the number of additions and deletions per week. See
      * https://developer.github.com/v3/repos/statistics/#get-the-number-of-additions-and-deletions-per-week
+     *
+     * @return the code frequency
+     * @throws IOException
+     *             the io exception
      */
     public List<CodeFrequency> getCodeFrequency() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
@@ -268,6 +341,9 @@ public class GHRepositoryStatistics {
         }
     }
 
+    /**
+     * The type CodeFrequency.
+     */
     public static class CodeFrequency {
         private int week;
         private int additions;
@@ -280,6 +356,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets week timestamp.
+         *
          * @return The start of the week as a UNIX timestamp.
          */
         public int getWeekTimestamp() {
@@ -287,6 +365,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets additions.
+         *
          * @return The number of additions for the week.
          */
         public long getAdditions() {
@@ -294,6 +374,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets deletions.
+         *
          * @return The number of deletions for the week. NOTE: This will be a NEGATIVE number.
          */
         public long getDeletions() {
@@ -312,11 +394,18 @@ public class GHRepositoryStatistics {
     /**
      * Get the weekly commit count for the repository owner and everyone else. See
      * https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
+     *
+     * @return the participation
+     * @throws IOException
+     *             the io exception
      */
     public Participation getParticipation() throws IOException {
         return root.retrieve().to(getApiTailUrl("participation"), Participation.class);
     }
 
+    /**
+     * The type Participation.
+     */
     public static class Participation extends GHObject {
         /* package almost final */ private GitHub root;
         private List<Integer> all;
@@ -327,11 +416,18 @@ public class GHRepositoryStatistics {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
         public GitHub getRoot() {
             return root;
         }
 
         /**
+         * Gets all commits.
+         *
          * @return The list of commit counts for everyone combined, for the last 52 weeks.
          */
         public List<Integer> getAllCommits() {
@@ -339,6 +435,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets owner commits.
+         *
          * @return The list of commit counts for the owner, for the last 52 weeks.
          */
         public List<Integer> getOwnerCommits() {
@@ -354,6 +452,10 @@ public class GHRepositoryStatistics {
     /**
      * Get the number of commits per hour in each day. See
      * https://developer.github.com/v3/repos/statistics/#get-the-number-of-commits-per-hour-in-each-day
+     *
+     * @return the punch card
+     * @throws IOException
+     *             the io exception
      */
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
@@ -375,6 +477,9 @@ public class GHRepositoryStatistics {
         return returnList;
     }
 
+    /**
+     * The type PunchCardItem.
+     */
     public static class PunchCardItem {
         private int dayOfWeek;
         private int hourOfDay;
@@ -387,6 +492,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets day of week.
+         *
          * @return The day of the week. 0 = Sunday, 1 = Monday, etc.
          */
         public int getDayOfWeek() {
@@ -394,6 +501,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets hour of day.
+         *
          * @return The hour of the day from 0 to 23.
          */
         public long getHourOfDay() {
@@ -401,6 +510,8 @@ public class GHRepositoryStatistics {
         }
 
         /**
+         * Gets number of commits.
+         *
          * @return The number of commits for the day and hour.
          */
         public long getNumberOfCommits() {

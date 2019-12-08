@@ -2,9 +2,9 @@
   "request": {
     "url": "/app/installations/11111111",
     "method": "DELETE",
-    "headers" : {
-      "Accept" : {
-        "equalTo" : "application/vnd.github.gambit-preview+json"
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.gambit-preview+json"
       }
     }
   },
@@ -16,7 +16,10 @@
       "Content-Type": "application/json; charset=utf-8",
       "Status": "204 No Content",
       "Cache-Control": "public, max-age=60, s-maxage=60",
-      "Vary": ["Accept","Accept-Encoding"],
+      "Vary": [
+        "Accept",
+        "Accept-Encoding"
+      ],
       "ETag": "W/\"01163b1a237898d328ed56cd0e9aefca\"",
       "X-GitHub-Media-Type": "github.machine-man-preview; format=json",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",

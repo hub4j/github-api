@@ -8,7 +8,7 @@ import java.util.List;
  * Builds up a creation of new {@link GHPullRequestReview}.
  *
  * @author Kohsuke Kawaguchi
- * @see GHPullRequest#createReview()
+ * @see GHPullRequest#createReview() GHPullRequest#createReview()
  */
 public class GHPullRequestReviewBuilder {
     private final GHPullRequest pr;
@@ -27,6 +27,10 @@ public class GHPullRequestReviewBuilder {
      * The SHA of the commit that needs a review. Not using the latest commit SHA may render your review comment
      * outdated if a subsequent commit modifies the line you specify as the position. Defaults to the most recent commit
      * in the pull request when you do not specify a value.
+     *
+     * @param commitId
+     *            the commit id
+     * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder commitId(String commitId) {
         builder.with("commit_id", commitId);
@@ -35,6 +39,10 @@ public class GHPullRequestReviewBuilder {
 
     /**
      * Required when using REQUEST_CHANGES or COMMENT for the event parameter. The body text of the pull request review.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder body(String body) {
         builder.with("body", body);
@@ -46,6 +54,10 @@ public class GHPullRequestReviewBuilder {
      * leaving this blank, you set the review action state to PENDING, which means you will need to
      * {@linkplain GHPullRequestReview#submit(String, GHPullRequestReviewEvent) submit the pull request review} when you
      * are ready.
+     *
+     * @param event
+     *            the event
+     * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder event(GHPullRequestReviewEvent event) {
         builder.with("event", event.action());
@@ -53,6 +65,8 @@ public class GHPullRequestReviewBuilder {
     }
 
     /**
+     * Comment gh pull request review builder.
+     *
      * @param body
      *            The relative path to the file that necessitates a review comment.
      * @param path
@@ -60,15 +74,25 @@ public class GHPullRequestReviewBuilder {
      *            the line number in the file. For help finding the position value, read the note below.
      * @param position
      *            Text of the review comment.
+     * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
         comments.add(new DraftReviewComment(body, path, position));
         return this;
     }
 
+    /**
+     * Create gh pull request review.
+     *
+     * @return the gh pull request review
+     * @throws IOException
+     *             the io exception
+     */
     public GHPullRequestReview create() throws IOException {
-        return builder.method("POST")._with("comments", comments)
-                .to(pr.getApiRoute() + "/reviews", GHPullRequestReview.class).wrapUp(pr);
+        return builder.method("POST")
+                .with("comments", comments)
+                .to(pr.getApiRoute() + "/reviews", GHPullRequestReview.class)
+                .wrapUp(pr);
     }
 
     private static class DraftReviewComment {
@@ -82,14 +106,29 @@ public class GHPullRequestReviewBuilder {
             this.position = position;
         }
 
+        /**
+         * Gets body.
+         *
+         * @return the body
+         */
         public String getBody() {
             return body;
         }
 
+        /**
+         * Gets path.
+         *
+         * @return the path
+         */
         public String getPath() {
             return path;
         }
 
+        /**
+         * Gets position.
+         *
+         * @return the position
+         */
         public int getPosition() {
             return position;
         }

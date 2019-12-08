@@ -12,6 +12,8 @@ import java.io.IOException;
 public interface Reactable {
     /**
      * List all the reactions left to this object.
+     *
+     * @return the paged iterable
      */
     @Preview
     @Deprecated
@@ -19,6 +21,12 @@ public interface Reactable {
 
     /**
      * Leaves a reaction to this object.
+     *
+     * @param content
+     *            the content
+     * @return the gh reaction
+     * @throws IOException
+     *             the io exception
      */
     @Preview
     @Deprecated

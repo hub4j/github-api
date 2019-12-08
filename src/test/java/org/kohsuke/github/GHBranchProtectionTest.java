@@ -6,10 +6,8 @@ import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
-import java.io.FileNotFoundException;
-
-public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
-    private static final String BRANCH = "bp-test";
+public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
+    private static final String BRANCH = "master";
     private static final String BRANCH_REF = "heads/" + BRANCH;
 
     private GHBranch branch;
@@ -17,40 +15,22 @@ public class GHBranchProtectionTest extends AbstractGitHubApiTestBase {
     private GHRepository repo;
 
     @Before
-    @Override
     public void setUp() throws Exception {
-        super.setUp();
-
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest").fork();
-
-        try {
-            repo.getRef(BRANCH_REF);
-        } catch (FileNotFoundException e) {
-            repo.createRef("refs/" + BRANCH_REF, repo.getBranch("master").getSHA1());
-        }
-
+        repo = getTempRepository();
         branch = repo.getBranch(BRANCH);
-
-        if (branch.isProtected()) {
-            GHBranchProtection protection = branch.getProtection();
-            if (protection.getRequiredSignatures()) {
-                protection.disableSignedCommits();
-            }
-
-            assertFalse(protection.getRequiredSignatures());
-            branch.disableProtection();
-        }
-
-        branch = repo.getBranch(BRANCH);
-        assertFalse(branch.isProtected());
     }
 
     @Test
     public void testEnableBranchProtections() throws Exception {
         // team/user restrictions require an organization repo to test against
-        GHBranchProtection protection = branch.enableProtection().addRequiredChecks("test-status-check")
-                .requireBranchIsUpToDate().requireCodeOwnReviews().dismissStaleReviews().requiredReviewers(2)
-                .includeAdmins().enable();
+        GHBranchProtection protection = branch.enableProtection()
+                .addRequiredChecks("test-status-check")
+                .requireBranchIsUpToDate()
+                .requireCodeOwnReviews()
+                .dismissStaleReviews()
+                .requiredReviewers(2)
+                .includeAdmins()
+                .enable();
 
         RequiredStatusChecks statusChecks = protection.getRequiredStatusChecks();
         assertNotNull(statusChecks);

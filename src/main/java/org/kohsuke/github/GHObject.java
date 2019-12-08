@@ -5,7 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -13,11 +12,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
-        "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 public abstract class GHObject {
     /**
      * Capture response HTTP headers on the state object.
@@ -38,7 +39,7 @@ public abstract class GHObject {
      * <p>
      * Some of the HTTP headers have nothing to do with the object, for example "Cache-Control" and others are different
      * depending on how this object was retrieved.
-     *
+     * <p>
      * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such. Use with caution.
      * The method might be removed in the future.
      *
@@ -68,6 +69,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets url.
+     *
      * @return API URL of this object.
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
@@ -76,6 +79,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets html url.
+     *
      * @return URL of this object for humans, which renders some HTML.
      * @throws IOException
      *             on error
@@ -95,6 +100,8 @@ public abstract class GHObject {
     }
 
     /**
+     * Gets id.
+     *
      * @return Unique ID number of this resource.
      */
     @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = "longToStringOrInt")

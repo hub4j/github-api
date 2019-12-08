@@ -2,7 +2,7 @@
   "id": "ed8bf5ba-65e0-47d8-bb4d-614063828c87",
   "name": "repos_github-api-test-org_github-api_branches_test_urlencode",
   "request": {
-    "url": "/repos/github-api-test-org/github-api/branches/test%2F%23UrlEncode",
+    "url": "/repos/github-api-test-org/github-api/branches/test/%23UrlEncode",
     "method": "GET"
   },
   "response": {

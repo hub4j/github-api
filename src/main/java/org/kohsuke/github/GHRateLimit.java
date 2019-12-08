@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 import static java.util.logging.Level.FINEST;
 
@@ -60,7 +61,9 @@ public class GHRateLimit {
     private final Record integrationManifest;
 
     static GHRateLimit Unknown() {
-        return new GHRateLimit(new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord(),
+        return new GHRateLimit(new UnknownLimitRecord(),
+                new UnknownLimitRecord(),
+                new UnknownLimitRecord(),
                 new UnknownLimitRecord());
     }
 
@@ -69,7 +72,8 @@ public class GHRateLimit {
     }
 
     @JsonCreator
-    GHRateLimit(@Nonnull @JsonProperty("core") Record core, @Nonnull @JsonProperty("search") Record search,
+    GHRateLimit(@Nonnull @JsonProperty("core") Record core,
+            @Nonnull @JsonProperty("search") Record search,
             @Nonnull @JsonProperty("graphql") Record graphql,
             @Nonnull @JsonProperty("integration_manifest") Record integrationManifest) {
         this.core = core;
@@ -204,10 +208,10 @@ public class GHRateLimit {
 
     /**
      * A limit record used as a placeholder when the the actual limit is not known.
-     *
+     * <p>
      * Has a large limit and long duration so that it will doesn't expire too often.
      *
-     * @since 1.100*
+     * @since 1.100
      */
     public static class UnknownLimitRecord extends Record {
 
@@ -224,7 +228,7 @@ public class GHRateLimit {
 
     /**
      * A rate limit record.
-     * 
+     *
      * @since 1.100
      */
     public static class Record {
@@ -255,12 +259,35 @@ public class GHRateLimit {
         @Nonnull
         private Date resetDate;
 
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         */
         @JsonCreator
-        public Record(@JsonProperty("limit") int limit, @JsonProperty("remaining") int remaining,
+        public Record(@JsonProperty("limit") int limit,
+                @JsonProperty("remaining") int remaining,
                 @JsonProperty("reset") long resetEpochSeconds) {
             this(limit, remaining, resetEpochSeconds, null);
         }
 
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         * @param updatedAt
+         *            the updated at
+         */
         @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "Deprecated")
         public Record(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
             this.limit = limit;

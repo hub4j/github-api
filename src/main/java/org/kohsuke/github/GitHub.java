@@ -702,6 +702,21 @@ public class GitHub {
     }
 
     /**
+     * Returns a list all plans for your Marketplace listing
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/apps/marketplace/#list-all-plans-for-your-marketplace-listing">List
+     *      Plans</a>
+     */
+    public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
+        return retrieve().asPagedIterable("/marketplace_listing/plans", GHMarketplacePlan[].class, null);
+    }
+
+    /**
      * Gets complete list of open invitations for current user.
      *
      * @return the my invitations

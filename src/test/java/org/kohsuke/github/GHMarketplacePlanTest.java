@@ -5,7 +5,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static org.kohsuke.github.GHMarketplaceAccountType.*;
+import static org.kohsuke.github.GHDirection.DESC;
+import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
+import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 
 /**
  * Tests for the GitHub MarketPlace Plan API methods
@@ -35,6 +37,36 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         List<GHMarketplaceAccount> marketplaceUsers = plans.get(0).listAccounts().retrieve().asList();
         assertEquals(2, marketplaceUsers.size());
         marketplaceUsers.forEach(this::testMarketplaceAccount);
+    }
+
+    @Test
+    public void listAccountsWithDirection() throws IOException {
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        assertEquals(3, plans.size());
+
+        for (GHMarketplacePlan plan : plans) {
+            List<GHMarketplaceAccount> marketplaceUsers = plan.listAccounts().direction(DESC).retrieve().asList();
+            assertEquals(2, marketplaceUsers.size());
+            marketplaceUsers.forEach(this::testMarketplaceAccount);
+        }
+
+    }
+
+    @Test
+    public void listAccountsWithSortAndDirection() throws IOException {
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        assertEquals(3, plans.size());
+
+        for (GHMarketplacePlan plan : plans) {
+            List<GHMarketplaceAccount> marketplaceUsers = plan.listAccounts()
+                    .sort(UPDATED)
+                    .direction(DESC)
+                    .retrieve()
+                    .asList();
+            assertEquals(2, marketplaceUsers.size());
+            marketplaceUsers.forEach(this::testMarketplaceAccount);
+        }
+
     }
 
     private void testMarketplacePlan(GHMarketplacePlan plan) {

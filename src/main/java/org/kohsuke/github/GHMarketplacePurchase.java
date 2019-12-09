@@ -23,7 +23,7 @@ public class GHMarketplacePurchase {
     @JsonProperty("free_trial_ends_on")
     private String freeTrialEndsOn;
     @JsonProperty("unit_count")
-    private long unitCount;
+    private Long unitCount;
     @JsonProperty("updated_at")
     private String updatedAt;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
@@ -85,7 +85,7 @@ public class GHMarketplacePurchase {
      *
      * @return the unit count
      */
-    public long getUnitCount() {
+    public Long getUnitCount() {
         return unitCount;
     }
 

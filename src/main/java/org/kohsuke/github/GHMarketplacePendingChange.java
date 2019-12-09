@@ -15,7 +15,7 @@ public class GHMarketplacePendingChange {
     private GitHub root;
     private long id;
     @JsonProperty("unit_count")
-    private long unitCount;
+    private Long unitCount;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
     @JsonProperty("effective_date")
@@ -50,7 +50,7 @@ public class GHMarketplacePendingChange {
      *
      * @return the unit count
      */
-    public long getUnitCount() {
+    public Long getUnitCount() {
         return unitCount;
     }
 

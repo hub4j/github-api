@@ -174,7 +174,9 @@ public class GHMarketplacePlan {
      * {@link GHMarketplaceListAccountBuilder#retrieve()} to finally list the accounts related to this plan.
      *
      * <p>
-     * You must use a JWT to access this endpoint.
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a GHMarketplaceListAccountBuilder instance
      * @see <a href=

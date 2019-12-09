@@ -55,7 +55,9 @@ public class GHMarketplaceListAccountBuilder {
     /**
      * List any accounts associated with the plan specified on construction with all the order/sort parameters set.
      * <p>
-     * You must use a JWT to access this endpoint.
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a paged iterable instance of GHMarketplaceAccount
      * @throws IOException

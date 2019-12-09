@@ -2,6 +2,12 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * GitHub Marketplace plan pricing model.
+ *
+ * @author Paulo Miguel Almeida
+ * @see GHMarketplacePlan
+ */
 public enum GHMarketplacePriceModel {
     FREE("free"), PER_UNIT("per-unit"), FLAT_RATE("flat-rate");
 
@@ -14,6 +20,8 @@ public enum GHMarketplacePriceModel {
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return a string containing GitHub's internal representation of this event.
      */
     public String symbol() {
         return internalName;

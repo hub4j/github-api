@@ -107,27 +107,4 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertEquals(19, metaExample.getWeb().size());
         }
     }
-
-    @Test
-    public void listMarketplacePlans() throws IOException {
-        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
-        assertEquals(3, plans.size());
-        for (GHMarketplacePlan plan : plans) {
-            // Non-nullable fields
-            assertNotNull(plan.getUrl());
-            assertNotNull(plan.getAccountsUrl());
-            assertNotNull(plan.getName());
-            assertNotNull(plan.getDescription());
-            assertNotNull(plan.getPriceModel());
-            assertNotNull(plan.getState());
-
-            // primitive fields
-            assertNotEquals(0L, plan.getId());
-            assertNotEquals(0L, plan.getNumber());
-            assertTrue(plan.getMonthlyPriceInCents() >= 0);
-
-            // list
-            assertEquals(2, plan.getBullets().size());
-        }
-    }
 }

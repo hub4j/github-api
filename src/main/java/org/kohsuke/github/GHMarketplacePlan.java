@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -11,6 +12,8 @@ import java.util.List;
  * @see GitHub#listMarketplacePlans()
  */
 public class GHMarketplacePlan {
+
+    private GitHub root;
     private String url;
     @JsonProperty("accounts_url")
     private String accountsUrl;
@@ -25,19 +28,31 @@ public class GHMarketplacePlan {
     @JsonProperty("price_model")
     private GHMarketplacePriceModel priceModel;
     @JsonProperty("has_free_trial")
-    private boolean freeTrial;
+    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is<propertyName>
     @JsonProperty("unit_name")
     private String unitName;
     private String state;
     private List<String> bullets;
 
     /**
+     * Wrap up gh marketplace plan.
+     *
+     * @param root
+     *            the root
+     * @return an instance of the GHMarketplacePlan class
+     */
+    GHMarketplacePlan wrapUp(GitHub root) {
+        this.root = root;
+        return this;
+    }
+
+    /**
      * Gets url.
      *
      * @return the url
      */
-    public String getUrl() {
-        return url;
+    public URL getUrl() {
+        return GitHub.parseURL(url);
     }
 
     /**
@@ -146,5 +161,27 @@ public class GHMarketplacePlan {
      */
     public List<String> getBullets() {
         return bullets;
+    }
+
+    /**
+     * Starts a builder that list any accounts associated with a plan, including free plans. For per-seat pricing, you
+     * see the list of accounts that have purchased the plan, including the number of seats purchased. When someone
+     * submits a plan change that won't be processed until the end of their billing cycle, you will also see the
+     * upcoming pending change.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call
+     * {@link GHMarketplaceListAccountBuilder#retrieve()} to finally list the accounts related to this plan.
+     *
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @return a GHMarketplaceListAccountBuilder instance
+     * @see <a href=
+     *      "https://developer.github.com/v3/apps/marketplace/#list-all-github-accounts-user-or-organization-on-a-specific-plan">List
+     *      all GitHub accounts (user or organization) on a specific plan</a>
+     */
+    public GHMarketplaceListAccountBuilder listAccounts() {
+        return new GHMarketplaceListAccountBuilder(root, this.id);
     }
 }

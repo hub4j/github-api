@@ -17,6 +17,8 @@ public class GHMarketplaceAccount {
     private long id;
     private String login;
     private String email;
+    @JsonProperty("organization_billing_email")
+    private String organizationBillingEmail;
     private GHMarketplaceAccountType type;
     @JsonProperty("marketplace_pending_change")
     private GHMarketplacePendingChange marketplacePendingChange;
@@ -32,12 +34,12 @@ public class GHMarketplaceAccount {
      */
     GHMarketplaceAccount wrapUp(GitHub root) {
         this.root = root;
-        if (this.marketplacePendingChange != null) {
+        if (this.marketplacePendingChange != null)
             this.marketplacePendingChange.wrapUp(this.root);
-        }
-        if (this.marketplacePurchase != null) {
+
+        if (this.marketplacePurchase != null)
             this.marketplacePurchase.wrapUp(this.root);
-        }
+
         return this;
     }
 
@@ -75,6 +77,15 @@ public class GHMarketplaceAccount {
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Gets organization billing email.
+     *
+     * @return the organization billing email
+     */
+    public String getOrganizationBillingEmail() {
+        return organizationBillingEmail;
     }
 
     /**

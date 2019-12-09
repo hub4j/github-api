@@ -1,0 +1,93 @@
+[
+  {
+    "url": "https://api.github.com/orgs/github",
+    "type": "Organization",
+    "id": 4,
+    "login": "github",
+    "email": null,
+    "organization_billing_email": "billing@github.com",
+    "marketplace_pending_change": null,
+    "marketplace_purchase": {
+      "billing_cycle": "monthly",
+      "next_billing_date": "2020-01-01T00:00:00.000Z",
+      "on_free_trial": false,
+      "free_trial_ends_on": null,
+      "unit_count": null,
+      "updated_at": "2019-11-25T00:00:00.000Z",
+      "plan": {
+        "url": "https://api.github.com/marketplace_listing/plans/9",
+        "accounts_url": "https://api.github.com/marketplace_listing/plans/9/accounts",
+        "id": 9,
+        "number": 3,
+        "name": "Pro",
+        "description": "A professional-grade CI solution",
+        "monthly_price_in_cents": 1099,
+        "yearly_price_in_cents": 11870,
+        "has_free_trial": false,
+        "price_model": "flat-rate",
+        "state": "published",
+        "unit_name": null,
+        "bullets": [
+          "This is the first bullet of the Pro plan",
+          "This is the second bullet of the Pro plan"
+        ]
+      }
+    }
+  },
+  {
+    "url": "https://api.github.com/users/test",
+    "type": "User",
+    "id": 2,
+    "login": "test",
+    "email": "test@example.com",
+    "marketplace_pending_change": {
+      "id": 12,
+      "unit_count": 8,
+      "plan": {
+        "url": "https://api.github.com/marketplace_listing/plans/8",
+        "accounts_url": "https://api.github.com/marketplace_listing/plans/8/accounts",
+        "id": 8,
+        "number": 2,
+        "name": "Hobby",
+        "description": "A hobby-grade CI solution",
+        "monthly_price_in_cents": 1099,
+        "yearly_price_in_cents": 11870,
+        "has_free_trial": false,
+        "price_model": "per-unit",
+        "state": "published",
+        "unit_name": "seat",
+        "bullets": [
+          "This is the first bullet of the Hobby plan",
+          "This is the second bullet of the Hobby plan"
+        ]
+      },
+      "effective_date": "2020-01-01T00:00:00.000Z"
+    },
+    "marketplace_purchase": {
+      "billing_cycle": "monthly",
+      "next_billing_date": "2020-01-01T00:00:00.000Z",
+      "on_free_trial": false,
+      "free_trial_ends_on": null,
+      "unit_count": 10,
+      "updated_at": "2019-11-25T00:00:00.000Z",
+      "plan": {
+        "url": "https://api.github.com/marketplace_listing/plans/8",
+        "accounts_url": "https://api.github.com/marketplace_listing/plans/8/accounts",
+        "id": 8,
+        "number": 2,
+        "name": "Hobby",
+        "description": "A hobby-grade CI solution",
+        "monthly_price_in_cents": 1099,
+        "yearly_price_in_cents": 11870,
+        "has_free_trial": false,
+        "price_model": "per-unit",
+        "state": "published",
+        "unit_name": "seat",
+        "bullets": [
+          "This is the first bullet of the Hobby plan",
+          "This is the second bullet of the Hobby plan"
+        ]
+      }
+    }
+  }
+]

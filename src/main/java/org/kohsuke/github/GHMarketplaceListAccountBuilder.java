@@ -59,14 +59,14 @@ public class GHMarketplaceListAccountBuilder {
      * <p>
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
-     * @return a paged iterable instance of GHMarketplaceAccount
+     * @return a paged iterable instance of GHMarketplaceAccountPlan
      * @throws IOException
      *             on error
      */
-    public PagedIterable<GHMarketplaceAccount> retrieve() throws IOException {
+    public PagedIterable<GHMarketplaceAccountPlan> retrieve() throws IOException {
         return builder.method("GET")
                 .asPagedIterable(String.format("/marketplace_listing/plans/%d/accounts", this.planId),
-                        GHMarketplaceAccount[].class,
+                        GHMarketplaceAccountPlan[].class,
                         item -> item.wrapUp(root));
     }
 

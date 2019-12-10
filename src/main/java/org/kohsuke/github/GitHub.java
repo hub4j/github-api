@@ -756,6 +756,26 @@ public class GitHub {
     }
 
     /**
+     * Returns only active subscriptions.
+     * <p>
+     * You must use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to
+     * access this endpoint
+     * <p>
+     * OAuth Apps must authenticate using an OAuth token.
+     *
+     * @return the paged iterable of GHMarketplaceUserPurchase
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a user's
+     *      Marketplace purchases</a>
+     */
+    public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
+        return retrieve().asPagedIterable("/user/marketplace_purchases",
+                GHMarketplaceUserPurchase[].class,
+                item -> item.wrapUp(this));
+    }
+
+    /**
      * Alias for {@link #getUserPublicOrganizations(String)}.
      *
      * @param user

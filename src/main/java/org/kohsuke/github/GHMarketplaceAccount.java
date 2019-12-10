@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URL;
 
 /**
- * A Github Marketplace Account.
+ * Base class for Github Marketplace Account.
  *
  * @author Paulo Miguel Almeida
+ * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#retrieve()
  */
 public class GHMarketplaceAccount {
 
-    private GitHub root;
+    protected GitHub root;
     private String url;
     private long id;
     private String login;
@@ -20,10 +21,6 @@ public class GHMarketplaceAccount {
     @JsonProperty("organization_billing_email")
     private String organizationBillingEmail;
     private GHMarketplaceAccountType type;
-    @JsonProperty("marketplace_pending_change")
-    private GHMarketplacePendingChange marketplacePendingChange;
-    @JsonProperty("marketplace_purchase")
-    private GHMarketplacePurchase marketplacePurchase;
 
     /**
      * Wrap up gh marketplace account.
@@ -34,12 +31,6 @@ public class GHMarketplaceAccount {
      */
     GHMarketplaceAccount wrapUp(GitHub root) {
         this.root = root;
-        if (this.marketplacePendingChange != null)
-            this.marketplacePendingChange.wrapUp(this.root);
-
-        if (this.marketplacePurchase != null)
-            this.marketplacePurchase.wrapUp(this.root);
-
         return this;
     }
 
@@ -97,21 +88,4 @@ public class GHMarketplaceAccount {
         return type;
     }
 
-    /**
-     * Gets marketplace pending change.
-     *
-     * @return the marketplace pending change
-     */
-    public GHMarketplacePendingChange getMarketplacePendingChange() {
-        return marketplacePendingChange;
-    }
-
-    /**
-     * Gets marketplace purchase.
-     *
-     * @return the marketplace purchase
-     */
-    public GHMarketplacePurchase getMarketplacePurchase() {
-        return marketplacePurchase;
-    }
 }

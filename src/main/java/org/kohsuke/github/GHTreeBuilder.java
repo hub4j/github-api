@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -16,8 +18,10 @@ public class GHTreeBuilder {
 
     private final List<TreeEntry> treeEntries = new ArrayList<TreeEntry>();
 
+    @JsonInclude(Include.NON_NULL)
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     private static final class TreeEntry {
+
         private final String path;
         private final String mode;
         private final String type;

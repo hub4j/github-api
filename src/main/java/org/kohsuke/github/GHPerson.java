@@ -23,9 +23,10 @@ public abstract class GHPerson extends GHObject {
     protected String login, avatar_url, gravatar_id;
 
     // other fields (that only show up in full data)
-    protected String location, blog, email, name, company;
+    protected String location, blog, email, name, company, type;
     protected String html_url;
     protected int followers, following, public_repos, public_gists;
+    protected boolean site_admin;
 
     GHPerson wrapUp(GitHub root) {
         this.root = root;
@@ -315,5 +316,29 @@ public abstract class GHPerson extends GHObject {
     public int getFollowersCount() throws IOException {
         populate();
         return followers;
+    }
+
+    /**
+     * Gets the type. This is either "User" or "Organization".
+     *
+     * @return the type
+     * @throws IOException
+     *             the io exception
+     */
+    public String getType() throws IOException {
+        populate();
+        return type;
+    }
+
+    /**
+     * Gets the site_admin field
+     *
+     * @return the site_admin field
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isSiteAdmin() throws IOException {
+        populate();
+        return site_admin;
     }
 }

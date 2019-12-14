@@ -60,6 +60,9 @@ public abstract class GHEventPayload {
      *
      * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
      */
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     public static class CheckRun extends GHEventPayload {
         private String action;
         private int number;
@@ -88,7 +91,8 @@ public abstract class GHEventPayload {
         /**
          * Sets Check Run object
          *
-         * @return the pull request
+         * @param currentCheckRun
+         *            the check run object
          */
         public void setCheckRun(GHCheckRun currentCheckRun) {
             this.checkRun = currentCheckRun;
@@ -97,7 +101,7 @@ public abstract class GHEventPayload {
         /**
          * Gets Check Run object
          *
-         * @return the pull request
+         * @return the current checkRun object
          */
         public GHCheckRun getCheckRun() {
             return checkRun;
@@ -106,7 +110,8 @@ public abstract class GHEventPayload {
         /**
          * Sets the Requested Action object
          *
-         * @return the pull request
+         * @param currentRequestedAction
+         *            the current action
          */
         public void setCheckRun(GHRequestedAction currentRequestedAction) {
             this.requestedAction = currentRequestedAction;
@@ -115,7 +120,7 @@ public abstract class GHEventPayload {
         /**
          * Gets the Requested Action object
          *
-         * @return the pull request
+         * @return the requested action
          */
         public GHRequestedAction getRequestedAction() {
             return requestedAction;

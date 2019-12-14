@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -9,9 +11,12 @@ import java.net.URL;
  * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
  */
 
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHCheckRun extends GHObject {
-    private GHRepository owner;
-    private GitHub root;
+    GHRepository owner;
+    GitHub root;
+
     private String status;
     private String conclusion;
     private String name;
@@ -19,7 +24,7 @@ public class GHCheckRun extends GHObject {
 
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
-        wrap(owner.root);
+        this.root = owner.root;
         return this;
     }
 
@@ -32,27 +37,26 @@ public class GHCheckRun extends GHObject {
     }
 
     GHPullRequest[] wrap() {
-        for (GHPullRequest singlePull : pullRequests) {
-            singlePull.wrap(owner);
-        }
         return pullRequests;
     }
 
-    String getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    String getConclusion() {
+    public String getConclusion() {
         return conclusion;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
     GHPullRequest[] getPullRequests() throws IOException {
-        for (GHPullRequest singlePull : pullRequests) {
-            singlePull.refresh();
+        if (pullRequests.length != 0) {
+            for (GHPullRequest singlePull : pullRequests) {
+                singlePull.refresh();
+            }
         }
         return pullRequests;
     }

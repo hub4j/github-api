@@ -1,7 +1,11 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.net.URL;
 
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHRequestedAction extends GHObject {
     private GHRepository owner;
     private GitHub root;

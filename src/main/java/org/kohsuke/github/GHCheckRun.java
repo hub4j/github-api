@@ -53,7 +53,7 @@ public class GHCheckRun extends GHObject {
     }
 
     GHPullRequest[] getPullRequests() throws IOException {
-        if (pullRequests.length != 0) {
+        if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }

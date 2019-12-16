@@ -159,7 +159,7 @@ public class GHMilestone extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
+        root.retrieve().with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
     }
 
     /**

@@ -108,12 +108,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve()
-                .method("POST")
-                .with("body", body)
-                .method("PATCH")
-                .withUrlPath(getApiRoute())
-                .to(GHIssueComment.class);
+        owner.root.retrieve().method("PATCH").with("body", body).withUrlPath(getApiRoute()).to(GHIssueComment.class);
         this.body = body;
     }
 

@@ -318,7 +318,7 @@ public class GHRepositoryStatistics {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = root.retrieve().asStream(getApiTailUrl("code_frequency"));
+            InputStream stream = root.retrieve().withUrlPath(getApiTailUrl("code_frequency")).toStream();
 
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<ArrayList<ArrayList<Integer>>> typeRef = new TypeReference<ArrayList<ArrayList<Integer>>>() {
@@ -460,7 +460,7 @@ public class GHRepositoryStatistics {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.retrieve().asStream(getApiTailUrl("punch_card"));
+        InputStream stream = root.retrieve().withUrlPath(getApiTailUrl("punch_card")).toStream();
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<ArrayList<ArrayList<Integer>>> typeRef = new TypeReference<ArrayList<ArrayList<Integer>>>() {

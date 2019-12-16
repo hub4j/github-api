@@ -14,7 +14,7 @@ public class GHReleaseUpdater {
 
     GHReleaseUpdater(GHRelease base) {
         this.base = base;
-        this.builder = base.root.retrieve().method("POST");
+        this.builder = base.root.retrieve();
     }
 
     /**

@@ -397,7 +397,7 @@ public class GHOrganization extends GHPerson {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names", repo_names);
-        return post.method("POST").withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
+        return post.withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
     }
 
     /**
@@ -438,7 +438,7 @@ public class GHOrganization extends GHPerson {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names", repo_names);
-        return post.method("POST").withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
+        return post.withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
     }
 
     /**

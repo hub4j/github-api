@@ -106,13 +106,7 @@ public class GHProjectColumn extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve()
-                .method("POST")
-                .withPreview(INERTIA)
-                .with(key, value)
-                .method("PATCH")
-                .withUrlPath(getApiRoute())
-                .to();
+        root.retrieve().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).to();
     }
 
     /**
@@ -131,7 +125,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("POST").withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).to();
+        root.retrieve().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).to();
     }
 
     /**

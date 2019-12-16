@@ -203,7 +203,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public boolean isStarred() throws IOException {
-        return root.retrieve().asHttpStatusCode(getApiTailUrl("star")) / 100 == 2;
+        return root.retrieve().withUrlPath(getApiTailUrl("star")).asHttpStatusCode() / 100 == 2;
     }
 
     /**

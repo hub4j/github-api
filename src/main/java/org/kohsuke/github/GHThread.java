@@ -177,10 +177,9 @@ public class GHThread extends GHObject {
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
         return root.retrieve()
-                .method("POST")
+                .method("PUT")
                 .with("subscribed", subscribed)
                 .with("ignored", ignored)
-                .method("PUT")
                 .withUrlPath(subscription_url)
                 .to(GHSubscription.class)
                 .wrapUp(root);

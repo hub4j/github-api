@@ -87,7 +87,7 @@ public class GHBranchProtection {
     @Preview
     @Deprecated
     public boolean getRequiredSignatures() throws IOException {
-        return requester().method("GET").withUrlPath(url + REQUIRE_SIGNATURES_URI).to(RequiredSignatures.class).enabled;
+        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).to(RequiredSignatures.class).enabled;
     }
 
     /**
@@ -123,7 +123,7 @@ public class GHBranchProtection {
     }
 
     private Requester requester() {
-        return root.retrieve().method("POST").withPreview(ZZZAX);
+        return root.retrieve().withPreview(ZZZAX);
     }
 
     /**

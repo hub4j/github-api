@@ -500,26 +500,24 @@ class Requester {
     }
 
     /**
-     * Makes a request and just obtains the HTTP status code.
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
      *
-     * @param tailApiUrl
-     *            the tail api url
      * @return the int
      * @throws IOException
      *             the io exception
      */
-    public int asHttpStatusCode(String tailApiUrl) throws IOException {
+    public int asHttpStatusCode() throws IOException {
         while (true) {// loop while API rate limit is hit
 
-            method("GET");
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(root.getApiURL(urlPath));
 
             try {
                 return uc.getResponseCode();
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
-                noteRateLimit(tailApiUrl);
+                noteRateLimit(urlPath);
             }
         }
     }
@@ -527,22 +525,20 @@ class Requester {
     /**
      * As stream input stream.
      *
-     * @param tailApiUrl
-     *            the tail api url
      * @return the input stream
      * @throws IOException
      *             the io exception
      */
-    public InputStream asStream(String tailApiUrl) throws IOException {
+    public InputStream toStream() throws IOException {
         while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+            setupConnection(root.getApiURL(urlPath));
 
             try {
                 return wrapStream(uc.getInputStream());
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
-                noteRateLimit(tailApiUrl);
+                noteRateLimit(urlPath);
             }
         }
     }
@@ -689,7 +685,9 @@ class Requester {
      * Every iterator call reports a new batch.
      */
     <T> Iterator<T> asIterator(Class<T> type, int pageSize) {
-        method("GET");
+        if (method != "GET") {
+            throw new IllegalStateException("Request method \"GET\" is required for iterator.");
+        }
 
         if (pageSize != 0)
             args.add(new Entry("per_page", pageSize));

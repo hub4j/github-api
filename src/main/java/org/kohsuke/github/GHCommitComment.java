@@ -113,12 +113,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve()
-                .method("POST")
-                .with("body", body)
-                .method("PATCH")
-                .withUrlPath(getApiTail())
-                .to(GHCommitComment.class);
+        owner.root.retrieve().method("PATCH").with("body", body).withUrlPath(getApiTail()).to(GHCommitComment.class);
         this.body = body;
     }
 

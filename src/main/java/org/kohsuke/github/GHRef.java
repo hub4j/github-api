@@ -67,10 +67,9 @@ public class GHRef {
      */
     public void updateTo(String sha, Boolean force) throws IOException {
         root.retrieve()
-                .method("POST")
+                .method("PATCH")
                 .with("sha", sha)
                 .with("force", force)
-                .method("PATCH")
                 .withUrlPath(url)
                 .to(GHRef.class)
                 .wrap(root);

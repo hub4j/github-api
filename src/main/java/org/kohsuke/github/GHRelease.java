@@ -256,9 +256,9 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public List<GHAsset> getAssets() throws IOException {
-        Requester builder = owner.root.retrieve().method("POST");
+        Requester builder = owner.root.retrieve();
 
-        GHAsset[] assets = builder.method("GET").withUrlPath(getApiTailUrl("assets")).toArray(GHAsset[].class);
+        GHAsset[] assets = builder.withUrlPath(getApiTailUrl("assets")).toArray(GHAsset[].class);
         return Arrays.asList(GHAsset.wrap(assets, this));
     }
 

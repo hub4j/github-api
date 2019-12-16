@@ -615,7 +615,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            root.retrieve().method("GET").withUrlPath(getIssuesApiRoute()).to(this);
+            root.retrieve().withUrlPath(getIssuesApiRoute()).to(this);
             fetchedIssueDetails = true;
         }
     }

@@ -925,10 +925,7 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
-        Requester requester = retrieve().method("POST")
-                .with("scopes", scope)
-                .with("note", note)
-                .with("note_url", noteUrl);
+        Requester requester = retrieve().with("scopes", scope).with("note", note).with("note_url", noteUrl);
 
         return requester.method("POST").withUrlPath("/authorizations").to(GHAuthorization.class).wrap(this);
     }
@@ -961,10 +958,7 @@ public class GitHub {
             return createToken(scope, note, noteUrl);
         } catch (GHOTPRequiredException ex) {
             String OTPstring = OTP.get();
-            Requester requester = retrieve().method("POST")
-                    .with("scopes", scope)
-                    .with("note", note)
-                    .with("note_url", noteUrl);
+            Requester requester = retrieve().with("scopes", scope).with("note", note).with("note_url", noteUrl);
             // Add the OTP from the user
             requester.setHeader("x-github-otp", OTPstring);
             return requester.method("POST").withUrlPath("/authorizations").to(GHAuthorization.class).wrap(this);
@@ -995,8 +989,7 @@ public class GitHub {
             List<String> scopes,
             String note,
             String note_url) throws IOException {
-        Requester requester = retrieve().method("POST")
-                .with("client_secret", clientSecret)
+        Requester requester = retrieve().with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
                 .with("note_url", note_url);
@@ -1356,7 +1349,8 @@ public class GitHub {
                 retrieve().method("POST")
                         .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
                         .contentType("text/plain;charset=UTF-8")
-                        .asStream("/markdown/raw"),
+                        .withUrlPath("/markdown/raw")
+                        .toStream(),
                 "UTF-8");
     }
 

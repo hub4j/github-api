@@ -419,7 +419,6 @@ public class GHRepository extends GHObject {
                 .method("POST")
                 .with("ref", name)
                 .with("sha", sha)
-                .method("POST")
                 .withUrlPath(getApiTailUrl("git/refs"))
                 .to(GHRef.class)
                 .wrap(root);
@@ -764,7 +763,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public boolean hasAssignee(GHUser u) throws IOException {
-        return root.retrieve().asHttpStatusCode(getApiTailUrl("assignees/" + u.getLogin())) / 100 == 2;
+        return root.retrieve().withUrlPath(getApiTailUrl("assignees/" + u.getLogin())).asHttpStatusCode() / 100 == 2;
     }
 
     /**
@@ -901,7 +900,7 @@ public class GHRepository extends GHObject {
     }
 
     private void edit(String key, String value) throws IOException {
-        Requester requester = root.retrieve().method("POST");
+        Requester requester = root.retrieve();
         if (!key.equals("name"))
             requester.with("name", name); // even when we don't change the name, we need to send it in
         requester.with(key, value).method("PATCH").withUrlPath(getApiTailUrl("")).to();
@@ -1556,7 +1555,10 @@ public class GHRepository extends GHObject {
      */
     public InputStream readBlob(String blobSha) throws IOException {
         String target = getApiTailUrl("git/blobs/" + blobSha);
-        return root.retrieve().withHeader("Accept", "application/vnd.github.VERSION.raw").asStream(target);
+        return root.retrieve()
+                .withHeader("Accept", "application/vnd.github.VERSION.raw")
+                .withUrlPath(target)
+                .toStream();
     }
 
     /**
@@ -2280,7 +2282,6 @@ public class GHRepository extends GHObject {
                 .method("POST")
                 .with("title", title)
                 .with("description", description)
-                .method("POST")
                 .withUrlPath(getApiTailUrl("milestones"))
                 .to(GHMilestone.class)
                 .wrap(this);
@@ -2302,7 +2303,6 @@ public class GHRepository extends GHObject {
                 .method("POST")
                 .with("title", title)
                 .with("key", key)
-                .method("POST")
                 .withUrlPath(getApiTailUrl("keys"))
                 .to(GHDeployKey.class)
                 .wrap(this);
@@ -2372,10 +2372,9 @@ public class GHRepository extends GHObject {
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
         return root.retrieve()
-                .method("POST")
+                .method("PUT")
                 .with("subscribed", subscribed)
                 .with("ignored", ignored)
-                .method("PUT")
                 .withUrlPath(getApiTailUrl("subscription"))
                 .to(GHSubscription.class)
                 .wrapUp(this);
@@ -2517,7 +2516,8 @@ public class GHRepository extends GHObject {
                         .with("text", text)
                         .with("mode", mode == null ? null : mode.toString())
                         .with("context", getFullName())
-                        .asStream("/markdown"),
+                        .withUrlPath("/markdown")
+                        .toStream(),
                 "UTF-8");
     }
 
@@ -2628,8 +2628,11 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setTopics(List<String> topics) throws IOException {
-        Requester requester = root.retrieve().method("POST");
-        requester.with("names", topics);
-        requester.method("PUT").withPreview(MERCY).withUrlPath(getApiTailUrl("topics")).to();
+        root.retrieve()
+                .method("PUT")
+                .with("names", topics)
+                .withPreview(MERCY)
+                .withUrlPath(getApiTailUrl("topics"))
+                .to();
     }
 }

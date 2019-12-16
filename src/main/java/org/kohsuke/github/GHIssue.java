@@ -239,11 +239,11 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().method("POST").with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
+        root.retrieve().with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.retrieve().method("POST").with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).to();
+        root.retrieve().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).to();
     }
 
     /**
@@ -520,12 +520,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve()
-                .method("POST")
-                .with(ASSIGNEES, getLogins(assignees))
-                .method("PATCH")
-                .withUrlPath(getIssuesApiRoute())
-                .to();
+        root.retrieve().method("PATCH").with(ASSIGNEES, getLogins(assignees)).withUrlPath(getIssuesApiRoute()).to();
     }
 
     /**

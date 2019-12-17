@@ -182,7 +182,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root.retrieve().method("PUT").withUrlPath(getApiTailUrl("star")).to();
+        root.createRequest().method("PUT").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**
@@ -192,7 +192,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root.retrieve().method("DELETE").withUrlPath(getApiTailUrl("star")).to();
+        root.createRequest().method("DELETE").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**
@@ -203,7 +203,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public boolean isStarred() throws IOException {
-        return root.retrieve().withUrlPath(getApiTailUrl("star")).asHttpStatusCode() / 100 == 2;
+        return root.createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
     }
 
     /**
@@ -214,7 +214,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGist fork() throws IOException {
-        return root.retrieve().method("POST").withUrlPath(getApiTailUrl("forks")).to(GHGist.class).wrapUp(root);
+        return root.createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class).wrapUp(root);
     }
 
     /**
@@ -223,7 +223,7 @@ public class GHGist extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHGist> listForks() {
-        return root.retrieve().asPagedIterable(getApiTailUrl("forks"), GHGist[].class, item -> item.wrapUp(root));
+        return root.createRequest().asPagedIterable(getApiTailUrl("forks"), GHGist[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -233,7 +233,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").withUrlPath("/gists/" + id).to();
+        root.createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
     }
 
     /**

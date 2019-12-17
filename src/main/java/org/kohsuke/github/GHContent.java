@@ -223,7 +223,7 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        root.retrieve().withUrlPath(url).to(this);
+        root.createRequest().withUrlPath(url).fetchInto(this);
     }
 
     /**
@@ -237,7 +237,9 @@ public class GHContent implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 
-        return root.retrieve().setRawUrlPath(url).asPagedIterable(GHContent[].class, item -> item.wrap(repository));
+        return root.createRequest()
+                .setRawUrlPath(url)
+                .asPagedIterable(GHContent[].class, item -> item.wrap(repository));
     }
 
     /**
@@ -306,7 +308,7 @@ public class GHContent implements Refreshable {
             throws IOException {
         String encodedContent = Base64.encodeBase64String(newContentBytes);
 
-        Requester requester = root.retrieve()
+        Requester requester = root.createRequest()
                 .method("POST")
                 .with("path", path)
                 .with("message", commitMessage)
@@ -319,7 +321,7 @@ public class GHContent implements Refreshable {
         }
 
         GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
-                .to(GHContentUpdateResponse.class);
+                .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repository);
         response.getCommit().wrapUp(repository);
@@ -353,7 +355,7 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = root.retrieve()
+        Requester requester = root.createRequest()
                 .method("POST")
                 .with("path", path)
                 .with("message", commitMessage)
@@ -365,7 +367,7 @@ public class GHContent implements Refreshable {
         }
 
         GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
-                .to(GHContentUpdateResponse.class);
+                .fetch(GHContentUpdateResponse.class);
 
         response.getCommit().wrapUp(repository);
         return response;
@@ -411,6 +413,6 @@ public class GHContent implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.retrieve().setRawUrlPath(url).to(this);
+        root.createRequest().setRawUrlPath(url).fetchInto(this);
     }
 }

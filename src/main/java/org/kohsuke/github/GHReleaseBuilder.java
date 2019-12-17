@@ -21,7 +21,7 @@ public class GHReleaseBuilder {
      */
     public GHReleaseBuilder(GHRepository ghRepository, String tag) {
         this.repo = ghRepository;
-        this.builder = repo.root.retrieve().method("POST");
+        this.builder = repo.root.createRequest().method("POST");
         builder.with("tag_name", tag);
     }
 
@@ -95,6 +95,6 @@ public class GHReleaseBuilder {
      *             the io exception
      */
     public GHRelease create() throws IOException {
-        return builder.withUrlPath(repo.getApiTailUrl("releases")).to(GHRelease.class).wrap(repo);
+        return builder.withUrlPath(repo.getApiTailUrl("releases")).fetch(GHRelease.class).wrap(repo);
     }
 }

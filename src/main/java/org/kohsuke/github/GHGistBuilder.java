@@ -23,7 +23,7 @@ public class GHGistBuilder {
      */
     public GHGistBuilder(GitHub root) {
         this.root = root;
-        req = root.retrieve().method("POST");
+        req = root.createRequest().method("POST");
     }
 
     /**
@@ -73,6 +73,6 @@ public class GHGistBuilder {
      */
     public GHGist create() throws IOException {
         req.with("files", files);
-        return req.withUrlPath("/gists").to(GHGist.class).wrapUp(root);
+        return req.withUrlPath("/gists").fetch(GHGist.class).wrapUp(root);
     }
 }

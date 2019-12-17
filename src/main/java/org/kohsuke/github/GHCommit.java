@@ -441,7 +441,7 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .asPagedIterable(
                         String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
                         GHCommitComment[].class,
@@ -466,7 +466,7 @@ public class GHCommit {
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = owner.root.retrieve()
+        GHCommitComment r = owner.root.createRequest()
                 .method("POST")
                 .with("body", body)
                 .with("path", path)
@@ -474,7 +474,7 @@ public class GHCommit {
                 .with("position", position)
                 .withUrlPath(
                         String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
-                .to(GHCommitComment.class);
+                .fetch(GHCommitComment.class);
         return r.wrap(owner);
     }
 
@@ -521,7 +521,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files == null && stats == null)
-            owner.root.retrieve().withUrlPath(owner.getApiTailUrl("commits/" + sha)).to(this);
+            owner.root.createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

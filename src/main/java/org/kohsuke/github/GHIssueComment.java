@@ -108,7 +108,11 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.retrieve().method("PATCH").with("body", body).withUrlPath(getApiRoute()).to(GHIssueComment.class);
+        owner.root.createRequest()
+                .method("PATCH")
+                .with("body", body)
+                .withUrlPath(getApiRoute())
+                .fetch(GHIssueComment.class);
         this.body = body;
     }
 
@@ -119,25 +123,25 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.retrieve().method("DELETE").withUrlPath(getApiRoute()).to();
+        owner.root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .to(GHReaction.class)
+                .fetch(GHReaction.class)
                 .wrap(owner.root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .asPagedIterable(getApiRoute() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }

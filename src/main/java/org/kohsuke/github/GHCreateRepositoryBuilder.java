@@ -16,7 +16,7 @@ public class GHCreateRepositoryBuilder {
     GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
-        this.builder = root.retrieve();
+        this.builder = root.createRequest();
         this.builder.with("name", name);
     }
 
@@ -196,7 +196,7 @@ public class GHCreateRepositoryBuilder {
      *             if repsitory cannot be created
      */
     public GHRepository create() throws IOException {
-        return builder.method("POST").withUrlPath(apiUrlTail).to(GHRepository.class).wrap(root);
+        return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);
     }
 
 }

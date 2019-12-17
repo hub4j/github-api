@@ -384,7 +384,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.retrieve().withPreview(SHADOW_CAT).withUrlPath(url).to(this).wrapUp(owner);
+        root.createRequest().withPreview(SHADOW_CAT).withUrlPath(url).fetchInto(this).wrapUp(owner);
     }
 
     /**
@@ -393,7 +393,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("%s/files", getApiRoute()), GHPullRequestFileDetail[].class, null);
     }
 
@@ -403,7 +403,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("%s/reviews", getApiRoute()),
                         GHPullRequestReview[].class,
                         item -> item.wrapUp(GHPullRequest.this));
@@ -417,7 +417,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(getApiRoute() + COMMENTS_ACTION,
                         GHPullRequestReviewComment[].class,
                         item -> item.wrapUp(GHPullRequest.this));
@@ -429,7 +429,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("%s/commits", getApiRoute()),
                         GHPullRequestCommitDetail[].class,
                         item -> item.wrapUp(GHPullRequest.this));
@@ -505,14 +505,14 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .method("POST")
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
                 .with("position", position)
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-                .to(GHPullRequestReviewComment.class)
+                .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(this);
     }
 
@@ -525,11 +525,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void requestReviewers(List<GHUser> reviewers) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("POST")
                 .with("reviewers", getLogins(reviewers))
                 .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)
-                .to();
+                .send();
     }
 
     /**
@@ -545,11 +545,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         for (GHTeam team : teams) {
             teamReviewers.add(team.getSlug());
         }
-        root.retrieve()
+        root.createRequest()
                 .method("POST")
                 .with("team_reviewers", teamReviewers)
                 .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)
-                .to();
+                .send();
     }
 
     /**
@@ -597,13 +597,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("PUT")
                 .with("commit_message", msg)
                 .with("sha", sha)
                 .with("merge_method", method)
                 .withUrlPath(getApiRoute() + "/merge")
-                .to();
+                .send();
     }
 
     /**
@@ -615,7 +615,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     private void fetchIssue() throws IOException {
         if (!fetchedIssueDetails) {
-            root.retrieve().withUrlPath(getIssuesApiRoute()).to(this);
+            root.createRequest().withUrlPath(getIssuesApiRoute()).fetchInto(this);
             fetchedIssueDetails = true;
         }
     }

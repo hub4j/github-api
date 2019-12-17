@@ -23,7 +23,7 @@ public class GHAppCreateTokenBuilder {
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
-        this.builder = root.retrieve();
+        this.builder = root.createRequest();
         withPermissions(builder, permissions);
     }
 
@@ -58,7 +58,7 @@ public class GHAppCreateTokenBuilder {
         return builder.method("POST")
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(apiUrlTail)
-                .to(GHAppInstallationToken.class)
+                .fetch(GHAppInstallationToken.class)
                 .wrapUp(root);
     }
 

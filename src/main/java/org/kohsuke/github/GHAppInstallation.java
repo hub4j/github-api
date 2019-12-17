@@ -271,11 +271,11 @@ public class GHAppInstallation extends GHObject {
     @Preview
     @Deprecated
     public void deleteInstallation() throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("DELETE")
                 .withPreview(GAMBIT)
                 .withUrlPath(String.format("/app/installations/%d", id))
-                .to();
+                .send();
     }
 
     /**

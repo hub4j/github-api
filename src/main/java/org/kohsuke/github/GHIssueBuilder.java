@@ -17,7 +17,7 @@ public class GHIssueBuilder {
 
     GHIssueBuilder(GHRepository repo, String title) {
         this.repo = repo;
-        this.builder = repo.root.retrieve().method("POST");
+        this.builder = repo.root.createRequest().method("POST");
         builder.with("title", title);
     }
 
@@ -96,7 +96,7 @@ public class GHIssueBuilder {
         return builder.with("labels", labels)
                 .with("assignees", assignees)
                 .withUrlPath(repo.getApiTailUrl("issues"))
-                .to(GHIssue.class)
+                .fetch(GHIssue.class)
                 .wrap(repo);
     }
 }

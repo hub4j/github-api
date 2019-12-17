@@ -44,7 +44,7 @@ public class GHUser extends GHPerson {
      */
     public List<GHKey> getKeys() throws IOException {
         return Collections.unmodifiableList(
-                Arrays.asList(root.retrieve().withUrlPath(getApiTailUrl("keys")).toArray(GHKey[].class)));
+                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHKey[].class)));
     }
 
     /**
@@ -54,7 +54,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public void follow() throws IOException {
-        root.retrieve().method("PUT").withUrlPath("/user/following/" + login).to();
+        root.createRequest().method("PUT").withUrlPath("/user/following/" + login).send();
     }
 
     /**
@@ -64,7 +64,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public void unfollow() throws IOException {
-        root.retrieve().method("DELETE").withUrlPath("/user/following/" + login).to();
+        root.createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
     }
 
     /**
@@ -110,7 +110,7 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHUser> listUser(final String suffix) {
-        return root.retrieve().asPagedIterable(getApiTailUrl(suffix), GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest().asPagedIterable(getApiTailUrl(suffix), GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -134,7 +134,8 @@ public class GHUser extends GHPerson {
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return root.retrieve().asPagedIterable(getApiTailUrl(suffix), GHRepository[].class, item -> item.wrap(root));
+        return root.createRequest()
+                .asPagedIterable(getApiTailUrl(suffix), GHRepository[].class, item -> item.wrap(root));
     }
 
     /**
@@ -187,9 +188,9 @@ public class GHUser extends GHPerson {
     public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve()
+        for (GHOrganization o : root.createRequest()
                 .withUrlPath("/users/" + login + "/orgs")
-                .toArray(GHOrganization[].class)) {
+                .fetchArray(GHOrganization[].class)) {
             if (names.add(o.getLogin())) // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -200,7 +201,7 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("/users/%s/events", login),
                         GHEventInfo[].class,
                         item -> item.wrapUp(root));
@@ -214,7 +215,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHGist> listGists() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("/users/%s/gists", login),
                         GHGist[].class,
                         item -> item.wrapUp(GHUser.this));

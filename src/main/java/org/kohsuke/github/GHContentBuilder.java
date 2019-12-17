@@ -21,7 +21,7 @@ public final class GHContentBuilder {
 
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = repo.root.retrieve().method("PUT");
+        this.req = repo.root.createRequest().method("PUT");
     }
 
     /**
@@ -109,7 +109,7 @@ public final class GHContentBuilder {
      */
     public GHContentUpdateResponse commit() throws IOException {
         GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))
-                .to(GHContentUpdateResponse.class);
+                .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repo);
         response.getCommit().wrapUp(repo);

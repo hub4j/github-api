@@ -206,7 +206,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void lock() throws IOException {
-        root.retrieve().method("PUT").withUrlPath(getApiRoute() + "/lock").to();
+        root.createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
     }
 
     /**
@@ -216,7 +216,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void unlock() throws IOException {
-        root.retrieve().method("PUT").withUrlPath(getApiRoute() + "/lock").to();
+        root.createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
     }
 
     /**
@@ -230,20 +230,20 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = root.retrieve()
+        GHIssueComment r = root.createRequest()
                 .method("POST")
                 .with("body", message)
                 .withUrlPath(getIssuesApiRoute() + "/comments")
-                .to(GHIssueComment.class);
+                .fetch(GHIssueComment.class);
         return r.wrapUp(this);
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.retrieve().with(key, value).method("PATCH").withUrlPath(getApiRoute()).to();
+        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.retrieve().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).to();
+        root.createRequest().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
 
     /**
@@ -445,7 +445,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(getIssuesApiRoute() + "/comments",
                         GHIssueComment[].class,
                         item -> item.wrapUp(GHIssue.this));
@@ -454,19 +454,19 @@ public class GHIssue extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .to(GHReaction.class)
+                .fetch(GHReaction.class)
                 .wrap(root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .asPagedIterable(getApiRoute() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }
@@ -492,11 +492,11 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("POST")
                 .with(ASSIGNEES, getLogins(assignees))
                 .withUrlPath(getIssuesApiRoute() + "/assignees")
-                .to(this);
+                .fetchInto(this);
     }
 
     /**
@@ -520,7 +520,11 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve().method("PATCH").with(ASSIGNEES, getLogins(assignees)).withUrlPath(getIssuesApiRoute()).to();
+        root.createRequest()
+                .method("PATCH")
+                .with(ASSIGNEES, getLogins(assignees))
+                .withUrlPath(getIssuesApiRoute())
+                .send();
     }
 
     /**
@@ -544,12 +548,12 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("DELETE")
                 .with(ASSIGNEES, getLogins(assignees))
                 .inBody()
                 .withUrlPath(getIssuesApiRoute() + "/assignees")
-                .to(this);
+                .fetchInto(this);
     }
 
     /**
@@ -711,7 +715,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(owner.getApiTailUrl(String.format("/issues/%s/events", number)),
                         GHIssueEvent[].class,
                         item -> item.wrapUp(GHIssue.this));

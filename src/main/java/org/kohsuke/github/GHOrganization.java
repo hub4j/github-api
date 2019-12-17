@@ -121,7 +121,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("/orgs/%s/teams", login),
                         GHTeam[].class,
                         item -> item.wrapUp(GHOrganization.this));
@@ -183,11 +183,11 @@ public class GHOrganization extends GHPerson {
      *      "https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("PUT")
                 .with("role", role.name().toLowerCase())
                 .withUrlPath("/orgs/" + login + "/memberships/" + user.getLogin())
-                .to();
+                .send();
     }
 
     /**
@@ -199,7 +199,7 @@ public class GHOrganization extends GHPerson {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).to();
+            root.createRequest().withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -216,7 +216,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void remove(GHUser user) throws IOException {
-        root.retrieve().method("DELETE").withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).to();
+        root.createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).send();
     }
 
     /**
@@ -228,7 +228,7 @@ public class GHOrganization extends GHPerson {
      */
     public boolean hasPublicMember(GHUser user) {
         try {
-            root.retrieve().withUrlPath("/orgs/" + login + "/public_members/" + user.getLogin()).to();
+            root.createRequest().withUrlPath("/orgs/" + login + "/public_members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -244,7 +244,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieve().method("PUT").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).to();
+        root.createRequest().method("PUT").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
     }
 
     /**
@@ -300,7 +300,7 @@ public class GHOrganization extends GHPerson {
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
                         GHUser[].class,
                         item -> item.wrapUp(root));
@@ -315,7 +315,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).to();
+        root.createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
     }
 
     /**
@@ -328,7 +328,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(INERTIA)
                 .with("state", status)
                 .asPagedIterable(String.format("/orgs/%s/projects", login), GHProject[].class, item -> item.wrap(root));
@@ -357,13 +357,13 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
-                .to(GHProject.class)
+                .fetch(GHProject.class)
                 .wrap(root);
     }
 
@@ -391,13 +391,13 @@ public class GHOrganization extends GHPerson {
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Requester post = root.retrieve().method("POST").with("name", name).with("permission", p);
+        Requester post = root.createRequest().method("POST").with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names", repo_names);
-        return post.withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
+        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
     }
 
     /**
@@ -432,13 +432,13 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
-        Requester post = root.retrieve().method("POST").with("name", name);
+        Requester post = root.createRequest().method("POST").with("name", name);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names", repo_names);
-        return post.withUrlPath("/orgs/" + login + "/teams").to(GHTeam.class).wrapUp(this);
+        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
     }
 
     /**
@@ -497,7 +497,7 @@ public class GHOrganization extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable(String.format("/orgs/%s/events", login),
                         GHEventInfo[].class,
                         item -> item.wrapUp(root));
@@ -513,7 +513,7 @@ public class GHOrganization extends GHPerson {
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable("/orgs/" + login + "/repos", GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }

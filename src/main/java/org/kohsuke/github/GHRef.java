@@ -66,12 +66,12 @@ public class GHRef {
      *             the io exception
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-        root.retrieve()
+        root.createRequest()
                 .method("PATCH")
                 .with("sha", sha)
                 .with("force", force)
                 .withUrlPath(url)
-                .to(GHRef.class)
+                .fetch(GHRef.class)
                 .wrap(root);
     }
 
@@ -82,7 +82,7 @@ public class GHRef {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").withUrlPath(url).to();
+        root.createRequest().method("DELETE").withUrlPath(url).send();
     }
 
     GHRef wrap(GitHub root) {

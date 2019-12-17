@@ -36,7 +36,7 @@ public class GHInvitation extends GHObject {
      *             the io exception
      */
     public void accept() throws IOException {
-        root.retrieve().method("PATCH").withUrlPath("/user/repository_invitations/" + id).to();
+        root.createRequest().method("PATCH").withUrlPath("/user/repository_invitations/" + id).send();
     }
 
     /**
@@ -46,7 +46,7 @@ public class GHInvitation extends GHObject {
      *             the io exception
      */
     public void decline() throws IOException {
-        root.retrieve().method("DELETE").withUrlPath("/user/repository_invitations/" + id).to();
+        root.createRequest().method("DELETE").withUrlPath("/user/repository_invitations/" + id).send();
     }
 
     @Override

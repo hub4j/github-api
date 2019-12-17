@@ -69,7 +69,7 @@ public class GHLabel {
      *             the io exception
      */
     public void delete() throws IOException {
-        repo.root.retrieve().method("DELETE").setRawUrlPath(url).to();
+        repo.root.createRequest().method("DELETE").setRawUrlPath(url).send();
     }
 
     /**
@@ -81,14 +81,14 @@ public class GHLabel {
      *             the io exception
      */
     public void setColor(String newColor) throws IOException {
-        repo.root.retrieve()
+        repo.root.createRequest()
                 .method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", newColor)
                 .with("description", description)
                 .setRawUrlPath(url)
-                .to();
+                .send();
     }
 
     /**
@@ -102,14 +102,14 @@ public class GHLabel {
     @Preview
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.root.retrieve()
+        repo.root.createRequest()
                 .method("PATCH")
                 .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)
                 .with("description", newDescription)
                 .setRawUrlPath(url)
-                .to();
+                .send();
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

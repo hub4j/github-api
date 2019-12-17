@@ -13,7 +13,7 @@ public class GHBlobBuilder {
 
     GHBlobBuilder(GHRepository repo) {
         this.repo = repo;
-        req = repo.root.retrieve();
+        req = repo.root.createRequest();
     }
 
     /**
@@ -55,6 +55,6 @@ public class GHBlobBuilder {
      *             if the blob cannot be created.
      */
     public GHBlob create() throws IOException {
-        return req.method("POST").withUrlPath(getApiTail()).to(GHBlob.class);
+        return req.method("POST").withUrlPath(getApiTail()).fetch(GHBlob.class);
     }
 }

@@ -17,7 +17,7 @@ public class GHPullRequestReviewBuilder {
 
     GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
-        this.builder = pr.root.retrieve();
+        this.builder = pr.root.createRequest();
     }
 
     // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
@@ -92,7 +92,7 @@ public class GHPullRequestReviewBuilder {
         return builder.method("POST")
                 .with("comments", comments)
                 .withUrlPath(pr.getApiRoute() + "/reviews")
-                .to(GHPullRequestReview.class)
+                .fetch(GHPullRequestReview.class)
                 .wrapUp(pr);
     }
 

@@ -43,6 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -382,8 +383,8 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public void to() throws IOException {
-        _to(null, null);
+    public void send() throws IOException {
+        _fetch(null, null);
     }
 
     /**
@@ -397,8 +398,8 @@ class Requester {
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
-    public <T> T to(@Nonnull Class<T> type) throws IOException {
-        return _to(type, null);
+    public <T> T fetch(@Nonnull Class<T> type) throws IOException {
+        return _fetch(type, null);
     }
 
     /**
@@ -412,7 +413,7 @@ class Requester {
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
-    public <T> T[] toArray(@Nonnull Class<T[]> type) throws IOException {
+    public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
         T[] result;
 
         // for arrays we might have to loop for pagination
@@ -430,7 +431,7 @@ class Requester {
     }
 
     /**
-     * Like {@link #to(Class)} but updates an existing object instead of creating a new instance.
+     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
      *
      * @param <T>
      *            the type parameter
@@ -440,11 +441,11 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public <T> T to(@Nonnull T existingInstance) throws IOException {
-        return _to(null, existingInstance);
+    public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
+        return _fetch(null, existingInstance);
     }
 
-    private <T> T _to(Class<T> type, T instance) throws IOException {
+    private <T> T _fetch(Class<T> type, T instance) throws IOException {
         T result;
 
         String tailApiUrl = buildTailApiUrl(urlPath);
@@ -484,9 +485,9 @@ class Requester {
 
                 for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
                     Entry arg = it.next();
-                    argString.append(URLEncoder.encode(arg.key, "UTF-8"));
+                    argString.append(URLEncoder.encode(arg.key, StandardCharsets.UTF_8.name()));
                     argString.append('=');
-                    argString.append(URLEncoder.encode(arg.value.toString(), "UTF-8"));
+                    argString.append(URLEncoder.encode(arg.value.toString(), StandardCharsets.UTF_8.name()));
                     if (it.hasNext()) {
                         argString.append('&');
                     }
@@ -507,7 +508,7 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public int asHttpStatusCode() throws IOException {
+    public int fetchHttpStatusCode() throws IOException {
         while (true) {// loop while API rate limit is hit
 
             setupConnection(root.getApiURL(urlPath));
@@ -529,7 +530,7 @@ class Requester {
      * @throws IOException
      *             the io exception
      */
-    public InputStream toStream() throws IOException {
+    public InputStream fetchStream() throws IOException {
         while (true) {// loop while API rate limit is hit
             setupConnection(root.getApiURL(urlPath));
 
@@ -890,7 +891,7 @@ class Requester {
                 return null;
             }
 
-            r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
+            r = new InputStreamReader(wrapStream(uc.getInputStream()), StandardCharsets.UTF_8);
             String data = IOUtils.toString(r);
             if (type != null)
                 try {
@@ -969,7 +970,7 @@ class Requester {
         InputStream es = wrapStream(uc.getErrorStream());
         if (es != null) {
             try {
-                String error = IOUtils.toString(es, "UTF-8");
+                String error = IOUtils.toString(es, StandardCharsets.UTF_8);
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
                     e = (IOException) new GHFileNotFoundException(error).withResponseHeaderFields(uc).initCause(e);

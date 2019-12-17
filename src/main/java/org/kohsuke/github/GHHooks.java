@@ -28,8 +28,9 @@ class GHHooks {
          */
         public List<GHHook> getHooks() throws IOException {
 
-            GHHook[] hookArray = root.retrieve().withUrlPath(collection()).to(collectionClass()); // jdk/eclipse bug
-                                                                                                  // requires this
+            GHHook[] hookArray = root.createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse
+                                                                                                          // bug
+            // requires this
             // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
@@ -47,7 +48,7 @@ class GHHooks {
          *             the io exception
          */
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.retrieve().withUrlPath(collection() + "/" + id).to(clazz());
+            GHHook hook = root.createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
             return wrap(hook);
         }
 
@@ -75,14 +76,14 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = root.retrieve()
+            GHHook hook = root.createRequest()
                     .method("POST")
                     .with("name", name)
                     .with("active", active)
                     .with("config", config)
                     .with("events", ea)
                     .withUrlPath(collection())
-                    .to(clazz());
+                    .fetch(clazz());
 
             return wrap(hook);
         }

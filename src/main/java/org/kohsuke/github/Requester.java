@@ -378,17 +378,17 @@ class Requester {
     }
 
     /**
-     * To.
+     * Sends a request to the specified URL and checks that it is sucessful.
      *
      * @throws IOException
      *             the io exception
      */
     public void send() throws IOException {
-        _fetch(null, null);
+        _fetch(() -> parse(null, null));
     }
 
     /**
-     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     * Sends a request and parses the response into the given type via databinding.
      *
      * @param <T>
      *            the type parameter
@@ -399,11 +399,11 @@ class Requester {
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T fetch(@Nonnull Class<T> type) throws IOException {
-        return _fetch(type, null);
+        return _fetch(() -> parse(type, null));
     }
 
     /**
-     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     * Sends a request and parses the response into an array of the given type via databinding.
      *
      * @param <T>
      *            the type parameter
@@ -427,7 +427,7 @@ class Requester {
         }
 
         result = concatenatePages(type, pages, totalSize);
-        return setResponseHeaders(result);
+        return result;
     }
 
     /**
@@ -442,19 +442,44 @@ class Requester {
      *             the io exception
      */
     public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
-        return _fetch(null, existingInstance);
+        return _fetch(() -> parse(null, existingInstance));
     }
 
-    private <T> T _fetch(Class<T> type, T instance) throws IOException {
-        T result;
+    /**
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
+     *
+     * @return the int
+     * @throws IOException
+     *             the io exception
+     */
+    public int fetchHttpStatusCode() throws IOException {
+        return _fetch(() -> uc.getResponseCode());
+    }
 
+    /**
+     * As stream input stream.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    public InputStream fetchStream() throws IOException {
+        return _fetch(() -> parse(InputStream.class, null));
+    }
+
+    private <T> T _fetch(SupplierThrows<T, IOException> supplier) throws IOException {
         String tailApiUrl = buildTailApiUrl(urlPath);
-        setupConnection(root.getApiURL(tailApiUrl));
+        URL url = root.getApiURL(tailApiUrl);
+        return _fetch(tailApiUrl, url, supplier);
+    }
 
+    private <T> T _fetch(String tailApiUrl, URL url, SupplierThrows<T, IOException> supplier) throws IOException {
         while (true) {// loop while API rate limit is hit
+            setupConnection(url);
+
             try {
-                result = parse(type, instance);
-                return setResponseHeaders(result);
+                return supplier.get();
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
@@ -498,50 +523,6 @@ class Requester {
             }
         }
         return tailApiUrl;
-    }
-
-    /**
-     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
-     * that would otherwise throw.
-     *
-     * @return the int
-     * @throws IOException
-     *             the io exception
-     */
-    public int fetchHttpStatusCode() throws IOException {
-        while (true) {// loop while API rate limit is hit
-
-            setupConnection(root.getApiURL(urlPath));
-
-            try {
-                return uc.getResponseCode();
-            } catch (IOException e) {
-                handleApiError(e);
-            } finally {
-                noteRateLimit(urlPath);
-            }
-        }
-    }
-
-    /**
-     * As stream input stream.
-     *
-     * @return the input stream
-     * @throws IOException
-     *             the io exception
-     */
-    public InputStream fetchStream() throws IOException {
-        while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(urlPath));
-
-            try {
-                return wrapStream(uc.getInputStream());
-            } catch (IOException e) {
-                handleApiError(e);
-            } finally {
-                noteRateLimit(urlPath);
-            }
-        }
     }
 
     private void noteRateLimit(String tailApiUrl) {
@@ -757,19 +738,9 @@ class Requester {
                 return; // no more data to fetch
 
             try {
-                while (true) {// loop while API rate limit is hit
-                    setupConnection(url);
-                    try {
-                        next = parse(type, null);
-                        assert next != null;
-                        findNextURL();
-                        return;
-                    } catch (IOException e) {
-                        handleApiError(e);
-                    } finally {
-                        noteRateLimit(tailApiUrl);
-                    }
-                }
+                next = _fetch(tailApiUrl, url, () -> parse(type, null));
+                assert next != null;
+                findNextURL();
             } catch (IOException e) {
                 throw new GHException("Failed to retrieve " + url, e);
             }
@@ -889,6 +860,10 @@ class Requester {
                 }
                 // Maybe throw an exception instead?
                 return null;
+            }
+
+            if (type != null && type.equals(InputStream.class)) {
+                return type.cast(wrapStream(uc.getInputStream()));
             }
 
             r = new InputStreamReader(wrapStream(uc.getInputStream()), StandardCharsets.UTF_8);
@@ -1037,4 +1012,27 @@ class Requester {
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * <p>
+     * This is a <a href="package-summary.html">functional interface</a> whose functional method is {@link #get()}.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     * @param <E>
+     *            the type of throwable that could be thrown
+     */
+    @FunctionalInterface
+    interface SupplierThrows<T, E extends Throwable> {
+
+        /**
+         * Gets a result.
+         *
+         * @return a result
+         * @throws E
+         */
+        T get() throws E;
+    }
 }

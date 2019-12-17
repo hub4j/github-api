@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>github-api</artifactId>
-  <version>1.100-SNAPSHOT</version>
+  <version>1.102-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -34,7 +34,7 @@
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.2.2</okhttp3.version>
-    <okio.version>2.4.1</okio.version>
+    <okio.version>2.4.2</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <jacoco.coverage.target.class>.80</jacoco.coverage.target.class>
@@ -246,11 +246,6 @@
       <version>3.9</version>
     </dependency>
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.13</version>
-    </dependency>
-    <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest</artifactId>
       <version>${hamcrest.version}</version>
@@ -300,7 +295,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.5.1.201910021850-r</version>
+      <version>5.6.0.201912101111-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -338,7 +333,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.1.0</version>
+      <version>3.2.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>

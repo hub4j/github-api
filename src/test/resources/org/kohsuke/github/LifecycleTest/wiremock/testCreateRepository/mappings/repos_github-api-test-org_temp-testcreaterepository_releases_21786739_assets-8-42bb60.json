@@ -1,37 +1,29 @@
 {
-  "id": "f9ee1424-8c2a-44d5-a0e2-70bc605f0539",
-  "name": "repos_github-api-test-org_temp-testcreaterepository_milestones",
+  "id": "42bb605f-8031-41c8-9749-2c23af78edee",
+  "name": "repos_github-api-test-org_temp-testcreaterepository_releases_21786739_assets",
   "request": {
-    "url": "/repos/github-api-test-org/temp-testCreateRepository/milestones",
-    "method": "POST",
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"description\":\"first one\",\"title\":\"Initial Release\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    "url": "/repos/github-api-test-org/temp-testCreateRepository/releases/21786739/assets",
+    "method": "GET"
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "repos_github-api-test-org_temp-testcreaterepository_milestones-f9ee1424-8c2a-44d5-a0e2-70bc605f0539.json",
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_temp-testcreaterepository_releases_21786739_assets-42bb605f-8031-41c8-9749-2c23af78edee.json",
     "headers": {
-      "Date": "Thu, 21 Nov 2019 23:50:55 GMT",
+      "Date": "Wed, 27 Nov 2019 01:45:30 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4941",
-      "X-RateLimit-Reset": "1574383121",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1574822730",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "\"3eda4a76756caa68d628e0757e6b86f8\"",
+      "ETag": "W/\"dd403348ea8675e7ee90b23ee54cbd2a\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/milestones/1",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -41,10 +33,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C262:5E20:385E8D:41BDFE:5DD722DF"
+      "X-GitHub-Request-Id": "D729:3497:963E2E:B1F801:5DDDD539"
     }
   },
-  "uuid": "f9ee1424-8c2a-44d5-a0e2-70bc605f0539",
+  "uuid": "42bb605f-8031-41c8-9749-2c23af78edee",
   "persistent": true,
-  "insertionIndex": 4
+  "scenarioName": "scenario-2-repos-github-api-test-org-temp-testCreateRepository-releases-21786739-assets",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-github-api-test-org-temp-testCreateRepository-releases-21786739-assets-2",
+  "insertionIndex": 8
 }

@@ -1,9 +1,8 @@
 package org.kohsuke.github;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * Used to create/update content.
@@ -69,7 +68,7 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder content(byte[] content) {
-        req.with("content", Base64.encodeBase64String(content));
+        req.with("content", Base64.getMimeEncoder().encodeToString(content));
         return this;
     }
 
@@ -81,11 +80,7 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder content(String content) {
-        try {
-            return content(content.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException x) {
-            throw new AssertionError();
-        }
+        return content(content.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

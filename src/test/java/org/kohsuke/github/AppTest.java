@@ -11,6 +11,7 @@ import org.kohsuke.github.GHOrganization.Permission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -928,7 +929,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     private void assertBlobContent(InputStream is) throws Exception {
-        String content = new String(IOUtils.toByteArray(is), "UTF-8");
+        String content = new String(IOUtils.toByteArray(is), StandardCharsets.UTF_8);
         assertThat(content, containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
         assertThat(content, containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
         assertThat(content.length(), is(1104));

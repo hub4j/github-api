@@ -1,13 +1,12 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Base64InputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * A Content of a repository.
@@ -114,7 +113,7 @@ public class GHContent implements Refreshable {
      */
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(Base64.decodeBase64(getEncodedContent()));
+        return new String(Base64.getMimeDecoder().decode(getEncodedContent()));
     }
 
     /**
@@ -175,8 +174,9 @@ public class GHContent implements Refreshable {
         refresh(content);
         if (encoding.equals("base64")) {
             try {
-                return new Base64InputStream(new ByteArrayInputStream(content.getBytes("US-ASCII")), false);
-            } catch (UnsupportedEncodingException e) {
+                Base64.Decoder decoder = Base64.getMimeDecoder();
+                return new ByteArrayInputStream(decoder.decode(content.getBytes(StandardCharsets.US_ASCII)));
+            } catch (IllegalArgumentException e) {
                 throw new AssertionError(e); // US-ASCII is mandatory
             }
         }
@@ -306,7 +306,7 @@ public class GHContent implements Refreshable {
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
             throws IOException {
-        String encodedContent = Base64.encodeBase64String(newContentBytes);
+        String encodedContent = Base64.getMimeEncoder().encodeToString(newContentBytes);
 
         Requester requester = root.createRequest()
                 .method("POST")

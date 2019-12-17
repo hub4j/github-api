@@ -113,23 +113,30 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).with("body", body).method("PATCH").to(getApiTail(), GHCommitComment.class);
+        owner.root.createRequest()
+                .method("PATCH")
+                .with("body", body)
+                .withUrlPath(getApiTail())
+                .fetch(GHCommitComment.class);
         this.body = body;
     }
 
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root).withPreview(SQUIRREL_GIRL)
+        return owner.root.createRequest()
+                .method("POST")
+                .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiTail() + "/reactions", GHReaction.class)
+                .withUrlPath(getApiTail() + "/reactions")
+                .fetch(GHReaction.class)
                 .wrap(owner.root);
     }
 
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .asPagedIterable(getApiTail() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
     }
@@ -141,7 +148,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiTail());
+        owner.root.createRequest().method("DELETE").withUrlPath(getApiTail()).send();
     }
 
     private String getApiTail() {

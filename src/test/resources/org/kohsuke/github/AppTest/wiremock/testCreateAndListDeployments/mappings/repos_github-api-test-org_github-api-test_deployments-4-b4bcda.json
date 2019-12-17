@@ -2,7 +2,7 @@
   "id": "b4bcdadb-a708-4509-9382-479f300eb172",
   "name": "repos_github-api-test-org_github-api-test_deployments",
   "request": {
-    "url": "/repos/github-api-test-org/github-api-test/deployments?ref=master&environment=unittest&",
+    "url": "/repos/github-api-test-org/github-api-test/deployments?ref=master&environment=unittest",
     "method": "GET"
   },
   "response": {

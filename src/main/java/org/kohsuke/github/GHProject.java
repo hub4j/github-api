@@ -74,11 +74,17 @@ public class GHProject extends GHObject {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHOrganization.class).wrapUp(root);
+                    owner = root.createRequest()
+                            .withUrlPath(getOwnerUrl().getPath())
+                            .fetch(GHOrganization.class)
+                            .wrapUp(root);
                 } else if (owner_url.contains("/users/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHUser.class).wrapUp(root);
+                    owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);
                 } else if (owner_url.contains("/repos/")) {
-                    owner = root.retrieve().to(getOwnerUrl().getPath(), GHRepository.class).wrap(root);
+                    owner = root.createRequest()
+                            .withUrlPath(getOwnerUrl().getPath())
+                            .fetch(GHRepository.class)
+                            .wrap(root);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -176,7 +182,7 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root).withPreview(INERTIA).with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -270,7 +276,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(root).withPreview(INERTIA).method("DELETE").to(getApiRoute());
+        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -282,7 +288,7 @@ public class GHProject extends GHObject {
      */
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(INERTIA)
                 .asPagedIterable(String.format("/projects/%d/columns", id),
                         GHProjectColumn[].class,
@@ -299,11 +305,12 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
-                .to(String.format("/projects/%d/columns", id), GHProjectColumn.class)
+                .withUrlPath(String.format("/projects/%d/columns", id))
+                .fetch(GHProjectColumn.class)
                 .wrap(this);
     }
 }

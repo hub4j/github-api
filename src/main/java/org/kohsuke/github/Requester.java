@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,6 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,13 +53,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
@@ -77,10 +77,13 @@ class Requester {
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String, String> headers = new LinkedHashMap<String, String>();
 
+    @Nonnull
+    private String urlPath = "/";
+
     /**
      * Request method.
      */
-    private String method = "POST";
+    private String method = "GET";
     private String contentType = null;
     private InputStream body;
 
@@ -91,8 +94,8 @@ class Requester {
     private boolean forceBody;
 
     private static class Entry {
-        String key;
-        Object value;
+        final String key;
+        final Object value;
 
         private Entry(String key, Object value) {
             this.key = key;
@@ -281,9 +284,9 @@ class Requester {
      * @return the requester
      */
     public Requester set(String key, Object value) {
-        for (Entry e : args) {
-            if (e.key.equals(key)) {
-                e.value = value;
+        for (int index = 0; index < args.size(); index++) {
+            if (args.get(index).key.equals(key)) {
+                args.set(index, new Entry(key, value));
                 return this;
             }
         }
@@ -315,6 +318,56 @@ class Requester {
     }
 
     /**
+     * NOT FOR PUBLIC USE. Do not make this method public.
+     * <p>
+     * Sets the path component of api URL without URI encoding.
+     * <p>
+     * Should only be used when passing a literal URL field from a GHObject, such as {@link GHContent#refresh()} or when
+     * needing to set query parameters on requests methods that don't usually have them, such as
+     * {@link GHRelease#uploadAsset(String, InputStream, String)}.
+     *
+     * @param urlOrPath
+     *            the content type
+     * @return the requester
+     */
+    Requester setRawUrlPath(String urlOrPath) {
+        Objects.requireNonNull(urlOrPath);
+        this.urlPath = urlOrPath;
+        return this;
+    }
+
+    /**
+     * Path component of api URL. Appended to api url.
+     * <p>
+     * If urlPath starts with a slash, it will be URI encoded as a path. If it starts with anything else, it will be
+     * used as is.
+     *
+     * @param urlPathItems
+     *            the content type
+     * @return the requester
+     */
+    public Requester withUrlPath(String... urlPathItems) {
+        if (!this.urlPath.startsWith("/")) {
+            throw new GHException("Cannot append to url path after setting a raw path");
+        }
+
+        if (urlPathItems.length == 1 && !urlPathItems[0].startsWith("/")) {
+            return setRawUrlPath(urlPathItems[0]);
+        }
+
+        String tailUrlPath = String.join("/", urlPathItems);
+
+        if (this.urlPath.endsWith("/")) {
+            tailUrlPath = StringUtils.stripStart(tailUrlPath, "/");
+        } else {
+            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
+        }
+
+        this.urlPath += urlPathEncode(tailUrlPath);
+        return this;
+    }
+
+    /**
      * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
      * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
      * forces the parameters to be sent as a body.
@@ -325,143 +378,108 @@ class Requester {
     }
 
     /**
-     * To.
+     * Sends a request to the specified URL and checks that it is sucessful.
      *
-     * @param tailApiUrl
-     *            the tail api url
      * @throws IOException
      *             the io exception
      */
-    public void to(String tailApiUrl) throws IOException {
-        _to(tailApiUrl, null, null);
+    public void send() throws IOException {
+        _fetch(() -> parse(null, null));
     }
 
     /**
-     * Sends a request to the specified URL, and parses the response into the given type via databinding.
+     * Sends a request and parses the response into the given type via databinding.
      *
      * @param <T>
      *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
      * @param type
      *            the type
      * @return {@link Reader} that reads the response.
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
-    public <T> T to(String tailApiUrl, Class<T> type) throws IOException {
-        return _to(tailApiUrl, type, null);
+    public <T> T fetch(@Nonnull Class<T> type) throws IOException {
+        return _fetch(() -> parse(type, null));
     }
 
     /**
-     * Like {@link #to(String, Class)} but updates an existing object instead of creating a new instance.
+     * Sends a request and parses the response into an array of the given type via databinding.
      *
      * @param <T>
      *            the type parameter
-     * @param tailApiUrl
-     *            the tail api url
+     * @param type
+     *            the type
+     * @return {@link Reader} that reads the response.
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
+        T[] result;
+
+        // for arrays we might have to loop for pagination
+        // use the iterator to handle it
+        List<T[]> pages = new ArrayList<>();
+        int totalSize = 0;
+        for (Iterator<T[]> iterator = asIterator(type, 0); iterator.hasNext();) {
+            T[] nextResult = iterator.next();
+            totalSize += Array.getLength(nextResult);
+            pages.add(nextResult);
+        }
+
+        result = concatenatePages(type, pages, totalSize);
+        return result;
+    }
+
+    /**
+     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param <T>
+     *            the type parameter
      * @param existingInstance
      *            the existing instance
      * @return the t
      * @throws IOException
      *             the io exception
      */
-    public <T> T to(String tailApiUrl, T existingInstance) throws IOException {
-        return _to(tailApiUrl, null, existingInstance);
-    }
-
-    @SuppressFBWarnings("SBSC_USE_STRINGBUFFER_CONCATENATION")
-    private <T> T _to(String tailApiUrl, Class<T> type, T instance) throws IOException {
-        if (!isMethodWithBody() && !args.isEmpty()) {
-            boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
-            tailApiUrl += questionMarkFound ? '&' : '?';
-            for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
-                Entry arg = it.next();
-                tailApiUrl += arg.key + '=' + URLEncoder.encode(arg.value.toString(), "UTF-8");
-                if (it.hasNext()) {
-                    tailApiUrl += '&';
-                }
-            }
-        }
-
-        while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
-
-            buildRequest();
-
-            try {
-                T result = parse(type, instance);
-                if (type != null && type.isArray()) { // we might have to loop for pagination - done through recursion
-                    final String links = uc.getHeaderField("link");
-                    if (links != null && links.contains("rel=\"next\"")) {
-                        Pattern nextLinkPattern = Pattern.compile(".*<(.*)>; rel=\"next\"");
-                        Matcher nextLinkMatcher = nextLinkPattern.matcher(links);
-                        if (nextLinkMatcher.find()) {
-                            final String link = nextLinkMatcher.group(1);
-                            T nextResult = _to(link, type, instance);
-                            setResponseHeaders(nextResult);
-                            final int resultLength = Array.getLength(result);
-                            final int nextResultLength = Array.getLength(nextResult);
-                            T concatResult = (T) Array.newInstance(type.getComponentType(),
-                                    resultLength + nextResultLength);
-                            System.arraycopy(result, 0, concatResult, 0, resultLength);
-                            System.arraycopy(nextResult, 0, concatResult, resultLength, nextResultLength);
-                            result = concatResult;
-                        }
-                    }
-                }
-                return setResponseHeaders(result);
-            } catch (IOException e) {
-                handleApiError(e);
-            } finally {
-                noteRateLimit(tailApiUrl);
-            }
-        }
+    public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
+        return _fetch(() -> parse(null, existingInstance));
     }
 
     /**
-     * Makes a request and just obtains the HTTP status code.
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
      *
-     * @param tailApiUrl
-     *            the tail api url
      * @return the int
      * @throws IOException
      *             the io exception
      */
-    public int asHttpStatusCode(String tailApiUrl) throws IOException {
-        while (true) {// loop while API rate limit is hit
-            method("GET");
-            setupConnection(root.getApiURL(tailApiUrl));
-
-            buildRequest();
-
-            try {
-                return uc.getResponseCode();
-            } catch (IOException e) {
-                handleApiError(e);
-            } finally {
-                noteRateLimit(tailApiUrl);
-            }
-        }
+    public int fetchHttpStatusCode() throws IOException {
+        return _fetch(() -> uc.getResponseCode());
     }
 
     /**
      * As stream input stream.
      *
-     * @param tailApiUrl
-     *            the tail api url
      * @return the input stream
      * @throws IOException
      *             the io exception
      */
-    public InputStream asStream(String tailApiUrl) throws IOException {
-        while (true) {// loop while API rate limit is hit
-            setupConnection(root.getApiURL(tailApiUrl));
+    public InputStream fetchStream() throws IOException {
+        return _fetch(() -> parse(InputStream.class, null));
+    }
 
-            buildRequest();
+    private <T> T _fetch(SupplierThrows<T, IOException> supplier) throws IOException {
+        String tailApiUrl = buildTailApiUrl(urlPath);
+        URL url = root.getApiURL(tailApiUrl);
+        return _fetch(tailApiUrl, url, supplier);
+    }
+
+    private <T> T _fetch(String tailApiUrl, URL url, SupplierThrows<T, IOException> supplier) throws IOException {
+        while (true) {// loop while API rate limit is hit
+            setupConnection(url);
 
             try {
-                return wrapStream(uc.getInputStream());
+                return supplier.get();
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
@@ -470,11 +488,52 @@ class Requester {
         }
     }
 
+    private <T> T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
+
+        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
+
+        int position = 0;
+        for (T[] page : pages) {
+            final int pageLength = Array.getLength(page);
+            System.arraycopy(page, 0, result, position, pageLength);
+            position += pageLength;
+        }
+        return result;
+    }
+
+    private String buildTailApiUrl(String tailApiUrl) {
+        if (!isMethodWithBody() && !args.isEmpty()) {
+            try {
+                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
+                StringBuilder argString = new StringBuilder();
+                argString.append(questionMarkFound ? '&' : '?');
+
+                for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
+                    Entry arg = it.next();
+                    argString.append(URLEncoder.encode(arg.key, StandardCharsets.UTF_8.name()));
+                    argString.append('=');
+                    argString.append(URLEncoder.encode(arg.value.toString(), StandardCharsets.UTF_8.name()));
+                    if (it.hasNext()) {
+                        argString.append('&');
+                    }
+                }
+                tailApiUrl += argString;
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError(e); // UTF-8 is mandatory
+            }
+        }
+        return tailApiUrl;
+    }
+
     private void noteRateLimit(String tailApiUrl) {
+        if (uc == null) {
+            return;
+        }
         if (tailApiUrl.startsWith("/search")) {
             // the search API uses a different rate limit
             return;
         }
+
         String limitString = uc.getHeaderField("X-RateLimit-Limit");
         if (StringUtils.isBlank(limitString)) {
             // if we are missing a header, return fast
@@ -569,31 +628,31 @@ class Requester {
     }
 
     <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return new PagedIterableWithConsumer<>(type, this, tailApiUrl, consumer);
+        return withUrlPath(tailApiUrl).asPagedIterable(type, consumer);
     }
 
-    static class PagedIterableWithConsumer<S> extends PagedIterable<S> {
+    <T> PagedIterable<T> asPagedIterable(Class<T[]> type, Consumer<T> consumer) {
+        return new PagedIterableWithConsumer<>(type, consumer);
+    }
 
-        private final Class<S[]> clazz;
-        private final Requester requester;
-        private final String tailApiUrl;
-        private final Consumer<S> consumer;
+    class PagedIterableWithConsumer<T> extends PagedIterable<T> {
 
-        PagedIterableWithConsumer(Class<S[]> clazz, Requester requester, String tailApiUrl, Consumer<S> consumer) {
+        private final Class<T[]> clazz;
+        private final Consumer<T> consumer;
+
+        PagedIterableWithConsumer(Class<T[]> clazz, Consumer<T> consumer) {
             this.clazz = clazz;
-            this.tailApiUrl = tailApiUrl;
-            this.requester = requester;
             this.consumer = consumer;
         }
 
         @Override
-        public PagedIterator<S> _iterator(int pageSize) {
-            final Iterator<S[]> iterator = requester.asIterator(tailApiUrl, clazz, pageSize);
-            return new PagedIterator<S>(iterator) {
+        public PagedIterator<T> _iterator(int pageSize) {
+            final Iterator<T[]> iterator = asIterator(clazz, pageSize);
+            return new PagedIterator<T>(iterator) {
                 @Override
-                protected void wrapUp(S[] page) {
+                protected void wrapUp(T[] page) {
                     if (consumer != null) {
-                        for (S item : page) {
+                        for (T item : page) {
                             consumer.accept(item);
                         }
                     }
@@ -607,35 +666,32 @@ class Requester {
      *
      * Every iterator call reports a new batch.
      */
-    <T> Iterator<T> asIterator(String tailApiUrl, Class<T> type, int pageSize) {
-        method("GET");
+    <T> Iterator<T> asIterator(Class<T> type, int pageSize) {
+        if (method != "GET") {
+            throw new IllegalStateException("Request method \"GET\" is required for iterator.");
+        }
 
         if (pageSize != 0)
             args.add(new Entry("per_page", pageSize));
 
-        StringBuilder s = new StringBuilder(tailApiUrl);
-        if (!args.isEmpty()) {
-            boolean first = true;
-            try {
-                for (Entry a : args) {
-                    s.append(first ? '?' : '&');
-                    first = false;
-                    s.append(URLEncoder.encode(a.key, "UTF-8"));
-                    s.append('=');
-                    s.append(URLEncoder.encode(a.value.toString(), "UTF-8"));
-                }
-            } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e); // UTF-8 is mandatory
-            }
-        }
+        String tailApiUrl = buildTailApiUrl(urlPath);
 
         try {
-            return new PagingIterator<T>(type, tailApiUrl, root.getApiURL(s.toString()));
+            return new PagingIterator<>(type, tailApiUrl, root.getApiURL(tailApiUrl));
         } catch (IOException e) {
             throw new GHException("Unable to build github Api URL", e);
         }
     }
 
+    /**
+     * May be used for any item that has pagination information.
+     *
+     * Works for array responses, also works for search results which are single instances with an array of items
+     * inside.
+     *
+     * @param <T>
+     *            type of each page (not the items in the page).
+     */
     class PagingIterator<T> implements Iterator<T> {
 
         private final Class<T> type;
@@ -682,19 +738,9 @@ class Requester {
                 return; // no more data to fetch
 
             try {
-                while (true) {// loop while API rate limit is hit
-                    setupConnection(url);
-                    try {
-                        next = parse(type, null);
-                        assert next != null;
-                        findNextURL();
-                        return;
-                    } catch (IOException e) {
-                        handleApiError(e);
-                    } finally {
-                        noteRateLimit(tailApiUrl);
-                    }
-                }
+                next = _fetch(tailApiUrl, url, () -> parse(type, null));
+                assert next != null;
+                findNextURL();
             } catch (IOException e) {
                 throw new GHException("Failed to retrieve " + url, e);
             }
@@ -744,6 +790,7 @@ class Requester {
 
         setRequestMethod(uc);
         uc.setRequestProperty("Accept-Encoding", "gzip");
+        buildRequest();
     }
 
     private void setRequestMethod(HttpURLConnection uc) throws IOException {
@@ -815,7 +862,11 @@ class Requester {
                 return null;
             }
 
-            r = new InputStreamReader(wrapStream(uc.getInputStream()), "UTF-8");
+            if (type != null && type.equals(InputStream.class)) {
+                return type.cast(wrapStream(uc.getInputStream()));
+            }
+
+            r = new InputStreamReader(wrapStream(uc.getInputStream()), StandardCharsets.UTF_8);
             String data = IOUtils.toString(r);
             if (type != null)
                 try {
@@ -894,7 +945,7 @@ class Requester {
         InputStream es = wrapStream(uc.getErrorStream());
         if (es != null) {
             try {
-                String error = IOUtils.toString(es, "UTF-8");
+                String error = IOUtils.toString(es, StandardCharsets.UTF_8);
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
                     e = (IOException) new GHFileNotFoundException(error).withResponseHeaderFields(uc).initCause(e);
@@ -961,4 +1012,27 @@ class Requester {
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * <p>
+     * This is a <a href="package-summary.html">functional interface</a> whose functional method is {@link #get()}.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     * @param <E>
+     *            the type of throwable that could be thrown
+     */
+    @FunctionalInterface
+    interface SupplierThrows<T, E extends Throwable> {
+
+        /**
+         * Gets a result.
+         *
+         * @return a result
+         * @throws E
+         */
+        T get() throws E;
+    }
 }

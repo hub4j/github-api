@@ -5,8 +5,10 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -327,4 +329,19 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repo.setTopics(topics);
         assertTrue("Topics can be set to empty", repo.listTopics().isEmpty());
     }
+
+    @Test
+    public void getCollaborators() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+        GHPersonSet<GHUser> collaborators = repo.getCollaborators();
+        assertThat(collaborators.size(), greaterThan(0));
+    }
+
+    @Test
+    public void getPostCommitHooks() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+        Set<URL> postcommitHooks = repo.getPostCommitHooks();
+        assertThat(postcommitHooks.size(), equalTo(0));
+    }
+
 }

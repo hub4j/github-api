@@ -424,8 +424,8 @@ public class GitHub {
         }
     }
 
-    Requester retrieve() {
-        return new Requester(this).method("GET");
+    Requester createRequest() {
+        return new Requester(this);
     }
 
     /**
@@ -438,7 +438,7 @@ public class GitHub {
     public GHRateLimit getRateLimit() throws IOException {
         GHRateLimit rateLimit;
         try {
-            rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).resources;
+            rateLimit = createRequest().withUrlPath("/rate_limit").fetch(JsonRateLimit.class).resources;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit
             // return a default rate limit that
@@ -544,7 +544,7 @@ public class GitHub {
             if (this.myself != null)
                 return myself;
 
-            GHMyself u = retrieve().to("/user", GHMyself.class);
+            GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
 
             u.root = this;
             this.myself = u;
@@ -564,7 +564,7 @@ public class GitHub {
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u == null) {
-            u = retrieve().to("/users/" + login, GHUser.class);
+            u = createRequest().withUrlPath("/users/" + login).fetch(GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
         }
@@ -608,7 +608,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o == null) {
-            o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
+            o = createRequest().withUrlPath("/orgs/" + name).fetch(GHOrganization.class).wrapUp(this);
             orgs.put(name, o);
         }
         return o;
@@ -632,7 +632,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
-        return retrieve().with("since", since)
+        return createRequest().with("since", since)
                 .asPagedIterable("/organizations", GHOrganization[].class, item -> item.wrapUp(GitHub.this));
     }
 
@@ -648,7 +648,9 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repos/" + tokens[0] + '/' + tokens[1])
+                .fetch(GHRepository.class)
+                .wrap(this);
     }
 
     /**
@@ -661,7 +663,7 @@ public class GitHub {
      *             the io exception
      */
     public GHRepository getRepositoryById(String id) throws IOException {
-        return retrieve().to("/repositories/" + id, GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
     }
 
     /**
@@ -673,7 +675,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return retrieve().asPagedIterable("/licenses", GHLicense[].class, item -> item.wrap(GitHub.this));
+        return createRequest().asPagedIterable("/licenses", GHLicense[].class, item -> item.wrap(GitHub.this));
     }
 
     /**
@@ -684,7 +686,7 @@ public class GitHub {
      *             the io exception
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return retrieve().asPagedIterable("/users", GHUser[].class, item -> item.wrapUp(GitHub.this));
+        return createRequest().asPagedIterable("/users", GHUser[].class, item -> item.wrapUp(GitHub.this));
     }
 
     /**
@@ -698,7 +700,7 @@ public class GitHub {
      * @see GHLicense#getKey() GHLicense#getKey()
      */
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve().to("/licenses/" + key, GHLicense.class);
+        return createRequest().withUrlPath("/licenses/" + key).fetch(GHLicense.class);
     }
 
     /**
@@ -728,7 +730,8 @@ public class GitHub {
      *             the io exception
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        GHInvitation[] invitations = createRequest().withUrlPath("/user/repository_invitations")
+                .fetchArray(GHInvitation[].class);
         for (GHInvitation i : invitations) {
             i.wrapUp(this);
         }
@@ -746,7 +749,7 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -780,7 +783,8 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
-        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
+                .fetchArray(GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -801,7 +805,7 @@ public class GitHub {
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+        for (GHTeam team : createRequest().withUrlPath("/user/teams").fetchArray(GHTeam[].class)) {
             team.wrapUp(this);
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
@@ -824,7 +828,7 @@ public class GitHub {
      *             the io exception
      */
     public GHTeam getTeam(int id) throws IOException {
-        return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
+        return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }
 
     /**
@@ -835,7 +839,7 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
+        GHEventInfo[] events = createRequest().withUrlPath("/events").fetchArray(GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
@@ -851,7 +855,7 @@ public class GitHub {
      *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-        return retrieve().to("/gists/" + id, GHGist.class).wrapUp(this);
+        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class).wrapUp(this);
     }
 
     /**
@@ -943,9 +947,9 @@ public class GitHub {
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
-        Requester requester = new Requester(this).with("scopes", scope).with("note", note).with("note_url", noteUrl);
+        Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
 
-        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+        return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
     }
 
     /**
@@ -976,12 +980,10 @@ public class GitHub {
             return createToken(scope, note, noteUrl);
         } catch (GHOTPRequiredException ex) {
             String OTPstring = OTP.get();
-            Requester requester = new Requester(this).with("scopes", scope)
-                    .with("note", note)
-                    .with("note_url", noteUrl);
+            Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
             // Add the OTP from the user
             requester.setHeader("x-github-otp", OTPstring);
-            return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+            return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
         }
     }
 
@@ -1009,12 +1011,12 @@ public class GitHub {
             List<String> scopes,
             String note,
             String note_url) throws IOException {
-        Requester requester = new Requester(this).with("client_secret", clientSecret)
+        Requester requester = createRequest().with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
                 .with("note_url", note_url);
 
-        return requester.method("PUT").to("/authorizations/clients/" + clientId, GHAuthorization.class);
+        return requester.method("PUT").withUrlPath("/authorizations/clients/" + clientId).fetch(GHAuthorization.class);
     }
 
     /**
@@ -1028,7 +1030,7 @@ public class GitHub {
      *      authorization</a>
      */
     public void deleteAuth(long id) throws IOException {
-        retrieve().method("DELETE").to("/authorizations/" + id);
+        createRequest().method("DELETE").withUrlPath("/authorizations/" + id).send();
     }
 
     /**
@@ -1045,7 +1047,8 @@ public class GitHub {
      *      authorization</a>
      */
     public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+        return createRequest().withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
+                .fetch(GHAuthorization.class);
     }
 
     /**
@@ -1062,8 +1065,9 @@ public class GitHub {
      *      authorization</a>
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().method("POST")
-                .to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+        return createRequest().method("POST")
+                .withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
+                .fetch(GHAuthorization.class);
     }
 
     /**
@@ -1076,7 +1080,8 @@ public class GitHub {
      *      authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return retrieve().asPagedIterable("/authorizations", GHAuthorization[].class, item -> item.wrap(GitHub.this));
+        return createRequest()
+                .asPagedIterable("/authorizations", GHAuthorization[].class, item -> item.wrap(GitHub.this));
     }
 
     /**
@@ -1093,7 +1098,7 @@ public class GitHub {
     @Preview
     @Deprecated
     public GHApp getApp() throws IOException {
-        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
+        return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
     }
 
     /**
@@ -1103,7 +1108,7 @@ public class GitHub {
      */
     public boolean isCredentialValid() {
         try {
-            retrieve().to("/user", GHUser.class);
+            createRequest().withUrlPath("/user").fetch(GHUser.class);
             return true;
         } catch (IOException e) {
             if (LOGGER.isLoggable(FINE))
@@ -1124,7 +1129,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      */
     public GHMeta getMeta() throws IOException {
-        return retrieve().to("/meta", GHMeta.class);
+        return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
     }
 
     GHUser intern(GHUser user) throws IOException {
@@ -1151,7 +1156,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProject getProject(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/" + id, GHProject.class).wrap(this);
+        return createRequest().withPreview(INERTIA).withUrlPath("/projects/" + id).fetch(GHProject.class).wrap(this);
     }
 
     /**
@@ -1164,7 +1169,10 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/" + id, GHProjectColumn.class).wrap(this);
+        return createRequest().withPreview(INERTIA)
+                .withUrlPath("/projects/columns/" + id)
+                .fetch(GHProjectColumn.class)
+                .wrap(this);
     }
 
     /**
@@ -1177,7 +1185,10 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectCard getProjectCard(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/" + id, GHProjectCard.class).wrap(this);
+        return createRequest().withPreview(INERTIA)
+                .withUrlPath("/projects/columns/cards/" + id)
+                .fetch(GHProjectCard.class)
+                .wrap(this);
     }
 
     private static class GHApiInfo {
@@ -1207,7 +1218,7 @@ public class GitHub {
      */
     public void checkApiUrlValidity() throws IOException {
         try {
-            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+            createRequest().withUrlPath("/").fetch(GHApiInfo.class).check(apiUrl);
         } catch (IOException e) {
             if (isPrivateModeEnabled()) {
                 throw (IOException) new IOException(
@@ -1339,7 +1350,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return retrieve().with("since", since)
+        return createRequest().with("since", since)
                 .asPagedIterable("/repositories", GHRepository[].class, item -> item.wrap(GitHub.this));
     }
 
@@ -1358,9 +1369,13 @@ public class GitHub {
      * @see GHRepository#renderMarkdown(String, MarkdownMode) GHRepository#renderMarkdown(String, MarkdownMode)
      */
     public Reader renderMarkdown(String text) throws IOException {
-        return new InputStreamReader(new Requester(this).with(new ByteArrayInputStream(text.getBytes("UTF-8")))
-                .contentType("text/plain;charset=UTF-8")
-                .asStream("/markdown/raw"), "UTF-8");
+        return new InputStreamReader(
+                createRequest().method("POST")
+                        .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
+                        .contentType("text/plain;charset=UTF-8")
+                        .withUrlPath("/markdown/raw")
+                        .fetchStream(),
+                "UTF-8");
     }
 
     static URL parseURL(String s) {

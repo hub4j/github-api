@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Martin van Zijl
  */
-public class GHIssueEventTest extends AbstractGitHubApiTestBase {
+public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testEventsForSingleIssue() throws Exception {

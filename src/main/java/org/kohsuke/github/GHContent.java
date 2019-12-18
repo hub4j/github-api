@@ -223,7 +223,7 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        root.retrieve().to(url, this);
+        root.createRequest().withUrlPath(url).fetchInto(this);
     }
 
     /**
@@ -237,7 +237,9 @@ public class GHContent implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 
-        return root.retrieve().asPagedIterable(url, GHContent[].class, item -> item.wrap(repository));
+        return root.createRequest()
+                .setRawUrlPath(url)
+                .asPagedIterable(GHContent[].class, item -> item.wrap(repository));
     }
 
     /**
@@ -306,7 +308,9 @@ public class GHContent implements Refreshable {
             throws IOException {
         String encodedContent = Base64.getMimeEncoder().encodeToString(newContentBytes);
 
-        Requester requester = new Requester(root).with("path", path)
+        Requester requester = root.createRequest()
+                .method("POST")
+                .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
                 .with("content", encodedContent)
@@ -316,7 +320,8 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
+                .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repository);
         response.getCommit().wrapUp(repository);
@@ -350,7 +355,9 @@ public class GHContent implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = new Requester(root).with("path", path)
+        Requester requester = root.createRequest()
+                .method("POST")
+                .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
                 .method("DELETE");
@@ -359,7 +366,8 @@ public class GHContent implements Refreshable {
             requester.with("branch", branch);
         }
 
-        GHContentUpdateResponse response = requester.to(getApiRoute(repository, path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
+                .fetch(GHContentUpdateResponse.class);
 
         response.getCommit().wrapUp(repository);
         return response;
@@ -405,6 +413,6 @@ public class GHContent implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.retrieve().to(url, this);
+        root.createRequest().setRawUrlPath(url).fetchInto(this);
     }
 }

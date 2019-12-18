@@ -93,7 +93,8 @@ public class GHBranchProtectionBuilder {
                 .withNullable("required_pull_request_reviews", prReviews)
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
-                .to(branch.getProtectionUrl().toString(), GHBranchProtection.class)
+                .withUrlPath(branch.getProtectionUrl().toString())
+                .fetch(GHBranchProtection.class)
                 .wrap(branch);
     }
 
@@ -352,7 +353,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return new Requester(branch.getRoot()).withPreview(LUKE_CAGE);
+        return branch.getRoot().createRequest().withPreview(LUKE_CAGE);
     }
 
     private static class Restrictions {

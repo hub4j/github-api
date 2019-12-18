@@ -178,7 +178,7 @@ public class GHApp extends GHObject {
     @Preview
     @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(MACHINE_MAN)
                 .asPagedIterable("/app/installations", GHAppInstallation[].class, item -> item.wrapUp(root));
     }
@@ -198,9 +198,10 @@ public class GHApp extends GHObject {
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/app/installations/%d", id), GHAppInstallation.class)
+                .withUrlPath(String.format("/app/installations/%d", id))
+                .fetch(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -220,9 +221,10 @@ public class GHApp extends GHObject {
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/orgs/%s/installation", name), GHAppInstallation.class)
+                .withUrlPath(String.format("/orgs/%s/installation", name))
+                .fetch(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -244,9 +246,10 @@ public class GHApp extends GHObject {
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/repos/%s/%s/installation", ownerName, repositoryName), GHAppInstallation.class)
+                .withUrlPath(String.format("/repos/%s/%s/installation", ownerName, repositoryName))
+                .fetch(GHAppInstallation.class)
                 .wrapUp(root);
     }
 
@@ -265,9 +268,10 @@ public class GHApp extends GHObject {
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-        return root.retrieve()
+        return root.createRequest()
                 .withPreview(MACHINE_MAN)
-                .to(String.format("/users/%s/installation", name), GHAppInstallation.class)
+                .withUrlPath(String.format("/users/%s/installation", name))
+                .fetch(GHAppInstallation.class)
                 .wrapUp(root);
     }
 

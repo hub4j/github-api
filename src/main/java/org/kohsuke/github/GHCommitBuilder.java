@@ -34,7 +34,7 @@ public class GHCommitBuilder {
 
     GHCommitBuilder(GHRepository repo) {
         this.repo = repo;
-        req = new Requester(repo.root);
+        req = repo.root.createRequest().method("POST");
     }
 
     /**
@@ -118,6 +118,6 @@ public class GHCommitBuilder {
      */
     public GHCommit create() throws IOException {
         req.with("parents", parents);
-        return req.method("POST").to(getApiTail(), GHCommit.class).wrapUp(repo);
+        return req.method("POST").withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);
     }
 }

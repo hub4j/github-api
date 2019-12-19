@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,8 +102,9 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         permissions.put("contents", GHPermissionType.READ);
         permissions.put("metadata", GHPermissionType.READ);
 
+        // Create token specifying both permissions and repository ids
         GHAppInstallationToken installationToken = installation.createToken(permissions)
-                .repositoryIds(Arrays.asList((long) 111111111))
+                .repositoryIds(Collections.singletonList((long) 111111111))
                 .create();
 
         assertThat(installationToken.getToken(), is("bogus"));
@@ -114,6 +116,16 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken.getRepositories().size(), is(1));
         assertThat(repository.getId(), is((long) 111111111));
         assertThat(repository.getName(), is("bogus"));
+
+        // Create token with no payload
+        GHAppInstallationToken installationToken2 = installation.createToken().create();
+
+        assertThat(installationToken2.getToken(), is("bogus"));
+        assertThat(installationToken2.getPermissions().size(), is(4));
+        assertThat(installationToken2.getRepositorySelection(), is(GHRepositorySelection.ALL));
+        assertThat(installationToken2.getExpiresAt(), is(GitHub.parseDate("2019-12-19T12:27:59Z")));
+
+        assertNull(installationToken2.getRepositories());;
     }
 
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {

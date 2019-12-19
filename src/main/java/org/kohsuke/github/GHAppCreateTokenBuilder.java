@@ -12,6 +12,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  *
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
+ * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppCreateTokenBuilder {
     private final GitHub root;
@@ -24,15 +25,13 @@ public class GHAppCreateTokenBuilder {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
-        withPermissions(builder, permissions);
-        this.builder = new Requester(root);
     }
 
     @Preview
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this(root, apiUrlTail);
-        this.builder.withPermissions("permissions", permissions);
+        permissions(permissions);
     }
 
     /**
@@ -48,6 +47,25 @@ public class GHAppCreateTokenBuilder {
     @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids", repositoryIds);
+        return this;
+    }
+
+    /**
+     * Set the permissions granted to the access token. The permissions object includes the permission names and their
+     * access type.
+     *
+     * @param permissions
+     *            Map containing the permission names and types.
+     * @return a GHAppCreateTokenBuilder
+     */
+    @Preview
+    @Deprecated
+    public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
+        Map<String, String> retMap = new HashMap<>();
+        for (Map.Entry<String, GHPermissionType> entry : permissions.entrySet()) {
+            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
+        }
+        builder.with("permissions", retMap);
         return this;
     }
 
@@ -68,14 +86,6 @@ public class GHAppCreateTokenBuilder {
                 .withUrlPath(apiUrlTail)
                 .fetch(GHAppInstallationToken.class)
                 .wrapUp(root);
-    }
-
-    private static Requester withPermissions(Requester builder, Map<String, GHPermissionType> value) {
-        Map<String, String> retMap = new HashMap<String, String>();
-        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
-            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
-        }
-        return builder.with("permissions", retMap);
     }
 
 }

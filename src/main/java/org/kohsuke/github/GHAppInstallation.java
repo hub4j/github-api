@@ -287,7 +287,8 @@ public class GHAppInstallation extends GHObject {
      *
      * @param permissions
      *            map of permissions for the created token
-     * @return a GHAppCreateTokenBuilder on error
+     * @return a GHAppCreateTokenBuilder instance
+     * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
     @Preview
     @Deprecated
@@ -302,7 +303,7 @@ public class GHAppInstallation extends GHObject {
      * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
      * finally create an access token.
      *
-     * @return a GHAppCreateTokenBuilder on error
+     * @return a GHAppCreateTokenBuilder instance
      */
     @Preview
     @Deprecated

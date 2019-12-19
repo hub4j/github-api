@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.junit.WireMockRule;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,7 +24,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assertThat(
                 "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
-                gitHub.isAnonymous(), is(false));
+                gitHub.isAnonymous(),
+                is(false));
 
         assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
 
@@ -80,7 +80,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
+        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(), containsString("Request was not matched"));
 
         // Invalid repository, without stub - fails 404 when not proxying
@@ -92,7 +92,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
+        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(), containsString("Request was not matched"));
     }
 
@@ -120,9 +120,9 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
             e = ex;
         }
 
-        assertThat(e, Matchers.<Exception> instanceOf(GHFileNotFoundException.class));
-        assertThat(e.getMessage(), equalTo(
-                "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
+        assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
+        assertThat(e.getMessage(),
+                equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
     }
 
     @Test

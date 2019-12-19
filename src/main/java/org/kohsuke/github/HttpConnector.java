@@ -17,6 +17,12 @@ import java.net.URL;
 public interface HttpConnector {
     /**
      * Opens a connection to the given URL.
+     *
+     * @param url
+     *            the url
+     * @return the http url connection
+     * @throws IOException
+     *             the io exception
      */
     HttpURLConnection connect(URL url) throws IOException;
 

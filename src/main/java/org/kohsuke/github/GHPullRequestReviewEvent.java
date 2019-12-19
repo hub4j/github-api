@@ -38,14 +38,14 @@ public enum GHPullRequestReviewEvent {
      */
     GHPullRequestReviewState toState() {
         switch (this) {
-        case PENDING:
-            return GHPullRequestReviewState.PENDING;
-        case APPROVE:
-            return GHPullRequestReviewState.APPROVED;
-        case REQUEST_CHANGES:
-            return GHPullRequestReviewState.CHANGES_REQUESTED;
-        case COMMENT:
-            return GHPullRequestReviewState.COMMENTED;
+            case PENDING :
+                return GHPullRequestReviewState.PENDING;
+            case APPROVE :
+                return GHPullRequestReviewState.APPROVED;
+            case REQUEST_CHANGES :
+                return GHPullRequestReviewState.CHANGES_REQUESTED;
+            case COMMENT :
+                return GHPullRequestReviewState.COMMENTED;
         }
         throw new IllegalStateException();
     }

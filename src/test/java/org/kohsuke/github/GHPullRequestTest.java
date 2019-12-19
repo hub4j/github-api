@@ -85,8 +85,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        GHPullRequestReview draftReview = p.createReview().body("Some draft review")
-                .comment("Some niggle", "README.md", 1).create();
+        GHPullRequestReview draftReview = p.createReview()
+                .body("Some draft review")
+                .comment("Some niggle", "README.md", 1)
+                .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
@@ -156,13 +158,17 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         int baseRequestCount = mockGitHub.getRequestCount();
         p.refresh();
         assertThat("We should not eagerly load organizations for teams",
-                mockGitHub.getRequestCount() - baseRequestCount, equalTo(1));
+                mockGitHub.getRequestCount() - baseRequestCount,
+                equalTo(1));
         assertThat(p.getRequestedTeams().size(), equalTo(1));
         assertThat("We should not eagerly load organizations for teams",
-                mockGitHub.getRequestCount() - baseRequestCount, equalTo(1));
+                mockGitHub.getRequestCount() - baseRequestCount,
+                equalTo(1));
         assertThat("Org should be queried for automatically if asked for",
-                p.getRequestedTeams().get(0).getOrganization(), notNullValue());
-        assertThat("Request count should show lazy load occurred", mockGitHub.getRequestCount() - baseRequestCount,
+                p.getRequestedTeams().get(0).getOrganization(),
+                notNullValue());
+        assertThat("Request count should show lazy load occurred",
+                mockGitHub.getRequestCount() - baseRequestCount,
                 equalTo(2));
     }
 
@@ -224,8 +230,13 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHContentUpdateResponse response = getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
 
-        getRepository().createContent().content(name + name).path(name).branch(branchName).message(name)
-                .sha(response.getContent().getSha()).commit();
+        getRepository().createContent()
+                .content(name + name)
+                .path(name)
+                .branch(branchName)
+                .message(name)
+                .sha(response.getContent().getSha())
+                .commit();
         GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
@@ -239,8 +250,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
-        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN)
-                .head("github-api-test-org:test/stable").base("master").list().asList();
+        List<GHPullRequest> prs = repo.queryPullRequests()
+                .state(GHIssueState.OPEN)
+                .head("github-api-test-org:test/stable")
+                .base("master")
+                .list()
+                .asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
@@ -254,8 +269,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
-        List<GHPullRequest> prs = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").base("master")
-                .list().asList();
+        List<GHPullRequest> prs = repo.queryPullRequests()
+                .state(GHIssueState.OPEN)
+                .head("test/stable")
+                .base("master")
+                .list()
+                .asList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());

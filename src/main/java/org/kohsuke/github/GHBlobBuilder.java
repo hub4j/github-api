@@ -1,8 +1,7 @@
 package org.kohsuke.github;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.IOException;
+import java.util.Base64;
 
 /**
  * Builder pattern for creating a new blob. Based on https://developer.github.com/v3/git/blobs/#create-a-blob
@@ -13,7 +12,7 @@ public class GHBlobBuilder {
 
     GHBlobBuilder(GHRepository repo) {
         this.repo = repo;
-        req = new Requester(repo.root);
+        req = repo.root.createRequest();
     }
 
     /**
@@ -37,7 +36,7 @@ public class GHBlobBuilder {
      * @return a GHBlobBuilder
      */
     public GHBlobBuilder binaryContent(byte[] content) {
-        String base64Content = Base64.encodeBase64String(content);
+        String base64Content = Base64.getMimeEncoder().encodeToString(content);
         req.with("content", base64Content);
         req.with("encoding", "base64");
         return this;
@@ -49,12 +48,12 @@ public class GHBlobBuilder {
 
     /**
      * Creates a blob based on the parameters specified thus far.
-     * 
+     *
      * @return a GHBlob
      * @throws IOException
      *             if the blob cannot be created.
      */
     public GHBlob create() throws IOException {
-        return req.method("POST").to(getApiTail(), GHBlob.class);
+        return req.method("POST").withUrlPath(getApiTail()).fetch(GHBlob.class);
     }
 }

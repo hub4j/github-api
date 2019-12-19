@@ -9,24 +9,38 @@ import java.util.Objects;
 import static org.kohsuke.github.Previews.SYMMETRA;
 
 /**
+ * The type GHLabel.
+ *
  * @author Kohsuke Kawaguchi
- * @see GHIssue#getLabels()
- * @see GHRepository#listLabels()
+ * @see GHIssue#getLabels() GHIssue#getLabels()
+ * @see GHRepository#listLabels() GHRepository#listLabels()
  */
 public class GHLabel {
     private String url, name, color, description;
     private GHRepository repo;
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
     /**
      * Color code without leading '#', such as 'f29513'
+     *
+     * @return the color
      */
     public String getColor() {
         return color;
@@ -34,6 +48,8 @@ public class GHLabel {
 
     /**
      * Purpose of Label
+     *
+     * @return the description
      */
     @Preview
     @Deprecated
@@ -46,28 +62,54 @@ public class GHLabel {
         return this;
     }
 
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
     public void delete() throws IOException {
-        repo.root.retrieve().method("DELETE").to(url);
+        repo.root.createRequest().method("DELETE").setRawUrlPath(url).send();
     }
 
     /**
+     * Sets color.
+     *
      * @param newColor
      *            6-letter hex color code, like "f29513"
+     * @throws IOException
+     *             the io exception
      */
     public void setColor(String newColor) throws IOException {
-        repo.root.retrieve().method("PATCH").withPreview(SYMMETRA).with("name", name).with("color", newColor)
-                .with("description", description).to(url);
+        repo.root.createRequest()
+                .method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", newColor)
+                .with("description", description)
+                .setRawUrlPath(url)
+                .send();
     }
 
     /**
+     * Sets description.
+     *
      * @param newDescription
      *            Description of label
+     * @throws IOException
+     *             the io exception
      */
     @Preview
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.root.retrieve().method("PATCH").withPreview(SYMMETRA).with("name", name).with("color", color)
-                .with("description", newDescription).to(url);
+        repo.root.createRequest()
+                .method("PATCH")
+                .withPreview(SYMMETRA)
+                .with("name", name)
+                .with("color", color)
+                .with("description", newDescription)
+                .setRawUrlPath(url)
+                .send();
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

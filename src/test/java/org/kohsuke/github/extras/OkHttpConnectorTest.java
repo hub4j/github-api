@@ -2,10 +2,9 @@ package org.kohsuke.github.extras;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import com.squareup.okhttp.OkUrlFactory;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -104,7 +103,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(false);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
                 .build();
 
         doTestActions();
@@ -129,7 +129,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
 
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
                 .build();
 
         doTestActions();
@@ -159,7 +160,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), 3);
 
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
                 .build();
 
         doTestActions();
@@ -184,7 +186,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).withConnector(connector)
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
                 .build();
 
         doTestActions();
@@ -204,7 +207,8 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("Request Count", mockGitHub.getRequestCount(), is(networkRequestCount + userRequestCount));
 
         // Rate limit must be under this value, but if it wiggles we don't care
-        assertThat("Rate Limit Change", rateLimitBefore.remaining - rateLimitAfter.remaining,
+        assertThat("Rate Limit Change",
+                rateLimitBefore.remaining - rateLimitAfter.remaining,
                 is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
 
     }

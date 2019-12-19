@@ -36,7 +36,7 @@ public class GHTreeEntry {
 
     /**
      * Gets the size of the file, such as 132
-     * 
+     *
      * @return The size of the path or 0 if it is a directory
      */
     public long getSize() {
@@ -54,6 +54,8 @@ public class GHTreeEntry {
 
     /**
      * SHA1 of this object.
+     *
+     * @return the sha
      */
     public String getSha() {
         return sha;
@@ -62,6 +64,8 @@ public class GHTreeEntry {
     /**
      * API URL to this Git data, such as https://api.github.com/repos/jenkinsci
      * /jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
+     *
+     * @return the url
      */
     public URL getUrl() {
         return GitHub.parseURL(url);
@@ -69,6 +73,10 @@ public class GHTreeEntry {
 
     /**
      * If this tree entry represents a file, then return its information. Otherwise null.
+     *
+     * @return the gh blob
+     * @throws IOException
+     *             the io exception
      */
     public GHBlob asBlob() throws IOException {
         if (type.equals("blob"))
@@ -79,6 +87,10 @@ public class GHTreeEntry {
 
     /**
      * If this tree entry represents a file, then return its content. Otherwise null.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
      */
     public InputStream readAsBlob() throws IOException {
         if (type.equals("blob"))
@@ -89,6 +101,10 @@ public class GHTreeEntry {
 
     /**
      * If this tree entry represents a directory, then return it. Otherwise null.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
      */
     public GHTree asTree() throws IOException {
         if (type.equals("tree"))

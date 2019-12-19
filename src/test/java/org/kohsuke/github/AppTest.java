@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,6 +11,7 @@ import org.kohsuke.github.GHOrganization.Permission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -34,8 +33,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         cleanupUserRepository("github-api-test-rename");
         cleanupUserRepository(targetName);
 
-        GHRepository r = gitHub.createRepository("github-api-test-rename", "a test repository",
-                "http://github-api.kohsuke.org/", true);
+        GHRepository r = gitHub.createRepository("github-api-test-rename",
+                "a test repository",
+                "http://github-api.kohsuke.org/",
+                true);
         assertThat(r.hasIssues(), is(true));
 
         r.enableIssueTracker(false);
@@ -49,8 +50,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testRepositoryWithAutoInitializationCRUD() throws Exception {
         String name = "github-api-test-autoinit";
         cleanupUserRepository(name);
-        GHRepository r = gitHub.createRepository(name).description("a test repository for auto init")
-                .homepage("http://github-api.kohsuke.org/").autoInit(true).create();
+        GHRepository r = gitHub.createRepository(name)
+                .description("a test repository for auto init")
+                .homepage("http://github-api.kohsuke.org/")
+                .autoInit(true)
+                .create();
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
@@ -91,8 +95,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHUser u = getUser();
         GHRepository repository = getTestRepository();
         GHMilestone milestone = repository.createMilestone("Test Milestone Title3", "Test Milestone");
-        GHIssue o = repository.createIssue("testing").body("this is body").assignee(u).label("bug").label("question")
-                .milestone(milestone).create();
+        GHIssue o = repository.createIssue("testing")
+                .body("this is body")
+                .assignee(u)
+                .label("bug")
+                .label("question")
+                .milestone(milestone)
+                .create();
         assertNotNull(o);
         o.close();
     }
@@ -101,7 +110,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testCreateAndListDeployments() throws IOException {
         GHRepository repository = getTestRepository();
         GHDeployment deployment = repository.createDeployment("master")
-                .payload("{\"user\":\"atmos\",\"room_id\":123456}").description("question").environment("unittest")
+                .payload("{\"user\":\"atmos\",\"room_id\":123456}")
+                .description("question")
+                .environment("unittest")
                 .create();
         assertNotNull(deployment.getCreator());
         assertNotNull(deployment.getId());
@@ -117,10 +128,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGetDeploymentStatuses() throws IOException {
         GHRepository repository = getTestRepository();
-        GHDeployment deployment = repository.createDeployment("master").description("question")
-                .payload("{\"user\":\"atmos\",\"room_id\":123456}").create();
+        GHDeployment deployment = repository.createDeployment("master")
+                .description("question")
+                .payload("{\"user\":\"atmos\",\"room_id\":123456}")
+                .create();
         GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
-                .description("success").targetUrl("http://www.github.com").create();
+                .description("success")
+                .targetUrl("http://www.github.com")
+                .create();
         Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1, Iterables.size(deploymentStatuses));
@@ -129,7 +144,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetIssues() throws Exception {
-        List<GHIssue> closedIssues = gitHub.getOrganization("github-api").getRepository("github-api")
+        List<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+                .getRepository("github-api")
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
         assertTrue(closedIssues.size() > 150);
@@ -150,11 +166,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHIssue unhomed = null;
         GHIssue homed = null;
         try {
-            unhomed = repository.createIssue("testing").body("this is body").assignee(u).label("bug").label("question")
+            unhomed = repository.createIssue("testing")
+                    .body("this is body")
+                    .assignee(u)
+                    .label("bug")
+                    .label("question")
                     .create();
             assertEquals(unhomed.getNumber(), repository.getIssues(GHIssueState.OPEN, null).get(0).getNumber());
-            homed = repository.createIssue("testing").body("this is body").assignee(u).label("bug").label("question")
-                    .milestone(milestone).create();
+            homed = repository.createIssue("testing")
+                    .body("this is body")
+                    .assignee(u)
+                    .label("bug")
+                    .label("question")
+                    .milestone(milestone)
+                    .create();
             assertEquals(homed.getNumber(), repository.getIssues(GHIssueState.OPEN, milestone).get(0).getNumber());
         } finally {
             if (unhomed != null) {
@@ -288,11 +313,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(keys.isEmpty());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testOrgFork() throws Exception {
-        kohsuke();
-
+        cleanupRepository(GITHUB_API_TEST_ORG + "/rubywm");
         gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization(GITHUB_API_TEST_ORG));
     }
 
@@ -306,7 +329,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testMembership() throws Exception {
-        Set<String> members = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("jenkins")
+        Set<String> members = gitHub.getOrganization(GITHUB_API_TEST_ORG)
+                .getRepository("jenkins")
                 .getCollaboratorNames();
         // System.out.println(members.contains("kohsuke"));
     }
@@ -344,7 +368,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCommit() throws Exception {
-        GHCommit commit = gitHub.getUser("jenkinsci").getRepository("jenkins")
+        GHCommit commit = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
                 .getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         assertEquals(1, commit.getParents().size());
         assertEquals(1, commit.getFiles().size());
@@ -374,8 +399,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     public void testQueryCommits() throws Exception {
         List<String> sha1 = new ArrayList<String>();
-        for (GHCommit c : gitHub.getUser("jenkinsci").getRepository("jenkins").queryCommits()
-                .since(new Date(1199174400000L)).until(1201852800000L).path("pom.xml").list()) {
+        for (GHCommit c : gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(new Date(1199174400000L))
+                .until(1201852800000L)
+                .path("pom.xml")
+                .list()) {
             // System.out.println(c.getSHA1());
             sha1.add(c.getSHA1());
         }
@@ -403,7 +433,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreateCommitComment() throws Exception {
-        GHCommit commit = gitHub.getUser("kohsuke").getRepository("sandbox-ant")
+        GHCommit commit = gitHub.getUser("kohsuke")
+                .getRepository("sandbox-ant")
                 .getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
         GHCommitComment c = commit.createComment("[testing](http://kohsuse.org/)");
         // System.out.println(c);
@@ -679,8 +710,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testCommitStatusContext() throws IOException {
         GHRepository myRepository = getTestRepository();
         GHRef masterRef = myRepository.getRef("heads/master");
-        GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject().getSha(),
-                GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
+        GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject()
+                .getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
         assertEquals("test/context", commitStatus.getContext());
 
     }
@@ -898,7 +929,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     private void assertBlobContent(InputStream is) throws Exception {
-        String content = new String(IOUtils.toByteArray(is), "UTF-8");
+        String content = new String(IOUtils.toByteArray(is), StandardCharsets.UTF_8);
         assertThat(content, containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
         assertThat(content, containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
         assertThat(content.length(), is(1104));

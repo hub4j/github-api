@@ -78,8 +78,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         setupEnvironment(props);
 
-        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth",
-                "customEndpoint");
+        GitHubBuilder builder = GitHubBuilder
+                .fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
 
         assertEquals("bogusLogin", builder.user);
         assertEquals("bogusOauth", builder.oauthToken);

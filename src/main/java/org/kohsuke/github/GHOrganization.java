@@ -9,9 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import static org.kohsuke.github.Previews.INERTIA;
 
 /**
+ * The type GHOrganization.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
@@ -22,10 +25,25 @@ public class GHOrganization extends GHPerson {
     /**
      * Creates a new repository.
      *
+     * @param name
+     *            the name
+     * @param description
+     *            the description
+     * @param homepage
+     *            the homepage
+     * @param team
+     *            the team
+     * @param isPublic
+     *            the is public
      * @return Newly created repository.
+     * @throws IOException
+     *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
-    public GHRepository createRepository(String name, String description, String homepage, String team,
+    public GHRepository createRepository(String name,
+            String description,
+            String homepage,
+            String team,
             boolean isPublic) throws IOException {
         GHTeam t = getTeams().get(team);
         if (t == null)
@@ -34,13 +52,34 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Create repository gh repository.
+     *
+     * @param name
+     *            the name
+     * @param description
+     *            the description
+     * @param homepage
+     *            the homepage
+     * @param team
+     *            the team
+     * @param isPublic
+     *            the is public
+     * @return the gh repository
+     * @throws IOException
+     *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
-    public GHRepository createRepository(String name, String description, String homepage, GHTeam team,
+    public GHRepository createRepository(String name,
+            String description,
+            String homepage,
+            GHTeam team,
             boolean isPublic) throws IOException {
         if (team == null)
             throw new IllegalArgumentException("Invalid team");
-        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).team(team)
+        return createRepository(name).description(description)
+                .homepage(homepage)
+                .private_(!isPublic)
+                .team(team)
                 .create();
     }
 
@@ -50,6 +89,10 @@ public class GHOrganization extends GHPerson {
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
      * finally createa repository.
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
         return new GHCreateRepositoryBuilder(root, "/orgs/" + login + "/repos", name);
@@ -57,6 +100,10 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Teams by their names.
+     *
+     * @return the teams
+     * @throws IOException
+     *             the io exception
      */
     public Map<String, GHTeam> getTeams() throws IOException {
         Map<String, GHTeam> r = new TreeMap<String, GHTeam>();
@@ -68,14 +115,26 @@ public class GHOrganization extends GHPerson {
 
     /**
      * List up all the teams.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/teams", login), GHTeam[].class,
-                item -> item.wrapUp(GHOrganization.this));
+        return root.createRequest()
+                .asPagedIterable(String.format("/orgs/%s/teams", login),
+                        GHTeam[].class,
+                        item -> item.wrapUp(GHOrganization.this));
     }
 
     /**
      * Finds a team that has the given name in its {@link GHTeam#getName()}
+     *
+     * @param name
+     *            the name
+     * @return the team by name
+     * @throws IOException
+     *             the io exception
      */
     public GHTeam getTeamByName(String name) throws IOException {
         for (GHTeam t : listTeams()) {
@@ -87,6 +146,12 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
+     *
+     * @param slug
+     *            the slug
+     * @return the team by slug
+     * @throws IOException
+     *             the io exception
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
         for (GHTeam t : listTeams()) {
@@ -96,7 +161,9 @@ public class GHOrganization extends GHPerson {
         return null;
     }
 
-    /** Member's role in an organization */
+    /**
+     * Member's role in an organization
+     */
     public enum Role {
         ADMIN,
         /** The user is an owner of the organization. */
@@ -105,21 +172,34 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Adds (invites) a user to the organization.
-     * 
+     *
+     * @param user
+     *            the user
+     * @param role
+     *            the role
+     * @throws IOException
+     *             the io exception
      * @see <a href=
      *      "https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership">documentation</a>
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.retrieve().method("PUT").with("role", role.name().toLowerCase())
-                .to("/orgs/" + login + "/memberships/" + user.getLogin());
+        root.createRequest()
+                .method("PUT")
+                .with("role", role.name().toLowerCase())
+                .withUrlPath("/orgs/" + login + "/memberships/" + user.getLogin())
+                .send();
     }
 
     /**
      * Checks if this organization has the specified user as a member.
+     *
+     * @param user
+     *            the user
+     * @return the boolean
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.retrieve().to("/orgs/" + login + "/members/" + user.getLogin());
+            root.createRequest().withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -129,17 +209,26 @@ public class GHOrganization extends GHPerson {
     /**
      * Remove a member of the organisation - which will remove them from all teams, and remove their access to the
      * organization’s repositories.
+     *
+     * @param user
+     *            the user
+     * @throws IOException
+     *             the io exception
      */
     public void remove(GHUser user) throws IOException {
-        root.retrieve().method("DELETE").to("/orgs/" + login + "/members/" + user.getLogin());
+        root.createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).send();
     }
 
     /**
      * Checks if this organization has the specified user as a public member.
+     *
+     * @param user
+     *            the user
+     * @return the boolean
      */
     public boolean hasPublicMember(GHUser user) {
         try {
-            root.retrieve().to("/orgs/" + login + "/public_members/" + user.getLogin());
+            root.createRequest().withUrlPath("/orgs/" + login + "/public_members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -148,12 +237,22 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Publicizes the membership.
+     *
+     * @param u
+     *            the u
+     * @throws IOException
+     *             the io exception
      */
     public void publicize(GHUser u) throws IOException {
-        root.retrieve().method("PUT").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        root.createRequest().method("PUT").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
     }
 
     /**
+     * Gets members.
+     *
+     * @return the members
+     * @throws IOException
+     *             the io exception
      * @deprecated use {@link #listMembers()}
      */
     public List<GHUser> getMembers() throws IOException {
@@ -162,6 +261,10 @@ public class GHOrganization extends GHPerson {
 
     /**
      * All the members of this organization.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
         return listMembers("members");
@@ -169,6 +272,10 @@ public class GHOrganization extends GHPerson {
 
     /**
      * All the public members of this organization.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHUser> listPublicMembers() throws IOException {
         return listMembers("public_members");
@@ -178,36 +285,61 @@ public class GHOrganization extends GHPerson {
         return listMembers(suffix, null);
     }
 
+    /**
+     * List members with filter paged iterable.
+     *
+     * @param filter
+     *            the filter
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
     public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
         return listMembers("members", filter);
     }
 
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
-                GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest()
+                .asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
+                        GHUser[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**
      * Conceals the membership.
+     *
+     * @param u
+     *            the u
+     * @throws IOException
+     *             the io exception
      */
     public void conceal(GHUser u) throws IOException {
-        root.retrieve().method("DELETE").to("/orgs/" + login + "/public_members/" + u.getLogin(), null);
+        root.createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
     }
 
     /**
      * Returns the projects for this organization.
-     * 
+     *
      * @param status
      *            The status filter (all, open or closed).
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-        return root.retrieve().withPreview(INERTIA).with("state", status)
+        return root.createRequest()
+                .withPreview(INERTIA)
+                .with("state", status)
                 .asPagedIterable(String.format("/orgs/%s/projects", login), GHProject[].class, item -> item.wrap(root));
     }
 
     /**
      * Returns all open projects for the organization.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHProject> listProjects() throws IOException {
         return listProjects(GHProject.ProjectStateFilter.OPEN);
@@ -215,38 +347,124 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Creates a project for the organization.
+     *
+     * @param name
+     *            the name
+     * @param body
+     *            the body
+     * @return the gh project
+     * @throws IOException
+     *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-        return root.retrieve().method("POST").withPreview(INERTIA).with("name", name).with("body", body)
-                .to(String.format("/orgs/%s/projects", login), GHProject.class).wrap(root);
+        return root.createRequest()
+                .method("POST")
+                .withPreview(INERTIA)
+                .with("name", name)
+                .with("body", body)
+                .withUrlPath(String.format("/orgs/%s/projects", login))
+                .fetch(GHProject.class)
+                .wrap(root);
     }
 
+    /**
+     * The enum Permission.
+     */
     public enum Permission {
         ADMIN, PUSH, PULL
     }
 
     /**
      * Creates a new team and assigns the repositories.
+     *
+     * @param name
+     *            the name
+     * @param p
+     *            the p
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
+     *             {@link #createTeam(String, Collection)}
      */
+    @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Requester post = new Requester(root).with("name", name).with("permission", p);
+        Requester post = root.createRequest().method("POST").with("name", name).with("permission", p);
         List<String> repo_names = new ArrayList<String>();
         for (GHRepository r : repositories) {
             repo_names.add(login + "/" + r.getName());
         }
         post.with("repo_names", repo_names);
-        return post.method("POST").to("/orgs/" + login + "/teams", GHTeam.class).wrapUp(this);
+        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
     }
 
+    /**
+     * Create team gh team.
+     *
+     * @param name
+     *            the name
+     * @param p
+     *            the p
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
+     *             {@link #createTeam(String, GHRepository...)}
+     */
+    @Deprecated
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
         return createTeam(name, p, Arrays.asList(repositories));
     }
 
     /**
-     * List up repositories that has some open pull requests.
+     * Creates a new team and assigns the repositories.
      *
+     * @param name
+     *            the name
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
+        Requester post = root.createRequest().method("POST").with("name", name);
+        List<String> repo_names = new ArrayList<String>();
+        for (GHRepository r : repositories) {
+            repo_names.add(login + "/" + r.getName());
+        }
+        post.with("repo_names", repo_names);
+        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
+    }
+
+    /**
+     * Create team gh team.
+     *
+     * @param name
+     *            the name
+     * @param repositories
+     *            the repositories
+     * @return the gh team
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
+        return createTeam(name, Arrays.asList(repositories));
+    }
+
+    /**
+     * List up repositories that has some open pull requests.
+     * <p>
      * This used to be an efficient method that didn't involve traversing every repository, but now it doesn't do any
      * optimization.
+     *
+     * @return the repositories with open pull requests
+     * @throws IOException
+     *             the io exception
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
@@ -262,6 +480,10 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Gets all the open pull requests in this organizataion.
+     *
+     * @return the pull requests
+     * @throws IOException
+     *             the io exception
      */
     public List<GHPullRequest> getPullRequests() throws IOException {
         List<GHPullRequest> all = new ArrayList<GHPullRequest>();
@@ -275,8 +497,10 @@ public class GHOrganization extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/orgs/%s/events", login), GHEventInfo[].class,
-                item -> item.wrapUp(root));
+        return root.createRequest()
+                .asPagedIterable(String.format("/orgs/%s/events", login),
+                        GHEventInfo[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**
@@ -289,24 +513,36 @@ public class GHOrganization extends GHPerson {
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return root.retrieve()
+        return root.createRequest()
                 .asPagedIterable("/orgs/" + login + "/repos", GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }
 
     /**
      * Retrieves the currently configured hooks.
+     *
+     * @return the hooks
+     * @throws IOException
+     *             the io exception
      */
     public List<GHHook> getHooks() throws IOException {
         return GHHooks.orgContext(this).getHooks();
     }
 
+    /**
+     * Gets hook.
+     *
+     * @param id
+     *            the id
+     * @return the hook
+     * @throws IOException
+     *             the io exception
+     */
     public GHHook getHook(int id) throws IOException {
         return GHHooks.orgContext(this).getHook(id);
     }
 
     /**
-     *
      * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
      * binding
      *
@@ -316,16 +552,41 @@ public class GHOrganization extends GHPerson {
      *            The configuration hash.
      * @param events
      *            Can be null. Types of events to hook into.
+     * @param active
+     *            the active
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
      */
     public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
             throws IOException {
         return GHHooks.orgContext(this).createHook(name, config, events, active);
     }
 
+    /**
+     * Create web hook gh hook.
+     *
+     * @param url
+     *            the url
+     * @param events
+     *            the events
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
     public GHHook createWebHook(URL url, Collection<GHEvent> events) throws IOException {
         return createHook("web", Collections.singletonMap("url", url.toExternalForm()), events, true);
     }
 
+    /**
+     * Create web hook gh hook.
+     *
+     * @param url
+     *            the url
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
     }

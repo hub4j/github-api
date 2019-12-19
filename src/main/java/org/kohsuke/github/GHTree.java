@@ -9,9 +9,9 @@ import java.util.List;
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
- * @see GHCommit#getTree()
- * @see GHRepository#getTree(String)
- * @see GHTreeEntry#asTree()
+ * @see GHCommit#getTree() GHCommit#getTree()
+ * @see GHRepository#getTree(String) GHRepository#getTree(String)
+ * @see GHTreeEntry#asTree() GHTreeEntry#asTree()
  */
 public class GHTree {
     /* package almost final */GHRepository repo;
@@ -22,6 +22,8 @@ public class GHTree {
 
     /**
      * The SHA for this trees
+     *
+     * @return the sha
      */
     public String getSha() {
         return sha;
@@ -29,6 +31,8 @@ public class GHTree {
 
     /**
      * Return an array of entries of the trees
+     *
+     * @return the tree
      */
     public List<GHTreeEntry> getTree() {
         return Collections.unmodifiableList(Arrays.asList(tree));
@@ -36,8 +40,12 @@ public class GHTree {
 
     /**
      * Finds a tree entry by its name.
-     *
+     * <p>
      * IOW, find a directory entry by a file name.
+     *
+     * @param path
+     *            the path
+     * @return the entry
      */
     public GHTreeEntry getEntry(String path) {
         for (GHTreeEntry e : tree) {
@@ -49,7 +57,7 @@ public class GHTree {
 
     /**
      * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
-     * 
+     *
      * @return true true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
      */
     public boolean isTruncated() {
@@ -59,6 +67,8 @@ public class GHTree {
     /**
      * The API URL of this tag, such as "url":
      * "https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7",
+     *
+     * @return the url
      */
     public URL getUrl() {
         return GitHub.parseURL(url);

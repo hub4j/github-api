@@ -39,12 +39,14 @@ public class RepositoryMockTest {
         user2.login = "login2";
 
         when(iterator.hasNext()).thenReturn(true, false, true);
-        when(iterator.next()).thenReturn(new GHUser[] { user1 }, new GHUser[] { user2 });
+        when(iterator.next()).thenReturn(new GHUser[]{ user1 }, new GHUser[]{ user2 });
 
         Requester requester = Mockito.mock(Requester.class);
-        when(mockGitHub.retrieve()).thenReturn(requester);
+        when(mockGitHub.createRequest()).thenReturn(requester);
 
-        when(requester.asIterator("/repos/*/*/collaborators", GHUser[].class, 0)).thenReturn(iterator, iterator);
+        when(requester.withUrlPath("/repos/*/*/collaborators")).thenReturn(requester);
+
+        when(requester.asIterator(GHUser[].class, 0)).thenReturn(iterator, iterator);
 
         PagedIterable<GHUser> pagedIterable = Mockito.mock(PagedIterable.class);
         when(mockRepository.listCollaborators()).thenReturn(pagedIterable);

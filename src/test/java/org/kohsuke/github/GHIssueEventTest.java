@@ -1,13 +1,14 @@
 package org.kohsuke.github;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.List;
-import org.junit.Test;
 
 /**
  * @author Martin van Zijl
  */
-public class GHIssueEventTest extends AbstractGitHubApiTestBase {
+public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testEventsForSingleIssue() throws Exception {

@@ -7,10 +7,12 @@ import java.util.NoSuchElementException;
 
 /**
  * Iterator over a paginated data source.
- *
+ * <p>
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()} that allows the caller to retrieve
  * items per page.
  *
+ * @param <T>
+ *            the type parameter
  * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterator<T> implements Iterator<T> {
@@ -26,6 +28,12 @@ public abstract class PagedIterator<T> implements Iterator<T> {
         this.base = base;
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param page
+     *            the page
+     */
     protected abstract void wrapUp(T[] page);
 
     public boolean hasNext() {
@@ -61,6 +69,8 @@ public abstract class PagedIterator<T> implements Iterator<T> {
 
     /**
      * Gets the next page worth of data.
+     *
+     * @return the list
      */
     public List<T> nextPage() {
         fetch();

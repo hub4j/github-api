@@ -1,5 +1,25 @@
 package org.kohsuke.github.extras.okhttp3;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Dispatcher;
+import okhttp3.Handshake;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Pipe;
+import okio.Timeout;
+
 /*
  * Copyright (C) 2014 Square, Inc.
  *
@@ -15,7 +35,6 @@ package org.kohsuke.github.extras.okhttp3;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,30 +59,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.Nullable;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Dispatcher;
-import okhttp3.Handshake;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.Okio;
-import okio.Pipe;
-import okio.Timeout;
 
 import static java.net.HttpURLConnection.HTTP_NOT_MODIFIED;
 import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
@@ -111,14 +111,32 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
     private OkHttpClient client;
 
+    /**
+     * Instantiates a new Obsolete url factory.
+     *
+     * @param client
+     *            the client
+     */
     public ObsoleteUrlFactory(OkHttpClient client) {
         this.client = client;
     }
 
+    /**
+     * Client ok http client.
+     *
+     * @return the ok http client
+     */
     public OkHttpClient client() {
         return client;
     }
 
+    /**
+     * Sets client.
+     *
+     * @param client
+     *            the client
+     * @return the client
+     */
     public ObsoleteUrlFactory setClient(OkHttpClient client) {
         this.client = client;
         return this;
@@ -133,6 +151,13 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         return new ObsoleteUrlFactory(client);
     }
 
+    /**
+     * Open http url connection.
+     *
+     * @param url
+     *            the url
+     * @return the http url connection
+     */
     public HttpURLConnection open(URL url) {
         return open(url, client.proxy());
     }
@@ -238,7 +263,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         if (networkResponse == null) {
             return response.cacheResponse() == null ? "NONE" : "CACHE " + response.code();
         } else {
-            return response.cacheResponse() == null ? "NETWORK " + response.code()
+            return response.cacheResponse() == null
+                    ? "NETWORK " + response.code()
                     : "CONDITIONAL_CACHE " + networkResponse.code();
         }
     }
@@ -389,8 +415,10 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             if (responseHeaders == null) {
                 Response response = getResponse(true);
                 Headers headers = response.headers();
-                responseHeaders = headers.newBuilder().add(SELECTED_PROTOCOL, response.protocol().toString())
-                        .add(RESPONSE_SOURCE, responseSourceHeader(response)).build();
+                responseHeaders = headers.newBuilder()
+                        .add(SELECTED_PROTOCOL, response.protocol().toString())
+                        .add(RESPONSE_SOURCE, responseSourceHeader(response))
+                        .build();
             }
             return responseHeaders;
         }
@@ -446,7 +474,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return toMultimap(requestHeaders.build(), null);
         }
 
-        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "Good request will have body")
+        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                justification = "Good request will have body")
         @Override
         public InputStream getInputStream() throws IOException {
             if (!doInput) {
@@ -478,7 +507,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return requestBody.outputStream;
         }
 
-        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "usingProxy() handles this")
+        @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                justification = "usingProxy() handles this")
         @Override
         public Permission getPermission() {
             URL url = getURL();
@@ -579,7 +609,9 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
                 throw malformedUrl;
             }
 
-            Request request = new Request.Builder().url(url).headers(requestHeaders.build()).method(method, requestBody)
+            Request request = new Request.Builder().url(url)
+                    .headers(requestHeaders.build())
+                    .method(method, requestBody)
                     .build();
 
             OkHttpClient.Builder clientBuilder = client.newBuilder();
@@ -752,6 +784,9 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             // Guarded by HttpUrlConnection.this.
             private boolean proceed;
 
+            /**
+             * Proceed.
+             */
             public void proceed() {
                 synchronized (lock) {
                     this.proceed = true;
@@ -759,7 +794,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
                 }
             }
 
-            @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "If we get here there is a connection and request.body() is checked")
+            @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+                    justification = "If we get here there is a connection and request.body() is checked")
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
@@ -815,7 +851,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
                 @Override
                 public void write(int b) throws IOException {
-                    write(new byte[] { (byte) b }, 0, 1);
+                    write(new byte[]{ (byte) b }, 0, 1);
                 }
 
                 @Override
@@ -867,6 +903,15 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             return null; // Let the caller provide this in a regular header.
         }
 
+        /**
+         * Prepare to send request request.
+         *
+         * @param request
+         *            the request
+         * @return the request
+         * @throws IOException
+         *             the io exception
+         */
         public Request prepareToSendRequest(Request request) throws IOException {
             return request;
         }
@@ -892,8 +937,10 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
             outputStream.close();
             contentLength = buffer.size();
-            return request.newBuilder().removeHeader("Transfer-Encoding")
-                    .header("Content-Length", Long.toString(buffer.size())).build();
+            return request.newBuilder()
+                    .removeHeader("Transfer-Encoding")
+                    .header("Content-Length", Long.toString(buffer.size()))
+                    .build();
         }
 
         @Override
@@ -930,6 +977,11 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             this.delegate = delegate;
         }
 
+        /**
+         * Handshake handshake.
+         *
+         * @return the handshake
+         */
         protected abstract Handshake handshake();
 
         @Override

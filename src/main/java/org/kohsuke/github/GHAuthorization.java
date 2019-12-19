@@ -10,7 +10,7 @@ import java.util.List;
  * Generated OAuth token
  *
  * @author janinko
- * @see GitHub#createToken(Collection, String, String)
+ * @see GitHub#createToken(Collection, String, String) GitHub#createToken(Collection, String, String)
  * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">API documentation</a>
  */
 public class GHAuthorization extends GHObject {
@@ -45,34 +45,74 @@ public class GHAuthorization extends GHObject {
     // TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
     // private GHUser user;
 
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
     public GitHub getRoot() {
         return root;
     }
 
+    /**
+     * Gets scopes.
+     *
+     * @return the scopes
+     */
     public List<String> getScopes() {
         return scopes;
     }
 
+    /**
+     * Gets token.
+     *
+     * @return the token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * Gets token last eight.
+     *
+     * @return the token last eight
+     */
     public String getTokenLastEight() {
         return token_last_eight;
     }
 
+    /**
+     * Gets hashed token.
+     *
+     * @return the hashed token
+     */
     public String getHashedToken() {
         return hashed_token;
     }
 
+    /**
+     * Gets app url.
+     *
+     * @return the app url
+     */
     public URL getAppUrl() {
         return GitHub.parseURL(app.url);
     }
 
+    /**
+     * Gets app name.
+     *
+     * @return the app name
+     */
     public String getAppName() {
         return app.name;
     }
 
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
     @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library API, cannot be changed")
     public URL getApiURL() {
         return GitHub.parseURL(url);
@@ -86,14 +126,29 @@ public class GHAuthorization extends GHObject {
         return null;
     }
 
+    /**
+     * Gets note.
+     *
+     * @return the note
+     */
     public String getNote() {
         return note;
     }
 
+    /**
+     * Gets note url.
+     *
+     * @return the note url
+     */
     public URL getNoteUrl() {
         return GitHub.parseURL(note_url);
     }
 
+    /**
+     * Gets fingerprint.
+     *
+     * @return the fingerprint
+     */
     public String getFingerprint() {
         return fingerprint;
     }
@@ -103,8 +158,8 @@ public class GHAuthorization extends GHObject {
         return this;
     }
 
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD",
-            "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     private static class App {
         private String url;
         private String name;

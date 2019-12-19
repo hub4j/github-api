@@ -1,0 +1,34 @@
+{
+  "sha": "450446ed2e0bcd2074ca54c0060e0a4b88d34aca",
+  "node_id": "MDY6Q29tbWl0MjIyODc0Mzk2OjQ1MDQ0NmVkMmUwYmNkMjA3NGNhNTRjMDA2MGUwYTRiODhkMzRhY2E=",
+  "url": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/commits/450446ed2e0bcd2074ca54c0060e0a4b88d34aca",
+  "html_url": "https://github.com/sandboxx/GHTreeBuilderTest/commit/450446ed2e0bcd2074ca54c0060e0a4b88d34aca",
+  "author": {
+    "name": "Serban Iordache",
+    "email": "iordache@hotmail.com",
+    "date": "2019-11-20T22:35:02Z"
+  },
+  "committer": {
+    "name": "Serban Iordache",
+    "email": "iordache@hotmail.com",
+    "date": "2019-11-20T22:35:02Z"
+  },
+  "tree": {
+    "sha": "b09a1698f3aeb1d462c3492007760e2579734c74",
+    "url": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/trees/b09a1698f3aeb1d462c3492007760e2579734c74"
+  },
+  "message": "Add files",
+  "parents": [
+    {
+      "sha": "c2066e756eb2185ed12419f790af4375c8b91e7b",
+      "url": "https://api.github.com/repos/sandboxx/GHTreeBuilderTest/git/commits/c2066e756eb2185ed12419f790af4375c8b91e7b",
+      "html_url": "https://github.com/sandboxx/GHTreeBuilderTest/commit/c2066e756eb2185ed12419f790af4375c8b91e7b"
+    }
+  ],
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null
+  }
+}

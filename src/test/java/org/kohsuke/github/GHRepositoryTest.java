@@ -5,13 +5,14 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
 
 /**
  * @author Liam Newman
@@ -47,6 +48,27 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    // Issue #607
+    @Test
+    public void getBranchNonExistentBut200Status() throws Exception {
+        // Manually changed the returned status to 200 so dont take a new snapshot
+        this.snapshotNotAllowed();
+
+        // This should *never* happen but with mocking it was discovered
+        GHRepository repo = getRepository();
+        try {
+            GHBranch branch = repo.getBranch("test/NonExistent");
+            fail();
+        } catch (Exception e) {
+            // I dont really love this but I wanted to get to the root wrapped cause
+            assertThat(e, instanceOf(IOException.class));
+            assertThat(e.getMessage(),
+                    equalTo("Server returned HTTP response code: 200, message: 'OK' for URL: "
+                            + mockGitHub.apiServer().baseUrl()
+                            + "/repos/github-api-test-org/github-api/branches/test/NonExistent"));
+        }
     }
 
     @Test
@@ -197,8 +219,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void searchRepositories() throws Exception {
-        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().q("tetris").language("assembly")
-                .sort(GHRepositorySearchBuilder.Sort.STARS).list();
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories()
+                .q("tetris")
+                .language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS)
+                .list();
         GHRepository u = r.iterator().next();
         // System.out.println(u.getName());
         assertNotNull(u.getId());
@@ -279,7 +304,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         topics.add("java");
         topics.add("api-test-dummy");
         repo.setTopics(topics);
-        assertThat("Topics retain input order (are not sort when stored)", repo.listTopics(),
+        assertThat("Topics retain input order (are not sort when stored)",
+                repo.listTopics(),
                 contains("java", "api-test-dummy"));
 
         topics = new ArrayList<>();
@@ -287,18 +313,35 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         topics.add("api-test-dummy");
         topics.add("java");
         repo.setTopics(topics);
-        assertThat("Topics behave as a set and retain order from previous calls", repo.listTopics(),
+        assertThat("Topics behave as a set and retain order from previous calls",
+                repo.listTopics(),
                 contains("java", "api-test-dummy", "ordered-state"));
 
         topics = new ArrayList<>();
         topics.add("ordered-state");
         topics.add("api-test-dummy");
         repo.setTopics(topics);
-        assertThat("Topics retain order even when some are removed", repo.listTopics(),
+        assertThat("Topics retain order even when some are removed",
+                repo.listTopics(),
                 contains("api-test-dummy", "ordered-state"));
 
         topics = new ArrayList<>();
         repo.setTopics(topics);
         assertTrue("Topics can be set to empty", repo.listTopics().isEmpty());
     }
+
+    @Test
+    public void getCollaborators() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+        GHPersonSet<GHUser> collaborators = repo.getCollaborators();
+        assertThat(collaborators.size(), greaterThan(0));
+    }
+
+    @Test
+    public void getPostCommitHooks() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+        Set<URL> postcommitHooks = repo.getPostCommitHooks();
+        assertThat(postcommitHooks.size(), equalTo(0));
+    }
+
 }

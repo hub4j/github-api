@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * Base class for various search builders.
  *
+ * @param <T>
+ *            the type parameter
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
@@ -25,6 +27,10 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
     /**
      * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the gh query builder
      */
     public GHQueryBuilder<T> q(String term) {
         terms.add(term);
@@ -39,7 +45,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         return new PagedSearchIterable<T>(root) {
             public PagedIterator<T> _iterator(int pageSize) {
                 req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.asIterator(getApiUrl(), receiverType, pageSize))) {
+                return new PagedIterator<T>(adapt(req.withUrlPath(getApiUrl()).asIterator(receiverType, pageSize))) {
                     protected void wrapUp(T[] page) {
                         // SearchResult.getItems() should do it
                     }
@@ -48,5 +54,10 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         };
     }
 
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
     protected abstract String getApiUrl();
 }

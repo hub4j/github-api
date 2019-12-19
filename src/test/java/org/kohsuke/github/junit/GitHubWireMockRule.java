@@ -1,10 +1,8 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.VerificationException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.FileSource;
-import com.github.tomakehurst.wiremock.core.Options;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
@@ -12,11 +10,6 @@ import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.verification.*;
 import com.google.gson.*;
-import org.junit.rules.MethodRule;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +17,6 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -66,6 +58,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return servers.get("raw");
     }
 
+    public WireMockServer uploadsServer() {
+        return servers.get("uploads");
+    }
+
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
@@ -77,34 +73,68 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void initializeServers() {
         super.initializeServers();
-        initializeServer("raw");
         initializeServer("default", new GitHubApiResponseTransformer(this));
+
+        // only start non-api servers if we might need them
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_raw").exists() || isUseProxy()) {
+            initializeServer("raw");
+        }
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_uploads").exists() || isUseProxy()) {
+            initializeServer("uploads");
+        }
     }
 
     @Override
     protected void before() {
         super.before();
-        if (isUseProxy()) {
-            this.apiServer().stubFor(proxyAllTo("https://api.github.com").atPriority(100));
+        if (!isUseProxy()) {
+            return;
+        }
+
+        this.apiServer().stubFor(proxyAllTo("https://api.github.com").atPriority(100));
+
+        if (this.rawServer() != null) {
             this.rawServer().stubFor(proxyAllTo("https://raw.githubusercontent.com").atPriority(100));
+        }
+
+        if (this.uploadsServer() != null) {
+            this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
         }
     }
 
     @Override
     protected void after() {
         super.after();
-        if (isTakeSnapshot()) {
-            this.apiServer().snapshotRecord(recordSpec().forTarget("https://api.github.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+        if (!isTakeSnapshot()) {
+            return;
+        }
 
-            this.rawServer().snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
-                    .captureHeader("If-None-Match").extractTextBodiesOver(255));
+        this.apiServer()
+                .snapshotRecord(recordSpec().forTarget("https://api.github.com")
+                        .captureHeader("If-None-Match")
+                        .extractTextBodiesOver(255));
 
-            // After taking the snapshot, format the output
-            formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
+        // After taking the snapshot, format the output
+        formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
+
+        if (this.rawServer() != null) {
+            this.rawServer()
+                    .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
 
             // For raw server, only fix up mapping files
             formatJsonFiles(new File(this.rawServer().getOptions().filesRoot().child("mappings").getPath()).toPath());
+        }
+
+        if (this.uploadsServer() != null) {
+            this.uploadsServer()
+                    .snapshotRecord(recordSpec().forTarget("https://uploads.github.com")
+                            .captureHeader("If-None-Match")
+                            .extractTextBodiesOver(255));
+
+            formatJsonFiles(new File(this.uploadsServer().getOptions().filesRoot().getPath()).toPath());
+
         }
     }
 
@@ -118,7 +148,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     private void formatJsonFiles(Path path) {
         // The more consistent we can make the json output the more meaningful it will be.
-        Gson g = new Gson().newBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting()
+        Gson g = new Gson().newBuilder()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .setPrettyPrinting()
                 .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override
                     public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
@@ -128,7 +161,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             return new JsonPrimitive(src.longValue());
                         return new JsonPrimitive(src);
                     }
-                }).create();
+                })
+                .create();
 
         try {
             Files.walk(path).forEach(filePath -> {
@@ -137,8 +171,17 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         String fileText = new String(Files.readAllBytes(filePath));
                         // while recording responses we replaced all github calls localhost
                         // now we reverse that for storage.
-                        fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com")
-                                .replace(this.rawServer().baseUrl(), "https://raw.githubusercontent.com");
+                        fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com");
+
+                        if (this.rawServer() != null) {
+                            fileText = fileText.replace(this.rawServer().baseUrl(),
+                                    "https://raw.githubusercontent.com");
+                        }
+
+                        if (this.uploadsServer() != null) {
+                            fileText = fileText.replace(this.uploadsServer().baseUrl(), "https://uploads.github.com");
+                        }
+
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
                         if (parsedObject instanceof Map && filePath.toString().contains("mappings")) {
@@ -196,9 +239,21 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
                 String body;
                 body = getBodyAsString(response, headers);
+                body = body.replace("https://api.github.com", rule.apiServer().baseUrl());
 
-                builder.body(body.replace("https://api.github.com", rule.apiServer().baseUrl())
-                        .replace("https://raw.githubusercontent.com", rule.rawServer().baseUrl()));
+                if (rule.rawServer() != null) {
+                    body = body.replace("https://raw.githubusercontent.com", rule.rawServer().baseUrl());
+                } else {
+                    body = body.replace("https://raw.githubusercontent.com", rule.apiServer().baseUrl() + "/raw");
+                }
+
+                if (rule.uploadsServer() != null) {
+                    body = body.replace("https://uploads.github.com", rule.uploadsServer().baseUrl());
+                } else {
+                    body = body.replace("https://uploads.github.com", rule.apiServer().baseUrl() + "/uploads");
+                }
+
+                builder.body(body);
 
             }
             builder.headers(new HttpHeaders(headers));

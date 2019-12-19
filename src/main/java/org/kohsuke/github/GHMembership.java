@@ -8,7 +8,7 @@ import java.util.Locale;
  * Represents a membership of a user in an organization.
  *
  * @author Kohsuke Kawaguchi
- * @see GHMyself#listOrgMemberships()
+ * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
 public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {
     GitHub root;
@@ -19,22 +19,47 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
     GHUser user;
     GHOrganization organization;
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public URL getUrl() {
         return GitHub.parseURL(url);
     }
 
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
     public State getState() {
         return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
     public Role getRole() {
         return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     public GHUser getUser() {
         return user;
     }
 
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
     public GHOrganization getOrganization() {
         return organization;
     }
@@ -42,10 +67,12 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
     /**
      * Accepts a pending invitation to an organization.
      *
-     * @see GHMyself#getMembership(GHOrganization)
+     * @throws IOException
+     *             the io exception
+     * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.retrieve().method("PATCH").with("state", State.ACTIVE).to(url, this);
+        root.createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 
     GHMembership wrap(GitHub root) {

@@ -44,6 +44,11 @@ public class GHMyself extends GHUser {
     }
 
     /**
+     * Gets emails.
+     *
+     * @return the emails
+     * @throws IOException
+     *             the io exception
      * @deprecated Use {@link #getEmails2()}
      */
     public List<String> getEmails() throws IOException {
@@ -57,49 +62,60 @@ public class GHMyself extends GHUser {
 
     /**
      * Returns the read-only list of e-mail addresses configured for you.
-     *
+     * <p>
      * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
      * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
      *
      * @return Always non-null.
+     * @throws IOException
+     *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        GHEmail[] addresses = root.retrieve().to("/user/emails", GHEmail[].class);
+        GHEmail[] addresses = root.createRequest().withUrlPath("/user/emails").fetchArray(GHEmail[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 
     /**
      * Returns the read-only list of all the pulic keys of the current user.
-     *
+     * <p>
      * NOTE: When using OAuth authenticaiton, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
      * will get a 404 NOT FOUND.
      *
      * @return Always non-null.
+     * @throws IOException
+     *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/user/keys", GHKey[].class)));
+        return Collections.unmodifiableList(
+                Arrays.asList(root.createRequest().withUrlPath("/user/keys").fetchArray(GHKey[].class)));
     }
 
     /**
      * Returns the read-only list of all the public verified keys of the current user.
-     *
+     * <p>
      * Differently from the getPublicKeys() method, the retrieval of the user's verified public keys does not require
      * any READ/WRITE OAuth Scope to the user's profile.
      *
      * @return Always non-null.
+     * @throws IOException
+     *             the io exception
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return Collections.unmodifiableList(
-                Arrays.asList(root.retrieve().to("/users/" + getLogin() + "/keys", GHVerifiedKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(
+                root.createRequest().withUrlPath("/users/" + getLogin() + "/keys").fetchArray(GHVerifiedKey[].class)));
     }
 
     /**
      * Gets the organization that this user belongs to.
+     *
+     * @return the all organizations
+     * @throws IOException
+     *             the io exception
      */
     public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/user/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class)) {
             if (names.add(o.getLogin())) // in case of rumoured duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -108,6 +124,10 @@ public class GHMyself extends GHUser {
 
     /**
      * Gets the all repositories this user owns (public and private).
+     *
+     * @return the all repositories
+     * @throws IOException
+     *             the io exception
      */
     public synchronized Map<String, GHRepository> getAllRepositories() throws IOException {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
@@ -153,13 +173,19 @@ public class GHMyself extends GHUser {
      *            size for each page of items returned by GitHub. Maximum page size is 100.
      * @param repoType
      *            type of repository returned in the listing
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-        return root.retrieve().with("type", repoType)
-                .asPagedIterable("/user/repos", GHRepository[].class, item -> item.wrap(root)).withPageSize(pageSize);
+        return root.createRequest()
+                .with("type", repoType)
+                .asPagedIterable("/user/repos", GHRepository[].class, item -> item.wrap(root))
+                .withPageSize(pageSize);
     }
 
     /**
+     * List all repositories paged iterable.
+     *
+     * @return the paged iterable
      * @deprecated Use {@link #listRepositories()}
      */
     public PagedIterable<GHRepository> listAllRepositories() {
@@ -168,6 +194,8 @@ public class GHMyself extends GHUser {
 
     /**
      * List your organization memberships
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships() {
         return listOrgMemberships(null);
@@ -178,17 +206,28 @@ public class GHMyself extends GHUser {
      *
      * @param state
      *            Filter by a specific state
+     * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return root.retrieve().with("state", state).asPagedIterable("/user/memberships/orgs", GHMembership[].class,
-                item -> item.wrap(root));
+        return root.createRequest()
+                .with("state", state)
+                .asPagedIterable("/user/memberships/orgs", GHMembership[].class, item -> item.wrap(root));
     }
 
     /**
      * Gets your membership in a specific organization.
+     *
+     * @param o
+     *            the o
+     * @return the membership
+     * @throws IOException
+     *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-        return root.retrieve().to("/user/memberships/orgs/" + o.getLogin(), GHMembership.class).wrap(root);
+        return root.createRequest()
+                .withUrlPath("/user/memberships/orgs/" + o.getLogin())
+                .fetch(GHMembership.class)
+                .wrap(root);
     }
 
     // public void addEmails(Collection<String> emails) throws IOException {

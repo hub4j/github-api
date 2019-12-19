@@ -26,25 +26,27 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Base64;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
@@ -128,9 +130,14 @@ public class GitHub {
      * @param connector
      *            HttpConnector to use. Pass null to use default connector.
      */
-    GitHub(String apiUrl, String login, String oauthAccessToken, String jwtToken, String password,
-            HttpConnector connector, RateLimitHandler rateLimitHandler, AbuseLimitHandler abuseLimitHandler)
-            throws IOException {
+    GitHub(String apiUrl,
+            String login,
+            String oauthAccessToken,
+            String jwtToken,
+            String password,
+            HttpConnector connector,
+            RateLimitHandler rateLimitHandler,
+            AbuseLimitHandler abuseLimitHandler) throws IOException {
         if (apiUrl.endsWith("/"))
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
         this.apiUrl = apiUrl;
@@ -144,9 +151,9 @@ public class GitHub {
                 encodedAuthorization = "Bearer " + jwtToken;
             } else if (password != null) {
                 String authorization = (login + ':' + password);
-                String charsetName = Charsets.UTF_8.name();
+                String charsetName = StandardCharsets.UTF_8.name();
                 encodedAuthorization = "Basic "
-                        + new String(Base64.encodeBase64(authorization.getBytes(charsetName)), charsetName);
+                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
             } else {// anonymous access
                 encodedAuthorization = null;
             }
@@ -164,6 +171,10 @@ public class GitHub {
 
     /**
      * Obtains the credential from "~/.github" or from the System Environment Properties.
+     *
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      */
     public static GitHub connect() throws IOException {
         return GitHubBuilder.fromCredentials().build();
@@ -172,6 +183,13 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
+     * @param apiUrl
+     *            the api url
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      * @deprecated Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
      */
     @Deprecated
@@ -187,6 +205,13 @@ public class GitHub {
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated.
+     * @param login
+     *            the login
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      */
     public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken)
             throws IOException {
@@ -196,6 +221,15 @@ public class GitHub {
     /**
      * Version that connects to GitHub Enterprise.
      *
+     * @param apiUrl
+     *            the api url
+     * @param login
+     *            the login
+     * @param password
+     *            the password
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      * @deprecated Use with caution. Login with password is not a preferred method.
      */
     @Deprecated
@@ -203,11 +237,33 @@ public class GitHub {
         return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
 
+    /**
+     * Connect git hub.
+     *
+     * @param login
+     *            the login
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
+     */
     public static GitHub connect(String login, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).build();
     }
 
     /**
+     * Connect git hub.
+     *
+     * @param login
+     *            the login
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @param password
+     *            the password
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      * @deprecated Either OAuth token or password is sufficient, so there's no point in passing both. Use
      *             {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
      */
@@ -216,22 +272,57 @@ public class GitHub {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
     }
 
+    /**
+     * Connect using password git hub.
+     *
+     * @param login
+     *            the login
+     * @param password
+     *            the password
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
+     */
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
         return new GitHubBuilder().withPassword(login, password).build();
     }
 
+    /**
+     * Connect using o auth git hub.
+     *
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
+     */
     public static GitHub connectUsingOAuth(String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken).build();
     }
 
+    /**
+     * Connect using o auth git hub.
+     *
+     * @param githubServer
+     *            the github server
+     * @param oauthAccessToken
+     *            the oauth access token
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
+     */
     public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withEndpoint(githubServer).withOAuthToken(oauthAccessToken).build();
     }
 
     /**
      * Connects to GitHub anonymously.
-     *
+     * <p>
      * All operations that require authentication will fail.
+     *
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      */
     public static GitHub connectAnonymously() throws IOException {
         return new GitHubBuilder().build();
@@ -239,8 +330,14 @@ public class GitHub {
 
     /**
      * Connects to GitHub Enterprise anonymously.
-     *
+     * <p>
      * All operations that require authentication will fail.
+     *
+     * @param apiUrl
+     *            the api url
+     * @return the git hub
+     * @throws IOException
+     *             the io exception
      */
     public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).build();
@@ -248,14 +345,15 @@ public class GitHub {
 
     /**
      * An offline-only {@link GitHub} useful for parsing event notification from an unknown source.
-     *
+     * <p>
      * All operations that require a connection will fail.
      *
      * @return An offline-only {@link GitHub}.
      */
     public static GitHub offline() {
         try {
-            return new GitHubBuilder().withEndpoint("https://api.github.invalid").withConnector(HttpConnector.OFFLINE)
+            return new GitHubBuilder().withEndpoint("https://api.github.invalid")
+                    .withConnector(HttpConnector.OFFLINE)
                     .build();
         } catch (IOException e) {
             throw new IllegalStateException("The offline implementation constructor should not connect", e);
@@ -280,16 +378,29 @@ public class GitHub {
         return connector == HttpConnector.OFFLINE;
     }
 
+    /**
+     * Gets connector.
+     *
+     * @return the connector
+     */
     public HttpConnector getConnector() {
         return connector;
     }
 
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
     public String getApiUrl() {
         return apiUrl;
     }
 
     /**
      * Sets the custom connector used to make requests to GitHub.
+     *
+     * @param connector
+     *            the connector
      */
     public void setConnector(HttpConnector connector) {
         this.connector = connector;
@@ -313,17 +424,21 @@ public class GitHub {
         }
     }
 
-    Requester retrieve() {
-        return new Requester(this).method("GET");
+    Requester createRequest() {
+        return new Requester(this);
     }
 
     /**
      * Gets the current rate limit.
+     *
+     * @return the rate limit
+     * @throws IOException
+     *             the io exception
      */
     public GHRateLimit getRateLimit() throws IOException {
         GHRateLimit rateLimit;
         try {
-            rateLimit = retrieve().to("/rate_limit", JsonRateLimit.class).resources;
+            rateLimit = createRequest().withUrlPath("/rate_limit").fetch(JsonRateLimit.class).resources;
         } catch (FileNotFoundException e) {
             // GitHub Enterprise doesn't have the rate limit
             // return a default rate limit that
@@ -417,6 +532,10 @@ public class GitHub {
 
     /**
      * Gets the {@link GHUser} that represents yourself.
+     *
+     * @return the myself
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(GHUser.class)
     public GHMyself getMyself() throws IOException {
@@ -425,7 +544,7 @@ public class GitHub {
             if (this.myself != null)
                 return myself;
 
-            GHMyself u = retrieve().to("/user", GHMyself.class);
+            GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
 
             u.root = this;
             this.myself = u;
@@ -435,11 +554,17 @@ public class GitHub {
 
     /**
      * Obtains the object that represents the named user.
+     *
+     * @param login
+     *            the login
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser(String login) throws IOException {
         GHUser u = users.get(login);
         if (u == null) {
-            u = retrieve().to("/users/" + login, GHUser.class);
+            u = createRequest().withUrlPath("/users/" + login).fetch(GHUser.class);
             u.root = this;
             users.put(u.getLogin(), u);
         }
@@ -456,6 +581,10 @@ public class GitHub {
 
     /**
      * Interns the given {@link GHUser}.
+     *
+     * @param orig
+     *            the orig
+     * @return the user
      */
     protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
@@ -469,11 +598,17 @@ public class GitHub {
 
     /**
      * Gets {@link GHOrganization} specified by name.
+     *
+     * @param name
+     *            the name
+     * @return the organization
+     * @throws IOException
+     *             the io exception
      */
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o == null) {
-            o = retrieve().to("/orgs/" + name, GHOrganization.class).wrapUp(this);
+            o = createRequest().withUrlPath("/orgs/" + name).fetch(GHOrganization.class).wrapUp(this);
             orgs.put(name, o);
         }
         return o;
@@ -481,6 +616,8 @@ public class GitHub {
 
     /**
      * Gets a list of all organizations.
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHOrganization> listOrganizations() {
         return listOrganizations(null);
@@ -489,46 +626,67 @@ public class GitHub {
     /**
      * Gets a list of all organizations starting after the organization identifier specified by 'since'.
      *
+     * @param since
+     *            the since
+     * @return the paged iterable
      * @see <a href="https://developer.github.com/v3/orgs/#parameters">List All Orgs - Parameters</a>
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
-        return retrieve().with("since", since).asPagedIterable("/organizations", GHOrganization[].class,
-                item -> item.wrapUp(GitHub.this));
+        return createRequest().with("since", since)
+                .asPagedIterable("/organizations", GHOrganization[].class, item -> item.wrapUp(GitHub.this));
     }
 
     /**
      * Gets the repository object from 'user/reponame' string that GitHub calls as "repository name"
      *
-     * @see GHRepository#getName()
+     * @param name
+     *            the name
+     * @return the repository
+     * @throws IOException
+     *             the io exception
+     * @see GHRepository#getName() GHRepository#getName()
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return retrieve().to("/repos/" + tokens[0] + '/' + tokens[1], GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repos/" + tokens[0] + '/' + tokens[1])
+                .fetch(GHRepository.class)
+                .wrap(this);
     }
 
     /**
      * Gets the repository object from its ID
+     *
+     * @param id
+     *            the id
+     * @return the repository by id
+     * @throws IOException
+     *             the io exception
      */
     public GHRepository getRepositoryById(String id) throws IOException {
-        return retrieve().to("/repositories/" + id, GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
     }
 
     /**
      * Returns a list of popular open source licenses
      *
-     * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
-     *
      * @return a list of popular open source licenses
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return retrieve().asPagedIterable("/licenses", GHLicense[].class, item -> item.wrap(GitHub.this));
+        return createRequest().asPagedIterable("/licenses", GHLicense[].class, item -> item.wrap(GitHub.this));
     }
 
     /**
      * Returns a list of all users.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return retrieve().asPagedIterable("/users", GHUser[].class, item -> item.wrapUp(GitHub.this));
+        return createRequest().asPagedIterable("/users", GHUser[].class, item -> item.wrapUp(GitHub.this));
     }
 
     /**
@@ -537,17 +695,24 @@ public class GitHub {
      * @param key
      *            The license key provided from the API
      * @return The license details
-     * @see GHLicense#getKey()
+     * @throws IOException
+     *             the io exception
+     * @see GHLicense#getKey() GHLicense#getKey()
      */
     public GHLicense getLicense(String key) throws IOException {
-        return retrieve().to("/licenses/" + key, GHLicense.class);
+        return createRequest().withUrlPath("/licenses/" + key).fetch(GHLicense.class);
     }
 
     /**
      * Gets complete list of open invitations for current user.
+     *
+     * @return the my invitations
+     * @throws IOException
+     *             the io exception
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = retrieve().to("/user/repository_invitations", GHInvitation[].class);
+        GHInvitation[] invitations = createRequest().withUrlPath("/user/repository_invitations")
+                .fetchArray(GHInvitation[].class);
         for (GHInvitation i : invitations) {
             i.wrapUp(this);
         }
@@ -556,12 +721,16 @@ public class GitHub {
 
     /**
      * This method returns shallowly populated organizations.
-     *
+     * <p>
      * To retrieve full organization details, you need to call {@link #getOrganization(String)} TODO: make this
      * automatic.
+     *
+     * @return the my organizations
+     * @throws IOException
+     *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = retrieve().to("/user/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -572,6 +741,12 @@ public class GitHub {
 
     /**
      * Alias for {@link #getUserPublicOrganizations(String)}.
+     *
+     * @param user
+     *            the user
+     * @return the user public organizations
+     * @throws IOException
+     *             the io exception
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) throws IOException {
         return getUserPublicOrganizations(user.getLogin());
@@ -579,16 +754,18 @@ public class GitHub {
 
     /**
      * This method returns a shallowly populated organizations.
-     *
+     * <p>
      * To retrieve full organization details, you need to call {@link #getOrganization(String)}
      *
      * @param login
      *            the user to retrieve public Organization membership information for
-     *
      * @return the public Organization memberships for the user
+     * @throws IOException
+     *             the io exception
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
-        GHOrganization[] orgs = retrieve().to("/users/" + login + "/orgs", GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
+                .fetchArray(GHOrganization[].class);
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -599,13 +776,17 @@ public class GitHub {
 
     /**
      * Gets complete map of organizations/teams that current user belongs to.
-     *
+     * <p>
      * Leverages the new GitHub API /user/teams made available recently to get in a single call the complete set of
      * organizations, teams and permissions in a single call.
+     *
+     * @return the my teams
+     * @throws IOException
+     *             the io exception
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : retrieve().to("/user/teams", GHTeam[].class)) {
+        for (GHTeam team : createRequest().withUrlPath("/user/teams").fetchArray(GHTeam[].class)) {
             team.wrapUp(this);
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
@@ -620,16 +801,26 @@ public class GitHub {
 
     /**
      * Gets a sigle team by ID.
+     *
+     * @param id
+     *            the id
+     * @return the team
+     * @throws IOException
+     *             the io exception
      */
     public GHTeam getTeam(int id) throws IOException {
-        return retrieve().to("/teams/" + id, GHTeam.class).wrapUp(this);
+        return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }
 
     /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
+     *
+     * @return the events
+     * @throws IOException
+     *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = retrieve().to("/events", GHEventInfo[].class);
+        GHEventInfo[] events = createRequest().withUrlPath("/events").fetchArray(GHEventInfo[].class);
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);
@@ -637,20 +828,41 @@ public class GitHub {
 
     /**
      * Gets a single gist by ID.
+     *
+     * @param id
+     *            the id
+     * @return the gist
+     * @throws IOException
+     *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-        return retrieve().to("/gists/" + id, GHGist.class).wrapUp(this);
+        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class).wrapUp(this);
     }
 
+    /**
+     * Create gist gh gist builder.
+     *
+     * @return the gh gist builder
+     */
     public GHGistBuilder createGist() {
         return new GHGistBuilder(this);
     }
 
     /**
      * Parses the GitHub event object.
-     *
+     * <p>
      * This is primarily intended for receiving a POST HTTP call from a hook. Unfortunately, hook script payloads aren't
      * self-descriptive, so you need to know the type of the payload you are expecting.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param r
+     *            the r
+     * @param type
+     *            the type
+     * @return the t
+     * @throws IOException
+     *             the io exception
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
         T t = MAPPER.readValue(r, type);
@@ -661,7 +873,17 @@ public class GitHub {
     /**
      * Creates a new repository.
      *
+     * @param name
+     *            the name
+     * @param description
+     *            the description
+     * @param homepage
+     *            the homepage
+     * @param isPublic
+     *            the is public
      * @return Newly created repository.
+     * @throws IOException
+     *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
     @Deprecated
@@ -680,6 +902,10 @@ public class GitHub {
      * <p>
      * To create a repository in an organization, see
      * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
         return new GHCreateRepositoryBuilder(this, "/user/repos", name);
@@ -687,26 +913,46 @@ public class GitHub {
 
     /**
      * Creates a new authorization.
-     *
+     * <p>
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *
+     * @param scope
+     *            the scope
+     * @param note
+     *            the note
+     * @param noteUrl
+     *            the note url
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
-        Requester requester = new Requester(this).with("scopes", scope).with("note", note).with("note_url", noteUrl);
+        Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
 
-        return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+        return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
     }
 
     /**
      * Creates a new authorization using an OTP.
-     *
+     * <p>
      * Start by running createToken, if exception is thrown, prompt for OTP from user
-     *
+     * <p>
      * Once OTP is received, call this token request
-     *
+     * <p>
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      *
+     * @param scope
+     *            the scope
+     * @param note
+     *            the note
+     * @param noteUrl
+     *            the note url
+     * @param OTP
+     *            the otp
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
      * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">Documentation</a>
      */
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl, Supplier<String> OTP)
@@ -715,81 +961,135 @@ public class GitHub {
             return createToken(scope, note, noteUrl);
         } catch (GHOTPRequiredException ex) {
             String OTPstring = OTP.get();
-            Requester requester = new Requester(this).with("scopes", scope).with("note", note).with("note_url",
-                    noteUrl);
+            Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
             // Add the OTP from the user
             requester.setHeader("x-github-otp", OTPstring);
-            return requester.method("POST").to("/authorizations", GHAuthorization.class).wrap(this);
+            return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
         }
     }
 
     /**
+     * Create or get auth gh authorization.
+     *
+     * @param clientId
+     *            the client id
+     * @param clientSecret
+     *            the client secret
+     * @param scopes
+     *            the scopes
+     * @param note
+     *            the note
+     * @param note_url
+     *            the note url
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
      * @see <a href=
      *      "https://developer.github.com/v3/oauth_authorizations/#get-or-create-an-authorization-for-a-specific-app">docs</a>
      */
-    public GHAuthorization createOrGetAuth(String clientId, String clientSecret, List<String> scopes, String note,
+    public GHAuthorization createOrGetAuth(String clientId,
+            String clientSecret,
+            List<String> scopes,
+            String note,
             String note_url) throws IOException {
-        Requester requester = new Requester(this).with("client_secret", clientSecret).with("scopes", scopes)
-                .with("note", note).with("note_url", note_url);
+        Requester requester = createRequest().with("client_secret", clientSecret)
+                .with("scopes", scopes)
+                .with("note", note)
+                .with("note_url", note_url);
 
-        return requester.method("PUT").to("/authorizations/clients/" + clientId, GHAuthorization.class);
+        return requester.method("PUT").withUrlPath("/authorizations/clients/" + clientId).fetch(GHAuthorization.class);
     }
 
     /**
+     * Delete auth.
+     *
+     * @param id
+     *            the id
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an
      *      authorization</a>
      */
     public void deleteAuth(long id) throws IOException {
-        retrieve().method("DELETE").to("/authorizations/" + id);
+        createRequest().method("DELETE").withUrlPath("/authorizations/" + id).send();
     }
 
     /**
+     * Check auth gh authorization.
+     *
+     * @param clientId
+     *            the client id
+     * @param accessToken
+     *            the access token
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an
      *      authorization</a>
      */
     public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().to("/applications/" + clientId + "/tokens/" + accessToken, GHAuthorization.class);
+        return createRequest().withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
+                .fetch(GHAuthorization.class);
     }
 
     /**
+     * Reset auth gh authorization.
+     *
+     * @param clientId
+     *            the client id
+     * @param accessToken
+     *            the access token
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an
      *      authorization</a>
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-        return retrieve().method("POST").to("/applications/" + clientId + "/tokens/" + accessToken,
-                GHAuthorization.class);
+        return createRequest().method("POST")
+                .withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
+                .fetch(GHAuthorization.class);
     }
 
     /**
      * Returns a list of all authorizations.
      *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your
      *      authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return retrieve().asPagedIterable("/authorizations", GHAuthorization[].class, item -> item.wrap(GitHub.this));
+        return createRequest()
+                .asPagedIterable("/authorizations", GHAuthorization[].class, item -> item.wrap(GitHub.this));
     }
 
     /**
      * Returns the GitHub App associated with the authentication credentials used.
-     *
+     * <p>
      * You must use a JWT to access this endpoint.
      *
+     * @return the app
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
     @Preview
     @Deprecated
     public GHApp getApp() throws IOException {
-        return retrieve().withPreview(MACHINE_MAN).to("/app", GHApp.class).wrapUp(this);
+        return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
     }
 
     /**
      * Ensures that the credential is valid.
+     *
+     * @return the boolean
      */
     public boolean isCredentialValid() {
         try {
-            retrieve().to("/user", GHUser.class);
+            createRequest().withUrlPath("/user").fetch(GHUser.class);
             return true;
         } catch (IOException e) {
             if (LOGGER.isLoggable(FINE))
@@ -803,15 +1103,14 @@ public class GitHub {
     /**
      * Provides a list of GitHub's IP addresses.
      *
-     * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
-     *
      * @return an instance of {@link GHMeta}
      * @throws IOException
      *             if the credentials supplied are invalid or if you're trying to access it as a GitHub App via the JWT
      *             authentication
+     * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      */
     public GHMeta getMeta() throws IOException {
-        return retrieve().to("/meta", GHMeta.class);
+        return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
     }
 
     GHUser intern(GHUser user) throws IOException {
@@ -828,16 +1127,49 @@ public class GitHub {
         return user;
     }
 
+    /**
+     * Gets project.
+     *
+     * @param id
+     *            the id
+     * @return the project
+     * @throws IOException
+     *             the io exception
+     */
     public GHProject getProject(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/" + id, GHProject.class).wrap(this);
+        return createRequest().withPreview(INERTIA).withUrlPath("/projects/" + id).fetch(GHProject.class).wrap(this);
     }
 
+    /**
+     * Gets project column.
+     *
+     * @param id
+     *            the id
+     * @return the project column
+     * @throws IOException
+     *             the io exception
+     */
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/" + id, GHProjectColumn.class).wrap(this);
+        return createRequest().withPreview(INERTIA)
+                .withUrlPath("/projects/columns/" + id)
+                .fetch(GHProjectColumn.class)
+                .wrap(this);
     }
 
+    /**
+     * Gets project card.
+     *
+     * @param id
+     *            the id
+     * @return the project card
+     * @throws IOException
+     *             the io exception
+     */
     public GHProjectCard getProjectCard(long id) throws IOException {
-        return retrieve().withPreview(INERTIA).to("/projects/columns/cards/" + id, GHProjectCard.class).wrap(this);
+        return createRequest().withPreview(INERTIA)
+                .withUrlPath("/projects/columns/cards/" + id)
+                .fetch(GHProjectCard.class)
+                .wrap(this);
     }
 
     private static class GHApiInfo {
@@ -861,10 +1193,13 @@ public class GitHub {
      * <p>
      * This method returns normally if the endpoint is reachable and verified to be GitHub API URL. Otherwise this
      * method throws {@link IOException} to indicate the problem.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void checkApiUrlValidity() throws IOException {
         try {
-            retrieve().to("/", GHApiInfo.class).check(apiUrl);
+            createRequest().withUrlPath("/").fetch(GHApiInfo.class).check(apiUrl);
         } catch (IOException e) {
             if (isPrivateModeEnabled()) {
                 throw (IOException) new IOException(
@@ -923,6 +1258,8 @@ public class GitHub {
 
     /**
      * Search commits.
+     *
+     * @return the gh commit search builder
      */
     @Preview
     @Deprecated
@@ -932,6 +1269,8 @@ public class GitHub {
 
     /**
      * Search issues.
+     *
+     * @return the gh issue search builder
      */
     public GHIssueSearchBuilder searchIssues() {
         return new GHIssueSearchBuilder(this);
@@ -939,6 +1278,8 @@ public class GitHub {
 
     /**
      * Search users.
+     *
+     * @return the gh user search builder
      */
     public GHUserSearchBuilder searchUsers() {
         return new GHUserSearchBuilder(this);
@@ -946,6 +1287,8 @@ public class GitHub {
 
     /**
      * Search repositories.
+     *
+     * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder searchRepositories() {
         return new GHRepositorySearchBuilder(this);
@@ -953,6 +1296,8 @@ public class GitHub {
 
     /**
      * Search content.
+     *
+     * @return the gh content search builder
      */
     public GHContentSearchBuilder searchContent() {
         return new GHContentSearchBuilder(this);
@@ -960,6 +1305,8 @@ public class GitHub {
 
     /**
      * List all the notifications.
+     *
+     * @return the gh notification stream
      */
     public GHNotificationStream listNotifications() {
         return new GHNotificationStream(this, "/notifications");
@@ -968,6 +1315,7 @@ public class GitHub {
     /**
      * This provides a dump of every public repository, in the order that they were created.
      *
+     * @return the paged iterable
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories() {
@@ -979,11 +1327,12 @@ public class GitHub {
      *
      * @param since
      *            The numeric ID of the last Repository that you’ve seen. See {@link GHRepository#getId()}
+     * @return the paged iterable
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return retrieve().with("since", since).asPagedIterable("/repositories", GHRepository[].class,
-                item -> item.wrap(GitHub.this));
+        return createRequest().with("since", since)
+                .asPagedIterable("/repositories", GHRepository[].class, item -> item.wrap(GitHub.this));
     }
 
     /**
@@ -993,11 +1342,21 @@ public class GitHub {
      * It takes a Markdown document as plaintext and renders it as plain Markdown without a repository context (just
      * like a README.md file is rendered – this is the simplest way to preview a readme online).
      *
-     * @see GHRepository#renderMarkdown(String, MarkdownMode)
+     * @param text
+     *            the text
+     * @return the reader
+     * @throws IOException
+     *             the io exception
+     * @see GHRepository#renderMarkdown(String, MarkdownMode) GHRepository#renderMarkdown(String, MarkdownMode)
      */
     public Reader renderMarkdown(String text) throws IOException {
-        return new InputStreamReader(new Requester(this).with(new ByteArrayInputStream(text.getBytes("UTF-8")))
-                .contentType("text/plain;charset=UTF-8").asStream("/markdown/raw"), "UTF-8");
+        return new InputStreamReader(
+                createRequest().method("POST")
+                        .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
+                        .contentType("text/plain;charset=UTF-8")
+                        .withUrlPath("/markdown/raw")
+                        .fetchStream(),
+                "UTF-8");
     }
 
     static URL parseURL(String s) {
@@ -1036,9 +1395,10 @@ public class GitHub {
     };
 
     static {
-        MAPPER.setVisibilityChecker(new Std(NONE, NONE, NONE, NONE, ANY));
+        MAPPER.setVisibility(new Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     }
 
     static final String GITHUB_URL = "https://api.github.com";

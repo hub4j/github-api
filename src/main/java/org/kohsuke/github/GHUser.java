@@ -35,26 +35,44 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
+    /**
+     * Gets keys.
+     *
+     * @return the keys
+     * @throws IOException
+     *             the io exception
+     */
     public List<GHKey> getKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to(getApiTailUrl("keys"), GHKey[].class)));
+        return Collections.unmodifiableList(
+                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHKey[].class)));
     }
 
     /**
      * Follow this user.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void follow() throws IOException {
-        new Requester(root).method("PUT").to("/user/following/" + login);
+        root.createRequest().method("PUT").withUrlPath("/user/following/" + login).send();
     }
 
     /**
      * Unfollow this user.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void unfollow() throws IOException {
-        new Requester(root).method("DELETE").to("/user/following/" + login);
+        root.createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
     }
 
     /**
      * Lists the users that this user is following
+     *
+     * @return the follows
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
@@ -63,6 +81,8 @@ public class GHUser extends GHPerson {
 
     /**
      * Lists the users that this user is following
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHUser> listFollows() {
         return listUser("following");
@@ -70,6 +90,10 @@ public class GHUser extends GHPerson {
 
     /**
      * Lists the users who are following this user.
+     *
+     * @return the followers
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollowers() throws IOException {
@@ -78,19 +102,23 @@ public class GHUser extends GHPerson {
 
     /**
      * Lists the users who are following this user.
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHUser> listFollowers() {
         return listUser("followers");
     }
 
     private PagedIterable<GHUser> listUser(final String suffix) {
-        return root.retrieve().asPagedIterable(getApiTailUrl(suffix), GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest().asPagedIterable(getApiTailUrl(suffix), GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
      * Lists all the subscribed (aka watched) repositories.
-     *
+     * <p>
      * https://developer.github.com/v3/activity/watching/
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listSubscriptions() {
         return listRepositories("subscriptions");
@@ -98,17 +126,24 @@ public class GHUser extends GHPerson {
 
     /**
      * Lists all the repositories that this user has starred.
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listStarredRepositories() {
         return listRepositories("starred");
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return root.retrieve().asPagedIterable(getApiTailUrl(suffix), GHRepository[].class, item -> item.wrap(root));
+        return root.createRequest()
+                .asPagedIterable(getApiTailUrl(suffix), GHRepository[].class, item -> item.wrap(root));
     }
 
     /**
      * Returns true if this user belongs to the specified organization.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
      */
     public boolean isMemberOf(GHOrganization org) {
         return org.hasMember(this);
@@ -116,6 +151,10 @@ public class GHUser extends GHPerson {
 
     /**
      * Returns true if this user belongs to the specified team.
+     *
+     * @param team
+     *            the team
+     * @return the boolean
      */
     public boolean isMemberOf(GHTeam team) {
         return team.hasMember(this);
@@ -123,6 +162,10 @@ public class GHUser extends GHPerson {
 
     /**
      * Returns true if this user belongs to the specified organization as a public member.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
      */
     public boolean isPublicMemberOf(GHOrganization org) {
         return org.hasPublicMember(this);
@@ -136,12 +179,18 @@ public class GHUser extends GHPerson {
 
     /**
      * Gets the organization that this user belongs to publicly.
+     *
+     * @return the organizations
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/users/" + login + "/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.createRequest()
+                .withUrlPath("/users/" + login + "/orgs")
+                .fetchArray(GHOrganization[].class)) {
             if (names.add(o.getLogin())) // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -152,16 +201,24 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/users/%s/events", login), GHEventInfo[].class,
-                item -> item.wrapUp(root));
+        return root.createRequest()
+                .asPagedIterable(String.format("/users/%s/events", login),
+                        GHEventInfo[].class,
+                        item -> item.wrapUp(root));
     }
 
     /**
      * Lists Gists created by this user.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHGist> listGists() throws IOException {
-        return root.retrieve().asPagedIterable(String.format("/users/%s/gists", login), GHGist[].class,
-                item -> item.wrapUp(GHUser.this));
+        return root.createRequest()
+                .asPagedIterable(String.format("/users/%s/gists", login),
+                        GHGist[].class,
+                        item -> item.wrapUp(GHUser.this));
     }
 
     @Override

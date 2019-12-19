@@ -21,9 +21,13 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
     @Before
     public void setUp() throws IOException {
         GHGistBuilder builder = new GHGistBuilder(gitHub);
-        gist = builder.description("Test for the API").file("unmodified.txt", "Should be unmodified")
+        gist = builder.description("Test for the API")
+                .file("unmodified.txt", "Should be unmodified")
                 // .file("delete-me.txt", "To be deleted")
-                .file("rename-me.py", "print 'hello'").file("update-me.txt", "To be updated").public_(true).create();
+                .file("rename-me.py", "print 'hello'")
+                .file("update-me.txt", "To be updated")
+                .public_(true)
+                .create();
     }
 
     @After
@@ -42,7 +46,8 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
         GHGist updatedGist = updater.description("Description updated by API")
                 .addFile("new-file.txt", "Added by updater")
                 // .deleteFile("delete-me.txt")
-                .renameFile("rename-me.py", "renamed.py").updateFile("update-me.txt", "Content updated by API")
+                .renameFile("rename-me.py", "renamed.py")
+                .updateFile("update-me.txt", "Content updated by API")
                 .update();
 
         assertEquals("Description updated by API", updatedGist.getDescription());

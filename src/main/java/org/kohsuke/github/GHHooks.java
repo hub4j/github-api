@@ -19,21 +19,54 @@ class GHHooks {
             this.root = root;
         }
 
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         * @throws IOException
+         *             the io exception
+         */
         public List<GHHook> getHooks() throws IOException {
 
-            GHHook[] hookArray = root.retrieve().to(collection(), collectionClass()); // jdk/eclipse bug requires this
-                                                                                      // to be on separate line
+            GHHook[] hookArray = root.createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse
+                                                                                                          // bug
+            // requires this
+            // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
                 wrap(h);
             return list;
         }
 
+        /**
+         * Gets hook.
+         *
+         * @param id
+         *            the id
+         * @return the hook
+         * @throws IOException
+         *             the io exception
+         */
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.retrieve().to(collection() + "/" + id, clazz());
+            GHHook hook = root.createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
             return wrap(hook);
         }
 
+        /**
+         * Create hook gh hook.
+         *
+         * @param name
+         *            the name
+         * @param config
+         *            the config
+         * @param events
+         *            the events
+         * @param active
+         *            the active
+         * @return the gh hook
+         * @throws IOException
+         *             the io exception
+         */
         public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
                 throws IOException {
             List<String> ea = null;
@@ -43,8 +76,14 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root).with("name", name).with("active", active)._with("config", config)
-                    ._with("events", ea).to(collection(), clazz());
+            GHHook hook = root.createRequest()
+                    .method("POST")
+                    .with("name", name)
+                    .with("active", active)
+                    .with("config", config)
+                    .with("events", ea)
+                    .withUrlPath(collection())
+                    .fetch(clazz());
 
             return wrap(hook);
         }

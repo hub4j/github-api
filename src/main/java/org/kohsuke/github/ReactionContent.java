@@ -19,11 +19,23 @@ public enum ReactionContent {
         this.content = content;
     }
 
+    /**
+     * Gets content.
+     *
+     * @return the content
+     */
     @JsonValue
     public String getContent() {
         return content;
     }
 
+    /**
+     * For content reaction content.
+     *
+     * @param content
+     *            the content
+     * @return the reaction content
+     */
     @JsonCreator
     public static ReactionContent forContent(String content) {
         for (ReactionContent c : ReactionContent.values()) {

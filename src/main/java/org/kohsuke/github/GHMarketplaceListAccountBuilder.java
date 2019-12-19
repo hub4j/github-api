@@ -15,7 +15,7 @@ public class GHMarketplaceListAccountBuilder {
 
     GHMarketplaceListAccountBuilder(GitHub root, long planId) {
         this.root = root;
-        this.builder = root.retrieve();
+        this.builder = root.createRequest();
         this.planId = planId;
     }
 

@@ -1782,7 +1782,6 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHLabel> listLabels() throws IOException {
         return root.createRequest()
-                .withPreview(SYMMETRA)
                 .asPagedIterable(getApiTailUrl("labels"), GHLabel[].class, item -> item.wrapUp(GHRepository.this));
     }
 
@@ -1796,11 +1795,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel getLabel(String name) throws IOException {
-        return root.createRequest()
-                .withPreview(SYMMETRA)
-                .withUrlPath(getApiTailUrl("labels/" + name))
-                .fetch(GHLabel.class)
-                .wrapUp(this);
+        return root.createRequest().withUrlPath(getApiTailUrl("labels/" + name)).fetch(GHLabel.class).wrapUp(this);
     }
 
     /**
@@ -1831,12 +1826,9 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview
-    @Deprecated
     public GHLabel createLabel(String name, String color, String description) throws IOException {
         return root.createRequest()
                 .method("POST")
-                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)
                 .with("description", description)

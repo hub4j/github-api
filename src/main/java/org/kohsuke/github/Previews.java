@@ -67,14 +67,6 @@ class Previews {
     static final String SQUIRREL_GIRL = "application/vnd.github.squirrel-girl-preview";
 
     /**
-     * Label emoji, search, and descriptions
-     *
-     * @see <a href="https://developer.github.com/v3/previews/#label-emoji-search-and-descriptions">GitHub API
-     *      Previews</a>
-     */
-    static final String SYMMETRA = "application/vnd.github.symmetra-preview+json";
-
-    /**
      * Require signed commits
      *
      * @see <a href="https://developer.github.com/v3/previews/#require-signed-commits">GitHub API Previews</a>

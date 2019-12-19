@@ -10,8 +10,8 @@
     "marketplace_purchase": {
       "billing_cycle": "monthly",
       "next_billing_date": "2020-01-01T00:00:00.000Z",
-      "on_free_trial": false,
-      "free_trial_ends_on": null,
+      "on_free_trial": true,
+      "free_trial_ends_on": "2020-01-01T00:00:00.000Z",
       "unit_count": null,
       "updated_at": "2019-11-25T00:00:00.000Z",
       "plan": {

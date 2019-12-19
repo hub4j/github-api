@@ -1,14 +1,12 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.URL;
 
 /**
  * A Github Marketplace Account.
  *
  * @author Paulo Miguel Almeida
- * @see GHMarketplaceListAccountBuilder#retrieve()
+ * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplaceAccount {
 
@@ -17,12 +15,9 @@ public class GHMarketplaceAccount {
     private long id;
     private String login;
     private String email;
-    @JsonProperty("organization_billing_email")
     private String organizationBillingEmail;
     private GHMarketplaceAccountType type;
-    @JsonProperty("marketplace_pending_change")
     private GHMarketplacePendingChange marketplacePendingChange;
-    @JsonProperty("marketplace_purchase")
     private GHMarketplacePurchase marketplacePurchase;
 
     /**

@@ -11,6 +11,6 @@ public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         assertThat(org.toString(),
                 containsString(
-                        "login=github-api-test-org,location=<null>,blog=<null>,email=<null>,name=<null>,company=<null>,followers=0,following=0"));
+                        "login=github-api-test-org,location=<null>,blog=<null>,email=<null>,name=<null>,company=<null>,type=Organization,followers=0,following=0"));
     }
 }

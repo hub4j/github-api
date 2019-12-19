@@ -1831,12 +1831,9 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview
-    @Deprecated
     public GHLabel createLabel(String name, String color, String description) throws IOException {
         return root.createRequest()
                 .method("POST")
-                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)
                 .with("description", description)

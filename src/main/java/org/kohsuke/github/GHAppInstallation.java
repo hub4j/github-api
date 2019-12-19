@@ -171,4 +171,19 @@ public class GHAppInstallation extends GHObject {
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
         return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id), permissions);
     }
+
+    /**
+     * Starts a builder that creates a new App Installation Token.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
+     * finally create an access token.
+     *
+     * @return a GHAppCreateTokenBuilder on error
+     */
+    @Preview
+    @Deprecated
+    public GHAppCreateTokenBuilder createToken() {
+        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id));
+    }
 }

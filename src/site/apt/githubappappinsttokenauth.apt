@@ -27,6 +27,6 @@ GHAppInstallationToken appInstallationToken = appInstallation
                     .create();
 // Or
 
-GHAppInstallationToken appInstallationToken = appInstallation.create();
+GHAppInstallationToken appInstallationToken = appInstallation.createToken().create();
 
 +-----+

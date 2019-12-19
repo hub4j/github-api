@@ -131,7 +131,7 @@ public class GHDeployment extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHDeploymentStatus> listStatuses() {
-        return root.retrieve().asPagedIterable(statuses_url, GHDeploymentStatus[].class, item -> item.wrap(owner));
+        return root.createRequest().asPagedIterable(statuses_url, GHDeploymentStatus[].class, item -> item.wrap(owner));
     }
 
 }

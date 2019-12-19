@@ -71,7 +71,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        GHEmail[] addresses = root.retrieve().to("/user/emails", GHEmail[].class);
+        GHEmail[] addresses = root.createRequest().withUrlPath("/user/emails").fetchArray(GHEmail[].class);
         return Collections.unmodifiableList(Arrays.asList(addresses));
     }
 
@@ -86,7 +86,8 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.retrieve().to("/user/keys", GHKey[].class)));
+        return Collections.unmodifiableList(
+                Arrays.asList(root.createRequest().withUrlPath("/user/keys").fetchArray(GHKey[].class)));
     }
 
     /**
@@ -100,8 +101,8 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return Collections.unmodifiableList(
-                Arrays.asList(root.retrieve().to("/users/" + getLogin() + "/keys", GHVerifiedKey[].class)));
+        return Collections.unmodifiableList(Arrays.asList(
+                root.createRequest().withUrlPath("/users/" + getLogin() + "/keys").fetchArray(GHVerifiedKey[].class)));
     }
 
     /**
@@ -114,7 +115,7 @@ public class GHMyself extends GHUser {
     public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.retrieve().to("/user/orgs", GHOrganization[].class)) {
+        for (GHOrganization o : root.createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class)) {
             if (names.add(o.getLogin())) // in case of rumoured duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -175,7 +176,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-        return root.retrieve()
+        return root.createRequest()
                 .with("type", repoType)
                 .asPagedIterable("/user/repos", GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
@@ -208,7 +209,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return root.retrieve()
+        return root.createRequest()
                 .with("state", state)
                 .asPagedIterable("/user/memberships/orgs", GHMembership[].class, item -> item.wrap(root));
     }
@@ -223,7 +224,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-        return root.retrieve().to("/user/memberships/orgs/" + o.getLogin(), GHMembership.class).wrap(root);
+        return root.createRequest()
+                .withUrlPath("/user/memberships/orgs/" + o.getLogin())
+                .fetch(GHMembership.class)
+                .wrap(root);
     }
 
     // public void addEmails(Collection<String> emails) throws IOException {

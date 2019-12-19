@@ -199,7 +199,7 @@ public class GHLicense extends GHObject {
         if (description != null)
             return; // already populated
 
-        root.retrieve().to(url, this);
+        root.createRequest().withUrlPath(url).fetchInto(this);
     }
 
     @Override

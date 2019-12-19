@@ -34,13 +34,12 @@
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.2.2</okhttp3.version>
-    <okio.version>2.4.1</okio.version>
+    <okio.version>2.4.2</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
-    <jacoco.coverage.target.class>.80</jacoco.coverage.target.class>
-    <jacoco.coverage.target.method>0.20</jacoco.coverage.target.method>
-    <jacoco.coverage.target.line>0.50</jacoco.coverage.target.line>
-    <jacoco.coverage.target.other>0.50</jacoco.coverage.target.other>
+    <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
+    <jacoco.coverage.target.bundle.bundle.method>0.556</jacoco.coverage.target.bundle.bundle.method>
+    <jacoco.coverage.target.class.class.method>0.25</jacoco.coverage.target.class.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
   </properties>
@@ -295,7 +294,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.5.1.201910021850-r</version>
+      <version>5.6.0.201912101111-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -333,7 +332,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.2.0</version>
+      <version>3.2.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -373,6 +372,8 @@
       <properties>
         <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
         <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+        <enable-jacoco>true</enable-jacoco>
+        <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
       </properties>
       <build>
       </build>
@@ -413,57 +414,92 @@
                 <configuration>
                   <rules>
                     <rule>
+                      <element>BUNDLE</element>
+                      <limits>
+                        <limit>
+                          <counter>METHOD</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${jacoco.coverage.target.bundle.method}</minimum>
+                        </limit>
+                      </limits>
+                    </rule>
+                    <rule>
                       <!--We end up with chatty logs, but it shows us which particular classes    -->
                       <!--are lacking in coverage. If this is too much, just remove the           -->
                       <!--<element>CLASS</element> tag below.                                     -->
                       <element>CLASS</element>
                       <limits>
-                        <!-- These limits can be overridden, in the form of `0.50` for          -->
-                        <!-- 50%, as necessary. Using a property just puts it in one spot.      -->
-                        <!--
-                                                <limit>
-                                                  <counter>LINE</counter>
-                                                  <value>COVEREDRATIO</value>
-                                                  <minimum>${jacoco.coverage.target.lines}</minimum>
-                                                </limit>
-                        -->
-                        <!--
-                                                <limit>
-                                                  <counter>BRANCH</counter>
-                                                  <value>COVEREDRATIO</value>
-                                                  <minimum>${jacoco.coverage.target.other}</minimum>
-                                                </limit>
-                        -->
-                        <!--
-                                                <limit>
-                                                  <counter>INSTRUCTION</counter>
-                                                  <value>COVEREDRATIO</value>
-                                                  <minimum>${jacoco.coverage.target.other}</minimum>
-                                                </limit>
-                        -->
-                        <!--
-                                                <limit>
-                                                  <counter>COMPLEXITY</counter>
-                                                  <value>COVEREDRATIO</value>
-                                                  <minimum>${jacoco.coverage.target.other}</minimum>
-                                                </limit>
-                        -->
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.method}</minimum>
+                          <minimum>${jacoco.coverage.target.class.method}</minimum>
                         </limit>
-                        <!--                        <limit>-->
-                        <!--                          <counter>CLASS</counter>-->
-                        <!--                          <value>COVEREDRATIO</value>-->
-                        <!--                          <minimum>${jacoco.coverage.target.class}</minimum>-->
-                        <!--                        </limit>-->
                       </limits>
                       <excludes>
+                        <!-- Code implemented externally -->
                         <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
                         <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+
+                        <!-- Sample only -->
+                        <exclude>org.kohsuke.github.example.*</exclude>
+
+                        <!-- No methods -->
+                        <exclude>org.kohsuke.github.DeleteToken</exclude>
+                        <exclude>org.kohsuke.github.Previews</exclude>
+
+                        <!-- Deprecated -->
                         <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
-                        <!--<exclude>io.jenkins.plugins.todeclarative.converter.api.*</exclude>-->
+                        <exclude>org.kohsuke.github.EnforcementLevel</exclude>
+                        <exclude>org.kohsuke.github.GHPerson.1</exclude>
+                        <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
+
+                        <!-- TODO: These still need test coverage -->
+                        <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
+                        <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
+                        <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
+                        <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
+                        <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
+                        <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
+                        <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
+                        <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
+                        <exclude>org.kohsuke.github.GHCommitState</exclude>
+                        <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
+                        <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
+                        <exclude>org.kohsuke.github.GHCompare.Status</exclude>
+                        <exclude>org.kohsuke.github.GHCompare.Tree</exclude>
+                        <exclude>org.kohsuke.github.GHCompare.User</exclude>
+                        <exclude>org.kohsuke.github.GHCompare</exclude>
+                        <exclude>org.kohsuke.github.GHDeployKey</exclude>
+                        <exclude>org.kohsuke.github.GHDeploymentStatusBuilder</exclude>
+                        <exclude>org.kohsuke.github.GHDirection</exclude>
+                        <exclude>org.kohsuke.github.GHEmail</exclude>
+                        <exclude>org.kohsuke.github.GHEventPayload.Ping</exclude>
+                        <exclude>org.kohsuke.github.GHEventPayload.Release</exclude>
+                        <exclude>org.kohsuke.github.GHException</exclude>
+                        <exclude>org.kohsuke.github.GHHook</exclude>
+                        <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
+                        <exclude>org.kohsuke.github.GHInvitation</exclude>
+                        <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
+                        <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
+                        <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
+                        <exclude>org.kohsuke.github.GHMilestoneState</exclude>
+                        <exclude>org.kohsuke.github.GHOrgHook</exclude>
+                        <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Authorship</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Commit</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Tree</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestFileDetail</exclude>
+                        <exclude>org.kohsuke.github.GHPullRequestQueryBuilder.Sort</exclude>
+                        <exclude>org.kohsuke.github.GHReleaseUpdater</exclude>
+                        <exclude>org.kohsuke.github.GHRepository.ForkSort</exclude>
+                        <exclude>org.kohsuke.github.GHStargazer</exclude>
+                        <exclude>org.kohsuke.github.GHTagObject</exclude>
+                        <exclude>org.kohsuke.github.GHTeam.Role</exclude>
+                        <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
+                        <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
+                        <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
                       </excludes>
                     </rule>
                   </rules>

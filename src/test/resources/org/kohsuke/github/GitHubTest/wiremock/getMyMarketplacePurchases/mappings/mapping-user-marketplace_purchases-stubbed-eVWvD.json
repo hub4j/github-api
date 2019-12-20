@@ -2,7 +2,12 @@
   "id" : "e5392532-debb-30c4-b86b-f5882a0d22b6",
   "request" : {
     "url" : "/user/marketplace_purchases",
-    "method" : "GET"
+    "method" : "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response" : {
     "status" : 200,

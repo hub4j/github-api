@@ -3,7 +3,12 @@
   "name": "orgs_github-api-test-org_teams",
   "request": {
     "url": "/orgs/github-api-test-org/teams",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "projects_3312437",
   "request": {
     "url": "/projects/3312437",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    }
   },
   "response": {
     "status": 404,

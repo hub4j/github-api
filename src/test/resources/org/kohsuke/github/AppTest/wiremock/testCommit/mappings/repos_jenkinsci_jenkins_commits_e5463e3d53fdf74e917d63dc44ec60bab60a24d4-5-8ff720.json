@@ -3,7 +3,12 @@
   "name": "repos_jenkinsci_jenkins_commits_e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
   "request": {
     "url": "/repos/jenkinsci/jenkins/commits/e5463e3d53fdf74e917d63dc44ec60bab60a24d4",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

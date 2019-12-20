@@ -3,7 +3,12 @@
   "name": "repositories_206888201_issues_events",
   "request": {
     "url": "/repositories/206888201/issues/events?page=6",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

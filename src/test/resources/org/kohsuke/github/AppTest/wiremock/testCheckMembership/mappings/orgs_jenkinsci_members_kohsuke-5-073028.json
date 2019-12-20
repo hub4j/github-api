@@ -3,7 +3,12 @@
   "name": "orgs_jenkinsci_members_kohsuke",
   "request": {
     "url": "/orgs/jenkinsci/members/kohsuke",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

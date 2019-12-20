@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_test-permission_collaborators_dude_permission",
   "request": {
     "url": "/repos/github-api-test-org/test-permission/collaborators/dude/permission",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

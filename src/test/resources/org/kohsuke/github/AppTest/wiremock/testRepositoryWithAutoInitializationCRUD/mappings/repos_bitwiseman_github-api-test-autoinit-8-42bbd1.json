@@ -3,7 +3,12 @@
   "name": "repos_bitwiseman_github-api-test-autoinit",
   "request": {
     "url": "/repos/bitwiseman/github-api-test-autoinit",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

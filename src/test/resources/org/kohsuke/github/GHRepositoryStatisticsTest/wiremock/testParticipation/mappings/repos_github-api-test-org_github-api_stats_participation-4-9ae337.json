@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_github-api_stats_participation",
   "request": {
     "url": "/repos/github-api-test-org/github-api/stats/participation",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

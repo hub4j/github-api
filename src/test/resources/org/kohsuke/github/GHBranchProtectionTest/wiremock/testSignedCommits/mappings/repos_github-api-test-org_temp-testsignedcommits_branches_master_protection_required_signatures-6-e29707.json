@@ -10,7 +10,12 @@
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
-    ]
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.zzzax-preview+json"
+      }
+    }
   },
   "response": {
     "status": 200,

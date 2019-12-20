@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_github-api_pulls_258_reviews_285200957",
   "request": {
     "url": "/repos/github-api-test-org/github-api/pulls/258/reviews/285200957",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

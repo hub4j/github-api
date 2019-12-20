@@ -10,7 +10,12 @@
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
-    ]
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 422,

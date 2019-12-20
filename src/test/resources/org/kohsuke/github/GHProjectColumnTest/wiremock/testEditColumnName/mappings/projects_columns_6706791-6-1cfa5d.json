@@ -3,7 +3,12 @@
   "name": "projects_columns_6706791",
   "request": {
     "url": "/projects/columns/6706791",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    }
   },
   "response": {
     "status": 200,

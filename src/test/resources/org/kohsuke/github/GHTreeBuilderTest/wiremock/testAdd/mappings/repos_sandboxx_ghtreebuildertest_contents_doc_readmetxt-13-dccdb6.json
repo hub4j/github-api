@@ -3,7 +3,12 @@
   "name": "repos_sandboxx_ghtreebuildertest_contents_doc_readmetxt",
   "request": {
     "url": "/repos/sandboxx/GHTreeBuilderTest/contents/doc/readme.txt",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "repos_bitwiseman_github-api-test-autoinit_readme",
   "request": {
     "url": "/repos/bitwiseman/github-api-test-autoinit/readme",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

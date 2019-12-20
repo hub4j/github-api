@@ -3,7 +3,12 @@
   "name": "repos_github-api_github-api_git_trees_master",
   "request": {
     "url": "/repos/github-api/github-api/git/trees/master?recursive=1",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

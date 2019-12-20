@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_github-api_topics",
   "request": {
     "url": "/repos/github-api-test-org/github-api/topics",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.mercy-preview+json"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -64,7 +64,7 @@ class Previews {
      *
      * @see <a href="https://developer.github.com/v3/previews/#reactions">GitHub API Previews</a>
      */
-    static final String SQUIRREL_GIRL = "application/vnd.github.squirrel-girl-preview";
+    static final String SQUIRREL_GIRL = "application/vnd.github.squirrel-girl-preview+json";
 
     /**
      * Require signed commits

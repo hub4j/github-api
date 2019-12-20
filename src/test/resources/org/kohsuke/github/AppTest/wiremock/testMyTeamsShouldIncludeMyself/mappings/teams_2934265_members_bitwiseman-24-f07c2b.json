@@ -3,7 +3,12 @@
   "name": "teams_2934265_members_bitwiseman",
   "request": {
     "url": "/teams/2934265/members/bitwiseman",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

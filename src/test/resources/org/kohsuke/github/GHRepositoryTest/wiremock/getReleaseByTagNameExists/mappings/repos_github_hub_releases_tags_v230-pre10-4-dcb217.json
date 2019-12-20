@@ -3,7 +3,12 @@
   "name": "repos_github_hub_releases_tags_v230-pre10",
   "request": {
     "url": "/repos/github/hub/releases/tags/v2.3.0-pre10",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

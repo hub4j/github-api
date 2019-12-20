@@ -3,7 +3,12 @@
   "name": "organizations",
   "request": {
     "url": "/organizations?per_page=2&since=128",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

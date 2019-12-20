@@ -15,21 +15,16 @@ public class GHMarketplacePlan {
 
     private GitHub root;
     private String url;
-    @JsonProperty("accounts_url")
     private String accountsUrl;
     private long id;
     private long number;
     private String name;
     private String description;
-    @JsonProperty("monthly_price_in_cents")
     private long monthlyPriceInCents;
-    @JsonProperty("yearly_price_in_cents")
     private long yearlyPriceInCents;
-    @JsonProperty("price_model")
     private GHMarketplacePriceModel priceModel;
     @JsonProperty("has_free_trial")
     private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is<propertyName>
-    @JsonProperty("unit_name")
     private String unitName;
     private String state;
     private List<String> bullets;
@@ -171,7 +166,7 @@ public class GHMarketplacePlan {
      *
      * <p>
      * You use the returned builder to set various properties, then call
-     * {@link GHMarketplaceListAccountBuilder#retrieve()} to finally list the accounts related to this plan.
+     * {@link GHMarketplaceListAccountBuilder#createRequest()} to finally list the accounts related to this plan.
      *
      * <p>
      * GitHub Apps must use a JWT to access this endpoint.

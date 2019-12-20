@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
@@ -9,16 +8,16 @@ import java.util.Date;
  * A Github Marketplace purchase pending change.
  *
  * @author Paulo Miguel Almeida
- * @see GHMarketplaceListAccountBuilder#retrieve()
+ * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplacePendingChange {
     private GitHub root;
     private long id;
-    @JsonProperty("unit_count")
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private Long unitCount;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
-    @JsonProperty("effective_date")
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private String effectiveDate;
 
     /**

@@ -2,7 +2,7 @@
   "id": "d9617266-1ca6-44b2-b495-52c1f3be4b91",
   "name": "notifications",
   "request": {
-    "url": "/notifications?all=true&page=2&all=true",
+    "url": "/notifications?all=true&page=2",
     "method": "GET"
   },
   "response": {

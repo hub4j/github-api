@@ -12,6 +12,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  *
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
+ * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppCreateTokenBuilder {
     private final GitHub root;
@@ -20,11 +21,17 @@ public class GHAppCreateTokenBuilder {
 
     @Preview
     @Deprecated
-    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
+    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
-        this.builder = new Requester(root);
-        withPermissions(builder, permissions);
+        this.builder = root.createRequest();
+    }
+
+    @Preview
+    @Deprecated
+    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
+        this(root, apiUrlTail);
+        permissions(permissions);
     }
 
     /**
@@ -44,6 +51,25 @@ public class GHAppCreateTokenBuilder {
     }
 
     /**
+     * Set the permissions granted to the access token. The permissions object includes the permission names and their
+     * access type.
+     *
+     * @param permissions
+     *            Map containing the permission names and types.
+     * @return a GHAppCreateTokenBuilder
+     */
+    @Preview
+    @Deprecated
+    public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
+        Map<String, String> retMap = new HashMap<>();
+        for (Map.Entry<String, GHPermissionType> entry : permissions.entrySet()) {
+            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
+        }
+        builder.with("permissions", retMap);
+        return this;
+    }
+
+    /**
      * Creates an app token with all the parameters.
      * <p>
      * You must use a JWT to access this endpoint.
@@ -57,16 +83,9 @@ public class GHAppCreateTokenBuilder {
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST")
                 .withPreview(MACHINE_MAN)
-                .to(apiUrlTail, GHAppInstallationToken.class)
+                .withUrlPath(apiUrlTail)
+                .fetch(GHAppInstallationToken.class)
                 .wrapUp(root);
-    }
-
-    private static Requester withPermissions(Requester builder, Map<String, GHPermissionType> value) {
-        Map<String, String> retMap = new HashMap<String, String>();
-        for (Map.Entry<String, GHPermissionType> entry : value.entrySet()) {
-            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
-        }
-        return builder.with("permissions", retMap);
     }
 
 }

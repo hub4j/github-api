@@ -161,7 +161,7 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public void markAsRead() throws IOException {
-        new Requester(root).method("PATCH").to(url);
+        root.createRequest().method("PATCH").withUrlPath(url).send();
     }
 
     /**
@@ -176,10 +176,12 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return new Requester(root).with("subscribed", subscribed)
-                .with("ignored", ignored)
+        return root.createRequest()
                 .method("PUT")
-                .to(subscription_url, GHSubscription.class)
+                .with("subscribed", subscribed)
+                .with("ignored", ignored)
+                .withUrlPath(subscription_url)
+                .fetch(GHSubscription.class)
                 .wrapUp(root);
     }
 
@@ -192,7 +194,11 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return new Requester(root).to(subscription_url, GHSubscription.class).wrapUp(root);
+            return root.createRequest()
+                    .method("POST")
+                    .withUrlPath(subscription_url)
+                    .fetch(GHSubscription.class)
+                    .wrapUp(root);
         } catch (FileNotFoundException e) {
             return null;
         }

@@ -155,11 +155,11 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.retrieve().method("DELETE").to(getApiRoute());
+        root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     private void edit(String key, Object value) throws IOException {
-        new Requester(root).with(key, value).method("PATCH").to(getApiRoute());
+        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**

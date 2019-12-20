@@ -58,6 +58,6 @@ public class GHReaction extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(root).method("DELETE").withPreview(SQUIRREL_GIRL).to("/reactions/" + id);
+        root.createRequest().method("DELETE").withPreview(SQUIRREL_GIRL).withUrlPath("/reactions/" + id).send();
     }
 }

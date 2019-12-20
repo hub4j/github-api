@@ -25,4 +25,8 @@ permissions.put("pull_requests", GHPermissionType.WRITE);
 GHAppInstallationToken appInstallationToken = appInstallation
                     .createToken(permissions)
                     .create();
+// Or
+
+GHAppInstallationToken appInstallationToken = appInstallation.createToken().create();
+
 +-----+

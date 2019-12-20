@@ -15,7 +15,7 @@ public class GHMarketplaceListAccountBuilder {
 
     GHMarketplaceListAccountBuilder(GitHub root, long planId) {
         this.root = root;
-        this.builder = new Requester(root);
+        this.builder = root.createRequest();
         this.planId = planId;
     }
 
@@ -63,9 +63,8 @@ public class GHMarketplaceListAccountBuilder {
      * @throws IOException
      *             on error
      */
-    public PagedIterable<GHMarketplaceAccountPlan> retrieve() throws IOException {
-        return builder.method("GET")
-                .asPagedIterable(String.format("/marketplace_listing/plans/%d/accounts", this.planId),
+    public PagedIterable<GHMarketplaceAccountPlan> createRequest() throws IOException {
+        return builder.asPagedIterable(String.format("/marketplace_listing/plans/%d/accounts", this.planId),
                         GHMarketplaceAccountPlan[].class,
                         item -> item.wrapUp(root));
     }

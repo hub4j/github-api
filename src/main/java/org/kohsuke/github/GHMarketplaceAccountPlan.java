@@ -1,18 +1,18 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A Github Marketplace Account Plan.
  *
  * @author Paulo Miguel Almeida
- * @see GHMarketplaceListAccountBuilder#retrieve()
+ * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {
 
-    @JsonProperty("marketplace_pending_change")
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePendingChange marketplacePendingChange;
-    @JsonProperty("marketplace_purchase")
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePurchase marketplacePurchase;
 
     /**

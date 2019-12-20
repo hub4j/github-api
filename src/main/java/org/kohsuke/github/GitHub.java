@@ -773,7 +773,7 @@ public class GitHub {
      *      Marketplace purchases</a>
      */
     public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
-        return retrieve().asPagedIterable("/user/marketplace_purchases",
+        return createRequest().asPagedIterable("/user/marketplace_purchases",
                 GHMarketplaceUserPurchase[].class,
                 item -> item.wrapUp(this));
     }

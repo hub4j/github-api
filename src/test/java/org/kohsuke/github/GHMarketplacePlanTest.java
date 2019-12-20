@@ -45,7 +45,10 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         assertEquals(3, plans.size());
 
         for (GHMarketplacePlan plan : plans) {
-            List<GHMarketplaceAccountPlan> marketplaceUsers = plan.listAccounts().direction(DESC).createRequest().asList();
+            List<GHMarketplaceAccountPlan> marketplaceUsers = plan.listAccounts()
+                    .direction(DESC)
+                    .createRequest()
+                    .asList();
             assertEquals(2, marketplaceUsers.size());
             marketplaceUsers.forEach(this::testMarketplaceAccount);
         }

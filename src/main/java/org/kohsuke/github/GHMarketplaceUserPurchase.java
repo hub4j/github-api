@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
@@ -13,17 +12,11 @@ import java.util.Date;
  */
 public class GHMarketplaceUserPurchase {
     protected GitHub root;
-    @JsonProperty("billing_cycle")
     private String billingCycle;
-    @JsonProperty("next_billing_date")
     private String nextBillingDate;
-    @JsonProperty("on_free_trial")
     private boolean onFreeTrial;
-    @JsonProperty("free_trial_ends_on")
     private String freeTrialEndsOn;
-    @JsonProperty("unit_count")
     private Long unitCount;
-    @JsonProperty("updated_at")
     private String updatedAt;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplaceAccount account;

@@ -3,7 +3,12 @@
   "name": "orgs_engineyard",
   "request": {
     "url": "/orgs/engineyard",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

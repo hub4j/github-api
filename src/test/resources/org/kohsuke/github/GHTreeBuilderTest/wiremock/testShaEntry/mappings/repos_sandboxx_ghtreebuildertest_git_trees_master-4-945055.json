@@ -3,7 +3,12 @@
   "name": "repos_sandboxx_ghtreebuildertest_git_trees_master",
   "request": {
     "url": "/repos/sandboxx/GHTreeBuilderTest/git/trees/master?recursive=1",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

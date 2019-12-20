@@ -3,7 +3,12 @@
   "name": "organizations_235526_teams",
   "request": {
     "url": "/organizations/235526/teams?page=2",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

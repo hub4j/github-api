@@ -3,7 +3,12 @@
   "name": "search_code",
   "request": {
     "url": "/search/code?q=addClass+in%3Afile+language%3Ajs+repo%3Ajquery%2Fjquery",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

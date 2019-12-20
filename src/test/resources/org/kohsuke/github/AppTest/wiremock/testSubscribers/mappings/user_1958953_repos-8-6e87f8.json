@@ -3,7 +3,12 @@
   "name": "user_1958953_repos",
   "request": {
     "url": "/user/1958953/repos?per_page=30&page=4",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

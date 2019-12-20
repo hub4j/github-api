@@ -10,7 +10,12 @@
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
-    ]
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
   },
   "response": {
     "status": 201,
@@ -31,7 +36,7 @@
       "ETag": "\"114f64d23a30418378801432528d6961\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "github.squirrel-girl-preview",
+      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",

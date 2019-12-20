@@ -109,9 +109,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             return;
         }
 
+        // "If-None-Match" header used for ETag matching for caching connections
+        // "Accept" header is used to specify previews. If it changes expected data may not be retrieved.
         this.apiServer()
                 .snapshotRecord(recordSpec().forTarget("https://api.github.com")
                         .captureHeader("If-None-Match")
+                        .captureHeader("Accept")
                         .extractTextBodiesOver(255));
 
         // After taking the snapshot, format the output
@@ -121,6 +124,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             this.rawServer()
                     .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
                             .captureHeader("If-None-Match")
+                            .captureHeader("Accept")
                             .extractTextBodiesOver(255));
 
             // For raw server, only fix up mapping files
@@ -131,6 +135,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             this.uploadsServer()
                     .snapshotRecord(recordSpec().forTarget("https://uploads.github.com")
                             .captureHeader("If-None-Match")
+                            .captureHeader("Accept")
                             .extractTextBodiesOver(255));
 
             formatJsonFiles(new File(this.uploadsServer().getOptions().filesRoot().getPath()).toPath());

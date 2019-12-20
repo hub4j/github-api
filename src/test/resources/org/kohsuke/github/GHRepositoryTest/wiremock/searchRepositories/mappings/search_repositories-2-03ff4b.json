@@ -3,7 +3,12 @@
   "name": "search_repositories",
   "request": {
     "url": "/search/repositories?sort=stars&q=tetris+language%3Aassembly",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "repos_github-api_github-api_statuses_ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396",
   "request": {
     "url": "/repos/github-api/github-api/statuses/ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

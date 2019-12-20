@@ -3,7 +3,12 @@
   "name": "repos_jenkinsci_jenkins_git_blobs_187cdf651cbf44196886f87327dc3968443174fb",
   "request": {
     "url": "/repos/jenkinsci/jenkins/git/blobs/187cdf651cbf44196886f87327dc3968443174fb",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3.raw"
+      }
+    }
   },
   "response": {
     "status": 200,

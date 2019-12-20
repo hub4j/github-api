@@ -3,7 +3,12 @@
   "name": "repos_kohsuke_sandbox-ant_comments_35673784",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant/comments/35673784",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

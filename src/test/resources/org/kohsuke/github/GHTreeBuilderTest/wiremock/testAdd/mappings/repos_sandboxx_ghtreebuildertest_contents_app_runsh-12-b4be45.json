@@ -3,7 +3,12 @@
   "name": "repos_sandboxx_ghtreebuildertest_contents_app_runsh",
   "request": {
     "url": "/repos/sandboxx/GHTreeBuilderTest/contents/app/run.sh",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

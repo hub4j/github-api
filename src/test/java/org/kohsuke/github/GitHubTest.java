@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
 /**
  * Unit test for {@link GitHub}.
@@ -106,6 +107,51 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertEquals(6, metaExample.getImporter().size());
             assertEquals(6, metaExample.getPages().size());
             assertEquals(19, metaExample.getWeb().size());
+        }
+    }
+
+    @Test
+    public void getMyMarketplacePurchases() throws IOException {
+        List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().asList();
+        assertEquals(2, userPurchases.size());
+
+        for (GHMarketplaceUserPurchase userPurchase : userPurchases) {
+            assertFalse(userPurchase.isOnFreeTrial());
+            assertNull(userPurchase.getFreeTrialEndsOn());
+            assertEquals("monthly", userPurchase.getBillingCycle());
+
+            GHMarketplacePlan plan = userPurchase.getPlan();
+            // GHMarketplacePlan - Non-nullable fields
+            assertNotNull(plan.getUrl());
+            assertNotNull(plan.getAccountsUrl());
+            assertNotNull(plan.getName());
+            assertNotNull(plan.getDescription());
+            assertNotNull(plan.getPriceModel());
+            assertNotNull(plan.getState());
+
+            // GHMarketplacePlan - primitive fields
+            assertNotEquals(0L, plan.getId());
+            assertNotEquals(0L, plan.getNumber());
+            assertTrue(plan.getMonthlyPriceInCents() >= 0);
+
+            // GHMarketplacePlan - list
+            assertEquals(2, plan.getBullets().size());
+
+            GHMarketplaceAccount account = userPurchase.getAccount();
+            // GHMarketplaceAccount - Non-nullable fields
+            assertNotNull(account.getLogin());
+            assertNotNull(account.getUrl());
+            assertNotNull(account.getType());
+
+            // GHMarketplaceAccount - primitive fields
+            assertNotEquals(0L, account.getId());
+
+            /* logical combination tests */
+            // Rationale: organization_billing_email is only set when account type is ORGANIZATION.
+            if (account.getType() == ORGANIZATION)
+                assertNotNull(account.getOrganizationBillingEmail());
+            else
+                assertNull(account.getOrganizationBillingEmail());
         }
     }
 }

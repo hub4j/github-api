@@ -1,0 +1,69 @@
+[
+  {
+    "billing_cycle": "monthly",
+    "next_billing_date": "2020-01-01T00:00:00.000+13:00",
+    "on_free_trial": false,
+    "free_trial_ends_on": null,
+    "unit_count": null,
+    "updated_at": "2019-12-02T00:00:00.000+13:00",
+    "account": {
+      "login": "github",
+      "id": 4,
+      "url": "https://api.github.com/orgs/github",
+      "email": null,
+      "organization_billing_email": "billing@github.com",
+      "type": "Organization"
+    },
+    "plan": {
+      "url": "https://api.github.com/marketplace_listing/plans/9",
+      "accounts_url": "https://api.github.com/marketplace_listing/plans/9/accounts",
+      "id": 9,
+      "number": 3,
+      "name": "Pro",
+      "description": "A professional-grade CI solution",
+      "monthly_price_in_cents": 1099,
+      "yearly_price_in_cents": 11870,
+      "has_free_trial": false,
+      "price_model": "flat-rate",
+      "state": "published",
+      "unit_name": null,
+      "bullets": [
+        "This is the first bullet of the Pro plan",
+        "This is the second bullet of the Pro plan"
+      ]
+    }
+  },
+  {
+    "billing_cycle": "monthly",
+    "next_billing_date": "2020-01-01T00:00:00.000+13:00",
+    "on_free_trial": false,
+    "free_trial_ends_on": null,
+    "unit_count": null,
+    "updated_at": "2019-12-02T00:00:00.000+13:00",
+    "account": {
+      "login": "test",
+      "id": 2,
+      "url": "https://api.github.com/users/test",
+      "email": "test@example.com",
+      "type": "User"
+    },
+    "plan": {
+      "url": "https://api.github.com/marketplace_listing/plans/7",
+      "accounts_url": "https://api.github.com/marketplace_listing/plans/7/accounts",
+      "id": 7,
+      "number": 1,
+      "name": "Free",
+      "description": "A free CI solution",
+      "monthly_price_in_cents": 0,
+      "yearly_price_in_cents": 0,
+      "price_model": "free",
+      "has_free_trial": false,
+      "state": "published",
+      "unit_name": null,
+      "bullets": [
+        "This is the first bullet of the free plan",
+        "This is the second bullet of the free plan"
+      ]
+    }
+  }
+]

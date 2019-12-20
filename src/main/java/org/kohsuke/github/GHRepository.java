@@ -1816,7 +1816,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Description is still in preview.
+     * Creates a new github label
      *
      * @param name
      *            the name

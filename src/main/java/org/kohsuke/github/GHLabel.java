@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Objects;
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */
-public class GHLabel {
+public class GHLabel extends GHObject {
     private String url, name, color, description;
     private GHRepository repo;
 
@@ -22,8 +24,18 @@ public class GHLabel {
      *
      * @return the url
      */
-    public String getUrl() {
-        return url;
+    public URL getUrl() {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public URL getHtmlUrl() throws IOException {
+        return null;
     }
 
     /**
@@ -66,6 +78,30 @@ public class GHLabel {
      */
     public void delete() throws IOException {
         repo.root.createRequest().method("DELETE").setRawUrlPath(url).send();
+    }
+
+    /**
+     * Updates an existing github label
+     *
+     * @param name
+     *            the name of the label
+     * @param color
+     *            the color
+     * @param description
+     *            the description
+     * @return gh label
+     * @throws IOException
+     *             the io exception
+     */
+    public GHLabel update(String name, String color, String description) throws IOException {
+        return repo.root.createRequest()
+                .method("PATCH")
+                .with("new_name", name)
+                .with("color", color)
+                .with("description", description)
+                .setRawUrlPath(url)
+                .fetchInto(this)
+                .wrapUp(this.repo);
     }
 
     /**

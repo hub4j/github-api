@@ -2653,4 +2653,30 @@ public class GHRepository extends GHObject {
                 .withUrlPath(getApiTailUrl("topics"))
                 .send();
     }
+
+    /**
+     * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
+     *
+     * @param tag
+     *            The tag's name.
+     * @param message
+     *            The tag message.
+     * @param object
+     *            The SHA of the git object this is tagging.
+     * @param type
+     *            The type of the object we're tagging: "commit", "tree" or "blob".
+     * @return The newly created tag.
+     * @throws java.io.IOException
+     */
+    public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
+        return root.createRequest()
+                .method("POST")
+                .with("tag", tag)
+                .with("message", message)
+                .with("object", object)
+                .with("type", type)
+                .withUrlPath(getApiTailUrl("git/tags"))
+                .fetch(GHTagObject.class)
+                .wrap(this);
+    }
 }

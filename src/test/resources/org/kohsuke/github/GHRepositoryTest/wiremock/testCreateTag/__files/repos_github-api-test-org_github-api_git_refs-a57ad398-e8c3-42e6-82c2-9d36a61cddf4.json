@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/create_tag_test",
+  "node_id": "MDM6UmVmMjA2ODg4MjAxOmNyZWF0ZV90YWdfdGVzdA==",
+  "url": "https://api.github.com/repos/github-api-test-org/github-api/git/refs/tags/create_tag_test",
+  "object": {
+    "sha": "f54a11526c489c661fddc34c9ce1af83f0cabee7",
+    "type": "tag",
+    "url": "https://api.github.com/repos/github-api-test-org/github-api/git/tags/f54a11526c489c661fddc34c9ce1af83f0cabee7"
+  }
+}

@@ -1567,8 +1567,10 @@ public class GHRepository extends GHObject {
      */
     public InputStream readBlob(String blobSha) throws IOException {
         String target = getApiTailUrl("git/blobs/" + blobSha);
+
+        // https://developer.github.com/v3/media/ describes this media type
         return root.createRequest()
-                .withHeader("Accept", "application/vnd.github.VERSION.raw")
+                .withHeader("Accept", "application/vnd.github.v3.raw")
                 .withUrlPath(target)
                 .fetchStream();
     }

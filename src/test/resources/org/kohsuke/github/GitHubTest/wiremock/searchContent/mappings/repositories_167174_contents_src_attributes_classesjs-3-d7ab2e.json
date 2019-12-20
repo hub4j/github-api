@@ -3,7 +3,12 @@
   "name": "repositories_167174_contents_src_attributes_classesjs",
   "request": {
     "url": "/repositories/167174/contents/src/attributes/classes.js?ref=cf84696fd1d7fe314a11492606529b5a658ee9e3",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

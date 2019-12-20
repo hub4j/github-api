@@ -3,7 +3,12 @@
   "name": "repos_jenkinsci_jenkins_git_trees_216d657eb6b24cb3ee300cf9dfe97b4131b7800b",
   "request": {
     "url": "/repos/jenkinsci/jenkins/git/trees/216d657eb6b24cb3ee300cf9dfe97b4131b7800b",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "gists_8edf855833a05ce8730d609fe8bd803a",
   "request": {
     "url": "/gists/8edf855833a05ce8730d609fe8bd803a",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

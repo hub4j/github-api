@@ -3,7 +3,12 @@
   "name": "repos_github_hub_releases_9223372036854775807",
   "request": {
     "url": "/repos/github/hub/releases/9223372036854775807",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 404,

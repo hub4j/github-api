@@ -3,7 +3,12 @@
   "name": "users_defunkt",
   "request": {
     "url": "/users/defunkt",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

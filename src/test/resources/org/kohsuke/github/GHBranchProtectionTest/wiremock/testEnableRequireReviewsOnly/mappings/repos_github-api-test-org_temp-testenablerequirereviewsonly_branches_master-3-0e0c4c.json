@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_temp-testenablerequirereviewsonly_branches_master",
   "request": {
     "url": "/repos/github-api-test-org/temp-testEnableRequireReviewsOnly/branches/master",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

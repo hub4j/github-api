@@ -3,7 +3,12 @@
   "name": "repos_jenkinsci_jenkins_comments",
   "request": {
     "url": "/repos/jenkinsci/jenkins/comments",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

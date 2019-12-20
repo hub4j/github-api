@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt",
   "request": {
     "url": "/repos/github-api-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt?path=test%2Bdirectory+%2350%2Ftest+file-to%2Bcreate-%231.txt&message=Enough+of+this+foolishness%21&sha=da2d3cc78776aec68881668775c46a53f0ee2288",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

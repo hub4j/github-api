@@ -3,7 +3,12 @@
   "name": "notifications",
   "request": {
     "url": "/notifications?all=true&page=3",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "organizations_107424_repos",
   "request": {
     "url": "/organizations/107424/repos?per_page=100&page=5",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

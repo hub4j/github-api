@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_ghcontentintegrationtest",
   "request": {
     "url": "/repos/github-api-test-org/GHContentIntegrationTest",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

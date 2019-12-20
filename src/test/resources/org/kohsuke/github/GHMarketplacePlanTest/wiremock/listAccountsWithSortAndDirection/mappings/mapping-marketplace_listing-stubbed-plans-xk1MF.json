@@ -2,7 +2,12 @@
   "id" : "e1c72a1d-7cae-3b19-a4cf-15da68b417cb",
   "request" : {
     "url" : "/marketplace_listing/plans",
-    "method" : "GET"
+    "method" : "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response" : {
     "status" : 200,

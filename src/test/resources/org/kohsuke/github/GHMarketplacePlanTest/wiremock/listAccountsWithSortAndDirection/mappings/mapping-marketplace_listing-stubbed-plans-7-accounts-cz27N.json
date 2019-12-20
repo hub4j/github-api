@@ -2,7 +2,12 @@
   "id" : "4bad09bb-8960-3af5-856d-95d0e889bdbc",
   "request" : {
     "url" : "/marketplace_listing/plans/7/accounts?sort=updated&direction=desc",
-    "method" : "GET"
+    "method" : "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response" : {
     "status" : 200,

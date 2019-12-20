@@ -3,7 +3,12 @@
   "name": "repos_stapler_stapler_commits_06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
   "request": {
     "url": "/repos/stapler/stapler/commits/06b1108ec041fd8d6e7f54c8578d84a672fee9e4",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

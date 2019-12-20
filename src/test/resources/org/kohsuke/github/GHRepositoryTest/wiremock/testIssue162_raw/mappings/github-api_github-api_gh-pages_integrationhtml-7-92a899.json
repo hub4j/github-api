@@ -3,7 +3,12 @@
   "name": "github-api_github-api_gh-pages_integrationhtml",
   "request": {
     "url": "/github-api/github-api/gh-pages/integration.html",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

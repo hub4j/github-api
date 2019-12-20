@@ -3,7 +3,12 @@
   "name": "projects_columns_cards_27353272",
   "request": {
     "url": "/projects/columns/cards/27353272",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    }
   },
   "response": {
     "status": 404,

@@ -9,7 +9,12 @@
         "equalTo": "**Test日本語**",
         "caseInsensitive": false
       }
-    ]
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

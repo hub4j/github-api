@@ -3,7 +3,12 @@
   "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

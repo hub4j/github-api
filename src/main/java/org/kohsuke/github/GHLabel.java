@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static org.kohsuke.github.Previews.SYMMETRA;
-
 /**
  * The type GHLabel.
  *
@@ -51,8 +49,6 @@ public class GHLabel {
      *
      * @return the description
      */
-    @Preview
-    @Deprecated
     public String getDescription() {
         return description;
     }
@@ -69,7 +65,7 @@ public class GHLabel {
      *             the io exception
      */
     public void delete() throws IOException {
-        repo.root.retrieve().method("DELETE").to(url);
+        repo.root.createRequest().method("DELETE").setRawUrlPath(url).send();
     }
 
     /**
@@ -81,13 +77,13 @@ public class GHLabel {
      *             the io exception
      */
     public void setColor(String newColor) throws IOException {
-        repo.root.retrieve()
+        repo.root.createRequest()
                 .method("PATCH")
-                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", newColor)
                 .with("description", description)
-                .to(url);
+                .setRawUrlPath(url)
+                .send();
     }
 
     /**
@@ -98,16 +94,14 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    @Preview
-    @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        repo.root.retrieve()
+        repo.root.createRequest()
                 .method("PATCH")
-                .withPreview(SYMMETRA)
                 .with("name", name)
                 .with("color", color)
                 .with("description", newDescription)
-                .to(url);
+                .setRawUrlPath(url)
+                .send();
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

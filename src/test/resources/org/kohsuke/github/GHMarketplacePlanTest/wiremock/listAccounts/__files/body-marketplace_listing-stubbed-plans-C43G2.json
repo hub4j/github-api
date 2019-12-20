@@ -1,0 +1,56 @@
+[
+  {
+    "url": "https://api.github.com/marketplace_listing/plans/7",
+    "accounts_url": "https://api.github.com/marketplace_listing/plans/7/accounts",
+    "id": 7,
+    "number": 1,
+    "name": "Free",
+    "description": "A free CI solution",
+    "monthly_price_in_cents": 0,
+    "yearly_price_in_cents": 0,
+    "price_model": "free",
+    "has_free_trial": false,
+    "state": "published",
+    "unit_name": null,
+    "bullets": [
+      "This is the first bullet of the free plan",
+      "This is the second bullet of the free plan"
+    ]
+  },
+  {
+    "url": "https://api.github.com/marketplace_listing/plans/8",
+    "accounts_url": "https://api.github.com/marketplace_listing/plans/8/accounts",
+    "id": 8,
+    "number": 2,
+    "name": "Hobby",
+    "description": "A hobby-grade CI solution",
+    "monthly_price_in_cents": 1099,
+    "yearly_price_in_cents": 11870,
+    "has_free_trial": false,
+    "price_model": "per-unit",
+    "state": "published",
+    "unit_name": "seat",
+    "bullets": [
+      "This is the first bullet of the Hobby plan",
+      "This is the second bullet of the Hobby plan"
+    ]
+  },
+  {
+    "url": "https://api.github.com/marketplace_listing/plans/9",
+    "accounts_url": "https://api.github.com/marketplace_listing/plans/9/accounts",
+    "id": 9,
+    "number": 3,
+    "name": "Pro",
+    "description": "A professional-grade CI solution",
+    "monthly_price_in_cents": 1099,
+    "yearly_price_in_cents": 11870,
+    "has_free_trial": false,
+    "price_model": "flat-rate",
+    "state": "published",
+    "unit_name": null,
+    "bullets": [
+      "This is the first bullet of the Pro plan",
+      "This is the second bullet of the Pro plan"
+    ]
+  }
+]

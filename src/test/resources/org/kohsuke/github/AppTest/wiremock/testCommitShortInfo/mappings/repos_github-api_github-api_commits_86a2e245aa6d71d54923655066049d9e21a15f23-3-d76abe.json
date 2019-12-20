@@ -3,7 +3,12 @@
   "name": "repos_github-api_github-api_commits_86a2e245aa6d71d54923655066049d9e21a15f23",
   "request": {
     "url": "/repos/github-api/github-api/commits/86a2e245aa6d71d54923655066049d9e21a15f23",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

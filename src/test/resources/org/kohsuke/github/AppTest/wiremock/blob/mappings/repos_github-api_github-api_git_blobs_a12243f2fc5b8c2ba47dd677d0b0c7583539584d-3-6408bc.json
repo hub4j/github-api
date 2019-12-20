@@ -3,7 +3,12 @@
   "name": "repos_github-api_github-api_git_blobs_a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
   "request": {
     "url": "/repos/github-api/github-api/git/blobs/a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3.raw"
+      }
+    }
   },
   "response": {
     "status": 200,

@@ -3,7 +3,12 @@
   "name": "repositories_617210_issues",
   "request": {
     "url": "/repositories/617210/issues?state=closed&page=6",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

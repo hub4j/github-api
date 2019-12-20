@@ -2,8 +2,13 @@
   "id": "d9617266-1ca6-44b2-b495-52c1f3be4b91",
   "name": "notifications",
   "request": {
-    "url": "/notifications?all=true&page=2&all=true",
-    "method": "GET"
+    "url": "/notifications?all=true&page=2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

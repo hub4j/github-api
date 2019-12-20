@@ -3,7 +3,12 @@
   "name": "rate_limit",
   "request": {
     "url": "/rate_limit",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 404,

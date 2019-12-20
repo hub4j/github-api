@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_temp-testcreaterepository_releases_assets_16422841",
   "request": {
     "url": "/repos/github-api-test-org/temp-testCreateRepository/releases/assets/16422841",
-    "method": "DELETE"
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 204,

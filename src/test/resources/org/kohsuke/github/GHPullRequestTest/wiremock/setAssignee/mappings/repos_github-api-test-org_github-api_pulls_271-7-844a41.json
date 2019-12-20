@@ -3,7 +3,12 @@
   "name": "repos_github-api-test-org_github-api_pulls_271",
   "request": {
     "url": "/repos/github-api-test-org/github-api/pulls/271",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    }
   },
   "response": {
     "status": 200,

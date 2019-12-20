@@ -3,7 +3,12 @@
   "name": "repos_kohsuke_sandbox-ant",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant",
-    "method": "GET"
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
   },
   "response": {
     "status": 200,

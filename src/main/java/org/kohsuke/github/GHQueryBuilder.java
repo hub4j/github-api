@@ -13,7 +13,7 @@ public abstract class GHQueryBuilder<T> {
 
     GHQueryBuilder(GitHub root) {
         this.root = root;
-        this.req = root.retrieve();
+        this.req = root.createRequest();
     }
 
     /**

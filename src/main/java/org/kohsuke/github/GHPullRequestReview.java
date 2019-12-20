@@ -160,10 +160,12 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.root).method("POST")
+        owner.root.createRequest()
+                .method("POST")
                 .with("body", body)
                 .with("event", event.action())
-                .to(getApiRoute() + "/events", this);
+                .withUrlPath(getApiRoute() + "/events")
+                .fetchInto(this);
         this.body = body;
         this.state = event.toState();
     }
@@ -175,7 +177,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiRoute());
+        owner.root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -187,7 +189,11 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void dismiss(String message) throws IOException {
-        new Requester(owner.root).method("PUT").with("message", message).to(getApiRoute() + "/dismissals");
+        owner.root.createRequest()
+                .method("PUT")
+                .with("message", message)
+                .withUrlPath(getApiRoute() + "/dismissals")
+                .send();
         state = GHPullRequestReviewState.DISMISSED;
     }
 
@@ -199,7 +205,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.retrieve()
+        return owner.root.createRequest()
                 .asPagedIterable(getApiRoute() + "/comments",
                         GHPullRequestReviewComment[].class,
                         item -> item.wrapUp(owner));

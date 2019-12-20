@@ -20,7 +20,7 @@ public final class GHContentBuilder {
 
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = new Requester(repo.root).method("PUT");
+        this.req = repo.root.createRequest().method("PUT");
     }
 
     /**
@@ -49,7 +49,7 @@ public final class GHContentBuilder {
     }
 
     /**
-     * Used when updating (but not creating a new content) to specify Thetblob SHA of the file being replaced.
+     * Used when updating (but not creating a new content) to specify the blob SHA of the file being replaced.
      *
      * @param sha
      *            the sha
@@ -103,7 +103,8 @@ public final class GHContentBuilder {
      *             the io exception
      */
     public GHContentUpdateResponse commit() throws IOException {
-        GHContentUpdateResponse response = req.to(GHContent.getApiRoute(repo, path), GHContentUpdateResponse.class);
+        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))
+                .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repo);
         response.getCommit().wrapUp(repo);

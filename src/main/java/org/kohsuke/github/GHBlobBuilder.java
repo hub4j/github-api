@@ -36,7 +36,7 @@ public class GHBlobBuilder {
      * @return a GHBlobBuilder
      */
     public GHBlobBuilder binaryContent(byte[] content) {
-        String base64Content = Base64.getMimeEncoder().encodeToString(content);
+        String base64Content = Base64.getEncoder().encodeToString(content);
         req.with("content", base64Content);
         req.with("encoding", "base64");
         return this;

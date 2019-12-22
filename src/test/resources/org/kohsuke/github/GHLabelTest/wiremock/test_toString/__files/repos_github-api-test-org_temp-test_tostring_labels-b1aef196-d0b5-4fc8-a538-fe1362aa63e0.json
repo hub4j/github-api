@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1747637662,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NjYy",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/bug",
+    "name": "bug",
+    "color": "d73a4a",
+    "default": true,
+    "description": "Something isn't working"
+  },
+  {
+    "id": 1747637664,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NjY0",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/documentation",
+    "name": "documentation",
+    "color": "0075ca",
+    "default": true,
+    "description": "Improvements or additions to documentation"
+  },
+  {
+    "id": 1747637665,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NjY1",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/duplicate",
+    "name": "duplicate",
+    "color": "cfd3d7",
+    "default": true,
+    "description": "This issue or pull request already exists"
+  },
+  {
+    "id": 1747637667,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NjY3",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/enhancement",
+    "name": "enhancement",
+    "color": "a2eeef",
+    "default": true,
+    "description": "New feature or request"
+  },
+  {
+    "id": 1747637719,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NzE5",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/foo",
+    "name": "foo",
+    "color": "001122",
+    "default": false,
+    "description": "test foo label"
+  },
+  {
+    "id": 1747637669,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3NjY5",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/good%20first%20issue",
+    "name": "good first issue",
+    "color": "7057ff",
+    "default": true,
+    "description": "Good for newcomers"
+  },
+  {
+    "id": 1747637671,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3Njcx",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/help%20wanted",
+    "name": "help wanted",
+    "color": "008672",
+    "default": true,
+    "description": "Extra attention is needed"
+  },
+  {
+    "id": 1747637674,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3Njc0",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/invalid",
+    "name": "invalid",
+    "color": "e4e669",
+    "default": true,
+    "description": "This doesn't seem right"
+  },
+  {
+    "id": 1747637675,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3Njc1",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/question",
+    "name": "question",
+    "color": "d876e3",
+    "default": true,
+    "description": "Further information is requested"
+  },
+  {
+    "id": 1747637677,
+    "node_id": "MDU6TGFiZWwxNzQ3NjM3Njc3",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-test_toString/labels/wontfix",
+    "name": "wontfix",
+    "color": "ffffff",
+    "default": true,
+    "description": "This will not be worked on"
+  }
+]

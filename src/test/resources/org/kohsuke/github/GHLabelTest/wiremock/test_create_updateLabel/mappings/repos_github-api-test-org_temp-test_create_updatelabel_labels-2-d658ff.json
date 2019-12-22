@@ -1,8 +1,8 @@
 {
-  "id": "03f3e613-ec17-4061-9449-5a6d77340e95",
-  "name": "repos_github-api-test-org_test-labels_labels",
+  "id": "d658ff9c-bd98-46c0-aaca-d619064496ea",
+  "name": "repos_github-api-test-org_temp-test_create_updatelabel_labels",
   "request": {
-    "url": "/repos/github-api-test-org/test-labels/labels",
+    "url": "/repos/github-api-test-org/temp-test_create_updateLabel/labels",
     "method": "POST",
     "headers": {
       "Accept": {
@@ -19,21 +19,21 @@
   },
   "response": {
     "status": 201,
-    "body": "{\"id\":1744812383,\"node_id\":\"MDU6TGFiZWwxNzQ0ODEyMzgz\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/foo\",\"name\":\"foo\",\"color\":\"001122\",\"default\":false,\"description\":\"test foo label\"}",
+    "body": "{\"id\":1747637599,\"node_id\":\"MDU6TGFiZWwxNzQ3NjM3NTk5\",\"url\":\"https://api.github.com/repos/github-api-test-org/temp-test_create_updateLabel/labels/foo\",\"name\":\"foo\",\"color\":\"001122\",\"default\":false,\"description\":\"test foo label\"}",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 20 Dec 2019 07:15:32 GMT",
+      "Date": "Sun, 22 Dec 2019 05:15:14 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4985",
-      "X-RateLimit-Reset": "1576829624",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1576995265",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
-      "ETag": "\"ecc66d756e13197c60516c1d21a24d03\"",
-      "X-OAuth-Scopes": "admin:org, repo",
+      "ETag": "\"df88c3c4db6b74f449a6a56e27725cc4\"",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/github-api-test-org/test-labels/labels/foo",
+      "Location": "https://api.github.com/repos/github-api-test-org/temp-test_create_updateLabel/labels/foo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -43,10 +43,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "83F3:71F2:2997DA:67DDD8:5DFC7514"
+      "X-GitHub-Request-Id": "3ADE:1E30:1325DF:2DC82A:5DFEFBE1"
     }
   },
-  "uuid": "03f3e613-ec17-4061-9449-5a6d77340e95",
+  "uuid": "d658ff9c-bd98-46c0-aaca-d619064496ea",
   "persistent": true,
-  "insertionIndex": 3
+  "insertionIndex": 2
 }

@@ -1,8 +1,8 @@
 {
-  "id": "93349c57-e435-431e-821f-759c84eee583",
-  "name": "repos_github-api-test-org_test-labels_labels_newfoo",
+  "id": "c7ceb02b-fd1a-4d80-897f-5a88c36eb1ae",
+  "name": "repos_github-api-test-org_temp-test_create_updatelabel_labels_newfoo",
   "request": {
-    "url": "/repos/github-api-test-org/test-labels/labels/newfoo",
+    "url": "/repos/github-api-test-org/temp-test_create_updateLabel/labels/newfoo",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -14,12 +14,12 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 20 Dec 2019 07:15:33 GMT",
+      "Date": "Sun, 22 Dec 2019 05:15:15 GMT",
       "Status": "204 No Content",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4983",
-      "X-RateLimit-Reset": "1576829624",
-      "X-OAuth-Scopes": "admin:org, repo",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1576995265",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
@@ -30,10 +30,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "83F3:71F2:2997E4:67DDE7:5DFC7514"
+      "X-GitHub-Request-Id": "3ADE:1E30:1325E8:2DC83B:5DFEFBE3"
     }
   },
-  "uuid": "93349c57-e435-431e-821f-759c84eee583",
+  "uuid": "c7ceb02b-fd1a-4d80-897f-5a88c36eb1ae",
   "persistent": true,
-  "insertionIndex": 5
+  "insertionIndex": 6
 }

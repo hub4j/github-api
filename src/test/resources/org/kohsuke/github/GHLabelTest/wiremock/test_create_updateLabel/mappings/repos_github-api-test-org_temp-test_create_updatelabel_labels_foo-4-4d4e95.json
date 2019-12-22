@@ -1,32 +1,38 @@
 {
-  "id": "80c07746-69ee-44bb-9494-ddfae62252ad",
-  "name": "orgs_github-api-test-org",
+  "id": "4d4e95de-3b21-4c93-afda-838f94d6599e",
+  "name": "repos_github-api-test-org_temp-test_create_updatelabel_labels_foo",
   "request": {
-    "url": "/orgs/github-api-test-org",
-    "method": "GET",
+    "url": "/repos/github-api-test-org/temp-test_create_updateLabel/labels/foo",
+    "method": "PATCH",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"color\":\"221100\",\"name\":\"foo\",\"description\":\"label foo test\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "orgs_github-api-test-org-80c07746-69ee-44bb-9494-ddfae62252ad.json",
+    "body": "{\"id\":1747637599,\"node_id\":\"MDU6TGFiZWwxNzQ3NjM3NTk5\",\"url\":\"https://api.github.com/repos/github-api-test-org/temp-test_create_updateLabel/labels/foo\",\"name\":\"foo\",\"color\":\"221100\",\"default\":false,\"description\":\"label foo test\"}",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 20 Dec 2019 07:15:31 GMT",
+      "Date": "Sun, 22 Dec 2019 05:15:15 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4987",
-      "X-RateLimit-Reset": "1576829624",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1576995265",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
-      "ETag": "W/\"90e9105f0c44a060884a6b5a52e59941\"",
-      "Last-Modified": "Thu, 19 Dec 2019 20:34:09 GMT",
-      "X-OAuth-Scopes": "admin:org, repo",
-      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "ETag": "W/\"684987871d872abf56bf9a46df7ecae1\"",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -36,10 +42,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "83F3:71F2:2997CB:67DDC0:5DFC7513"
+      "X-GitHub-Request-Id": "3ADE:1E30:1325E4:2DC832:5DFEFBE2"
     }
   },
-  "uuid": "80c07746-69ee-44bb-9494-ddfae62252ad",
+  "uuid": "4d4e95de-3b21-4c93-afda-838f94d6599e",
   "persistent": true,
-  "insertionIndex": 1
+  "insertionIndex": 4
 }

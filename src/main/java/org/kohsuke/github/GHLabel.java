@@ -81,22 +81,17 @@ public class GHLabel extends GHObject {
     }
 
     /**
-     * Updates an existing github label
+     * Sets color.
      *
-     * @param name
-     *            the name of the label
-     * @param color
-     *            the color
-     * @param description
-     *            the description
-     * @return gh label
+     * @param newName
+     *            New name
      * @throws IOException
      *             the io exception
      */
-    public GHLabel update(String name, String color, String description) throws IOException {
-        return repo.root.createRequest()
+    public void setName(String newName) throws IOException {
+        repo.root.createRequest()
                 .method("PATCH")
-                .with("new_name", name)
+                .with("new_name", newName)
                 .with("color", color)
                 .with("description", description)
                 .setRawUrlPath(url)
@@ -119,7 +114,8 @@ public class GHLabel extends GHObject {
                 .with("color", newColor)
                 .with("description", description)
                 .setRawUrlPath(url)
-                .send();
+                .fetchInto(this)
+                .wrapUp(this.repo);
     }
 
     /**
@@ -137,7 +133,8 @@ public class GHLabel extends GHObject {
                 .with("color", color)
                 .with("description", newDescription)
                 .setRawUrlPath(url)
-                .send();
+                .fetchInto(this)
+                .wrapUp(this.repo);
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {

@@ -344,19 +344,27 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(postcommitHooks.size(), equalTo(0));
     }
 
-    public void cleanUpTags() throws Exception {
-        GHRepository repo = getRepository(gitHubBeforeAfter);
-
-        GHRef ref = repo.getRef("tags/create_tag_test");
-        if (ref != null) {
-            ref.delete();
-        }
-    }
+    // @Before
+    // @After
+    // public void cleanUpTags() throws Exception {
+    // // Cleanup is only needed when proxying
+    // if (!mockGitHub.isUseProxy()) {
+    // return;
+    // }
+    //
+    // try {
+    // GHRef ref = getRepository(this.gitHubBeforeAfter).getRef("tags/create_tag_test");
+    // if (ref != null) {
+    // ref.delete();
+    // }
+    // } catch (IOException e) {
+    // // The reference probably does not exist.
+    // // This is safe to ignore.
+    // }
+    // }
 
     @Test
     public void testCreateTag() throws Exception {
-        cleanUpTags();
-
         GHRepository repo = getRepository(gitHub);
 
         String commitSha = "dfe47235cfdcaa12292dab3b1a84ca53a1ceadaf";

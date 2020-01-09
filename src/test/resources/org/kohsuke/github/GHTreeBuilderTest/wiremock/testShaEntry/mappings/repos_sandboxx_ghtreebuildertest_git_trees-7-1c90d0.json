@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"base_tree\":\"c2066e756eb2185ed12419f790af4375c8b91e7b\",\"tree\":[{\"path\":\"data/val1.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74\",\"content\":null},{\"path\":\"data/val2.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"5bd8bb897b13225c93a1d26baa88c96b7bd5d817\",\"content\":null}]}",
+        "equalToJson": "{\"base_tree\":\"c2066e756eb2185ed12419f790af4375c8b91e7b\",\"tree\":[{\"path\":\"data/val1.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74\"},{\"path\":\"data/val2.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"5bd8bb897b13225c93a1d26baa88c96b7bd5d817\"}]}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

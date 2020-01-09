@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
-    private static String REPO_NAME = "sandboxx/GHTreeBuilderTest";
+    private static String REPO_NAME = "github-api-test-org/GHTreeBuilderTest";
 
     private static String PATH_SCRIPT = "app/run.sh";
     private static String CONTENT_SCRIPT = "#!/bin/bash\necho Hello\n";

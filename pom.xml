@@ -79,7 +79,16 @@
     </testResources>
     <pluginManagement>
       <plugins>
-        <!-- adds jacoco coverage -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
@@ -109,42 +118,6 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <excludes>
-                  <exclude>com.infradna.tool:bridge-method-annotation</exclude>
-                  <exclude>org.jenkins-ci:annotation-indexer</exclude>
-                  <exclude>com.squareup.*:*</exclude>
-                  <exclude>org.jetbrains*:*</exclude>
-                  <exclude>com.github.spotbugs:*</exclude>
-                  <exclude>com.google.code.findbugs:*</exclude>
-                </excludes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>module-info.class</exclude>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -339,6 +312,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId></groupId>
+      <artifactId></artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler-jetty</artifactId>
       <version>1.1</version>
@@ -421,11 +398,59 @@
   </pluginRepositories>
   <profiles>
     <profile>
+      <id>enable-shade</id>
+      <activation>
+        <property>
+          <name>enable-shade</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>shade</goal>
+                </goals>
+                <configuration>
+                  <artifactSet>
+                    <excludes>
+                      <exclude>com.infradna.tool:bridge-method-annotation</exclude>
+                      <exclude>org.jenkins-ci:annotation-indexer</exclude>
+                      <exclude>com.squareup.*:*</exclude>
+                      <exclude>org.jetbrains*:*</exclude>
+                      <exclude>com.github.spotbugs:*</exclude>
+                      <exclude>com.google.code.findbugs:*</exclude>
+                    </excludes>
+                  </artifactSet>
+                  <filters>
+                    <filter>
+                      <artifact>*:*</artifact>
+                      <excludes>
+                        <exclude>module-info.class</exclude>
+                        <exclude>META-INF/*.SF</exclude>
+                        <exclude>META-INF/*.DSA</exclude>
+                        <exclude>META-INF/*.RSA</exclude>
+                      </excludes>
+                    </filter>
+                  </filters>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>ci</id>
       <properties>
         <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
         <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
         <enable-jacoco>true</enable-jacoco>
+        <enable-shade>true</enable-shade>
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
       </properties>
       <build>
@@ -443,7 +468,6 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
             <executions>
               <execution>
                 <goals>
@@ -565,12 +589,14 @@
     </profile>
     <profile>
       <id>release</id>
+      <properties>
+        <enable-shade>true</enable-shade>
+      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -590,7 +616,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>

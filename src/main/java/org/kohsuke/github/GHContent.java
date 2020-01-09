@@ -306,7 +306,7 @@ public class GHContent implements Refreshable {
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
             throws IOException {
-        String encodedContent = Base64.getMimeEncoder().encodeToString(newContentBytes);
+        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);
 
         Requester requester = root.createRequest()
                 .method("POST")

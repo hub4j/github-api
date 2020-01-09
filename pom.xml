@@ -311,9 +311,26 @@
       <version>1.18</version>
       <optional>true</optional>
     </dependency>
+    <!-- for stapler-jetty -->
     <dependency>
-      <groupId></groupId>
-      <artifactId></artifactId>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- for stapler-jetty -->
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.5</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- for stapler-jetty -->
+    <dependency>
+      <groupId>org.kohsuke.stapler</groupId>
+      <artifactId>stapler</artifactId>
+      <version>1.258</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>

@@ -125,4 +125,36 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                     equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
         }
     }
+
+    @Test
+    public void testMIMESmall() throws IOException {
+        GHRepository ghRepository = getTempRepository();
+        GHContentBuilder ghContentBuilder = ghRepository.createContent();
+        ghContentBuilder.message("Some commit msg");
+        ghContentBuilder.path("MIME-Small.md");
+        ghContentBuilder.content("123456789012345678901234567890123456789012345678901234567");
+        ghContentBuilder.commit();
+    }
+
+    @Test
+    public void testMIMELong() throws IOException {
+        GHRepository ghRepository = getTempRepository();
+        GHContentBuilder ghContentBuilder = ghRepository.createContent();
+        ghContentBuilder.message("Some commit msg");
+        ghContentBuilder.path("MIME-Long.md");
+        ghContentBuilder.content("1234567890123456789012345678901234567890123456789012345678");
+        ghContentBuilder.commit();
+    }
+    @Test
+    public void testMIMELonger() throws IOException {
+        GHRepository ghRepository = getTempRepository();
+        GHContentBuilder ghContentBuilder = ghRepository.createContent();
+        ghContentBuilder.message("Some commit msg");
+        ghContentBuilder.path("MIME-Long.md");
+        ghContentBuilder.content("123456789012345678901234567890123456789012345678901234567890"
+                + "123456789012345678901234567890123456789012345678901234567890"
+                + "123456789012345678901234567890123456789012345678901234567890"
+                + "123456789012345678901234567890123456789012345678901234567890");
+        ghContentBuilder.commit();
+    }
 }

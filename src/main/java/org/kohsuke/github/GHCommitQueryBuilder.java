@@ -127,6 +127,6 @@ public class GHCommitQueryBuilder {
      * @return the paged iterable
      */
     public PagedIterable<GHCommit> list() {
-        return req.asPagedIterable(repo.getApiTailUrl("commits"), GHCommit[].class, item -> item.wrapUp(repo));
+        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
     }
 }

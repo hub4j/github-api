@@ -139,9 +139,8 @@ public class GHProjectColumn extends GHObject {
         final GHProjectColumn column = this;
         return root.createRequest()
                 .withPreview(INERTIA)
-                .asPagedIterable(String.format("/projects/columns/%d/cards", id),
-                        GHProjectCard[].class,
-                        item -> item.wrap(column));
+                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .toIterable(GHProjectCard[].class, item -> item.wrap(column));
     }
 
     /**

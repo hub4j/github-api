@@ -633,7 +633,8 @@ public class GitHub {
      */
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
         return createRequest().with("since", since)
-                .asPagedIterable("/organizations", GHOrganization[].class, item -> item.wrapUp(GitHub.this));
+                .withUrlPath("/organizations")
+                .toIterable(GHOrganization[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -675,7 +676,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return createRequest().asPagedIterable("/licenses", GHLicense[].class, item -> item.wrap(GitHub.this));
+        return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, item -> item.wrap(this));
     }
 
     /**
@@ -686,7 +687,7 @@ public class GitHub {
      *             the io exception
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return createRequest().asPagedIterable("/users", GHUser[].class, item -> item.wrapUp(GitHub.this));
+        return createRequest().withUrlPath("/users").toIterable(GHUser[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -717,9 +718,8 @@ public class GitHub {
      *      Plans</a>
      */
     public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
-        return createRequest().asPagedIterable("/marketplace_listing/plans",
-                GHMarketplacePlan[].class,
-                item -> item.wrapUp(GitHub.this));
+        return createRequest().withUrlPath("/marketplace_listing/plans")
+                .toIterable(GHMarketplacePlan[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -773,9 +773,8 @@ public class GitHub {
      *      Marketplace purchases</a>
      */
     public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
-        return createRequest().asPagedIterable("/user/marketplace_purchases",
-                GHMarketplaceUserPurchase[].class,
-                item -> item.wrapUp(this));
+        return createRequest().withUrlPath("/user/marketplace_purchases")
+                .toIterable(GHMarketplaceUserPurchase[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -1100,8 +1099,8 @@ public class GitHub {
      *      authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return createRequest()
-                .asPagedIterable("/authorizations", GHAuthorization[].class, item -> item.wrap(GitHub.this));
+        return createRequest().withUrlPath("/authorizations")
+                .toIterable(GHAuthorization[].class, item -> item.wrap(this));
     }
 
     /**
@@ -1371,7 +1370,8 @@ public class GitHub {
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
         return createRequest().with("since", since)
-                .asPagedIterable("/repositories", GHRepository[].class, item -> item.wrap(GitHub.this));
+                .withUrlPath("/repositories")
+                .toIterable(GHRepository[].class, item -> item.wrap(this));
     }
 
     /**

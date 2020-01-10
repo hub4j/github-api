@@ -627,11 +627,7 @@ class Requester {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
-    <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return withUrlPath(tailApiUrl).asPagedIterable(type, consumer);
-    }
-
-    <T> PagedIterable<T> asPagedIterable(Class<T[]> type, Consumer<T> consumer) {
+    <T> PagedIterable<T> toIterable(Class<T[]> type, Consumer<T> consumer) {
         return new PagedIterableWithConsumer<>(type, consumer);
     }
 
@@ -664,14 +660,20 @@ class Requester {
     /**
      * Loads paginated resources.
      *
-     * Every iterator call reports a new batch.
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param pageSize
+     *            the size of the
+     * @param <T>
+     *            type of each page (not the items in the page).
+     * @return
      */
     <T> Iterator<T> asIterator(Class<T> type, int pageSize) {
-        if (method != "GET") {
+        if (!"GET".equals(method)) {
             throw new IllegalStateException("Request method \"GET\" is required for iterator.");
         }
 
-        if (pageSize != 0)
+        if (pageSize > 0)
             args.add(new Entry("per_page", pageSize));
 
         String tailApiUrl = buildTailApiUrl(urlPath);

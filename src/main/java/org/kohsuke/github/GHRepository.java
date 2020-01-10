@@ -139,9 +139,8 @@ public class GHRepository extends GHObject {
                 .with("ref", ref)
                 .with("task", task)
                 .with("environment", environment)
-                .asPagedIterable(getApiTailUrl("deployments"),
-                        GHDeployment[].class,
-                        item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("deployments"))
+                .toIterable(GHDeployment[].class, item -> item.wrap(this));
     }
 
     /**
@@ -391,7 +390,8 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
         return root.createRequest()
                 .with("state", state)
-                .asPagedIterable(getApiTailUrl("issues"), GHIssue[].class, item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("issues"))
+                .toIterable(GHIssue[].class, item -> item.wrap(this));
     }
 
     /**
@@ -500,7 +500,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHRelease> listReleases() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("releases"), GHRelease[].class, item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("releases"))
+                .toIterable(GHRelease[].class, item -> item.wrap(this));
     }
 
     /**
@@ -512,7 +513,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHTag> listTags() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("tags"), GHTag[].class, item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("tags"))
+                .toIterable(GHTag[].class, item -> item.wrap(this));
     }
 
     /**
@@ -1114,7 +1116,8 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHRepository> listForks(final ForkSort sort) {
         return root.createRequest()
                 .with("sort", sort)
-                .asPagedIterable(getApiTailUrl("forks"), GHRepository[].class, item -> item.wrap(root));
+                .withUrlPath(getApiTailUrl("forks"))
+                .toIterable(GHRepository[].class, item -> item.wrap(root));
     }
 
     /**
@@ -1424,7 +1427,7 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHRef> listRefs() throws IOException {
         final String url = String.format("/repos/%s/%s/git/refs", getOwnerName(), name);
-        return root.createRequest().asPagedIterable(url, GHRef[].class, item -> item.wrap(root));
+        return root.createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> item.wrap(root));
     }
 
     /**
@@ -1453,7 +1456,7 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHRef> listRefs(String refType) throws IOException {
         final String url = String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType);
-        return root.createRequest().asPagedIterable(url, GHRef[].class, item -> item.wrap(root));
+        return root.createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> item.wrap(root));
     }
 
     /**
@@ -1612,9 +1615,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHCommit> listCommits() {
         return root.createRequest()
-                .asPagedIterable(String.format("/repos/%s/%s/commits", getOwnerName(), name),
-                        GHCommit[].class,
-                        item -> item.wrapUp(GHRepository.this));
+                .withUrlPath(String.format("/repos/%s/%s/commits", getOwnerName(), name))
+                .toIterable(GHCommit[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -1633,9 +1635,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHCommitComment> listCommitComments() {
         return root.createRequest()
-                .asPagedIterable(String.format("/repos/%s/%s/comments", getOwnerName(), name),
-                        GHCommitComment[].class,
-                        item -> item.wrap(GHRepository.this));
+                .withUrlPath(String.format("/repos/%s/%s/comments", getOwnerName(), name))
+                .toIterable(GHCommitComment[].class, item -> item.wrap(this));
     }
 
     /**
@@ -1685,9 +1686,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
         return root.createRequest()
-                .asPagedIterable(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1),
-                        GHCommitStatus[].class,
-                        item -> item.wrapUp(root));
+                .withUrlPath(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1))
+                .toIterable(GHCommitStatus[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -1768,9 +1768,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root.createRequest()
-                .asPagedIterable(String.format("/repos/%s/%s/events", getOwnerName(), name),
-                        GHEventInfo[].class,
-                        item -> item.wrapUp(root));
+                .withUrlPath(String.format("/repos/%s/%s/events", getOwnerName(), name))
+                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -1784,7 +1783,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHLabel> listLabels() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("labels"), GHLabel[].class, item -> item.wrapUp(GHRepository.this));
+                .withUrlPath(getApiTailUrl("labels"))
+                .toIterable(GHLabel[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -1846,9 +1846,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHInvitation> listInvitations() {
         return root.createRequest()
-                .asPagedIterable(String.format("/repos/%s/%s/invitations", getOwnerName(), name),
-                        GHInvitation[].class,
-                        item -> item.wrapUp(root));
+                .withUrlPath(String.format("/repos/%s/%s/invitations", getOwnerName(), name))
+                .toIterable(GHInvitation[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -1881,13 +1880,14 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHStargazer> listStargazers2() {
         return root.createRequest()
                 .withPreview("application/vnd.github.v3.star+json")
-                .asPagedIterable(getApiTailUrl("stargazers"),
-                        GHStargazer[].class,
-                        item -> item.wrapUp(GHRepository.this));
+                .withUrlPath(getApiTailUrl("stargazers"))
+                .toIterable(GHStargazer[].class, item -> item.wrapUp(this));
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
-        return root.createRequest().asPagedIterable(getApiTailUrl(suffix), GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl(suffix))
+                .toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -2081,9 +2081,8 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHMilestone> listMilestones(final GHIssueState state) {
         return root.createRequest()
                 .with("state", state)
-                .asPagedIterable(getApiTailUrl("milestones"),
-                        GHMilestone[].class,
-                        item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("milestones"))
+                .toIterable(GHMilestone[].class, item -> item.wrap(this));
     }
 
     /**
@@ -2416,7 +2415,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<Contributor> listContributors() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("contributors"), Contributor[].class, item -> item.wrapUp(root));
+                .withUrlPath(getApiTailUrl("contributors"))
+                .toIterable(Contributor[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -2493,7 +2493,8 @@ public class GHRepository extends GHObject {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .with("state", status)
-                .asPagedIterable(getApiTailUrl("projects"), GHProject[].class, item -> item.wrap(GHRepository.this));
+                .withUrlPath(getApiTailUrl("projects"))
+                .toIterable(GHProject[].class, item -> item.wrap(this));
     }
 
     /**
@@ -2596,7 +2597,8 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("issues/events"), GHIssueEvent[].class, item -> item.wrapUp(root));
+                .withUrlPath(getApiTailUrl("issues/events"))
+                .toIterable(GHIssueEvent[].class, item -> item.wrapUp(root));
     }
 
     /**

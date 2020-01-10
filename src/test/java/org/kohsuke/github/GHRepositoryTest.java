@@ -343,6 +343,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(postcommitHooks.size(), equalTo(0));
     }
 
+    @Test
     public void getRefs() throws Exception {
         GHRepository repo = getTempRepository();
         GHRef[] refs = repo.getRefs();

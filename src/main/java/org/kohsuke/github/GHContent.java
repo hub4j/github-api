@@ -237,9 +237,7 @@ public class GHContent implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 
-        return root.createRequest()
-                .setRawUrlPath(url)
-                .asPagedIterable(GHContent[].class, item -> item.wrap(repository));
+        return root.createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -> item.wrap(repository));
     }
 
     /**

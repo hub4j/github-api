@@ -206,8 +206,7 @@ public class GHPullRequestReview extends GHObject {
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return owner.root.createRequest()
-                .asPagedIterable(getApiRoute() + "/comments",
-                        GHPullRequestReviewComment[].class,
-                        item -> item.wrapUp(owner));
+                .withUrlPath(getApiRoute() + "/comments")
+                .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(owner));
     }
 }

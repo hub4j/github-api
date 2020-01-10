@@ -1,0 +1,54 @@
+{
+  "id": "e0c20fc7-e5c2-4af3-875a-3489d677a32f",
+  "name": "repos_github-api-test-org_ghtreebuildertest_git_refs_heads_master",
+  "request": {
+    "url": "/repos/github-api-test-org/GHTreeBuilderTest/git/refs/heads/master",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"force\":false,\"sha\":\"4ae7229c06d96391696155ed9c324bde17a7b665\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_ghtreebuildertest_git_refs_heads_master-e0c20fc7-e5c2-4af3-875a-3489d677a32f.json",
+    "headers": {
+      "Date": "Thu, 09 Jan 2020 03:40:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4823",
+      "X-RateLimit-Reset": "1578544466",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"67c3585b5b9dce91e789db185cc6d2b3\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E86E:34E9:1D0F68:24274D:5E16A0A4"
+    }
+  },
+  "uuid": "e0c20fc7-e5c2-4af3-875a-3489d677a32f",
+  "persistent": true,
+  "insertionIndex": 11
+}

@@ -344,41 +344,4 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(postcommitHooks.size(), equalTo(0));
     }
 
-    // @Before
-    // @After
-    // public void cleanUpTags() throws Exception {
-    // // Cleanup is only needed when proxying
-    // if (!mockGitHub.isUseProxy()) {
-    // return;
-    // }
-    //
-    // try {
-    // GHRef ref = getRepository(this.gitHubBeforeAfter).getRef("tags/create_tag_test");
-    // if (ref != null) {
-    // ref.delete();
-    // }
-    // } catch (IOException e) {
-    // // The reference probably does not exist.
-    // // This is safe to ignore.
-    // }
-    // }
-
-    @Test
-    public void testCreateTag() throws Exception {
-        GHRepository repo = getRepository(gitHub);
-
-        String commitSha = "dfe47235cfdcaa12292dab3b1a84ca53a1ceadaf";
-        String tagName = "create_tag_test";
-        String tagMessage = "Test Tag";
-        String tagType = "commit";
-
-        GHTagObject tag = repo.createTag(tagName, tagMessage, commitSha, tagType);
-        assertEquals(tagName, tag.getTag());
-        assertEquals(tagMessage, tag.getMessage());
-        assertEquals(commitSha, tag.getObject().getSha());
-
-        // Make a reference to the newly created tag.
-        GHRef ref = repo.createRef("refs/tags/" + tagName, tag.getSha());
-        assertNotNull(ref);
-    }
 }

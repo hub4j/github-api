@@ -68,7 +68,7 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder content(byte[] content) {
-        req.with("content", Base64.getMimeEncoder().encodeToString(content));
+        req.with("content", Base64.getEncoder().encodeToString(content));
         return this;
     }
 

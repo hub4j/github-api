@@ -2667,6 +2667,7 @@ public class GHRepository extends GHObject {
      *            The type of the object we're tagging: "commit", "tree" or "blob".
      * @return The newly created tag.
      * @throws java.io.IOException
+     *            The IO exception.
      */
     public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
         return root.createRequest()

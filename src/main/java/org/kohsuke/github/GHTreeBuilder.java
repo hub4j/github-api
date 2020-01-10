@@ -18,6 +18,7 @@ public class GHTreeBuilder {
 
     private final List<TreeEntry> treeEntries = new ArrayList<TreeEntry>();
 
+    // Issue #636: Create Tree no longer accepts null value in sha field
     @JsonInclude(Include.NON_NULL)
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     private static final class TreeEntry {

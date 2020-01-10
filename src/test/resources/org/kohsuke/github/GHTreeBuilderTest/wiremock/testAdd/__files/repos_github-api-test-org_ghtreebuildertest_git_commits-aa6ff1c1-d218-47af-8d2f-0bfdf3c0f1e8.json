@@ -1,0 +1,34 @@
+{
+  "sha": "4ae7229c06d96391696155ed9c324bde17a7b665",
+  "node_id": "MDY6Q29tbWl0MjMyNzE0NTk1OjRhZTcyMjljMDZkOTYzOTE2OTYxNTVlZDljMzI0YmRlMTdhN2I2NjU=",
+  "url": "https://api.github.com/repos/github-api-test-org/GHTreeBuilderTest/git/commits/4ae7229c06d96391696155ed9c324bde17a7b665",
+  "html_url": "https://github.com/github-api-test-org/GHTreeBuilderTest/commit/4ae7229c06d96391696155ed9c324bde17a7b665",
+  "author": {
+    "name": "Liam Newman",
+    "email": "bitwiseman@gmail.com",
+    "date": "2020-01-09T03:40:20Z"
+  },
+  "committer": {
+    "name": "Liam Newman",
+    "email": "bitwiseman@gmail.com",
+    "date": "2020-01-09T03:40:20Z"
+  },
+  "tree": {
+    "sha": "b09a1698f3aeb1d462c3492007760e2579734c74",
+    "url": "https://api.github.com/repos/github-api-test-org/GHTreeBuilderTest/git/trees/b09a1698f3aeb1d462c3492007760e2579734c74"
+  },
+  "message": "Add files",
+  "parents": [
+    {
+      "sha": "68a5bb512f28e6a9aa9a1b2068d9517929817dbb",
+      "url": "https://api.github.com/repos/github-api-test-org/GHTreeBuilderTest/git/commits/68a5bb512f28e6a9aa9a1b2068d9517929817dbb",
+      "html_url": "https://github.com/github-api-test-org/GHTreeBuilderTest/commit/68a5bb512f28e6a9aa9a1b2068d9517929817dbb"
+    }
+  ],
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null
+  }
+}

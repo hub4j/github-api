@@ -1,0 +1,40 @@
+{
+  "id": "09d3d4ac-fe4b-4c29-8e45-db8420f55c9b",
+  "name": "repos_github-api-test-org_github-api_git_refs_heads_test_content_ref_cache",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/git/refs/heads/test/content_ref_cache",
+    "method": "GET"
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}",
+    "headers": {
+      "Date": "Tue, 14 Jan 2020 07:57:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4836",
+      "X-RateLimit-Reset": "1578990081",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C635:0F14:1462ED:192E8C:5E1D7473"
+    }
+  },
+  "uuid": "09d3d4ac-fe4b-4c29-8e45-db8420f55c9b",
+  "persistent": true,
+  "scenarioName": "scenario-5-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache",
+  "requiredScenarioState": "scenario-5-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-2",
+  "newScenarioState": "scenario-5-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-3",
+  "insertionIndex": 10
+}

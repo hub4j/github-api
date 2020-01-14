@@ -1,0 +1,53 @@
+{
+  "id": "017723aa-48ed-4019-a2a9-af3e1f5cfd4b",
+  "name": "repos_github-api-test-org_github-api_git_refs",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/git/refs",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/test/content_ref_cache\",\"sha\":\"d4080cf9e2fa0959966d201f3dd60105fdf5bd97\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-017723aa-48ed-4019-a2a9-af3e1f5cfd4b.json",
+    "headers": {
+      "Date": "Tue, 14 Jan 2020 07:57:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4839",
+      "X-RateLimit-Reset": "1578990082",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"6dea9f3ede677a39fc93b2a0d26c4b99\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/github-api-test-org/github-api/git/refs/heads/test/content_ref_cache",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C635:0F14:146256:192E33:5E1D7471"
+    }
+  },
+  "uuid": "017723aa-48ed-4019-a2a9-af3e1f5cfd4b",
+  "persistent": true,
+  "scenarioName": "scenario-4-repos-github-api-test-org-github-api-git-refs",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-4-repos-github-api-test-org-github-api-git-refs-2",
+  "insertionIndex": 6
+}

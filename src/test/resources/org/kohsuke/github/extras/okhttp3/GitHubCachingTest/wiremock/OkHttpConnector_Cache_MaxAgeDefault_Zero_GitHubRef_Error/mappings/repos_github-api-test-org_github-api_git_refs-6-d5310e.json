@@ -1,31 +1,42 @@
 {
-  "id": "99f24564-cf38-4672-a9b2-a189ed77ff60",
-  "name": "repos_github-api-test-org_github-api_git_refs_heads_test_content_ref_cache",
+  "id": "d5310eac-a58b-496e-9829-5bfb59231e49",
+  "name": "repos_github-api-test-org_github-api_git_refs",
   "request": {
-    "url": "/repos/github-api-test-org/github-api/git/refs/heads/test/content_ref_cache",
-    "method": "GET"
+    "url": "/repos/github-api-test-org/github-api/git/refs",
+    "method": "POST",
+    "headers": {
+      "Cache-Control": {
+        "equalTo": "max-age=0"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/test/content_ref_cache\",\"sha\":\"d4080cf9e2fa0959966d201f3dd60105fdf5bd97\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "repos_github-api-test-org_github-api_git_refs_heads_test_content_ref_cache-99f24564-cf38-4672-a9b2-a189ed77ff60.json",
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-d5310eac-a58b-496e-9829-5bfb59231e49.json",
     "headers": {
-      "Date": "Tue, 14 Jan 2020 07:57:38 GMT",
+      "Date": "Fri, 17 Jan 2020 23:41:12 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4838",
-      "X-RateLimit-Reset": "1578990081",
+      "X-RateLimit-Remaining": "4851",
+      "X-RateLimit-Reset": "1579305892",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"6dea9f3ede677a39fc93b2a0d26c4b99\"",
-      "Last-Modified": "Tue, 14 Jan 2020 03:43:01 GMT",
-      "X-Poll-Interval": "300",
+      "ETag": "\"d3be5b35b8d84ef7ac03c0cc9c94ed81\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/github-api-test-org/github-api/git/refs/heads/test/content_ref_cache",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -35,13 +46,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C635:0F14:14627A:192E63:5E1D7472"
+      "X-GitHub-Request-Id": "CAF0:630F:7834B:93BE9:5E224618"
     }
   },
-  "uuid": "99f24564-cf38-4672-a9b2-a189ed77ff60",
+  "uuid": "d5310eac-a58b-496e-9829-5bfb59231e49",
   "persistent": true,
-  "scenarioName": "scenario-5-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache",
+  "scenarioName": "scenario-2-repos-github-api-test-org-github-api-git-refs",
   "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-5-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-2",
-  "insertionIndex": 7
+  "newScenarioState": "scenario-2-repos-github-api-test-org-github-api-git-refs-2",
+  "insertionIndex": 6
 }

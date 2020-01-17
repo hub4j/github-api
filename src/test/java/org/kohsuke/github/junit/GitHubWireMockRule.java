@@ -115,6 +115,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 .snapshotRecord(recordSpec().forTarget("https://api.github.com")
                         .captureHeader("If-None-Match")
                         .captureHeader("If-Modified-Since")
+                        .captureHeader("Cache-Control")
                         .captureHeader("Accept")
                         .extractTextBodiesOver(255));
 
@@ -126,6 +127,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
                             .captureHeader("If-None-Match")
                             .captureHeader("If-Modified-Since")
+                            .captureHeader("Cache-Control")
                             .captureHeader("Accept")
                             .extractTextBodiesOver(255));
 
@@ -138,6 +140,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .snapshotRecord(recordSpec().forTarget("https://uploads.github.com")
                             .captureHeader("If-None-Match")
                             .captureHeader("If-Modified-Since")
+                            .captureHeader("Cache-Control")
                             .captureHeader("Accept")
                             .extractTextBodiesOver(255));
 

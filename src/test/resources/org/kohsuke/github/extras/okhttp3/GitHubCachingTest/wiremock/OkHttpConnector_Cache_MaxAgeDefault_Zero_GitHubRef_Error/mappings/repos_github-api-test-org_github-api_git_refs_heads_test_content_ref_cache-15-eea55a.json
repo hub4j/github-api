@@ -1,31 +1,34 @@
 {
-  "id": "5e8c886b-200d-4167-ae3b-95c41e281a70",
+  "id": "eea55a5c-27a5-448a-a51f-097a78fcc884",
   "name": "repos_github-api-test-org_github-api_git_refs_heads_test_content_ref_cache",
   "request": {
     "url": "/repos/github-api-test-org/github-api/git/refs/heads/test/content_ref_cache",
     "method": "GET",
     "headers": {
       "If-None-Match": {
-        "equalTo": "W/\"6dea9f3ede677a39fc93b2a0d26c4b99\""
+        "equalTo": "W/\"d3be5b35b8d84ef7ac03c0cc9c94ed81\""
+      },
+      "Cache-Control": {
+        "equalTo": "max-age=0"
       }
     }
   },
   "response": {
     "status": 304,
     "headers": {
-      "Date": "Tue, 14 Jan 2020 07:57:38 GMT",
+      "Date": "Fri, 17 Jan 2020 23:41:20 GMT",
       "Server": "GitHub.com",
       "Status": "304 Not Modified",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4838",
-      "X-RateLimit-Reset": "1578990081",
+      "X-RateLimit-Remaining": "4845",
+      "X-RateLimit-Reset": "1579305892",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding"
       ],
-      "ETag": "\"6dea9f3ede677a39fc93b2a0d26c4b99\"",
-      "Last-Modified": "Tue, 14 Jan 2020 03:43:01 GMT",
+      "ETag": "\"d3be5b35b8d84ef7ac03c0cc9c94ed81\"",
+      "Last-Modified": "Thu, 16 Jan 2020 21:22:56 GMT",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -34,10 +37,12 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C635:0F14:146281:192E6E:5E1D7472"
+      "X-GitHub-Request-Id": "CAF0:630F:78527:93E20:5E224620"
     }
   },
-  "uuid": "5e8c886b-200d-4167-ae3b-95c41e281a70",
+  "uuid": "eea55a5c-27a5-448a-a51f-097a78fcc884",
   "persistent": true,
-  "insertionIndex": 8
+  "scenarioName": "scenario-4-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache",
+  "requiredScenarioState": "scenario-4-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-2",
+  "insertionIndex": 15
 }

@@ -882,6 +882,26 @@ class Requester {
             // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in
             // HttpException
             // to preserve backward compatibility
+
+            // WORKAROUND FOR ISSUE #669:
+            // When caching GitHub doesn't handle "If-Modified-Since" correctly
+            // In the case that an item didn't exist (returned 404) but now does exist
+            // Accurate 404 responses from GitHub do not have ETag information (at this time)
+            // If we see a 404 with an ETag we treat it as corrupt and make new request with
+            // caching headers overridden to force refresh.
+            // If we tried this once already, don't try again.
+            if (Objects.equals(uc.getRequestMethod(), "GET")
+                && uc.getHeaderField("ETag") != null
+                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")
+                && timeouts > 0) {
+                setupConnection(uc.getURL());
+                // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+                // "If-Modified-Since" or "If-None-Match" values.
+                // This makes GitHub give us current data (not incorrectly cached data)
+                uc.setRequestProperty("Cache-Control", "no-cache");
+                return parse(type, instance, timeouts - 1);
+            }
+
             throw e;
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException && timeouts > 0) {

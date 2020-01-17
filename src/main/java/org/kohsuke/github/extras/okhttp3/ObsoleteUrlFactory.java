@@ -19,7 +19,6 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Pipe;
 import okio.Timeout;
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Copyright (C) 2014 Square, Inc.
@@ -618,18 +617,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             OkHttpClient.Builder clientBuilder = client.newBuilder();
             clientBuilder.interceptors().clear();
             clientBuilder.interceptors().add(UnexpectedException.INTERCEPTOR);
-
             clientBuilder.networkInterceptors().clear();
-
-            // network interceptors are generally not allowed
-            // (probably buggy when used with this hacked in adapter)
-            // but we have to use this one to handle github issue:
-            // https://github.com/isaacs/github/issues/692
-            // #669 in this project
-            if (client.cache() != null && getUseCaches()) {
-                clientBuilder.addNetworkInterceptor(new OkHttpConnector.RemoveIfModifiedSinceRequestHeader());
-            }
-
             clientBuilder.networkInterceptors().add(networkInterceptor);
 
             // Use a separate dispatcher so that limits aren't impacted. But use the same executor service!

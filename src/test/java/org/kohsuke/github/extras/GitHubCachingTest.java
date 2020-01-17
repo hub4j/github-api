@@ -1,9 +1,10 @@
-package org.kohsuke.github.extras.okhttp3;
+package org.kohsuke.github.extras;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -40,8 +41,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
-            // Use the same data files as the 2.x test
-            .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
                 .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
     }
 
@@ -66,7 +65,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error();
     }
 
-//        @Ignore("The wiremock snapshot files attached to this test method show what was sent to and from the server during a run, but they aren't re-runnable - not templated.")
     @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error() throws Exception {
         // ISSUE #669
@@ -74,7 +72,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         // snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -83,7 +81,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         // Alternate client also doing caching but staying in a good state
         // We use this to do sanity checks and other information gathering
         GitHub gitHub2 = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withConnector(new OkHttpConnector(createClient(true)))
+                .withConnector(new OkHttpConnector(new OkUrlFactory(createClient(true))))
                 .build();
 
         // Create a branch from a known conflicting branch
@@ -175,19 +173,19 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     private static int clientCount = 0;
 
     private OkHttpClient createClient(boolean useCache) throws IOException {
-        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        OkHttpClient client = new OkHttpClient();
 
         if (useCache) {
             File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName()
-                    + clientCount++);
+                + clientCount++);
             cacheDir.mkdirs();
             FileUtils.cleanDirectory(cacheDir);
             Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
 
-            builder.cache(cache);
+            client.setCache(cache);
         }
 
-        return builder.build();
+        return client;
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {

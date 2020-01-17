@@ -1,5 +1,8 @@
 package org.kohsuke.github.extras.okhttp3;
 
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.CacheControl;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
@@ -51,12 +54,18 @@ public class OkHttpConnector implements HttpConnector {
         OkHttpClient.Builder builder = client.newBuilder();
 
         builder.connectionSpecs(TlsConnectionSpecs());
-        this.client = builder.build();
-        if (cacheMaxAge >= 0 && this.client != null && this.client.cache() != null) {
+
+        if (cacheMaxAge >= 0 && client.cache() != null) {
             maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();
+            // HttpURLConnection does not support networkInterceptors, so this would not work
+            // However, we hacked ObsoleteUrlFactory to do this automatically for us.
+            // builder.addNetworkInterceptor(new RemoveIfModifiedSinceRequestHeader());
         } else {
             maxAgeHeaderValue = null;
         }
+
+        this.client = builder.build();
+
         this.urlFactory = new ObsoleteUrlFactory(this.client);
     }
 
@@ -78,5 +87,18 @@ public class OkHttpConnector implements HttpConnector {
     /** Returns connection spec with TLS v1.2 in it */
     private List<ConnectionSpec> TlsConnectionSpecs() {
         return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
+    }
+
+    static class RemoveIfModifiedSinceRequestHeader implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request currentRequest = chain.request();
+            if (currentRequest.header("If-Modified-Since") != null) {
+                currentRequest = currentRequest.newBuilder()
+                    .removeHeader("If-Modified-Since")
+                    .build();
+            }
+            return chain.proceed(currentRequest);
+        }
     }
 }

@@ -123,7 +123,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.createRequest().asPagedIterable(api("/members"), GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest().withUrlPath(api("/members")).toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -174,7 +174,9 @@ public class GHTeam implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-        return root.createRequest().asPagedIterable(api("/repos"), GHRepository[].class, item -> item.wrap(root));
+        return root.createRequest()
+                .withUrlPath(api("/repos"))
+                .toIterable(GHRepository[].class, item -> item.wrap(root));
     }
 
     /**

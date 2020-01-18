@@ -122,9 +122,8 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHTeam> listTeams() throws IOException {
         return root.createRequest()
-                .asPagedIterable(String.format("/orgs/%s/teams", login),
-                        GHTeam[].class,
-                        item -> item.wrapUp(GHOrganization.this));
+                .withUrlPath(String.format("/orgs/%s/teams", login))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -301,9 +300,8 @@ public class GHOrganization extends GHPerson {
     private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
         return root.createRequest()
-                .asPagedIterable(String.format("/orgs/%s/%s%s", login, suffix, filterParams),
-                        GHUser[].class,
-                        item -> item.wrapUp(root));
+                .withUrlPath(String.format("/orgs/%s/%s%s", login, suffix, filterParams))
+                .toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -331,7 +329,8 @@ public class GHOrganization extends GHPerson {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .with("state", status)
-                .asPagedIterable(String.format("/orgs/%s/projects", login), GHProject[].class, item -> item.wrap(root));
+                .withUrlPath(String.format("/orgs/%s/projects", login))
+                .toIterable(GHProject[].class, item -> item.wrap(root));
     }
 
     /**
@@ -498,9 +497,8 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root.createRequest()
-                .asPagedIterable(String.format("/orgs/%s/events", login),
-                        GHEventInfo[].class,
-                        item -> item.wrapUp(root));
+                .withUrlPath(String.format("/orgs/%s/events", login))
+                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -514,7 +512,8 @@ public class GHOrganization extends GHPerson {
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root.createRequest()
-                .asPagedIterable("/orgs/" + login + "/repos", GHRepository[].class, item -> item.wrap(root))
+                .withUrlPath("/orgs/" + login + "/repos")
+                .toIterable(GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }
 

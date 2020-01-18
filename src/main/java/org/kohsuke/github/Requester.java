@@ -414,19 +414,30 @@ class Requester {
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
-        T[] result;
+        T[] result = null;
 
-        // for arrays we might have to loop for pagination
-        // use the iterator to handle it
-        List<T[]> pages = new ArrayList<>();
-        int totalSize = 0;
-        for (Iterator<T[]> iterator = asIterator(type, 0); iterator.hasNext();) {
-            T[] nextResult = iterator.next();
-            totalSize += Array.getLength(nextResult);
-            pages.add(nextResult);
+        try {
+            // for arrays we might have to loop for pagination
+            // use the iterator to handle it
+            List<T[]> pages = new ArrayList<>();
+            int totalSize = 0;
+            for (Iterator<T[]> iterator = asIterator(type, 0); iterator.hasNext();) {
+                T[] nextResult = iterator.next();
+                totalSize += Array.getLength(nextResult);
+                pages.add(nextResult);
+            }
+
+            result = concatenatePages(type, pages, totalSize);
+        } catch (GHException e) {
+            // if there was an exception inside the iterator it is wrapped as a GHException
+            // if the wrapped exception is an IOException, throw that
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else {
+                throw e;
+            }
         }
 
-        result = concatenatePages(type, pages, totalSize);
         return result;
     }
 
@@ -627,11 +638,7 @@ class Requester {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
-    <T> PagedIterable<T> asPagedIterable(String tailApiUrl, Class<T[]> type, Consumer<T> consumer) {
-        return withUrlPath(tailApiUrl).asPagedIterable(type, consumer);
-    }
-
-    <T> PagedIterable<T> asPagedIterable(Class<T[]> type, Consumer<T> consumer) {
+    <T> PagedIterable<T> toIterable(Class<T[]> type, Consumer<T> consumer) {
         return new PagedIterableWithConsumer<>(type, consumer);
     }
 
@@ -664,14 +671,20 @@ class Requester {
     /**
      * Loads paginated resources.
      *
-     * Every iterator call reports a new batch.
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param pageSize
+     *            the size of the
+     * @param <T>
+     *            type of each page (not the items in the page).
+     * @return
      */
     <T> Iterator<T> asIterator(Class<T> type, int pageSize) {
-        if (method != "GET") {
+        if (!"GET".equals(method)) {
             throw new IllegalStateException("Request method \"GET\" is required for iterator.");
         }
 
-        if (pageSize != 0)
+        if (pageSize > 0)
             args.add(new Entry("per_page", pageSize));
 
         String tailApiUrl = buildTailApiUrl(urlPath);

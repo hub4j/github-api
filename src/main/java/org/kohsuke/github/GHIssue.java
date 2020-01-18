@@ -446,9 +446,8 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getIssuesApiRoute() + "/comments",
-                        GHIssueComment[].class,
-                        item -> item.wrapUp(GHIssue.this));
+                .withUrlPath(getIssuesApiRoute() + "/comments")
+                .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
     @Preview
@@ -468,7 +467,8 @@ public class GHIssue extends GHObject implements Reactable {
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
-                .asPagedIterable(getApiRoute() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
+                .withUrlPath(getApiRoute() + "/reactions")
+                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     /**
@@ -716,8 +716,7 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
         return root.createRequest()
-                .asPagedIterable(owner.getApiTailUrl(String.format("/issues/%s/events", number)),
-                        GHIssueEvent[].class,
-                        item -> item.wrapUp(GHIssue.this));
+                .withUrlPath(owner.getApiTailUrl(String.format("/issues/%s/events", number)))
+                .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));
     }
 }

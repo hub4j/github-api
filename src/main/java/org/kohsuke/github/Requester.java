@@ -897,11 +897,16 @@ class Requester {
             // to preserve backward compatibility
 
             // WORKAROUND FOR ISSUE #669:
-            // When caching GitHub doesn't handle "If-Modified-Since" correctly
-            // In the case that an item didn't exist (returned 404) but now does exist
-            // Accurate 404 responses from GitHub do not have ETag information (at this time)
-            // If we see a 404 with an ETag we treat it as corrupt and make new request with
-            // caching headers overridden to force refresh.
+            // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
+            // is bogus and would cause cache corruption), try the query again with new request header
+            // that forces the server to not return 304 and return new data instead.
+            //
+            // This solution is transparent to users of this library and automatically handles a
+            // situation that was cause insidious and hard to debug bad responses in caching
+            // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
+            // their 404 responses, this will result in at worst two requests being made for each 404
+            // responses. However, only the second request will count against rate limit.
+
             // If we tried this once already, don't try again.
             if (Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
                     && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && timeouts > 0) {

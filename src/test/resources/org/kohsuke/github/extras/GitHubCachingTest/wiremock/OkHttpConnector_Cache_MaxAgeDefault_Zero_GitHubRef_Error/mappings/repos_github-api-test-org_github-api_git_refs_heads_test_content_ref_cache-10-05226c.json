@@ -10,9 +10,6 @@
       },
       "If-Modified-Since": {
         "absent": true
-      },
-      "If-None-Match": {
-        "absent": true
       }
     }
   },

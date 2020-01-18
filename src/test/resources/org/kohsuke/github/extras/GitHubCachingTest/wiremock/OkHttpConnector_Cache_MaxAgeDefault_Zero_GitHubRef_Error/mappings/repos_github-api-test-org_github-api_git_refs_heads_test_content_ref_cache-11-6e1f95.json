@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "If-Modified-Since": {
-        "contains" : "GMT"
+        "contains": "GMT"
       },
       "Cache-Control": {
         "equalTo": "max-age=0"

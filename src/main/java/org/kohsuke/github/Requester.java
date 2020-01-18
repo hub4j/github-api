@@ -895,6 +895,29 @@ class Requester {
             // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in
             // HttpException
             // to preserve backward compatibility
+
+            // WORKAROUND FOR ISSUE #669:
+            // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
+            // is bogus and would cause cache corruption), try the query again with new request header
+            // that forces the server to not return 304 and return new data instead.
+            //
+            // This solution is transparent to users of this library and automatically handles a
+            // situation that was cause insidious and hard to debug bad responses in caching
+            // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
+            // their 404 responses, this will result in at worst two requests being made for each 404
+            // responses. However, only the second request will count against rate limit.
+
+            // If we tried this once already, don't try again.
+            if (Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
+                    && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && timeouts > 0) {
+                setupConnection(uc.getURL());
+                // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+                // "If-Modified-Since" or "If-None-Match" values.
+                // This makes GitHub give us current data (not incorrectly cached data)
+                uc.setRequestProperty("Cache-Control", "no-cache");
+                return parse(type, instance, timeouts - 1);
+            }
+
             throw e;
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException && timeouts > 0) {

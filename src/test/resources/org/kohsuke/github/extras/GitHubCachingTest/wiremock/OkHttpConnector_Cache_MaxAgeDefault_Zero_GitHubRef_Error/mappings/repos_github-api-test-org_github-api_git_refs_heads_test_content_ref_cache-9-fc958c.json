@@ -13,7 +13,7 @@
   "response": {
     "status": 204,
     "headers": {
-      "Date": "Fri, 17 Jan 2020 23:41:14 GMT",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Server": "GitHub.com",
       "Status": "204 No Content",
       "X-RateLimit-Limit": "5000",

@@ -16,7 +16,7 @@
   "response": {
     "status": 304,
     "headers": {
-      "Date": "Fri, 17 Jan 2020 23:41:13 GMT",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Server": "GitHub.com",
       "Status": "304 Not Modified",
       "X-RateLimit-Limit": "5000",
@@ -28,7 +28,7 @@
         "Accept-Encoding"
       ],
       "ETag": "\"d3be5b35b8d84ef7ac03c0cc9c94ed81\"",
-      "Last-Modified": "Thu, 16 Jan 2020 21:22:56 GMT",
+      "Last-Modified": "{{now offset='-1 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -42,8 +42,8 @@
   },
   "uuid": "4506da20-fd38-4c44-a4de-99242417e735",
   "persistent": true,
-  "scenarioName": "scenario-4-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-4-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-2",
+  "scenarioName": "scenario-3-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache",
+  "requiredScenarioState": "scenario-3-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-2",
+  "newScenarioState": "scenario-3-repos-github-api-test-org-github-api-git-refs-heads-test-content_ref_cache-3",
   "insertionIndex": 8
 }

@@ -12,7 +12,6 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.*;
 
 /**
  * @author Liam Newman
@@ -344,4 +343,85 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(postcommitHooks.size(), equalTo(0));
     }
 
+    @Test
+    public void getRefs() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRef[] refs = repo.getRefs();
+        assertThat(refs, notNullValue());
+        assertThat(refs.length, equalTo(1));
+        assertThat(refs[0].getRef(), equalTo("refs/heads/master"));
+    }
+
+    @Test
+    public void getRefsHeads() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRef[] refs = repo.getRefs("heads");
+        assertThat(refs, notNullValue());
+        assertThat(refs.length, equalTo(1));
+        assertThat(refs[0].getRef(), equalTo("refs/heads/master"));
+    }
+
+    @Test
+    public void getRefsEmptyTags() throws Exception {
+        GHRepository repo = getTempRepository();
+        try {
+            repo.getRefs("tags");
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(GHFileNotFoundException.class));
+            assertThat(e.getMessage(),
+                    containsString(
+                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
+            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
+        }
+    }
+
+    @Test
+    public void listRefs() throws Exception {
+        GHRepository repo = getTempRepository();
+        List<GHRef> refs = repo.listRefs().asList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), equalTo(1));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
+    }
+
+    @Test
+    public void listRefsHeads() throws Exception {
+        GHRepository repo = getTempRepository();
+        List<GHRef> refs = repo.listRefs("heads").asList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), equalTo(1));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
+    }
+
+    @Test
+    public void listRefsEmptyTags() throws Exception {
+        try {
+            GHRepository repo = getTempRepository();
+            repo.listRefs("tags").asList();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(GHException.class));
+            assertThat(e.getMessage(), containsString("Failed to retrieve "));
+            assertThat(e.getMessage(),
+                    containsString("/repos/github-api-test-org/temp-listRefsEmptyTags/git/refs/tags"));
+            assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
+        }
+    }
+
+    @Test
+    public void listTagsEmpty() throws Exception {
+        GHRepository repo = getTempRepository();
+        List<GHTag> refs = repo.listTags().asList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), equalTo(0));
+    }
+
+    @Test
+    public void listTags() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHTag> refs = repo.listTags().withPageSize(33).asList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), greaterThan(90));
+    }
 }

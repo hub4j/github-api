@@ -5,6 +5,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 /**
  * {@link Iterable} that returns {@link PagedIterator}
  *
@@ -33,6 +35,12 @@ public abstract class PagedIterable<T> implements Iterable<T> {
         return this;
     }
 
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Nonnull
     public final PagedIterator<T> iterator() {
         return _iterator(size);
     }
@@ -44,6 +52,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      *            the page size
      * @return the paged iterator
      */
+    @Nonnull
     public abstract PagedIterator<T> _iterator(int pageSize);
 
     /**
@@ -52,7 +61,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * @return the list
      */
     public List<T> asList() {
-        List<T> r = new ArrayList<T>();
+        ArrayList<T> r = new ArrayList<>();
         for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }
@@ -65,7 +74,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * @return the set
      */
     public Set<T> asSet() {
-        LinkedHashSet<T> r = new LinkedHashSet<T>();
+        LinkedHashSet<T> r = new LinkedHashSet<>();
         for (PagedIterator<T> i = iterator(); i.hasNext();) {
             r.addAll(i.nextPage());
         }

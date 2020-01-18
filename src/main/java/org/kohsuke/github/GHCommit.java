@@ -442,10 +442,9 @@ public class GHCommit {
      */
     public PagedIterable<GHCommitComment> listComments() {
         return owner.root.createRequest()
-                .asPagedIterable(
-                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha),
-                        GHCommitComment[].class,
-                        item -> item.wrap(owner));
+                .withUrlPath(
+                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
+                .toIterable(GHCommitComment[].class, item -> item.wrap(owner));
     }
 
     /**

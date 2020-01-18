@@ -138,7 +138,8 @@ public class GHCommitComment extends GHObject implements Reactable {
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
-                .asPagedIterable(getApiTail() + "/reactions", GHReaction[].class, item -> item.wrap(owner.root));
+                .withUrlPath(getApiTail() + "/reactions")
+                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     /**

@@ -155,40 +155,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return getTempRepository(GITHUB_API_TEST_REPO);
     }
 
-    @Ignore("Needs to be rewritten to not create new issues just to check that they can be found.")
     @Test
     public void testListIssues() throws IOException {
-        GHUser u = getUser();
-        GHRepository repository = getTestRepository();
+        Iterable<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+                .getRepository("github-api")
+                .listIssues(GHIssueState.CLOSED);
 
-        GHMilestone milestone = repository.createMilestone(System.currentTimeMillis() + "", "Test Milestone");
-        milestone.close();
-        GHIssue unhomed = null;
-        GHIssue homed = null;
-        try {
-            unhomed = repository.createIssue("testing")
-                    .body("this is body")
-                    .assignee(u)
-                    .label("bug")
-                    .label("question")
-                    .create();
-            assertEquals(unhomed.getNumber(), repository.getIssues(GHIssueState.OPEN, null).get(0).getNumber());
-            homed = repository.createIssue("testing")
-                    .body("this is body")
-                    .assignee(u)
-                    .label("bug")
-                    .label("question")
-                    .milestone(milestone)
-                    .create();
-            assertEquals(homed.getNumber(), repository.getIssues(GHIssueState.OPEN, milestone).get(0).getNumber());
-        } finally {
-            if (unhomed != null) {
-                unhomed.close();
-            }
-            if (homed != null) {
-                homed.close();
-            }
+        int x = 0;
+        for (GHIssue issue : closedIssues) {
+            assertNotNull(issue);
+            x++;
         }
+
+        assertTrue(x > 150);
     }
 
     @Test

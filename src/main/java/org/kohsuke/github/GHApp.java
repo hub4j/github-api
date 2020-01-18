@@ -180,7 +180,8 @@ public class GHApp extends GHObject {
     public PagedIterable<GHAppInstallation> listInstallations() {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
-                .asPagedIterable("/app/installations", GHAppInstallation[].class, item -> item.wrapUp(root));
+                .withUrlPath("/app/installations")
+                .toIterable(GHAppInstallation[].class, item -> item.wrapUp(root));
     }
 
     /**

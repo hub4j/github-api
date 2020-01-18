@@ -88,7 +88,8 @@ public class GHRepositoryStatistics {
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("contributors"), ContributorStats[].class, item -> item.wrapUp(root));
+                .withUrlPath(getApiTailUrl("contributors"))
+                .toIterable(ContributorStats[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -244,7 +245,8 @@ public class GHRepositoryStatistics {
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiTailUrl("commit_activity"), CommitActivity[].class, item -> item.wrapUp(root));
+                .withUrlPath(getApiTailUrl("commit_activity"))
+                .toIterable(CommitActivity[].class, item -> item.wrapUp(root));
     }
 
     /**

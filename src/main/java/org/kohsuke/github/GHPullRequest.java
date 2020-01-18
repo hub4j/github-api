@@ -394,7 +394,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return root.createRequest()
-                .asPagedIterable(String.format("%s/files", getApiRoute()), GHPullRequestFileDetail[].class, null);
+                .withUrlPath(String.format("%s/files", getApiRoute()))
+                .toIterable(GHPullRequestFileDetail[].class, null);
     }
 
     /**
@@ -404,9 +405,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public PagedIterable<GHPullRequestReview> listReviews() {
         return root.createRequest()
-                .asPagedIterable(String.format("%s/reviews", getApiRoute()),
-                        GHPullRequestReview[].class,
-                        item -> item.wrapUp(GHPullRequest.this));
+                .withUrlPath(String.format("%s/reviews", getApiRoute()))
+                .toIterable(GHPullRequestReview[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -418,9 +418,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return root.createRequest()
-                .asPagedIterable(getApiRoute() + COMMENTS_ACTION,
-                        GHPullRequestReviewComment[].class,
-                        item -> item.wrapUp(GHPullRequest.this));
+                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
+                .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -430,9 +429,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
         return root.createRequest()
-                .asPagedIterable(String.format("%s/commits", getApiRoute()),
-                        GHPullRequestCommitDetail[].class,
-                        item -> item.wrapUp(GHPullRequest.this));
+                .withUrlPath(String.format("%s/commits", getApiRoute()))
+                .toIterable(GHPullRequestCommitDetail[].class, item -> item.wrapUp(this));
     }
 
     /**

@@ -6,11 +6,8 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
-import org.kohsuke.github.GHContent;
-import org.kohsuke.github.GHException;
 import org.kohsuke.github.GHFileNotFoundException;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHPullRequest;
@@ -20,9 +17,6 @@ import org.kohsuke.github.GitHub;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
-import static org.hamcrest.core.Is.is;
 
 /**
  * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
@@ -40,8 +34,8 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
-            // Use the same data files as the 2.x test
-            .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
+                // Use the same data files as the 2.x test
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
                 .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
     }
 
@@ -60,18 +54,9 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error_runnable() throws Exception {
-
-        requireProxy("This test method can be run locally for debugging and analyzing.");
-        OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error();
-    }
-
-//        @Ignore("The wiremock snapshot files attached to this test method show what was sent to and from the server during a run, but they aren't re-runnable - not templated.")
-    @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error() throws Exception {
         // ISSUE #669
-        // requireProxy("For clarity. Will switch to snapshot shortly.");
-        // snapshotNotAllowed();
+        snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
         OkHttpConnector connector = new OkHttpConnector(client);
@@ -178,8 +163,8 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
         if (useCache) {
-            File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName()
-                    + clientCount++);
+            File cacheDir = new File(
+                    "target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName() + clientCount++);
             cacheDir.mkdirs();
             FileUtils.cleanDirectory(cacheDir);
             Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);

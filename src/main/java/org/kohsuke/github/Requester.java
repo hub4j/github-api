@@ -890,10 +890,8 @@ class Requester {
             // If we see a 404 with an ETag we treat it as corrupt and make new request with
             // caching headers overridden to force refresh.
             // If we tried this once already, don't try again.
-            if (Objects.equals(uc.getRequestMethod(), "GET")
-                && uc.getHeaderField("ETag") != null
-                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")
-                && timeouts > 0) {
+            if (Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
+                    && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && timeouts > 0) {
                 setupConnection(uc.getURL());
                 // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                 // "If-Modified-Since" or "If-None-Match" values.

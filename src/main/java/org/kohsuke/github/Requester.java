@@ -66,6 +66,7 @@ import static java.util.Arrays.asList;
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.kohsuke.github.GitHub.MAPPER;
+import static org.kohsuke.github.GitHub.connect;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -487,9 +488,10 @@ class Requester {
 
     private <T> T _fetch(String tailApiUrl, URL url, SupplierThrows<T, IOException> supplier) throws IOException {
         while (true) {// loop while API rate limit is hit
-            setupConnection(url);
+            uc = setupConnection(url);
 
             try {
+                retryInvalidCached404Response();
                 return supplier.get();
             } catch (IOException e) {
                 handleApiError(e);
@@ -608,24 +610,25 @@ class Requester {
     /**
      * Set up the request parameters or POST payload.
      */
-    private void buildRequest() throws IOException {
+    private void buildRequest(HttpURLConnection connection) throws IOException {
         if (isMethodWithBody()) {
-            uc.setDoOutput(true);
+            connection.setDoOutput(true);
 
             if (body == null) {
-                uc.setRequestProperty("Content-type", defaultString(contentType, "application/json"));
+                connection.setRequestProperty("Content-type", defaultString(contentType, "application/json"));
                 Map json = new HashMap();
                 for (Entry e : args) {
                     json.put(e.key, e.value);
                 }
-                MAPPER.writeValue(uc.getOutputStream(), json);
+                MAPPER.writeValue(connection.getOutputStream(), json);
             } else {
-                uc.setRequestProperty("Content-type", defaultString(contentType, "application/x-www-form-urlencoded"));
+                connection.setRequestProperty("Content-type",
+                        defaultString(contentType, "application/x-www-form-urlencoded"));
                 try {
                     byte[] bytes = new byte[32768];
                     int read;
                     while ((read = body.read(bytes)) != -1) {
-                        uc.getOutputStream().write(bytes, 0, read);
+                        connection.getOutputStream().write(bytes, 0, read);
                     }
                 } finally {
                     body.close();
@@ -782,47 +785,49 @@ class Requester {
         }
     }
 
-    private void setupConnection(URL url) throws IOException {
+    private HttpURLConnection setupConnection(URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE,
                     "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " "
                             + url.toString());
         }
-        uc = root.getConnector().connect(url);
+        HttpURLConnection connection = root.getConnector().connect(url);
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
         if (root.encodedAuthorization != null)
-            uc.setRequestProperty("Authorization", root.encodedAuthorization);
+            connection.setRequestProperty("Authorization", root.encodedAuthorization);
 
         for (Map.Entry<String, String> e : headers.entrySet()) {
             String v = e.getValue();
             if (v != null)
-                uc.setRequestProperty(e.getKey(), v);
+                connection.setRequestProperty(e.getKey(), v);
         }
 
-        setRequestMethod(uc);
-        uc.setRequestProperty("Accept-Encoding", "gzip");
-        buildRequest();
+        setRequestMethod(connection);
+        connection.setRequestProperty("Accept-Encoding", "gzip");
+        buildRequest(connection);
+
+        return connection;
     }
 
-    private void setRequestMethod(HttpURLConnection uc) throws IOException {
+    private void setRequestMethod(HttpURLConnection connection) throws IOException {
         try {
-            uc.setRequestMethod(method);
+            connection.setRequestMethod(method);
         } catch (ProtocolException e) {
             // JDK only allows one of the fixed set of verbs. Try to override that
             try {
                 Field $method = HttpURLConnection.class.getDeclaredField("method");
                 $method.setAccessible(true);
-                $method.set(uc, method);
+                $method.set(connection, method);
             } catch (Exception x) {
                 throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
             }
             // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
             try {
-                Field $delegate = uc.getClass().getDeclaredField("delegate");
+                Field $delegate = connection.getClass().getDeclaredField("delegate");
                 $delegate.setAccessible(true);
-                Object delegate = $delegate.get(uc);
+                Object delegate = $delegate.get(connection);
                 if (delegate instanceof HttpURLConnection) {
                     HttpURLConnection nested = (HttpURLConnection) delegate;
                     setRequestMethod(nested);
@@ -833,7 +838,7 @@ class Requester {
                 throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
             }
         }
-        if (!uc.getRequestMethod().equals(method))
+        if (!connection.getRequestMethod().equals(method))
             throw new IllegalStateException("Failed to set the request method to " + method);
     }
 
@@ -885,39 +890,16 @@ class Requester {
                 try {
                     return setResponseHeaders(MAPPER.readValue(data, type));
                 } catch (JsonMappingException e) {
-                    throw (IOException) new IOException("Failed to deserialize " + data).initCause(e);
+                    String message = "Failed to deserialize " + data;
+                    throw (IOException) new IOException(message).initCause(e);
                 }
             if (instance != null) {
                 return setResponseHeaders(MAPPER.readerForUpdating(instance).<T>readValue(data));
             }
             return null;
         } catch (FileNotFoundException e) {
-            // java.net.URLConnection handles 404 exception has FileNotFoundException, don't wrap exception in
-            // HttpException
-            // to preserve backward compatibility
-
-            // WORKAROUND FOR ISSUE #669:
-            // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
-            // is bogus and would cause cache corruption), try the query again with new request header
-            // that forces the server to not return 304 and return new data instead.
-            //
-            // This solution is transparent to users of this library and automatically handles a
-            // situation that was cause insidious and hard to debug bad responses in caching
-            // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
-            // their 404 responses, this will result in at worst two requests being made for each 404
-            // responses. However, only the second request will count against rate limit.
-
-            // If we tried this once already, don't try again.
-            if (Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
-                    && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && timeouts > 0) {
-                setupConnection(uc.getURL());
-                // Setting "Cache-Control" to "no-cache" stops the cache from supplying
-                // "If-Modified-Since" or "If-None-Match" values.
-                // This makes GitHub give us current data (not incorrectly cached data)
-                uc.setRequestProperty("Cache-Control", "no-cache");
-                return parse(type, instance, timeouts - 1);
-            }
-
+            // java.net.URLConnection handles 404 exception as FileNotFoundException,
+            // don't wrap exception in HttpException to preserve backward compatibility
             throw e;
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException && timeouts > 0) {
@@ -927,6 +909,29 @@ class Requester {
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         } finally {
             IOUtils.closeQuietly(r);
+        }
+    }
+
+    private void retryInvalidCached404Response() throws IOException {
+        // WORKAROUND FOR ISSUE #669:
+        // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
+        // is bogus and would cause cache corruption), try the query again with new request header
+        // that forces the server to not return 304 and return new data instead.
+        //
+        // This solution is transparent to users of this library and automatically handles a
+        // situation that was cause insidious and hard to debug bad responses in caching
+        // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
+        // their 404 responses, this will result in at worst two requests being made for each 404
+        // responses. However, only the second request will count against rate limit.
+        int responseCode = uc.getResponseCode();
+        if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
+                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")) {
+            uc = setupConnection(uc.getURL());
+            // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+            // "If-Modified-Since" or "If-None-Match" values.
+            // This makes GitHub give us current data (not incorrectly cached data)
+            uc.setRequestProperty("Cache-Control", "no-cache");
+            uc.getResponseCode();
         }
     }
 

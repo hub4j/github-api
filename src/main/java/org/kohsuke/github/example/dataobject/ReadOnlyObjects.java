@@ -489,7 +489,8 @@ public final class ReadOnlyObjects {
      * <ul>
      * <li>There is no way you'd know about this without some research</li>
      * <li>Specific annotations needed</li>
-     * <li>Nonnull annotations are misleading - null value is not checked even for "required" constructor parameters</li>
+     * <li>Nonnull annotations are misleading - null value is not checked even for "required" constructor
+     * parameters</li>
      * <li>Brittle and verbose - not friendly to large number of fields</li>
      * </ul>
      *
@@ -508,13 +509,22 @@ public final class ReadOnlyObjects {
 
         /**
          *
-         * @param hooks the hooks - required property works, but only on creator json properties like this, ignores Nonnull, checked manually
-         * @param git the git list - required property works, but only on creator json properties like this, misleading Nonnull annotation
-         * @param web the web list - misleading Nonnull annotation
-         * @param api the api list - misleading Nonnull annotation
-         * @param pages the pages list - misleading Nonnull annotation
-         * @param importer the importer list - misleading Nonnull annotation
-         * @param verifiablePasswordAuthentication true or false
+         * @param hooks
+         *            the hooks - required property works, but only on creator json properties like this, ignores
+         *            Nonnull, checked manually
+         * @param git
+         *            the git list - required property works, but only on creator json properties like this, misleading
+         *            Nonnull annotation
+         * @param web
+         *            the web list - misleading Nonnull annotation
+         * @param api
+         *            the api list - misleading Nonnull annotation
+         * @param pages
+         *            the pages list - misleading Nonnull annotation
+         * @param importer
+         *            the importer list - misleading Nonnull annotation
+         * @param verifiablePasswordAuthentication
+         *            true or false
          */
         @JsonCreator
         private GHMetaGettersFinalCreator(@Nonnull @JsonProperty(value = "hooks", required = true) List<String> hooks,

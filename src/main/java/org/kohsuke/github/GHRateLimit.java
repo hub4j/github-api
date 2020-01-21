@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import static java.util.logging.Level.FINEST;
@@ -41,7 +42,10 @@ public class GHRateLimit {
     public int limit;
 
     /**
-     * The time at which the current rate limit window resets in UTC epoch seconds. NOTE: that means to
+     * The time at which the current rate limit window resets in UTC epoch seconds. WARNING: this field was implemented
+     * using {@link Date#Date(long)} which expects UTC epoch milliseconds, so this Date instance is meaningless as a
+     * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
+     * multiplied by 1000.
      *
      * @deprecated This value should never have been made public. Use {@link #getResetDate()}
      */
@@ -60,6 +64,7 @@ public class GHRateLimit {
     @Nonnull
     private final Record integrationManifest;
 
+    @Nonnull
     static GHRateLimit Unknown() {
         return new GHRateLimit(new UnknownLimitRecord(),
                 new UnknownLimitRecord(),
@@ -67,6 +72,7 @@ public class GHRateLimit {
                 new UnknownLimitRecord());
     }
 
+    @Nonnull
     static GHRateLimit fromHeaderRecord(Record header) {
         return new GHRateLimit(header, new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord());
     }
@@ -76,6 +82,12 @@ public class GHRateLimit {
             @Nonnull @JsonProperty("search") Record search,
             @Nonnull @JsonProperty("graphql") Record graphql,
             @Nonnull @JsonProperty("integration_manifest") Record integrationManifest) {
+        // The Nonnull annotation is ignored by Jackson, we have to check manually
+        Objects.requireNonNull(core);
+        Objects.requireNonNull(search);
+        Objects.requireNonNull(graphql);
+        Objects.requireNonNull(integrationManifest);
+
         this.core = core;
         this.search = search;
         this.graphql = graphql;
@@ -84,6 +96,7 @@ public class GHRateLimit {
         // Deprecated fields
         this.remaining = core.getRemaining();
         this.limit = core.getLimit();
+        // This is wrong but is how this was implemented. Kept for backward compat.
         this.reset = new Date(core.getResetEpochSeconds());
     }
 
@@ -270,9 +283,9 @@ public class GHRateLimit {
          *            the reset epoch seconds
          */
         @JsonCreator
-        public Record(@JsonProperty("limit") int limit,
-                @JsonProperty("remaining") int remaining,
-                @JsonProperty("reset") long resetEpochSeconds) {
+        public Record(@JsonProperty(value = "limit", required = true) int limit,
+                @JsonProperty(value = "remaining", required = true) int remaining,
+                @JsonProperty(value = "reset", required = true) long resetEpochSeconds) {
             this(limit, remaining, resetEpochSeconds, null);
         }
 
@@ -289,7 +302,7 @@ public class GHRateLimit {
          *            the updated at
          */
         @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "Deprecated")
-        public Record(int limit, int remaining, long resetEpochSeconds, String updatedAt) {
+        public Record(int limit, int remaining, long resetEpochSeconds, @CheckForNull String updatedAt) {
             this.limit = limit;
             this.remaining = remaining;
             this.resetEpochSeconds = resetEpochSeconds;
@@ -304,7 +317,7 @@ public class GHRateLimit {
          *            a string date in RFC 1123
          * @return reset date based on the passed date
          */
-        Date recalculateResetDate(String updatedAt) {
+        Date recalculateResetDate(@CheckForNull String updatedAt) {
             long updatedAtEpochSeconds = createdAtEpochSeconds;
             if (!StringUtils.isBlank(updatedAt)) {
                 try {
@@ -319,7 +332,7 @@ public class GHRateLimit {
             }
 
             // This may seem odd but it results in an accurate or slightly pessimistic reset date
-            // based on system time rather than on the system being in sync with the server
+            // based on system time rather than assuming the system time synchronized with the server
             long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
             return resetDate = new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
         }
@@ -352,7 +365,7 @@ public class GHRateLimit {
         }
 
         /**
-         * Whether the rate limit reset date indicated by this instance is in the
+         * Whether the rate limit reset date indicated by this instance is expired
          *
          * @return true if the rate limit reset date has passed. Otherwise false.
          */

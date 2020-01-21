@@ -1,10 +1,11 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.IOException;
 import java.util.Date;
@@ -34,6 +35,9 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
  */
 public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
+    GHRateLimit rateLimit = null;
+    GHRateLimit previousLimit = null;
+
     public GHRateLimitTest() {
         useDefaultGitHub = false;
     }
@@ -50,10 +54,10 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
-        GHRateLimit rateLimit = null;
 
-        Date lastReset = new Date(System.currentTimeMillis() / 1000L);
-        int lastRemaining = 5000;
+        // 4897 is just the what the limit was when the snapshot was taken
+        previousLimit = GHRateLimit
+                .fromHeaderRecord(new GHRateLimit.Record(5000, 4897, System.currentTimeMillis() / 1000L));
 
         // Give this a moment
         Thread.sleep(1000);
@@ -67,12 +71,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         // Since we already had rate limit info these don't request again
         rateLimit = gitHub.lastRateLimit();
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
-        assertThat(rateLimit.getLimit(), equalTo(5000));
-        lastRemaining = rateLimit.getRemaining();
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
-        lastReset = rateLimit.getResetDate();
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
 
         GHRateLimit headerRateLimit = rateLimit;
 
@@ -91,13 +91,9 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
 
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
-        assertThat(rateLimit.getLimit(), equalTo(5000));
-        // rate limit request is free
-        assertThat(rateLimit.remaining, equalTo(lastRemaining));
-        assertThat(rateLimit.getRemaining(), equalTo(lastRemaining));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
+        // rate limit request is free, remaining is unchanged
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
 
         // Give this a moment
         Thread.sleep(1000);
@@ -106,27 +102,20 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
 
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
-        assertThat(rateLimit.getLimit(), equalTo(5000));
-        // rate limit request is free
-        assertThat(rateLimit.remaining, equalTo(lastRemaining));
-        assertThat(rateLimit.getRemaining(), equalTo(lastRemaining));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
+        // rate limit request is free, remaining is unchanged
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
 
         gitHub.getOrganization(GITHUB_API_TEST_ORG);
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
 
         assertThat(gitHub.lastRateLimit(), not(equalTo(headerRateLimit)));
         rateLimit = gitHub.lastRateLimit();
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
-        assertThat(rateLimit.getLimit(), equalTo(5000));
+
         // Org costs limit to query
-        assertThat(rateLimit.remaining, equalTo(lastRemaining - 1));
-        assertThat(rateLimit.getRemaining(), equalTo(lastRemaining - 1));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
-        lastReset = rateLimit.getResetDate();
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining() - 1);
+
+        previousLimit = rateLimit;
         headerRateLimit = rateLimit;
 
         // ratelimit() should prefer headerRateLimit when it is most recent and not expired
@@ -141,13 +130,9 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(5));
 
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
-        assertThat(rateLimit.getLimit(), equalTo(5000));
-        // Org costs limit to query
-        assertThat(rateLimit.remaining, equalTo(lastRemaining - 1));
-        assertThat(rateLimit.getRemaining(), equalTo(lastRemaining - 1));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
+        // rate limit request is free, remaining is unchanged
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
 
         // When getRateLimit() succeeds, headerRateLimit updates as usual as well (if needed)
         // These are separate instances, but should be equal
@@ -164,6 +149,27 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.rateLimit(), sameInstance(gitHub.lastRateLimit()));
 
         assertThat(mockGitHub.getRequestCount(), equalTo(5));
+    }
+
+    private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining) {
+        // Basic checks of values
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.getLimit(), equalTo(previousLimit.getLimit()));
+        assertThat(rateLimit.getRemaining(), equalTo(remaining));
+
+        // Check that the reset date of the current limit is not older than the previous one
+        assertThat(rateLimit.getResetDate().compareTo(previousLimit.getResetDate()), greaterThanOrEqualTo(0));
+
+        // Additional checks for record values
+        assertThat(rateLimit.getCore().getLimit(), equalTo(rateLimit.getLimit()));
+        assertThat(rateLimit.getCore().getRemaining(), equalTo(rateLimit.getRemaining()));
+        assertThat(rateLimit.getCore().getResetEpochSeconds(), equalTo(rateLimit.getResetEpochSeconds()));
+        assertThat(rateLimit.getCore().getResetDate(), equalTo(rateLimit.getResetDate()));
+
+        // Additional checks for deprecated values
+        assertThat(rateLimit.limit, equalTo(rateLimit.getLimit()));
+        assertThat(rateLimit.remaining, equalTo(rateLimit.getRemaining()));
+        assertThat(rateLimit.reset.getTime(), equalTo(rateLimit.getResetEpochSeconds()));
     }
 
     @Test
@@ -187,9 +193,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         rateLimit = gitHub.rateLimit();
         assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
-        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
-        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
         lastReset = rateLimit.getResetDate();
@@ -214,9 +218,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         rateLimit = gitHub.rateLimit();
         assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
-        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
-        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
         lastReset = rateLimit.getResetDate();
@@ -231,9 +233,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
 
         assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
-        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
-        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
 
@@ -256,9 +256,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // Since we already had rate limit info these don't request again
         rateLimit = gitHub.lastRateLimit();
         assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.limit, equalTo(5000));
         assertThat(rateLimit.getLimit(), equalTo(5000));
-        assertThat(rateLimit.remaining, equalTo(4978));
         assertThat(rateLimit.getRemaining(), equalTo(4978));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), greaterThanOrEqualTo(0));
         lastReset = rateLimit.getResetDate();
@@ -281,9 +279,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
 
         assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
-        assertThat(rateLimit.limit, equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
-        assertThat(rateLimit.remaining, equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
 
@@ -294,6 +290,36 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         // Wait for the header
         Thread.sleep(1000);
+    }
+
+    @Test
+    public void testGitHubRateLimitWithBadData() throws Exception {
+        snapshotNotAllowed();
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+        gitHub.getMyself();
+        try {
+            gitHub.getRateLimit();
+            fail("Invalid rate limit missing some records should throw");
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getCause(), instanceOf(ValueInstantiationException.class));
+            assertThat(e.getCause().getCause().getMessage(),
+                    containsString(
+                            "Cannot construct instance of `org.kohsuke.github.GHRateLimit`, problem: `java.lang.NullPointerException`"));
+        }
+
+        try {
+            gitHub.getRateLimit();
+            fail("Invalid rate limit record missing a value should throw");
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getCause(), instanceOf(MismatchedInputException.class));
+            assertThat(e.getCause().getCause().getMessage(),
+                    containsString("Missing required creator property 'reset' (index 2)"));
+        }
+
     }
 
     // These tests should behave the same, showing server time adjustment working

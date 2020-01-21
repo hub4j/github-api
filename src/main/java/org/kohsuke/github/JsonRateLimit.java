@@ -3,8 +3,9 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Kohsuke Kawaguchi

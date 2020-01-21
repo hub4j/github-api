@@ -424,4 +424,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs, notNullValue());
         assertThat(refs.size(), greaterThan(90));
     }
+
+    @Test
+    public void checkWatchersCount() throws Exception {
+        GHRepository repo = getRepository();
+        int watchersCount = repo.getWatchers();
+        assertNotEquals(null, watchersCount);
+        assertEquals(10, watchersCount);
+    }
+
+    @Test
+    public void checkStargazersCount() throws Exception {
+        GHRepository repo = getRepository();
+        int stargazersCount = repo.getStargazersCount();
+        assertNotEquals(null, stargazersCount);
+        assertEquals(10, stargazersCount);
+    }
 }

@@ -13,7 +13,7 @@
   <body>
     <menu name="Git Hub API for Java">
       <item name="Introduction" href="/index.html"/>
-      <item name="Download" href="http://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
+      <item name="Download" href="https://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
       <item name="Source code" href="https://github.com/github-api/${project.artifactId}"/>
       <item name="Mailing List" href="https://groups.google.com/forum/#!forum/github-api"/>
     </menu>

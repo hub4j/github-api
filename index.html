@@ -26,7 +26,7 @@
       <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
 		
             <h1 id="bannerLeft">
-          <a href="https://github-api.kohsuke.org/">
+          <a href="./">
     
             GitHub API for Java
     
@@ -264,7 +264,7 @@ export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70</pre></div>
 <div class="source">
 <pre>GitHub github = GitHubBuilder.fromEnvironment().build();</pre></div></section></section><section>
 <h2><a name="Pluggable_HTTP_client"></a>Pluggable HTTP client</h2>
-<p>This library comes with a pluggable connector to use different HTTP client implementations through <code>HttpConnector</code>. In particular, this means you can use <a class="externalLink" href="http://square.github.io/okhttp/">OkHttp</a>, so we can make use of it's HTTP response cache. Making a conditional request against the GitHub API and receiving a 304 response <a class="externalLink" href="http://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
+<p>This library comes with a pluggable connector to use different HTTP client implementations through <code>HttpConnector</code>. In particular, this means you can use <a class="externalLink" href="https://square.github.io/okhttp/">OkHttp</a>, so we can make use of it's HTTP response cache. Making a conditional request against the GitHub API and receiving a 304 response <a class="externalLink" href="https://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
 <p>The following code shows an example of how to set up persistent cache on the disk:</p>
 <div class="source">
 <pre>Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
@@ -277,14 +277,14 @@ GitHub gitHub = GitHubBuilder.fromEnvironment()
       <div class="xright">&#169;  
           2020
     
-          <a href="https://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
+          <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
   
 
   
   
-  &nbsp;| Last Published: 2020-01-21
-  &nbsp;| Version: 1.102
+  &nbsp;| Last Published: 2020-01-22
+  &nbsp;| Version: 1.103
 </div>
       <div class="clear">
         <hr/>

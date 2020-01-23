@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -38,6 +39,7 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -902,8 +904,14 @@ class Requester {
             // don't wrap exception in HttpException to preserve backward compatibility
             throw e;
         } catch (IOException e) {
-            if (e instanceof SocketTimeoutException && timeouts > 0) {
-                LOGGER.log(INFO, "timed out accessing " + uc.getURL() + "; will try " + timeouts + " more time(s)", e);
+            if (((e instanceof SocketException && e.getCause() instanceof SocketTimeoutException)
+                    || e instanceof SocketTimeoutException) && timeouts > 0) {
+                LOGGER.log(INFO, "timed out accessing  "  + uc.getURL() + ". Sleeping 5 seconds before retrying... ; will try" + timeouts + " more time(s)", e);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException _) {
+                    throw (IOException)new InterruptedIOException().initCause(e);
+                }
                 return parse(type, instance, timeouts - 1);
             }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);

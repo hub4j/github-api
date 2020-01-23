@@ -87,6 +87,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void before() {
         super.before();
+        this.apiServer()
+                .stubFor(get(urlMatching(".*test/timeout"))
+                        .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)));
         if (!isUseProxy()) {
             return;
         }

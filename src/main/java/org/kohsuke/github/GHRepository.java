@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License
  *
  * Copyright (c) 2010, Kohsuke Kawaguchi

@@ -904,8 +904,7 @@ class Requester {
             // don't wrap exception in HttpException to preserve backward compatibility
             throw e;
         } catch (IOException e) {
-            if (((e instanceof SocketException && e.getCause() instanceof SocketTimeoutException)
-                    || e instanceof SocketTimeoutException) && timeouts > 0) {
+            if ((e instanceof SocketException || e instanceof SocketTimeoutException) && timeouts > 0) {
                 LOGGER.log(INFO,
                         "timed out accessing  " + uc.getURL() + ". Sleeping 5 seconds before retrying... ; will try"
                                 + timeouts + " more time(s)",

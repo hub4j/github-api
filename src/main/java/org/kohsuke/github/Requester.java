@@ -106,6 +106,11 @@ class Requester {
         }
     }
 
+    /**
+     * If timeout issues let's retry after milliseconds.
+     */
+    private static final int retryTimeoutMillis = 500;
+
     Requester(GitHub root) {
         this.root = root;
     }
@@ -906,11 +911,11 @@ class Requester {
         } catch (IOException e) {
             if ((e instanceof SocketException || e instanceof SocketTimeoutException) && timeouts > 0) {
                 LOGGER.log(INFO,
-                        "timed out accessing  " + uc.getURL() + ". Sleeping 5 seconds before retrying... ; will try"
-                                + timeouts + " more time(s)",
+                        "timed out accessing  " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
+                                + " milliseconds before retrying... ; will try " + timeouts + " more time(s)",
                         e);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(Requester.retryTimeoutMillis);
                 } catch (InterruptedException ie) {
                     throw (IOException) new InterruptedIOException().initCause(e);
                 }

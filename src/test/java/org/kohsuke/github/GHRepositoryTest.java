@@ -428,22 +428,16 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void checkWatchersCount() throws Exception {
         snapshotNotAllowed();
-        GHRepository repo = getRepository();
-        GHRepository parent = repo.getParent();
+        GHRepository repo = getTempRepository();
         int watchersCount = repo.getWatchers();
-        int watchersCountParent = parent.getWatchers();
         assertEquals(10, watchersCount);
-        assertEquals(602, watchersCountParent);
     }
 
     @Test
     public void checkStargazersCount() throws Exception {
         snapshotNotAllowed();
-        GHRepository repo = getRepository();
-        GHRepository parent = repo.getParent();
+        GHRepository repo = getTempRepository();
         int stargazersCount = repo.getStargazersCount();
-        int stargazersCountParent = parent.getWatchers();
         assertEquals(10, stargazersCount);
-        assertEquals(602, stargazersCountParent);
     }
 }

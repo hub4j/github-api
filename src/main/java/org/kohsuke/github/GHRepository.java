@@ -843,8 +843,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHUser... users) throws IOException {
-        addCollaborators(asList(users));
+    public void addCollaborators(GHOrganization.Permission perm, GHUser... users) throws IOException {
+        addCollaborators(perm, asList(users));
     }
 
     /**
@@ -855,8 +855,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT");
+    public void addCollaborators(GHOrganization.Permission perm, Collection<GHUser> users) throws IOException {
+        modifyCollaborators(perm, users, "PUT");
     }
 
     /**
@@ -886,6 +886,18 @@ public class GHRepository extends GHObject {
     private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
         for (GHUser user : users) {
             root.createRequest().method(method).withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+        }
+    }
+
+    private void modifyCollaborators(GHOrganization.Permission perm, Collection<GHUser> users, String method)
+            throws IOException {
+        for (GHUser user : users) {
+            root.createRequest()
+                    .method(method)
+                    .with("permission", perm)
+                    .inBody()
+                    .withUrlPath(getApiTailUrl("collaborators/" + user.getLogin()))
+                    .send();
         }
     }
 

@@ -919,6 +919,7 @@ class Requester {
                 } catch (InterruptedException ie) {
                     throw (IOException) new InterruptedIOException().initCause(e);
                 }
+                uc = setupConnection(uc.getURL());
                 return parse(type, instance, timeouts - 1);
             }
             throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
@@ -938,7 +939,11 @@ class Requester {
         // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
-        int responseCode = uc.getResponseCode();
+        int responseCode = 0;
+        try {
+            uc.getResponseCode();
+        } catch (Exception e) {
+        }
         if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
                 && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")) {
             uc = setupConnection(uc.getURL());

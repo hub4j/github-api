@@ -911,7 +911,7 @@ class Requester {
                         e);
                 try {
                     Thread.sleep(5000);
-                } catch (InterruptedException _) {
+                } catch (InterruptedException ie) {
                     throw (IOException) new InterruptedIOException().initCause(e);
                 }
                 return parse(type, instance, timeouts - 1);

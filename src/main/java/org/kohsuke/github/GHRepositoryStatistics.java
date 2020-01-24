@@ -1,14 +1,12 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -317,20 +315,17 @@ public class GHRepositoryStatistics {
      *             the io exception
      */
     public List<CodeFrequency> getCodeFrequency() throws IOException {
-        // Map to ArrayLists first, since there are no field names in the
+        // Map to arrays first, since there are no field names in the
         // returned JSON.
         try {
-            InputStream stream = root.createRequest().withUrlPath(getApiTailUrl("code_frequency")).fetchStream();
-
-            ObjectMapper mapper = new ObjectMapper();
-            TypeReference<ArrayList<ArrayList<Integer>>> typeRef = new TypeReference<ArrayList<ArrayList<Integer>>>() {
-            };
-            ArrayList<ArrayList<Integer>> list = mapper.readValue(stream, typeRef);
+            Integer[][] list = root.createRequest()
+                    .withUrlPath(getApiTailUrl("code_frequency"))
+                    .fetch(Integer[][].class);
 
             // Convert to proper objects.
-            ArrayList<CodeFrequency> returnList = new ArrayList<CodeFrequency>();
-            for (ArrayList<Integer> item : list) {
-                CodeFrequency cf = new CodeFrequency(item);
+            List<CodeFrequency> returnList = new ArrayList<>();
+            for (Integer[] item : list) {
+                CodeFrequency cf = new CodeFrequency(Arrays.asList(item));
                 returnList.add(cf);
             }
 
@@ -351,7 +346,7 @@ public class GHRepositoryStatistics {
         private int additions;
         private int deletions;
 
-        private CodeFrequency(ArrayList<Integer> item) {
+        private CodeFrequency(List<Integer> item) {
             week = item.get(0);
             additions = item.get(1);
             deletions = item.get(2);
@@ -462,17 +457,12 @@ public class GHRepositoryStatistics {
     public List<PunchCardItem> getPunchCard() throws IOException {
         // Map to ArrayLists first, since there are no field names in the
         // returned JSON.
-        InputStream stream = root.createRequest().withUrlPath(getApiTailUrl("punch_card")).fetchStream();
-
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<ArrayList<ArrayList<Integer>>> typeRef = new TypeReference<ArrayList<ArrayList<Integer>>>() {
-        };
-        ArrayList<ArrayList<Integer>> list = mapper.readValue(stream, typeRef);
+        Integer[][] list = root.createRequest().withUrlPath(getApiTailUrl("punch_card")).fetch(Integer[][].class);
 
         // Convert to proper objects.
-        ArrayList<PunchCardItem> returnList = new ArrayList<PunchCardItem>();
-        for (ArrayList<Integer> item : list) {
-            PunchCardItem pci = new PunchCardItem(item);
+        ArrayList<PunchCardItem> returnList = new ArrayList<>();
+        for (Integer[] item : list) {
+            PunchCardItem pci = new PunchCardItem(Arrays.asList(item));
             returnList.add(pci);
         }
 
@@ -487,7 +477,7 @@ public class GHRepositoryStatistics {
         private int hourOfDay;
         private int numberOfCommits;
 
-        private PunchCardItem(ArrayList<Integer> item) {
+        private PunchCardItem(List<Integer> item) {
             dayOfWeek = item.get(0);
             hourOfDay = item.get(1);
             numberOfCommits = item.get(2);

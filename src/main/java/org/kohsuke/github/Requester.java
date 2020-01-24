@@ -470,7 +470,8 @@ class Requester {
     }
 
     /**
-     * As stream input stream.
+     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
+     * {@link #fetch(Class)} where possible.
      *
      * @return the input stream
      * @throws IOException

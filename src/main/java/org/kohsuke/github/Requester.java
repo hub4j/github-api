@@ -923,9 +923,19 @@ class Requester {
         // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
-        int responseCode = uc.getResponseCode();
-        if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
-                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")) {
+
+        // Only retry if the exact conditions are met
+        // also do not throw if we can't get all the information needed to determine the condition.
+        boolean shouldRetry = false;
+        try {
+            int responseCode = uc.getResponseCode();
+            shouldRetry = responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET")
+                    && uc.getHeaderField("ETag") != null
+                    && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache");
+        } catch (Exception e) {
+        }
+
+        if (shouldRetry) {
             uc = setupConnection(uc.getURL());
             // Setting "Cache-Control" to "no-cache" stops the cache from supplying
             // "If-Modified-Since" or "If-None-Match" values.

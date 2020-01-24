@@ -76,7 +76,7 @@ import static org.kohsuke.github.GitHub.connect;
  * @author Kohsuke Kawaguchi
  */
 class Requester {
-    public static final int SOCKET_ERROR_RETRIES = 2;
+    public static final int CONNECTION_ERROR_RETRIES = 2;
     private final GitHub root;
     private final List<Entry> args = new ArrayList<Entry>();
     private final Map<String, String> headers = new LinkedHashMap<String, String>();
@@ -499,7 +499,7 @@ class Requester {
             uc = setupConnection(url);
 
             try {
-                return _fetchOrRetry(supplier, SOCKET_ERROR_RETRIES);
+                return _fetchOrRetry(supplier, CONNECTION_ERROR_RETRIES);
             } catch (IOException e) {
                 handleApiError(e);
             } finally {
@@ -511,35 +511,50 @@ class Requester {
     private <T> T _fetchOrRetry(SupplierThrows<T, IOException> supplier, int retries) throws IOException {
         int responseCode = -1;
         String responseMessage = null;
+        // When retries equal 0 the previous call must return or throw, not retry again
+        if (retries < 0) {
+            throw new IllegalArgumentException("'retries' cannot be less than 0");
+        }
+
         try {
             // This is where the request is sent and response is processing starts
             responseCode = uc.getResponseCode();
-
-            // If we are caching and get an invalid cached 404, retry it.
-            responseCode = retryIfInvalidCached404Response(responseCode);
             responseMessage = uc.getResponseMessage();
 
-            return supplier.get();
+            // If we are caching and get an invalid cached 404, retry it.
+            if (!retryInvalidCached404Response(responseCode, retries)) {
+                return supplier.get();
+            }
         } catch (FileNotFoundException e) {
             // java.net.URLConnection handles 404 exception as FileNotFoundException,
             // don't wrap exception in HttpException to preserve backward compatibility
             throw e;
         } catch (IOException e) {
-            if ((e instanceof SocketException || e instanceof SocketTimeoutException) && retries > 0) {
-                LOGGER.log(INFO,
-                        "timed out accessing  " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
-                                + " milliseconds before retrying... ; will try " + retries + " more time(s)",
-                        e);
-                try {
-                    Thread.sleep(Requester.retryTimeoutMillis);
-                } catch (InterruptedException ie) {
-                    throw (IOException) new InterruptedIOException().initCause(e);
-                }
-                uc = setupConnection(uc.getURL());
-                return _fetchOrRetry(supplier, retries - 1);
+            if (!retrySocketException(e, retries)) {
+                throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
             }
-            throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
         }
+
+        // We did not fetch or throw, retry
+        return _fetchOrRetry(supplier, retries - 1);
+
+    }
+
+    private boolean retrySocketException(IOException e, int retries) throws IOException {
+        if ((e instanceof SocketException || e instanceof SocketTimeoutException) && retries > 0) {
+            LOGGER.log(INFO,
+                    "timed out accessing  " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
+                            + " milliseconds before retrying... ; will try " + retries + " more time(s)",
+                    e);
+            try {
+                Thread.sleep(Requester.retryTimeoutMillis);
+            } catch (InterruptedException ie) {
+                throw (IOException) new InterruptedIOException().initCause(e);
+            }
+            uc = setupConnection(uc.getURL());
+            return true;
+        }
+        return false;
     }
 
     private <T> T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
@@ -941,7 +956,7 @@ class Requester {
         }
     }
 
-    private int retryIfInvalidCached404Response(int responseCode) throws IOException {
+    private boolean retryInvalidCached404Response(int responseCode, int retries) throws IOException {
         // WORKAROUND FOR ISSUE #669:
         // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
@@ -953,15 +968,19 @@ class Requester {
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
         if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
-                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")) {
+                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && retries > 0) {
+            LOGGER.log(FINE,
+                    "Encountered GitHub invalid cached 404 from " + uc.getURL()
+                            + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
+
             uc = setupConnection(uc.getURL());
             // Setting "Cache-Control" to "no-cache" stops the cache from supplying
             // "If-Modified-Since" or "If-None-Match" values.
             // This makes GitHub give us current data (not incorrectly cached data)
             uc.setRequestProperty("Cache-Control", "no-cache");
-            responseCode = uc.getResponseCode();
+            return true;
         }
-        return responseCode;
+        return false;
     }
 
     private <T> T setResponseHeaders(T readValue) {

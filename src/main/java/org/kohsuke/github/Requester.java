@@ -63,6 +63,7 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
+import javax.net.ssl.SSLHandshakeException;
 
 import static java.util.Arrays.asList;
 import static java.util.logging.Level.*;
@@ -110,7 +111,7 @@ class Requester {
     /**
      * If timeout issues let's retry after milliseconds.
      */
-    private static final int retryTimeoutMillis = 500;
+    private static final int retryTimeoutMillis = 100;
 
     Requester(GitHub root) {
         this.root = root;
@@ -531,7 +532,8 @@ class Requester {
             // don't wrap exception in HttpException to preserve backward compatibility
             throw e;
         } catch (IOException e) {
-            if (!retrySocketException(e, retries)) {
+
+            if (!retryConnectionError(e, retries)) {
                 throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
             }
         }
@@ -541,10 +543,13 @@ class Requester {
 
     }
 
-    private boolean retrySocketException(IOException e, int retries) throws IOException {
-        if ((e instanceof SocketException || e instanceof SocketTimeoutException) && retries > 0) {
+    private boolean retryConnectionError(IOException e, int retries) throws IOException {
+        // There are a range of connection errors where we want to wait a moment and just automatically retry
+        boolean connectionError = e instanceof SocketException || e instanceof SocketTimeoutException
+                || e instanceof SSLHandshakeException;
+        if (connectionError && retries > 0) {
             LOGGER.log(INFO,
-                    "timed out accessing  " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
+                    "Error while connecting to " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
                             + " milliseconds before retrying... ; will try " + retries + " more time(s)",
                     e);
             try {
@@ -553,6 +558,33 @@ class Requester {
                 throw (IOException) new InterruptedIOException().initCause(e);
             }
             uc = setupConnection(uc.getURL());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean retryInvalidCached404Response(int responseCode, int retries) throws IOException {
+        // WORKAROUND FOR ISSUE #669:
+        // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
+        // is bogus and would cause cache corruption), try the query again with new request header
+        // that forces the server to not return 304 and return new data instead.
+        //
+        // This solution is transparent to users of this library and automatically handles a
+        // situation that was cause insidious and hard to debug bad responses in caching
+        // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
+        // their 404 responses, this will result in at worst two requests being made for each 404
+        // responses. However, only the second request will count against rate limit.
+        if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
+                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && retries > 0) {
+            LOGGER.log(FINE,
+                    "Encountered GitHub invalid cached 404 from " + uc.getURL()
+                            + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
+
+            uc = setupConnection(uc.getURL());
+            // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+            // "If-Modified-Since" or "If-None-Match" values.
+            // This makes GitHub give us current data (not incorrectly cached data)
+            uc.setRequestProperty("Cache-Control", "no-cache");
             return true;
         }
         return false;
@@ -955,33 +987,6 @@ class Requester {
         } finally {
             IOUtils.closeQuietly(r);
         }
-    }
-
-    private boolean retryInvalidCached404Response(int responseCode, int retries) throws IOException {
-        // WORKAROUND FOR ISSUE #669:
-        // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
-        // is bogus and would cause cache corruption), try the query again with new request header
-        // that forces the server to not return 304 and return new data instead.
-        //
-        // This solution is transparent to users of this library and automatically handles a
-        // situation that was cause insidious and hard to debug bad responses in caching
-        // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
-        // their 404 responses, this will result in at worst two requests being made for each 404
-        // responses. However, only the second request will count against rate limit.
-        if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
-                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && retries > 0) {
-            LOGGER.log(FINE,
-                    "Encountered GitHub invalid cached 404 from " + uc.getURL()
-                            + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
-
-            uc = setupConnection(uc.getURL());
-            // Setting "Cache-Control" to "no-cache" stops the cache from supplying
-            // "If-Modified-Since" or "If-None-Match" values.
-            // This makes GitHub give us current data (not incorrectly cached data)
-            uc.setRequestProperty("Cache-Control", "no-cache");
-            return true;
-        }
-        return false;
     }
 
     private <T> T setResponseHeaders(T readValue) {

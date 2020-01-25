@@ -8,6 +8,8 @@ import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 
+import static java.util.Collections.singletonList;
+
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
@@ -86,7 +88,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
         Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
-        Assert.assertEquals(Permission.PUSH.toString().toLowerCase(), team.getPermission());
+        assertEquals(Permission.PUSH.toString().toLowerCase(), team.getPermission());
     }
 
     @Test
@@ -100,6 +102,30 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with no permission field. Verify that default permission is pull
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, repo);
         Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
-        Assert.assertEquals(DEFAULT_PERMISSION, team.getPermission());
+        assertEquals(DEFAULT_PERMISSION, team.getPermission());
+    }
+
+    @Test
+    public void testCreateVisibleTeam() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE).privacy(GHTeam.Privacy.CLOSED).create();
+        assertEquals(GHTeam.Privacy.CLOSED, team.getPrivacy());
+    }
+
+    @Test
+    public void testCreateAllArgsTeam() throws IOException {
+        String REPO_NAME = "github-api";
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE)
+                .description("Team description")
+                .maintainers(singletonList("bitwiseman"))
+                .repoNames(singletonList(REPO_NAME))
+                .privacy(GHTeam.Privacy.CLOSED)
+                .parentTeamId(3617900)
+                .create();
+        assertEquals("Team description", team.getDescription());
+        assertEquals(GHTeam.Privacy.CLOSED, team.getPrivacy());
     }
 }

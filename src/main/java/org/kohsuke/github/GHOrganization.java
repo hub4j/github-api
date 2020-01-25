@@ -88,7 +88,7 @@ public class GHOrganization extends GHPerson {
      *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
-     * finally createa repository.
+     * finally create a repository.
      *
      * @param name
      *            the name
@@ -453,6 +453,21 @@ public class GHOrganization extends GHPerson {
      */
     public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
         return createTeam(name, Arrays.asList(repositories));
+    }
+
+    /**
+     * Starts a builder that creates a new team.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHCreateTeamBuilder#create()} to finally
+     * create a team.
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
+     */
+    public GHCreateTeamBuilder createTeam(String name) {
+        return new GHCreateTeamBuilder(root, "/orgs/" + login + "/teams", name);
     }
 
     /**

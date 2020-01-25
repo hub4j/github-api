@@ -1,0 +1,44 @@
+{
+  "id": "89ad96c9-ae91-4a67-8408-0772316c2abd",
+  "name": "orgs_github-api-test-org-missing",
+  "request": {
+    "url": "/orgs/github-api-test-org-missing",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/orgs/#get-an-organization\"}",
+    "headers": {
+      "Date": "Sat, 25 Jan 2020 05:17:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4977",
+      "X-RateLimit-Reset": "1579932373",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FE45:1B3A:69A661:8035EB:5E2BCF68"
+    }
+  },
+  "uuid": "89ad96c9-ae91-4a67-8408-0772316c2abd",
+  "persistent": true,
+  "scenarioName": "scenario-2-orgs-github-api-test-org-missing",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-orgs-github-api-test-org-missing-2",
+  "insertionIndex": 4
+}

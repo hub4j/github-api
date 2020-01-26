@@ -106,7 +106,7 @@ public class GHTeam implements Refreshable {
 
     /**
      * Gets the privacy state.
-     * 
+     *
      * @return the privacy state.
      */
     public Privacy getPrivacy() {
@@ -123,6 +123,18 @@ public class GHTeam implements Refreshable {
      */
     public void setDescription(String description) throws IOException {
         root.createRequest().method("PATCH").with("description", description).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets privacy.
+     *
+     * @param privacy
+     *            the privacy
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPrivacy(Privacy privacy) throws IOException {
+        root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 
     /**

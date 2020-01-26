@@ -1,0 +1,50 @@
+{
+  "id": "9ce59a51-f556-4b3d-ac00-a4bf313ae3a8",
+  "name": "orgs_github-api-test-org_teams",
+  "request": {
+    "url": "/orgs/github-api-test-org/teams",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org_teams-9ce59a51-f556-4b3d-ac00-a4bf313ae3a8.json",
+    "headers": {
+      "Date": "Sun, 26 Jan 2020 10:43:13 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4922",
+      "X-RateLimit-Reset": "1580037742",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"c1b31aa926aa74612905022fb6686f05\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F148:392DB:A5E224B:C6B45CC:5E2D6D41"
+    }
+  },
+  "uuid": "9ce59a51-f556-4b3d-ac00-a4bf313ae3a8",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-github-api-test-org-teams",
+  "requiredScenarioState": "scenario-1-orgs-github-api-test-org-teams-2",
+  "newScenarioState": "scenario-1-orgs-github-api-test-org-teams-3",
+  "insertionIndex": 5
+}

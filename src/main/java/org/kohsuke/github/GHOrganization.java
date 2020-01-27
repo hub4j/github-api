@@ -386,7 +386,7 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String, Collection)}
+     *             {@link #createTeam(String)}
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
@@ -412,7 +412,7 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String, GHRepository...)}
+     *             {@link #createTeam(String)}
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
@@ -429,7 +429,9 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
         Requester post = root.createRequest().method("POST").with("name", name);
         List<String> repo_names = new ArrayList<String>();
@@ -450,7 +452,9 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
         return createTeam(name, Arrays.asList(repositories));
     }
@@ -459,15 +463,15 @@ public class GHOrganization extends GHPerson {
      * Starts a builder that creates a new team.
      *
      * <p>
-     * You use the returned builder to set various properties, then call {@link GHCreateTeamBuilder#create()} to finally
+     * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
      * create a team.
      *
      * @param name
      *            the name
      * @return the gh create repository builder
      */
-    public GHCreateTeamBuilder createTeam(String name) {
-        return new GHCreateTeamBuilder(root, "/orgs/" + login + "/teams", name);
+    public GHTeamBuilder createTeam(String name) {
+        return new GHTeamBuilder(root, login, name);
     }
 
     /**

@@ -126,14 +126,14 @@ public class GHTeam implements Refreshable {
     }
 
     /**
-     * Sets privacy.
+     * Updates the team's privacy setting.
      *
      * @param privacy
      *            the privacy
      * @throws IOException
      *             the io exception
      */
-    public void setPrivacy(Privacy privacy) throws IOException {
+    public void updatePrivacy(Privacy privacy) throws IOException {
         root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 

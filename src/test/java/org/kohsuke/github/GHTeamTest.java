@@ -32,13 +32,13 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testSetPrivacy() throws IOException {
+    public void testUpdatePrivacy() throws IOException {
         String teamSlug = "dummy-team";
         Privacy privacy = Privacy.CLOSED;
 
         // Set the privacy.
         GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        team.setPrivacy(privacy);
+        team.updatePrivacy(privacy);
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
@@ -47,7 +47,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         privacy = Privacy.SECRET;
 
         // Set the privacy.
-        team.setPrivacy(privacy);
+        team.updatePrivacy(privacy);
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);

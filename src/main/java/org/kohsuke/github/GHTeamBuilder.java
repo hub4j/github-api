@@ -5,16 +5,18 @@ import java.util.List;
 
 /**
  * Creates a team.
+ *
+ * https://developer.github.com/v3/teams/#parameters
  */
-public class GHCreateTeamBuilder {
+public class GHTeamBuilder {
 
     private final GitHub root;
     protected final Requester builder;
-    private final String apiUrlTail;
+    private final String orgName;
 
-    public GHCreateTeamBuilder(GitHub root, String apiUrlTail, String name) {
+    public GHTeamBuilder(GitHub root, String orgName, String name) {
         this.root = root;
-        this.apiUrlTail = apiUrlTail;
+        this.orgName = orgName;
         this.builder = root.createRequest();
         this.builder.with("name", name);
     }
@@ -26,7 +28,7 @@ public class GHCreateTeamBuilder {
      *            description of team
      * @return a builder to continue with building
      */
-    public GHCreateTeamBuilder description(String description) {
+    public GHTeamBuilder description(String description) {
         this.builder.with("description", description);
         return this;
     }
@@ -38,7 +40,7 @@ public class GHCreateTeamBuilder {
      *            maintainers of team
      * @return a builder to continue with building
      */
-    public GHCreateTeamBuilder maintainers(List<String> maintainers) {
+    public GHTeamBuilder maintainers(List<String> maintainers) {
         this.builder.with("maintainers", maintainers);
         return this;
     }
@@ -50,7 +52,7 @@ public class GHCreateTeamBuilder {
      *            repoNames to add team to
      * @return a builder to continue with building
      */
-    public GHCreateTeamBuilder repoNames(List<String> repoNames) {
+    public GHTeamBuilder repoNames(List<String> repoNames) {
         this.builder.with("repo_names", repoNames);
         return this;
     }
@@ -62,7 +64,7 @@ public class GHCreateTeamBuilder {
      *            privacy of team
      * @return a builder to continue with building
      */
-    public GHCreateTeamBuilder privacy(GHTeam.Privacy privacy) {
+    public GHTeamBuilder privacy(GHTeam.Privacy privacy) {
         this.builder.with("privacy", privacy);
         return this;
     }
@@ -74,7 +76,7 @@ public class GHCreateTeamBuilder {
      *            parentTeamId of team
      * @return a builder to continue with building
      */
-    public GHCreateTeamBuilder parentTeamId(int parentTeamId) {
+    public GHTeamBuilder parentTeamId(int parentTeamId) {
         this.builder.with("parent_team_id", parentTeamId);
         return this;
     }
@@ -87,6 +89,6 @@ public class GHCreateTeamBuilder {
      *             if team cannot be created
      */
     public GHTeam create() throws IOException {
-        return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHTeam.class).wrapUp(root);
+        return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root);
     }
 }

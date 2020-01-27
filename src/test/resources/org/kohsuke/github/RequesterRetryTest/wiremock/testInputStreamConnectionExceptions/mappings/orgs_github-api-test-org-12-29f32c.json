@@ -1,0 +1,51 @@
+{
+  "id": "29f32c7d-9a05-4c8f-9d30-ccfd0600e382",
+  "name": "orgs_github-api-test-org",
+  "request": {
+    "url": "/orgs/github-api-test-org",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org-29f32c7d-9a05-4c8f-9d30-ccfd0600e382.json",
+    "headers": {
+      "Date": "Sat, 25 Jan 2020 05:18:23 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4869",
+      "X-RateLimit-Reset": "1579932373",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"0dfdf14c762767b64d42a9944f82d6ea\"",
+      "Last-Modified": "Mon, 20 Apr 2015 00:42:30 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FEC4:4E06:BE6E4F:E62E83:5E2BCF9F"
+    }
+  },
+  "uuid": "29f32c7d-9a05-4c8f-9d30-ccfd0600e382",
+  "persistent": true,
+  "scenarioName": "scenario-2-orgs-github-api-test-org",
+  "requiredScenarioState": "scenario-2-orgs-github-api-test-org-9",
+  "newScenarioState": "scenario-2-orgs-github-api-test-org-10",
+  "insertionIndex": 12
+}

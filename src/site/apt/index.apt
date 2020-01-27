@@ -17,7 +17,7 @@ GitHub github = GitHub.connect();
 
 GHRepository repo = github.createRepository(
   "new-repository","this is my new repository",
-  "http://www.kohsuke.org/",true/*public*/);
+  "https://www.kohsuke.org/",true/*public*/);
 repo.addCollaborators(github.getUser("abayer"),github.getUser("rtyler"));
 repo.delete();
 +-----+
@@ -139,10 +139,10 @@ GitHub github = GitHubBuilder.fromEnvironment().build();
 Pluggable HTTP client
 
   This library comes with a pluggable connector to use different HTTP client implementations
-  through <<<HttpConnector>>>. In particular, this means you can use {{{http://square.github.io/okhttp/}OkHttp}},
+  through <<<HttpConnector>>>. In particular, this means you can use {{{https://square.github.io/okhttp/}OkHttp}},
   so we can make use of it's HTTP response cache.
   Making a conditional request against the GitHub API and receiving a 304 response
-  {{{http://developer.github.com/v3/#conditional-requests}does not count against the rate limit}}.
+  {{{https://developer.github.com/v3/#conditional-requests}does not count against the rate limit}}.
 
   The following code shows an example of how to set up persistent cache on the disk:
 

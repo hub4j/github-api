@@ -2,7 +2,7 @@
 <project name="GitHub API for Java">
   <bannerLeft>
     <name>GitHub API for Java</name>
-    <href>http://github-api.kohsuke.org/</href>
+    <href>https://github-api.kohsuke.org/</href>
   </bannerLeft>
   <skin>
     <groupId>org.kohsuke</groupId>
@@ -13,7 +13,7 @@
   <body>
     <menu name="Git Hub API for Java">
       <item name="Introduction" href="/index.html"/>
-      <item name="Download" href="http://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
+      <item name="Download" href="https://mvnrepository.com/artifact/${project.groupId}/${project.artifactId}"/>
       <item name="Source code" href="https://github.com/github-api/${project.artifactId}"/>
       <item name="Mailing List" href="https://groups.google.com/forum/#!forum/github-api"/>
     </menu>

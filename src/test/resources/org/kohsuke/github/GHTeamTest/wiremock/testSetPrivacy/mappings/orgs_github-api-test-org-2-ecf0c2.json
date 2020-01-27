@@ -1,0 +1,48 @@
+{
+  "id": "ecf0c232-2c2b-4580-b12c-ddc025656f64",
+  "name": "orgs_github-api-test-org",
+  "request": {
+    "url": "/orgs/github-api-test-org",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org-ecf0c232-2c2b-4580-b12c-ddc025656f64.json",
+    "headers": {
+      "Date": "Sun, 26 Jan 2020 10:43:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4925",
+      "X-RateLimit-Reset": "1580037742",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"d211113b4423739223ae7cb0b5ef2b04\"",
+      "Last-Modified": "Mon, 07 Oct 2019 20:06:18 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F148:392DB:A5E2033:C6B41E4:5E2D6D3F"
+    }
+  },
+  "uuid": "ecf0c232-2c2b-4580-b12c-ddc025656f64",
+  "persistent": true,
+  "insertionIndex": 2
+}

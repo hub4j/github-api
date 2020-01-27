@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -482,12 +483,15 @@ public final class ReadOnlyObjects {
      * <li>Fields final and lists unmodifiable</li>
      * <li>Construction behavior can be controlled - if values depended on each other or needed to be set in a specific
      * order, this could do that.</li>
+     * <li>JsonProrperty "required" works on JsonCreator constructors - lets annotation define required values</li>
      * </ul>
      * Con:
      * <ul>
      * <li>There is no way you'd know about this without some research</li>
      * <li>Specific annotations needed</li>
-     * <li>Brittle and verbose - not friendly to optional fields or large number of fields</li>
+     * <li>Nonnull annotations are misleading - null value is not checked even for "required" constructor
+     * parameters</li>
+     * <li>Brittle and verbose - not friendly to large number of fields</li>
      * </ul>
      *
      * @author Liam Newman
@@ -503,14 +507,37 @@ public final class ReadOnlyObjects {
         private final List<String> pages;
         private final List<String> importer;
 
+        /**
+         *
+         * @param hooks
+         *            the hooks - required property works, but only on creator json properties like this, ignores
+         *            Nonnull, checked manually
+         * @param git
+         *            the git list - required property works, but only on creator json properties like this, misleading
+         *            Nonnull annotation
+         * @param web
+         *            the web list - misleading Nonnull annotation
+         * @param api
+         *            the api list - misleading Nonnull annotation
+         * @param pages
+         *            the pages list - misleading Nonnull annotation
+         * @param importer
+         *            the importer list - misleading Nonnull annotation
+         * @param verifiablePasswordAuthentication
+         *            true or false
+         */
         @JsonCreator
-        private GHMetaGettersFinalCreator(@Nonnull @JsonProperty("hooks") List<String> hooks,
-                @Nonnull @JsonProperty("git") List<String> git,
+        private GHMetaGettersFinalCreator(@Nonnull @JsonProperty(value = "hooks", required = true) List<String> hooks,
+                @Nonnull @JsonProperty(value = "git", required = true) List<String> git,
                 @Nonnull @JsonProperty("web") List<String> web,
                 @Nonnull @JsonProperty("api") List<String> api,
                 @Nonnull @JsonProperty("pages") List<String> pages,
                 @Nonnull @JsonProperty("importer") List<String> importer,
                 @JsonProperty("verifiable_password_authentication") boolean verifiablePasswordAuthentication) {
+
+            // to ensure a value is actually not null we still have to do a null check
+            Objects.requireNonNull(hooks);
+
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
             this.hooks = Collections.unmodifiableList(hooks);
             this.git = Collections.unmodifiableList(git);

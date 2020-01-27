@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.102-SNAPSHOT</version>
+  <version>1.106-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -42,8 +42,8 @@
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
-    <jacoco.coverage.target.bundle.bundle.method>0.556</jacoco.coverage.target.bundle.bundle.method>
-    <jacoco.coverage.target.class.class.method>0.25</jacoco.coverage.target.class.class.method>
+    <jacoco.coverage.target.bundle.method>0.556</jacoco.coverage.target.bundle.method>
+    <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
   </properties>
@@ -81,6 +81,54 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.2.1</version>
+          <executions>
+            <execution>
+              <id>shaded-jar</id>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <relocations>
+                  <relocation>
+                    <pattern>com.fasterxml.jackson</pattern>
+                    <shadedPattern>hidden.com.fasterxml.jackson</shadedPattern>
+                  </relocation>
+                  <relocation>
+                    <pattern>org.apache</pattern>
+                    <shadedPattern>hidden.org.apache</shadedPattern>
+                  </relocation>
+                </relocations>
+                <artifactSet>
+                  <excludes>
+                    <exclude>com.infradna.tool:bridge-method-annotation</exclude>
+                    <exclude>org.jenkins-ci:annotation-indexer</exclude>
+                    <exclude>com.squareup.*:*</exclude>
+                    <exclude>org.jetbrains*:*</exclude>
+                    <exclude>com.github.spotbugs:*</exclude>
+                    <exclude>com.google.code.findbugs:*</exclude>
+                  </excludes>
+                </artifactSet>
+                <shadedArtifactAttached>true</shadedArtifactAttached>
+                <filters>
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>module-info.class</exclude>
+                      <exclude>META-INF/*.SF</exclude>
+                      <exclude>META-INF/*.DSA</exclude>
+                      <exclude>META-INF/*.RSA</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.2.1</version>
         </plugin>
@@ -93,6 +141,122 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.5</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <!-- attached to Maven test phase -->
+            <execution>
+              <id>report</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.coverage.target.bundle.method}</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <!--We end up with chatty logs, but it shows us which particular classes    -->
+                    <!--are lacking in coverage. If this is too much, just remove the           -->
+                    <!--<element>CLASS</element> tag below.                                     -->
+                    <element>CLASS</element>
+                    <limits>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.coverage.target.class.method}</minimum>
+                      </limit>
+                    </limits>
+                    <excludes>
+                      <!-- Code implemented externally -->
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+
+                      <!-- Sample only -->
+                      <exclude>org.kohsuke.github.example.*</exclude>
+
+                      <!-- No methods -->
+                      <exclude>org.kohsuke.github.DeleteToken</exclude>
+                      <exclude>org.kohsuke.github.Previews</exclude>
+
+                      <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
+                      <exclude>org.kohsuke.github.EnforcementLevel</exclude>
+                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
+                      <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
+
+                      <!-- TODO: These still need test coverage -->
+                      <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
+                      <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
+                      <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
+                      <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
+                      <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
+                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
+                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
+                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHCommitState</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.Status</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.Tree</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.User</exclude>
+                      <exclude>org.kohsuke.github.GHCompare</exclude>
+                      <exclude>org.kohsuke.github.GHDeployKey</exclude>
+                      <exclude>org.kohsuke.github.GHDeploymentStatusBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHDirection</exclude>
+                      <exclude>org.kohsuke.github.GHEmail</exclude>
+                      <exclude>org.kohsuke.github.GHEventPayload.Ping</exclude>
+                      <exclude>org.kohsuke.github.GHEventPayload.Release</exclude>
+                      <exclude>org.kohsuke.github.GHException</exclude>
+                      <exclude>org.kohsuke.github.GHHook</exclude>
+                      <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
+                      <exclude>org.kohsuke.github.GHInvitation</exclude>
+                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
+                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
+                      <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHMilestoneState</exclude>
+                      <exclude>org.kohsuke.github.GHOrgHook</exclude>
+                      <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Authorship</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Commit</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Tree</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestFileDetail</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestQueryBuilder.Sort</exclude>
+                      <exclude>org.kohsuke.github.GHReleaseUpdater</exclude>
+                      <exclude>org.kohsuke.github.GHRepository.ForkSort</exclude>
+                      <exclude>org.kohsuke.github.GHRequestedAction</exclude>
+                      <exclude>org.kohsuke.github.GHStargazer</exclude>
+                      <exclude>org.kohsuke.github.GHTagObject</exclude>
+                      <exclude>org.kohsuke.github.GHTeam.Role</exclude>
+                      <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
+                      <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
+                      <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
+                    </excludes>
+                  </rule>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -386,7 +550,7 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <version>${spotbugs.version}</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
@@ -415,191 +579,26 @@
   </pluginRepositories>
   <profiles>
     <profile>
-      <id>enable-shade</id>
+      <id>ci</id>
       <activation>
         <property>
-          <name>enable-shade</name>
+          <name>enable-ci</name>
         </property>
       </activation>
+      <properties>
+        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
+        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+        <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
+      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>shade</goal>
-                </goals>
-                <configuration>
-                  <artifactSet>
-                    <excludes>
-                      <exclude>com.infradna.tool:bridge-method-annotation</exclude>
-                      <exclude>org.jenkins-ci:annotation-indexer</exclude>
-                      <exclude>com.squareup.*:*</exclude>
-                      <exclude>org.jetbrains*:*</exclude>
-                      <exclude>com.github.spotbugs:*</exclude>
-                      <exclude>com.google.code.findbugs:*</exclude>
-                    </excludes>
-                  </artifactSet>
-                  <filters>
-                    <filter>
-                      <artifact>*:*</artifact>
-                      <excludes>
-                        <exclude>module-info.class</exclude>
-                        <exclude>META-INF/*.SF</exclude>
-                        <exclude>META-INF/*.DSA</exclude>
-                        <exclude>META-INF/*.RSA</exclude>
-                      </excludes>
-                    </filter>
-                  </filters>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>ci</id>
-      <properties>
-        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
-        <enable-jacoco>true</enable-jacoco>
-        <enable-shade>true</enable-shade>
-        <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
-      </properties>
-      <build>
-      </build>
-    </profile>
-    <profile>
-      <id>jacoco</id>
-      <activation>
-        <property>
-          <name>enable-jacoco</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <!-- attached to Maven test phase -->
-              <execution>
-                <id>report</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>check</id>
-                <phase>install</phase>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <rule>
-                      <element>BUNDLE</element>
-                      <limits>
-                        <limit>
-                          <counter>METHOD</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.bundle.method}</minimum>
-                        </limit>
-                      </limits>
-                    </rule>
-                    <rule>
-                      <!--We end up with chatty logs, but it shows us which particular classes    -->
-                      <!--are lacking in coverage. If this is too much, just remove the           -->
-                      <!--<element>CLASS</element> tag below.                                     -->
-                      <element>CLASS</element>
-                      <limits>
-                        <limit>
-                          <counter>METHOD</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>${jacoco.coverage.target.class.method}</minimum>
-                        </limit>
-                      </limits>
-                      <excludes>
-                        <!-- Code implemented externally -->
-                        <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
-                        <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
-
-                        <!-- Sample only -->
-                        <exclude>org.kohsuke.github.example.*</exclude>
-
-                        <!-- No methods -->
-                        <exclude>org.kohsuke.github.DeleteToken</exclude>
-                        <exclude>org.kohsuke.github.Previews</exclude>
-
-                        <!-- Deprecated -->
-                        <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
-                        <exclude>org.kohsuke.github.EnforcementLevel</exclude>
-                        <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                        <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
-
-                        <!-- TODO: These still need test coverage -->
-                        <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
-                        <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
-                        <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
-                        <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
-                        <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
-                        <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
-                        <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
-                        <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
-                        <exclude>org.kohsuke.github.GHCommitState</exclude>
-                        <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
-                        <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
-                        <exclude>org.kohsuke.github.GHCompare.Status</exclude>
-                        <exclude>org.kohsuke.github.GHCompare.Tree</exclude>
-                        <exclude>org.kohsuke.github.GHCompare.User</exclude>
-                        <exclude>org.kohsuke.github.GHCompare</exclude>
-                        <exclude>org.kohsuke.github.GHDeployKey</exclude>
-                        <exclude>org.kohsuke.github.GHDeploymentStatusBuilder</exclude>
-                        <exclude>org.kohsuke.github.GHDirection</exclude>
-                        <exclude>org.kohsuke.github.GHEmail</exclude>
-                        <exclude>org.kohsuke.github.GHEventPayload.Ping</exclude>
-                        <exclude>org.kohsuke.github.GHEventPayload.Release</exclude>
-                        <exclude>org.kohsuke.github.GHException</exclude>
-                        <exclude>org.kohsuke.github.GHHook</exclude>
-                        <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
-                        <exclude>org.kohsuke.github.GHInvitation</exclude>
-                        <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
-                        <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
-                        <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
-                        <exclude>org.kohsuke.github.GHMilestoneState</exclude>
-                        <exclude>org.kohsuke.github.GHOrgHook</exclude>
-                        <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Authorship</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Commit</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Tree</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestCommitDetail</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestFileDetail</exclude>
-                        <exclude>org.kohsuke.github.GHPullRequestQueryBuilder.Sort</exclude>
-                        <exclude>org.kohsuke.github.GHReleaseUpdater</exclude>
-                        <exclude>org.kohsuke.github.GHRepository.ForkSort</exclude>
-                        <exclude>org.kohsuke.github.GHStargazer</exclude>
-                        <exclude>org.kohsuke.github.GHTagObject</exclude>
-                        <exclude>org.kohsuke.github.GHTeam.Role</exclude>
-                        <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
-                        <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
-                        <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
-                      </excludes>
-                    </rule>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>
@@ -607,10 +606,15 @@
     <profile>
       <id>release</id>
       <properties>
-        <enable-shade>true</enable-shade>
+        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
+        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
       </properties>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>

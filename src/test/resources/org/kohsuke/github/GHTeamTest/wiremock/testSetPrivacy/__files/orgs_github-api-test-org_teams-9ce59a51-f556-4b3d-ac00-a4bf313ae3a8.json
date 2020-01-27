@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Core Developers",
+    "id": 3617900,
+    "node_id": "MDQ6VGVhbTM2MTc5MDA=",
+    "slug": "core-developers",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/49127317/team/3617900",
+    "html_url": "https://github.com/orgs/github-api-test-org/teams/core-developers",
+    "members_url": "https://api.github.com/organizations/49127317/team/3617900/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/49127317/team/3617900/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "dummy-team",
+    "id": 3618279,
+    "node_id": "MDQ6VGVhbTM2MTgyNzk=",
+    "slug": "dummy-team",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/49127317/team/3618279",
+    "html_url": "https://github.com/orgs/github-api-test-org/teams/dummy-team",
+    "members_url": "https://api.github.com/organizations/49127317/team/3618279/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/49127317/team/3618279/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "slack-plugin Developers",
+    "id": 3618268,
+    "node_id": "MDQ6VGVhbTM2MTgyNjg=",
+    "slug": "slack-plugin-developers",
+    "description": null,
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/49127317/team/3618268",
+    "html_url": "https://github.com/orgs/github-api-test-org/teams/slack-plugin-developers",
+    "members_url": "https://api.github.com/organizations/49127317/team/3618268/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/49127317/team/3618268/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "bitwiseman-team",
+    "id": 3617890,
+    "node_id": "MDQ6VGVhbTM2MTc4OTA=",
+    "slug": "bitwiseman-team",
+    "description": "",
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/49127317/team/3617890",
+    "html_url": "https://github.com/orgs/github-api-test-org/teams/bitwiseman-team",
+    "members_url": "https://api.github.com/organizations/49127317/team/3617890/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/49127317/team/3617890/repos",
+    "permission": "pull",
+    "parent": null
+  }
+]

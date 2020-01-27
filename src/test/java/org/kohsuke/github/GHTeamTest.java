@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHTeam.Privacy;
 
 import java.io.IOException;
 
@@ -28,6 +29,29 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
         assertEquals(description, team.getDescription());
+    }
+
+    @Test
+    public void testSetPrivacy() throws IOException {
+        String teamSlug = "dummy-team";
+        Privacy privacy = Privacy.CLOSED;
+
+        // Set the privacy.
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        team.setPrivacy(privacy);
+
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertEquals(privacy, team.getPrivacy());
+
+        privacy = Privacy.SECRET;
+
+        // Set the privacy.
+        team.setPrivacy(privacy);
+
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertEquals(privacy, team.getPrivacy());
     }
 
 }

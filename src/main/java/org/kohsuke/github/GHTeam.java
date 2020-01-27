@@ -12,11 +12,21 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam implements Refreshable {
-    private String name, permission, slug, description;
+    private String name;
+    private String permission;
+    private String slug;
+    private String description;
+    private Privacy privacy;
+
     private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     protected /* final */ GitHub root;
+
+    public enum Privacy {
+        SECRET, // only visible to organization owners and members of this team.
+        CLOSED // visible to all members of this organization.
+    }
 
     /**
      * Member's role in a team
@@ -95,6 +105,15 @@ public class GHTeam implements Refreshable {
     }
 
     /**
+     * Gets the privacy state.
+     *
+     * @return the privacy state.
+     */
+    public Privacy getPrivacy() {
+        return privacy;
+    }
+
+    /**
      * Sets description.
      *
      * @param description
@@ -104,6 +123,18 @@ public class GHTeam implements Refreshable {
      */
     public void setDescription(String description) throws IOException {
         root.createRequest().method("PATCH").with("description", description).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Updates the team's privacy setting.
+     *
+     * @param privacy
+     *            the privacy
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPrivacy(Privacy privacy) throws IOException {
+        root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 
     /**

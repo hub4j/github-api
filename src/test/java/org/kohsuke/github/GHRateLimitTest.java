@@ -4,13 +4,14 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
  * Test showing the behavior of OkHttpConnector with and without cache.

@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Martin van Zijl
  */

@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "github-api-test-org/GHTreeBuilderTest";
 

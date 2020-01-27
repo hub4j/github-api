@@ -4,7 +4,10 @@ import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -22,10 +25,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         requireProxy("Tests proper configuration when proxying.");
 
-        assertThat(
-                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
-                gitHub.isAnonymous(),
-                is(false));
+        verifyAuthenticated();
 
         assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
 
@@ -47,7 +47,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
-        assertThat(gitHub.isAnonymous(), is(false));
+        verifyAuthenticated();
         assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();

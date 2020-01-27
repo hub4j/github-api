@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.kohsuke.github.junit.GitHubWireMockRule;
@@ -13,13 +12,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
  */
-public abstract class AbstractGitHubWireMockTest extends Assert {
+public abstract class AbstractGitHubWireMockTest {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
@@ -126,6 +127,13 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
                 mockGitHub.isUseProxy());
     }
 
+    protected void verifyAuthenticated() {
+        assertThat(
+                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
+                gitHub.isAnonymous(),
+                is(false));
+    }
+
     protected GHUser getUser() {
         return getUser(gitHub);
     }
@@ -163,6 +171,10 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     protected GHRepository getTempRepository(String name) throws IOException {
         String fullName = GITHUB_API_TEST_ORG + '/' + name;
         if (mockGitHub.isUseProxy()) {
+
+            // Needs to check if you are authenticated before doing this cleanup and repo creation
+            verifyAuthenticated();
+
             cleanupRepository(fullName);
 
             GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)

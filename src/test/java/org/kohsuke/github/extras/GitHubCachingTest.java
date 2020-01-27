@@ -19,6 +19,8 @@ import org.kohsuke.github.GitHub;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.fail;
+
 /**
  * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
  *

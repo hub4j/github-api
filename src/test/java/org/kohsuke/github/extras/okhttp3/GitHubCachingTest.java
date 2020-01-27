@@ -44,11 +44,11 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            for (GHPullRequest pr : getRepository(this.gitHubBeforeAfter).getPullRequests(GHIssueState.OPEN)) {
+            for (GHPullRequest pr : getRepository(this.getGitHubBeforeAfter()).getPullRequests(GHIssueState.OPEN)) {
                 pr.close();
             }
             try {
-                GHRef ref = getRepository(this.gitHubBeforeAfter).getRef(testRefName);
+                GHRef ref = getRepository(this.getGitHubBeforeAfter()).getRef(testRefName);
                 ref.delete();
             } catch (IOException e) {
             }

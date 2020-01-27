@@ -25,7 +25,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         requireProxy("Tests proper configuration when proxying.");
 
-        verifyAuthenticated();
+        verifyAuthenticated(gitHub);
 
         assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
 
@@ -47,7 +47,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
-        verifyAuthenticated();
+        verifyAuthenticated(gitHub);
         assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();

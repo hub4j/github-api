@@ -38,11 +38,7 @@ public abstract class AbstractGitHubWireMockTest {
      */
     protected GitHub gitHub;
 
-    /**
-     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
-     * be used when isUseProxy() or isTakeSnapShot().
-     */
-    protected GitHub gitHubBeforeAfter;
+    private GitHub gitHubBeforeAfter;
 
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
@@ -127,10 +123,10 @@ public abstract class AbstractGitHubWireMockTest {
                 mockGitHub.isUseProxy());
     }
 
-    protected void verifyAuthenticated() {
+    protected void verifyAuthenticated(GitHub instance) {
         assertThat(
                 "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
-                gitHub.isAnonymous(),
+                instance.isAnonymous(),
                 is(false));
     }
 
@@ -172,12 +168,9 @@ public abstract class AbstractGitHubWireMockTest {
         String fullName = GITHUB_API_TEST_ORG + '/' + name;
         if (mockGitHub.isUseProxy()) {
 
-            // Needs to check if you are authenticated before doing this cleanup and repo creation
-            verifyAuthenticated();
-
             cleanupRepository(fullName);
 
-            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
+            GHRepository repository = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG)
                     .createRepository(name)
                     .description("A test repository for testing the github-api project: " + name)
                     .homepage("http://github-api.kohsuke.org/")
@@ -211,7 +204,7 @@ public abstract class AbstractGitHubWireMockTest {
         if (mockGitHub.isUseProxy()) {
             tempGitHubRepositories.add(fullName);
             try {
-                GHRepository repository = gitHubBeforeAfter.getRepository(fullName);
+                GHRepository repository = getGitHubBeforeAfter().getRepository(fullName);
                 if (repository != null) {
                     repository.delete();
                 }
@@ -220,6 +213,15 @@ public abstract class AbstractGitHubWireMockTest {
             }
 
         }
+    }
+
+    /**
+     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
+     * be used when isUseProxy() or isTakeSnapShot().
+     */
+    public GitHub getGitHubBeforeAfter() {
+        verifyAuthenticated(gitHubBeforeAfter);
+        return gitHubBeforeAfter;
     }
 
     protected void kohsuke() {

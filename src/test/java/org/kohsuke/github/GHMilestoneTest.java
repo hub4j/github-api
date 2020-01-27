@@ -22,7 +22,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHMilestone milestone : getRepository(gitHubBeforeAfter).listMilestones(GHIssueState.ALL)) {
+        for (GHMilestone milestone : getRepository(getGitHubBeforeAfter()).listMilestones(GHIssueState.ALL)) {
             if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())) {
                 milestone.delete();
             }

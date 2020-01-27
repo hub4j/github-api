@@ -133,7 +133,7 @@ public class GHTeam implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void updatePrivacy(Privacy privacy) throws IOException {
+    public void setPrivacy(Privacy privacy) throws IOException {
         root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 

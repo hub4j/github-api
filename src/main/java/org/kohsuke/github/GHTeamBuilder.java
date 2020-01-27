@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Creates a team.
  *
- * https://developer.github.com/v3/teams/#parameters
+ * https://developer.github.com/v3/teams/#create-team
  */
 public class GHTeamBuilder {
 

@@ -8,8 +8,6 @@ import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 
-import static java.util.Collections.singletonList;
-
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
@@ -120,8 +118,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         GHTeam team = org.createTeam(TEAM_NAME_CREATE)
                 .description("Team description")
-                .maintainers(singletonList("bitwiseman"))
-                .repoNames(singletonList(REPO_NAME))
+                .maintainers("bitwiseman")
+                .repositories(REPO_NAME)
                 .privacy(GHTeam.Privacy.CLOSED)
                 .parentTeamId(3617900)
                 .create();

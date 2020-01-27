@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Creates a team.
@@ -40,19 +39,19 @@ public class GHTeamBuilder {
      *            maintainers of team
      * @return a builder to continue with building
      */
-    public GHTeamBuilder maintainers(List<String> maintainers) {
+    public GHTeamBuilder maintainers(String... maintainers) {
         this.builder.with("maintainers", maintainers);
         return this;
     }
 
     /**
-     * Repo names to add this team to.
+     * Repository names to add this team to.
      *
      * @param repoNames
      *            repoNames to add team to
      * @return a builder to continue with building
      */
-    public GHTeamBuilder repoNames(List<String> repoNames) {
+    public GHTeamBuilder repositories(String... repoNames) {
         this.builder.with("repo_names", repoNames);
         return this;
     }

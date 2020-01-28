@@ -204,6 +204,7 @@
                       <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
 
                       <!-- TODO: These still need test coverage -->
+                      <exclude>org.kohsuke.github.GitHub.GHApiInfo</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>

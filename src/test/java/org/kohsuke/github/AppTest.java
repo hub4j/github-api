@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
@@ -896,6 +898,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void blob() throws Exception {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
         GHRepository r = gitHub.getRepository("github-api/github-api");
         String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
 

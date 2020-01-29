@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHOrganization.Permission;

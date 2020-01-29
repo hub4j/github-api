@@ -54,7 +54,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error() throws Exception {
+    public void testCached404() throws Exception {
         // ISSUE #669
         snapshotNotAllowed();
 

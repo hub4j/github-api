@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-
 /**
  * @author Kohsuke Kawaguchi
  */

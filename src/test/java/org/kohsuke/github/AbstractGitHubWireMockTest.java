@@ -243,7 +243,12 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
         if (!matcher.matches(actual)) {
             Description description = new StringDescription();
-            description.appendText(reason).appendText(System.lineSeparator()).appendText("Expected: ").appendDescriptionOf(matcher).appendText(System.lineSeparator()).appendText("     but: ");
+            description.appendText(reason)
+                    .appendText(System.lineSeparator())
+                    .appendText("Expected: ")
+                    .appendDescriptionOf(matcher)
+                    .appendText(System.lineSeparator())
+                    .appendText("     but: ");
             matcher.describeMismatch(actual, description);
             throw new AssertionError(description.toString());
         }

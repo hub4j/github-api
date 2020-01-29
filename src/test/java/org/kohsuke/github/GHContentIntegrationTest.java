@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
+
 /**
  * Integration test for {@link GHContent}.
  */

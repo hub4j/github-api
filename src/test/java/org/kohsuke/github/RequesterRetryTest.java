@@ -27,11 +27,7 @@ import java.util.logging.StreamHandler;
 import javax.net.ssl.SSLHandshakeException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * @author Victor Martinez

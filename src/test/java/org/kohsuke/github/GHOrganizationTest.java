@@ -8,8 +8,6 @@ import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";

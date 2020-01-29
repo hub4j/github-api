@@ -588,7 +588,7 @@
       </activation>
       <properties>
         <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+<!--        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>-->
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
       </properties>
       <build>
@@ -608,7 +608,7 @@
       <id>release</id>
       <properties>
         <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+<!--        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>-->
       </properties>
       <build>
         <plugins>

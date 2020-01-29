@@ -203,6 +203,11 @@
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
 
+                      <!-- These fail coverage on windows because tests are disabled -->
+                      <exclude>org.kohsuke.github.GHAsset</exclude>
+                      <exclude>org.kohsuke.github.GHReleaseBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHRelease</exclude>
+
                       <!-- TODO: These still need test coverage -->
                       <exclude>org.kohsuke.github.GitHub.GHApiInfo</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>

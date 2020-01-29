@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -99,10 +100,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertEquals("", github.login);
     }
 
+    @Ignore
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         GitHub hub = GitHub.connectAnonymously();
-        // GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
+        // GitHub hub = GitHub.connectToEnterpriseAnonymously(mockGitHub.apiServer().baseUrl());
         try {
             hub.checkApiUrlValidity();
         } catch (IOException ioe) {

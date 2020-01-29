@@ -6,9 +6,10 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest, ubuntu-latest]
         java: [ '1.8.0', '11.0.x', '13.0.x' ]
     steps:
     - uses: actions/checkout@v2

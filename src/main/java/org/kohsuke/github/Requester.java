@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -59,6 +60,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipException;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -1014,8 +1016,17 @@ class Requester {
         String encoding = uc.getContentEncoding();
         if (encoding == null || in == null)
             return in;
-        if (encoding.equals("gzip"))
-            return new GZIPInputStream(in);
+        if (encoding.equals("gzip")) {
+            try {
+                return new GZIPInputStream(in);
+            } catch (ZipException e) {
+                if (SystemUtils.IS_OS_WINDOWS && e.getMessage().contains("Not in GZIP format")) {
+                    LOGGER.log(FINE, "Failed to unzip stream. Trying returning in unchanged.", e);
+                    return in;
+                }
+                throw e;
+            }
+        }
 
         throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
     }

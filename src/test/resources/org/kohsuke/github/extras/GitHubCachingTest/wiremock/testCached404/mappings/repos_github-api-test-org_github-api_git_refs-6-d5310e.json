@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-d5310eac-a58b-496e-9829-5bfb59231e49.json",
+    "bodyFileName": "repos_github-api-test-org_github-api_git_refs-d5310eac.json",
     "headers": {
       "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",

@@ -549,9 +549,9 @@ class Requester {
                 || e instanceof SSLHandshakeException;
         if (connectionError && retries > 0) {
             LOGGER.log(INFO,
-                    "Error while connecting to " + uc.getURL() + ". Sleeping " + Requester.retryTimeoutMillis
-                            + " milliseconds before retrying... ; will try " + retries + " more time(s)",
-                    e);
+                    e.getMessage() + " while connecting to " + uc.getURL() + ". Sleeping "
+                            + Requester.retryTimeoutMillis + " milliseconds before retrying... ; will try " + retries
+                            + " more time(s)");
             try {
                 Thread.sleep(Requester.retryTimeoutMillis);
             } catch (InterruptedException ie) {

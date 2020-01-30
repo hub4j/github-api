@@ -12,6 +12,7 @@ import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
  * Test showing the behavior of OkHttpConnector with and without cache.

@@ -21,7 +21,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        GHTeam team = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getTeamByName(TEAM_NAME_CREATE);
+        GHTeam team = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG).getTeamByName(TEAM_NAME_CREATE);
         if (team != null) {
             team.delete();
         }

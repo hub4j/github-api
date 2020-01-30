@@ -2,6 +2,9 @@ package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -37,11 +41,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      */
     protected GitHub gitHub;
 
-    /**
-     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
-     * be used when isUseProxy() or isTakeSnapShot().
-     */
-    protected GitHub gitHubBeforeAfter;
+    private GitHub gitHubBeforeAfter;
 
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
@@ -126,6 +126,13 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
                 mockGitHub.isUseProxy());
     }
 
+    protected void verifyAuthenticated(GitHub instance) {
+        assertThat(
+                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
+                instance.isAnonymous(),
+                is(false));
+    }
+
     protected GHUser getUser() {
         return getUser(gitHub);
     }
@@ -163,9 +170,10 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     protected GHRepository getTempRepository(String name) throws IOException {
         String fullName = GITHUB_API_TEST_ORG + '/' + name;
         if (mockGitHub.isUseProxy()) {
+
             cleanupRepository(fullName);
 
-            GHRepository repository = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG)
+            GHRepository repository = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG)
                     .createRepository(name)
                     .description("A test repository for testing the github-api project: " + name)
                     .homepage("http://github-api.kohsuke.org/")
@@ -199,7 +207,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         if (mockGitHub.isUseProxy()) {
             tempGitHubRepositories.add(fullName);
             try {
-                GHRepository repository = gitHubBeforeAfter.getRepository(fullName);
+                GHRepository repository = getGitHubBeforeAfter().getRepository(fullName);
                 if (repository != null) {
                     repository.delete();
                 }
@@ -210,6 +218,17 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         }
     }
 
+    /**
+     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
+     * be used when isUseProxy() or isTakeSnapShot().
+     *
+     * @return a github instance after checking Authentication
+     */
+    public GitHub getGitHubBeforeAfter() {
+        verifyAuthenticated(gitHubBeforeAfter);
+        return gitHubBeforeAfter;
+    }
+
     protected void kohsuke() {
         // No-op for now
         // Generally this means the test is doing something that requires additional access rights
@@ -217,6 +236,30 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
         // String login = getUserTest().getLogin();
         // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+    }
+
+    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+        assertThat("", actual, matcher);
+    }
+
+    public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
+        if (!matcher.matches(actual)) {
+            Description description = new StringDescription();
+            description.appendText(reason)
+                    .appendText(System.lineSeparator())
+                    .appendText("Expected: ")
+                    .appendDescriptionOf(matcher)
+                    .appendText(System.lineSeparator())
+                    .appendText("     but: ");
+            matcher.describeMismatch(actual, description);
+            throw new AssertionError(description.toString());
+        }
+    }
+
+    public static void assertThat(String reason, boolean assertion) {
+        if (!assertion) {
+            throw new AssertionError(reason);
+        }
     }
 
 }

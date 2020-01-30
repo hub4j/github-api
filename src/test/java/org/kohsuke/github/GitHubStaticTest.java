@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +17,7 @@ import static org.hamcrest.core.Is.is;
  *
  * @author Liam Newman
  */
-public class GitHubStaticTest extends Assert {
+public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void timeRoundTrip() throws Exception {

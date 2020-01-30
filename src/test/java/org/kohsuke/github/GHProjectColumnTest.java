@@ -48,7 +48,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (column != null) {
-                column = gitHubBeforeAfter.getProjectColumn(column.getId());
+                column = getGitHubBeforeAfter().getProjectColumn(column.getId());
                 try {
                     column.delete();
                     column = null;
@@ -57,7 +57,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
                 }
             }
             if (project != null) {
-                project = gitHubBeforeAfter.getProject(project.getId());
+                project = getGitHubBeforeAfter().getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

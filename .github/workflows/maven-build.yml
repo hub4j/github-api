@@ -1,14 +1,15 @@
-name: Java CI Build and Test
+name: CI
 
 on: [push, pull_request]
 
 
 jobs:
   build:
+    name: build-only (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11.0.x' ]
+        java: [ 11 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -25,10 +26,11 @@ jobs:
       - name: Maven Install (skipTests)
         run: mvn -B install -DskipTests -D enable-ci --file pom.xml
   site:
+    name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11.0.x' ]
+        java: [ 11 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -44,11 +46,12 @@ jobs:
       - name: Maven Site
         run: mvn -B site -D enable-ci --file pom.xml
   test:
-    runs-on: ${{ matrix.os }}
+    name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest ]
-        java: [ '1.8.0', '11.0.x', '13.0.x' ]
+        os: [ ubuntu, windows ]
+        java: [ 8, 11, 13 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK

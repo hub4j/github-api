@@ -1,23 +1,68 @@
-name: Java CI Build and Test
+name: CI
 
 on: [push, pull_request]
 
 
 jobs:
   build:
-
-    runs-on: ${{ matrix.os }}
+    name: build-only (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        java: [ '1.8.0', '11.0.x', '13.0.x' ]
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Cached .m2
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Maven Install (skipTests)
+        run: mvn -B install -DskipTests -D enable-ci --file pom.xml
+  site:
+    name: site (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Maven Site
+        run: mvn -B site -D enable-ci --file pom.xml
+  test:
+    name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [ ubuntu, windows ]
+        java: [ 8, 11, 13 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: Maven Download all dependencies
-      run: mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.1:go-offline -P ci
-    - name: Maven Build
-      run: mvn -B install site -P ci --file pom.xml
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Maven Install
+      run: mvn -B install --file pom.xml

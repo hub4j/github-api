@@ -5322,7 +5322,7 @@
       "url": "https://api.github.com/repos/github-api/github-api/git/trees/23d4565bd270308657a4e5b65cb6e6bec6736b54"
     },
     {
-      "path": "src/test/resources/org/kohsuke/github/GHContentIntegrationTest/wiremock/testGetDirectoryContentTrailingSlash/__files",
+      "path": "src/test/resources/org/kohsuke/github/GHContentIntegrationTest/wiremock/testGetDirectoryContentTrailingSlashtestGetDirectoryContentTrailingSlash/__files",
       "mode": "040000",
       "type": "tree",
       "sha": "98db44a404132445a934e7e1b28d0d94a8243a6e",

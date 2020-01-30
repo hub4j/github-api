@@ -20,8 +20,8 @@ import java.net.URL;
 import java.security.Permission;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -55,8 +55,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     @Before
     public void attachLogCapturer() {
         logCapturingStream = new ByteArrayOutputStream();
-        Handler[] handlers = log.getParent().getHandlers();
-        customLogHandler = new StreamHandler(logCapturingStream, handlers[0].getFormatter());
+        customLogHandler = new StreamHandler(logCapturingStream, new SimpleFormatter());
         log.addHandler(customLogHandler);
     }
 

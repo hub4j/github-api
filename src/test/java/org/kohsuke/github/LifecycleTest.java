@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,6 +16,8 @@ import static org.hamcrest.core.Is.is;
 public class LifecycleTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCreateRepository() throws IOException {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
         GHMyself myself = gitHub.getMyself();
         // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 

@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_bitwiseman_github-api-test-rename-39714670-728d-4f72-bf18-7b2e6f0ac276.json",
+    "bodyFileName": "repos_bitwiseman_github-api-test-rename-39714670.json",
     "headers": {
       "Date": "Wed, 02 Oct 2019 21:40:02 GMT",
       "Content-Type": "application/json; charset=utf-8",

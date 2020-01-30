@@ -6,6 +6,8 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
@@ -55,7 +57,9 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error() throws Exception {
+    public void testCached404() throws Exception {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
         // ISSUE #669
         snapshotNotAllowed();
 

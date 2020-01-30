@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_temp-testenablebranchprotections_branches_master_protection-aa97cf7b-7c9d-4c01-b7c5-bccc62b30873.json",
+    "bodyFileName": "repos_github-api-test-org_temp-aa97cf7b.json",
     "headers": {
       "Date": "Tue, 19 Nov 2019 03:01:32 GMT",
       "Content-Type": "application/json; charset=utf-8",

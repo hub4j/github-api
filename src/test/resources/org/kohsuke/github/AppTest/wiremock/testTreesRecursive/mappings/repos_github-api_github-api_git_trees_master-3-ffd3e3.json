@@ -12,7 +12,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api_github-api_git_trees_master-ffd3e351-e215-4bef-9756-a608a46e6c42.json",
+    "bodyFileName": "repos_github-api_github-api_git_trees_master-ffd3e351.json",
     "headers": {
       "Date": "Sat, 26 Oct 2019 01:27:04 GMT",
       "Content-Type": "application/json; charset=utf-8",

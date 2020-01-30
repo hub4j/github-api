@@ -221,6 +221,8 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
     /**
      * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
      * be used when isUseProxy() or isTakeSnapShot().
+     *
+     * @return a github instance after checking Authentication
      */
     public GitHub getGitHubBeforeAfter() {
         verifyAuthenticated(gitHubBeforeAfter);

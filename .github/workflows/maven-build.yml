@@ -17,7 +17,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: Maven Download all dependencies
-      run: mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.1:go-offline -D enable-ci
+    - name: Cached .m2
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
     - name: Maven Build
       run: mvn -B install site -D enable-ci --file pom.xml

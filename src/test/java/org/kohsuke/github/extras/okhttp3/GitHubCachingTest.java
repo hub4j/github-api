@@ -5,8 +5,6 @@ import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemp
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
@@ -57,8 +55,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCached404() throws Exception {
-        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
-
         // ISSUE #669
         snapshotNotAllowed();
 

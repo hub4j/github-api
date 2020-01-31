@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 /**
@@ -27,6 +28,9 @@ public abstract class GHPerson extends GHObject {
     protected String html_url;
     protected int followers, following, public_repos, public_gists;
     protected boolean site_admin;
+
+    // other fields (that only show up in full data) that require privileged scope
+    protected Integer total_private_repos;
 
     GHPerson wrapUp(GitHub root) {
         this.root = root;
@@ -345,5 +349,17 @@ public abstract class GHPerson extends GHObject {
     public boolean isSiteAdmin() throws IOException {
         populate();
         return site_admin;
+    }
+
+    /**
+     * Gets total private repo count.
+     *
+     * @return the total private repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
+        populate();
+        return Optional.ofNullable(total_private_repos);
     }
 }

@@ -90,7 +90,9 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
 
         GHRepository repository = gitHub.createRepository("github-user-test-private-repo")
                 .description("a test private repository used to test kohsuke's github-api")
-                .homepage("http://github-api.kohsuke.org/").private_(true).create();
+                .homepage("http://github-api.kohsuke.org/")
+                .private_(true)
+                .create();
 
         try {
             Assert.assertNotNull(repository);

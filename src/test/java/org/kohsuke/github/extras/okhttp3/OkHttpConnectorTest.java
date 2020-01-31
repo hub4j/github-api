@@ -16,6 +16,7 @@ import org.kohsuke.github.GitHub;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -79,7 +80,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            GHRepository repo = getRepository(gitHubBeforeAfter);
+            GHRepository repo = getRepository(getGitHubBeforeAfter());
             repo.setDescription("Resetting");
 
             // Let things settle a bit between tests when working against the live site
@@ -261,7 +262,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         // Get Tricky - make a change via a different client
         if (mockGitHub.isUseProxy()) {
-            GHRepository altRepo = getRepository(gitHubBeforeAfter);
+            GHRepository altRepo = getRepository(getGitHubBeforeAfter());
             altRepo.setDescription("Tricky");
         }
 

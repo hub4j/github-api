@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "github-api-test-org/GHTreeBuilderTest";
 
@@ -31,7 +33,7 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = gitHubBeforeAfter.getRepository(REPO_NAME);
+            repo = getGitHubBeforeAfter().getRepository(REPO_NAME);
             Arrays.asList(PATH_SCRIPT, PATH_README, PATH_DATA1, PATH_DATA2).forEach(path -> {
                 try {
                     GHContent content = repo.getFileContent(path);

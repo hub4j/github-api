@@ -24,7 +24,7 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         }
 
         try {
-            GHRef ref = getRepository(this.gitHubBeforeAfter).getRef("tags/create_tag_test");
+            GHRef ref = getRepository(this.getGitHubBeforeAfter()).getRef("tags/create_tag_test");
             if (ref != null) {
                 ref.delete();
             }

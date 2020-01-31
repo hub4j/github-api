@@ -26,7 +26,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = gitHubBeforeAfter.getRepository("github-api-test-org/GHContentIntegrationTest");
+            repo = getGitHubBeforeAfter().getRepository("github-api-test-org/GHContentIntegrationTest");
             try {
                 GHContent content = repo.getFileContent(createdFilename);
                 if (content != null) {

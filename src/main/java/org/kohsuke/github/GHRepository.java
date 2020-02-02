@@ -857,6 +857,30 @@ public class GHRepository extends GHObject {
      *
      * @param users
      *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(GHUser... users) throws IOException {
+        addCollaborators(asList(users));
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(List<GHUser> users) throws IOException {
+        modifyCollaborators(users, "PUT");
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
      * @param perm
      *            the permission level
      * @throws IOException

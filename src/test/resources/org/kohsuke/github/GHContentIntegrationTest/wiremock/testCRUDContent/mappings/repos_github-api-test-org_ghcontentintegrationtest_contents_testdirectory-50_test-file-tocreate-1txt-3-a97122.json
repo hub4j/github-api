@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_github-api-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt-a971220e-d7f0-4919-9963-dbcedf5577e7.json",
+    "bodyFileName": "repos_github-api-test-org_ghcontentintegrationtest-50_test-file-tocreate-1txt-a971220e.json",
     "headers": {
       "Date": "Tue, 26 Nov 2019 01:09:45 GMT",
       "Content-Type": "application/json; charset=utf-8",

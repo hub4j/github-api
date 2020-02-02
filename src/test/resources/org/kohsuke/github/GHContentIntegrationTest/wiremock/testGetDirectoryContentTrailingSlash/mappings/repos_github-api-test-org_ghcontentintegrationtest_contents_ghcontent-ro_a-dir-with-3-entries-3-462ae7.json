@@ -12,7 +12,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-dir-with-3-entries-462ae734-fe48-4be5-b432-ddd9912ca0e5.json",
+    "bodyFileName": "repos_github-api-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-dir-with-3-entries-462ae734.json",
     "headers": {
       "Date": "Tue, 26 Nov 2019 01:09:41 GMT",
       "Content-Type": "application/json; charset=utf-8",

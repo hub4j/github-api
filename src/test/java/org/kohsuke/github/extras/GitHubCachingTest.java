@@ -6,6 +6,8 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
@@ -18,6 +20,8 @@ import org.kohsuke.github.GitHub;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.Assert.fail;
 
 /**
  * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
@@ -41,11 +45,11 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            for (GHPullRequest pr : getRepository(this.gitHubBeforeAfter).getPullRequests(GHIssueState.OPEN)) {
+            for (GHPullRequest pr : getRepository(this.getGitHubBeforeAfter()).getPullRequests(GHIssueState.OPEN)) {
                 pr.close();
             }
             try {
-                GHRef ref = getRepository(this.gitHubBeforeAfter).getRef(testRefName);
+                GHRef ref = getRepository(this.getGitHubBeforeAfter()).getRef(testRefName);
                 ref.delete();
             } catch (IOException e) {
             }
@@ -53,7 +57,9 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void OkHttpConnector_Cache_MaxAgeDefault_Zero_GitHubRef_Error() throws Exception {
+    public void testCached404() throws Exception {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
         // ISSUE #669
         snapshotNotAllowed();
 

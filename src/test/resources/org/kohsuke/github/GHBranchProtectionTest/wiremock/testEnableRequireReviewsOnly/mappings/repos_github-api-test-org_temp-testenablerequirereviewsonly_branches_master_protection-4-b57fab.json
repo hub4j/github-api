@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_temp-testenablerequirereviewsonly_branches_master_protection-b57fab91-f2a6-4d52-b6d4-05e4a8be5df4.json",
+    "bodyFileName": "repos_github-api-test-org_temp-testenablerequirereviewsonly_branches_master_protection-b57fab91.json",
     "headers": {
       "Date": "Tue, 19 Nov 2019 03:01:41 GMT",
       "Content-Type": "application/json; charset=utf-8",

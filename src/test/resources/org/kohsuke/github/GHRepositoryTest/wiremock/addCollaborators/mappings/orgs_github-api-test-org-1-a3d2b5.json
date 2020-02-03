@@ -1,5 +1,5 @@
 {
-  "id": "355d5cda-5423-49ef-b604-6276fbaba24e",
+  "id": "a3d2b552-58b8-4028-b731-d00420496ca8",
   "name": "orgs_github-api-test-org",
   "request": {
     "url": "/orgs/github-api-test-org",
@@ -12,14 +12,14 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "orgs_github-api-test-org-355d5cda-5423-49ef-b604-6276fbaba24e.json",
+    "bodyFileName": "orgs_github-api-test-org-a3d2b552-58b8-4028-b731-d00420496ca8.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sun, 02 Feb 2020 04:29:45 GMT",
+      "Date": "Sun, 02 Feb 2020 04:59:39 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4951",
+      "X-RateLimit-Remaining": "4895",
       "X-RateLimit-Reset": "1580620984",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
@@ -36,10 +36,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C7DB:0D8E:63D359:C9F18B:5E365038"
+      "X-GitHub-Request-Id": "C903:768E:16C4938:2BA1171:5E36573B"
     }
   },
-  "uuid": "355d5cda-5423-49ef-b604-6276fbaba24e",
+  "uuid": "a3d2b552-58b8-4028-b731-d00420496ca8",
   "persistent": true,
-  "insertionIndex": 2
+  "insertionIndex": 1
 }

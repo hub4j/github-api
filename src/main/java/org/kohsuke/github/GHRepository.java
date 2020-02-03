@@ -860,6 +860,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public void addCollaborators(GHUser... users) throws IOException {
         addCollaborators(asList(users));
     }
@@ -872,6 +873,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public void addCollaborators(List<GHUser> users) throws IOException {
         modifyCollaborators(users, "PUT");
     }

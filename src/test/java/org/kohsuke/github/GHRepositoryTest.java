@@ -169,10 +169,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
 
-        GHUser colabUser = collabs.byLogin(user.getLogin());
+        GHUser colabUser = collabs.byLogin("jimmysombrero");
 
         assertEquals(colabUser.getName(), user.getName());
-        assertEquals(GHOrganization.Permission.PUSH, repo.getPermission(user.getName()));
     }
 
     @Test

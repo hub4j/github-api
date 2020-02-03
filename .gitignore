@@ -10,3 +10,4 @@ target
 
 dependency-reduced-pom.xml
 .factorypath
+.vscode/settings.json

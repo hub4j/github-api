@@ -1,0 +1,39 @@
+{
+  "id": "666cac17-c8fc-49b9-a2eb-b9667c2ea446",
+  "name": "repos_kohsuke_github-user-test-private-repo",
+  "request": {
+    "url": "/repos/kohsuke/github-user-test-private-repo",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 31 Jan 2020 18:52:46 GMT",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1580498839",
+      "X-OAuth-Scopes": "delete_repo, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "3123:3DD0:725FE2:11566AB:5E34777E"
+    }
+  },
+  "uuid": "666cac17-c8fc-49b9-a2eb-b9667c2ea446",
+  "persistent": true,
+  "insertionIndex": 4
+}

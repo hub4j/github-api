@@ -89,6 +89,10 @@ public class WireMockRuleConfiguration implements Options {
         return parent.portNumber();
     }
 
+    public boolean getHttpDisabled() {
+        return parent.getHttpDisabled();
+    }
+
     public int containerThreads() {
         return parent.containerThreads();
     }
@@ -171,5 +175,9 @@ public class WireMockRuleConfiguration implements Options {
 
     public boolean getGzipDisabled() {
         return parent.getGzipDisabled();
+    }
+
+    public boolean getStubRequestLoggingDisabled() {
+        return parent.getStubRequestLoggingDisabled();
     }
 }

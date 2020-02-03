@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -130,7 +130,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         assertThat(
                 "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
                 instance.isAnonymous(),
-                is(false));
+                Matchers.is(false));
     }
 
     protected GHUser getUser() {
@@ -260,6 +260,30 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         if (!assertion) {
             throw new AssertionError(reason);
         }
+    }
+
+    public static void assertEquals(Object expected, Object actual) {
+        assertThat(actual, Matchers.equalTo(expected));
+    }
+
+    public static void assertNotEquals(Object expected, Object actual) {
+        assertThat(actual, Matchers.not(expected));
+    }
+
+    public static void assertNotNull(Object actual) {
+        assertThat(actual, Matchers.notNullValue());
+    }
+
+    public static void assertNull(Object actual) {
+        assertThat(actual, Matchers.nullValue());
+    }
+
+    public static void assertTrue(Boolean condition) {
+        assertThat(condition, Matchers.is(true));
+    }
+
+    public static void assertFalse(Boolean condition) {
+        assertThat(condition, Matchers.is(false));
     }
 
 }

@@ -535,12 +535,9 @@ public class GHRepository extends GHObject {
      * @return the owner name
      */
     public String getOwnerName() {
-        // consistency of the GitHub API is super... some serialized forms of
-        // GHRepository populate
-        // a full GHUser while others populate only the owner and email. This later form
-        // is super helpful
-        // in putting the login in owner.name not owner.login... thankfully we can
-        // easily identify this
+        // consistency of the GitHub API is super... some serialized forms of GHRepository populate
+        // a full GHUser while others populate only the owner and email. This later form is super helpful
+        // in putting the login in owner.name not owner.login... thankfully we can easily identify this
         // second set because owner.login will be null
         return owner.login != null ? owner.login : owner.name;
     }
@@ -753,7 +750,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all
-     * <a href= "https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
+     * <a href="https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
      * available assignees</a> to which issues may be assigned.
      *
      * @return the paged iterable

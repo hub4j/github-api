@@ -813,7 +813,7 @@ public class GHRepository extends GHObject {
      * Obtain permission for a given user in this repository.
      *
      * @param u
-     *            the u
+     *            the user
      * @return the permission
      * @throws IOException
      *             the io exception
@@ -1986,8 +1986,7 @@ public class GHRepository extends GHObject {
     // * Retrieves all the pull requests.
     // */
     // public List<GHPullRequest> getPullRequests() throws IOException {
-    // return
-    // root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
+    // return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
     // }
 
     /**

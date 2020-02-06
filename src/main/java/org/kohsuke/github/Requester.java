@@ -512,13 +512,21 @@ class Requester {
                 responseCode = uc.getResponseCode();
                 responseMessage = uc.getResponseMessage();
                 noteRateLimit(tailApiUrl);
-                if (!(isInvalidCached404Response(responseCode) || isRateLimitResponse(responseCode)
-                        || isAbuseLimitResponse(responseCode))) {
+
+                // for this workaround, we can retry now
+                if (isInvalidCached404Response(responseCode)) {
+                    continue;
+                }
+                if (!(isRateLimitResponse(responseCode) || isAbuseLimitResponse(responseCode))) {
                     return supplier.get();
                 }
             } catch (IOException e) {
-                handleApiError(e, responseCode, responseMessage, url, retries);
-                continue;
+                // For transient errors, retry
+                if (handledTransientConnectionError(e, url, retries)) {
+                    continue;
+                }
+
+                throw interpretApiError(e, responseCode, responseMessage, url, retries);
             }
 
             handleLimitingErrors(responseCode);
@@ -1031,11 +1039,8 @@ class Requester {
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    void handleApiError(IOException e, int responseCode, String message, URL url, int retries) throws IOException {
-        if (handledTransientConnectionError(e, url, retries)) {
-            return;
-        }
-
+    IOException interpretApiError(IOException e, int responseCode, String message, URL url, int retries)
+            throws IOException {
         InputStream es = wrapStream(uc.getErrorStream());
         if (es != null) {
             try {
@@ -1060,11 +1065,10 @@ class Requester {
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
             // will be returned indicating the user needs to respond with an otp
             if (uc.getHeaderField("X-GitHub-OTP") != null) {
-                throw (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
+                e = (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
             }
         }
-
-        throw e;
+        return e;
     }
 
     /**

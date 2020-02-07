@@ -512,6 +512,7 @@ class Requester {
                 responseCode = uc.getResponseCode();
                 responseMessage = uc.getResponseMessage();
                 noteRateLimit(tailApiUrl);
+                detectOTPRequired(responseCode);
 
                 // for this workaround, we can retry now
                 if (isInvalidCached404Response(responseCode)) {
@@ -522,7 +523,7 @@ class Requester {
                 }
             } catch (IOException e) {
                 // For transient errors, retry
-                if (handledTransientConnectionError(e, url, retries)) {
+                if (retryConnectionError(e, url, retries)) {
                     continue;
                 }
 
@@ -534,6 +535,17 @@ class Requester {
         } while (--retries >= 0);
 
         throw new GHIOException("Ran out of retries for URL: " + url.toString());
+    }
+
+    private void detectOTPRequired(int responseCode) throws GHIOException {
+        // 401 Unauthorized == bad creds or OTP request
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
+            // will be returned indicating the user needs to respond with an otp
+            if (uc.getHeaderField("X-GitHub-OTP") != null) {
+                throw new GHOTPRequiredException().withResponseHeaderFields(uc);
+            }
+        }
     }
 
     private boolean isRateLimitResponse(int responseCode) {
@@ -561,7 +573,7 @@ class Requester {
         }
     }
 
-    private boolean handledTransientConnectionError(IOException e, URL url, int retries) throws IOException {
+    private boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {
         // There are a range of connection errors where we want to wait a moment and just automatically retry
         boolean connectionError = e instanceof SocketException || e instanceof SocketTimeoutException
                 || e instanceof SSLHandshakeException;
@@ -1041,6 +1053,10 @@ class Requester {
      */
     IOException interpretApiError(IOException e, int responseCode, String message, URL url, int retries)
             throws IOException {
+        // If we're already throwing a GHIOException, pass through
+        if (e instanceof GHIOException) {
+            return e;
+        }
         InputStream es = wrapStream(uc.getErrorStream());
         if (es != null) {
             try {
@@ -1058,15 +1074,6 @@ class Requester {
             }
         } else if (!(e instanceof FileNotFoundException)) {
             e = new HttpException(responseCode, message, url.toString(), e);
-        }
-
-        // 401 Unauthorized == bad creds or OTP request
-        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
-            // will be returned indicating the user needs to respond with an otp
-            if (uc.getHeaderField("X-GitHub-OTP") != null) {
-                e = (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
-            }
         }
         return e;
     }

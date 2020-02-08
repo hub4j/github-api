@@ -842,13 +842,13 @@ public class GHRepository extends GHObject {
      *
      * @param users
      *            the users
-     * @param perm
+     * @param permission
      *            the permission level
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHOrganization.Permission permission, GHUser... user) throws IOException {
-        addCollaborators(asList(user), permission);
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+        addCollaborators(asList(users), permission);
     }
 
     /**
@@ -880,7 +880,7 @@ public class GHRepository extends GHObject {
      *
      * @param users
      *            the users
-     * @param perm
+     * @param permission
      *            the permission level
      * @throws IOException
      *             the io exception

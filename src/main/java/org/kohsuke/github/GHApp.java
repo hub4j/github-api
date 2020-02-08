@@ -140,7 +140,7 @@ public class GHApp extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(htmlUrl);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**

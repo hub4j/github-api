@@ -47,7 +47,7 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
          * @return the timestamp
          */
         public Date getTimestamp() {
-            return GitHub.parseDate(timestamp);
+            return GitHubClient.parseDate(timestamp);
         }
 
         public int getCount() {

@@ -24,7 +24,7 @@ public class GHBlob {
      * @return API URL of this blob.
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**

@@ -137,7 +137,7 @@ public class GHIssue extends GHObject implements Reactable {
      * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -187,7 +187,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the closed at
      */
     public Date getClosedAt() {
-        return GitHub.parseDate(closed_at);
+        return GitHubClient.parseDate(closed_at);
     }
 
     /**
@@ -196,7 +196,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the api url
      */
     public URL getApiURL() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -677,7 +677,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the diff url
          */
         public URL getDiffUrl() {
-            return GitHub.parseURL(diff_url);
+            return GitHubClient.parseURL(diff_url);
         }
 
         /**
@@ -686,7 +686,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the patch url
          */
         public URL getPatchUrl() {
-            return GitHub.parseURL(patch_url);
+            return GitHubClient.parseURL(patch_url);
         }
 
         /**
@@ -695,7 +695,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(html_url);
+            return GitHubClient.parseURL(html_url);
         }
     }
 

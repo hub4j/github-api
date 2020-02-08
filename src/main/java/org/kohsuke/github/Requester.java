@@ -58,7 +58,7 @@ import javax.net.ssl.SSLHandshakeException;
 
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.kohsuke.github.GitHub.MAPPER;
+import static org.kohsuke.github.GitHubClient.MAPPER;
 
 /**
  * A builder pattern for making HTTP call and parsing its output.
@@ -67,7 +67,7 @@ import static org.kohsuke.github.GitHub.MAPPER;
  */
 class Requester extends GitHubRequest.Builder<Requester> {
     public static final int CONNECTION_ERROR_RETRIES = 2;
-    private final GitHub root;
+    private final GitHubClient client;
 
     /**
      * Current connection.
@@ -79,8 +79,8 @@ class Requester extends GitHubRequest.Builder<Requester> {
      */
     private static final int retryTimeoutMillis = 100;
 
-    Requester(GitHub root) {
-        this.root = root;
+    Requester(GitHubClient client) {
+        this.client = client;
     }
 
     /**
@@ -171,7 +171,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public int fetchHttpStatusCode() throws IOException {
-        return sendRequest(build(root), null).statusCode();
+        return sendRequest(build(client), null).statusCode();
     }
 
     /**
@@ -188,7 +188,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
 
     @Nonnull
     private <T> GitHubResponse<T> parseResponse(Class<T> type, T instance) throws IOException {
-        return sendRequest(build(root), (responseInfo) -> parse(responseInfo, type, instance));
+        return sendRequest(build(client), (responseInfo) -> parse(responseInfo, type, instance));
     }
 
     @Nonnull
@@ -200,7 +200,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
 
             GitHubResponse.ResponseInfo responseInfo = null;
             try {
-                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(request, root);
+                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(request, client);
                 previousResponseInfo = responseInfo;
                 noteRateLimit(responseInfo);
                 detectOTPRequired(responseInfo);
@@ -259,13 +259,13 @@ class Requester extends GitHubRequest.Builder<Requester> {
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            root.rateLimitHandler.onError(e, responseInfo.connection);
+            client.rateLimitHandler.onError(e, responseInfo.connection);
         } else if (isAbuseLimitResponse(responseInfo)) {
             GHIOException e = new HttpException("Abuse limit violation",
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            root.abuseLimitHandler.onError(e, responseInfo.connection);
+            client.abuseLimitHandler.onError(e, responseInfo.connection);
         }
     }
 
@@ -379,7 +379,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
 
         GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo.headerField("Date"));
 
-        root.updateCoreRateLimit(observed);
+        client.updateCoreRateLimit(observed);
     }
 
     /**
@@ -440,7 +440,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
             this.with("per_page", pageSize);
 
         try {
-            GitHubRequest request = build(root);
+            GitHubRequest request = build(client);
             if (!"GET".equals(request.method())) {
                 throw new IllegalStateException("Request method \"GET\" is required for iterator.");
             }
@@ -527,7 +527,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
                     // found the next page. This should look something like
                     // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
                     int idx = token.indexOf('>');
-                    nextRequest = responseInfo.request().builder().build(root, new URL(token.substring(1, idx)));
+                    nextRequest = responseInfo.request().builder().build(client, new URL(token.substring(1, idx)));
                     return;
                 }
             }
@@ -536,23 +536,20 @@ class Requester extends GitHubRequest.Builder<Requester> {
         }
     }
 
-    static class GitHubClient {
-
-    }
-
     @Nonnull
-    static HttpURLConnection setupConnection(@Nonnull GitHub root, @Nonnull GitHubRequest request) throws IOException {
+    static HttpURLConnection setupConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
+            throws IOException {
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE,
-                    "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + request.method()
-                            + " " + request.url().toString());
+                    "GitHub API request [" + (client.login == null ? "anonymous" : client.login) + "]: "
+                            + request.method() + " " + request.url().toString());
         }
-        HttpURLConnection connection = root.getConnector().connect(request.url());
+        HttpURLConnection connection = client.connector.connect(request.url());
 
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        if (root.encodedAuthorization != null)
-            connection.setRequestProperty("Authorization", root.encodedAuthorization);
+        if (client.encodedAuthorization != null)
+            connection.setRequestProperty("Authorization", client.encodedAuthorization);
 
         setRequestMethod(request.method(), connection);
         buildRequest(request, connection);

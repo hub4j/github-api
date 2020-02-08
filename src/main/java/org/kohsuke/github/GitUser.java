@@ -41,6 +41,6 @@ public class GitUser {
      * @return This field doesn't appear to be consistently available in all the situations where this class is used.
      */
     public Date getDate() {
-        return GitHub.parseDate(date);
+        return GitHubClient.parseDate(date);
     }
 }

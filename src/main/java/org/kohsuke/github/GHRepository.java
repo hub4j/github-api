@@ -255,7 +255,7 @@ public class GHRepository extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -694,7 +694,7 @@ public class GHRepository extends GHObject {
      * @return null if the repository was never pushed at.
      */
     public Date getPushedAt() {
-        return GitHub.parseDate(pushed_at);
+        return GitHubClient.parseDate(pushed_at);
     }
 
     /**

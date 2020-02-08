@@ -35,8 +35,8 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(app.getDescription(), is(""));
         assertThat(app.getExternalUrl(), is("https://bogus.domain.com"));
         assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/bogus-development"));
-        assertThat(app.getCreatedAt(), is(GitHub.parseDate("2019-06-10T04:21:41Z")));
-        assertThat(app.getUpdatedAt(), is(GitHub.parseDate("2019-06-10T04:21:41Z")));
+        assertThat(app.getCreatedAt(), is(GitHubClient.parseDate("2019-06-10T04:21:41Z")));
+        assertThat(app.getUpdatedAt(), is(GitHubClient.parseDate("2019-06-10T04:21:41Z")));
         assertThat(app.getPermissions().size(), is(4));
         assertThat(app.getEvents().size(), is(2));
         assertThat(app.getInstallationsCount(), is((long) 1));
@@ -110,7 +110,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken.getToken(), is("bogus"));
         assertThat(installation.getPermissions(), is(permissions));
         assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
-        assertThat(installationToken.getExpiresAt(), is(GitHub.parseDate("2019-08-10T05:54:58Z")));
+        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2019-08-10T05:54:58Z")));
 
         GHRepository repository = installationToken.getRepositories().get(0);
         assertThat(installationToken.getRepositories().size(), is(1));
@@ -123,7 +123,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken2.getToken(), is("bogus"));
         assertThat(installationToken2.getPermissions().size(), is(4));
         assertThat(installationToken2.getRepositorySelection(), is(GHRepositorySelection.ALL));
-        assertThat(installationToken2.getExpiresAt(), is(GitHub.parseDate("2019-12-19T12:27:59Z")));
+        assertThat(installationToken2.getExpiresAt(), is(GitHubClient.parseDate("2019-12-19T12:27:59Z")));
 
         assertNull(installationToken2.getRepositories());;
     }
@@ -151,8 +151,8 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
 
         List<GHEvent> events = Arrays.asList(GHEvent.PULL_REQUEST, GHEvent.PUSH);
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
-        assertThat(appInstallation.getCreatedAt(), is(GitHub.parseDate("2019-07-04T01:19:36.000Z")));
-        assertThat(appInstallation.getUpdatedAt(), is(GitHub.parseDate("2019-07-30T22:48:09.000Z")));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2019-07-04T01:19:36.000Z")));
+        assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseDate("2019-07-30T22:48:09.000Z")));
         assertNull(appInstallation.getSingleFileName());
     }
 

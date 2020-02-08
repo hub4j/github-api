@@ -19,7 +19,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testOffline() throws Exception {
         GitHub hub = GitHub.offline();
-        assertEquals("https://api.github.invalid/test", hub.getApiURL("/test").toString());
+        assertEquals("https://api.github.invalid/test", hub.client.getApiURL("/test").toString());
         assertTrue(hub.isAnonymous());
         try {
             hub.getRateLimit();
@@ -32,19 +32,19 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
-        assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
+        assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.client.getApiURL("/test").toString());
     }
 
     @Test
     public void testGitHubServerWithHttps() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
-        assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
+        assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.client.getApiURL("/test").toString());
     }
 
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
-        assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
+        assertEquals("https://api.github.com/test", hub.client.getApiURL("/test").toString());
     }
 
     @Test
@@ -96,8 +96,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();
-        assertEquals("token bogus", github.encodedAuthorization);
-        assertEquals("", github.login);
+        assertEquals("token bogus", github.client.encodedAuthorization);
+        assertEquals("", github.client.login);
     }
 
     @Ignore

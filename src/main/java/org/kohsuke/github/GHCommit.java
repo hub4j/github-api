@@ -61,7 +61,7 @@ public class GHCommit {
          * @return the authored date
          */
         public Date getAuthoredDate() {
-            return GitHub.parseDate(author.date);
+            return GitHubClient.parseDate(author.date);
         }
 
         /**
@@ -80,7 +80,7 @@ public class GHCommit {
          * @return the commit date
          */
         public Date getCommitDate() {
-            return GitHub.parseDate(committer.date);
+            return GitHubClient.parseDate(committer.date);
         }
 
         /**
@@ -201,7 +201,7 @@ public class GHCommit {
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-            return GitHub.parseURL(raw_url);
+            return GitHubClient.parseURL(raw_url);
         }
 
         /**
@@ -212,7 +212,7 @@ public class GHCommit {
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-            return GitHub.parseURL(blob_url);
+            return GitHubClient.parseURL(blob_url);
         }
 
         /**
@@ -326,7 +326,7 @@ public class GHCommit {
      *         "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

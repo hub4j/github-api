@@ -67,11 +67,11 @@ class GitHubResponse<T> {
         final HttpURLConnection connection;
 
         @Nonnull
-        static ResponseInfo fromHttpURLConnection(@Nonnull GitHubRequest request, @Nonnull GitHub root)
+        static ResponseInfo fromHttpURLConnection(@Nonnull GitHubRequest request, @Nonnull GitHubClient client)
                 throws IOException {
             HttpURLConnection connection;
             try {
-                connection = Requester.setupConnection(root, request);
+                connection = Requester.setupConnection(client, request);
             } catch (IOException e) {
                 // An error in here should be wrapped to bypass http exception wrapping.
                 throw new GHIOException(e.getMessage(), e);

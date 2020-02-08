@@ -24,7 +24,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         verifyAuthenticated(gitHub);
 
-        assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
+        assertThat(gitHub.client.login, not(equalTo(STUBBED_USER_LOGIN)));
 
         // If this user query fails, either the proxying config has broken (unlikely)
         // or your auth settings are not being retrieved from the environemnt.
@@ -45,7 +45,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         verifyAuthenticated(gitHub);
-        assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
+        assertThat(gitHub.client.login, equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();
         // NOTE: the stubbed user does not have to match the login provided from the github object

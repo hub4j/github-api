@@ -96,7 +96,7 @@ public class GHAuthorization extends GHObject {
      * @return the app url
      */
     public URL getAppUrl() {
-        return GitHub.parseURL(app.url);
+        return GitHubClient.parseURL(app.url);
     }
 
     /**
@@ -115,7 +115,7 @@ public class GHAuthorization extends GHObject {
      */
     @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library API, cannot be changed")
     public URL getApiURL() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -141,7 +141,7 @@ public class GHAuthorization extends GHObject {
      * @return the note url
      */
     public URL getNoteUrl() {
-        return GitHub.parseURL(note_url);
+        return GitHubClient.parseURL(note_url);
     }
 
     /**

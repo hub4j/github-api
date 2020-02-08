@@ -22,7 +22,7 @@ import java.util.Properties;
 public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
-    /* private */ String endpoint = GitHub.GITHUB_URL;
+    /* private */ String endpoint = GitHubClient.GITHUB_URL;
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
@@ -214,7 +214,7 @@ public class GitHubBuilder implements Cloneable {
         self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
         self.withJwtToken(props.getProperty("jwt"));
         self.withPassword(props.getProperty("login"), props.getProperty("password"));
-        self.withEndpoint(props.getProperty("endpoint", GitHub.GITHUB_URL));
+        self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
         return self;
     }
 

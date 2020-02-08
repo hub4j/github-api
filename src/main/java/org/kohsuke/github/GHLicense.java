@@ -83,7 +83,7 @@ public class GHLicense extends GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -100,7 +100,7 @@ public class GHLicense extends GHObject {
 
     public URL getHtmlUrl() throws IOException {
         populate();
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

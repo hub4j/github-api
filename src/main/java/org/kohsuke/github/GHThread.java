@@ -41,7 +41,7 @@ public class GHThread extends GHObject {
      * @return the last read at
      */
     public Date getLastReadAt() {
-        return GitHub.parseDate(last_read_at);
+        return GitHubClient.parseDate(last_read_at);
     }
 
     /**

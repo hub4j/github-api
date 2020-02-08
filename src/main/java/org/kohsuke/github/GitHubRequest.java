@@ -43,7 +43,7 @@ class GitHubRequest {
             @Nonnull String method,
             @CheckForNull InputStream body,
             boolean forceBody,
-            @Nonnull GitHub root,
+            @Nonnull GitHubClient client,
             @CheckForNull URL url) throws MalformedURLException {
         this.args = args;
         this.headers = headers;
@@ -53,7 +53,7 @@ class GitHubRequest {
         this.forceBody = forceBody;
         if (url == null) {
             String tailApiUrl = buildTailApiUrl(urlPath);
-            url = root.getApiURL(tailApiUrl);
+            url = client.getApiURL(tailApiUrl);
         }
         this.url = url;
     }
@@ -170,11 +170,11 @@ class GitHubRequest {
             this.forceBody = forceBody;
         }
 
-        GitHubRequest build(GitHub root) throws MalformedURLException {
+        GitHubRequest build(GitHubClient root) throws MalformedURLException {
             return build(root, null);
         }
 
-        GitHubRequest build(GitHub root, URL url) throws MalformedURLException {
+        GitHubRequest build(GitHubClient root, URL url) throws MalformedURLException {
             return new GitHubRequest(args, headers, urlPath, method, body, forceBody, root, url);
         }
 

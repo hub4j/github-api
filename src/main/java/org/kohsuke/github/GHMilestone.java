@@ -56,7 +56,7 @@ public class GHMilestone extends GHObject {
     public Date getDueOn() {
         if (due_on == null)
             return null;
-        return GitHub.parseDate(due_on);
+        return GitHubClient.parseDate(due_on);
     }
 
     /**
@@ -67,7 +67,7 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public Date getClosedAt() throws IOException {
-        return GitHub.parseDate(closed_at);
+        return GitHubClient.parseDate(closed_at);
     }
 
     /**
@@ -116,7 +116,7 @@ public class GHMilestone extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -195,7 +195,7 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void setDueOn(Date dueOn) throws IOException {
-        edit("due_on", GitHub.printDate(dueOn));
+        edit("due_on", GitHubClient.printDate(dueOn));
     }
 
     /**

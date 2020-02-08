@@ -90,7 +90,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public void send() throws IOException {
-        parseResponse(null, null).body();
+        parseResponse(null, null);
     }
 
     /**
@@ -255,16 +255,16 @@ class Requester extends GitHubRequest.Builder<Requester> {
 
     private void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
         if (isRateLimitResponse(responseInfo)) {
-            HttpException e = new HttpException("Rate limit violation",
+            GHIOException e = new HttpException("Rate limit violation",
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
-                    responseInfo.url().toString());
+                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
             root.rateLimitHandler.onError(e, responseInfo.connection);
         } else if (isAbuseLimitResponse(responseInfo)) {
-            HttpException e = new HttpException("Abuse limit violation",
+            GHIOException e = new HttpException("Abuse limit violation",
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
-                    responseInfo.url().toString());
+                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
             root.abuseLimitHandler.onError(e, responseInfo.connection);
         }
     }
@@ -574,24 +574,23 @@ class Requester extends GitHubRequest.Builder<Requester> {
         if (request.inBody()) {
             connection.setDoOutput(true);
 
-            if (request.body() == null) {
-                connection.setRequestProperty("Content-type", defaultString(request.contentType(), "application/json"));
-                Map<String, Object> json = new HashMap<>();
-                for (GitHubRequest.Entry e : request.args()) {
-                    json.put(e.key, e.value);
-                }
-                MAPPER.writeValue(connection.getOutputStream(), json);
-            } else {
-                connection.setRequestProperty("Content-type",
-                        defaultString(request.contentType(), "application/x-www-form-urlencoded"));
-                try {
+            try (InputStream body = request.body()) {
+                if (body != null) {
+                    connection.setRequestProperty("Content-type",
+                            defaultString(request.contentType(), "application/x-www-form-urlencoded"));
                     byte[] bytes = new byte[32768];
                     int read;
-                    while ((read = request.body().read(bytes)) != -1) {
+                    while ((read = body.read(bytes)) != -1) {
                         connection.getOutputStream().write(bytes, 0, read);
                     }
-                } finally {
-                    request.body().close();
+                } else {
+                    connection.setRequestProperty("Content-type",
+                            defaultString(request.contentType(), "application/json"));
+                    Map<String, Object> json = new HashMap<>();
+                    for (GitHubRequest.Entry e : request.args()) {
+                        json.put(e.key, e.value);
+                    }
+                    MAPPER.writeValue(connection.getOutputStream(), json);
                 }
             }
         }

@@ -198,7 +198,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             String capturedLog = getTestCapturedLog();
             assertFalse(capturedLog.contains("will try 2 more time"));
             assertFalse(capturedLog.contains("will try 1 more time"));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
 
         connector = new ResponseCodeThrowingHttpConnector<>(() -> {
@@ -219,7 +219,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             String capturedLog = getTestCapturedLog();
             assertFalse(capturedLog.contains("will try 2 more time"));
             assertFalse(capturedLog.contains("will try 1 more time"));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
     }
 
@@ -305,32 +305,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testResponseMessageConnectionExceptions() throws Exception {
-        // Because the test throws after getResponseCode, there is one connection for each retry
-        HttpConnector connector = new ResponseMessageThrowingHttpConnector<>(() -> {
-            throw new SocketException();
-        });
-        runConnectionExceptionTest(connector, 3);
-        runConnectionExceptionStatusCodeTest(connector, 3);
-
-        connector = new ResponseMessageThrowingHttpConnector<>(() -> {
-            throw new SocketTimeoutException();
-        });
-        runConnectionExceptionTest(connector, 3);
-        runConnectionExceptionStatusCodeTest(connector, 3);
-
-        connector = new ResponseMessageThrowingHttpConnector<>(() -> {
-            throw new SSLHandshakeException("TestFailure");
-        });
-        runConnectionExceptionTest(connector, 3);
-        runConnectionExceptionStatusCodeTest(connector, 3);
-    }
-
-    @Test
     public void testInputStreamConnectionExceptions() throws Exception {
         // InputStream is where most exceptions get thrown whether connection or simple FNF
         // Because the test throws after getResponseCode, there is one connection for each retry
-        // However, getStatusCode never calls that and so it does succeeds
+        // However, getStatusCode never calls that and so it does succeed
         HttpConnector connector = new InputStreamThrowingHttpConnector<>(() -> {
             throw new SocketException();
         });
@@ -426,38 +404,6 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             });
         }
 
-    }
-
-    class ResponseMessageThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {
-
-        ResponseMessageThrowingHttpConnector(final Thrower<E> thrower) {
-            super(new HttpConnector() {
-                final int[] count = { 0 };
-
-                @Override
-                public HttpURLConnection connect(URL url) throws IOException {
-                    if (url.toString().contains(GITHUB_API_TEST_ORG)) {
-                        count[0]++;
-                    }
-                    connection = Mockito.spy(new HttpURLConnectionWrapper(url) {
-                        @Override
-                        public String getResponseMessage() throws IOException {
-                            // getResponseMessage throwing even though getResponseCode doesn't.
-                            // While this is not the way this would go in the real world, it is a fine test
-                            // to show that exception handling and retries are working as expected
-                            if (getURL().toString().contains(GITHUB_API_TEST_ORG)) {
-                                if (count[0] % 3 != 0) {
-                                    thrower.throwError();
-                                }
-                            }
-                            return super.getResponseMessage();
-                        }
-                    });
-
-                    return connection;
-                }
-            });
-        }
     }
 
     class InputStreamThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {

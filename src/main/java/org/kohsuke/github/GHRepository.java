@@ -25,6 +25,8 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -845,8 +847,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHOrganization.Permission perm, GHUser... users) throws IOException {
-        addCollaborators(perm, asList(users));
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... user) throws IOException {
+        addCollaborators(asList(user), permission);
     }
 
     /**
@@ -857,7 +859,6 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Deprecated
     public void addCollaborators(GHUser... users) throws IOException {
         addCollaborators(asList(users));
     }
@@ -870,9 +871,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Deprecated
-    public void addCollaborators(List<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT");
+    public void addCollaborators(Collection<GHUser> users) throws IOException {
+        modifyCollaborators(users, "PUT", null);
     }
 
     /**
@@ -885,8 +885,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHOrganization.Permission perm, Collection<GHUser> users) throws IOException {
-        modifyCollaborators(perm, users, "PUT");
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+        modifyCollaborators(users, "PUT", permission);
     }
 
     /**
@@ -910,24 +910,20 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE");
+        modifyCollaborators(users, "DELETE", null);
     }
 
-    private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
-        for (GHUser user : users) {
-            root.createRequest().method(method).withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+    private void modifyCollaborators(@NonNull Collection<GHUser> users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.Permission permission) throws IOException {
+        Requester requester = root.createRequest().method(method);
+
+        if (permission != null) {
+            requester = requester.with("permission", permission).inBody();
         }
-    }
 
-    private void modifyCollaborators(GHOrganization.Permission perm, Collection<GHUser> users, String method)
-            throws IOException {
         for (GHUser user : users) {
-            root.createRequest()
-                    .method(method)
-                    .with("permission", perm)
-                    .inBody()
-                    .withUrlPath(getApiTailUrl("collaborators/" + user.getLogin()))
-                    .send();
+            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
 

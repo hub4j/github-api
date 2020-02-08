@@ -412,7 +412,8 @@ public class GitHub {
                     "This operation requires a credential but none is given to the GitHub constructor");
     }
 
-    URL getApiURL(String tailApiUrl) throws IOException {
+    @Nonnull
+    URL getApiURL(String tailApiUrl) throws MalformedURLException {
         if (tailApiUrl.startsWith("/")) {
             if ("github.com".equals(apiUrl)) {// backward compatibility
                 return new URL(GITHUB_URL + tailApiUrl);

@@ -1,11 +1,11 @@
 package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
-import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
@@ -54,8 +54,8 @@ public class GHFileNotFoundException extends FileNotFoundException {
         return responseHeaderFields;
     }
 
-    GHFileNotFoundException withResponseHeaderFields(HttpURLConnection urlConnection) {
-        this.responseHeaderFields = urlConnection.getHeaderFields();
+    GHFileNotFoundException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {
+        this.responseHeaderFields = headerFields;
         return this;
     }
 }

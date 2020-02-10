@@ -20,7 +20,7 @@ public class RepositoryMockTest {
     GitHub mockGitHub;
 
     @Mock
-    Iterator<GHUser[]> iterator;
+    GitHubPageIterator<GHUser[]> iterator;
 
     @Mock
     GHRepository mockRepository;
@@ -46,7 +46,7 @@ public class RepositoryMockTest {
 
         when(requester.withUrlPath("/repos/*/*/collaborators")).thenReturn(requester);
 
-        when(requester.asIterator(GHUser[].class, 0)).thenReturn(iterator, iterator);
+        when(requester.fetchIterator(GHUser[].class, 0)).thenReturn(iterator, iterator);
 
         PagedIterable<GHUser> pagedIterable = Mockito.mock(PagedIterable.class);
         when(mockRepository.listCollaborators()).thenReturn(pagedIterable);

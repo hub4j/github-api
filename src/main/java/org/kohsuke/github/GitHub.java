@@ -52,7 +52,10 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
 public class GitHub {
 
     @Nonnull
-    final GitHubClient client;
+    /* private */ final GitHubClient client;
+
+    @CheckForNull
+    private GHMyself myself;
 
     private final ConcurrentMap<String, GHUser> users;
     private final ConcurrentMap<String, GHOrganization> orgs;
@@ -106,16 +109,15 @@ public class GitHub {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler) throws IOException {
-        this.client = new GitHubClient(this,
-                apiUrl,
+        this.client = new GitHubClient(apiUrl,
                 login,
                 oauthAccessToken,
                 jwtToken,
                 password,
                 connector,
                 rateLimitHandler,
-                abuseLimitHandler);
-
+                abuseLimitHandler,
+                (myself) -> setMyself(myself));
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
     }
@@ -339,15 +341,6 @@ public class GitHub {
     }
 
     /**
-     * Gets api url.
-     *
-     * @return the api url
-     */
-    public String getApiUrl() {
-        return client.getApiUrl();
-    }
-
-    /**
      * Sets the custom connector used to make requests to GitHub.
      *
      * @param connector
@@ -357,8 +350,13 @@ public class GitHub {
         client.setConnector(connector);
     }
 
-    Requester createRequest() {
-        return client.createRequest();
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    public String getApiUrl() {
+        return client.getApiUrl();
     }
 
     /**
@@ -403,8 +401,22 @@ public class GitHub {
      *             the io exception
      */
     @WithBridgeMethods(GHUser.class)
-    public GHMyself getMyself() throws IOException {
-        return client.getMyself(this);
+    GHMyself getMyself() throws IOException {
+        client.requireCredential();
+        synchronized (this) {
+            if (this.myself == null) {
+                GHMyself u = client.createRequest().withUrlPath("/user").fetch(GHMyself.class);
+                setMyself(u);
+            }
+            return myself;
+        }
+    }
+
+    private void setMyself(GHMyself myself) {
+        synchronized (this) {
+            myself.wrapUp(this);
+            this.myself = myself;
+        }
     }
 
     /**
@@ -489,7 +501,7 @@ public class GitHub {
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
         return createRequest().with("since", since)
                 .withUrlPath("/organizations")
-                .toIterable(GHOrganization[].class, item -> item.wrapUp(this));
+                .fetchIterable(GHOrganization[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -531,7 +543,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, item -> item.wrap(this));
+        return createRequest().withUrlPath("/licenses").fetchIterable(GHLicense[].class, item -> item.wrap(this));
     }
 
     /**
@@ -542,7 +554,7 @@ public class GitHub {
      *             the io exception
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return createRequest().withUrlPath("/users").toIterable(GHUser[].class, item -> item.wrapUp(this));
+        return createRequest().withUrlPath("/users").fetchIterable(GHUser[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -574,7 +586,7 @@ public class GitHub {
      */
     public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
         return createRequest().withUrlPath("/marketplace_listing/plans")
-                .toIterable(GHMarketplacePlan[].class, item -> item.wrapUp(this));
+                .fetchIterable(GHMarketplacePlan[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -629,7 +641,7 @@ public class GitHub {
      */
     public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
         return createRequest().withUrlPath("/user/marketplace_purchases")
-                .toIterable(GHMarketplaceUserPurchase[].class, item -> item.wrapUp(this));
+                .fetchIterable(GHMarketplaceUserPurchase[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -955,7 +967,7 @@ public class GitHub {
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
         return createRequest().withUrlPath("/authorizations")
-                .toIterable(GHAuthorization[].class, item -> item.wrap(this));
+                .fetchIterable(GHAuthorization[].class, item -> item.wrap(this));
     }
 
     /**
@@ -995,20 +1007,6 @@ public class GitHub {
      */
     public GHMeta getMeta() throws IOException {
         return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
-    }
-
-    GHUser intern(GHUser user) throws IOException {
-        if (user == null)
-            return user;
-
-        // if we already have this user in our map, use it
-        GHUser u = users.get(user.getLogin());
-        if (u != null)
-            return u;
-
-        // if not, remember this new user
-        users.putIfAbsent(user.getLogin(), user);
-        return user;
     }
 
     /**
@@ -1150,7 +1148,7 @@ public class GitHub {
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
         return createRequest().with("since", since)
                 .withUrlPath("/repositories")
-                .toIterable(GHRepository[].class, item -> item.wrap(this));
+                .fetchIterable(GHRepository[].class, item -> item.wrap(this));
     }
 
     /**
@@ -1175,6 +1173,24 @@ public class GitHub {
                         .withUrlPath("/markdown/raw")
                         .fetchStream(),
                 "UTF-8");
+    }
+
+    Requester createRequest() {
+        return client.createRequest();
+    }
+
+    GHUser intern(GHUser user) throws IOException {
+        if (user == null)
+            return user;
+
+        // if we already have this user in our map, use it
+        GHUser u = users.get(user.getLogin());
+        if (u != null)
+            return u;
+
+        // if not, remember this new user
+        users.putIfAbsent(user.getLogin(), user);
+        return user;
     }
 
     private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());

@@ -95,7 +95,7 @@ public abstract class GHPerson extends GHObject {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root.createRequest()
                 .withUrlPath("/users/" + login + "/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root))
+                .fetchIterable(GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }
 
@@ -120,7 +120,7 @@ public abstract class GHPerson extends GHObject {
             public Iterator<List<GHRepository>> iterator() {
                 final Iterator<GHRepository[]> pager = root.createRequest()
                         .withUrlPath("users", login, "repos")
-                        .asIterator(GHRepository[].class, pageSize);
+                        .fetchIterator(GHRepository[].class, pageSize);
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {

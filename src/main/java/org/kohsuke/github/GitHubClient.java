@@ -1,21 +1,22 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
-import java.lang.reflect.Field;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
@@ -39,11 +41,10 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 class GitHubClient {
 
-    public static final int CONNECTION_ERROR_RETRIES = 2;
+    static final int CONNECTION_ERROR_RETRIES = 2;
     /**
      * If timeout issues let's retry after milliseconds.
      */
@@ -56,17 +57,18 @@ class GitHubClient {
     /* private */ final String encodedAuthorization;
 
     // Cache of myself object.
-    private GHMyself myself;
     private final String apiUrl;
 
-    final RateLimitHandler rateLimitHandler;
-    final AbuseLimitHandler abuseLimitHandler;
+    private final RateLimitHandler rateLimitHandler;
+    private final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector;
 
     private final Object headerRateLimitLock = new Object();
     private GHRateLimit headerRateLimit = null;
     private volatile GHRateLimit rateLimit = null;
+
+    private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
     static final ObjectMapper MAPPER = new ObjectMapper();
     static final String GITHUB_URL = "https://api.github.com";
@@ -75,15 +77,23 @@ class GitHubClient {
             "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
     };
 
-    public GitHubClient(GitHub root,
-            String apiUrl,
+    static {
+        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    }
+
+    GitHubClient(String apiUrl,
             String login,
             String oauthAccessToken,
             String jwtToken,
             String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler) throws IOException {
+            AbuseLimitHandler abuseLimitHandler,
+            Consumer<GHMyself> myselfConsumer) throws IOException {
+
         if (apiUrl.endsWith("/"))
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
         this.apiUrl = apiUrl;
@@ -111,15 +121,148 @@ class GitHubClient {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
 
-        if (login == null && encodedAuthorization != null && jwtToken == null)
-            login = getMyself(root).getLogin();
+        if (login == null && encodedAuthorization != null && jwtToken == null) {
+            GHMyself myself = createRequest().withUrlPath("/user").fetch(GHMyself.class);
+            login = myself.getLogin();
+            if (myselfConsumer != null) {
+                myselfConsumer.accept(myself);
+            }
+        }
         this.login = login;
+    }
+
+    /**
+     * Ensures that the credential is valid.
+     *
+     * @return the boolean
+     */
+    public boolean isCredentialValid() {
+        try {
+            createRequest().withUrlPath("/user").fetch(GHUser.class);
+            return true;
+        } catch (IOException e) {
+            if (LOGGER.isLoggable(FINE))
+                LOGGER.log(FINE,
+                        "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
+                        e);
+            return false;
+        }
+    }
+
+    /**
+     * Is this an always offline "connection".
+     *
+     * @return {@code true} if this is an always offline "connection".
+     */
+    public boolean isOffline() {
+        return getConnector() == HttpConnector.OFFLINE;
+    }
+
+    /**
+     * Gets connector.
+     *
+     * @return the connector
+     */
+    public HttpConnector getConnector() {
+        return connector;
+    }
+
+    /**
+     * Sets the custom connector used to make requests to GitHub.
+     *
+     * @param connector
+     *            the connector
+     */
+    public void setConnector(HttpConnector connector) {
+        this.connector = connector;
+    }
+
+    /**
+     * Is this an anonymous connection
+     *
+     * @return {@code true} if operations that require authentication will fail.
+     */
+    public boolean isAnonymous() {
+        return login == null && encodedAuthorization == null;
+    }
+
+    @Nonnull
+    <T> GitHubResponse<T> sendRequest(GitHubRequest request, ResponseBodyHandler<T> parser) throws IOException {
+        int retries = CONNECTION_ERROR_RETRIES;
+
+        do {
+            // if we fail to create a connection we do not retry and we do not wrap
+
+            GitHubResponse.ResponseInfo responseInfo = null;
+            try {
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE,
+                            "GitHub API request [" + (login == null ? "anonymous" : login) + "]: " + request.method()
+                                    + " " + request.url().toString());
+                }
+
+                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(request, this);
+                noteRateLimit(responseInfo);
+                detectOTPRequired(responseInfo);
+
+                if (isInvalidCached404Response(responseInfo)) {
+                    // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+                    // "If-Modified-Since" or "If-None-Match" values.
+                    // This makes GitHub give us current data (not incorrectly cached data)
+                    request = request.builder().withHeader("Cache-Control", "no-cache").build(this);
+                    continue;
+                }
+                if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
+                    return parseGitHubResponse(responseInfo, parser);
+                }
+            } catch (IOException e) {
+                // For transient errors, retry
+                if (retryConnectionError(e, request.url(), retries)) {
+                    continue;
+                }
+
+                throw interpretApiError(e, request, responseInfo);
+            }
+
+            handleLimitingErrors(responseInfo);
+
+        } while (--retries >= 0);
+
+        throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
+    }
+
+    @NotNull
+    private <T> GitHubResponse<T> parseGitHubResponse(GitHubResponse.ResponseInfo responseInfo,
+            ResponseBodyHandler<T> parser) throws IOException {
+        T body = null;
+        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
+            // special case handling for 304 unmodified, as the content will be ""
+        } else if (responseInfo.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
+
+            // Response code 202 means data is being generated.
+            // This happens in specific cases:
+            // statistics - See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
+            // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
+
+            if (responseInfo.url().toString().endsWith("/forks")) {
+                LOGGER.log(INFO, "The fork is being created. Please try again in 5 seconds.");
+            } else if (responseInfo.url().toString().endsWith("/statistics")) {
+                LOGGER.log(INFO, "The statistics are being generated. Please try again in 5 seconds.");
+            } else {
+                LOGGER.log(INFO,
+                        "Received 202 from " + responseInfo.url().toString() + " . Please try again in 5 seconds.");
+            }
+            // Maybe throw an exception instead?
+        } else if (parser != null) {
+            body = parser.apply(responseInfo);
+        }
+        return new GitHubResponse<>(responseInfo, body);
     }
 
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    static IOException interpretApiError(IOException e,
+    private static IOException interpretApiError(IOException e,
             @Nonnull GitHubRequest request,
             @CheckForNull GitHubResponse.ResponseInfo responseInfo) throws IOException {
         // If we're already throwing a GHIOException, pass through
@@ -159,135 +302,48 @@ class GitHubClient {
         }
         return e;
     }
-    @Nonnull
-    static HttpURLConnection setupConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
-            throws IOException {
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE,
-                    "GitHub API request [" + (client.login == null ? "anonymous" : client.login) + "]: "
-                            + request.method() + " " + request.url().toString());
+
+    @CheckForNull
+    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, Class<T> type) throws IOException {
+
+        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
+            // no content
+            return type.cast(Array.newInstance(type.getComponentType(), 0));
         }
-        HttpURLConnection connection = client.getConnector().connect(request.url());
 
-        // if the authentication is needed but no credential is given, try it anyway (so that some calls
-        // that do work with anonymous access in the reduced form should still work.)
-        if (client.encodedAuthorization != null)
-            connection.setRequestProperty("Authorization", client.encodedAuthorization);
-
-        setRequestMethod(request.method(), connection);
-        buildRequest(request, connection);
-
-        return connection;
-    }
-
-    /**
-     * Set up the request parameters or POST payload.
-     */
-    private static void buildRequest(GitHubRequest request, HttpURLConnection connection) throws IOException {
-        for (Map.Entry<String, String> e : request.headers().entrySet()) {
-            String v = e.getValue();
-            if (v != null)
-                connection.setRequestProperty(e.getKey(), v);
-        }
-        connection.setRequestProperty("Accept-Encoding", "gzip");
-
-        if (request.inBody()) {
-            connection.setDoOutput(true);
-
-            try (InputStream body = request.body()) {
-                if (body != null) {
-                    connection.setRequestProperty("Content-type",
-                            defaultString(request.contentType(), "application/x-www-form-urlencoded"));
-                    byte[] bytes = new byte[32768];
-                    int read;
-                    while ((read = body.read(bytes)) != -1) {
-                        connection.getOutputStream().write(bytes, 0, read);
-                    }
-                } else {
-                    connection.setRequestProperty("Content-type",
-                            defaultString(request.contentType(), "application/json"));
-                    Map<String, Object> json = new HashMap<>();
-                    for (GitHubRequest.Entry e : request.args()) {
-                        json.put(e.key, e.value);
-                    }
-                    MAPPER.writeValue(connection.getOutputStream(), json);
-                }
-            }
-        }
-    }
-
-    private static void setRequestMethod(String method, HttpURLConnection connection) throws IOException {
+        String data = responseInfo.getBodyAsString();
         try {
-            connection.setRequestMethod(method);
-        } catch (ProtocolException e) {
-            // JDK only allows one of the fixed set of verbs. Try to override that
-            try {
-                Field $method = HttpURLConnection.class.getDeclaredField("method");
-                $method.setAccessible(true);
-                $method.set(connection, method);
-            } catch (Exception x) {
-                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-            }
-            // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
-            try {
-                Field $delegate = connection.getClass().getDeclaredField("delegate");
-                $delegate.setAccessible(true);
-                Object delegate = $delegate.get(connection);
-                if (delegate instanceof HttpURLConnection) {
-                    HttpURLConnection nested = (HttpURLConnection) delegate;
-                    setRequestMethod(method, nested);
-                }
-            } catch (NoSuchFieldException x) {
-                // no problem
-            } catch (IllegalAccessException x) {
-                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-            }
+            return setResponseHeaders(responseInfo, MAPPER.readValue(data, type));
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
         }
-        if (!connection.getRequestMethod().equals(method))
-            throw new IllegalStateException("Failed to set the request method to " + method);
     }
 
-    @Nonnull
-    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, ResponsBodyHandler<T> parser) throws IOException {
-        int retries = CONNECTION_ERROR_RETRIES;
+    @CheckForNull
+    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, T instance) throws IOException {
 
-        do {
-            // if we fail to create a connection we do not retry and we do not wrap
+        String data = responseInfo.getBodyAsString();
+        try {
+            return setResponseHeaders(responseInfo, MAPPER.readerForUpdating(instance).<T>readValue(data));
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
+        }
+    }
 
-            GitHubResponse.ResponseInfo responseInfo = null;
-            try {
-                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(request, this);
-                noteRateLimit(responseInfo);
-                detectOTPRequired(responseInfo);
-
-                if (isInvalidCached404Response(responseInfo)) {
-                    // Setting "Cache-Control" to "no-cache" stops the cache from supplying
-                    // "If-Modified-Since" or "If-None-Match" values.
-                    // This makes GitHub give us current data (not incorrectly cached data)
-                    request = request.builder().withHeader("Cache-Control", "no-cache").build(this);
-                    continue;
-                }
-                if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
-                    T body = null;
-                    if (parser != null) {
-                        body = parser.apply(responseInfo);
-                    }
-                    return new GitHubResponse<>(responseInfo, body);
-                }
-            } catch (IOException e) {
-                // For transient errors, retry
-                if (retryConnectionError(e, request.url(), retries)) {
-                    continue;
-                }
-
-                throw interpretApiError(e, request, responseInfo);
+    private static <T> T setResponseHeaders(GitHubResponse.ResponseInfo responseInfo, T readValue) {
+        if (readValue instanceof GHObject[]) {
+            for (GHObject ghObject : (GHObject[]) readValue) {
+                ghObject.responseHeaderFields = responseInfo.headers();
             }
-
-            handleLimitingErrors(responseInfo);
-
-        } while (--retries >= 0);
-
-        throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
+        } else if (readValue instanceof GHObject) {
+            ((GHObject) readValue).responseHeaderFields = responseInfo.headers();
+        } else if (readValue instanceof JsonRateLimit) {
+            // if we're getting a GHRateLimit it needs the server date
+            ((JsonRateLimit) readValue).resources.getCore().recalculateResetDate(responseInfo.headerField("Date"));
+        }
+        return readValue;
     }
 
     private static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
@@ -306,13 +362,13 @@ class GitHubClient {
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            rateLimitHandler.onError(e, responseInfo.connection);
+            rateLimitHandler.onError(e, ((GitHubResponse.HttpURLConnectionResponseInfo) responseInfo).connection);
         } else if (isAbuseLimitResponse(responseInfo)) {
             GHIOException e = new HttpException("Abuse limit violation",
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            abuseLimitHandler.onError(e, responseInfo.connection);
+            abuseLimitHandler.onError(e, ((GitHubResponse.HttpURLConnectionResponseInfo) responseInfo).connection);
         }
     }
 
@@ -411,7 +467,7 @@ class GitHubClient {
         updateCoreRateLimit(observed);
     }
 
-    static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
+    private static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
         // 401 Unauthorized == bad creds or OTP request
         if (responseInfo.statusCode() == HTTP_UNAUTHORIZED) {
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
@@ -424,82 +480,6 @@ class GitHubClient {
 
     Requester createRequest() {
         return new Requester(this);
-    }
-
-    /**
-     * Gets the {@link GHUser} that represents yourself.
-     *
-     * @return the myself
-     * @throws IOException
-     *             the io exception
-     */
-    GHMyself getMyself(GitHub root) throws IOException {
-        requireCredential();
-        synchronized (this) {
-            if (this.myself != null)
-                return myself;
-
-            GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
-            u.root = root;
-
-            this.myself = u;
-            return u;
-        }
-    }
-
-    /**
-     * Ensures that the credential is valid.
-     *
-     * @return the boolean
-     */
-    public boolean isCredentialValid() {
-        try {
-            createRequest().withUrlPath("/user").fetch(GHUser.class);
-            return true;
-        } catch (IOException e) {
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
-                        e);
-            return false;
-        }
-    }
-
-    /**
-     * Is this an always offline "connection".
-     *
-     * @return {@code true} if this is an always offline "connection".
-     */
-    public boolean isOffline() {
-        return getConnector() == HttpConnector.OFFLINE;
-    }
-
-    /**
-     * Gets connector.
-     *
-     * @return the connector
-     */
-    public HttpConnector getConnector() {
-        return connector;
-    }
-
-    /**
-     * Sets the custom connector used to make requests to GitHub.
-     *
-     * @param connector
-     *            the connector
-     */
-    public void setConnector(HttpConnector connector) {
-        this.connector = connector;
-    }
-
-    /**
-     * Is this an anonymous connection
-     *
-     * @return {@code true} if operations that require authentication will fail.
-     */
-    public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
     }
 
     void requireCredential() {
@@ -548,7 +528,7 @@ class GitHubClient {
      * @param observed
      *            {@link GHRateLimit.Record} constructed from the response header information
      */
-    void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
+    private void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
         synchronized (headerRateLimitLock) {
             if (headerRateLimit == null || GitHubClient.shouldReplace(observed, headerRateLimit.getCore())) {
                 headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
@@ -631,7 +611,7 @@ class GitHubClient {
      *            the type of results supplied by this supplier
      */
     @FunctionalInterface
-    interface ResponsBodyHandler<T> {
+    interface ResponseBodyHandler<T> {
 
         /**
          * Gets a result.
@@ -761,14 +741,4 @@ class GitHubClient {
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(dt);
     }
-
-    static {
-        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-    }
-
-    private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
-
 }

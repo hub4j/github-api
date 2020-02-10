@@ -179,7 +179,7 @@ public class GHMyself extends GHUser {
         return root.createRequest()
                 .with("type", repoType)
                 .withUrlPath("/user/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root))
+                .fetchIterable(GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }
 
@@ -213,7 +213,7 @@ public class GHMyself extends GHUser {
         return root.createRequest()
                 .with("state", state)
                 .withUrlPath("/user/memberships/orgs")
-                .toIterable(GHMembership[].class, item -> item.wrap(root));
+                .fetchIterable(GHMembership[].class, item -> item.wrap(root));
     }
 
     /**

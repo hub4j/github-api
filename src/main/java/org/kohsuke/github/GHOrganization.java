@@ -123,7 +123,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHTeam> listTeams() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/teams", login))
-                .toIterable(GHTeam[].class, item -> item.wrapUp(this));
+                .fetchIterable(GHTeam[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -301,7 +301,7 @@ public class GHOrganization extends GHPerson {
         String filterParams = (filter == null) ? "" : ("?filter=" + filter);
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/%s%s", login, suffix, filterParams))
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+                .fetchIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -330,7 +330,7 @@ public class GHOrganization extends GHPerson {
                 .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
-                .toIterable(GHProject[].class, item -> item.wrap(root));
+                .fetchIterable(GHProject[].class, item -> item.wrap(root));
     }
 
     /**
@@ -517,7 +517,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/events", login))
-                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root));
+                .fetchIterable(GHEventInfo[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -532,7 +532,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root.createRequest()
                 .withUrlPath("/orgs/" + login + "/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root))
+                .fetchIterable(GHRepository[].class, item -> item.wrap(root))
                 .withPageSize(pageSize);
     }
 

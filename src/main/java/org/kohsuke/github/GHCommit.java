@@ -444,7 +444,7 @@ public class GHCommit {
         return owner.root.createRequest()
                 .withUrlPath(
                         String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
-                .toIterable(GHCommitComment[].class, item -> item.wrap(owner));
+                .fetchIterable(GHCommitComment[].class, item -> item.wrap(owner));
     }
 
     /**

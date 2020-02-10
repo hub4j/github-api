@@ -140,7 +140,7 @@ public class GHProjectColumn extends GHObject {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/columns/%d/cards", id))
-                .toIterable(GHProjectCard[].class, item -> item.wrap(column));
+                .fetchIterable(GHProjectCard[].class, item -> item.wrap(column));
     }
 
     /**

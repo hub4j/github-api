@@ -112,7 +112,7 @@ public class GHUser extends GHPerson {
     private PagedIterable<GHUser> listUser(final String suffix) {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl(suffix))
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+                .fetchIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -138,7 +138,7 @@ public class GHUser extends GHPerson {
     private PagedIterable<GHRepository> listRepositories(final String suffix) {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl(suffix))
-                .toIterable(GHRepository[].class, item -> item.wrap(root));
+                .fetchIterable(GHRepository[].class, item -> item.wrap(root));
     }
 
     /**
@@ -206,7 +206,7 @@ public class GHUser extends GHPerson {
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/users/%s/events", login))
-                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root));
+                .fetchIterable(GHEventInfo[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -219,7 +219,7 @@ public class GHUser extends GHPerson {
     public PagedIterable<GHGist> listGists() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
-                .toIterable(GHGist[].class, item -> item.wrapUp(this));
+                .fetchIterable(GHGist[].class, item -> item.wrapUp(this));
     }
 
     @Override

@@ -26,7 +26,6 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -36,7 +35,6 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static java.util.logging.Level.FINE;
 import static org.kohsuke.github.Previews.INERTIA;
 import static org.kohsuke.github.Previews.MACHINE_MAN;
 
@@ -346,7 +344,7 @@ public class GitHub {
      * @return the api url
      */
     public String getApiUrl() {
-        return client.apiUrl;
+        return client.getApiUrl();
     }
 
     /**
@@ -356,7 +354,7 @@ public class GitHub {
      *            the connector
      */
     public void setConnector(HttpConnector connector) {
-        this.client.connector = connector;
+        client.setConnector(connector);
     }
 
     Requester createRequest() {
@@ -983,17 +981,7 @@ public class GitHub {
      * @return the boolean
      */
     public boolean isCredentialValid() {
-        try {
-            createRequest().withUrlPath("/user").fetch(GHUser.class);
-            return true;
-        } catch (IOException e) {
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Exception validating credentials on " + client.apiUrl + " with login '" + client.login + "' "
-                                + e,
-                        e);
-            return false;
-        }
+        return client.isCredentialValid();
     }
 
     /**
@@ -1068,18 +1056,6 @@ public class GitHub {
                 .wrap(this);
     }
 
-    private static class GHApiInfo {
-        private String rate_limit_url;
-
-        void check(String apiUrl) throws IOException {
-            if (rate_limit_url == null)
-                throw new IOException(apiUrl + " doesn't look like GitHub API URL");
-
-            // make sure that the URL is legitimate
-            new URL(rate_limit_url);
-        }
-    }
-
     /**
      * Tests the connection.
      *
@@ -1094,15 +1070,7 @@ public class GitHub {
      *             the io exception
      */
     public void checkApiUrlValidity() throws IOException {
-        try {
-            createRequest().withUrlPath("/").fetch(GHApiInfo.class).check(client.apiUrl);
-        } catch (IOException e) {
-            if (client.isPrivateModeEnabled()) {
-                throw (IOException) new IOException(
-                        "GitHub Enterprise server (" + client.apiUrl + ") with private mode enabled").initCause(e);
-            }
-            throw e;
-        }
+        client.checkApiUrlValidity();
     }
 
     /**

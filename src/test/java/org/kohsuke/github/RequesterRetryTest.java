@@ -34,7 +34,8 @@ import static org.hamcrest.Matchers.*;
  */
 public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
-    private static Logger log = Logger.getLogger(Requester.class.getName()); // matches the logger in the affected class
+    private static Logger log = Logger.getLogger(GitHubClient.class.getName()); // matches the logger in the affected
+                                                                                // class
     private static OutputStream logCapturingStream;
     private static StreamHandler customLogHandler;
     HttpURLConnection connection;

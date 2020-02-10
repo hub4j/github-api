@@ -26,7 +26,14 @@ class GitHubResponse<T> {
     @CheckForNull
     private final T body;
 
-    GitHubResponse(ResponseInfo responseInfo, T body) {
+    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
+        this.statusCode = response.statusCode();
+        this.request = response.request();
+        this.headers = response.headers();
+        this.body = body;
+    }
+
+    GitHubResponse(ResponseInfo responseInfo, @CheckForNull T body) {
         this.statusCode = responseInfo.statusCode();
         this.request = responseInfo.request();
         this.headers = responseInfo.headers();
@@ -52,6 +59,16 @@ class GitHubResponse<T> {
         return headers;
     }
 
+    @CheckForNull
+    public String headerField(String name) {
+        String result = null;
+        if (headers.containsKey(name)) {
+            result = headers.get(name).get(0);
+        }
+        return result;
+    }
+
+    @CheckForNull
     public T body() {
         return body;
     }
@@ -71,7 +88,7 @@ class GitHubResponse<T> {
                 throws IOException {
             HttpURLConnection connection;
             try {
-                connection = Requester.setupConnection(client, request);
+                connection = GitHubClient.setupConnection(client, request);
             } catch (IOException e) {
                 // An error in here should be wrapped to bypass http exception wrapping.
                 throw new GHIOException(e.getMessage(), e);
@@ -95,6 +112,7 @@ class GitHubResponse<T> {
             this.connection = connection;
         }
 
+        @CheckForNull
         public String headerField(String name) {
             String result = null;
             if (headers.containsKey(name)) {

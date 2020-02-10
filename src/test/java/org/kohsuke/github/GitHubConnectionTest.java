@@ -96,6 +96,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();
+        // change this to get a request
         assertEquals("token bogus", github.client.encodedAuthorization);
         assertEquals("", github.client.login);
     }

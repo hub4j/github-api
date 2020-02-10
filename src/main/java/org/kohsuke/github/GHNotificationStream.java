@@ -180,7 +180,10 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
                         req.setHeader("If-Modified-Since", lastModified);
 
-                        threads = req.withUrlPath(apiUrl).fetchArray(GHThread[].class);
+                        GitHubResponse<GHThread[]> response = req.withUrlPath(apiUrl)
+                                .fetchResponseArray(GHThread[].class);
+                        threads = response.body();
+
                         if (threads == null) {
                             threads = EMPTY_ARRAY; // if unmodified, we get empty array
                         } else {
@@ -189,18 +192,16 @@ public class GHNotificationStream implements Iterable<GHThread> {
                         }
                         idx = threads.length - 1;
 
-                        nextCheckTime = calcNextCheckTime();
-                        lastModified = req.getResponseHeader("Last-Modified");
+                        nextCheckTime = calcNextCheckTime(response);
+                        lastModified = response.headerField("Last-Modified");
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            private long calcNextCheckTime() {
-                String v = req.getResponseHeader("X-Poll-Interval");
+            private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
+                String v = response.headerField("X-Poll-Interval");
                 if (v == null)
                     v = "60";
                 long seconds = Integer.parseInt(v);

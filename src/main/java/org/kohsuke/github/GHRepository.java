@@ -81,6 +81,8 @@ public class GHRepository extends GHObject {
     private boolean allow_merge_commit;
     private boolean allow_rebase_merge;
 
+    private boolean delete_branch_on_merge;
+
     @JsonProperty("private")
     private boolean _private;
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
@@ -606,6 +608,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Automatically deleting head branches when pull requests are merged
+     *
+     * @return the boolean
+     */
+    public boolean isDeleteBranchOnMerge() {
+        return delete_branch_on_merge;
+    }
+
+    /**
      * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
      * and so on.
      *
@@ -1046,6 +1057,18 @@ public class GHRepository extends GHObject {
      */
     public void allowRebaseMerge(boolean value) throws IOException {
         edit("allow_rebase_merge", Boolean.toString(value));
+    }
+
+    /**
+     * After pull requests are merged, you can have head branches deleted automatically.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteBranchOnMerge(boolean value) throws IOException {
+        edit("delete_branch_on_merge", Boolean.toString(value));
     }
 
     /**

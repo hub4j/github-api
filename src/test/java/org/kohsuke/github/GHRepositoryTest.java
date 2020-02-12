@@ -295,6 +295,29 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getDeleteBranchOnMerge() throws IOException {
+        GHRepository r = getTempRepository();
+        assertNotNull(r.isDeleteBranchOnMerge());
+    }
+
+    @Test
+    public void setAutomaticallyDeleteHeadBranchesOption() throws IOException {
+        GHRepository r = getTempRepository();
+
+        // enable auto delete
+        r.deleteBranchOnMerge(true);
+
+        r = gitHub.getRepository(r.getFullName());
+        assertTrue(r.isDeleteBranchOnMerge());
+
+        // flip the last value
+        r.deleteBranchOnMerge(false);
+
+        r = gitHub.getRepository(r.getFullName());
+        assertFalse(r.isDeleteBranchOnMerge());
+    }
+
+    @Test
     public void testSetTopics() throws Exception {
         GHRepository repo = getRepository(gitHub);
 

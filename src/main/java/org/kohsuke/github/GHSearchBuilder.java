@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,11 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     @Override
     public PagedSearchIterable<T> list() {
         return new PagedSearchIterable<T>(root) {
+            @NotNull
             public PagedIterator<T> _iterator(int pageSize) {
                 req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.withUrlPath(getApiUrl()).fetchIterator(receiverType, pageSize))) {
+                return new PagedIterator<T>(adapt(GitHubPageIterator
+                        .create(req.client, receiverType, req.withUrlPath(getApiUrl()).withPageSize(pageSize)))) {
                     protected void wrapUp(T[] page) {
                         // SearchResult.getItems() should do it
                     }

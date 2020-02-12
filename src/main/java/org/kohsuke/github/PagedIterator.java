@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 /**
  * Iterator over a paginated data source.
@@ -38,29 +41,22 @@ public abstract class PagedIterator<T> implements Iterator<T> {
 
     public boolean hasNext() {
         fetch();
-        return current != null;
+        return current.length > pos;
     }
 
     public T next() {
-        fetch();
-        if (current == null)
+        if (!hasNext())
             throw new NoSuchElementException();
         return current[pos++];
     }
 
     private void fetch() {
-        while (current == null || current.length <= pos) {
-            if (!base.hasNext()) {// no more to retrieve
-                current = null;
-                pos = 0;
-                return;
-            }
-
+        if ((current == null || current.length <= pos) && base.hasNext()) {
+            // On first call, always get next page (may be empty array)
             current = base.next();
             wrapUp(current);
             pos = 0;
         }
-        // invariant at the end: there's some data to retrieve
     }
 
     public void remove() {
@@ -76,8 +72,38 @@ public abstract class PagedIterator<T> implements Iterator<T> {
         fetch();
         List<T> r = Arrays.asList(current);
         r = r.subList(pos, r.size());
-        current = null;
-        pos = 0;
+        pos = current.length;
         return r;
     }
+
+    /**
+     * Gets the next page worth of data.
+     *
+     * @return the list
+     */
+    @Nonnull
+    public T[] nextPageArray() {
+        fetch();
+        // Current should never be null after fetch
+        Objects.requireNonNull(current);
+        T[] r = current;
+        if (pos != 0) {
+            r = Arrays.copyOfRange(r, pos, r.length);
+        }
+        pos = current.length;
+        return r;
+    }
+
+    /**
+     * Gets the next page worth of data.
+     *
+     * @return the list
+     */
+    GitHubResponse<T[]> lastResponse() {
+        if (!(base instanceof GitHubPageIterator)) {
+            throw new IllegalStateException("Cannot get lastResponse for " + base.getClass().toString());
+        }
+        return ((GitHubPageIterator<T[]>) base).lastResponse();
+    }
+
 }

@@ -73,7 +73,7 @@ class GitHubPageResponseIterator<T> implements Iterator<GitHubResponse<T>> {
                     // found the next page. This should look something like
                     // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
                     int idx = token.indexOf('>');
-                    result = next.request().builder().build(client, new URL(token.substring(1, idx)));
+                    result = next.request().toBuilder().withUrlPath(token.substring(1, idx)).build();
                     break;
                 }
             }

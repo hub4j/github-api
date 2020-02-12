@@ -73,8 +73,9 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         Mockito.doReturn("GET").when(mockHttpURLConnection).getRequestMethod();
 
         // this covers calls on "uc" in Requester.setupConnection and Requester.buildRequest
-        URL trafficURL = gitHub.client.getApiURL("/repos/" + GITHUB_API_TEST_ORG + "/" + repositoryName + "/traffic/"
-                + ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones"));
+        String tailApiUrl = "/repos/" + GITHUB_API_TEST_ORG + "/" + repositoryName + "/traffic/"
+                + ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones");
+        URL trafficURL = GitHubRequest.getApiURL(gitHub.getClient().getApiUrl(), tailApiUrl);
         Mockito.doReturn(mockHttpURLConnection).when(connectorSpy).connect(Mockito.eq(trafficURL));
 
         // make Requester.parse work

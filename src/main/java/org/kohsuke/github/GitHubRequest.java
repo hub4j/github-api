@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -30,6 +31,7 @@ class GitHubRequest {
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
     private final Map<String, String> headers;
+    private final String apiUrl;
     private final String urlPath;
     private final String method;
     private final InputStream body;
@@ -39,23 +41,37 @@ class GitHubRequest {
 
     private GitHubRequest(@Nonnull List<Entry> args,
             @Nonnull Map<String, String> headers,
+            @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
             @CheckForNull InputStream body,
-            boolean forceBody,
-            @Nonnull GitHubClient client,
-            @CheckForNull URL url) throws MalformedURLException {
+            boolean forceBody) throws MalformedURLException {
         this.args = args;
         this.headers = headers;
+        this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
         this.body = body;
         this.forceBody = forceBody;
-        if (url == null) {
-            String tailApiUrl = buildTailApiUrl(urlPath);
-            url = client.getApiURL(tailApiUrl);
+        String tailApiUrl = buildTailApiUrl();
+        url = getApiURL(apiUrl, tailApiUrl);
+    }
+
+    @Nonnull
+    static URL getApiURL(String apiUrl, String tailApiUrl) throws MalformedURLException {
+        if (tailApiUrl.startsWith("/")) {
+            if ("github.com".equals(apiUrl)) {// backward compatibility
+                return new URL(GitHubClient.GITHUB_URL + tailApiUrl);
+            } else {
+                return new URL(apiUrl + tailApiUrl);
+            }
+        } else {
+            return new URL(tailApiUrl);
         }
-        this.url = url;
+    }
+
+    public static Builder<?> newBuilder() {
+        return new Builder<>();
     }
 
     /**
@@ -88,6 +104,11 @@ class GitHubRequest {
     }
 
     @Nonnull
+    public String apiUrl() {
+        return apiUrl;
+    }
+
+    @Nonnull
     public String urlPath() {
         return urlPath;
     }
@@ -111,14 +132,15 @@ class GitHubRequest {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
-    public Builder builder() {
-        return new Builder(args, headers, urlPath, method, body, forceBody);
+    public Builder<?> toBuilder() {
+        return new Builder<>(args, headers, apiUrl, urlPath, method, body, forceBody);
     }
-    private String buildTailApiUrl(String tailApiUrl) {
-        if (!inBody() && !args.isEmpty()) {
+    private String buildTailApiUrl() {
+        String tailApiUrl = urlPath;
+        if (!inBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
             try {
-                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
                 StringBuilder argString = new StringBuilder();
+                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
                 argString.append(questionMarkFound ? '&' : '?');
 
                 for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
@@ -132,7 +154,7 @@ class GitHubRequest {
                 }
                 tailApiUrl += argString;
             } catch (UnsupportedEncodingException e) {
-                throw new AssertionError(e); // UTF-8 is mandatory
+                throw new GHException("UTF-8 encoding required", e);
             }
         }
         return tailApiUrl;
@@ -142,6 +164,10 @@ class GitHubRequest {
 
         private final List<Entry> args;
         private final Map<String, String> headers;
+
+        @Nonnull
+        private String apiUrl;
+
         @Nonnull
         private String urlPath;
         /**
@@ -153,29 +179,39 @@ class GitHubRequest {
         private boolean forceBody;
 
         protected Builder() {
-            this(new ArrayList<>(), new LinkedHashMap<>(), "/", "GET", null, false);
+            this(new ArrayList<>(), new LinkedHashMap<>(), GitHubClient.GITHUB_URL, "/", "GET", null, false);
         }
 
         private Builder(@Nonnull List<Entry> args,
                 @Nonnull Map<String, String> headers,
+                @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
                 @CheckForNull InputStream body,
                 boolean forceBody) {
             this.args = args;
             this.headers = headers;
+            this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
             this.body = body;
             this.forceBody = forceBody;
         }
 
-        GitHubRequest build(GitHubClient root) throws MalformedURLException {
-            return build(root, null);
+        GitHubRequest build() throws MalformedURLException {
+            return new GitHubRequest(args, headers, apiUrl, urlPath, method, body, forceBody);
         }
 
-        GitHubRequest build(GitHubClient root, URL url) throws MalformedURLException {
-            return new GitHubRequest(args, headers, urlPath, method, body, forceBody, root, url);
+        /**
+         * With header requester.
+         *
+         * @param url
+         *            the url
+         * @return the requester
+         */
+        public T withApiUrl(String url) {
+            this.apiUrl = url;
+            return (T) this;
         }
 
         /**
@@ -418,12 +454,14 @@ class GitHubRequest {
          * @return the requester
          */
         public T withUrlPath(String... urlPathItems) {
-            if (!this.urlPath.startsWith("/")) {
-                throw new GHException("Cannot append to url path after setting a raw path");
-            }
-
+            // full url may be set and reset as needed
             if (urlPathItems.length == 1 && !urlPathItems[0].startsWith("/")) {
                 return setRawUrlPath(urlPathItems[0]);
+            }
+
+            // Once full url is set, do not allow path setting
+            if (!this.urlPath.startsWith("/")) {
+                throw new GHException("Cannot append to url path after setting a full url");
             }
 
             String tailUrlPath = String.join("/", urlPathItems);
@@ -463,6 +501,25 @@ class GitHubRequest {
             return (T) this;
         }
 
+        /**
+         * Set page size for
+         * 
+         * @param pageSize
+         */
+        public T withPageSize(int pageSize) {
+            if (pageSize > 0) {
+                this.with("per_page", pageSize);
+            }
+            return (T) this;
+        }
+
+        public <R> PagedIterable<R> buildIterable(GitHubClient client, Class<R[]> type, Consumer<R> consumer) {
+            try {
+                return new GitHubPagedIterableImpl<>(client, build(), type, consumer);
+            } catch (MalformedURLException e) {
+                throw new GHException(e.getMessage(), e);
+            }
+        }
     }
 
     protected static class Entry {

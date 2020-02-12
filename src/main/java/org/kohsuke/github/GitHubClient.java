@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -122,13 +121,20 @@ class GitHubClient {
         this.abuseLimitHandler = abuseLimitHandler;
 
         if (login == null && encodedAuthorization != null && jwtToken == null) {
-            GHMyself myself = createRequest().withUrlPath("/user").fetch(GHMyself.class);
+            GHMyself myself = fetch(GHMyself.class, "/user");
             login = myself.getLogin();
             if (myselfConsumer != null) {
                 myselfConsumer.accept(myself);
             }
         }
         this.login = login;
+    }
+
+    private <T> T fetch(Class<T> type, String urlPath) throws IOException {
+        return this
+                .sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build(),
+                        (responseInfo) -> GitHubClient.parseBody(responseInfo, type))
+                .body();
     }
 
     /**
@@ -138,7 +144,7 @@ class GitHubClient {
      */
     public boolean isCredentialValid() {
         try {
-            createRequest().withUrlPath("/user").fetch(GHUser.class);
+            fetch(GHUser.class, "/user");
             return true;
         } catch (IOException e) {
             if (LOGGER.isLoggable(FINE))
@@ -186,8 +192,98 @@ class GitHubClient {
         return login == null && encodedAuthorization == null;
     }
 
+    /**
+     * Gets the current rate limit.
+     *
+     * @return the rate limit
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRateLimit getRateLimit() throws IOException {
+        GHRateLimit rateLimit;
+        try {
+            rateLimit = fetch(JsonRateLimit.class, "/rate_limit").resources;
+        } catch (FileNotFoundException e) {
+            // GitHub Enterprise doesn't have the rate limit
+            // return a default rate limit that
+            rateLimit = GHRateLimit.Unknown();
+        }
+
+        return this.rateLimit = rateLimit;
+    }
+
+    /**
+     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit (for example
+     * GitHub Enterprise) or if no requests have been made.
+     *
+     * @return the most recently observed rate limit data or {@code null}.
+     */
+    @CheckForNull
+    public GHRateLimit lastRateLimit() {
+        synchronized (headerRateLimitLock) {
+            return headerRateLimit;
+        }
+    }
+
+    /**
+     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     *
+     * @return the current rate limit data.
+     * @throws IOException
+     *             if we couldn't get the current rate limit data.
+     */
     @Nonnull
-    <T> GitHubResponse<T> sendRequest(GitHubRequest request, ResponseBodyHandler<T> parser) throws IOException {
+    public GHRateLimit rateLimit() throws IOException {
+        synchronized (headerRateLimitLock) {
+            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
+                return headerRateLimit;
+            }
+        }
+        GHRateLimit rateLimit = this.rateLimit;
+        if (rateLimit == null || rateLimit.isExpired()) {
+            rateLimit = getRateLimit();
+        }
+        return rateLimit;
+    }
+
+    /**
+     * Tests the connection.
+     *
+     * <p>
+     * Verify that the API URL and credentials are valid to access this GitHub.
+     *
+     * <p>
+     * This method returns normally if the endpoint is reachable and verified to be GitHub API URL. Otherwise this
+     * method throws {@link IOException} to indicate the problem.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void checkApiUrlValidity() throws IOException {
+        try {
+            fetch(GHApiInfo.class, "/").check(getApiUrl());
+        } catch (IOException e) {
+            if (isPrivateModeEnabled()) {
+                throw (IOException) new IOException(
+                        "GitHub Enterprise server (" + getApiUrl() + ") with private mode enabled").initCause(e);
+            }
+            throw e;
+        }
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    @Nonnull
+    public <T> GitHubResponse<T> sendRequest(GitHubRequest.Builder<?> builder, GitHubResponse.BodyHandler<T> handler)
+            throws IOException {
+        return sendRequest(builder.build(), handler);
+    }
+
+    @Nonnull
+    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, GitHubResponse.BodyHandler<T> handler)
+            throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
 
         do {
@@ -201,7 +297,7 @@ class GitHubClient {
                                     + " " + request.url().toString());
                 }
 
-                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(request, this);
+                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(this, request);
                 noteRateLimit(responseInfo);
                 detectOTPRequired(responseInfo);
 
@@ -209,11 +305,11 @@ class GitHubClient {
                     // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                     // "If-Modified-Since" or "If-None-Match" values.
                     // This makes GitHub give us current data (not incorrectly cached data)
-                    request = request.builder().withHeader("Cache-Control", "no-cache").build(this);
+                    request = request.toBuilder().withHeader("Cache-Control", "no-cache").build();
                     continue;
                 }
                 if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
-                    return parseGitHubResponse(responseInfo, parser);
+                    return createResponse(responseInfo, handler);
                 }
             } catch (IOException e) {
                 // For transient errors, retry
@@ -231,9 +327,38 @@ class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
-    @NotNull
-    private <T> GitHubResponse<T> parseGitHubResponse(GitHubResponse.ResponseInfo responseInfo,
-            ResponseBodyHandler<T> parser) throws IOException {
+    @CheckForNull
+    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, Class<T> type) throws IOException {
+
+        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
+            // no content
+            return type.cast(Array.newInstance(type.getComponentType(), 0));
+        }
+
+        String data = responseInfo.getBodyAsString();
+        try {
+            return setResponseHeaders(responseInfo, MAPPER.readValue(data, type));
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
+        }
+    }
+
+    @CheckForNull
+    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, T instance) throws IOException {
+
+        String data = responseInfo.getBodyAsString();
+        try {
+            return MAPPER.readerForUpdating(instance).<T>readValue(data);
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
+        }
+    }
+
+    @Nonnull
+    private <T> GitHubResponse<T> createResponse(GitHubResponse.ResponseInfo responseInfo,
+            GitHubResponse.BodyHandler<T> handler) throws IOException {
         T body = null;
         if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
@@ -253,8 +378,9 @@ class GitHubClient {
                         "Received 202 from " + responseInfo.url().toString() + " . Please try again in 5 seconds.");
             }
             // Maybe throw an exception instead?
-        } else if (parser != null) {
-            body = parser.apply(responseInfo);
+        } else if (handler != null) {
+            body = handler.apply(responseInfo);
+            setResponseHeaders(responseInfo, body);
         }
         return new GitHubResponse<>(responseInfo, body);
     }
@@ -288,7 +414,7 @@ class GitHubClient {
                 String error = IOUtils.toString(es, StandardCharsets.UTF_8);
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
-                    e = new GHFileNotFoundException(error, e).withResponseHeaderFields(headers);
+                    e = new GHFileNotFoundException(e.getMessage() + " " + error, e).withResponseHeaderFields(headers);
                 } else if (statusCode >= 0) {
                     e = new HttpException(error, statusCode, message, request.url().toString(), e);
                 } else {
@@ -301,35 +427,6 @@ class GitHubClient {
             e = new HttpException(statusCode, message, request.url().toString(), e);
         }
         return e;
-    }
-
-    @CheckForNull
-    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, Class<T> type) throws IOException {
-
-        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
-            // no content
-            return type.cast(Array.newInstance(type.getComponentType(), 0));
-        }
-
-        String data = responseInfo.getBodyAsString();
-        try {
-            return setResponseHeaders(responseInfo, MAPPER.readValue(data, type));
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
-        }
-    }
-
-    @CheckForNull
-    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, T instance) throws IOException {
-
-        String data = responseInfo.getBodyAsString();
-        try {
-            return setResponseHeaders(responseInfo, MAPPER.readerForUpdating(instance).<T>readValue(data));
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
-        }
     }
 
     private static <T> T setResponseHeaders(GitHubResponse.ResponseInfo responseInfo, T readValue) {
@@ -478,47 +575,10 @@ class GitHubClient {
         }
     }
 
-    Requester createRequest() {
-        return new Requester(this);
-    }
-
     void requireCredential() {
         if (isAnonymous())
             throw new IllegalStateException(
                     "This operation requires a credential but none is given to the GitHub constructor");
-    }
-
-    @Nonnull
-    URL getApiURL(String tailApiUrl) throws MalformedURLException {
-        if (tailApiUrl.startsWith("/")) {
-            if ("github.com".equals(apiUrl)) {// backward compatibility
-                return new URL(GitHubClient.GITHUB_URL + tailApiUrl);
-            } else {
-                return new URL(apiUrl + tailApiUrl);
-            }
-        } else {
-            return new URL(tailApiUrl);
-        }
-    }
-
-    /**
-     * Gets the current rate limit.
-     *
-     * @return the rate limit
-     * @throws IOException
-     *             the io exception
-     */
-    public GHRateLimit getRateLimit() throws IOException {
-        GHRateLimit rateLimit;
-        try {
-            rateLimit = createRequest().withUrlPath("/rate_limit").fetch(JsonRateLimit.class).resources;
-        } catch (FileNotFoundException e) {
-            // GitHub Enterprise doesn't have the rate limit
-            // return a default rate limit that
-            rateLimit = GHRateLimit.Unknown();
-        }
-
-        return this.rateLimit = rateLimit;
     }
 
     /**
@@ -535,91 +595,6 @@ class GitHubClient {
                 LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }
         }
-    }
-
-    /**
-     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit (for example
-     * GitHub Enterprise) or if no requests have been made.
-     *
-     * @return the most recently observed rate limit data or {@code null}.
-     */
-    @CheckForNull
-    public GHRateLimit lastRateLimit() {
-        synchronized (headerRateLimitLock) {
-            return headerRateLimit;
-        }
-    }
-
-    /**
-     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
-     *
-     * @return the current rate limit data.
-     * @throws IOException
-     *             if we couldn't get the current rate limit data.
-     */
-    @Nonnull
-    public GHRateLimit rateLimit() throws IOException {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
-                return headerRateLimit;
-            }
-        }
-        GHRateLimit rateLimit = this.rateLimit;
-        if (rateLimit == null || rateLimit.isExpired()) {
-            rateLimit = getRateLimit();
-        }
-        return rateLimit;
-    }
-
-    /**
-     * Tests the connection.
-     *
-     * <p>
-     * Verify that the API URL and credentials are valid to access this GitHub.
-     *
-     * <p>
-     * This method returns normally if the endpoint is reachable and verified to be GitHub API URL. Otherwise this
-     * method throws {@link IOException} to indicate the problem.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void checkApiUrlValidity() throws IOException {
-        try {
-            createRequest().withUrlPath("/").fetch(GHApiInfo.class).check(apiUrl);
-        } catch (IOException e) {
-            if (isPrivateModeEnabled()) {
-                throw (IOException) new IOException(
-                        "GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
-            }
-            throw e;
-        }
-    }
-
-    public String getApiUrl() {
-        return apiUrl;
-    }
-
-    /**
-     * Represents a supplier of results that can throw.
-     *
-     * <p>
-     * This is a <a href="package-summary.html">functional interface</a> whose functional method is
-     * {@link #apply(GitHubResponse.ResponseInfo)}.
-     *
-     * @param <T>
-     *            the type of results supplied by this supplier
-     */
-    @FunctionalInterface
-    interface ResponseBodyHandler<T> {
-
-        /**
-         * Gets a result.
-         *
-         * @return a result
-         * @throws IOException
-         */
-        T apply(GitHubResponse.ResponseInfo input) throws IOException;
     }
 
     private static class GHApiInfo {
@@ -664,18 +639,8 @@ class GitHubClient {
      */
     private boolean isPrivateModeEnabled() {
         try {
-            HttpURLConnection uc = connector.connect(getApiURL("/"));
-            try {
-                return uc.getResponseCode() == HTTP_UNAUTHORIZED && uc.getHeaderField("X-GitHub-Media-Type") != null;
-            } finally {
-                // ensure that the connection opened by getResponseCode gets closed
-                try {
-                    IOUtils.closeQuietly(uc.getInputStream());
-                } catch (IOException ignore) {
-                    // ignore
-                }
-                IOUtils.closeQuietly(uc.getErrorStream());
-            }
+            GitHubResponse<?> response = sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()), null);
+            return response.statusCode() == HTTP_UNAUTHORIZED && response.headerField("X-GitHub-Media-Type") != null;
         } catch (IOException e) {
             return false;
         }

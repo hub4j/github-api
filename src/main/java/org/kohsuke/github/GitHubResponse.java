@@ -77,9 +77,30 @@ class GitHubResponse<T> {
         return result;
     }
 
-    @CheckForNull
     public T body() {
         return body;
+    }
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * <p>
+     * This is a <a href="package-summary.html">functional interface</a> whose functional method is
+     * {@link #apply(ResponseInfo)}.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     */
+    @FunctionalInterface
+    interface BodyHandler<T> {
+
+        /**
+         * Gets a result.
+         *
+         * @return a result
+         * @throws IOException
+         */
+        T apply(ResponseInfo input) throws IOException;
     }
 
     static abstract class ResponseInfo {
@@ -91,7 +112,7 @@ class GitHubResponse<T> {
         private final Map<String, List<String>> headers;
 
         @Nonnull
-        static ResponseInfo fromHttpURLConnection(@Nonnull GitHubRequest request, @Nonnull GitHubClient client)
+        static ResponseInfo fromHttpURLConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
                 throws IOException {
             HttpURLConnection connection;
             try {

@@ -52,7 +52,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
 public class GitHub {
 
     @Nonnull
-    /* private */ final GitHubClient client;
+    private final GitHubClient client;
 
     @CheckForNull
     private GHMyself myself;
@@ -405,7 +405,7 @@ public class GitHub {
         client.requireCredential();
         synchronized (this) {
             if (this.myself == null) {
-                GHMyself u = client.createRequest().withUrlPath("/user").fetch(GHMyself.class);
+                GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
                 setMyself(u);
             }
             return myself;
@@ -1175,8 +1175,14 @@ public class GitHub {
                 "UTF-8");
     }
 
+    @Nonnull
+    GitHubClient getClient() {
+        return client;
+    }
+
+    @Nonnull
     Requester createRequest() {
-        return client.createRequest();
+        return new Requester(client);
     }
 
     GHUser intern(GHUser user) throws IOException {

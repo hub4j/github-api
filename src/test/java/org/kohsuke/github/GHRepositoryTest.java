@@ -440,4 +440,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         int stargazersCount = repo.getStargazersCount();
         assertEquals(10, stargazersCount);
     }
+
+    @Test
+    public void listCollaborators() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHUser> collaborators = repo.listCollaborators().asList();
+        assertThat(collaborators.size(), greaterThan(10));
+    }
 }

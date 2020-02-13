@@ -497,73 +497,101 @@ class Requester {
     }
 
     private <T> T _fetch(String tailApiUrl, URL url, SupplierThrows<T, IOException> supplier) throws IOException {
-        while (true) {// loop while API rate limit is hit
+        int responseCode = -1;
+        String responseMessage = null;
+
+        int retries = CONNECTION_ERROR_RETRIES;
+
+        do {
+            // if we fail to create a connection we do not retry and we do not wrap
+            uc = null;
             uc = setupConnection(url);
 
             try {
-                return _fetchOrRetry(supplier, CONNECTION_ERROR_RETRIES);
-            } catch (IOException e) {
-                handleApiError(e);
-            } finally {
+                // This is where the request is sent and response is processing starts
+                responseCode = uc.getResponseCode();
+                responseMessage = uc.getResponseMessage();
                 noteRateLimit(tailApiUrl);
+                detectOTPRequired(responseCode);
+
+                // for this workaround, we can retry now
+                if (isInvalidCached404Response(responseCode)) {
+                    continue;
+                }
+                if (!(isRateLimitResponse(responseCode) || isAbuseLimitResponse(responseCode))) {
+                    return supplier.get();
+                }
+            } catch (IOException e) {
+                // For transient errors, retry
+                if (retryConnectionError(e, url, retries)) {
+                    continue;
+                }
+
+                throw interpretApiError(e, responseCode, responseMessage, url, retries);
+            }
+
+            handleLimitingErrors(responseCode);
+
+        } while (--retries >= 0);
+
+        throw new GHIOException("Ran out of retries for URL: " + url.toString());
+    }
+
+    private void detectOTPRequired(int responseCode) throws GHIOException {
+        // 401 Unauthorized == bad creds or OTP request
+        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
+            // will be returned indicating the user needs to respond with an otp
+            if (uc.getHeaderField("X-GitHub-OTP") != null) {
+                throw new GHOTPRequiredException().withResponseHeaderFields(uc);
             }
         }
     }
 
-    private <T> T _fetchOrRetry(SupplierThrows<T, IOException> supplier, int retries) throws IOException {
-        int responseCode = -1;
-        String responseMessage = null;
-        // When retries equal 0 the previous call must return or throw, not retry again
-        if (retries < 0) {
-            throw new IllegalArgumentException("'retries' cannot be less than 0");
-        }
-
-        try {
-            // This is where the request is sent and response is processing starts
-            responseCode = uc.getResponseCode();
-            responseMessage = uc.getResponseMessage();
-
-            // If we are caching and get an invalid cached 404, retry it.
-            if (!retryInvalidCached404Response(responseCode, retries)) {
-                return supplier.get();
-            }
-        } catch (FileNotFoundException e) {
-            // java.net.URLConnection handles 404 exception as FileNotFoundException,
-            // don't wrap exception in HttpException to preserve backward compatibility
-            throw e;
-        } catch (IOException e) {
-
-            if (!retryConnectionError(e, retries)) {
-                throw new HttpException(responseCode, responseMessage, uc.getURL(), e);
-            }
-        }
-
-        // We did not fetch or throw, retry
-        return _fetchOrRetry(supplier, retries - 1);
-
+    private boolean isRateLimitResponse(int responseCode) {
+        return responseCode == HttpURLConnection.HTTP_FORBIDDEN
+                && "0".equals(uc.getHeaderField("X-RateLimit-Remaining"));
     }
 
-    private boolean retryConnectionError(IOException e, int retries) throws IOException {
+    private boolean isAbuseLimitResponse(int responseCode) {
+        return responseCode == HttpURLConnection.HTTP_FORBIDDEN && uc.getHeaderField("Retry-After") != null;
+    }
+
+    private void handleLimitingErrors(int responseCode) throws IOException {
+        if (isRateLimitResponse(responseCode)) {
+            HttpException e = new HttpException("Rate limit violation",
+                    responseCode,
+                    uc.getResponseMessage(),
+                    uc.getURL().toString());
+            root.rateLimitHandler.onError(e, uc);
+        } else if (isAbuseLimitResponse(responseCode)) {
+            HttpException e = new HttpException("Abuse limit violation",
+                    responseCode,
+                    uc.getResponseMessage(),
+                    uc.getURL().toString());
+            root.abuseLimitHandler.onError(e, uc);
+        }
+    }
+
+    private boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {
         // There are a range of connection errors where we want to wait a moment and just automatically retry
         boolean connectionError = e instanceof SocketException || e instanceof SocketTimeoutException
                 || e instanceof SSLHandshakeException;
         if (connectionError && retries > 0) {
             LOGGER.log(INFO,
-                    e.getMessage() + " while connecting to " + uc.getURL() + ". Sleeping "
-                            + Requester.retryTimeoutMillis + " milliseconds before retrying... ; will try " + retries
-                            + " more time(s)");
+                    e.getMessage() + " while connecting to " + url + ". Sleeping " + Requester.retryTimeoutMillis
+                            + " milliseconds before retrying... ; will try " + retries + " more time(s)");
             try {
                 Thread.sleep(Requester.retryTimeoutMillis);
             } catch (InterruptedException ie) {
                 throw (IOException) new InterruptedIOException().initCause(e);
             }
-            uc = setupConnection(uc.getURL());
             return true;
         }
         return false;
     }
 
-    private boolean retryInvalidCached404Response(int responseCode, int retries) throws IOException {
+    private boolean isInvalidCached404Response(int responseCode) {
         // WORKAROUND FOR ISSUE #669:
         // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
@@ -575,16 +603,15 @@ class Requester {
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
         if (responseCode == 404 && Objects.equals(uc.getRequestMethod(), "GET") && uc.getHeaderField("ETag") != null
-                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache") && retries > 0) {
+                && !Objects.equals(uc.getRequestProperty("Cache-Control"), "no-cache")) {
             LOGGER.log(FINE,
                     "Encountered GitHub invalid cached 404 from " + uc.getURL()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
 
-            uc = setupConnection(uc.getURL());
             // Setting "Cache-Control" to "no-cache" stops the cache from supplying
             // "If-Modified-Since" or "If-None-Match" values.
             // This makes GitHub give us current data (not incorrectly cached data)
-            uc.setRequestProperty("Cache-Control", "no-cache");
+            setHeader("Cache-Control", "no-cache");
             return true;
         }
         return false;
@@ -874,7 +901,8 @@ class Requester {
         }
     }
 
-    private HttpURLConnection setupConnection(URL url) throws IOException {
+    @Nonnull
+    private HttpURLConnection setupConnection(@Nonnull URL url) throws IOException {
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE,
                     "GitHub API request [" + (root.login == null ? "anonymous" : root.login) + "]: " + method + " "
@@ -941,10 +969,10 @@ class Requester {
         int responseCode = -1;
         try {
             responseCode = uc.getResponseCode();
-            if (responseCode == 304) {
+            if (responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
                 return null; // special case handling for 304 unmodified, as the content will be ""
             }
-            if (responseCode == 204 && type != null && type.isArray()) {
+            if (responseCode == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
                 // no content
                 return type.cast(Array.newInstance(type.getComponentType(), 0));
             }
@@ -954,7 +982,7 @@ class Requester {
             // See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             // And for fork creation:
             // See https://developer.github.com/v3/repos/forks/#create-a-fork
-            if (responseCode == 202) {
+            if (responseCode == HttpURLConnection.HTTP_ACCEPTED) {
                 if (uc.getURL().toString().endsWith("/forks")) {
                     LOGGER.log(INFO, "The fork is being created. Please try again in 5 seconds.");
                 } else if (uc.getURL().toString().endsWith("/statistics")) {
@@ -1023,19 +1051,11 @@ class Requester {
     /**
      * Handle API error by either throwing it or by returning normally to retry.
      */
-    void handleApiError(IOException e) throws IOException {
-        int responseCode;
-        try {
-            responseCode = uc.getResponseCode();
-        } catch (IOException e2) {
-            // likely to be a network exception (e.g. SSLHandshakeException),
-            // uc.getResponseCode() and any other getter on the response will cause an exception
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Silently ignore exception retrieving response code for '" + uc.getURL() + "'"
-                                + " handling exception " + e,
-                        e);
-            throw e;
+    IOException interpretApiError(IOException e, int responseCode, String message, URL url, int retries)
+            throws IOException {
+        // If we're already throwing a GHIOException, pass through
+        if (e instanceof GHIOException) {
+            return e;
         }
         InputStream es = wrapStream(uc.getErrorStream());
         if (es != null) {
@@ -1043,37 +1063,19 @@ class Requester {
                 String error = IOUtils.toString(es, StandardCharsets.UTF_8);
                 if (e instanceof FileNotFoundException) {
                     // pass through 404 Not Found to allow the caller to handle it intelligently
-                    e = (IOException) new GHFileNotFoundException(error).withResponseHeaderFields(uc).initCause(e);
-                } else if (e instanceof HttpException) {
-                    HttpException http = (HttpException) e;
-                    e = new HttpException(error, http.getResponseCode(), http.getResponseMessage(), http.getUrl(), e);
+                    e = new GHFileNotFoundException(error, e).withResponseHeaderFields(uc);
+                } else if (responseCode >= 0) {
+                    e = new HttpException(error, responseCode, uc.getResponseMessage(), url.toString(), e);
                 } else {
-                    e = (IOException) new GHIOException(error).withResponseHeaderFields(uc).initCause(e);
+                    e = new GHIOException(error).withResponseHeaderFields(uc);
                 }
             } finally {
                 IOUtils.closeQuietly(es);
             }
+        } else if (!(e instanceof FileNotFoundException)) {
+            e = new HttpException(responseCode, message, url.toString(), e);
         }
-        if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) // 401 Unauthorized == bad creds or OTP request
-            // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
-            // will be returned indicating the user needs to respond with an otp
-            if (uc.getHeaderField("X-GitHub-OTP") != null)
-                throw (IOException) new GHOTPRequiredException().withResponseHeaderFields(uc).initCause(e);
-            else
-                throw e; // usually org.kohsuke.github.HttpException (which extends IOException)
-
-        if ("0".equals(uc.getHeaderField("X-RateLimit-Remaining"))) {
-            root.rateLimitHandler.onError(e, uc);
-            return;
-        }
-
-        // Retry-After is not documented but apparently that field exists
-        if (responseCode == HttpURLConnection.HTTP_FORBIDDEN && uc.getHeaderField("Retry-After") != null) {
-            this.root.abuseLimitHandler.onError(e, uc);
-            return;
-        }
-
-        throw e;
+        return e;
     }
 
     /**

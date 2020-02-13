@@ -77,7 +77,7 @@ public class GHRelease extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

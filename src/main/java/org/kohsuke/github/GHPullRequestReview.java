@@ -122,7 +122,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
-        return GitHub.parseDate(submitted_at);
+        return GitHubClient.parseDate(submitted_at);
     }
 
     /**

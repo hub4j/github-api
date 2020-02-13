@@ -105,7 +105,7 @@ public class GHPullRequestFileDetail {
      * @return the blob url
      */
     public URL getBlobUrl() {
-        return GitHub.parseURL(blob_url);
+        return GitHubClient.parseURL(blob_url);
     }
 
     /**
@@ -114,7 +114,7 @@ public class GHPullRequestFileDetail {
      * @return the raw url
      */
     public URL getRawUrl() {
-        return GitHub.parseURL(raw_url);
+        return GitHubClient.parseURL(raw_url);
     }
 
     /**
@@ -123,7 +123,7 @@ public class GHPullRequestFileDetail {
      * @return the contents url
      */
     public URL getContentsUrl() {
-        return GitHub.parseURL(contents_url);
+        return GitHubClient.parseURL(contents_url);
     }
 
     /**

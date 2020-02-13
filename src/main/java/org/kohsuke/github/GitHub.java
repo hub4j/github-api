@@ -33,11 +33,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Base64;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1396,35 +1393,6 @@ public class GitHub {
                         .withUrlPath("/markdown/raw")
                         .fetchStream(),
                 "UTF-8");
-    }
-
-    static URL parseURL(String s) {
-        try {
-            return s == null ? null : new URL(s);
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Invalid URL: " + s);
-        }
-    }
-
-    static Date parseDate(String timestamp) {
-        if (timestamp == null)
-            return null;
-        for (String f : TIME_FORMATS) {
-            try {
-                SimpleDateFormat df = new SimpleDateFormat(f);
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                return df.parse(timestamp);
-            } catch (ParseException e) {
-                // try next
-            }
-        }
-        throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
-    }
-
-    static String printDate(Date dt) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(dt);
     }
 
     static final ObjectMapper MAPPER = new ObjectMapper();

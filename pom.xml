@@ -82,7 +82,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.1</version>
+          <version>3.2.2</version>
           <executions>
             <execution>
               <id>shaded-jar</id>
@@ -499,7 +499,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.258</version>
+      <version>1.259</version>
       <scope>test</scope>
     </dependency>
     <dependency>

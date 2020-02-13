@@ -24,11 +24,24 @@ public class GHFileNotFoundException extends FileNotFoundException {
     /**
      * Instantiates a new Gh file not found exception.
      *
-     * @param s
-     *            the s
+     * @param message
+     *            the message
      */
-    public GHFileNotFoundException(String s) {
-        super(s);
+    public GHFileNotFoundException(String message) {
+        super(message);
+    }
+
+    /**
+     * Instantiates a new Gh file not found exception.
+     *
+     * @param message
+     *            the message
+     * @param cause
+     *            the cause
+     */
+    public GHFileNotFoundException(String message, Throwable cause) {
+        super(message);
+        this.initCause(cause);
     }
 
     /**

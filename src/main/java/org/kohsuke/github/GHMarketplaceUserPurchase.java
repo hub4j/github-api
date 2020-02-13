@@ -54,7 +54,7 @@ public class GHMarketplaceUserPurchase {
      * @return the next billing date
      */
     public Date getNextBillingDate() {
-        return GitHub.parseDate(nextBillingDate);
+        return GitHubClient.parseDate(nextBillingDate);
     }
 
     /**
@@ -72,7 +72,7 @@ public class GHMarketplaceUserPurchase {
      * @return the free trial ends on
      */
     public Date getFreeTrialEndsOn() {
-        return GitHub.parseDate(freeTrialEndsOn);
+        return GitHubClient.parseDate(freeTrialEndsOn);
     }
 
     /**
@@ -90,7 +90,7 @@ public class GHMarketplaceUserPurchase {
      * @return the updated at
      */
     public Date getUpdatedAt() {
-        return GitHub.parseDate(updatedAt);
+        return GitHubClient.parseDate(updatedAt);
     }
 
     /**

@@ -108,7 +108,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHub.parseURL(patch_url);
+        return GitHubClient.parseURL(patch_url);
     }
 
     /**
@@ -117,7 +117,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the issue url
      */
     public URL getIssueUrl() {
-        return GitHub.parseURL(issue_url);
+        return GitHubClient.parseURL(issue_url);
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHub.parseURL(diff_url);
+        return GitHubClient.parseURL(diff_url);
     }
 
     /**
@@ -165,7 +165,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the merged at
      */
     public Date getMergedAt() {
-        return GitHub.parseDate(merged_at);
+        return GitHubClient.parseDate(merged_at);
     }
 
     @Override

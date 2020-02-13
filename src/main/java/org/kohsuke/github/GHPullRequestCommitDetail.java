@@ -75,7 +75,7 @@ public class GHPullRequestCommitDetail {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(url);
+            return GitHubClient.parseURL(url);
         }
     }
 
@@ -125,7 +125,7 @@ public class GHPullRequestCommitDetail {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(url);
+            return GitHubClient.parseURL(url);
         }
 
         /**
@@ -161,7 +161,7 @@ public class GHPullRequestCommitDetail {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(url);
+            return GitHubClient.parseURL(url);
         }
 
         /**
@@ -170,7 +170,7 @@ public class GHPullRequestCommitDetail {
          * @return the html url
          */
         public URL getHtml_url() {
-            return GitHub.parseURL(html_url);
+            return GitHubClient.parseURL(html_url);
         }
 
         /**
@@ -214,7 +214,7 @@ public class GHPullRequestCommitDetail {
      * @return the api url
      */
     public URL getApiUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -223,7 +223,7 @@ public class GHPullRequestCommitDetail {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -232,7 +232,7 @@ public class GHPullRequestCommitDetail {
      * @return the comments url
      */
     public URL getCommentsUrl() {
-        return GitHub.parseURL(comments_url);
+        return GitHubClient.parseURL(comments_url);
     }
 
     /**

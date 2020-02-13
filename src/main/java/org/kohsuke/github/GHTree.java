@@ -71,7 +71,7 @@ public class GHTree {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     GHTree wrap(GHRepository repo) {

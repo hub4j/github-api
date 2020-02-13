@@ -60,7 +60,7 @@ public abstract class GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
-        return GitHub.parseDate(created_at);
+        return GitHubClient.parseDate(created_at);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getCreatedAt")
@@ -75,7 +75,7 @@ public abstract class GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class GHObject {
      *             on error
      */
     public Date getUpdatedAt() throws IOException {
-        return GitHub.parseDate(updated_at);
+        return GitHubClient.parseDate(updated_at);
     }
 
     /**

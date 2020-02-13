@@ -1,0 +1,27 @@
+[
+  {
+    "login": "jimmysombrero",
+    "id": 12157727,
+    "node_id": "MDQ6VXNlcjEyMTU3NzI3",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/12157727?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jimmysombrero",
+    "html_url": "https://github.com/jimmysombrero",
+    "followers_url": "https://api.github.com/users/jimmysombrero/followers",
+    "following_url": "https://api.github.com/users/jimmysombrero/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jimmysombrero/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jimmysombrero/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jimmysombrero/subscriptions",
+    "organizations_url": "https://api.github.com/users/jimmysombrero/orgs",
+    "repos_url": "https://api.github.com/users/jimmysombrero/repos",
+    "events_url": "https://api.github.com/users/jimmysombrero/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jimmysombrero/received_events",
+    "type": "User",
+    "site_admin": false,
+    "permissions": {
+      "push": true,
+      "pull": true,
+      "admin": false
+    }
+  }
+]

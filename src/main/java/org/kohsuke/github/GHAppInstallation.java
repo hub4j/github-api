@@ -42,7 +42,7 @@ public class GHAppInstallation extends GHObject {
     private String htmlUrl;
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(htmlUrl);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**

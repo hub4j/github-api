@@ -264,7 +264,7 @@ public abstract class GHPerson extends GHObject {
 
     @Override
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

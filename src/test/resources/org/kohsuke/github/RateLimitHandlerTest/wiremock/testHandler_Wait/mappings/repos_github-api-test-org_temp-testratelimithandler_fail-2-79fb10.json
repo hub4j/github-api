@@ -1,0 +1,51 @@
+{
+  "id": "79fb1092-8bf3-4274-bc8e-ca126c9d9261",
+  "name": "repos_github-api-test-org_temp-testHandler_Wait",
+  "request": {
+    "url": "/repos/github-api-test-org/temp-testHandler_Wait",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 403,
+    "body": "{\"message\":\"Must have push access to repository\",\"documentation_url\":\"https://developer.github.com/\"}",
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "403 Forbidden",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "0",
+      "X-RateLimit-Reset": "{{now offset='2 seconds' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"7ff3c96399f7ddf6129622d675ca9935\"",
+      "Last-Modified": "Thu, 06 Feb 2020 18:33:37 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CC37:2605:3F982:4E949:5E3C5BFC"
+    }
+  },
+  "uuid": "79fb1092-8bf3-4274-bc8e-ca126c9d9261",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-temp-testHandler_Wait",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-temp-testHandler_Wait-2",
+  "insertionIndex": 2
+}

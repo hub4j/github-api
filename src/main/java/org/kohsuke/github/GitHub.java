@@ -403,7 +403,7 @@ public class GitHub {
      *             the io exception
      */
     @WithBridgeMethods(GHUser.class)
-    GHMyself getMyself() throws IOException {
+    public GHMyself getMyself() throws IOException {
         client.requireCredential();
         synchronized (this) {
             if (this.myself == null) {

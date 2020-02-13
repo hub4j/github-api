@@ -301,7 +301,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void setAutomaticallyDeleteHeadBranchesOption() throws IOException {
+    public void setDeleteBranchOnMerge() throws IOException {
         GHRepository r = getTempRepository();
 
         // enable auto delete

@@ -79,7 +79,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
      * @return the gh notification stream
      */
     public GHNotificationStream since(Date dt) {
-        since = GitHub.printDate(dt);
+        since = GitHubClient.printDate(dt);
         return this;
     }
 
@@ -234,7 +234,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
     public void markAsRead(long timestamp) throws IOException {
         final Requester req = root.createRequest();
         if (timestamp >= 0)
-            req.with("last_read_at", GitHub.printDate(new Date(timestamp)));
+            req.with("last_read_at", GitHubClient.printDate(new Date(timestamp)));
         req.withUrlPath(apiUrl).fetchHttpStatusCode();
     }
 

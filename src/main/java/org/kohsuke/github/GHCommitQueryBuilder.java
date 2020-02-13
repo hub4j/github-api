@@ -83,7 +83,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(Date dt) {
-        req.with("since", GitHub.printDate(dt));
+        req.with("since", GitHubClient.printDate(dt));
         return this;
     }
 
@@ -106,7 +106,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(Date dt) {
-        req.with("until", GitHub.printDate(dt));
+        req.with("until", GitHubClient.printDate(dt));
         return this;
     }
 

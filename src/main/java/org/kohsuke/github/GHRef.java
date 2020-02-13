@@ -31,7 +31,7 @@ public class GHRef {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -131,7 +131,7 @@ public class GHRef {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(url);
+            return GitHubClient.parseURL(url);
         }
     }
 }

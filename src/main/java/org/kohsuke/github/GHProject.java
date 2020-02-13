@@ -51,7 +51,7 @@ public class GHProject extends GHObject {
 
     @Override
     public URL getHtmlUrl() throws IOException {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -99,7 +99,7 @@ public class GHProject extends GHObject {
      * @return the owner url
      */
     public URL getOwnerUrl() {
-        return GitHub.parseURL(owner_url);
+        return GitHubClient.parseURL(owner_url);
     }
 
     /**

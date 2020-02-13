@@ -37,7 +37,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the target url
      */
     public URL getTargetUrl() {
-        return GitHub.parseURL(target_url);
+        return GitHubClient.parseURL(target_url);
     }
 
     /**
@@ -46,7 +46,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-        return GitHub.parseURL(deployment_url);
+        return GitHubClient.parseURL(deployment_url);
     }
 
     /**
@@ -55,7 +55,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-        return GitHub.parseURL(repository_url);
+        return GitHubClient.parseURL(repository_url);
     }
 
     /**

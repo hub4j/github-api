@@ -90,7 +90,7 @@ public class GHIssueEvent {
      * @return the created at
      */
     public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
+        return GitHubClient.parseDate(created_at);
     }
 
     /**

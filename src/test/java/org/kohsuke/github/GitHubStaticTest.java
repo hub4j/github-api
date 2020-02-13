@@ -38,25 +38,25 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
 
-        assertThat(GitHub.parseDate(GitHub.printDate(instantSeconds)),
-                equalTo(GitHub.parseDate(GitHub.printDate(instantMillis))));
+        assertThat(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds)),
+                equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis))));
 
-        assertThat(instantSeconds, equalTo(GitHub.parseDate(GitHub.printDate(instantSeconds))));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds))));
 
         // printDate will truncate to the nearest second, so it should not be equal
-        assertThat(instantMillis, not(equalTo(GitHub.parseDate(GitHub.printDate(instantMillis)))));
+        assertThat(instantMillis, not(equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis)))));
 
-        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantFormatSlash)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatSlash)));
 
-        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantFormatDash)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatDash)));
 
         // This parser does not truncate to the nearest second, so it will be equal
-        assertThat(instantMillis, equalTo(GitHub.parseDate(instantFormatMillis)));
+        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillis)));
 
-        assertThat(instantSeconds, equalTo(GitHub.parseDate(instantSecondsFormatMillis)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillis)));
 
         try {
-            GitHub.parseDate(instantBadFormat);
+            GitHubClient.parseDate(instantBadFormat);
             fail("Bad time format should throw.");
         } catch (IllegalStateException e) {
             assertThat(e.getMessage(), equalTo("Unable to parse the timestamp: " + instantBadFormat));

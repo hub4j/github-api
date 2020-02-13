@@ -133,7 +133,7 @@ public class GHDeployment extends GHObject {
     public PagedIterable<GHDeploymentStatus> listStatuses() {
         return root.createRequest()
                 .withUrlPath(statuses_url)
-                .fetchIterable(GHDeploymentStatus[].class, item -> item.wrap(owner));
+                .toIterable(GHDeploymentStatus[].class, item -> item.wrap(owner));
     }
 
 }

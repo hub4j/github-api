@@ -225,7 +225,7 @@ public class GHGist extends GHObject {
     public PagedIterable<GHGist> listForks() {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("forks"))
-                .fetchIterable(GHGist[].class, item -> item.wrapUp(root));
+                .toIterable(GHGist[].class, item -> item.wrapUp(root));
     }
 
     /**

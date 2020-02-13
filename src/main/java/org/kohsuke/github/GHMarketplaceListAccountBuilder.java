@@ -65,7 +65,7 @@ public class GHMarketplaceListAccountBuilder {
      */
     public PagedIterable<GHMarketplaceAccountPlan> createRequest() throws IOException {
         return builder.withUrlPath(String.format("/marketplace_listing/plans/%d/accounts", this.planId))
-                .fetchIterable(GHMarketplaceAccountPlan[].class, item -> item.wrapUp(root));
+                .toIterable(GHMarketplaceAccountPlan[].class, item -> item.wrapUp(root));
     }
 
 }

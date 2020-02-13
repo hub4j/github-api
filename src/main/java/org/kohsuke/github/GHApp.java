@@ -181,7 +181,7 @@ public class GHApp extends GHObject {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath("/app/installations")
-                .fetchIterable(GHAppInstallation[].class, item -> item.wrapUp(root));
+                .toIterable(GHAppInstallation[].class, item -> item.wrapUp(root));
     }
 
     /**

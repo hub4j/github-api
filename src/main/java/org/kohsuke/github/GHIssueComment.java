@@ -144,7 +144,7 @@ public class GHIssueComment extends GHObject implements Reactable {
         return owner.root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .fetchIterable(GHReaction[].class, item -> item.wrap(owner.root));
+                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
     }
 
     private String getApiRoute() {

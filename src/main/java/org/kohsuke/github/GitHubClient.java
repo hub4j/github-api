@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
@@ -41,6 +39,15 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
 
+/**
+ * A GitHub API Client
+ * <p>
+ * A GitHubClient can be used to send requests and retrieve their responses. Once built, a GitHubClient is thread-safe
+ * and can be used to send multiple requests. GitHubClient does, however cache some GitHub API information such as
+ * {@link #rateLimit()}.
+ * </p>
+ * Class {@link GitHubClient} retireves
+ */
 class GitHubClient {
 
     static final int CONNECTION_ERROR_RETRIES = 2;
@@ -93,14 +100,15 @@ class GitHubClient {
             AbuseLimitHandler abuseLimitHandler,
             Consumer<GHMyself> myselfConsumer) throws IOException {
 
-        if (apiUrl.endsWith("/"))
+        if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
-        this.apiUrl = apiUrl;
-        if (null != connector) {
-            this.connector = connector;
-        } else {
-            this.connector = HttpConnector.DEFAULT;
         }
+
+        if (null == connector) {
+            connector = HttpConnector.DEFAULT;
+        }
+        this.apiUrl = apiUrl;
+        this.connector = connector;
 
         if (oauthAccessToken != null) {
             encodedAuthorization = "token " + oauthAccessToken;
@@ -170,7 +178,9 @@ class GitHubClient {
      * @return the connector
      */
     public HttpConnector getConnector() {
-        return connector;
+        synchronized (this) {
+            return connector;
+        }
     }
 
     /**
@@ -178,9 +188,14 @@ class GitHubClient {
      *
      * @param connector
      *            the connector
+     * @deprecated HttpConnector should not be changed.
      */
+    @Deprecated
     public void setConnector(HttpConnector connector) {
-        this.connector = connector;
+        LOGGER.warning("Connector should not be changed. Please file an issue describing your use case.");
+        synchronized (this) {
+            this.connector = connector;
+        }
     }
 
     /**
@@ -193,7 +208,7 @@ class GitHubClient {
     }
 
     /**
-     * Gets the current rate limit.
+     * Gets the current rate limit from the server.
      *
      * @return the rate limit
      * @throws IOException
@@ -275,14 +290,45 @@ class GitHubClient {
         return apiUrl;
     }
 
+    /**
+     * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the
+     * {@link GitHubResponse.BodyHandler} to parse the response info and response body data into an instance of
+     * {@link T}.
+     *
+     * @param builder
+     *            used to build the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     *            {@link GitHubResponse#body()} will return null.
+     * @param <T>
+     *            the type of the parse body data.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
     @Nonnull
-    public <T> GitHubResponse<T> sendRequest(GitHubRequest.Builder<?> builder, GitHubResponse.BodyHandler<T> handler)
-            throws IOException {
+    public <T> GitHubResponse<T> sendRequest(@Nonnull GitHubRequest.Builder<?> builder,
+            @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
         return sendRequest(builder.build(), handler);
     }
 
+    /**
+     * Sends the {@link GitHubRequest} to the server, and uses the {@link GitHubResponse.BodyHandler} to parse the
+     * response info and response body data into an instance of {@link T}.
+     *
+     * @param request
+     *            the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     *            {@link GitHubResponse#body()} will return null.
+     * @param <T>
+     *            the type of the parse body data.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
     @Nonnull
-    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, GitHubResponse.BodyHandler<T> handler)
+    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull GitHubResponse.BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
 
@@ -327,6 +373,19 @@ class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
+    /**
+     * Parses a {@link GitHubResponse.ResponseInfo} body into a new instance of {@link T}.
+     * 
+     * @param responseInfo
+     *            response info to parse.
+     * @param type
+     *            the type to be constructed.
+     * @param <T>
+     *            the type
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
     @CheckForNull
     static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, Class<T> type) throws IOException {
 
@@ -337,13 +396,26 @@ class GitHubClient {
 
         String data = responseInfo.getBodyAsString();
         try {
-            return setResponseHeaders(responseInfo, MAPPER.readValue(data, type));
+            return MAPPER.readValue(data, type);
         } catch (JsonMappingException e) {
             String message = "Failed to deserialize " + data;
             throw new IOException(message, e);
         }
     }
 
+    /**
+     * Parses a {@link GitHubResponse.ResponseInfo} body into a new instance of {@link T}.
+     * 
+     * @param responseInfo
+     *            response info to parse.
+     * @param instance
+     *            the object to fill with data parsed from body
+     * @param <T>
+     *            the type
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
     @CheckForNull
     static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, T instance) throws IOException {
 
@@ -357,8 +429,8 @@ class GitHubClient {
     }
 
     @Nonnull
-    private <T> GitHubResponse<T> createResponse(GitHubResponse.ResponseInfo responseInfo,
-            GitHubResponse.BodyHandler<T> handler) throws IOException {
+    private <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,
+            @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
         T body = null;
         if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
@@ -399,29 +471,24 @@ class GitHubClient {
         int statusCode = -1;
         String message = null;
         Map<String, List<String>> headers = new HashMap<>();
-        InputStream es = null;
+        String errorMessage = null;
 
         if (responseInfo != null) {
             statusCode = responseInfo.statusCode();
             message = responseInfo.headerField("Status");
             headers = responseInfo.headers();
-            es = responseInfo.wrapErrorStream();
-
+            errorMessage = responseInfo.errorMessage();
         }
 
-        if (es != null) {
-            try {
-                String error = IOUtils.toString(es, StandardCharsets.UTF_8);
-                if (e instanceof FileNotFoundException) {
-                    // pass through 404 Not Found to allow the caller to handle it intelligently
-                    e = new GHFileNotFoundException(e.getMessage() + " " + error, e).withResponseHeaderFields(headers);
-                } else if (statusCode >= 0) {
-                    e = new HttpException(error, statusCode, message, request.url().toString(), e);
-                } else {
-                    e = new GHIOException(error).withResponseHeaderFields(headers);
-                }
-            } finally {
-                IOUtils.closeQuietly(es);
+        if (errorMessage != null) {
+            if (e instanceof FileNotFoundException) {
+                // pass through 404 Not Found to allow the caller to handle it intelligently
+                e = new GHFileNotFoundException(e.getMessage() + " " + errorMessage, e)
+                        .withResponseHeaderFields(headers);
+            } else if (statusCode >= 0) {
+                e = new HttpException(errorMessage, statusCode, message, request.url().toString(), e);
+            } else {
+                e = new GHIOException(errorMessage).withResponseHeaderFields(headers);
             }
         } else if (!(e instanceof FileNotFoundException)) {
             e = new HttpException(statusCode, message, request.url().toString(), e);
@@ -429,7 +496,18 @@ class GitHubClient {
         return e;
     }
 
-    private static <T> T setResponseHeaders(GitHubResponse.ResponseInfo responseInfo, T readValue) {
+    /**
+     * Sets the response headers on objects that need it. Ideally this would be handled by the objects themselves, but
+     * currently they do not have access to {@link GitHubResponse.ResponseInfo} after the
+     * 
+     * @param responseInfo
+     *            the response info
+     * @param readValue
+     *            the object to consider adding headers to.
+     * @param <T>
+     *            type of the object
+     */
+    private static <T> void setResponseHeaders(GitHubResponse.ResponseInfo responseInfo, T readValue) {
         if (readValue instanceof GHObject[]) {
             for (GHObject ghObject : (GHObject[]) readValue) {
                 ghObject.responseHeaderFields = responseInfo.headers();
@@ -440,7 +518,6 @@ class GitHubClient {
             // if we're getting a GHRateLimit it needs the server date
             ((JsonRateLimit) readValue).resources.getCore().recalculateResetDate(responseInfo.headerField("Date"));
         }
-        return readValue;
     }
 
     private static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
@@ -583,14 +660,15 @@ class GitHubClient {
 
     /**
      * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server.
+     * out of order, we want to pick the one with the most recent info from the server. Calls
+     * {@link #shouldReplace(GHRateLimit.Record, GHRateLimit.Record)}
      *
      * @param observed
      *            {@link GHRateLimit.Record} constructed from the response header information
      */
     private void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
         synchronized (headerRateLimitLock) {
-            if (headerRateLimit == null || GitHubClient.shouldReplace(observed, headerRateLimit.getCore())) {
+            if (headerRateLimit == null || shouldReplace(observed, headerRateLimit.getCore())) {
                 headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
                 LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
             }
@@ -647,9 +725,8 @@ class GitHubClient {
     }
 
     /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server. Header date is only accurate to
-     * the second, so we look at the information in the record itself.
+     * Determine if one {@link GHRateLimit.Record} should replace another. Header date is only accurate to the second,
+     * so we look at the information in the record itself.
      *
      * {@link GHRateLimit.UnknownLimitRecord}s are always replaced by regular {@link GHRateLimit.Record}s. Regular
      * {@link GHRateLimit.Record}s are never replaced by {@link GHRateLimit.UnknownLimitRecord}s. Candidates with

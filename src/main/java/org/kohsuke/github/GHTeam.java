@@ -154,9 +154,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.createRequest()
-                .withUrlPath(api("/members"))
-                .fetchIterable(GHUser[].class, item -> item.wrapUp(root));
+        return root.createRequest().withUrlPath(api("/members")).toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -209,7 +207,7 @@ public class GHTeam implements Refreshable {
     public PagedIterable<GHRepository> listRepositories() {
         return root.createRequest()
                 .withUrlPath(api("/repos"))
-                .fetchIterable(GHRepository[].class, item -> item.wrap(root));
+                .toIterable(GHRepository[].class, item -> item.wrap(root));
     }
 
     /**

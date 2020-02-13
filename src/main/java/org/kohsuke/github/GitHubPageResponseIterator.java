@@ -7,7 +7,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * May be used for any item that has pagination information.
+ * May be used for any item that has pagination information. Iterates over paginated {@link GitHubResponse} objects
+ * containing each page (not items on the page).
  *
  * Works for array responses, also works for search results which are single instances with an array of items inside.
  *

@@ -395,7 +395,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return root.createRequest()
                 .withUrlPath(String.format("%s/files", getApiRoute()))
-                .fetchIterable(GHPullRequestFileDetail[].class, null);
+                .toIterable(GHPullRequestFileDetail[].class, null);
     }
 
     /**
@@ -406,7 +406,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     public PagedIterable<GHPullRequestReview> listReviews() {
         return root.createRequest()
                 .withUrlPath(String.format("%s/reviews", getApiRoute()))
-                .fetchIterable(GHPullRequestReview[].class, item -> item.wrapUp(this));
+                .toIterable(GHPullRequestReview[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -419,7 +419,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
         return root.createRequest()
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-                .fetchIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));
+                .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));
     }
 
     /**
@@ -430,7 +430,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     public PagedIterable<GHPullRequestCommitDetail> listCommits() {
         return root.createRequest()
                 .withUrlPath(String.format("%s/commits", getApiRoute()))
-                .fetchIterable(GHPullRequestCommitDetail[].class, item -> item.wrapUp(this));
+                .toIterable(GHPullRequestCommitDetail[].class, item -> item.wrapUp(this));
     }
 
     /**

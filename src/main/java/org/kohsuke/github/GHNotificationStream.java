@@ -180,8 +180,9 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
                         req.setHeader("If-Modified-Since", lastModified);
 
-                        GitHubResponse<GHThread[]> response = req.withUrlPath(apiUrl)
-                                .fetchArrayResponse(GHThread[].class);
+                        Requester requester = req.withUrlPath(apiUrl);
+                        GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
+                                .toIterable(requester.client, GHThread[].class, null)).toResponse();
                         threads = response.body();
 
                         if (threads == null) {

@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,6 +27,15 @@ import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Class {@link GitHubRequest} represents an immutable instance used by the client to determine what information to
+ * retrieve from a GitHub server. Use the {@link Builder} construct a {@link GitHubRequest}.
+ * <p>
+ * NOTE: {@link GitHubRequest} should include the data type to be returned. Any use cases where the same request should
+ * be used to return different types of data could be handled in some other way. However, the return type is currently
+ * not specified until late in the building process, so this is still untyped.
+ * </p>
+ */
 class GitHubRequest {
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
@@ -46,8 +56,8 @@ class GitHubRequest {
             @Nonnull String method,
             @CheckForNull InputStream body,
             boolean forceBody) throws MalformedURLException {
-        this.args = args;
-        this.headers = headers;
+        this.args = Collections.unmodifiableList(new ArrayList<>(args));
+        this.headers = Collections.unmodifiableMap(new LinkedHashMap<>(headers));
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
@@ -57,6 +67,18 @@ class GitHubRequest {
         url = getApiURL(apiUrl, tailApiUrl);
     }
 
+    /**
+     * Create a new {@link Builder}.
+     * 
+     * @return a new {@link Builder}.
+     */
+    public static Builder<?> newBuilder() {
+        return new Builder<>();
+    }
+
+    /**
+     * Gets the final GitHub API URL.
+     */
     @Nonnull
     static URL getApiURL(String apiUrl, String tailApiUrl) throws MalformedURLException {
         if (tailApiUrl.startsWith("/")) {
@@ -68,10 +90,6 @@ class GitHubRequest {
         } else {
             return new URL(tailApiUrl);
         }
-    }
-
-    public static Builder<?> newBuilder() {
-        return new Builder<>();
     }
 
     /**
@@ -88,53 +106,107 @@ class GitHubRequest {
         return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
     }
 
+    /**
+     * The method for this request, such as "GET", "PATCH", or "DELETE".
+     *
+     * @return the request method.
+     */
     @Nonnull
     public String method() {
         return method;
     }
 
+    /**
+     * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
+     * url or to the request body.
+     *
+     * @return the {@link List<Entry>} of arguments
+     */
     @Nonnull
     public List<Entry> args() {
         return args;
     }
 
+    /**
+     * The headers for this request.
+     *
+     * @return the {@link Map} of headers
+     */
     @Nonnull
     public Map<String, String> headers() {
         return headers;
     }
 
+    /**
+     * The base GitHub API URL for this request represented as a {@link String}
+     * 
+     * @return the url string
+     */
     @Nonnull
     public String apiUrl() {
         return apiUrl;
     }
 
+    /**
+     * The url path to be added to the {@link #apiUrl()} for this request. If this does not start with a "/", it instead
+     * represents the full url string for this request.
+     * 
+     * @return a url path or full url string
+     */
     @Nonnull
     public String urlPath() {
         return urlPath;
     }
 
+    /**
+     * The content type to to be sent by this request.
+     * 
+     * @return the content type.
+     */
     @Nonnull
     public String contentType() {
         return headers.get("Content-type");
     }
 
+    /**
+     * The {@link InputStream} to be sent as the body of this request.
+     * 
+     * @return the {@link InputStream}.
+     */
     @CheckForNull
     public InputStream body() {
         return body;
     }
 
+    /**
+     * The {@link URL} for this request. This is the actual URL the {@link GitHubClient} will send this request to.
+     * 
+     * @return the request {@link URL}
+     */
     @Nonnull
     public URL url() {
         return url;
     }
 
+    /**
+     * Whether arguments for this request should be included in the URL or in the body of the request.
+     * 
+     * @return true if the arguements should be sent in the body of the request.
+     */
     public boolean inBody() {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
+    /**
+     * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
+     * {@link GitHubRequest}.
+     * 
+     * @return a {@link Builder} based on this request.
+     */
     public Builder<?> toBuilder() {
         return new Builder<>(args, headers, apiUrl, urlPath, method, body, forceBody);
     }
+
     private String buildTailApiUrl() {
         String tailApiUrl = urlPath;
         if (!inBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
@@ -160,11 +232,26 @@ class GitHubRequest {
         return tailApiUrl;
     }
 
-    static class Builder<T extends Builder<T>> {
+    /**
+     * Class {@link Builder} follows the builder pattern for {@link GitHubRequest}.
+     *
+     * @param <B>
+     *            The type of {@link Builder} to return from the various "with*" methods.
+     */
+    static class Builder<B extends Builder<B>> {
 
+        @Nonnull
         private final List<Entry> args;
+
+        /**
+         * The header values for this request.
+         */
+        @Nonnull
         private final Map<String, String> headers;
 
+        /**
+         * The base GitHub API for this request.
+         */
         @Nonnull
         private String apiUrl;
 
@@ -178,6 +265,9 @@ class GitHubRequest {
         private InputStream body;
         private boolean forceBody;
 
+        /**
+         * Create a new {@link GitHubRequest.Builder}
+         */
         protected Builder() {
             this(new ArrayList<>(), new LinkedHashMap<>(), GitHubClient.GITHUB_URL, "/", "GET", null, false);
         }
@@ -187,10 +277,10 @@ class GitHubRequest {
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
-                @CheckForNull InputStream body,
+                @CheckForNull @WillClose InputStream body,
                 boolean forceBody) {
-            this.args = args;
-            this.headers = headers;
+            this.args = new ArrayList<>(args);
+            this.headers = new LinkedHashMap<>(headers);
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
@@ -198,8 +288,38 @@ class GitHubRequest {
             this.forceBody = forceBody;
         }
 
-        GitHubRequest build() throws MalformedURLException {
+        /**
+         * Builds a {@link GitHubRequest} from this builder.
+         * 
+         * @return a {@link GitHubRequest}
+         * @throws MalformedURLException
+         *             if the GitHub API URL cannot be constructed
+         */
+        public GitHubRequest build() throws MalformedURLException {
             return new GitHubRequest(args, headers, apiUrl, urlPath, method, body, forceBody);
+        }
+
+        /**
+         * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}. This method and
+         * the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()} or
+         * {@link Iterator#hasNext()} are called.
+         *
+         * @param client
+         *            the {@link GitHubClient} to be used for this {@link PagedIterable<R>}
+         * @param type
+         *            the type of the pages to retrieve.
+         * @param itemInitializer
+         *            the consumer to execute on each paged item retrieved.
+         * @param <R>
+         *            the element type for the pages returned from
+         * @return the {@link PagedIterable} for this builder.
+         */
+        public <R> PagedIterable<R> toIterable(GitHubClient client, Class<R[]> type, Consumer<R> itemInitializer) {
+            try {
+                return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
+            } catch (MalformedURLException e) {
+                throw new GHException(e.getMessage(), e);
+            }
         }
 
         /**
@@ -207,11 +327,11 @@ class GitHubRequest {
          *
          * @param url
          *            the url
-         * @return the requester
+         * @return the request builder
          */
-        public T withApiUrl(String url) {
+        public B withApiUrl(String url) {
             this.apiUrl = url;
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -235,14 +355,14 @@ class GitHubRequest {
          *            the name
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T withHeader(String name, String value) {
+        public B withHeader(String name, String value) {
             setHeader(name, value);
-            return (T) this;
+            return (B) this;
         }
 
-        public T withPreview(String name) {
+        public B withPreview(String name) {
             return withHeader("Accept", name);
         }
 
@@ -253,9 +373,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, int value) {
+        public B with(String key, int value) {
             return with(key, (Object) value);
         }
 
@@ -266,9 +386,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, long value) {
+        public B with(String key, long value) {
             return with(key, (Object) value);
         }
 
@@ -279,9 +399,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, boolean value) {
+        public B with(String key, boolean value) {
             return with(key, (Object) value);
         }
 
@@ -292,9 +412,9 @@ class GitHubRequest {
          *            the key
          * @param e
          *            the e
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, Enum<?> e) {
+        public B with(String key, Enum<?> e) {
             if (e == null)
                 return with(key, (Object) null);
             return with(key, transformEnum(e));
@@ -307,9 +427,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, String value) {
+        public B with(String key, String value) {
             return with(key, (Object) value);
         }
 
@@ -320,9 +440,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, Collection<?> value) {
+        public B with(String key, Collection<?> value) {
             return with(key, (Object) value);
         }
 
@@ -333,9 +453,9 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, Map<?, ?> value) {
+        public B with(String key, Map<?, ?> value) {
             return with(key, (Object) value);
         }
 
@@ -344,11 +464,11 @@ class GitHubRequest {
          *
          * @param body
          *            the body
-         * @return the requester
+         * @return the request builder
          */
-        public T with(@WillClose /* later */ InputStream body) {
+        public B with(@WillClose /* later */ InputStream body) {
             this.body = body;
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -358,11 +478,11 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T withNullable(String key, Object value) {
+        public B withNullable(String key, Object value) {
             args.add(new Entry(key, value));
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -372,13 +492,13 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T with(String key, Object value) {
+        public B with(String key, Object value) {
             if (value != null) {
                 args.add(new Entry(key, value));
             }
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -388,13 +508,13 @@ class GitHubRequest {
          *            the key
          * @param value
          *            the value
-         * @return the requester
+         * @return the request builder
          */
-        public T set(String key, Object value) {
+        public B set(String key, Object value) {
             for (int index = 0; index < args.size(); index++) {
                 if (args.get(index).key.equals(key)) {
                     args.set(index, new Entry(key, value));
-                    return (T) this;
+                    return (B) this;
                 }
             }
             return with(key, value);
@@ -405,11 +525,11 @@ class GitHubRequest {
          *
          * @param method
          *            the method
-         * @return the requester
+         * @return the request builder
          */
-        public T method(@Nonnull String method) {
+        public B method(@Nonnull String method) {
             this.method = method;
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -417,11 +537,11 @@ class GitHubRequest {
          *
          * @param contentType
          *            the content type
-         * @return the requester
+         * @return the request builder
          */
-        public T contentType(String contentType) {
+        public B contentType(String contentType) {
             this.headers.put("Content-type", contentType);
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -435,12 +555,12 @@ class GitHubRequest {
          *
          * @param urlOrPath
          *            the content type
-         * @return the requester
+         * @return the request builder
          */
-        T setRawUrlPath(String urlOrPath) {
+        B setRawUrlPath(String urlOrPath) {
             Objects.requireNonNull(urlOrPath);
             this.urlPath = urlOrPath;
-            return (T) this;
+            return (B) this;
         }
 
         /**
@@ -451,9 +571,9 @@ class GitHubRequest {
          *
          * @param urlPathItems
          *            the content type
-         * @return the requester
+         * @return the request builder
          */
-        public T withUrlPath(String... urlPathItems) {
+        public B withUrlPath(String... urlPathItems) {
             // full url may be set and reset as needed
             if (urlPathItems.length == 1 && !urlPathItems[0].startsWith("/")) {
                 return setRawUrlPath(urlPathItems[0]);
@@ -473,52 +593,33 @@ class GitHubRequest {
             }
 
             this.urlPath += urlPathEncode(tailUrlPath);
-            return (T) this;
-        }
-
-        /**
-         * Encode the path to url safe string.
-         *
-         * @param value
-         *            string to be path encoded.
-         * @return The encoded string.
-         */
-        private static String urlPathEncode(String value) {
-            try {
-                return new URI(null, null, value, null, null).toString();
-            } catch (URISyntaxException ex) {
-                throw new AssertionError(ex);
-            }
+            return (B) this;
         }
 
         /**
          * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
          * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
          * forces the parameters to be sent as a body.
+         *
+         * @return the request builder
          */
-        public T inBody() {
+        public B inBody() {
             forceBody = true;
-            return (T) this;
+            return (B) this;
         }
 
         /**
-         * Set page size for
+         * Set page size for to be used for {@link #toIterable(GitHubClient, Class, Consumer)}.
          * 
          * @param pageSize
+         *            the page size
+         * @return the request builder
          */
-        public T withPageSize(int pageSize) {
+        public B withPageSize(int pageSize) {
             if (pageSize > 0) {
                 this.with("per_page", pageSize);
             }
-            return (T) this;
-        }
-
-        public <R> PagedIterable<R> buildIterable(GitHubClient client, Class<R[]> type, Consumer<R> consumer) {
-            try {
-                return new GitHubPagedIterableImpl<>(client, build(), type, consumer);
-            } catch (MalformedURLException e) {
-                throw new GHException(e.getMessage(), e);
-            }
+            return (B) this;
         }
     }
 
@@ -531,4 +632,20 @@ class GitHubRequest {
             this.value = value;
         }
     }
+
+    /**
+     * Encode the path to url safe string.
+     *
+     * @param value
+     *            string to be path encoded.
+     * @return The encoded string.
+     */
+    private static String urlPathEncode(String value) {
+        try {
+            return new URI(null, null, value, null, null).toString();
+        } catch (URISyntaxException ex) {
+            throw new AssertionError(ex);
+        }
+    }
+
 }

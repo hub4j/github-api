@@ -2,9 +2,14 @@ package org.kohsuke.github;
 
 import java.net.MalformedURLException;
 import java.util.Iterator;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 /**
- * May be used for any item that has pagination information.
+ * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
+ * inside the page). Also exposes {@link #nextResponse()} to allow getting the full {@link GitHubResponse<T>} instead of
+ * T.
  *
  * Works for array responses, also works for search results which are single instances with an array of items inside.
  *
@@ -32,17 +37,18 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * Loads paginated resources.
      *
      * @param client
+     *            the {@link GitHubClient} from which to request responses
      * @param type
      *            type of each page (not the items in the page).
      * @param <T>
      *            type of each page (not the items in the page).
-     * @return
+     * @return iterator
      */
     static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest.Builder<?> builder) {
         try {
             return new GitHubPageIterator<>(client, type, builder.build());
         } catch (MalformedURLException e) {
-            throw new GHException("Unable to build github Api URL", e);
+            throw new GHException("Unable to build GitHub API URL", e);
         }
     }
 
@@ -50,14 +56,26 @@ class GitHubPageIterator<T> implements Iterator<T> {
         return delegate.hasNext();
     }
 
+    /**
+     * Gets the next page.
+     * 
+     * @return the next page.
+     */
+    @Nonnull
     public T next() {
-        lastResponse = nextResponse();
-        assert lastResponse.body() != null;
-        return lastResponse.body();
+        return Objects.requireNonNull(nextResponse().body());
     }
 
+    /**
+     * Gets the next response page.
+     * 
+     * @return the next response page.
+     */
+    @Nonnull
     public GitHubResponse<T> nextResponse() {
-        return delegate.next();
+        GitHubResponse<T> result = Objects.requireNonNull(delegate.next());
+        lastResponse = result;
+        return result;
     }
 
     public void remove() {

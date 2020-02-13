@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
  * {@link Iterable} that returns {@link PagedIterator}
  *
  * @param <T>
- *            the type parameter
+ *            the type of items on each page
  * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
@@ -50,7 +50,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Iterator paged iterator.
+     * Iterator over page items.
      *
      * @param pageSize
      *            the page size
@@ -60,18 +60,17 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     public abstract PagedIterator<T> _iterator(int pageSize);
 
     /**
-     * Eagerly walk {@link Iterable} and return the result in a response containing an array.
+     * Eagerly walk {@link PagedIterator} and return the result in an array.
      *
-     * @return the list
+     * @param iterator
+     *            the {@link PagedIterator} to read
+     * @return an array of all elements from the {@link PagedIterator}
      * @throws IOException
+     *             if an I/O exception occurs.
      */
-    @Nonnull
-    GitHubResponse<T[]> toResponse() throws IOException {
-        GitHubResponse<T[]> result;
-
+    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
         try {
             ArrayList<T[]> pages = new ArrayList<>();
-            PagedIterator<T> iterator = iterator();
             int totalSize = 0;
             T[] item;
             do {
@@ -80,12 +79,9 @@ public abstract class PagedIterable<T> implements Iterable<T> {
                 pages.add(item);
             } while (iterator.hasNext());
 
-            // At this point should always be at least one response and it should have a result
-            // thought that might be an empty array.
-            GitHubResponse<T[]> lastResponse = iterator.lastResponse();
             Class<T[]> type = (Class<T[]>) item.getClass();
 
-            result = new GitHubResponse<>(lastResponse, concatenatePages(type, pages, totalSize));
+            return concatenatePages(type, pages, totalSize);
         } catch (GHException e) {
             // if there was an exception inside the iterator it is wrapped as a GHException
             // if the wrapped exception is an IOException, throw that
@@ -95,18 +91,18 @@ public abstract class PagedIterable<T> implements Iterable<T> {
                 throw e;
             }
         }
-        return result;
     }
 
     /**
      * Eagerly walk {@link Iterable} and return the result in an array.
      *
      * @return the list
+     * @throws IOException
+     *             if an I/O exception occurs.
      */
     @Nonnull
     public T[] toArray() throws IOException {
-        T[] result = toResponse().body();
-        return result;
+        return toArray(iterator());
     }
 
     /**
@@ -133,6 +129,17 @@ public abstract class PagedIterable<T> implements Iterable<T> {
         return new LinkedHashSet<>(this.asList());
     }
 
+    /**
+     * Concatenates a list of arrays into a single array.
+     * 
+     * @param type
+     *            the type of array to be returned.
+     * @param pages
+     *            the list of arrays to be concatenated.
+     * @param totalLength
+     *            the total length of the returned array.
+     * @return an array containing all elements from all pages.
+     */
     @Nonnull
     private T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
 

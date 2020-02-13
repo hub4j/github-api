@@ -25,13 +25,13 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
 /**
- * A builder pattern for making HTTP call and parsing its output.
+ * A thin helper for {@link GitHubRequest.Builder} that includes {@link GitHubClient}.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -62,7 +62,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *            the type parameter
      * @param type
      *            the type
-     * @return {@link Reader} that reads the response.
+     * @return an instance of {@link T}
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
@@ -77,16 +77,12 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *            the type parameter
      * @param type
      *            the type
-     * @return {@link Reader} that reads the response.
+     * @return an array of {@link T} elements
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
-        return fetchIterable(type, null).toArray();
-    }
-
-    <T> GitHubResponse<T[]> fetchArrayResponse(@Nonnull Class<T[]> type) throws IOException {
-        return fetchIterable(type, null).toResponse();
+        return toIterable(client, type, null).toArray();
     }
 
     /**
@@ -96,7 +92,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *            the type parameter
      * @param existingInstance
      *            the existing instance
-     * @return the t
+     * @return the updated instance
      * @throws IOException
      *             the io exception
      */
@@ -126,10 +122,23 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public InputStream fetchStream() throws IOException {
-        return client.sendRequest(this, (responseInfo) -> responseInfo.wrapInputStream()).body();
+        return client.sendRequest(this, (responseInfo) -> responseInfo.bodyStream()).body();
     }
 
-    public <T> PagedIterable<T> fetchIterable(Class<T[]> type, Consumer<T> consumer) {
-        return buildIterable(client, type, consumer);
+    /**
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}. This method and the
+     * {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()} or
+     * {@link Iterator#hasNext()} are called.
+     *
+     * @param type
+     *            the type of the pages to retrieve.
+     * @param itemInitializer
+     *            the consumer to execute on each paged item retrieved.
+     * @param <R>
+     *            the element type for the pages returned from
+     * @return the {@link PagedIterable} for this builder.
+     */
+    public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
+        return toIterable(this.client, type, itemInitializer);
     }
 }

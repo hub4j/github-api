@@ -109,7 +109,7 @@ public class GitHub {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler) throws IOException {
-        this.client = new GitHubClient(apiUrl,
+        this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 login,
                 oauthAccessToken,
                 jwtToken,

@@ -54,7 +54,7 @@ class GitHubPageResponseIterator<T> implements Iterator<GitHubResponse<T>> {
 
         URL url = nextRequest.url();
         try {
-            next = client.sendRequest(nextRequest, (responseInfo) -> GitHubClient.parseBody(responseInfo, type));
+            next = client.sendRequest(nextRequest, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type));
             assert next.body() != null;
             nextRequest = findNextURL();
         } catch (IOException e) {

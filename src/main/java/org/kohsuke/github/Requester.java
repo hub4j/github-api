@@ -67,7 +67,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T fetch(@Nonnull Class<T> type) throws IOException {
-        return client.sendRequest(this, (responseInfo) -> GitHubClient.parseBody(responseInfo, type)).body();
+        return client.sendRequest(this, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
 
     /**
@@ -97,7 +97,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
-        return client.sendRequest(this, (responseInfo) -> GitHubClient.parseBody(responseInfo, existingInstance))
+        return client.sendRequest(this, (responseInfo) -> GitHubResponse.parseBody(responseInfo, existingInstance))
                 .body();
     }
 

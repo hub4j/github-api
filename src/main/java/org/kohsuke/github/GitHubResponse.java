@@ -1,27 +1,22 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * A GitHubResponse
@@ -57,6 +52,61 @@ class GitHubResponse<T> {
         this.request = responseInfo.request();
         this.headers = responseInfo.headers();
         this.body = body;
+    }
+
+    /**
+     * Parses a {@link ResponseInfo} body into a new instance of {@link T}.
+     *
+     * @param responseInfo
+     *            response info to parse.
+     * @param type
+     *            the type to be constructed.
+     * @param <T>
+     *            the type
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
+    @CheckForNull
+    static <T> T parseBody(ResponseInfo responseInfo, Class<T> type) throws IOException {
+
+        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
+            // no content
+            return type.cast(Array.newInstance(type.getComponentType(), 0));
+        }
+
+        String data = responseInfo.getBodyAsString();
+        try {
+            return GitHubClient.MAPPER.readValue(data, type);
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
+        }
+    }
+
+    /**
+     * Parses a {@link ResponseInfo} body into a new instance of {@link T}.
+     *
+     * @param responseInfo
+     *            response info to parse.
+     * @param instance
+     *            the object to fill with data parsed from body
+     * @param <T>
+     *            the type
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
+    @CheckForNull
+    static <T> T parseBody(ResponseInfo responseInfo, T instance) throws IOException {
+
+        String data = responseInfo.getBodyAsString();
+        try {
+            return GitHubClient.MAPPER.readerForUpdating(instance).<T>readValue(data);
+        } catch (JsonMappingException e) {
+            String message = "Failed to deserialize " + data;
+            throw new IOException(message, e);
+        }
     }
 
     /**
@@ -158,37 +208,6 @@ class GitHubResponse<T> {
         @Nonnull
         private final Map<String, List<String>> headers;
 
-        /**
-         * Opens a connection using a {@link GitHubClient} and retrieves a {@link ResponseInfo} from a
-         * {@link HttpURLConnection}.
-         *
-         * @param client
-         *            the client to query.
-         * @param request
-         *            the request to send.
-         * @return the initial {@link ResponseInfo}.
-         * @throws IOException
-         *             if an I/O Exception occurs.
-         */
-        @Nonnull
-        static ResponseInfo fromHttpURLConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
-                throws IOException {
-            HttpURLConnection connection;
-            try {
-                connection = HttpURLConnectionResponseInfo.setupConnection(client, request);
-            } catch (IOException e) {
-                // An error in here should be wrapped to bypass http exception wrapping.
-                throw new GHIOException(e.getMessage(), e);
-            }
-
-            // HttpUrlConnection is nuts. This call opens the connection and gets a response.
-            // Putting this on it's own line for ease of debugging if needed.
-            int statusCode = connection.getResponseCode();
-            Map<String, List<String>> headers = connection.getHeaderFields();
-
-            return new HttpURLConnectionResponseInfo(request, statusCode, headers, connection);
-        }
-
         protected ResponseInfo(@Nonnull GitHubRequest request,
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers) {
@@ -287,152 +306,4 @@ class GitHubResponse<T> {
         }
     }
 
-    /**
-     * Initial response information supplied to a {@link BodyHandler} when a response is initially received and before
-     * the body is processed.
-     *
-     * Implementation specific to {@link HttpURLConnection}.
-     */
-    static class HttpURLConnectionResponseInfo extends ResponseInfo {
-
-        @Nonnull
-        final HttpURLConnection connection;
-
-        private HttpURLConnectionResponseInfo(@Nonnull GitHubRequest request,
-                int statusCode,
-                @Nonnull Map<String, List<String>> headers,
-                @Nonnull HttpURLConnection connection) {
-            super(request, statusCode, headers);
-            this.connection = connection;
-        }
-
-        @Nonnull
-        static HttpURLConnection setupConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
-                throws IOException {
-            HttpURLConnection connection = client.getConnector().connect(request.url());
-
-            // if the authentication is needed but no credential is given, try it anyway (so that some calls
-            // that do work with anonymous access in the reduced form should still work.)
-            if (client.encodedAuthorization != null)
-                connection.setRequestProperty("Authorization", client.encodedAuthorization);
-
-            setRequestMethod(request.method(), connection);
-            buildRequest(request, connection);
-
-            return connection;
-        }
-
-        /**
-         * Set up the request parameters or POST payload.
-         */
-        private static void buildRequest(GitHubRequest request, HttpURLConnection connection) throws IOException {
-            for (Map.Entry<String, String> e : request.headers().entrySet()) {
-                String v = e.getValue();
-                if (v != null)
-                    connection.setRequestProperty(e.getKey(), v);
-            }
-            connection.setRequestProperty("Accept-Encoding", "gzip");
-
-            if (request.inBody()) {
-                connection.setDoOutput(true);
-
-                try (InputStream body = request.body()) {
-                    if (body != null) {
-                        connection.setRequestProperty("Content-type",
-                                defaultString(request.contentType(), "application/x-www-form-urlencoded"));
-                        byte[] bytes = new byte[32768];
-                        int read;
-                        while ((read = body.read(bytes)) != -1) {
-                            connection.getOutputStream().write(bytes, 0, read);
-                        }
-                    } else {
-                        connection.setRequestProperty("Content-type",
-                                defaultString(request.contentType(), "application/json"));
-                        Map<String, Object> json = new HashMap<>();
-                        for (GitHubRequest.Entry e : request.args()) {
-                            json.put(e.key, e.value);
-                        }
-                        GitHubClient.MAPPER.writeValue(connection.getOutputStream(), json);
-                    }
-                }
-            }
-        }
-
-        private static void setRequestMethod(String method, HttpURLConnection connection) throws IOException {
-            try {
-                connection.setRequestMethod(method);
-            } catch (ProtocolException e) {
-                // JDK only allows one of the fixed set of verbs. Try to override that
-                try {
-                    Field $method = HttpURLConnection.class.getDeclaredField("method");
-                    $method.setAccessible(true);
-                    $method.set(connection, method);
-                } catch (Exception x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
-                // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
-                try {
-                    Field $delegate = connection.getClass().getDeclaredField("delegate");
-                    $delegate.setAccessible(true);
-                    Object delegate = $delegate.get(connection);
-                    if (delegate instanceof HttpURLConnection) {
-                        HttpURLConnection nested = (HttpURLConnection) delegate;
-                        setRequestMethod(method, nested);
-                    }
-                } catch (NoSuchFieldException x) {
-                    // no problem
-                } catch (IllegalAccessException x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
-            }
-            if (!connection.getRequestMethod().equals(method))
-                throw new IllegalStateException("Failed to set the request method to " + method);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        InputStream bodyStream() throws IOException {
-            return wrapStream(connection.getInputStream());
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        String errorMessage() {
-            String result = null;
-            InputStream stream = null;
-            try {
-                stream = connection.getErrorStream();
-                if (stream != null) {
-                    result = IOUtils.toString(wrapStream(stream), StandardCharsets.UTF_8);
-                }
-            } catch (Exception e) {
-                LOGGER.log(Level.FINER, "Ignored exception get error message", e);
-            } finally {
-                IOUtils.closeQuietly(stream);
-            }
-            return result;
-        }
-
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = headerField("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-        }
-
-        private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
-
-    }
 }

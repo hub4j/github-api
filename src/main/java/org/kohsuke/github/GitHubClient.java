@@ -1,17 +1,16 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketException;
@@ -48,7 +47,7 @@ import static java.util.logging.Level.*;
  * </p>
  * Class {@link GitHubClient} retireves
  */
-class GitHubClient {
+abstract class GitHubClient {
 
     static final int CONNECTION_ERROR_RETRIES = 2;
     /**
@@ -65,8 +64,8 @@ class GitHubClient {
     // Cache of myself object.
     private final String apiUrl;
 
-    private final RateLimitHandler rateLimitHandler;
-    private final AbuseLimitHandler abuseLimitHandler;
+    protected final RateLimitHandler rateLimitHandler;
+    protected final AbuseLimitHandler abuseLimitHandler;
 
     private HttpConnector connector;
 
@@ -141,7 +140,7 @@ class GitHubClient {
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
         return this
                 .sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build(),
-                        (responseInfo) -> GitHubClient.parseBody(responseInfo, type))
+                        (responseInfo) -> GitHubResponse.parseBody(responseInfo, type))
                 .body();
     }
 
@@ -178,9 +177,7 @@ class GitHubClient {
      * @return the connector
      */
     public HttpConnector getConnector() {
-        synchronized (this) {
-            return connector;
-        }
+        return connector;
     }
 
     /**
@@ -193,9 +190,7 @@ class GitHubClient {
     @Deprecated
     public void setConnector(HttpConnector connector) {
         LOGGER.warning("Connector should not be changed. Please file an issue describing your use case.");
-        synchronized (this) {
-            this.connector = connector;
-        }
+        this.connector = connector;
     }
 
     /**
@@ -343,7 +338,7 @@ class GitHubClient {
                                     + " " + request.url().toString());
                 }
 
-                responseInfo = GitHubResponse.ResponseInfo.fromHttpURLConnection(this, request);
+                responseInfo = getResponseInfo(request);
                 noteRateLimit(responseInfo);
                 detectOTPRequired(responseInfo);
 
@@ -373,63 +368,13 @@ class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
-    /**
-     * Parses a {@link GitHubResponse.ResponseInfo} body into a new instance of {@link T}.
-     * 
-     * @param responseInfo
-     *            response info to parse.
-     * @param type
-     *            the type to be constructed.
-     * @param <T>
-     *            the type
-     * @return a new instance of {@link T}.
-     * @throws IOException
-     *             if there is an I/O Exception.
-     */
-    @CheckForNull
-    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, Class<T> type) throws IOException {
+    @NotNull
+    protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
-        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
-            // no content
-            return type.cast(Array.newInstance(type.getComponentType(), 0));
-        }
-
-        String data = responseInfo.getBodyAsString();
-        try {
-            return MAPPER.readValue(data, type);
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
-        }
-    }
-
-    /**
-     * Parses a {@link GitHubResponse.ResponseInfo} body into a new instance of {@link T}.
-     * 
-     * @param responseInfo
-     *            response info to parse.
-     * @param instance
-     *            the object to fill with data parsed from body
-     * @param <T>
-     *            the type
-     * @return a new instance of {@link T}.
-     * @throws IOException
-     *             if there is an I/O Exception.
-     */
-    @CheckForNull
-    static <T> T parseBody(GitHubResponse.ResponseInfo responseInfo, T instance) throws IOException {
-
-        String data = responseInfo.getBodyAsString();
-        try {
-            return MAPPER.readerForUpdating(instance).<T>readValue(data);
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
-        }
-    }
+    protected abstract void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException;
 
     @Nonnull
-    private <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,
+    private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,
             @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
         T body = null;
         if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
@@ -520,30 +465,14 @@ class GitHubClient {
         }
     }
 
-    private static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    protected static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
                 && "0".equals(responseInfo.headerField("X-RateLimit-Remaining"));
     }
 
-    private static boolean isAbuseLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    protected static boolean isAbuseLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
                 && responseInfo.headerField("Retry-After") != null;
-    }
-
-    private void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
-        if (isRateLimitResponse(responseInfo)) {
-            GHIOException e = new HttpException("Rate limit violation",
-                    responseInfo.statusCode(),
-                    responseInfo.headerField("Status"),
-                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            rateLimitHandler.onError(e, ((GitHubResponse.HttpURLConnectionResponseInfo) responseInfo).connection);
-        } else if (isAbuseLimitResponse(responseInfo)) {
-            GHIOException e = new HttpException("Abuse limit violation",
-                    responseInfo.statusCode(),
-                    responseInfo.headerField("Status"),
-                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            abuseLimitHandler.onError(e, ((GitHubResponse.HttpURLConnectionResponseInfo) responseInfo).connection);
-        }
     }
 
     private static boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {

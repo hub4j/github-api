@@ -159,6 +159,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void addCollaborators() throws Exception {
+        GHRepository repo = getRepository();
+        GHUser user = getUser();
+        List<GHUser> users = new ArrayList<GHUser>();
+
+        users.add(user);
+        repo.addCollaborators(users, GHOrganization.Permission.PUSH);
+
+        GHPersonSet<GHUser> collabs = repo.getCollaborators();
+
+        GHUser colabUser = collabs.byLogin("jimmysombrero");
+
+        assertEquals(colabUser.getName(), user.getName());
+    }
+
+    @Test
     public void LatestRepositoryNotExist() {
         try {
             // add the repository that `NOT` have latest release

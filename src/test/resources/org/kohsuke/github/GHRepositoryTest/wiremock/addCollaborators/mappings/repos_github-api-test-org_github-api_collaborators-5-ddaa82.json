@@ -1,0 +1,41 @@
+{
+  "id": "ddaa8229-c0ae-4df6-90ed-08425bfe71f2",
+  "name": "repos_github-api-test-org_github-api_collaborators",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/collaborators",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": "200",
+    "bodyFileName": "repos_github-apit-test-ort_github-api_get_collaborators-5-ddaa82.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 03 Feb 2020 02:32:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4979",
+      "X-RateLimit-Reset": "1580700723",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CBB1:43C6:FBCD05:26D0ED5:5E378627"
+    }
+  },
+  "uuid": "ddaa8229-c0ae-4df6-90ed-08425bfe71f2",
+  "persistent": true,
+  "insertionIndex": 5
+}

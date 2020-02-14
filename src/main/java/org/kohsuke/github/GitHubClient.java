@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -64,6 +63,7 @@ abstract class GitHubClient {
 
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
+    private final GitHubRateLimitChecker rateLimitChecker;
 
     private HttpConnector connector;
 
@@ -95,6 +95,7 @@ abstract class GitHubClient {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitChecker rateLimitChecker,
             Consumer<GHMyself> myselfConsumer) throws IOException {
 
         if (apiUrl.endsWith("/")) {
@@ -124,6 +125,7 @@ abstract class GitHubClient {
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
+        this.rateLimitChecker = rateLimitChecker;
 
         if (login == null && encodedAuthorization != null && jwtToken == null) {
             GHMyself myself = fetch(GHMyself.class, "/user");
@@ -336,6 +338,8 @@ abstract class GitHubClient {
                                     + " " + request.url().toString());
                 }
 
+                rateLimitChecker.checkRateLimit(this, request);
+
                 responseInfo = getResponseInfo(request);
                 noteRateLimit(responseInfo);
                 detectOTPRequired(responseInfo);
@@ -366,7 +370,7 @@ abstract class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
-    @NotNull
+    @Nonnull
     protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
     protected abstract void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException;
@@ -442,7 +446,7 @@ abstract class GitHubClient {
     /**
      * Sets the response headers on objects that need it. Ideally this would be handled by the objects themselves, but
      * currently they do not have access to {@link GitHubResponse.ResponseInfo} after the
-     * 
+     *
      * @param responseInfo
      *            the response info
      * @param readValue

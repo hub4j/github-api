@@ -108,7 +108,8 @@ public class GitHub {
             String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler) throws IOException {
+            AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitChecker rateLimitChecker) throws IOException {
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 login,
                 oauthAccessToken,
@@ -117,6 +118,7 @@ public class GitHub {
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
+                rateLimitChecker,
                 (myself) -> setMyself(myself));
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();

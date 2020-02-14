@@ -219,6 +219,20 @@ public class GHRateLimit {
         return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());
     }
 
+    Record selectRateLimitRecord(String urlPath) {
+        if (urlPath.equals("/rate_limit")) {
+            return new UnknownLimitRecord();
+        } else if (urlPath.startsWith("/search")) {
+            return getSearch();
+        } else if (urlPath.startsWith("/graphql")) {
+            return getGraphQL();
+        } else if (urlPath.startsWith("/app-manifests")) {
+            return getIntegrationManifest();
+        } else {
+            return getCore();
+        }
+    }
+
     /**
      * A limit record used as a placeholder when the the actual limit is not known.
      * <p>

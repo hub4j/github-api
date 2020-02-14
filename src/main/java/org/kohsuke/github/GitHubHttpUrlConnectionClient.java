@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +40,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitChecker rateLimitChecker,
             Consumer<GHMyself> myselfConsumer) throws IOException {
         super(apiUrl,
                 login,
@@ -50,10 +50,11 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
+                rateLimitChecker,
                 myselfConsumer);
     }
 
-    @NotNull
+    @Nonnull
     protected GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
         HttpURLConnection connection;
         try {

@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "comment": "This header rate limit will be ignored because the reset is sooner than existing"
+  },
+  "id": "4c3594ea-179b-418f-b590-72e9a9a48494",
+  "name": "orgs_github-api-test-org",
+  "request": {
+    "url": "/orgs/github-api-test-org",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org-4c3594ea-179b-418f-b590-72e9a9a48494.json",
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4400",
+      "X-RateLimit-Reset": "{{testStartDate offset='4 seconds' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"75d6d979ad0098ece26e54f88ea58d8c\"",
+      "Last-Modified": "Mon, 20 Apr 2015 00:42:30 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8AD:9836:A3F7D9:C516A2:5E4DF170"
+    }
+  },
+  "uuid": "4c3594ea-179b-418f-b590-72e9a9a48494",
+  "persistent": true,
+  "insertionIndex": 3
+}

@@ -228,6 +228,13 @@ public class GHIssue extends GHObject implements Reactable {
         root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
+    /**
+     * Identical to edit(), but allows null for the value.
+     */
+    private void editNullable(String key, Object value) throws IOException {
+        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
     private void editIssue(String key, Object value) throws IOException {
         root.createRequest().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
@@ -277,15 +284,19 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Sets milestone.
+     * Sets the milestone for this issue.
      *
      * @param milestone
-     *            the milestone
+     *            The milestone to assign this issue to. Use null to remove the milestone for this issue.
      * @throws IOException
-     *             the io exception
+     *             The io exception
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
-        edit("milestone", milestone.getNumber());
+        if (milestone == null) {
+            editNullable("milestone", null);
+        } else {
+            edit("milestone", milestone.getNumber());
+        }
     }
 
     /**

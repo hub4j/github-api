@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * @author Martin van Zijl
  */
@@ -23,7 +21,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         }
 
         for (GHMilestone milestone : getRepository(getGitHubBeforeAfter()).listMilestones(GHIssueState.ALL)) {
-            if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())) {
+            if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())
+                    || "Unset Test Milestone".equals(milestone.getTitle())) {
                 milestone.delete();
             }
         }
@@ -52,6 +51,23 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         // The time is truncated when sent to the server, but still part of the returned value
         // 07:00 midnight PDT
         assertEquals(OUTPUT_DUE_DATE, milestone.getDueOn());
+    }
+
+    @Test
+    public void testUnsetMilestone() throws IOException {
+        GHRepository repo = getRepository();
+        GHMilestone milestone = repo.createMilestone("Unset Test Milestone", "For testUnsetMilestone");
+        GHIssue issue = repo.createIssue("Issue for testUnsetMilestone").create();
+
+        // set the milestone
+        issue.setMilestone(milestone);
+        issue = repo.getIssue(issue.getNumber()); // force reload
+        assertEquals(milestone.getNumber(), issue.getMilestone().getNumber());
+
+        // remove the milestone
+        issue.setMilestone(null);
+        issue = repo.getIssue(issue.getNumber()); // force reload
+        assertEquals(null, issue.getMilestone());
     }
 
     protected GHRepository getRepository() throws IOException {

@@ -23,41 +23,76 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     protected final Iterator<T[]> base;
 
     /**
-     * Current batch that we retrieved but haven't returned to the caller.
+     * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
+     * the last item of the array is returned, when {@link #next()} is called again, a new page of items will be fetched
+     * and iterating will continue from the first item in the new page.
+     * 
+     * @see #fetch() {@link #fetch()} for details on how this field is used.
      */
-    private T[] current;
-    private int pos;
+    private T[] currentPage;
+
+    /**
+     * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
+     * 
+     * @see #fetch() {@link #fetch()} for details on how this field is used.
+     */
+    private int nextItemIndex;
 
     PagedIterator(Iterator<T[]> base) {
         this.base = base;
     }
 
     /**
-     * Wrap up.
+     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
+     * to decide what local data to apply.
      *
      * @param page
-     *            the page
+     *            the page of items to be initialized
      */
     protected abstract void wrapUp(T[] page);
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean hasNext() {
         fetch();
-        return current.length > pos;
+        return currentPage.length > nextItemIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public T next() {
         if (!hasNext())
             throw new NoSuchElementException();
-        return current[pos++];
+        return currentPage[nextItemIndex++];
     }
 
+    /**
+     * Fetch is called at the start of {@link #next()} or {@link #hasNext()} to fetch another page of data if it is
+     * needed and available.
+     * <p>
+     * If there is no current page yet (at the start of iterating), a page is fetched. If {@link #nextItemIndex} points
+     * to an item in the current page array, the state is valid - no more work is needed. If {@link #nextItemIndex} is
+     * greater than the last index in the current page array, the method checks if there is another page of data
+     * available.
+     * </p>
+     * <p>
+     * If there is another page, get that page of data and reset the check {@link #nextItemIndex} to the start of the
+     * new page.
+     * </p>
+     * <p>
+     * If no more pages are available, leave the page and index unchanged. In this case, {@link #hasNext()} will return
+     * {@code false} and {@link #next()} will throw an exception.
+     * </p>
+     */
     private void fetch() {
-        if ((current == null || current.length <= pos) && base.hasNext()) {
+        if ((currentPage == null || currentPage.length <= nextItemIndex) && base.hasNext()) {
             // On first call, always get next page (may be empty array)
             T[] result = Objects.requireNonNull(base.next());
             wrapUp(result);
-            current = result;
-            pos = 0;
+            currentPage = result;
+            nextItemIndex = 0;
         }
     }
 
@@ -83,19 +118,19 @@ public abstract class PagedIterator<T> implements Iterator<T> {
     T[] nextPageArray() {
         // if we have not fetched any pages yet, always fetch.
         // If we have fetched at least one page, check hasNext()
-        if (current == null) {
+        if (currentPage == null) {
             fetch();
         } else if (!hasNext()) {
             throw new NoSuchElementException();
         }
 
         // Current should never be null after fetch
-        Objects.requireNonNull(current);
-        T[] r = current;
-        if (pos != 0) {
-            r = Arrays.copyOfRange(r, pos, r.length);
+        Objects.requireNonNull(currentPage);
+        T[] r = currentPage;
+        if (nextItemIndex != 0) {
+            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
         }
-        pos = current.length;
+        nextItemIndex = currentPage.length;
         return r;
     }
 }

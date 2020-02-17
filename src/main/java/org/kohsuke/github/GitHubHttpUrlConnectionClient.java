@@ -22,13 +22,14 @@ import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
- * A GitHub API Client
+ * A GitHub API Client for HttpUrlConnection
  * <p>
- * A GitHubClient can be used to send requests and retrieve their responses. Once built, a GitHubClient is thread-safe
- * and can be used to send multiple requests. GitHubClient does, however cache some GitHub API information such as
- * {@link #rateLimit()}.
+ * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
+ * to send multiple requests. GitHubClient also track some GitHub API information such as {@link #rateLimit()}.
  * </p>
- * Class {@link GitHubHttpUrlConnectionClient} retireves
+ * <p>
+ * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.
+ * </p>
  */
 class GitHubHttpUrlConnectionClient extends GitHubClient {
 

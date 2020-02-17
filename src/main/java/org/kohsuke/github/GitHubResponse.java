@@ -290,7 +290,7 @@ class GitHubResponse<T> {
         /**
          * Gets the body of the response as a {@link String}.
          *
-         * @return the body of the response as a {@link String}.F
+         * @return the body of the response as a {@link String}.
          * @throws IOException
          *             if an I/O Exception occurs.
          */
@@ -302,7 +302,6 @@ class GitHubResponse<T> {
             } finally {
                 IOUtils.closeQuietly(r);
             }
-
         }
     }
 

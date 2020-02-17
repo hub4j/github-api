@@ -41,11 +41,9 @@ import static java.util.logging.Level.*;
 /**
  * A GitHub API Client
  * <p>
- * A GitHubClient can be used to send requests and retrieve their responses. Once built, a GitHubClient is thread-safe
- * and can be used to send multiple requests. GitHubClient does, however cache some GitHub API information such as
- * {@link #rateLimit()}.
+ * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
+ * to send multiple requests. GitHubClient also track some GitHub API information such as {@link #rateLimit()}.
  * </p>
- * Class {@link GitHubClient} retireves
  */
 abstract class GitHubClient {
 

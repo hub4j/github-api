@@ -37,7 +37,7 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     public PagedIterator<T> _iterator(int pageSize) {
         final GitHubPageIterator<T[]> iterator = GitHubPageIterator
                 .create(client, clazz, request.toBuilder().withPageSize(pageSize));
-        return new GitHubPagedIterator(iterator);
+        return new GitHubPageContentsIterator(iterator);
     }
 
     /**
@@ -50,18 +50,16 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
      */
     @Nonnull
     GitHubResponse<T[]> toResponse() throws IOException {
-        GitHubPagedIterator iterator = (GitHubPagedIterator) iterator();
+        GitHubPageContentsIterator iterator = (GitHubPageContentsIterator) iterator();
         T[] items = toArray(iterator);
         GitHubResponse<T[]> lastResponse = iterator.lastResponse();
         return new GitHubResponse<>(lastResponse, items);
     }
 
-    private class GitHubPagedIterator extends PagedIterator<T> {
-        private final GitHubPageIterator<T[]> baseIterator;
+    private class GitHubPageContentsIterator extends PagedIterator<T> {
 
-        public GitHubPagedIterator(GitHubPageIterator<T[]> iterator) {
+        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator) {
             super(iterator);
-            baseIterator = iterator;
         }
 
         @Override
@@ -79,7 +77,7 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
          * @return the {@link GitHubResponse} for the last page received.
          */
         private GitHubResponse<T[]> lastResponse() {
-            return baseIterator.lastResponse();
+            return ((GitHubPageIterator<T[]>) base).finalResponse();
         }
     }
 }

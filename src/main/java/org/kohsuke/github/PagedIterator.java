@@ -55,17 +55,21 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      * {@inheritDoc}
      */
     public boolean hasNext() {
-        fetch();
-        return currentPage.length > nextItemIndex;
+        synchronized (this) {
+            fetch();
+            return currentPage.length > nextItemIndex;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public T next() {
-        if (!hasNext())
-            throw new NoSuchElementException();
-        return currentPage[nextItemIndex++];
+        synchronized (this) {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            return currentPage[nextItemIndex++];
+        }
     }
 
     /**
@@ -116,21 +120,23 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      */
     @Nonnull
     T[] nextPageArray() {
-        // if we have not fetched any pages yet, always fetch.
-        // If we have fetched at least one page, check hasNext()
-        if (currentPage == null) {
-            fetch();
-        } else if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
+        synchronized (this) {
+            // if we have not fetched any pages yet, always fetch.
+            // If we have fetched at least one page, check hasNext()
+            if (currentPage == null) {
+                fetch();
+            } else if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
 
-        // Current should never be null after fetch
-        Objects.requireNonNull(currentPage);
-        T[] r = currentPage;
-        if (nextItemIndex != 0) {
-            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
+            // Current should never be null after fetch
+            Objects.requireNonNull(currentPage);
+            T[] r = currentPage;
+            if (nextItemIndex != 0) {
+                r = Arrays.copyOfRange(r, nextItemIndex, r.length);
+            }
+            nextItemIndex = currentPage.length;
+            return r;
         }
-        nextItemIndex = currentPage.length;
-        return r;
     }
 }

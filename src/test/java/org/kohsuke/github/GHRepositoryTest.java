@@ -312,13 +312,13 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void getDeleteBranchOnMerge() throws IOException {
-        GHRepository r = getTempRepository();
+        GHRepository r = getRepository();
         assertNotNull(r.isDeleteBranchOnMerge());
     }
 
     @Test
     public void setDeleteBranchOnMerge() throws IOException {
-        GHRepository r = getTempRepository();
+        GHRepository r = getRepository();
 
         // enable auto delete
         r.deleteBranchOnMerge(true);

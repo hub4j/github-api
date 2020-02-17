@@ -83,7 +83,7 @@ public class GHRepository extends GHObject {
     private boolean allow_merge_commit;
     private boolean allow_rebase_merge;
 
-    private boolean deleteBranchOnMerge;
+    private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
     private boolean _private;
@@ -615,7 +615,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isDeleteBranchOnMerge() {
-        return deleteBranchOnMerge;
+        return delete_branch_on_merge;
     }
 
     /**

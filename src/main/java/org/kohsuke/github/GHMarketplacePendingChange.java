@@ -68,7 +68,7 @@ public class GHMarketplacePendingChange {
      * @return the effective date
      */
     public Date getEffectiveDate() {
-        return GitHub.parseDate(effectiveDate);
+        return GitHubClient.parseDate(effectiveDate);
     }
 
 }

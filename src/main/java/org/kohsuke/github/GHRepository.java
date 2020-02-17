@@ -25,6 +25,8 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -257,7 +259,7 @@ public class GHRepository extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -705,7 +707,7 @@ public class GHRepository extends GHObject {
      * @return null if the repository was never pushed at.
      */
     public Date getPushedAt() {
-        return GitHub.parseDate(pushed_at);
+        return GitHubClient.parseDate(pushed_at);
     }
 
     /**
@@ -824,7 +826,7 @@ public class GHRepository extends GHObject {
      * Obtain permission for a given user in this repository.
      *
      * @param u
-     *            the u
+     *            the user
      * @return the permission
      * @throws IOException
      *             the io exception
@@ -851,6 +853,20 @@ public class GHRepository extends GHObject {
      *
      * @param users
      *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+        addCollaborators(asList(users), permission);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
      * @throws IOException
      *             the io exception
      */
@@ -867,7 +883,21 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT");
+        modifyCollaborators(users, "PUT", null);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+        modifyCollaborators(users, "PUT", permission);
     }
 
     /**
@@ -891,12 +921,20 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE");
+        modifyCollaborators(users, "DELETE", null);
     }
 
-    private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
+    private void modifyCollaborators(@NonNull Collection<GHUser> users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.Permission permission) throws IOException {
+        Requester requester = root.createRequest().method(method);
+
+        if (permission != null) {
+            requester = requester.with("permission", permission).inBody();
+        }
+
         for (GHUser user : users) {
-            root.createRequest().method(method).withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
 

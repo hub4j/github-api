@@ -27,7 +27,7 @@ public class GHCompare {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -36,7 +36,7 @@ public class GHCompare {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -45,7 +45,7 @@ public class GHCompare {
      * @return the permalink url
      */
     public URL getPermalinkUrl() {
-        return GitHub.parseURL(permalink_url);
+        return GitHubClient.parseURL(permalink_url);
     }
 
     /**
@@ -54,7 +54,7 @@ public class GHCompare {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHub.parseURL(diff_url);
+        return GitHubClient.parseURL(diff_url);
     }
 
     /**
@@ -63,7 +63,7 @@ public class GHCompare {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHub.parseURL(patch_url);
+        return GitHubClient.parseURL(patch_url);
     }
 
     /**

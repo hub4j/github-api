@@ -127,7 +127,7 @@ public class GHAppInstallationToken {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "expiresAtStr")
     public Date getExpiresAt() throws IOException {
-        return GitHub.parseDate(expires_at);
+        return GitHubClient.parseDate(expires_at);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getExpiresAt")

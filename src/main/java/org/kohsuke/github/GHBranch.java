@@ -90,7 +90,7 @@ public class GHBranch {
     @Preview
     @Deprecated
     public URL getProtectionUrl() {
-        return GitHub.parseURL(protection_url);
+        return GitHubClient.parseURL(protection_url);
     }
 
     /**

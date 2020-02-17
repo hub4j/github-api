@@ -90,7 +90,7 @@ public class GHProjectColumn extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHub.parseURL(project_url);
+        return GitHubClient.parseURL(project_url);
     }
 
     /**

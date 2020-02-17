@@ -41,7 +41,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * show this commit comment in a browser.
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

@@ -25,7 +25,7 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**

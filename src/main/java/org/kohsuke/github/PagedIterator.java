@@ -15,6 +15,8 @@ import javax.annotation.Nonnull;
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()} and {@link #nextPageArray()} that
  * allows the caller to retrieve entire pages.
  *
+ * This class is not thread-safe. Any one instance should only be called from a single thread.
+ *
  * @param <T>
  *            the type parameter
  * @author Kohsuke Kawaguchi
@@ -55,21 +57,17 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      * {@inheritDoc}
      */
     public boolean hasNext() {
-        synchronized (this) {
-            fetch();
-            return currentPage.length > nextItemIndex;
-        }
+        fetch();
+        return currentPage.length > nextItemIndex;
     }
 
     /**
      * {@inheritDoc}
      */
     public T next() {
-        synchronized (this) {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            return currentPage[nextItemIndex++];
-        }
+        if (!hasNext())
+            throw new NoSuchElementException();
+        return currentPage[nextItemIndex++];
     }
 
     /**
@@ -120,23 +118,21 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      */
     @Nonnull
     T[] nextPageArray() {
-        synchronized (this) {
-            // if we have not fetched any pages yet, always fetch.
-            // If we have fetched at least one page, check hasNext()
-            if (currentPage == null) {
-                fetch();
-            } else if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-
-            // Current should never be null after fetch
-            Objects.requireNonNull(currentPage);
-            T[] r = currentPage;
-            if (nextItemIndex != 0) {
-                r = Arrays.copyOfRange(r, nextItemIndex, r.length);
-            }
-            nextItemIndex = currentPage.length;
-            return r;
+        // if we have not fetched any pages yet, always fetch.
+        // If we have fetched at least one page, check hasNext()
+        if (currentPage == null) {
+            fetch();
+        } else if (!hasNext()) {
+            throw new NoSuchElementException();
         }
+
+        // Current should never be null after fetch
+        Objects.requireNonNull(currentPage);
+        T[] r = currentPage;
+        if (nextItemIndex != 0) {
+            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
+        }
+        nextItemIndex = currentPage.length;
+        return r;
     }
 }

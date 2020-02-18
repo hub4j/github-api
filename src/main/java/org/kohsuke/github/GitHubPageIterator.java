@@ -15,6 +15,8 @@ import javax.annotation.Nonnull;
  *
  * Works for array responses, also works for search results which are single instances with an array of items inside.
  *
+ * This class is not thread-safe. Any one instance should only be called from a single thread.
+ *
  * @param <T>
  *            type of each page (not the items in the page).
  */
@@ -80,10 +82,8 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * {@inheritDoc}
      */
     public boolean hasNext() {
-        synchronized (this) {
-            fetch();
-            return next != null;
-        }
+        fetch();
+        return next != null;
     }
 
     /**
@@ -93,15 +93,13 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     @Nonnull
     public T next() {
-        synchronized (this) {
-            fetch();
-            T result = next;
-            if (result == null)
-                throw new NoSuchElementException();
-            // If this is the last page, keep the response
-            next = null;
-            return result;
-        }
+        fetch();
+        T result = next;
+        if (result == null)
+            throw new NoSuchElementException();
+        // If this is the last page, keep the response
+        next = null;
+        return result;
     }
 
     /**

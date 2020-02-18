@@ -122,13 +122,13 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
      * needed.
      * <p>
-     * If {@link #next} is not {@code null}, no further action is need. If {@link #next} is {@code null} and
+     * If {@link #next} is not {@code null}, no further action is needed. If {@link #next} is {@code null} and
      * {@link #nextRequest} is {@code null}, there are no more pages to fetch.
      * </p>
      * <p>
-     * Otherwise, a new response page is fetched using {@link #nextRequest}. The response is then check to see if there
-     * is a page after it and {@link #nextRequest} is updated to point to it. If there are no pages available after the
-     * current response, {@link #nextRequest} is set to {@code null}.
+     * Otherwise, a new response page is fetched using {@link #nextRequest}. The response is then checked to see if
+     * there is a page after it and {@link #nextRequest} is updated to point to it. If there are no pages available
+     * after the current response, {@link #nextRequest} is set to {@code null}.
      * </p>
      */
     private void fetch() {

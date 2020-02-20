@@ -85,38 +85,48 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         // We should update to the regular records over unknowns.
         // After that, we should update to the candidate if its limit is lower or its reset is later.
 
-        assertThat("Equivalent unknown should not replace", GitHub.shouldReplace(unknown0, unknown1), is(false));
-        assertThat("Equivalent unknown should not replace", GitHub.shouldReplace(unknown1, unknown0), is(false));
+        assertThat("Equivalent unknown should not replace", GitHubClient.shouldReplace(unknown0, unknown1), is(false));
+        assertThat("Equivalent unknown should not replace", GitHubClient.shouldReplace(unknown1, unknown0), is(false));
 
-        assertThat("Later unknown should replace earlier", GitHub.shouldReplace(unknown2, unknown0), is(true));
-        assertThat("Earlier unknown should not replace later", GitHub.shouldReplace(unknown0, unknown2), is(false));
-
-        assertThat("Worst record should replace later unknown", GitHub.shouldReplace(recordWorst, unknown1), is(true));
-        assertThat("Unknown should not replace worst record", GitHub.shouldReplace(unknown1, recordWorst), is(false));
-
-        assertThat("Earlier record should replace later worst", GitHub.shouldReplace(record0, recordWorst), is(true));
-        assertThat("Later worst record should not replace earlier",
-                GitHub.shouldReplace(recordWorst, record0),
+        assertThat("Later unknown should replace earlier", GitHubClient.shouldReplace(unknown2, unknown0), is(true));
+        assertThat("Earlier unknown should not replace later",
+                GitHubClient.shouldReplace(unknown0, unknown2),
                 is(false));
 
-        assertThat("Equivalent record should not replace", GitHub.shouldReplace(record0, record00), is(false));
-        assertThat("Equivalent record should not replace", GitHub.shouldReplace(record00, record0), is(false));
+        assertThat("Worst record should replace later unknown",
+                GitHubClient.shouldReplace(recordWorst, unknown1),
+                is(true));
+        assertThat("Unknown should not replace worst record",
+                GitHubClient.shouldReplace(unknown1, recordWorst),
+                is(false));
 
-        assertThat("Lower limit record should replace higher", GitHub.shouldReplace(record1, record0), is(true));
-        assertThat("Lower limit record should replace higher", GitHub.shouldReplace(record2, record1), is(true));
+        assertThat("Earlier record should replace later worst",
+                GitHubClient.shouldReplace(record0, recordWorst),
+                is(true));
+        assertThat("Later worst record should not replace earlier",
+                GitHubClient.shouldReplace(recordWorst, record0),
+                is(false));
 
-        assertThat("Higher limit record should not replace lower", GitHub.shouldReplace(record1, record2), is(false));
+        assertThat("Equivalent record should not replace", GitHubClient.shouldReplace(record0, record00), is(false));
+        assertThat("Equivalent record should not replace", GitHubClient.shouldReplace(record00, record0), is(false));
+
+        assertThat("Lower limit record should replace higher", GitHubClient.shouldReplace(record1, record0), is(true));
+        assertThat("Lower limit record should replace higher", GitHubClient.shouldReplace(record2, record1), is(true));
+
+        assertThat("Higher limit record should not replace lower",
+                GitHubClient.shouldReplace(record1, record2),
+                is(false));
 
         assertThat("Higher limit record with later reset should  replace lower",
-                GitHub.shouldReplace(record3, record2),
+                GitHubClient.shouldReplace(record3, record2),
                 is(true));
 
         assertThat("Lower limit record with later reset should replace higher",
-                GitHub.shouldReplace(record4, record1),
+                GitHubClient.shouldReplace(record4, record1),
                 is(true));
 
         assertThat("Lower limit record with earlier reset should not replace higher",
-                GitHub.shouldReplace(record2, record4),
+                GitHubClient.shouldReplace(record2, record4),
                 is(false));
 
     }

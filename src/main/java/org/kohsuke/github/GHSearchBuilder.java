@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Base class for various search builders.
  *
@@ -43,9 +45,11 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     @Override
     public PagedSearchIterable<T> list() {
         return new PagedSearchIterable<T>(root) {
+            @Nonnull
             public PagedIterator<T> _iterator(int pageSize) {
                 req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.withUrlPath(getApiUrl()).asIterator(receiverType, pageSize))) {
+                return new PagedIterator<T>(adapt(GitHubPageIterator
+                        .create(req.client, receiverType, req.withUrlPath(getApiUrl()).withPageSize(pageSize)))) {
                     protected void wrapUp(T[] page) {
                         // SearchResult.getItems() should do it
                     }

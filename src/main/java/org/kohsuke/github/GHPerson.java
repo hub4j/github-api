@@ -118,9 +118,9 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return new Iterable<List<GHRepository>>() {
             public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.createRequest()
-                        .withUrlPath("users", login, "repos")
-                        .asIterator(GHRepository[].class, pageSize);
+                final Iterator<GHRepository[]> pager = GitHubPageIterator.create(root.getClient(),
+                        GHRepository[].class,
+                        root.createRequest().withUrlPath("users", login, "repos").withPageSize(pageSize));
 
                 return new Iterator<List<GHRepository>>() {
                     public boolean hasNext() {

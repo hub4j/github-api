@@ -259,7 +259,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
         if (StringUtils.isBlank(commitUrl)) {
             return null;
         }
-        int indexOfUsername = (GitHub.GITHUB_URL + "/repos/").length();
+        int indexOfUsername = (GitHubClient.GITHUB_URL + "/repos/").length();
         String[] tokens = commitUrl.substring(indexOfUsername).split("/", 3);
         return tokens[0] + '/' + tokens[1];
     }

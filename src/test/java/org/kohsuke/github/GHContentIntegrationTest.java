@@ -122,7 +122,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
             fail("Delete didn't work!");
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(),
-                    equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
+                    endsWith(
+                            "/repos/github-api-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
         }
     }
 

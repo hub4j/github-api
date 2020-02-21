@@ -321,12 +321,11 @@ public class GitHubBuilder implements Cloneable {
      * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
      * {@link RateLimitHandler#onError(IOException, HttpURLConnection)} will be called.
      * </p>
-     * <P>
+     * <p>
      * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
-     * exceeding their rate limit. Consider add a {@link RateLimitChecker} to automatically check the rate limit for
+     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
      * each request and wait if needed.
-     * </P>
-     *
+     * </p>
      *
      * @param handler
      *            the handler

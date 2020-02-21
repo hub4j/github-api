@@ -15,7 +15,8 @@ import static org.hamcrest.CoreMatchers.*;
 /**
  * Test showing the behavior of the {@link GitHubRateLimitChecker} and {@link RateLimitChecker.LiteralValue}.
  *
- * This is a very simple test but covers the key features: Checks occur automatically and are retried until they indicate it is safe to proceed.
+ * This is a very simple test but covers the key features: Checks occur automatically and are retried until they
+ * indicate it is safe to proceed.
  */
 public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 

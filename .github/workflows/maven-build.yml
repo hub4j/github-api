@@ -65,8 +65,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Maven Install without Code Coverage
-      if: matrix.os == "windows"
+      if: ${{ matrix.os == 'windows' }}
       run: mvn -B install --file pom.xml
     - name: Maven Install with Code Coverage
-      if: matrix.os != "windows"
+      if: ${{ matrix.os != 'windows' }}
       run: mvn -B install -D enable-ci --file pom.xml

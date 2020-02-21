@@ -1,31 +1,16 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHRepositoryTraffic.DailyInfo;
-import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     final private String repositoryName = "github-api";
-
-    @Override
-    protected GitHubBuilder getGitHubBuilder() {
-        return new GitHubBuilder().withPassword(GITHUB_API_TEST_ORG, null);
-    }
 
     @SuppressWarnings("unchecked")
     private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual) {
@@ -50,100 +35,66 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    private <T extends GHRepositoryTraffic> void testTraffic(T expectedResult) throws IOException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        ObjectMapper mapper = new ObjectMapper().setDateFormat(dateFormat);
-        String mockedResponse = mapper.writeValueAsString(expectedResult);
-
-        GitHub gitHubSpy = Mockito.spy(gitHub);
-        GHRepository repo = Mockito.spy(gitHubSpy.getOrganization(GITHUB_API_TEST_ORG).getRepository(repositoryName));
-        Mockito.doReturn(GITHUB_API_TEST_ORG).when(repo).getOwnerName();
-
-        // accessing traffic info requires push access to the repo
-        // since we don't have that, let the mocking begin...
-
-        HttpConnector connectorSpy = Mockito.spy(gitHubSpy.getConnector());
-        Mockito.doReturn(connectorSpy).when(gitHubSpy).getConnector();
-
-        // also known as the "uc" in the Requester class
-        HttpURLConnection mockHttpURLConnection = Mockito.mock(HttpURLConnection.class);
-
-        // needed for Requester.setRequestMethod
-        Mockito.doReturn("GET").when(mockHttpURLConnection).getRequestMethod();
-
-        // this covers calls on "uc" in Requester.setupConnection and Requester.buildRequest
-        String tailApiUrl = "/repos/" + GITHUB_API_TEST_ORG + "/" + repositoryName + "/traffic/"
-                + ((expectedResult instanceof GHRepositoryViewTraffic) ? "views" : "clones");
-        URL trafficURL = GitHubRequest.getApiURL(gitHub.getClient().getApiUrl(), tailApiUrl);
-        Mockito.doReturn(mockHttpURLConnection).when(connectorSpy).connect(Mockito.eq(trafficURL));
-
-        // make Requester.parse work
-        Mockito.doReturn(200).when(mockHttpURLConnection).getResponseCode();
-        // Mocking failing here due to refactoriing.
-        // Mockito.doReturn("OK").when(mockHttpURLConnection).getResponseMessage();
-        Mockito.doReturn(new HashMap<String, List<String>>()).when(mockHttpURLConnection).getHeaderFields();
-
-        InputStream stubInputStream = IOUtils.toInputStream(mockedResponse, "UTF-8");
-        Mockito.doReturn(stubInputStream).when(mockHttpURLConnection).getInputStream();
-
-        if (expectedResult instanceof GHRepositoryViewTraffic) {
-            GHRepositoryViewTraffic views = repo.getViewTraffic();
-            checkResponse(expectedResult, views);
-        } else if (expectedResult instanceof GHRepositoryCloneTraffic) {
-            GHRepositoryCloneTraffic clones = repo.getCloneTraffic();
-            checkResponse(expectedResult, clones);
-        }
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("github-api").getRepository("github-api");
     }
 
-    @Ignore("Refactoring broke mocking")
     @Test
     public void testGetViews() throws IOException {
-        GHRepositoryViewTraffic expectedResult = new GHRepositoryViewTraffic(21523359,
-                65534,
-                Arrays.asList(new GHRepositoryViewTraffic.DailyInfo("2016-10-10T00:00:00Z", 3, 2),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-11T00:00:00Z", 9, 4),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-12T00:00:00Z", 27, 8),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-13T00:00:00Z", 81, 16),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-14T00:00:00Z", 243, 32),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-15T00:00:00Z", 729, 64),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-16T00:00:00Z", 2187, 128),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-17T00:00:00Z", 6561, 256),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-18T00:00:00Z", 19683, 512),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-19T00:00:00Z", 59049, 1024),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-20T00:00:00Z", 177147, 2048),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-21T00:00:00Z", 531441, 4096),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-22T00:00:00Z", 1594323, 8192),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-23T00:00:00Z", 4782969, 16384),
-                        new GHRepositoryViewTraffic.DailyInfo("2016-10-24T00:00:00Z", 14348907, 32768)));
-        testTraffic(expectedResult);
+        // Would change all the time
+        snapshotNotAllowed();
+
+        GHRepository repository = getRepository(gitHub);
+        GHRepositoryViewTraffic views = repository.getViewTraffic();
+
+        GHRepositoryViewTraffic expectedResult = new GHRepositoryViewTraffic(3533,
+                616,
+                Arrays.asList(new GHRepositoryViewTraffic.DailyInfo("2020-02-08T00:00:00Z", 101, 31),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-09T00:00:00Z", 92, 22),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-10T00:00:00Z", 317, 84),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-11T00:00:00Z", 365, 90),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-12T00:00:00Z", 428, 78),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-13T00:00:00Z", 334, 52),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-14T00:00:00Z", 138, 44),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-15T00:00:00Z", 76, 13),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-16T00:00:00Z", 99, 27),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-17T00:00:00Z", 367, 65),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-18T00:00:00Z", 411, 76),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-19T00:00:00Z", 140, 61),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-20T00:00:00Z", 259, 55),
+                        new GHRepositoryViewTraffic.DailyInfo("2020-02-21T00:00:00Z", 406, 66)));
+        checkResponse(expectedResult, views);
     }
 
-    @Ignore("Refactoring broke mocking")
     @Test
     public void testGetClones() throws IOException {
-        GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(1500,
-                455,
-                Arrays.asList(new GHRepositoryCloneTraffic.DailyInfo("2016-10-10T00:00:00Z", 10, 3),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-11T00:00:00Z", 20, 6),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-12T00:00:00Z", 30, 5),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-13T00:00:00Z", 40, 7),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-14T00:00:00Z", 50, 11),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-15T00:00:00Z", 60, 12),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-16T00:00:00Z", 70, 19),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-17T00:00:00Z", 170, 111),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-18T00:00:00Z", 180, 70),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-19T00:00:00Z", 190, 10),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-20T00:00:00Z", 200, 18),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-21T00:00:00Z", 210, 8),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-22T00:00:00Z", 220, 168),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-23T00:00:00Z", 5, 2),
-                        new GHRepositoryCloneTraffic.DailyInfo("2016-10-24T00:00:00Z", 45, 5)));
-        testTraffic(expectedResult);
+        // Would change all the time
+        snapshotNotAllowed();
+
+        GHRepository repository = getRepository(gitHub);
+        GHRepositoryCloneTraffic clones = repository.getCloneTraffic();
+
+        GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(128,
+                25,
+                Arrays.asList(new GHRepositoryCloneTraffic.DailyInfo("2020-02-08T00:00:00Z", 6, 3),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-10T00:00:00Z", 6, 4),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-11T00:00:00Z", 2, 2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-12T00:00:00Z", 1, 1),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-13T00:00:00Z", 1, 1),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-14T00:00:00Z", 2, 2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-15T00:00:00Z", 2, 2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-16T00:00:00Z", 2, 2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-17T00:00:00Z", 3, 3),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-18T00:00:00Z", 1, 1),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-20T00:00:00Z", 25, 2),
+                        new GHRepositoryCloneTraffic.DailyInfo("2020-02-21T00:00:00Z", 77, 6)));
+        checkResponse(expectedResult, clones);
     }
 
     @Test
     public void testGetTrafficStatsAccessFailureDueToInsufficientPermissions() throws IOException {
+        // Snapshot taken without permissions
+        snapshotNotAllowed();
         String errorMsg = "Exception should be thrown, since we don't have permission to access repo traffic info.";
 
         GHRepository repo = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository(repositoryName);

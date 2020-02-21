@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * Represents your subscribing to a repository / conversation thread..
  *
- * @author Kohsuke Kawaguchi
  * @see GHRepository#getSubscription() GHRepository#getSubscription()
  * @see GHThread#getSubscription() GHThread#getSubscription()
  */

@@ -33,7 +33,6 @@ import static org.kohsuke.github.Previews.INERTIA;
 /**
  * A GitHub project.
  *
- * @author Martin van Zijl
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  */
 public class GHProject extends GHObject {

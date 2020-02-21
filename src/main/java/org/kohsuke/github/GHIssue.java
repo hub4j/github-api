@@ -42,7 +42,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 /**
  * Represents an issue on GitHub.
  *
- * @author Eric Maupin
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getIssue(int) GHRepository#getIssue(int)
  * @see GitHub#searchIssues() GitHub#searchIssues()

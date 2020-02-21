@@ -28,7 +28,6 @@ import java.net.URL;
 /**
  * File detail inside a {@link GHPullRequest}.
  *
- * @author Julien Henry
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
  */
 public class GHPullRequestFileDetail {

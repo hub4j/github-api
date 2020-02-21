@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
- * @author Kohsuke Kawaguchi
  * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
  * @see AbuseLimitHandler
  */

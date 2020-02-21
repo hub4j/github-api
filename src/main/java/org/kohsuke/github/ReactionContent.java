@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Content of reactions.
  *
- * @author Kohsuke Kawaguchi
  * @see <a href="https://developer.github.com/v3/reactions/">API documentation</a>
  * @see GHReaction
  */

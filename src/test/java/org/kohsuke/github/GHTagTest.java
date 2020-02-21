@@ -10,8 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- *
- * @author Martin van Zijl
  */
 public class GHTagTest extends AbstractGitHubWireMockTest {
 

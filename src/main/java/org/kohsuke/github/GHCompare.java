@@ -7,8 +7,6 @@ import java.net.URL;
 
 /**
  * The model user for comparing 2 commits in the GitHub API.
- *
- * @author Michael Clarke
  */
 public class GHCompare {
 

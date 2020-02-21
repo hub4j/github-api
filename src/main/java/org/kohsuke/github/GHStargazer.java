@@ -6,8 +6,6 @@ import java.util.Date;
 
 /**
  * A stargazer at a repository on GitHub.
- *
- * @author noctarius
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHStargazer {

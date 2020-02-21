@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * A Github App Installation Token.
  *
- * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  */
 public class GHAppInstallationToken {

@@ -27,8 +27,6 @@ import java.io.IOException;
 
 /**
  * Identifies a commit in {@link GHPullRequest}.
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHCommitPointer {
     private String ref, sha, label;

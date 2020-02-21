@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 /**
  * The type GHException.
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHException extends RuntimeException {
     /**

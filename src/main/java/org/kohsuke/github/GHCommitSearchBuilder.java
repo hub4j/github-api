@@ -7,7 +7,6 @@ import java.io.IOException;
 /**
  * Search commits.
  *
- * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
 @Preview

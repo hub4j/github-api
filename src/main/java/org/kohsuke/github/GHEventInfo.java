@@ -8,8 +8,6 @@ import java.util.Date;
 
 /**
  * Represents an event.
- *
- * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHEventInfo {

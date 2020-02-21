@@ -8,7 +8,6 @@ import static org.kohsuke.github.Previews.*;
 /**
  * Reaction to issue, comment, PR, and so on.
  *
- * @author Kohsuke Kawaguchi
  * @see Reactable
  */
 @Preview

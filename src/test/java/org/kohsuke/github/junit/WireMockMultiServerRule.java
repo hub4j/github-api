@@ -21,8 +21,6 @@ import java.util.Map;
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version supports multiple servers in one rule
  * and takes a lazy approach to intitialization allowing us to isolate files snapshots for each method.
- *
- * @author Liam Newman
  */
 public class WireMockMultiServerRule implements MethodRule, TestRule {
 

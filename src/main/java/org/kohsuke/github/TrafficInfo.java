@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 /**
  * The interface TrafficInfo.
- *
- * @author Kohsuke Kawaguchi
  */
 public interface TrafficInfo {
     /**

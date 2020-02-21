@@ -10,7 +10,6 @@ import java.util.Date;
 /**
  * A conversation in the notification API.
  *
- * @author Kohsuke Kawaguchi
  * @see <a href="https://developer.github.com/v3/activity/notifications/">documentation</a>
  * @see GHNotificationStream
  */

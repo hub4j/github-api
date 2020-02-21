@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * Github Marketplace User Purchase
  *
- * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  */
 public class GHMarketplaceUserPurchase {

@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     protected final List<String> terms = new ArrayList<String>();

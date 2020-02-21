@@ -16,8 +16,6 @@ import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 
 /**
  * Tests for the GitHub MarketPlace Plan API methods
- *
- * @author Paulo Miguel Almeida
  */
 public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 

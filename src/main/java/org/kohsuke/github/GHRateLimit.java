@@ -19,8 +19,6 @@ import static java.util.logging.Level.FINEST;
 
 /**
  * Rate limit.
- *
- * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHRateLimit {

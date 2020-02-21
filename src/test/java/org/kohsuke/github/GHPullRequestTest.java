@@ -12,8 +12,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * @author Kohsuke Kawaguchi
- */
+*/
 public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
     @Before

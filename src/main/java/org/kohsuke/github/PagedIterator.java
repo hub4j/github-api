@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterator<T> implements Iterator<T> {
     protected final Iterator<T[]> base;

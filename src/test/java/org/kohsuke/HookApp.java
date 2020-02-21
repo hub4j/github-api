@@ -11,8 +11,6 @@ import java.io.StringReader;
 /**
  * App to test the hook script. You need some internet-facing server that can forward the request to you (typically via
  * SSH reverse port forwarding.)
- *
- * @author Kohsuke Kawaguchi
  */
 public class HookApp {
     public static void main(String[] args) throws Exception {

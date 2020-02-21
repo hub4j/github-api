@@ -10,7 +10,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
 /**
  * A Github App.
  *
- * @author Paulo Miguel Almeida
  * @see GitHub#getApp() GitHub#getApp()
  */
 public class GHApp extends GHObject {

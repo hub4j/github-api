@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author Kohsuke Kawaguchi
- */
+*/
 public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 152
     public void lastStatus() throws IOException {

@@ -9,8 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * @author Gunnar Skjold
- */
+*/
 public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     private GHProject project;
     private GHProjectColumn column;

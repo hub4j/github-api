@@ -6,8 +6,6 @@ import java.util.List;
 
 /**
  * The type GHIssueBuilder.
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHIssueBuilder {
     private final GHRepository repo;

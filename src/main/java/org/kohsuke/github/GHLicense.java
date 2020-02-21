@@ -35,7 +35,6 @@ import java.util.List;
 /**
  * The GitHub Preview API's license information
  *
- * @author Duncan Dickinson
  * @see GitHub#getLicense(String) GitHub#getLicense(String)
  * @see GHRepository#getLicense() GHRepository#getLicense()
  * @see <a href="https://developer.github.com/v3/licenses/">https://developer.github.com/v3/licenses/</a>

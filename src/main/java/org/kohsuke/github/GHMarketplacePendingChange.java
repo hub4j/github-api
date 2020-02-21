@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * A Github Marketplace purchase pending change.
  *
- * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplacePendingChange {

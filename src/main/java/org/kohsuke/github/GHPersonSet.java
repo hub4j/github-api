@@ -9,7 +9,6 @@ import java.util.HashSet;
  *
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
     private static final long serialVersionUID = 1L;

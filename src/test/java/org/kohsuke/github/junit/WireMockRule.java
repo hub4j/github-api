@@ -34,8 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Liam Newman
- */
+*/
 public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, Admin {
 
     private WireMockServer wireMockServer;

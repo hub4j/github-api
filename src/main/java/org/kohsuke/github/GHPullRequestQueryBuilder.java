@@ -5,7 +5,6 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
 /**
  * Lists up pull requests with some filtering and sorting.
  *
- * @author Kohsuke Kawaguchi
  * @see GHRepository#queryPullRequests() GHRepository#queryPullRequests()
  */
 public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {

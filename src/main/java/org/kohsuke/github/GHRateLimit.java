@@ -219,7 +219,15 @@ public class GHRateLimit {
         return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());
     }
 
-    Record selectRateLimitRecord(String urlPath) {
+    /**
+     * Gets the appropriate {@link Record} for a particular url path.
+     *
+     * @param urlPath
+     *            the url path of the request
+     * @return the {@link Record} for a url path.
+     */
+    @Nonnull
+    Record getRecordForUrlPath(@Nonnull String urlPath) {
         if (urlPath.equals("/rate_limit")) {
             return new UnknownLimitRecord();
         } else if (urlPath.startsWith("/search")) {
@@ -271,6 +279,9 @@ public class GHRateLimit {
 
         /**
          * The time at which the current rate limit window resets in UTC epoch seconds.
+         *
+         * This is value returned by the server, it is not adjusted if local machine time is not synchronized with
+         * server time.
          */
         private final long resetEpochSeconds;
 
@@ -280,8 +291,8 @@ public class GHRateLimit {
         private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
-         * The calculated time at which the rate limit will reset. Recalculated if {@link #recalculateResetDate} is
-         * called.
+         * The calculated time at which the rate limit will reset, adjusted to local machine time even if the local
+         * machine time is not synchronized with server time. Recalculated if {@link #recalculateResetDate} is called.
          */
         @Nonnull
         private Date resetDate;
@@ -372,7 +383,12 @@ public class GHRateLimit {
         /**
          * Gets the time in epoch seconds when the rate limit will reset.
          *
-         * @return a long
+         * This is value returned by the server, it is not adjusted if local machine time is not synchronized with
+         * server time. If attempting to check when the rate limit will reset, use {@link #getResetDate()} or implement
+         * a {@link RateLimitChecker} instead.
+         *
+         * @return a long representing the time in epoch seconds when the rate limit will reset
+         * @see #getResetDate() #getResetDate()
          */
         public long getResetEpochSeconds() {
             return resetEpochSeconds;
@@ -388,7 +404,11 @@ public class GHRateLimit {
         }
 
         /**
-         * Returns the date at which the rate limit will reset.
+         * Returns the date at which the rate limit will reset, adjusted to local machine time if it not synchronized
+         * with server time.
+         *
+         * If attempting to check when the rate limit will reset, consider implementing a {@link RateLimitChecker}
+         * instead.
          *
          * @return the calculated date at which the rate limit has or will reset.
          */

@@ -316,9 +316,11 @@ public class GitHubBuilder implements Cloneable {
     /**
      * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
      * number of requests remaining is returned in the response header and can also be requested using
-     * {@link GitHub#getRateLimit()}. This request per interval is referred to as the "rate limit". When the remaining
-     * number of requests reaches zero, the next request will return a error. If this happens, the
+     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+     * <p>
+     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
      * {@link RateLimitHandler#onError(IOException, HttpURLConnection)} will be called.
+     * </p>
      * <P>
      * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
      * exceeding their rate limit. Consider add a {@link RateLimitChecker} to automatically check the rate limit for
@@ -338,7 +340,7 @@ public class GitHubBuilder implements Cloneable {
 
     /**
      * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
-     * the client to not make any more request for some period of time. If this happens, the
+     * the client to not make any more request for some period of time. If this happens,
      * {@link AbuseLimitHandler#onError(IOException, HttpURLConnection)} will be called.
      *
      * @param handler
@@ -351,12 +353,17 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * The {@link RateLimitChecker} is called before each request to check the rate limit and wait if the guard criteria
-     * are met. This allows for more complex throttling strategies. Also, GitHub prefers that client throttle before
-     * exceeding their rate limit rather than stopping after they exceed it.
+     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+     * number of requests remaining is returned in the response header and can also be requested using
+     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
      * <p>
-     * Checking your rate limit {@link GitHub#getRateLimit()} does not effect your rate limit, but {@link GitHub}
-     * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
+     * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
+     * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria
+     * are met.
+     * </p>
+     * <p>
+     * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each
+     * {@link GitHub} instance will attempt to cache and reuse the last see rate limit rather than making a new request.
      * </p>
      *
      * @param coreRateLimitChecker

@@ -6,6 +6,25 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A GitHub API Rate Limit Checker called before each request. This class provides the basic infrastructure for calling
+ * the appropriate {@link RateLimitChecker} for a request and retrying as many times as needed. This class supports more
+ * complex throttling strategies and polling, but leaves the specifics to the {@link RateLimitChecker} implementations.
+ * <p>
+ * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+ * number of requests remaining is returned in the response header and can also be requested using
+ * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+ * </p>
+ * <p>
+ * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
+ * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
+ * met.
+ * </p>
+ * <p>
+ * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each {@link GitHub}
+ * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
+ * </p>
+ */
 class GitHubRateLimitChecker {
 
     @Nonnull
@@ -41,15 +60,46 @@ class GitHubRateLimitChecker {
         this.integrationManifest = Objects.requireNonNull(integrationManifest);
     }
 
+    /**
+     * Checks whether there is sufficient requests remaining within this client's rate limit quota to make the current
+     * request.
+     * <p>
+     * This method does not do the actual check. Instead it select the appropriate {@link RateLimitChecker} and
+     * {@link GHRateLimit.Record} for the current request's urlPath. If the {@link RateLimitChecker} for this the
+     * current request's urlPath is {@link RateLimitChecker#NONE} the rate limit is not checked. If not, it calls
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)}. which decides if the rate limit has been
+     * exceeded and then sleeps for as long is it choose.
+     * </p>
+     * <p>
+     * It is up to the {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} which decide if the rate limit
+     * has been exceeded. If it has, that method will sleep for as long is it chooses and then return {@code true}. If
+     * not, that method will return {@code false}.
+     * </p>
+     * <p>
+     * As long as {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} returns {@code true}, this method
+     * will request updated rate limit information and call
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} again. This looping allows implementers of
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} to apply any number of strategies to
+     * controlling the speed at which requests are made. When it returns {@code false} this method will return and the
+     * request will be sent.
+     * </p>
+     *
+     * @param client
+     *            the {@link GitHubClient} to check
+     * @param request
+     *            the {@link GitHubRequest} to check against
+     * @throws IOException
+     *             if there is an I/O error
+     */
     void checkRateLimit(GitHubClient client, GitHubRequest request) throws IOException {
-        RateLimitChecker guard = selectChecker(request);
+        RateLimitChecker guard = selectChecker(request.urlPath());
         if (guard == RateLimitChecker.NONE) {
             return;
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
         GHRateLimit rateLimit = client.rateLimit();
-        GHRateLimit.Record rateLimitRecord = rateLimit.selectRateLimitRecord(request.urlPath());
+        GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
         long waitCount = 0;
         try {
             while (guard.checkRateLimit(rateLimitRecord, waitCount)) {
@@ -63,21 +113,30 @@ class GitHubRateLimitChecker {
 
                 // After the first wait, always request a new rate limit from the server.
                 rateLimit = client.getRateLimit();
-                rateLimitRecord = rateLimit.selectRateLimitRecord(request.urlPath());
+                rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
             }
         } catch (InterruptedException e) {
             throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);
         }
     }
 
-    private RateLimitChecker selectChecker(GitHubRequest request) {
-        if (request.urlPath().equals("/rate_limit")) {
+    /**
+     * Gets the appropriate {@link RateLimitChecker} for a particular url path. Similar to
+     * {@link GHRateLimit#getRecordForUrlPath(String)}.
+     *
+     * @param urlPath
+     *            the url path of the request
+     * @return the {@link RateLimitChecker} for a url path.
+     */
+    @Nonnull
+    private RateLimitChecker selectChecker(@Nonnull String urlPath) {
+        if (urlPath.equals("/rate_limit")) {
             return RateLimitChecker.NONE;
-        } else if (request.urlPath().startsWith("/search")) {
+        } else if (urlPath.startsWith("/search")) {
             return search;
-        } else if (request.urlPath().startsWith("/graphql")) {
+        } else if (urlPath.startsWith("/graphql")) {
             return graphql;
-        } else if (request.urlPath().startsWith("/app-manifests")) {
+        } else if (urlPath.startsWith("/app-manifests")) {
             return integrationManifest;
         } else {
             return core;

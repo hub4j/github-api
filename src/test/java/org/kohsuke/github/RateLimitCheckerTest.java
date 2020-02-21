@@ -13,24 +13,9 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * Test showing the behavior of OkHttpConnector with and without cache.
- * <p>
- * Key take aways:
+ * Test showing the behavior of the {@link GitHubRateLimitChecker} and {@link RateLimitChecker.LiteralValue}.
  *
- * <ul>
- * <li>These tests are artificial and intended to highlight the differences in behavior between scenarios. However, the
- * differences they indicate are stark.</li>
- * <li>Caching reduces rate limit consumption by at least a factor of two in even the simplest case.</li>
- * <li>The OkHttp cache is pretty smart and will often connect read and write requests made on the same client and
- * invalidate caches.</li>
- * <li>Changes made outside the current client cause the OkHttp cache to return stale data. This is expected and correct
- * behavior.</li>
- * <li>"max-age=0" addresses the problem of external changes by revalidating caches for each request. This produces the
- * same number of requests as OkHttp without caching, but those requests only count towards the GitHub rate limit if
- * data has changes.</li>
- * </ul>
- *
- * @author Liam Newman
+ * This is a very simple test but covers the key features: Checks occur automatically and are retried until they indicate it is safe to proceed.
  */
 public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
@@ -61,7 +46,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGitHubRateLimit() throws Exception {
         // Customized response that templates the date to keep things working
-        // snapshotNotAllowed();
+        snapshotNotAllowed();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
 

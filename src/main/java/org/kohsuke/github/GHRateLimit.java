@@ -280,8 +280,7 @@ public class GHRateLimit {
         /**
          * The time at which the current rate limit window resets in UTC epoch seconds.
          *
-         * This is value returned by the server, it is not adjusted if local machine time is not synchronized with
-         * server time.
+         * This is the raw value returned by the server.
          */
         private final long resetEpochSeconds;
 
@@ -291,8 +290,12 @@ public class GHRateLimit {
         private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
-         * The calculated time at which the rate limit will reset, adjusted to local machine time even if the local
-         * machine time is not synchronized with server time. Recalculated if {@link #recalculateResetDate} is called.
+         * The time at which the rate limit will reset. This value is calculated based on
+         * {@link #getResetEpochSeconds()} by calling {@link #recalculateResetDate}. If the clock on the local machine
+         * not synchronized with the server clock, this time value will be adjusted to match the local machine's clock.
+         * <p>
+         * Recalculated by calling {@link #recalculateResetDate}.
+         * </p>
          */
         @Nonnull
         private Date resetDate;
@@ -335,8 +338,27 @@ public class GHRateLimit {
         }
 
         /**
-         * Recalculates the reset date using the server response date to calculate a time duration and then add that to
-         * the local created time for this record.
+         * Recalculates the {@link #resetDate} relative to the local machine clock.
+         * <p>
+         * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetDate()} to make decisions about
+         * how long to wait for until for the rate limit to reset. That means that {@link #getResetDate()} needs to be
+         * accurate to the local machine.
+         * </p>
+         * <p>
+         * When we say that the clock on two machines is "synchronized", we mean that the UTC time returned from
+         * {@link System#currentTimeMillis()} on each machine is basically the same. For the purposes of rate limits an
+         * differences of up to a second can be ignored.
+         * </p>
+         * <p>
+         * When the clock on the local machine is synchronized to the same time as the clock on the GitHub server (via a
+         * time service for example), the {@link #resetDate} generated directly from {@link #resetEpochSeconds} will be
+         * accurate for the local machine as well.
+         * </p>
+         * <p>
+         * When the clock on the local machine is not synchronized with the server, the {@link #resetDate} must be
+         * recalculated relative to the local machine clock. This is done by taking the number of seconds between the
+         * response "Date" header and {@link #resetEpochSeconds} and then adding that to this record's
+         * {@link #createdAtEpochSeconds}.
          *
          * @param updatedAt
          *            a string date in RFC 1123
@@ -383,9 +405,9 @@ public class GHRateLimit {
         /**
          * Gets the time in epoch seconds when the rate limit will reset.
          *
-         * This is value returned by the server, it is not adjusted if local machine time is not synchronized with
-         * server time. If attempting to check when the rate limit will reset, use {@link #getResetDate()} or implement
-         * a {@link RateLimitChecker} instead.
+         * This is the raw value returned by the server. This value is not adjusted if local machine time is not
+         * synchronized with server time. If attempting to check when the rate limit will reset, use
+         * {@link #getResetDate()} or implement a {@link RateLimitChecker} instead.
          *
          * @return a long representing the time in epoch seconds when the rate limit will reset
          * @see #getResetDate() #getResetDate()
@@ -404,11 +426,10 @@ public class GHRateLimit {
         }
 
         /**
-         * Returns the date at which the rate limit will reset, adjusted to local machine time if it not synchronized
-         * with server time.
+         * Returns the date at which the rate limit will reset, adjusted to local machine time if the local machine's
+         * clock not synchronized with to the same clock as the GitHub server.
          *
-         * If attempting to check when the rate limit will reset, consider implementing a {@link RateLimitChecker}
-         * instead.
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
          *
          * @return the calculated date at which the rate limit has or will reset.
          */

@@ -314,9 +314,12 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * Adds a {@link RateLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
      * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
      * number of requests remaining is returned in the response header and can also be requested using
      * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+     * </p>
      * <p>
      * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
      * {@link RateLimitHandler#onError(IOException, HttpURLConnection)} will be called.
@@ -338,9 +341,12 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * Adds a {@link AbuseLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
      * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
      * the client to not make any more request for some period of time. If this happens,
      * {@link AbuseLimitHandler#onError(IOException, HttpURLConnection)} will be called.
+     * </p>
      *
      * @param handler
      *            the handler
@@ -352,9 +358,12 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * Adds a {@link RateLimitChecker} to this {@link GitHubBuilder}.
+     * <p>
      * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
      * number of requests remaining is returned in the response header and can also be requested using
      * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+     * </p>
      * <p>
      * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
      * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria
@@ -362,7 +371,8 @@ public class GitHubBuilder implements Cloneable {
      * </p>
      * <p>
      * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each
-     * {@link GitHub} instance will attempt to cache and reuse the last see rate limit rather than making a new request.
+     * {@link GitHub} instance will attempt to cache and reuse the last seen rate limit rather than making a new
+     * request.
      * </p>
      *
      * @param coreRateLimitChecker
@@ -394,7 +404,7 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * Build git hub.
+     * Builds a {@link GitHub} instance.
      *
      * @return the git hub
      * @throws IOException

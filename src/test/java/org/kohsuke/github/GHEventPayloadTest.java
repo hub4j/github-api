@@ -294,9 +294,16 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-    // TODO implement support classes and write test
-    // @Test
-    // public void status() throws Exception {}
+    @Test
+    public void status() throws Exception {
+        GHEventPayload.Status event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
+        assertThat(event.getContext(), is("default"));
+        assertThat(event.getDescription(), is("status description"));
+        assertThat(event.getState(), is(GHCommitState.SUCCESS));
+        assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+    }
 
     // TODO implement support classes and write test
     // @Test

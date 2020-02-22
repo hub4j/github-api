@@ -707,26 +707,37 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(all.isEmpty());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommitSearch() throws IOException {
-        PagedSearchIterable<GHCommit> r = gitHub.searchCommits().author("kohsuke").list();
+        PagedSearchIterable<GHCommit> r = gitHub.searchCommits()
+                .org("github-api")
+                .repo("github-api")
+                .author("kohsuke")
+                .sort(GHCommitSearchBuilder.Sort.COMMITTER_DATE)
+                .list();
         assertTrue(r.getTotalCount() > 0);
 
         GHCommit firstCommit = r.iterator().next();
         assertTrue(firstCommit.getFiles().size() > 0);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testIssueSearch() throws IOException {
-        PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
-        for (GHIssue i : r) {
-            // System.out.println(i.getTitle());
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .mentions("kohsuke")
+                .isOpen()
+                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .list();
+        assertTrue(r.getTotalCount() > 0);
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            PagedIterable<GHIssueComment> comments = issue.listComments();
+            for (GHIssueComment comment : comments) {
+                assertThat(comment, notNullValue());
+            }
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test // issue #99
     public void testReadme() throws IOException {
         GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();

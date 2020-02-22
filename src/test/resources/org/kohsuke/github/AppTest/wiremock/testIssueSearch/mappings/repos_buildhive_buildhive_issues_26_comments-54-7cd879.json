@@ -1,0 +1,47 @@
+{
+  "id": "7cd8798a-89d6-4f01-a203-0eb3c111d160",
+  "name": "repos_buildhive_buildhive_issues_26_comments",
+  "request": {
+    "url": "/repos/buildhive/buildhive/issues/26/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_buildhive_buildhive_issues_26_comments-7cd8798a-89d6-4f01-a203-0eb3c111d160.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 02:24:44 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4822",
+      "X-RateLimit-Reset": "1582341554",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"0dcc30956758042c3866d8bab826c669\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EC02:6D35:5FF630:726ADA:5E5090EC"
+    }
+  },
+  "uuid": "7cd8798a-89d6-4f01-a203-0eb3c111d160",
+  "persistent": true,
+  "insertionIndex": 54
+}

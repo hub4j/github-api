@@ -1,0 +1,46 @@
+{
+  "id": "44b5b3a8-cb76-4cd7-8b0f-762f81037dac",
+  "name": "search_commits",
+  "request": {
+    "url": "/search/commits?sort=committer-date&q=org%3Agithub-api+repo%3Agithub-api+author%3Akohsuke",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.cloak-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_commits-44b5b3a8-cb76-4cd7-8b0f-762f81037dac.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 02:23:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "28",
+      "X-RateLimit-Reset": "1582338261",
+      "Cache-Control": "no-cache",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.cloak-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "EBD8:0A38:5FB202:724B72:5E50909F",
+      "Link": "<https://api.github.com/search/commits?sort=committer-date&q=org%3Agithub-api+repo%3Agithub-api+author%3Akohsuke&page=2>; rel=\"next\", <https://api.github.com/search/commits?sort=committer-date&q=org%3Agithub-api+repo%3Agithub-api+author%3Akohsuke&page=30>; rel=\"last\""
+    }
+  },
+  "uuid": "44b5b3a8-cb76-4cd7-8b0f-762f81037dac",
+  "persistent": true,
+  "scenarioName": "scenario-1-search-commits",
+  "requiredScenarioState": "scenario-1-search-commits-2",
+  "insertionIndex": 33
+}

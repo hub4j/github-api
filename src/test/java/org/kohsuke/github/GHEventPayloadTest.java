@@ -314,6 +314,7 @@ public class GHEventPayloadTest {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getAction(), is("created"));
         assertThat(event.getCheckRun().getName(), is("Octocoders-linter"));
+        assertThat(event.getCheckRun().getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
     }
 
 }

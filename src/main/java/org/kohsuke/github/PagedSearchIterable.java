@@ -4,6 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+
 /**
  * {@link PagedIterable} enhanced to report search result specific information.
  *
@@ -14,16 +16,30 @@ import java.util.Iterator;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
                 "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
         justification = "Constructed by JSON API")
-public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
+public class PagedSearchIterable<T> extends PagedIterable<T> {
+    @Nonnull
     private final GitHub root;
+
+    @Nonnull
+    private final GitHubRequest request;
+
+    /**
+     * Data transfer object that receives the result of search.
+     */
+    @Nonnull
+    private final Class<? extends SearchResult<T>> receiverType;
 
     /**
      * As soon as we have any result fetched, it's set here so that we can report the total count.
      */
     private SearchResult<T> result;
 
-    PagedSearchIterable(GitHub root) {
+    PagedSearchIterable(@Nonnull GitHub root,
+            @Nonnull GitHubRequest request,
+            @Nonnull Class<? extends SearchResult<T>> receiverType) {
         this.root = root;
+        this.receiverType = receiverType;
+        this.request = request;
     }
 
     @Override
@@ -54,6 +70,15 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
     private void populate() {
         if (result == null)
             iterator().hasNext();
+    }
+
+    @Nonnull
+    @Override
+    public PagedIterator<T> _iterator(int pageSize) {
+        final Iterator<T[]> adapter = adapt(GitHubPageIterator
+                .create(root.getClient(), receiverType, this.request.toBuilder().withPageSize(pageSize)));
+        return new GitHubPageContentsIterator<>(adapter, null);
+
     }
 
     /**

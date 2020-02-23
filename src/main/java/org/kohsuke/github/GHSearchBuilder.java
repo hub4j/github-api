@@ -20,11 +20,13 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     /**
      * Data transfer object that receives the result of search.
      */
+    @Nonnull
     private final Class<? extends SearchResult<T>> receiverType;
 
-    GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
+    GHSearchBuilder(@Nonnull GitHub root, @Nonnull Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
+        req.withUrlPath(getApiUrl());
     }
 
     /**
@@ -42,25 +44,12 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     /**
      * Performs the search.
      */
+    @Nonnull
     @Override
     public PagedSearchIterable<T> list() {
-
         req.set("q", StringUtils.join(terms, " "));
         try {
-            final GitHubRequest baseRequest = req.build();
-            return new PagedSearchIterable<T>(root) {
-                @Nonnull
-                public PagedIterator<T> _iterator(int pageSize) {
-                    return new PagedIterator<T>(adapt(GitHubPageIterator.create(root.getClient(),
-                            receiverType,
-                            baseRequest.toBuilder().withUrlPath(getApiUrl()).withPageSize(pageSize)))) {
-                        protected void wrapUp(T[] page) {
-                            // PagedSearchIterable
-                            // SearchResult.getItems() should do it
-                        }
-                    };
-                }
-            };
+            return new PagedSearchIterable<T>(root, req.build(), receiverType);
         } catch (MalformedURLException e) {
             throw new GHException("", e);
         }

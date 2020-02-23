@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -17,15 +18,22 @@ import javax.annotation.Nonnull;
  */
 class GitHubPageContentsIterable<T> extends PagedIterable<T> {
 
+    @Nonnull
     private final GitHubClient client;
+
+    @Nonnull
     private final GitHubRequest request;
+
+    @Nonnull
     private final Class<T[]> clazz;
+
+    @CheckForNull
     private final Consumer<T> itemInitializer;
 
-    GitHubPageContentsIterable(GitHubClient client,
-            GitHubRequest request,
-            Class<T[]> clazz,
-            Consumer<T> itemInitializer) {
+    GitHubPageContentsIterable(@Nonnull GitHubClient client,
+            @Nonnull GitHubRequest request,
+            @Nonnull Class<T[]> clazz,
+            @CheckForNull Consumer<T> itemInitializer) {
         this.client = client;
         this.request = request;
         this.clazz = clazz;
@@ -40,7 +48,7 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     public PagedIterator<T> _iterator(int pageSize) {
         final GitHubPageIterator<T[]> iterator = GitHubPageIterator
                 .create(client, clazz, request.toBuilder().withPageSize(pageSize));
-        return new GitHubPageContentsIterator(iterator);
+        return new GitHubPageContentsIterator<>(iterator, itemInitializer);
     }
 
     /**
@@ -53,37 +61,10 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
      */
     @Nonnull
     GitHubResponse<T[]> toResponse() throws IOException {
-        GitHubPageContentsIterator iterator = (GitHubPageContentsIterator) iterator();
+        GitHubPageContentsIterator<T> iterator = (GitHubPageContentsIterator<T>) iterator();
         T[] items = toArray(iterator);
         GitHubResponse<T[]> lastResponse = iterator.lastResponse();
         return new GitHubResponse<>(lastResponse, items);
     }
 
-    /**
-     * This class is not thread-safe. Any one instance should only be called from a single thread.
-     */
-    private class GitHubPageContentsIterator extends PagedIterator<T> {
-
-        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator) {
-            super(iterator);
-        }
-
-        @Override
-        protected void wrapUp(T[] page) {
-            if (itemInitializer != null) {
-                for (T item : page) {
-                    itemInitializer.accept(item);
-                }
-            }
-        }
-
-        /**
-         * Gets the {@link GitHubResponse} for the last page received.
-         *
-         * @return the {@link GitHubResponse} for the last page received.
-         */
-        private GitHubResponse<T[]> lastResponse() {
-            return ((GitHubPageIterator<T[]>) base).finalResponse();
-        }
-    }
 }

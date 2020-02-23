@@ -10,7 +10,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @see GHReaction
  */
 public enum ReactionContent {
-    PLUS_ONE("+1"), MINUS_ONE("-1"), LAUGH("laugh"), CONFUSED("confused"), HEART("heart"), HOORAY("hooray");
+    PLUS_ONE("+1"),
+    MINUS_ONE("-1"),
+    LAUGH("laugh"),
+    CONFUSED("confused"),
+    HEART("heart"),
+    HOORAY("hooray"),
+    ROCKET("rocket"),
+    EYES("eyes");
 
     private final String content;
 

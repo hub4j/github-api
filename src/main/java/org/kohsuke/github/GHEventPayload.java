@@ -1428,6 +1428,107 @@ public abstract class GHEventPayload {
                 organization.wrapUp(root);
             }
         }
+    }
 
+    /**
+     * A git commit status was changed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#statusevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    public static class Status extends GHEventPayload {
+        private String context;
+        private String description;
+        private GHCommitState state;
+        private GHCommit commit;
+        private GHRepository repository;
+
+        /**
+         * Gets the status content.
+         * 
+         * @return status content
+         */
+        public String getContext() {
+            return context;
+        }
+
+        /**
+         * Gets the status description.
+         * 
+         * @return status description
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * Gets the status state.
+         * 
+         * @return status state
+         */
+        public GHCommitState getState() {
+            return state;
+        }
+
+        /**
+         * Sets the status stage.
+         * 
+         * @param state
+         *            status state
+         */
+        public void setState(GHCommitState state) {
+            this.state = state;
+        }
+
+        /**
+         * Gets the commit associated with the status event.
+         * 
+         * @return commit
+         */
+        public GHCommit getCommit() {
+            return commit;
+        }
+
+        /**
+         * Sets the commit associated with the status event.
+         * 
+         * @param commit
+         *            commit
+         */
+        public void setCommit(GHCommit commit) {
+            this.commit = commit;
+        }
+
+        /**
+         * Gets the repository associated with the status event.
+         * 
+         * @return repository
+         */
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        /**
+         * Sets the repository associated with the status event.
+         * 
+         * @param repository
+         *            repository
+         */
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (state == null) {
+                throw new IllegalStateException(
+                        "Expected status payload, but got something else. Maybe we've got another type of event?");
+            }
+            if (repository != null) {
+                repository.wrap(root);
+                commit.wrapUp(repository);
+            }
+        }
     }
 }

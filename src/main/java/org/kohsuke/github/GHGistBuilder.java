@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 /**
  * Builder pattern for creating a new Gist.
  *
- * @author Kohsuke Kawaguchi
  * @see GitHub#createGist() GitHub#createGist()
  */
 public class GHGistBuilder {

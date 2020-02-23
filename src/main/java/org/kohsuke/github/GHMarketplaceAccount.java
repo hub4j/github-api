@@ -5,7 +5,6 @@ import java.net.URL;
 /**
  * Base class for Github Marketplace Account.
  *
- * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */

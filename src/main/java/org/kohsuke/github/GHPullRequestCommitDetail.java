@@ -31,7 +31,6 @@ import java.net.URL;
 /**
  * Commit detail inside a {@link GHPullRequest}.
  *
- * @author Luca Milanesio
  * @see GHPullRequest#listCommits() GHPullRequest#listCommits()
  */
 @SuppressFBWarnings(

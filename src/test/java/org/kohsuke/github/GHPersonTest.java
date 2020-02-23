@@ -5,8 +5,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author Martin van Zijl
- */
+*/
 public class GHPersonTest extends AbstractGitHubWireMockTest {
     @Test
     public void testFieldsForOrganization() throws Exception {

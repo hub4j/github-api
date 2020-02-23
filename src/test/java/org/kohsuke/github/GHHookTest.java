@@ -17,8 +17,7 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
- * @author Kanstantsin Shautsou
- */
+*/
 public class GHHookTest {
 
     @Ignore

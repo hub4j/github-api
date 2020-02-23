@@ -4,8 +4,6 @@ import java.io.IOException;
 
 /**
  * Those {@link GHObject}s that can have {@linkplain GHReaction reactions}.
- *
- * @author Kohsuke Kawaguchi
  */
 @Preview
 @Deprecated

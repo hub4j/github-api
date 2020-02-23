@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Represents a deployment
+ * Represents a check run.
  *
  * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
  */
@@ -20,6 +20,7 @@ public class GHCheckRun extends GHObject {
     private String status;
     private String conclusion;
     private String name;
+    private String headSha;
     private GHPullRequest[] pullRequests;
 
     GHCheckRun wrap(GHRepository owner) {
@@ -50,6 +51,15 @@ public class GHCheckRun extends GHObject {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+        return headSha;
     }
 
     GHPullRequest[] getPullRequests() throws IOException {

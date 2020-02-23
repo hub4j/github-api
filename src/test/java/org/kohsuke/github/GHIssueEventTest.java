@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author Martin van Zijl
- */
+*/
 public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
     @Test

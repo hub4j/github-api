@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,7 +41,6 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
 /**
  * A pull request.
  *
- * @author Kohsuke Kawaguchi
  * @see GHRepository#getPullRequest(int) GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({ "UnusedDeclaration" })
@@ -99,6 +100,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     @Override
     protected String getApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), ""), "/");
+        }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
     }
 

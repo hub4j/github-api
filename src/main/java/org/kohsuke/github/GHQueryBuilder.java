@@ -5,7 +5,6 @@ package org.kohsuke.github;
  *
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public abstract class GHQueryBuilder<T> {
     protected final GitHub root;

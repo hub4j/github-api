@@ -12,8 +12,6 @@ import static org.junit.Assume.assumeTrue;
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
  * <p>
  * The wiremock data for these tests should only be modified by hand - thus most are skipped when snapshotting.
- *
- * @author Liam Newman
  */
 public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
@@ -24,7 +22,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         verifyAuthenticated(gitHub);
 
-        assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
+        assertThat(gitHub.getClient().login, not(equalTo(STUBBED_USER_LOGIN)));
 
         // If this user query fails, either the proxying config has broken (unlikely)
         // or your auth settings are not being retrieved from the environemnt.
@@ -45,7 +43,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         verifyAuthenticated(gitHub);
-        assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
+        assertThat(gitHub.getClient().login, equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();
         // NOTE: the stubbed user does not have to match the login provided from the github object

@@ -3,7 +3,6 @@ package org.kohsuke.github;
 /**
  * Search code for {@link GHContent}.
  *
- * @author Kohsuke Kawaguchi
  * @see GitHub#searchContent() GitHub#searchContent()
  */
 public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {

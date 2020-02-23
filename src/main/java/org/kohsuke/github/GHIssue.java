@@ -26,6 +26,7 @@ package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,7 +43,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 /**
  * Represents an issue on GitHub.
  *
- * @author Eric Maupin
  * @author Kohsuke Kawaguchi
  * @see GHRepository#getIssue(int) GHRepository#getIssue(int)
  * @see GitHub#searchIssues() GitHub#searchIssues()
@@ -453,7 +453,7 @@ public class GHIssue extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.createRequest()
+        return root.createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
@@ -465,10 +465,10 @@ public class GHIssue extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.createRequest()
+        return root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
+                .toIterable(GHReaction[].class, item -> item.wrap(root));
     }
 
     /**
@@ -571,6 +571,10 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the issues api route
      */
     protected String getIssuesApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), ""), "/");
+        }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
     }
 

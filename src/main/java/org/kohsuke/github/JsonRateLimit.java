@@ -8,8 +8,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
- * @author Kohsuke Kawaguchi
- */
+*/
 class JsonRateLimit {
 
     @Nonnull

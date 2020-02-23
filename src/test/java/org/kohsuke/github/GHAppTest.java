@@ -13,8 +13,6 @@ import static org.hamcrest.Matchers.*;
 
 /**
  * Tests for the GitHub App API methods
- *
- * @author Paulo Miguel Almeida
  */
 public class GHAppTest extends AbstractGitHubWireMockTest {
 

@@ -5,8 +5,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * SSH public key.
- *
- * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHKey {

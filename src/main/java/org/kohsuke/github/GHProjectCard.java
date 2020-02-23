@@ -10,8 +10,6 @@ import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * The type GHProjectCard.
- *
- * @author Gunnar Skjold
  */
 public class GHProjectCard extends GHObject {
     private GitHub root;

@@ -37,8 +37,6 @@ import static org.junit.Assume.assumeTrue;
  * same number of requests as OkHttp without caching, but those requests only count towards the GitHub rate limit if
  * data has changes.</li>
  * </ul>
- *
- * @author Liam Newman
  */
 public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 

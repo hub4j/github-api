@@ -31,7 +31,6 @@ import static org.kohsuke.github.Previews.*;
 /**
  * Comment to the issue
  *
- * @author Kohsuke Kawaguchi
  * @see GHIssue#comment(String) GHIssue#comment(String)
  * @see GHIssue#listComments() GHIssue#listComments()
  */

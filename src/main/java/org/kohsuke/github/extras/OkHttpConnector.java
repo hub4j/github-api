@@ -24,7 +24,6 @@ import javax.net.ssl.SSLSocketFactory;
  * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
  * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
- * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
  */
 public class OkHttpConnector implements HttpConnector {

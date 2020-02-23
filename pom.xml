@@ -34,10 +34,10 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
-    <spotbugs.version>3.1.12</spotbugs.version>
+    <spotbugs.version>4.0.0</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>4.3.1</okhttp3.version>
+    <okhttp3.version>4.4.0</okhttp3.version>
     <okio.version>2.4.3</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
@@ -79,54 +79,6 @@
     </testResources>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.2</version>
-          <executions>
-            <execution>
-              <id>shaded-jar</id>
-              <phase>package</phase>
-              <goals>
-                <goal>shade</goal>
-              </goals>
-              <configuration>
-                <relocations>
-                  <relocation>
-                    <pattern>com.fasterxml.jackson</pattern>
-                    <shadedPattern>hidden.com.fasterxml.jackson</shadedPattern>
-                  </relocation>
-                  <relocation>
-                    <pattern>org.apache</pattern>
-                    <shadedPattern>hidden.org.apache</shadedPattern>
-                  </relocation>
-                </relocations>
-                <artifactSet>
-                  <excludes>
-                    <exclude>com.infradna.tool:bridge-method-annotation</exclude>
-                    <exclude>org.jenkins-ci:annotation-indexer</exclude>
-                    <exclude>com.squareup.*:*</exclude>
-                    <exclude>org.jetbrains*:*</exclude>
-                    <exclude>com.github.spotbugs:*</exclude>
-                    <exclude>com.google.code.findbugs:*</exclude>
-                  </excludes>
-                </artifactSet>
-                <shadedArtifactAttached>true</shadedArtifactAttached>
-                <filters>
-                  <filter>
-                    <artifact>*:*</artifact>
-                    <excludes>
-                      <exclude>module-info.class</exclude>
-                      <exclude>META-INF/*.SF</exclude>
-                      <exclude>META-INF/*.DSA</exclude>
-                      <exclude>META-INF/*.RSA</exclude>
-                    </excludes>
-                  </filter>
-                </filters>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
@@ -209,15 +161,12 @@
                       <exclude>org.kohsuke.github.GHRelease</exclude>
 
                       <!-- TODO: These still need test coverage -->
-                      <exclude>org.kohsuke.github.GitHub.GHApiInfo</exclude>
+                      <exclude>org.kohsuke.github.GitHubClient.GHApiInfo</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
                       <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHCommitState</exclude>
                       <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
                       <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
@@ -235,9 +184,6 @@
                       <exclude>org.kohsuke.github.GHHook</exclude>
                       <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
                       <exclude>org.kohsuke.github.GHInvitation</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHMilestoneState</exclude>
                       <exclude>org.kohsuke.github.GHOrgHook</exclude>
                       <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>
@@ -511,7 +457,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.6.0.201912101111-r</version>
+      <version>5.6.1.202002131546-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -612,10 +558,6 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-          </plugin>
-          <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
           </plugin>
@@ -630,10 +572,6 @@
       </properties>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>

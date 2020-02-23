@@ -3,7 +3,6 @@ package org.kohsuke.github;
 /**
  * A file inside {@link GHGist}
  *
- * @author Kohsuke Kawaguchi
  * @see GHGist#getFile(String) GHGist#getFile(String)
  * @see GHGist#getFiles() GHGist#getFiles()
  */

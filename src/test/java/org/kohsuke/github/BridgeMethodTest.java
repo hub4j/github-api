@@ -13,8 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
- * @author Kohsuke Kawaguchi
- */
+*/
 public class BridgeMethodTest extends Assert {
 
     @Test

@@ -4,8 +4,6 @@ import java.util.Locale;
 
 /**
  * This was added during preview API period but it has changed since then.
- *
- * @author Kohsuke Kawaguchi
  */
 @Deprecated
 public enum EnforcementLevel {

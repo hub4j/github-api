@@ -10,7 +10,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
 /**
  * Creates a access token for a GitHub App Installation
  *
- * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
@@ -63,7 +62,7 @@ public class GHAppCreateTokenBuilder {
     public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
         Map<String, String> retMap = new HashMap<>();
         for (Map.Entry<String, GHPermissionType> entry : permissions.entrySet()) {
-            retMap.put(entry.getKey(), Requester.transformEnum(entry.getValue()));
+            retMap.put(entry.getKey(), GitHubRequest.transformEnum(entry.getValue()));
         }
         builder.with("permissions", retMap);
         return this;

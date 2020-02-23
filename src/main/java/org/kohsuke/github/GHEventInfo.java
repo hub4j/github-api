@@ -8,8 +8,6 @@ import java.util.Date;
 
 /**
  * Represents an event.
- *
- * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHEventInfo {
@@ -144,7 +142,7 @@ public class GHEventInfo {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHub.MAPPER.readValue(payload.traverse(), type);
+        T v = GitHubClient.MAPPER.readValue(payload.traverse(), type);
         v.wrapUp(root);
         return v;
     }

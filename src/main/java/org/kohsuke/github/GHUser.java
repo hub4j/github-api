@@ -30,8 +30,6 @@ import java.util.*;
 
 /**
  * Represents an user of GitHub.
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHUser extends GHPerson {
 

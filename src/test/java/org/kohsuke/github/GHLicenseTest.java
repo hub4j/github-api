@@ -31,8 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * @author Duncan Dickinson
- */
+*/
 public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**

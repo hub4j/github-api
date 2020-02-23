@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
  * read-only</li>
  * </ul>
  *
- * @author Liam Newman
  * @see org.kohsuke.github.GHMeta
  * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
  */
@@ -32,8 +31,6 @@ public final class ReadOnlyObjects {
 
     /**
      * All GHMeta data objects should expose these values.
-     *
-     * @author Liam Newman
      */
     public interface GHMetaExample {
         /**
@@ -102,7 +99,6 @@ public final class ReadOnlyObjects {
      * <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
      * </ul>
      *
-     * @author Paulo Miguel Almeida
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaPublic implements GHMetaExample {
@@ -233,7 +229,6 @@ public final class ReadOnlyObjects {
      * <li>Lists modifiable when they should not be changed</li>
      * </ul>
      *
-     * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaPackage implements GHMetaExample {
@@ -364,7 +359,6 @@ public final class ReadOnlyObjects {
      * checking for null or assigning a default.</li>
      * </ul>
      *
-     * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaGettersUnmodifiable implements GHMetaExample {
@@ -426,7 +420,6 @@ public final class ReadOnlyObjects {
      * <li>If this object could be refreshed or populated, then the final is misleading (and possibly buggy)</li>
      * </ul>
      *
-     * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaGettersFinal implements GHMetaExample {
@@ -494,7 +487,6 @@ public final class ReadOnlyObjects {
      * <li>Brittle and verbose - not friendly to large number of fields</li>
      * </ul>
      *
-     * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaGettersFinalCreator implements GHMetaExample {

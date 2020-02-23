@@ -14,8 +14,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
- * @author Liam Newman
- */
+*/
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     protected GHRepository getRepository() throws IOException {
@@ -64,7 +63,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             // I dont really love this but I wanted to get to the root wrapped cause
             assertThat(e, instanceOf(IOException.class));
             assertThat(e.getMessage(),
-                    equalTo("Server returned HTTP response code: 200, message: 'OK' for URL: "
+                    equalTo("Server returned HTTP response code: 200, message: '404 Not Found' for URL: "
                             + mockGitHub.apiServer().baseUrl()
                             + "/repos/github-api-test-org/github-api/branches/test/NonExistent"));
         }
@@ -478,5 +477,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getTempRepository();
         int stargazersCount = repo.getStargazersCount();
         assertEquals(10, stargazersCount);
+    }
+
+    @Test
+    public void listCollaborators() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHUser> collaborators = repo.listCollaborators().asList();
+        assertThat(collaborators.size(), greaterThan(10));
     }
 }

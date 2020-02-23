@@ -5,8 +5,6 @@ import java.net.URL;
 
 /**
  * Creates a repository
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHCreateRepositoryBuilder {
     private final GitHub root;

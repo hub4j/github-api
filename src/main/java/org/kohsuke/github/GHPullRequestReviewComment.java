@@ -33,7 +33,6 @@ import static org.kohsuke.github.Previews.*;
 /**
  * Review comment to the pull request
  *
- * @author Julien Henry
  * @see GHPullRequest#listReviewComments() GHPullRequest#listReviewComments()
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)

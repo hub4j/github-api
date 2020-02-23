@@ -11,7 +11,6 @@ import java.util.Base64;
 /**
  * A Content of a repository.
  *
- * @author Alexandre COLLIGNON
  * @see GHRepository#getFileContent(String) GHRepository#getFileContent(String)
  */
 @SuppressWarnings({ "UnusedDeclaration" })

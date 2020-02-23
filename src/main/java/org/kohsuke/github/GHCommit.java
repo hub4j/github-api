@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * A commit in a repository.
  *
- * @author Kohsuke Kawaguchi
  * @see GHRepository#getCommit(String) GHRepository#getCommit(String)
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */

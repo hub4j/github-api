@@ -12,8 +12,6 @@ import java.util.TreeMap;
 
 /**
  * Represents the account that's logging into GitHub.
- *
- * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
 

@@ -12,8 +12,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Statistics for a GitHub repository.
- *
- * @author Martin van Zijl
  */
 public class GHRepositoryStatistics {
 

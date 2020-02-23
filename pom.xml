@@ -167,9 +167,6 @@
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
                       <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHCommitState</exclude>
                       <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
                       <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
@@ -187,9 +184,6 @@
                       <exclude>org.kohsuke.github.GHHook</exclude>
                       <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
                       <exclude>org.kohsuke.github.GHInvitation</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHMilestoneState</exclude>
                       <exclude>org.kohsuke.github.GHOrgHook</exclude>
                       <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>

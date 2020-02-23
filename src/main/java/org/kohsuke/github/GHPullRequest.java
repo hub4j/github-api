@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,6 +100,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     @Override
     protected String getApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), ""), "/");
+        }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
     }
 

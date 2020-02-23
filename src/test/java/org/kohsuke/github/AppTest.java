@@ -874,15 +874,60 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void reactions() throws Exception {
         GHIssue i = gitHub.getRepository("github-api/github-api").getIssue(311);
 
+        List<GHReaction> l;
         // retrieval
-        GHReaction r = i.listReactions().iterator().next();
-        assertThat(r.getUser().getLogin(), is("kohsuke"));
-        assertThat(r.getContent(), is(ReactionContent.HEART));
+        l = i.listReactions().asList();
+        assertThat(l.size(), equalTo(1));
+
+        assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
+        assertThat(l.get(0).getContent(), is(ReactionContent.HEART));
 
         // CRUD
-        GHReaction a = i.createReaction(ReactionContent.HOORAY);
+        GHReaction a;
+        a = i.createReaction(ReactionContent.HOORAY);
         assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.HOORAY));
         a.delete();
+
+        l = i.listReactions().asList();
+        assertThat(l.size(), equalTo(1));
+
+        a = i.createReaction(ReactionContent.PLUS_ONE);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.PLUS_ONE));
+
+        a = i.createReaction(ReactionContent.CONFUSED);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.CONFUSED));
+
+        a = i.createReaction(ReactionContent.EYES);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.EYES));
+
+        a = i.createReaction(ReactionContent.ROCKET);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.ROCKET));
+
+        l = i.listReactions().asList();
+        assertThat(l.size(), equalTo(5));
+        assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
+        assertThat(l.get(0).getContent(), is(ReactionContent.HEART));
+        assertThat(l.get(1).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(1).getContent(), is(ReactionContent.PLUS_ONE));
+        assertThat(l.get(2).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(2).getContent(), is(ReactionContent.CONFUSED));
+        assertThat(l.get(3).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(3).getContent(), is(ReactionContent.EYES));
+        assertThat(l.get(4).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(4).getContent(), is(ReactionContent.ROCKET));
+
+        l.get(1).delete();
+        l.get(2).delete();
+        l.get(3).delete();
+        l.get(4).delete();
+
+        l = i.listReactions().asList();
+        assertThat(l.size(), equalTo(1));
     }
 
     @Test

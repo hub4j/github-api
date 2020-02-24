@@ -600,7 +600,8 @@ public class GitHub {
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
         GHInvitation[] invitations = createRequest().withUrlPath("/user/repository_invitations")
-                .fetchArray(GHInvitation[].class);
+                .toIterable(GHInvitation[].class, null)
+                .toArray();
         for (GHInvitation i : invitations) {
             i.wrapUp(this);
         }
@@ -618,7 +619,9 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class);
+        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs")
+                .toIterable(GHOrganization[].class, null)
+                .toArray();
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -672,7 +675,8 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
         GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
-                .fetchArray(GHOrganization[].class);
+                .toIterable(GHOrganization[].class, null)
+                .toArray();
         Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
@@ -693,7 +697,7 @@ public class GitHub {
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : createRequest().withUrlPath("/user/teams").fetchArray(GHTeam[].class)) {
+        for (GHTeam team : createRequest().withUrlPath("/user/teams").toIterable(GHTeam[].class, null).toArray()) {
             team.wrapUp(this);
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
@@ -727,7 +731,7 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = createRequest().withUrlPath("/events").fetchArray(GHEventInfo[].class);
+        GHEventInfo[] events = createRequest().withUrlPath("/events").toIterable(GHEventInfo[].class, null).toArray();
         for (GHEventInfo e : events)
             e.wrapUp(this);
         return Arrays.asList(events);

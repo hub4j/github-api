@@ -69,21 +69,6 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Sends a request and parses the response into an array of the given type via databinding.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param type
-     *            the type
-     * @return an array of {@link T} elements
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
-        return toIterable(client, type, null).toArray();
-    }
-
-    /**
      * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
      *
      * @param <T>

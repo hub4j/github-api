@@ -376,8 +376,9 @@ public class GHRepository extends GHObject {
         Requester requester = root.createRequest()
                 .with("state", state)
                 .with("milestone", milestone == null ? "none" : "" + milestone.getNumber());
-        return Arrays
-                .asList(GHIssue.wrap(requester.withUrlPath(getApiTailUrl("issues")).fetchArray(GHIssue[].class), this));
+        return Arrays.asList(
+                GHIssue.wrap(requester.withUrlPath(getApiTailUrl("issues")).toIterable(GHIssue[].class, null).toArray(),
+                        this));
     }
 
     /**
@@ -785,9 +786,10 @@ public class GHRepository extends GHObject {
      */
     public Set<String> getCollaboratorNames() throws IOException {
         Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(
-                root.createRequest().withUrlPath(getApiTailUrl("collaborators")).fetchArray(GHUser[].class),
-                root))
+        for (GHUser u : GHUser.wrap(root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null)
+                .toArray(), root))
             r.add(u.login);
         return r;
     }
@@ -830,9 +832,9 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(
-                GHTeam.wrapUp(root.createRequest().withUrlPath(getApiTailUrl("teams")).fetchArray(GHTeam[].class),
-                        root.getOrganization(getOwnerName())))));
+        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(GHTeam.wrapUp(
+                root.createRequest().withUrlPath(getApiTailUrl("teams")).toIterable(GHTeam[].class, null).toArray(),
+                root.getOrganization(getOwnerName())))));
     }
 
     /**
@@ -1451,7 +1453,8 @@ public class GHRepository extends GHObject {
     public GHRef[] getRefs() throws IOException {
         return GHRef.wrap(root.createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/git/refs", getOwnerName(), name))
-                .fetchArray(GHRef[].class), root);
+                .toIterable(GHRef[].class, null)
+                .toArray(), root);
     }
 
     /**
@@ -1478,7 +1481,8 @@ public class GHRepository extends GHObject {
     public GHRef[] getRefs(String refType) throws IOException {
         return GHRef.wrap(root.createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType))
-                .fetchArray(GHRef[].class), root);
+                .toIterable(GHRef[].class, null)
+                .toArray(), root);
     }
 
     /**
@@ -2071,7 +2075,10 @@ public class GHRepository extends GHObject {
      */
     public Map<String, GHBranch> getBranches() throws IOException {
         Map<String, GHBranch> r = new TreeMap<String, GHBranch>();
-        for (GHBranch p : root.createRequest().withUrlPath(getApiTailUrl("branches")).fetchArray(GHBranch[].class)) {
+        for (GHBranch p : root.createRequest()
+                .withUrlPath(getApiTailUrl("branches"))
+                .toIterable(GHBranch[].class, null)
+                .toArray()) {
             p.wrap(this);
             r.put(p.getName(), p);
         }
@@ -2203,7 +2210,10 @@ public class GHRepository extends GHObject {
         }
         String target = getApiTailUrl("contents/" + path);
 
-        GHContent[] files = requester.with("ref", ref).withUrlPath(target).fetchArray(GHContent[].class);
+        GHContent[] files = requester.with("ref", ref)
+                .withUrlPath(target)
+                .toIterable(GHContent[].class, null)
+                .toArray();
 
         GHContent.wrap(files, this);
 
@@ -2361,8 +2371,10 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHDeployKey> getDeployKeys() throws IOException {
-        List<GHDeployKey> list = new ArrayList<GHDeployKey>(
-                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHDeployKey[].class)));
+        List<GHDeployKey> list = new ArrayList<GHDeployKey>(Arrays.asList(root.createRequest()
+                .withUrlPath(getApiTailUrl("keys"))
+                .toIterable(GHDeployKey[].class, null)
+                .toArray()));
         for (GHDeployKey h : list)
             h.wrap(this);
         return list;

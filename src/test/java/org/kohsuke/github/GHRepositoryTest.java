@@ -420,10 +420,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getMessage(),
                     containsString("/repos/github-api-test-org/temp-listRefsEmptyTags/git/refs/tags"));
         }
-    }
 
-    @Test
-    public void listRefsEmptyTagsAsList() throws Exception {
         try {
             GHRepository repo = getTempRepository();
             repo.listRefs("tags").asList();

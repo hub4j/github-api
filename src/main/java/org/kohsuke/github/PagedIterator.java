@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.Consumer;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -20,8 +22,13 @@ import javax.annotation.Nonnull;
  * @param <T>
  *            the type parameter
  */
-public abstract class PagedIterator<T> implements Iterator<T> {
+public class PagedIterator<T> implements Iterator<T> {
+
+    @Nonnull
     protected final Iterator<T[]> base;
+
+    @CheckForNull
+    private final Consumer<T> itemInitializer;
 
     /**
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
@@ -39,8 +46,9 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      */
     private int nextItemIndex;
 
-    PagedIterator(Iterator<T[]> base) {
+    PagedIterator(@Nonnull Iterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
         this.base = base;
+        this.itemInitializer = itemInitializer;
     }
 
     /**
@@ -50,7 +58,13 @@ public abstract class PagedIterator<T> implements Iterator<T> {
      * @param page
      *            the page of items to be initialized
      */
-    protected abstract void wrapUp(T[] page);
+    protected void wrapUp(T[] page) {
+        if (itemInitializer != null) {
+            for (T item : page) {
+                itemInitializer.accept(item);
+            }
+        }
+    }
 
     /**
      * {@inheritDoc}

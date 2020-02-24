@@ -49,7 +49,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     private GitHubResponse<T> finalResponse = null;
 
-    GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
+    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
         if (!"GET".equals(request.method())) {
             throw new IllegalStateException("Request method \"GET\" is required for page iterator.");
         }
@@ -70,9 +70,15 @@ class GitHubPageIterator<T> implements Iterator<T> {
      *            type of each page (not the items in the page).
      * @return iterator
      */
-    static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest.Builder<?> builder) {
+    static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
+
         try {
-            return new GitHubPageIterator<>(client, type, builder.build());
+            if (pageSize > 0) {
+                GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
+                request = builder.build();
+            }
+
+            return new GitHubPageIterator<>(client, type, request);
         } catch (MalformedURLException e) {
             throw new GHException("Unable to build GitHub API URL", e);
         }

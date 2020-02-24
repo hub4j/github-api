@@ -110,6 +110,8 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * Eagerly walk {@link Iterable} and return the result in a list.
      *
      * @return the list
+     * @throws IOException
+     *             if an I/O Exception occurs
      */
     @Nonnull
     public List<T> toList() throws IOException {
@@ -120,6 +122,8 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * Eagerly walk {@link Iterable} and return the result in a set.
      *
      * @return the set
+     * @throws IOException
+     *             if an I/O Exception occurs
      */
     @Nonnull
     public Set<T> toSet() throws IOException {

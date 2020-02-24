@@ -181,7 +181,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
                         Requester requester = req.withUrlPath(apiUrl);
                         GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
-                                .toIterable(requester.client, GHThread[].class, null)).toResponse();
+                                .toIterable(GHThread[].class, null)).toResponse();
                         threads = response.body();
 
                         if (threads == null) {

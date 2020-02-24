@@ -1,0 +1,42 @@
+[
+  {
+    "login": "bitwiseman",
+    "id": 1958953,
+    "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/bitwiseman",
+    "html_url": "https://github.com/bitwiseman",
+    "followers_url": "https://api.github.com/users/bitwiseman/followers",
+    "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+    "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+    "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+    "repos_url": "https://api.github.com/users/bitwiseman/repos",
+    "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "kohsuke2",
+    "id": 1329242,
+    "node_id": "MDQ6VXNlcjEzMjkyNDI=",
+    "avatar_url": "https://avatars2.githubusercontent.com/u/1329242?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke2",
+    "html_url": "https://github.com/kohsuke2",
+    "followers_url": "https://api.github.com/users/kohsuke2/followers",
+    "following_url": "https://api.github.com/users/kohsuke2/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke2/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke2/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke2/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke2/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke2/repos",
+    "events_url": "https://api.github.com/users/kohsuke2/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke2/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

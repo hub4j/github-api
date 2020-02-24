@@ -299,7 +299,7 @@ public class GHOrganization extends GHPerson {
      * List members with specified role paged iterable.
      *
      * @param role
-     *            the filter
+     *            the role
      * @return the paged iterable
      * @throws IOException
      *             the io exception

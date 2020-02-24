@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
@@ -74,6 +75,15 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Check the invitation has worked.
         // assertTrue(org.hasMember(user));
+    }
+
+    @Test
+    public void testListMembersWithRole() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHUser> admins = org.listMembersWithRole("admin").asList();
+
+        assertFalse(admins.isEmpty());
     }
 
     @Test

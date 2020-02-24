@@ -394,7 +394,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listRefs() throws Exception {
         GHRepository repo = getTempRepository();
-        List<GHRef> refs = repo.listRefs().asList();
+        List<GHRef> refs = repo.listRefs().toList();
         assertThat(refs, notNullValue());
         assertThat(refs.size(), equalTo(1));
         assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
@@ -403,7 +403,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
-        List<GHRef> refs = repo.listRefs("heads").asList();
+        List<GHRef> refs = repo.listRefs("heads").toList();
         assertThat(refs, notNullValue());
         assertThat(refs.size(), equalTo(1));
         assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
@@ -411,6 +411,19 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listRefsEmptyTags() throws Exception {
+        try {
+            GHRepository repo = getTempRepository();
+            repo.listRefs("tags").toList();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(GHFileNotFoundException.class));
+            assertThat(e.getMessage(),
+                    containsString("/repos/github-api-test-org/temp-listRefsEmptyTags/git/refs/tags"));
+        }
+    }
+
+    @Test
+    public void listRefsEmptyTagsAsList() throws Exception {
         try {
             GHRepository repo = getTempRepository();
             repo.listRefs("tags").asList();
@@ -427,7 +440,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listTagsEmpty() throws Exception {
         GHRepository repo = getTempRepository();
-        List<GHTag> refs = repo.listTags().asList();
+        List<GHTag> refs = repo.listTags().toList();
         assertThat(refs, notNullValue());
         assertThat(refs.size(), equalTo(0));
     }
@@ -435,7 +448,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listTags() throws Exception {
         GHRepository repo = getRepository();
-        List<GHTag> refs = repo.listTags().withPageSize(33).asList();
+        List<GHTag> refs = repo.listTags().withPageSize(33).toList();
         assertThat(refs, notNullValue());
         assertThat(refs.size(), greaterThan(90));
     }
@@ -459,7 +472,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listCollaborators() throws Exception {
         GHRepository repo = getRepository();
-        List<GHUser> collaborators = repo.listCollaborators().asList();
+        List<GHUser> collaborators = repo.listCollaborators().toList();
         assertThat(collaborators.size(), greaterThan(10));
     }
 }

@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -69,11 +68,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        GHEmail[] addresses = root.createRequest()
-                .withUrlPath("/user/emails")
-                .toIterable(GHEmail[].class, null)
-                .toArray();
-        return Collections.unmodifiableList(Arrays.asList(addresses));
+        return root.createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
     }
 
     /**
@@ -87,8 +82,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays
-                .asList(root.createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toArray()));
+        return root.createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
     }
 
     /**
@@ -102,10 +96,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(root.createRequest()
+        return root.createRequest()
                 .withUrlPath("/users/" + getLogin() + "/keys")
                 .toIterable(GHVerifiedKey[].class, null)
-                .toArray()));
+                .toList();
     }
 
     /**

@@ -117,7 +117,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .create();
         assertNotNull(deployment.getCreator());
         assertNotNull(deployment.getId());
-        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").asList();
+        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").toList();
         assertNotNull(deployments);
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
@@ -260,7 +260,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         assertEquals("master", r.getMasterBranch());
         PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
-        List<GHPullRequest> prs = i.asList();
+        List<GHPullRequest> prs = i.toList();
         assertNotNull(prs);
         assertTrue(prs.size() > 0);
     }
@@ -570,7 +570,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // state = r.createCommitStatus("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396", GHCommitState.FAILURE,
         // "http://kohsuke.org/", "testing!");
 
-        List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").asList();
+        List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").toList();
         state = lst.get(0);
         // System.out.println(state);
         assertEquals("testing!", state.getDescription());
@@ -778,7 +778,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         cleanupLabel("test2");
 
         GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
-        List<GHLabel> lst = r.listLabels().asList();
+        List<GHLabel> lst = r.listLabels().toList();
         for (GHLabel l : lst) {
             // System.out.println(l.getName());
         }
@@ -887,7 +887,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         List<GHReaction> l;
         // retrieval
-        l = i.listReactions().asList();
+        l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));
 
         assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
@@ -900,7 +900,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(a.getContent(), is(ReactionContent.HOORAY));
         a.delete();
 
-        l = i.listReactions().asList();
+        l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));
 
         a = i.createReaction(ReactionContent.PLUS_ONE);
@@ -919,7 +919,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
         assertThat(a.getContent(), is(ReactionContent.ROCKET));
 
-        l = i.listReactions().asList();
+        l = i.listReactions().toList();
         assertThat(l.size(), equalTo(5));
         assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
         assertThat(l.get(0).getContent(), is(ReactionContent.HEART));
@@ -937,7 +937,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         l.get(3).delete();
         l.get(4).delete();
 
-        l = i.listReactions().asList();
+        l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));
     }
 

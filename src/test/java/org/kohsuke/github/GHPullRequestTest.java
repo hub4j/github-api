@@ -56,7 +56,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p2.isDraft(), is(true));
 
-        p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().asList().get(0);
+        p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().toList().get(0);
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p.isDraft(), is(true));
 
@@ -91,14 +91,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
-        List<GHPullRequestReview> reviews = p.listReviews().asList();
+        List<GHPullRequestReview> reviews = p.listReviews().toList();
         assertThat(reviews.size(), is(1));
         GHPullRequestReview review = reviews.get(0);
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
-        List<GHPullRequestReviewComment> comments = review.listReviewComments().asList();
+        List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Some niggle", comment.getBody());
@@ -111,21 +111,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "pullRequestReviewComments";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         // System.out.println(p.getUrl());
-        assertTrue(p.listReviewComments().asList().isEmpty());
+        assertTrue(p.listReviewComments().toList().isEmpty());
         p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
-        List<GHPullRequestReviewComment> comments = p.listReviewComments().asList();
+        List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Sample review comment", comment.getBody());
 
         comment.update("Updated review comment");
-        comments = p.listReviewComments().asList();
+        comments = p.listReviewComments().toList();
         assertEquals(1, comments.size());
         comment = comments.get(0);
         assertEquals("Updated review comment", comment.getBody());
 
         comment.delete();
-        comments = p.listReviewComments().asList();
+        comments = p.listReviewComments().toList();
         assertTrue(comments.isEmpty());
     }
 
@@ -254,7 +254,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 .head("github-api-test-org:test/stable")
                 .base("master")
                 .list()
-                .asList();
+                .toList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
@@ -273,7 +273,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 .head("test/stable")
                 .base("master")
                 .list()
-                .asList();
+                .toList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());

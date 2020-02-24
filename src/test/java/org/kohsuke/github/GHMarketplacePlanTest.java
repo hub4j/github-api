@@ -28,30 +28,30 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listMarketplacePlans() throws IOException {
-        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertEquals(3, plans.size());
         plans.forEach(this::testMarketplacePlan);
     }
 
     @Test
     public void listAccounts() throws IOException {
-        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertEquals(3, plans.size());
-        List<GHMarketplaceAccountPlan> marketplaceUsers = plans.get(0).listAccounts().createRequest().asList();
+        List<GHMarketplaceAccountPlan> marketplaceUsers = plans.get(0).listAccounts().createRequest().toList();
         assertEquals(2, marketplaceUsers.size());
         marketplaceUsers.forEach(this::testMarketplaceAccount);
     }
 
     @Test
     public void listAccountsWithDirection() throws IOException {
-        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertEquals(3, plans.size());
 
         for (GHMarketplacePlan plan : plans) {
             List<GHMarketplaceAccountPlan> marketplaceUsers = plan.listAccounts()
                     .direction(DESC)
                     .createRequest()
-                    .asList();
+                    .toList();
             assertEquals(2, marketplaceUsers.size());
             marketplaceUsers.forEach(this::testMarketplaceAccount);
         }
@@ -60,7 +60,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listAccountsWithSortAndDirection() throws IOException {
-        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().asList();
+        List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertEquals(3, plans.size());
 
         for (GHMarketplacePlan plan : plans) {
@@ -68,7 +68,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                     .sort(UPDATED)
                     .direction(DESC)
                     .createRequest()
-                    .asList();
+                    .toList();
             assertEquals(2, marketplaceUsers.size());
             marketplaceUsers.forEach(this::testMarketplaceAccount);
         }

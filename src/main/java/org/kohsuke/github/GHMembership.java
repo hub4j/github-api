@@ -83,11 +83,6 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
         return this;
     }
 
-    static void wrap(GHMembership[] page, GitHub root) {
-        for (GHMembership m : page)
-            m.wrap(root);
-    }
-
     /**
      * Role of a user in an organization.
      */

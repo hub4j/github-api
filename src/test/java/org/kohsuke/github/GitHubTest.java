@@ -112,7 +112,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void getMyMarketplacePurchases() throws IOException {
-        List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().asList();
+        List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().toList();
         assertEquals(2, userPurchases.size());
 
         for (GHMarketplaceUserPurchase userPurchase : userPurchases) {

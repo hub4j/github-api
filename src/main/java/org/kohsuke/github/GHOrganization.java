@@ -253,7 +253,7 @@ public class GHOrganization extends GHPerson {
      * @deprecated use {@link #listMembers()}
      */
     public List<GHUser> getMembers() throws IOException {
-        return listMembers().asList();
+        return listMembers().toList();
     }
 
     /**

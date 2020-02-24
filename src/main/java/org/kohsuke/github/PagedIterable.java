@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -111,9 +112,31 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * @return the list
      */
     @Nonnull
+    public List<T> toList() throws IOException {
+        return Collections.unmodifiableList(Arrays.asList(this.toArray()));
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a set.
+     *
+     * @return the set
+     */
+    @Nonnull
+    public Set<T> toSet() throws IOException {
+        return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(this.toArray())));
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a list.
+     *
+     * @return the list
+     * @deprecated Use {@link #toList()} instead.
+     */
+    @Nonnull
+    @Deprecated
     public List<T> asList() {
         try {
-            return Arrays.asList(this.toArray());
+            return this.toList();
         } catch (IOException e) {
             throw new GHException("Failed to retrieve list: " + e.getMessage(), e);
         }
@@ -123,10 +146,16 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * Eagerly walk {@link Iterable} and return the result in a set.
      *
      * @return the set
+     * @deprecated Use {@link #toSet()} instead.
      */
     @Nonnull
+    @Deprecated
     public Set<T> asSet() {
-        return new LinkedHashSet<>(this.asList());
+        try {
+            return this.toSet();
+        } catch (IOException e) {
+            throw new GHException("Failed to retrieve list: " + e.getMessage(), e);
+        }
     }
 
     /**

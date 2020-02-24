@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -50,13 +49,6 @@ public class GHTeam implements Refreshable {
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
         this.organization.wrapUp(root);
         return wrapUp(organization);
-    }
-
-    static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
-        for (GHTeam t : teams) {
-            t.wrapUp(owner);
-        }
-        return teams;
     }
 
     static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
@@ -163,7 +155,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public Set<GHUser> getMembers() throws IOException {
-        return Collections.unmodifiableSet(listMembers().asSet());
+        return listMembers().toSet();
     }
 
     /**

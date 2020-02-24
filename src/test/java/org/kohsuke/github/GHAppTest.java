@@ -43,7 +43,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
     @Test
     public void listInstallations() throws IOException {
         GHApp app = gitHub.getApp();
-        List<GHAppInstallation> installations = app.listInstallations().asList();
+        List<GHAppInstallation> installations = app.listInstallations().toList();
         assertThat(installations.size(), is(1));
 
         GHAppInstallation appInstallation = installations.get(0);

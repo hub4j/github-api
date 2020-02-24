@@ -308,7 +308,8 @@ public class GHOrganization extends GHPerson {
         return listMembers("members", null, role);
     }
 
-    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role) throws IOException {
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role)
+            throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
                 .with("filter", filter)

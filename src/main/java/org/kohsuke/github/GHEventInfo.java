@@ -142,7 +142,7 @@ public class GHEventInfo {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.MAPPER.readValue(payload.traverse(), type);
+        T v = GitHubClient.getMappingObjectReader().readValue(payload.traverse(), type);
         v.wrapUp(root);
         return v;
     }

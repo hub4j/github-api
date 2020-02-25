@@ -207,10 +207,6 @@ public class GHNotificationStream implements Iterable<GHThread> {
                 long seconds = Integer.parseInt(v);
                 return System.currentTimeMillis() + seconds * 1000;
             }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
         };
     }
 

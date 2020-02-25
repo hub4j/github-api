@@ -14,13 +14,13 @@
     "status": 200,
     "bodyFileName": "user-a60baf84-5b5c-4f86-af3d-cab0d609c7b2.json",
     "headers": {
-      "Date": "Thu, 06 Feb 2020 18:33:32 GMT",
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
       "X-RateLimit-Remaining": "4930",
-      "X-RateLimit-Reset": "1581014122",
+      "X-RateLimit-Reset": "{{now offset='3 seconds' format='unix'}}",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",

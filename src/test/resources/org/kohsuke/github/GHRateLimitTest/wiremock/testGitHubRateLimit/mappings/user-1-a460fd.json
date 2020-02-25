@@ -20,7 +20,7 @@
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
       "X-RateLimit-Remaining": "4897",
-      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
+      "X-RateLimit-Reset": "{{testStartDate offset='1 hours' format='unix'}}",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",

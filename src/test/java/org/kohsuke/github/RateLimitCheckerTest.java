@@ -1,11 +1,7 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
 import org.junit.Test;
-import wiremock.com.github.jknack.handlebars.Helper;
-import wiremock.com.github.jknack.handlebars.Options;
 
 import java.io.IOException;
 import java.util.Date;
@@ -22,7 +18,6 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
     GHRateLimit rateLimit = null;
     GHRateLimit previousLimit = null;
-    Date testStartDate = new Date();
 
     public RateLimitCheckerTest() {
         useDefaultGitHub = false;
@@ -30,18 +25,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
     @Override
     protected WireMockConfiguration getWireMockOptions() {
-
-        return super.getWireMockOptions().extensions(ResponseTemplateTransformer.builder()
-                .global(true)
-                .maxCacheEntries(0L)
-                .helper("testStartDate", new Helper<Object>() {
-                    private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
-                    @Override
-                    public Object apply(final Object context, final Options options) throws IOException {
-                        return this.helper.apply(RateLimitCheckerTest.this.testStartDate, options);
-                    }
-                })
-                .build());
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     @Test
@@ -51,14 +35,10 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
 
-        // // 4897 is just the what the limit was when the snapshot was taken
-        // previousLimit = GHRateLimit
-        // .fromHeaderRecord(new GHRateLimit.Record(5000, 4897, System.currentTimeMillis() / 1000L));
-
         // Give this a moment
         Thread.sleep(1000);
 
-        testStartDate = new Date();
+        templating.testStartDate = new Date();
         // -------------------------------------------------------------
         // /user gets response with rate limit information
         gitHub = getGitHubBuilder().withRateLimitChecker(new RateLimitChecker.LiteralValue(4500))

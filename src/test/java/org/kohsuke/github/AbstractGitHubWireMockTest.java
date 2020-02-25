@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -11,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.kohsuke.github.junit.GitHubWireMockRule;
+import wiremock.com.github.jknack.handlebars.Helper;
+import wiremock.com.github.jknack.handlebars.Options;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +51,8 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     @Rule
     public final GitHubWireMockRule mockGitHub;
+
+    protected final TemplatingHelper templating = new TemplatingHelper();
 
     public AbstractGitHubWireMockTest() {
         mockGitHub = new GitHubWireMockRule(this.getWireMockOptions());
@@ -283,6 +289,25 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     public static void assertFalse(Boolean condition) {
         assertThat(condition, Matchers.is(false));
+    }
+
+    protected static class TemplatingHelper {
+        public Date testStartDate = new Date();
+
+        public ResponseTemplateTransformer newResponseTransformer() {
+            testStartDate = new Date();
+            return ResponseTemplateTransformer.builder()
+                    .global(true)
+                    .maxCacheEntries(0L)
+                    .helper("testStartDate", new Helper<Object>() {
+                        private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
+                        @Override
+                        public Object apply(final Object context, final Options options) throws IOException {
+                            return this.helper.apply(TemplatingHelper.this.testStartDate, options);
+                        }
+                    })
+                    .build();
+        }
     }
 
 }

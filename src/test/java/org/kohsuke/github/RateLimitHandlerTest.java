@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,8 +35,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
 
     @Override
     protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.kohsuke.github.extras.okhttp3;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -72,7 +71,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         return super.getWireMockOptions()
                 // Use the same data files as the 2.x test
                 .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
+                .extensions(templating.newResponseTransformer());
     }
 
     @Before

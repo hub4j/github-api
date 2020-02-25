@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -297,29 +296,6 @@ class GitHubRequest {
          */
         public GitHubRequest build() throws MalformedURLException {
             return new GitHubRequest(args, headers, apiUrl, urlPath, method, body, forceBody);
-        }
-
-        /**
-         * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}. This method and
-         * the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()} or
-         * {@link Iterator#hasNext()} are called.
-         *
-         * @param client
-         *            the {@link GitHubClient} to be used for this {@link PagedIterable<R>}
-         * @param type
-         *            the type of the pages to retrieve.
-         * @param itemInitializer
-         *            the consumer to execute on each paged item retrieved.
-         * @param <R>
-         *            the element type for the pages returned from
-         * @return the {@link PagedIterable} for this builder.
-         */
-        public <R> PagedIterable<R> toIterable(GitHubClient client, Class<R[]> type, Consumer<R> itemInitializer) {
-            try {
-                return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
-            } catch (MalformedURLException e) {
-                throw new GHException(e.getMessage(), e);
-            }
         }
 
         /**
@@ -605,20 +581,6 @@ class GitHubRequest {
          */
         public B inBody() {
             forceBody = true;
-            return (B) this;
-        }
-
-        /**
-         * Set page size for to be used for {@link #toIterable(GitHubClient, Class, Consumer)}.
-         * 
-         * @param pageSize
-         *            the page size
-         * @return the request builder
-         */
-        public B withPageSize(int pageSize) {
-            if (pageSize > 0) {
-                this.with("per_page", pageSize);
-            }
             return (B) this;
         }
     }

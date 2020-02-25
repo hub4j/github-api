@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -69,21 +70,6 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Sends a request and parses the response into an array of the given type via databinding.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param type
-     *            the type
-     * @return an array of {@link T} elements
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public <T> T[] fetchArray(@Nonnull Class<T[]> type) throws IOException {
-        return toIterable(client, type, null).toArray();
-    }
-
-    /**
      * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
      *
      * @param <T>
@@ -124,9 +110,11 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}. This method and the
-     * {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()} or
-     * {@link Iterator#hasNext()} are called.
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}.
+     * <p>
+     * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
+     * or {@link Iterator#hasNext()} are called.
+     * </p>
      *
      * @param type
      *            the type of the pages to retrieve.
@@ -137,6 +125,11 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @return the {@link PagedIterable} for this builder.
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
-        return toIterable(this.client, type, itemInitializer);
+        try {
+            return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
+        } catch (MalformedURLException e) {
+            throw new GHException(e.getMessage(), e);
+        }
+
     }
 }

@@ -6,8 +6,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 /**
  * Base class for various search builders.
  *
@@ -25,6 +23,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
+        req.withUrlPath(getApiUrl());
     }
 
     /**
@@ -47,20 +46,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
         req.set("q", StringUtils.join(terms, " "));
         try {
-            final GitHubRequest baseRequest = req.build();
-            return new PagedSearchIterable<T>(root) {
-                @Nonnull
-                public PagedIterator<T> _iterator(int pageSize) {
-                    return new PagedIterator<T>(adapt(GitHubPageIterator.create(root.getClient(),
-                            receiverType,
-                            baseRequest.toBuilder().withUrlPath(getApiUrl()).withPageSize(pageSize)))) {
-                        protected void wrapUp(T[] page) {
-                            // PagedSearchIterable
-                            // SearchResult.getItems() should do it
-                        }
-                    };
-                }
-            };
+            return new PagedSearchIterable<>(root, req.build(), receiverType);
         } catch (MalformedURLException e) {
             throw new GHException("", e);
         }

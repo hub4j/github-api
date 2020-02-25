@@ -20,7 +20,7 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         issue.addLabels("test-label");
 
         // Test that the events are present.
-        List<GHIssueEvent> list = issue.listEvents().asList();
+        List<GHIssueEvent> list = issue.listEvents().toList();
         assertEquals(1, list.size());
 
         GHIssueEvent event = list.get(0);
@@ -39,7 +39,7 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     @Test
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
-        List<GHIssueEvent> list = repo.listIssueEvents().asList();
+        List<GHIssueEvent> list = repo.listIssueEvents().toList();
         assertTrue(list.size() > 0);
 
         int i = 0;

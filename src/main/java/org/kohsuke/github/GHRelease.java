@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -258,8 +257,9 @@ public class GHRelease extends GHObject {
     public List<GHAsset> getAssets() throws IOException {
         Requester builder = owner.root.createRequest();
 
-        GHAsset[] assets = builder.withUrlPath(getApiTailUrl("assets")).fetchArray(GHAsset[].class);
-        return Arrays.asList(GHAsset.wrap(assets, this));
+        return builder.withUrlPath(getApiTailUrl("assets"))
+                .toIterable(GHAsset[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**

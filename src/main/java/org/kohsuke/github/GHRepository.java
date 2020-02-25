@@ -39,7 +39,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -358,7 +357,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-        return listIssues(state).asList();
+        return listIssues(state).toList();
     }
 
     /**
@@ -376,8 +375,9 @@ public class GHRepository extends GHObject {
         Requester requester = root.createRequest()
                 .with("state", state)
                 .with("milestone", milestone == null ? "none" : "" + milestone.getNumber());
-        return Arrays
-                .asList(GHIssue.wrap(requester.withUrlPath(getApiTailUrl("issues")).fetchArray(GHIssue[].class), this));
+        return requester.withUrlPath(getApiTailUrl("issues"))
+                .toIterable(GHIssue[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -436,7 +436,7 @@ public class GHRepository extends GHObject {
      * @deprecated use {@link #listReleases()}
      */
     public List<GHRelease> getReleases() throws IOException {
-        return listReleases().asList();
+        return listReleases().toList();
     }
 
     /**
@@ -734,7 +734,7 @@ public class GHRepository extends GHObject {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(listCollaborators().asList());
+        return new GHPersonSet<GHUser>(listCollaborators().toList());
     }
 
     /**
@@ -784,11 +784,14 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<String> getCollaboratorNames() throws IOException {
-        Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(
-                root.createRequest().withUrlPath(getApiTailUrl("collaborators")).fetchArray(GHUser[].class),
-                root))
+        Set<String> r = new HashSet<>();
+        // no initializer - we just want to the logins
+        PagedIterable<GHUser> users = root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null);
+        for (GHUser u : users.toArray()) {
             r.add(u.login);
+        }
         return r;
     }
 
@@ -830,9 +833,11 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(
-                GHTeam.wrapUp(root.createRequest().withUrlPath(getApiTailUrl("teams")).fetchArray(GHTeam[].class),
-                        root.getOrganization(getOwnerName())))));
+        GHOrganization org = root.getOrganization(getOwnerName());
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("teams"))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(org))
+                .toSet();
     }
 
     /**
@@ -1238,7 +1243,7 @@ public class GHRepository extends GHObject {
      * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return queryPullRequests().state(state).list().asList();
+        return queryPullRequests().state(state).list().toList();
     }
 
     /**
@@ -1449,9 +1454,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-        return GHRef.wrap(root.createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/git/refs", getOwnerName(), name))
-                .fetchArray(GHRef[].class), root);
+        return listRefs().toArray();
     }
 
     /**
@@ -1476,9 +1479,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return GHRef.wrap(root.createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType))
-                .fetchArray(GHRef[].class), root);
+        return listRefs(refType).toArray();
     }
 
     /**
@@ -1736,7 +1737,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
-        List<GHCommitStatus> v = listCommitStatuses(sha1).asList();
+        List<GHCommitStatus> v = listCommitStatuses(sha1).toList();
         return v.isEmpty() ? null : v.get(0);
     }
 
@@ -2071,8 +2072,10 @@ public class GHRepository extends GHObject {
      */
     public Map<String, GHBranch> getBranches() throws IOException {
         Map<String, GHBranch> r = new TreeMap<String, GHBranch>();
-        for (GHBranch p : root.createRequest().withUrlPath(getApiTailUrl("branches")).fetchArray(GHBranch[].class)) {
-            p.wrap(this);
+        for (GHBranch p : root.createRequest()
+                .withUrlPath(getApiTailUrl("branches"))
+                .toIterable(GHBranch[].class, item -> item.wrap(this))
+                .toArray()) {
             r.put(p.getName(), p);
         }
         return r;
@@ -2203,11 +2206,10 @@ public class GHRepository extends GHObject {
         }
         String target = getApiTailUrl("contents/" + path);
 
-        GHContent[] files = requester.with("ref", ref).withUrlPath(target).fetchArray(GHContent[].class);
-
-        GHContent.wrap(files, this);
-
-        return Arrays.asList(files);
+        return requester.with("ref", ref)
+                .withUrlPath(target)
+                .toIterable(GHContent[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -2361,11 +2363,10 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHDeployKey> getDeployKeys() throws IOException {
-        List<GHDeployKey> list = new ArrayList<GHDeployKey>(
-                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHDeployKey[].class)));
-        for (GHDeployKey h : list)
-            h.wrap(this);
-        return list;
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("keys"))
+                .toIterable(GHDeployKey[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**

@@ -599,12 +599,9 @@ public class GitHub {
      *             the io exception
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = createRequest().withUrlPath("/user/repository_invitations")
-                .fetchArray(GHInvitation[].class);
-        for (GHInvitation i : invitations) {
-            i.wrapUp(this);
-        }
-        return Arrays.asList(invitations);
+        return createRequest().withUrlPath("/user/repository_invitations")
+                .toIterable(GHInvitation[].class, item -> item.wrapUp(this))
+                .toList();
     }
 
     /**
@@ -618,11 +615,13 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class);
-        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs")
+                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toArray();
+        Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(), o.wrapUp(this));
+            r.put(o.getLogin(), o);
         }
         return r;
     }
@@ -672,11 +671,12 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
         GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
-                .fetchArray(GHOrganization[].class);
-        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toArray();
+        Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
-            // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(), o.wrapUp(this));
+            // don't put 'o' into orgs cache because they are shallow records
+            r.put(o.getLogin(), o);
         }
         return r;
     }
@@ -692,13 +692,14 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
-        Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : createRequest().withUrlPath("/user/teams").fetchArray(GHTeam[].class)) {
-            team.wrapUp(this);
+        Map<String, Set<GHTeam>> allMyTeams = new HashMap<>();
+        for (GHTeam team : createRequest().withUrlPath("/user/teams")
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this))
+                .toArray()) {
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
             if (teamsPerOrg == null) {
-                teamsPerOrg = new HashSet<GHTeam>();
+                teamsPerOrg = new HashSet<>();
             }
             teamsPerOrg.add(team);
             allMyTeams.put(orgLogin, teamsPerOrg);
@@ -727,10 +728,9 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = createRequest().withUrlPath("/events").fetchArray(GHEventInfo[].class);
-        for (GHEventInfo e : events)
-            e.wrapUp(this);
-        return Arrays.asList(events);
+        return createRequest().withUrlPath("/events")
+                .toIterable(GHEventInfo[].class, item -> item.wrapUp(this))
+                .toList();
     }
 
     /**

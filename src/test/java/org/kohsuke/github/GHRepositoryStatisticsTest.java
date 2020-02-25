@@ -24,7 +24,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         }
 
         // check the statistics are accurate
-        List<GHRepositoryStatistics.ContributorStats> list = stats.asList();
+        List<GHRepositoryStatistics.ContributorStats> list = stats.toList();
         assertEquals(99, list.size());
 
         // find a particular developer
@@ -79,7 +79,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         }
 
         // check the statistics are accurate
-        List<GHRepositoryStatistics.CommitActivity> list = stats.asList();
+        List<GHRepositoryStatistics.CommitActivity> list = stats.toList();
 
         // TODO: Return this as a map with the timestamp as the key.
         // Either that or wrap in an object an accessor method.

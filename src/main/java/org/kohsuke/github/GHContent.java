@@ -388,22 +388,6 @@ public class GHContent implements Refreshable {
     }
 
     /**
-     * Wrap gh content [ ].
-     *
-     * @param contents
-     *            the contents
-     * @param repository
-     *            the repository
-     * @return the gh content [ ]
-     */
-    public static GHContent[] wrap(GHContent[] contents, GHRepository repository) {
-        for (GHContent unwrappedContent : contents) {
-            unwrappedContent.wrap(repository);
-        }
-        return contents;
-    }
-
-    /**
      * Fully populate the data by retrieving missing data.
      *
      * Depending on the original API call where this object is created, it may not contain everything.

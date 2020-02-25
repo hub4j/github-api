@@ -100,12 +100,6 @@ public class GHIssue extends GHObject implements Reactable {
         return this;
     }
 
-    static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
-        for (GHIssue i : issues)
-            i.wrap(owner);
-        return issues;
-    }
-
     /**
      * Repository to which the issue belongs.
      *
@@ -434,7 +428,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @see #listComments() #listComments()
      */
     public List<GHIssueComment> getComments() throws IOException {
-        return listComments().asList();
+        return listComments().toList();
     }
 
     /**

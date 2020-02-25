@@ -88,13 +88,6 @@ public class GHRef {
         return this;
     }
 
-    static GHRef[] wrap(GHRef[] in, GitHub root) {
-        for (GHRef r : in) {
-            r.wrap(root);
-        }
-        return in;
-    }
-
     /**
      * The type GHObject.
      */

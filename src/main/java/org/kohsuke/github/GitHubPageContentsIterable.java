@@ -19,16 +19,16 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
 
     private final GitHubClient client;
     private final GitHubRequest request;
-    private final Class<T[]> clazz;
+    private final Class<T[]> receiverType;
     private final Consumer<T> itemInitializer;
 
     GitHubPageContentsIterable(GitHubClient client,
             GitHubRequest request,
-            Class<T[]> clazz,
+            Class<T[]> receiverType,
             Consumer<T> itemInitializer) {
         this.client = client;
         this.request = request;
-        this.clazz = clazz;
+        this.receiverType = receiverType;
         this.itemInitializer = itemInitializer;
     }
 
@@ -38,9 +38,8 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     @Override
     @Nonnull
     public PagedIterator<T> _iterator(int pageSize) {
-        final GitHubPageIterator<T[]> iterator = GitHubPageIterator
-                .create(client, clazz, request.toBuilder().withPageSize(pageSize));
-        return new GitHubPageContentsIterator(iterator);
+        final GitHubPageIterator<T[]> iterator = GitHubPageIterator.create(client, receiverType, request, pageSize);
+        return new GitHubPageContentsIterator(iterator, itemInitializer);
     }
 
     /**
@@ -64,17 +63,8 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
      */
     private class GitHubPageContentsIterator extends PagedIterator<T> {
 
-        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator) {
-            super(iterator);
-        }
-
-        @Override
-        protected void wrapUp(T[] page) {
-            if (itemInitializer != null) {
-                for (T item : page) {
-                    itemInitializer.accept(item);
-                }
-            }
+        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator, Consumer<T> itemInitializer) {
+            super(iterator, itemInitializer);
         }
 
         /**

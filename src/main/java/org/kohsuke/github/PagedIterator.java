@@ -111,10 +111,6 @@ public class PagedIterator<T> implements Iterator<T> {
         }
     }
 
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Gets the next page worth of data.
      *

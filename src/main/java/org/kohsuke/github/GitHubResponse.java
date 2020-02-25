@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 
@@ -77,7 +78,10 @@ class GitHubResponse<T> {
 
         String data = responseInfo.getBodyAsString();
         try {
-            return GitHubClient.MAPPER.readValue(data, type);
+            InjectableValues.Std inject = new InjectableValues.Std();
+            inject.addValue(ResponseInfo.class, responseInfo);
+
+            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);
         } catch (JsonMappingException e) {
             String message = "Failed to deserialize " + data;
             throw new IOException(message, e);
@@ -102,7 +106,7 @@ class GitHubResponse<T> {
 
         String data = responseInfo.getBodyAsString();
         try {
-            return GitHubClient.MAPPER.readerForUpdating(instance).<T>readValue(data);
+            return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);
         } catch (JsonMappingException e) {
             String message = "Failed to deserialize " + data;
             throw new IOException(message, e);

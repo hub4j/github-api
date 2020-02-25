@@ -138,10 +138,6 @@ public abstract class GHPerson extends GHObject {
                             r.root = root;
                         return Arrays.asList(batch);
                     }
-
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
                 };
             }
         };

@@ -78,12 +78,47 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testListMembersWithFilter() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHUser> admins = org.listMembersWithFilter("all").asList();
+
+        assertNotNull(admins);
+        assertTrue(admins.size() >= 12); // In case more are added in the future
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("alexanderrtaylor")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("asthinasthi")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("farmdawgnation")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("halkeye")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("jberglund-BSFT")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke2")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("martinvanzijl")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("PauloMigAlmeida")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("Sage-Pierce")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")));
+    }
+
+    @Test
     public void testListMembersWithRole() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         List<GHUser> admins = org.listMembersWithRole("admin").asList();
 
-        assertFalse(admins.isEmpty());
+        assertNotNull(admins);
+        assertTrue(admins.size() >= 12); // In case more are added in the future
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("alexanderrtaylor")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("asthinasthi")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("farmdawgnation")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("halkeye")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("jberglund-BSFT")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke2")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("martinvanzijl")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("PauloMigAlmeida")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("Sage-Pierce")));
+        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")));
     }
 
     @Test

@@ -153,7 +153,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                         for (GitHubRequest.Entry e : request.args()) {
                             json.put(e.key, e.value);
                         }
-                        MAPPER.writeValue(connection.getOutputStream(), json);
+                        getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
                     }
                 }
             }
@@ -235,4 +235,5 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
         private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
     }
+
 }

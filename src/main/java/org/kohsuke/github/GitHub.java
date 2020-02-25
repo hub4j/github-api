@@ -772,7 +772,7 @@ public class GitHub {
      *             the io exception
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
-        T t = GitHubClient.MAPPER.readValue(r, type);
+        T t = GitHubClient.getMappingObjectReader().forType(type).readValue(r);
         t.wrapUp(this);
         return t;
     }

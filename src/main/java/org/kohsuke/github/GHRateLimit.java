@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -289,14 +290,11 @@ public class GHRateLimit {
 
         /**
          * The time at which the rate limit will reset. This value is calculated based on
-         * {@link #getResetEpochSeconds()} by calling {@link #recalculateResetDate}. If the clock on the local machine
-         * not synchronized with the server clock, this time value will be adjusted to match the local machine's clock.
-         * <p>
-         * Recalculated by calling {@link #recalculateResetDate}.
-         * </p>
+         * {@link #getResetEpochSeconds()} by calling {@link #calculateResetDate}. If the clock on the local machine not
+         * synchronized with the server clock, this time value will be adjusted to match the local machine's clock.
          */
         @Nonnull
-        private Date resetDate;
+        private final Date resetDate;
 
         /**
          * Instantiates a new Record.
@@ -308,7 +306,6 @@ public class GHRateLimit {
          * @param resetEpochSeconds
          *            the reset epoch seconds
          */
-        @JsonCreator
         public Record(@JsonProperty(value = "limit", required = true) int limit,
                 @JsonProperty(value = "remaining", required = true) int remaining,
                 @JsonProperty(value = "reset", required = true) long resetEpochSeconds) {
@@ -316,7 +313,7 @@ public class GHRateLimit {
         }
 
         /**
-         * Instantiates a new Record.
+         * Instantiates a new Record. Called by Jackson data binding or during header parsing.
          *
          * @param limit
          *            the limit
@@ -324,15 +321,22 @@ public class GHRateLimit {
          *            the remaining
          * @param resetEpochSeconds
          *            the reset epoch seconds
-         * @param updatedAt
-         *            the updated at
+         * @param responseInfo
+         *            the response info
          */
-        @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "Deprecated")
-        public Record(int limit, int remaining, long resetEpochSeconds, @CheckForNull String updatedAt) {
+        @JsonCreator
+        Record(@JsonProperty(value = "limit", required = true) int limit,
+                @JsonProperty(value = "remaining", required = true) int remaining,
+                @JsonProperty(value = "reset", required = true) long resetEpochSeconds,
+                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {
             this.limit = limit;
             this.remaining = remaining;
             this.resetEpochSeconds = resetEpochSeconds;
-            this.resetDate = recalculateResetDate(updatedAt);
+            String updatedAt = null;
+            if (responseInfo != null) {
+                updatedAt = responseInfo.headerField("Date");
+            }
+            this.resetDate = calculateResetDate(updatedAt);
         }
 
         /**
@@ -362,7 +366,8 @@ public class GHRateLimit {
          *            a string date in RFC 1123
          * @return reset date based on the passed date
          */
-        Date recalculateResetDate(@CheckForNull String updatedAt) {
+        @Nonnull
+        private Date calculateResetDate(@CheckForNull String updatedAt) {
             long updatedAtEpochSeconds = createdAtEpochSeconds;
             if (!StringUtils.isBlank(updatedAt)) {
                 try {
@@ -379,7 +384,7 @@ public class GHRateLimit {
             // This may seem odd but it results in an accurate or slightly pessimistic reset date
             // based on system time rather than assuming the system time synchronized with the server
             long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
-            return resetDate = new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
+            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
         }
 
         /**

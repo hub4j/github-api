@@ -1,8 +1,11 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +76,7 @@ abstract class GitHubClient {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
-    static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     static final String GITHUB_URL = "https://api.github.com";
 
     private static final String[] TIME_FORMATS = { "yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -399,7 +402,6 @@ abstract class GitHubClient {
             // Maybe throw an exception instead?
         } else if (handler != null) {
             body = handler.apply(responseInfo);
-            setResponseHeaders(responseInfo, body);
         }
         return new GitHubResponse<>(responseInfo, body);
     }
@@ -441,30 +443,6 @@ abstract class GitHubClient {
             e = new HttpException(statusCode, message, request.url().toString(), e);
         }
         return e;
-    }
-
-    /**
-     * Sets the response headers on objects that need it. Ideally this would be handled by the objects themselves, but
-     * currently they do not have access to {@link GitHubResponse.ResponseInfo} after the
-     *
-     * @param responseInfo
-     *            the response info
-     * @param readValue
-     *            the object to consider adding headers to.
-     * @param <T>
-     *            type of the object
-     */
-    private static <T> void setResponseHeaders(GitHubResponse.ResponseInfo responseInfo, T readValue) {
-        if (readValue instanceof GHObject[]) {
-            for (GHObject ghObject : (GHObject[]) readValue) {
-                ghObject.responseHeaderFields = responseInfo.headers();
-            }
-        } else if (readValue instanceof GHObject) {
-            ((GHObject) readValue).responseHeaderFields = responseInfo.headers();
-        } else if (readValue instanceof JsonRateLimit) {
-            // if we're getting a GHRateLimit it needs the server date
-            ((JsonRateLimit) readValue).resources.getCore().recalculateResetDate(responseInfo.headerField("Date"));
-        }
     }
 
     protected static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
@@ -567,7 +545,7 @@ abstract class GitHubClient {
             return;
         }
 
-        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo.headerField("Date"));
+        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
 
         updateCoreRateLimit(observed);
     }
@@ -713,5 +691,46 @@ abstract class GitHubClient {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(dt);
+    }
+
+    /**
+     * Gets an {@link ObjectWriter}.
+     *
+     * @return an {@link ObjectWriter} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectWriter getMappingObjectWriter() {
+        return MAPPER.writer();
+    }
+
+    /**
+     * Helper for {@link #getMappingObjectReader(GitHubResponse.ResponseInfo)}
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader() {
+        return getMappingObjectReader(null);
+    }
+
+    /**
+     * Gets an {@link ObjectReader}.
+     *
+     * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
+     * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
+     *
+     * Having one spot to create readers and having it take all injectable values is not a great long term solution but
+     * it is sufficient for this first cut.
+     *
+     * @param responseInfo
+     *            the {@link GitHubResponse.ResponseInfo} to inject for this reader.
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+        InjectableValues.Std inject = new InjectableValues.Std();
+        inject.addValue(GitHubResponse.ResponseInfo.class, responseInfo);
+
+        return MAPPER.reader(inject);
     }
 }

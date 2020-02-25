@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.107-SNAPSHOT</version>
+  <version>1.108-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -10,7 +10,7 @@
   <scm>
     <connection>scm:git:git@github.com/github-api/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/github-api/${project.artifactId}.git</developerConnection>
-    <url>https://${project.artifactId}.kohsuke.org/</url>
+    <url>https://github.com/github-api/github-api/</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -495,7 +495,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.2.4</version>
+      <version>3.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

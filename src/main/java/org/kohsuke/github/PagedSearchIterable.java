@@ -75,10 +75,6 @@ public abstract class PagedSearchIterable<T> extends PagedIterable<T> {
                     result = v;
                 return v.getItems(root);
             }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
         };
     }
 }

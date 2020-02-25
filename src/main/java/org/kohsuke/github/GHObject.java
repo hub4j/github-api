@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -31,6 +32,19 @@ public abstract class GHObject {
     protected String updated_at;
 
     GHObject() {
+    }
+
+    /**
+     * Called by Jackson
+     * 
+     * @param responseInfo
+     *            the {@link GitHubResponse.ResponseInfo} to get headers from.
+     */
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+        if (responseInfo != null) {
+            responseHeaderFields = responseInfo.headers();
+        }
     }
 
     /**

@@ -279,7 +279,7 @@ public class GHOrganization extends GHPerson {
     }
 
     private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
-        return listMembers(suffix, null);
+        return listMembers(suffix, null, null);
     }
 
     /**
@@ -292,13 +292,28 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
-        return listMembers("members", filter);
+        return listMembers("members", filter, null);
     }
 
-    private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
-        String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+    /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listMembersWithRole(String role) throws IOException {
+        return listMembers("members", null, role);
+    }
+
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role)
+            throws IOException {
         return root.createRequest()
-                .withUrlPath(String.format("/orgs/%s/%s%s", login, suffix, filterParams))
+                .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
+                .with("filter", filter)
+                .with("role", role)
                 .toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 

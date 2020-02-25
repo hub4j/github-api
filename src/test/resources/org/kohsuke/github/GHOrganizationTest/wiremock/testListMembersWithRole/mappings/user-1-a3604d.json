@@ -1,0 +1,48 @@
+{
+  "id": "a3604d73-d76d-4f3e-8f7f-cecee94c5cef",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "user-a3604d73-d76d-4f3e-8f7f-cecee94c5cef.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 25 Feb 2020 14:27:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4999",
+      "X-RateLimit-Reset": "1582644474",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9adfa44fe91fb698b5fd807d9471afc3\"",
+      "Last-Modified": "Tue, 18 Feb 2020 13:29:56 GMT",
+      "X-OAuth-Scopes": "delete_repo, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E686:35E3:5882BF:ABE338:5E552EEA"
+    }
+  },
+  "uuid": "a3604d73-d76d-4f3e-8f7f-cecee94c5cef",
+  "persistent": true,
+  "insertionIndex": 1
+}

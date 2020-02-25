@@ -53,6 +53,14 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertNotNull(r.getUrl());
             assertNotEquals(0L, r.getId());
         }
+
+        // ensure the iterator throws as expected
+        try {
+            itr.remove();
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertThat(e, notNullValue());
+        }
     }
 
     @Test

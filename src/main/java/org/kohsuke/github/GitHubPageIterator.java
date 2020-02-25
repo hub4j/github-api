@@ -114,10 +114,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
         return finalResponse;
     }
 
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
      * needed.

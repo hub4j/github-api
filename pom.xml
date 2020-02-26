@@ -42,7 +42,7 @@
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
-    <jacoco.coverage.target.bundle.method>0.556</jacoco.coverage.target.bundle.method>
+    <jacoco.coverage.target.bundle.method>0.60</jacoco.coverage.target.bundle.method>
     <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>

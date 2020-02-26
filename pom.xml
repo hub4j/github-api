@@ -160,7 +160,6 @@
                       <exclude>org.kohsuke.github.GHRelease</exclude>
 
                       <!-- TODO: These still need test coverage -->
-                      <exclude>org.kohsuke.github.GitHubClient.GHApiInfo</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
@@ -201,7 +200,6 @@
                       <exclude>org.kohsuke.github.GHTeam.Role</exclude>
                       <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
                       <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
-                      <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
                     </excludes>
                   </rule>
                 </rules>

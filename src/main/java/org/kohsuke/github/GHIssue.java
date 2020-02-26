@@ -64,21 +64,13 @@ public class GHIssue extends GHObject implements Reactable {
     @SkipFromToString
     protected String body;
     // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
-    protected List<Label> labels;
+    protected List<GHLabel> labels;
     protected GHUser user;
     protected String title, html_url;
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
     protected boolean locked;
-
-    /**
-     * The type Label.
-     *
-     * @deprecated use {@link GHLabel}
-     */
-    public static class Label extends GHLabel {
-    }
 
     GHIssue wrap(GHRepository owner) {
         this.owner = owner;
@@ -172,7 +164,7 @@ public class GHIssue extends GHObject implements Reactable {
         if (labels == null) {
             return Collections.emptyList();
         }
-        return Collections.<GHLabel>unmodifiableList(labels);
+        return Collections.unmodifiableList(labels);
     }
 
     /**

@@ -117,6 +117,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @deprecated Use {@code getDeployment(id).listStatuses()}
      */
+    @Deprecated
     public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) throws IOException {
         return getDeployment(id).listStatuses();
     }
@@ -172,6 +173,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @deprecated Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
      */
+    @Deprecated
     public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
             throws IOException {
         return getDeployment(deploymentId).createStatus(ghDeploymentState);
@@ -214,16 +216,6 @@ public class GHRepository extends GHObject {
      * @return the http transport url
      */
     public String getHttpTransportUrl() {
-        return clone_url;
-    }
-
-    /**
-     * Git http transport url string.
-     *
-     * @return the string
-     * @deprecated Typo of {@link #getHttpTransportUrl()}
-     */
-    public String gitHttpTransportUrl() {
         return clone_url;
     }
 
@@ -621,8 +613,20 @@ public class GHRepository extends GHObject {
      * and so on.
      *
      * @return the forks
+     * @deprecated use {@link #getForksCount()} instead
      */
+    @Deprecated
     public int getForks() {
+        return getForksCount();
+    }
+
+    /**
+     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
+     * and so on.
+     *
+     * @return the forks
+     */
+    public int getForksCount() {
         return forks_count;
     }
 
@@ -666,8 +670,19 @@ public class GHRepository extends GHObject {
      * Gets watchers.
      *
      * @return the watchers
+     * @deprecated use {@link #getWatchersCount()} instead
      */
+    @Deprecated
     public int getWatchers() {
+        return getWatchersCount();
+    }
+
+    /**
+     * Gets the count of watchers.
+     *
+     * @return the watchers
+     */
+    public int getWatchersCount() {
         return watchers_count;
     }
 
@@ -678,16 +693,6 @@ public class GHRepository extends GHObject {
      */
     public int getOpenIssueCount() {
         return open_issues_count;
-    }
-
-    /**
-     * Gets network count.
-     *
-     * @return the network count
-     * @deprecated This no longer exists in the official API documentation. Use {@link #getForks()}
-     */
-    public int getNetworkCount() {
-        return forks_count;
     }
 
     /**
@@ -723,6 +728,7 @@ public class GHRepository extends GHObject {
      * @return the master branch
      * @deprecated Renamed to {@link #getDefaultBranch()}
      */
+    @Deprecated
     public String getMasterBranch() {
         return default_branch;
     }
@@ -1277,6 +1283,7 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      * @deprecated Use {@link #queryPullRequests()}
      */
+    @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
         return queryPullRequests().state(state).list();
     }
@@ -1999,14 +2006,6 @@ public class GHRepository extends GHObject {
         return createWebHook(url, null);
     }
 
-    // this is no different from getPullRequests(OPEN)
-    // /**
-    // * Retrieves all the pull requests.
-    // */
-    // public List<GHPullRequest> getPullRequests() throws IOException {
-    // return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
-    // }
-
     /**
      * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
      * reflected to GitHub.
@@ -2016,6 +2015,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
+    @Deprecated
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
     }
@@ -2029,7 +2029,7 @@ public class GHRepository extends GHObject {
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
         private List<URL> getPostCommitHooks() {
             try {
-                List<URL> r = new ArrayList<URL>();
+                List<URL> r = new ArrayList<>();
                 for (GHHook h : getHooks()) {
                     if (h.getName().equals("web")) {
                         r.add(new URL(h.getConfig().get("url")));

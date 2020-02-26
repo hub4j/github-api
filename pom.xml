@@ -146,7 +146,6 @@
                       <exclude>org.kohsuke.github.example.*</exclude>
 
                       <!-- No methods -->
-                      <exclude>org.kohsuke.github.DeleteToken</exclude>
                       <exclude>org.kohsuke.github.Previews</exclude>
 
                       <!-- Deprecated -->

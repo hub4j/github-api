@@ -63,7 +63,6 @@ public class GHIssue extends GHObject implements Reactable {
     protected int comments;
     @SkipFromToString
     protected String body;
-    // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
     protected List<GHLabel> labels;
     protected GHUser user;
     protected String title, html_url;

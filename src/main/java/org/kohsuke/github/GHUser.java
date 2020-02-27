@@ -217,7 +217,7 @@ public class GHUser extends GHPerson {
     public PagedIterable<GHGist> listGists() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
-                .toIterable(GHGist[].class, item -> item.wrapUp(this));
+                .toIterable(GHGist[].class, null);
     }
 
     @Override

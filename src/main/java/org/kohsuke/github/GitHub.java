@@ -743,7 +743,7 @@ public class GitHub {
      *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class).wrapUp(this);
+        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class);
     }
 
     /**

@@ -742,7 +742,7 @@ abstract class GitHubClient {
 
         if (responseInfo != null) {
             injected.put(GitHubResponse.ResponseInfo.class.getName(), responseInfo);
-            injected.putAll(responseInfo.request().injected());
+            injected.putAll(responseInfo.request().injectedMappingValues());
         }
         return MAPPER.reader(new InjectableValues.Std(injected));
     }

@@ -1184,7 +1184,7 @@ public class GitHub {
 
     @Nonnull
     Requester createRequest() {
-        return new Requester(client).inject(this);
+        return new Requester(client).injectMappingValue(this);
     }
 
     GHUser intern(GHUser user) throws IOException {

@@ -797,44 +797,48 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
         assertTrue(lst.size() > 5);
         GHLabel e = r.getLabel("enhancement");
-        assertEquals("enhancement", e.getName());
-        assertNotNull(e.getUrl());
-        assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));
+        assertEquals("enhancement", e.name());
+        assertNotNull(e.url());
+        assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.color()));
 
         GHLabel t = null;
         GHLabel t2 = null;
         try {// CRUD
             t = r.createLabel("test", "123456");
             t2 = r.getLabel("test");
-            assertEquals(t.getName(), t2.getName());
-            assertEquals(t.getColor(), "123456");
-            assertEquals(t.getColor(), t2.getColor());
-            assertEquals(t.getDescription(), "");
-            assertEquals(t.getDescription(), t2.getDescription());
-            assertEquals(t.getUrl(), t2.getUrl());
+            assertEquals(t.name(), t2.name());
+            assertEquals(t.color(), "123456");
+            assertEquals(t.color(), t2.color());
+            assertEquals(t.description(), "");
+            assertEquals(t.description(), t2.description());
+            assertEquals(t.url(), t2.url());
 
-            t.setColor("000000");
+            // update works on multiple changes in one call
+            t.setColor("");
+            t2 = t.update(i -> i.color("000000").description("It is dark!"));
 
-            // This is annoying behavior, but it is by design at this time.
-            // Verifying so we can know when it is fixed.
-            assertEquals(t.getColor(), "123456");
+            // instances are immutable, but update returns a new updated instance.
+            assertEquals(t.color(), "123456");
+            assertEquals(t.description(), "");
+            assertEquals(t2.color(), "000000");
+            assertEquals(t2.description(), "It is dark!");
 
             t = r.getLabel("test");
-            t.setDescription("this is also a test");
+            t.update(i -> i.description("this is also a test"));
 
             GHLabel t3 = r.getLabel("test");
-            assertEquals(t3.getColor(), "000000");
-            assertEquals(t3.getDescription(), "this is also a test");
+            assertEquals(t3.color(), "000000");
+            assertEquals(t3.description(), "this is also a test");
             t.delete();
 
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
-            assertEquals(t.getName(), t2.getName());
-            assertEquals(t.getColor(), "123457");
-            assertEquals(t.getColor(), t2.getColor());
-            assertEquals(t.getDescription(), "this is a different test");
-            assertEquals(t.getDescription(), t2.getDescription());
-            assertEquals(t.getUrl(), t2.getUrl());
+            assertEquals(t.name(), t2.name());
+            assertEquals(t.color(), "123457");
+            assertEquals(t.color(), t2.color());
+            assertEquals(t.description(), "this is a different test");
+            assertEquals(t.description(), t2.description());
+            assertEquals(t.url(), t2.url());
         } finally {
             cleanupLabel("test");
             cleanupLabel("test2");

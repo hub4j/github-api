@@ -6,7 +6,7 @@
     "method": "PATCH",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"color\":\"000000\",\"name\":\"test\",\"description\":\"\"}",
+        "equalToJson": "{\"color\":\"000000\",\"name\":\"test\",\"description\":\"It is dark!\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
@@ -19,7 +19,7 @@
   },
   "response": {
     "status": 200,
-    "body": "{\"id\":1596524803,\"node_id\":\"MDU6TGFiZWwxNTk2NTI0ODAz\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"\"}",
+    "body": "{\"id\":1596524803,\"node_id\":\"MDU6TGFiZWwxNTk2NTI0ODAz\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"It is dark!\"}",
     "headers": {
       "Date": "Sat, 05 Oct 2019 05:21:23 GMT",
       "Content-Type": "application/json; charset=utf-8",

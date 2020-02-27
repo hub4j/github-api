@@ -295,7 +295,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
-        assertEquals(label, labels.iterator().next().getName());
+        assertEquals(label, labels.iterator().next().name());
     }
 
     @Test

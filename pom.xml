@@ -152,7 +152,6 @@
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                      <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
 
                       <!-- These fail coverage on windows because tests are disabled -->
                       <exclude>org.kohsuke.github.GHAsset</exclude>

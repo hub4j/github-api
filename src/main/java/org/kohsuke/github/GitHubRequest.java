@@ -40,6 +40,7 @@ class GitHubRequest {
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
     private final Map<String, String> headers;
+    private final Map<String, Object> injected;
     private final String apiUrl;
     private final String urlPath;
     private final String method;
@@ -50,6 +51,7 @@ class GitHubRequest {
 
     private GitHubRequest(@Nonnull List<Entry> args,
             @Nonnull Map<String, String> headers,
+            @Nonnull Map<String, Object> injected,
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
@@ -57,6 +59,7 @@ class GitHubRequest {
             boolean forceBody) throws MalformedURLException {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
         this.headers = Collections.unmodifiableMap(new LinkedHashMap<>(headers));
+        this.injected = Collections.unmodifiableMap(new LinkedHashMap<>(injected));
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
@@ -137,6 +140,16 @@ class GitHubRequest {
     }
 
     /**
+     * The headers for this request.
+     *
+     * @return the {@link Map} of headers
+     */
+    @Nonnull
+    public Map<String, Object> injected() {
+        return injected;
+    }
+
+    /**
      * The base GitHub API URL for this request represented as a {@link String}
      * 
      * @return the url string
@@ -203,7 +216,7 @@ class GitHubRequest {
      * @return a {@link Builder} based on this request.
      */
     public Builder<?> toBuilder() {
-        return new Builder<>(args, headers, apiUrl, urlPath, method, body, forceBody);
+        return new Builder<>(args, headers, injected, apiUrl, urlPath, method, body, forceBody);
     }
 
     private String buildTailApiUrl() {
@@ -249,6 +262,12 @@ class GitHubRequest {
         private final Map<String, String> headers;
 
         /**
+         * Injected local data map
+         */
+        @Nonnull
+        private final Map<String, Object> injected;
+
+        /**
          * The base GitHub API for this request.
          */
         @Nonnull
@@ -268,11 +287,19 @@ class GitHubRequest {
          * Create a new {@link GitHubRequest.Builder}
          */
         protected Builder() {
-            this(new ArrayList<>(), new LinkedHashMap<>(), GitHubClient.GITHUB_URL, "/", "GET", null, false);
+            this(new ArrayList<>(),
+                    new LinkedHashMap<>(),
+                    new LinkedHashMap<>(),
+                    GitHubClient.GITHUB_URL,
+                    "/",
+                    "GET",
+                    null,
+                    false);
         }
 
         private Builder(@Nonnull List<Entry> args,
                 @Nonnull Map<String, String> headers,
+                @Nonnull Map<String, Object> injected,
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
@@ -280,6 +307,7 @@ class GitHubRequest {
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
             this.headers = new LinkedHashMap<>(headers);
+            this.injected = new LinkedHashMap<>(injected);
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
@@ -295,7 +323,7 @@ class GitHubRequest {
          *             if the GitHub API URL cannot be constructed
          */
         public GitHubRequest build() throws MalformedURLException {
-            return new GitHubRequest(args, headers, apiUrl, urlPath, method, body, forceBody);
+            return new GitHubRequest(args, headers, injected, apiUrl, urlPath, method, body, forceBody);
         }
 
         /**
@@ -335,6 +363,18 @@ class GitHubRequest {
          */
         public B withHeader(String name, String value) {
             setHeader(name, value);
+            return (B) this;
+        }
+
+        /**
+         * Object to inject into binding.
+         *
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B inject(Object value) {
+            this.injected.put(value.getClass().getName(), value);
             return (B) this;
         }
 

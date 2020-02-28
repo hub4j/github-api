@@ -335,8 +335,7 @@ public class GHEventPayloadTest {
                 is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
         assertThat(checkRun.getUrl().toString(),
                 is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
-        assertThat(checkRun.getHtmlUrl().toString(),
-                is("https://github.com/Codertocat/Hello-World/runs/128620228"));
+        assertThat(checkRun.getHtmlUrl().toString(), is("https://github.com/Codertocat/Hello-World/runs/128620228"));
         assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
         assertThat(checkRun.getApp().getId(), is(29310L));
 

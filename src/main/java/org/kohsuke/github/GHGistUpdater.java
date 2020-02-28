@@ -94,6 +94,6 @@ public class GHGistUpdater {
      */
     public GHGist update() throws IOException {
         builder.with("files", files);
-        return builder.method("PATCH").withUrlPath(base.getApiTailUrl("")).fetch(GHGist.class).wrap(base.owner);
+        return builder.method("PATCH").withUrlPath(base.getApiTailUrl("")).fetch(GHGist.class);
     }
 }

@@ -320,8 +320,28 @@ public class GHEventPayloadTest {
                 .parseEventPayload(payload.asReader(), GHEventPayload.CheckRun.class);
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getAction(), is("created"));
-        assertThat(event.getCheckRun().getName(), is("Octocoders-linter"));
-        assertThat(event.getCheckRun().getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+
+        // Checks the deserialization of check_run
+        GHCheckRun checkRun = event.getCheckRun();
+        assertThat(checkRun.getName(), is("Octocoders-linter"));
+        assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkRun.getStatus(), is("completed"));
+        assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
+        assertThat(checkRun.getExternalId(), is(""));
+        assertThat(checkRun.getStartedAt(), is("2019-05-15T15:21:12Z"));
+        assertThat(checkRun.getCompletedAt(), is("2019-05-15T20:22:22Z"));
+        assertThat(checkRun.getConclusion(), is("success"));
+        assertThat(checkRun.getUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
+        assertThat(checkRun.getUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
+        assertThat(checkRun.getHtmlUrl().toString(),
+                is("https://github.com/Codertocat/Hello-World/runs/128620228"));
+        assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
+        assertThat(checkRun.getApp().getId(), is(29310L));
+
+        // Checks the deserialization of sender
+        assertThat(event.getSender().getId(), is(21031067L));
     }
 
 }

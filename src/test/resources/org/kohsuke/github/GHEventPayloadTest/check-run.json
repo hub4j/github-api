@@ -8,10 +8,10 @@
     "url": "https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228",
     "html_url": "https://github.com/Codertocat/Hello-World/runs/128620228",
     "details_url": "https://octocoders.io",
-    "status": "queued",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "started_at": "2019-05-15T15:21:12Z",
-    "completed_at": null,
+    "completed_at": "2019-05-15T20:22:22Z",
     "output": {
       "title": null,
       "summary": null,

@@ -173,7 +173,7 @@ public class GHCheckRun extends GHObject {
     /**
      * Gets the GitHub app this check run belongs to, included in response.
      *
-     * @retrurn GitHub App
+     * @return GitHub App
      */
     public GHApp getApp() {
         return app;

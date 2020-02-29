@@ -3,6 +3,9 @@ package org.kohsuke.github;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -328,8 +331,12 @@ public class GHEventPayloadTest {
         assertThat(checkRun.getStatus(), is("completed"));
         assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
         assertThat(checkRun.getExternalId(), is(""));
-        assertThat(checkRun.getStartedAt(), is("2019-05-15T15:21:12Z"));
-        assertThat(checkRun.getCompletedAt(), is("2019-05-15T20:22:22Z"));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
+        assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
+
         assertThat(checkRun.getConclusion(), is("success"));
         assertThat(checkRun.getUrl().toString(),
                 is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));

@@ -4,13 +4,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Represents a check run.
  *
  * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
  */
-
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHCheckRun extends GHObject {
@@ -25,7 +25,6 @@ public class GHCheckRun extends GHObject {
     private String externalId;
     private String startedAt;
     private String completedAt;
-    private URL url;
     private URL htmlUrl;
     private URL detailsUrl;
     private Output output;
@@ -135,16 +134,6 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Gets the api URL: https://api.github.com/[owner]/[repo-name]/check-runs/[check-run-id].
-     *
-     * @return Api URL
-     **/
-    @Override
-    public URL getUrl() {
-        return url;
-    }
-
-    /**
      * Gets the details URL from which to find full details of the check run on the integrator's site.
      *
      * @return Details URL
@@ -158,8 +147,8 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the start time
      */
-    public String getStartedAt() {
-        return startedAt;
+    public Date getStartedAt() {
+        return GitHubClient.parseDate(startedAt);
     }
 
     /**
@@ -167,8 +156,8 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the completed time
      */
-    public String getCompletedAt() {
-        return completedAt;
+    public Date getCompletedAt() {
+        return GitHubClient.parseDate(completedAt);
     }
 
     /**

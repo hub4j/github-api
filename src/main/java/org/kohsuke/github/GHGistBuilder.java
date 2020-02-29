@@ -72,6 +72,6 @@ public class GHGistBuilder {
      */
     public GHGist create() throws IOException {
         req.with("files", files);
-        return req.withUrlPath("/gists").fetch(GHGist.class).wrapUp(root);
+        return req.withUrlPath("/gists").fetch(GHGist.class);
     }
 }

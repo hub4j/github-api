@@ -706,11 +706,16 @@ abstract class GitHubClient {
     /**
      * Helper for {@link #getMappingObjectReader(GitHubResponse.ResponseInfo)}
      *
+     * @param root
+     *            the root GitHub object for this reader
+     *
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
-    static ObjectReader getMappingObjectReader() {
-        return getMappingObjectReader(null);
+    static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
+        ObjectReader reader = getMappingObjectReader((GitHubResponse.ResponseInfo) null);
+        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
+        return reader;
     }
 
     /**
@@ -724,13 +729,21 @@ abstract class GitHubClient {
      *
      * @param responseInfo
      *            the {@link GitHubResponse.ResponseInfo} to inject for this reader.
+     *
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
-        InjectableValues.Std inject = new InjectableValues.Std();
-        inject.addValue(GitHubResponse.ResponseInfo.class, responseInfo);
+        Map<String, Object> injected = new HashMap<>();
 
-        return MAPPER.reader(inject);
+        // Required or many things break
+        injected.put(GitHubResponse.ResponseInfo.class.getName(), null);
+        injected.put(GitHub.class.getName(), null);
+
+        if (responseInfo != null) {
+            injected.put(GitHubResponse.ResponseInfo.class.getName(), responseInfo);
+            injected.putAll(responseInfo.request().injectedMappingValues());
+        }
+        return MAPPER.reader(new InjectableValues.Std(injected));
     }
 }

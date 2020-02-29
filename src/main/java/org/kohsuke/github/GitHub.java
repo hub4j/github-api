@@ -743,7 +743,7 @@ public class GitHub {
      *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class).wrapUp(this);
+        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class);
     }
 
     /**
@@ -772,7 +772,7 @@ public class GitHub {
      *             the io exception
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
-        T t = GitHubClient.getMappingObjectReader().forType(type).readValue(r);
+        T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);
         t.wrapUp(this);
         return t;
     }
@@ -1184,7 +1184,7 @@ public class GitHub {
 
     @Nonnull
     Requester createRequest() {
-        return new Requester(client);
+        return new Requester(client).injectMappingValue(this);
     }
 
     GHUser intern(GHUser user) throws IOException {

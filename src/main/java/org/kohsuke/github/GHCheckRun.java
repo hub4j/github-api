@@ -28,10 +28,11 @@ public class GHCheckRun extends GHObject {
     private URL url;
     private URL htmlUrl;
     private URL detailsUrl;
+    private Output output;
     private GHApp app;
     private GHPullRequest[] pullRequests;
 
-    // TODO: Add Output object, Check Suite object
+    // TODO: Add Check Suite object
 
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
@@ -173,9 +174,47 @@ public class GHCheckRun extends GHObject {
     /**
      * Gets the GitHub app this check run belongs to, included in response.
      *
-     * @retrurn GitHub App
+     * @return GitHub App
      */
     public GHApp getApp() {
         return app;
     }
+
+    public Output getOutput() {
+        return output;
+    }
+
+    /**
+     * Represents an output in a check run to include summary and other results.
+     *
+     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
+     */
+    public static class Output {
+        private String title;
+        private String summary;
+        private String text;
+        private int annotationsCount;
+        private URL annotationsUrl;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public int getAnnotationsCount() {
+            return annotationsCount;
+        }
+
+        public URL getAnnotationsUrl() {
+            return annotationsUrl;
+        }
+    }
+
 }

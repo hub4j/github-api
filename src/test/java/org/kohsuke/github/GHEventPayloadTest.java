@@ -338,6 +338,7 @@ public class GHEventPayloadTest {
         assertThat(checkRun.getHtmlUrl().toString(), is("https://github.com/Codertocat/Hello-World/runs/128620228"));
         assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
         assertThat(checkRun.getApp().getId(), is(29310L));
+        assertThat(checkRun.getOutput().getTitle(), is("check-run output"));
 
         // Checks the deserialization of sender
         assertThat(event.getSender().getId(), is(21031067L));

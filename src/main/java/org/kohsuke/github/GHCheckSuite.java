@@ -8,7 +8,7 @@ import java.net.URL;
 /**
  * Represents a check suite.
  *
- * @see <a href="https://developer.github.com/v3/checks/suites/ >documentation</a>
+ * @see <a href="https://developer.github.com/v3/checks/suites/">documentation</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")

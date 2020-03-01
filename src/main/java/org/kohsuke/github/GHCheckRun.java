@@ -23,8 +23,8 @@ public class GHCheckRun extends GHObject {
     private String headSha;
     private String nodeId;
     private String externalId;
-    private String startedAt;
-    private String completedAt;
+    private Date startedAt;
+    private Date completedAt;
     private URL htmlUrl;
     private URL detailsUrl;
     private Output output;
@@ -147,7 +147,7 @@ public class GHCheckRun extends GHObject {
      * @return Timestamp of the start time
      */
     public Date getStartedAt() {
-        return GitHubClient.parseDate(startedAt);
+        return startedAt;
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHCheckRun extends GHObject {
      * @return Timestamp of the completed time
      */
     public Date getCompletedAt() {
-        return GitHubClient.parseDate(completedAt);
+        return completedAt;
     }
 
     /**
@@ -168,6 +168,11 @@ public class GHCheckRun extends GHObject {
         return app;
     }
 
+    /**
+     * Gets an output for a check run.
+     *
+     * @return Output of a check run
+     */
     public Output getOutput() {
         return output;
     }
@@ -184,22 +189,47 @@ public class GHCheckRun extends GHObject {
         private int annotationsCount;
         private URL annotationsUrl;
 
+        /**
+         * Gets the title of check run.
+         *
+         * @return title of check run
+         */
         public String getTitle() {
             return title;
         }
 
+        /**
+         * Gets the summary of the check run, note that it supports Markdown.
+         *
+         * @return summary of check run
+         */
         public String getSummary() {
             return summary;
         }
 
+        /**
+         * Gets the details of the check run, note that it supports Markdown.
+         *
+         * @return Details of the check run
+         */
         public String getText() {
             return text;
         }
 
+        /**
+         * Gets the annotation count of a check run.
+         *
+         * @return annotation count of a check run
+         */
         public int getAnnotationsCount() {
             return annotationsCount;
         }
 
+        /**
+         * Gets the URL of annotations.
+         *
+         * @return URL of annotations
+         */
         public URL getAnnotationsUrl() {
             return annotationsUrl;
         }

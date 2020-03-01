@@ -30,8 +30,7 @@ public class GHCheckRun extends GHObject {
     private Output output;
     private GHApp app;
     private GHPullRequest[] pullRequests;
-
-    // TODO: Add Check Suite object
+    private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
@@ -166,6 +165,15 @@ public class GHCheckRun extends GHObject {
      */
     public GHApp getApp() {
         return app;
+    }
+
+    /**
+     * Gets the check suite this check run belongs to
+     *
+     * @return Check suite
+     */
+    public GHCheckSuite getCheckSuite() {
+        return checkSuite;
     }
 
     /**

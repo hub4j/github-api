@@ -1,18 +1,17 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Represents a check suite.
  *
  * @see <a href="https://developer.github.com/v3/checks/suites/ >documentation</a>
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
-        "URF_UNREAD_FIELD" }, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
+        justification = "JSON API")
 public class GHCheckSuite extends GHObject {
     GHRepository owner;
     GitHub root;
@@ -101,8 +100,8 @@ public class GHCheckSuite extends GHObject {
      *
      * @return sha of a commit
      */
-    public Date getBefore() {
-        return GitHubClient.parseDate(before);
+    public String getBefore() {
+        return before;
     }
 
     /**
@@ -110,8 +109,8 @@ public class GHCheckSuite extends GHObject {
      *
      * @return sha of a commit
      */
-    public Date getAfter() {
-        return GitHubClient.parseDate(after);
+    public String getAfter() {
+        return after;
     }
 
     /**

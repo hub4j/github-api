@@ -23,8 +23,8 @@ public class GHCheckRun extends GHObject {
     private String headSha;
     private String nodeId;
     private String externalId;
-    private Date startedAt;
-    private Date completedAt;
+    private String startedAt;
+    private String completedAt;
     private URL htmlUrl;
     private URL detailsUrl;
     private Output output;
@@ -147,7 +147,7 @@ public class GHCheckRun extends GHObject {
      * @return Timestamp of the start time
      */
     public Date getStartedAt() {
-        return startedAt;
+        return GitHubClient.parseDate(startedAt);
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHCheckRun extends GHObject {
      * @return Timestamp of the completed time
      */
     public Date getCompletedAt() {
-        return completedAt;
+        return GitHubClient.parseDate(completedAt);
     }
 
     /**

@@ -97,25 +97,20 @@ public class GHLabel {
 
     // NEW IMPLEMENTATION STARTS HERE
 
+    @Nonnull
+    private String url, name, color, description;
+
     @JacksonInject
-    @Nonnull
-    protected final GitHub root;
+    protected GitHub root;
 
-    @Nonnull
-    private final String url, name, color, description;
-
+    // Late bind
     protected GHRepository repository;
 
     GHLabel() {
-        this(new GHLabelBuilder());
-    }
-
-    private GHLabel(@Nonnull GHLabelBuilder builder) {
-        this.root = builder.root;
-        this.url = builder.url;
-        this.name = builder.name;
-        this.color = builder.color;
-        this.description = builder.description;
+        url = "";
+        name = "";
+        color = "";
+        description = "";
     }
 
     /**
@@ -266,21 +261,6 @@ public class GHLabel {
         }
     }
 
-    public static class GHLabelBuilder {
-        private String url, name, color, description;
-
-        @JacksonInject
-        private GitHub root;
-
-        public GHLabelBuilder() {
-            root = null;
-            url = "";
-            name = "";
-            color = "";
-            description = "";
-        }
-    }
-
     public static class Builder<U> extends BaseBuilder<GHLabel, U> {
 
         final GHRepository repository;
@@ -291,7 +271,7 @@ public class GHLabel {
         }
 
         public Builder(GHRepository repository) throws IOException {
-            super(repository.root, GHLabel.class, new GHLabel(new GHLabelBuilder()), false);
+            super(repository.root, GHLabel.class, new GHLabel(), false);
             this.repository = repository;
         }
 

@@ -862,7 +862,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
-                // both thread an unread are included
+                // both read and unread are included
                 assertThat(t.getTitle(), is("Create a Jenkinsfile for Librecores CI in mor1kx"));
                 assertThat(t.getLastReadAt(), notNullValue());
                 assertThat(t.isRead(), equalTo(true));

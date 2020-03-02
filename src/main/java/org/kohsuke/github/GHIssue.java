@@ -352,7 +352,7 @@ public class GHIssue extends GHObject implements Reactable {
         List<String> newLabels = new ArrayList<String>();
 
         for (GHLabel label : getLabels()) {
-            newLabels.add(label.name());
+            newLabels.add(label.getName());
         }
         for (String name : names) {
             if (!newLabels.contains(name)) {
@@ -403,8 +403,8 @@ public class GHIssue extends GHObject implements Reactable {
         List<String> newLabels = new ArrayList<String>();
 
         for (GHLabel l : getLabels()) {
-            if (!names.contains(l.name())) {
-                newLabels.add(l.name());
+            if (!names.contains(l.getName())) {
+                newLabels.add(l.getName());
             }
         }
 

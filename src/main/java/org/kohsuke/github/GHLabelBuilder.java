@@ -46,9 +46,9 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
         super(repository.root, intermediateReturnType, GHLabel.class, baseInstance);
         this.repository = repository;
 
-        requester.with("name", baseInstance.name());
-        requester.with("color", baseInstance.color());
-        requester.with("description", baseInstance.description());
+        requester.with("name", baseInstance.getName());
+        requester.with("color", baseInstance.getColor());
+        requester.with("description", baseInstance.getDescription());
     }
 
     @Nonnull

@@ -797,47 +797,47 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
         assertTrue(lst.size() > 5);
         GHLabel e = r.getLabel("enhancement");
-        assertEquals("enhancement", e.name());
-        assertNotNull(e.url());
-        assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.color()));
+        assertEquals("enhancement", e.getName());
+        assertNotNull(e.getUrl());
+        assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));
 
         GHLabel t = null;
         GHLabel t2 = null;
         try {// CRUD
             t = r.createLabel("test", "123456");
             t2 = r.getLabel("test");
-            assertEquals(t.name(), t2.name());
-            assertEquals(t.color(), "123456");
-            assertEquals(t.color(), t2.color());
-            assertEquals(t.description(), "");
-            assertEquals(t.description(), t2.description());
-            assertEquals(t.url(), t2.url());
+            assertEquals(t.getName(), t2.getName());
+            assertEquals(t.getColor(), "123456");
+            assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getDescription(), "");
+            assertEquals(t.getDescription(), t2.getDescription());
+            assertEquals(t.getUrl(), t2.getUrl());
 
             // update works on multiple changes in one call
             // t.setColor("");
             t2 = t.update().color("000000").description("It is dark!").done();
 
             // instances are immutable, but update returns a new updated instance.
-            assertEquals(t.color(), "123456");
-            assertEquals(t.description(), "");
-            assertEquals(t2.color(), "000000");
-            assertEquals(t2.description(), "It is dark!");
+            assertEquals(t.getColor(), "123456");
+            assertEquals(t.getDescription(), "");
+            assertEquals(t2.getColor(), "000000");
+            assertEquals(t2.getDescription(), "It is dark!");
 
             t = r.getLabel("test");
             GHLabel t3 = t.set().description("this is also a test");
 
-            assertEquals(t3.color(), "000000");
-            assertEquals(t3.description(), "this is also a test");
+            assertEquals(t3.getColor(), "000000");
+            assertEquals(t3.getDescription(), "this is also a test");
             t.delete();
 
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
-            assertEquals(t.name(), t2.name());
-            assertEquals(t.color(), "123457");
-            assertEquals(t.color(), t2.color());
-            assertEquals(t.description(), "this is a different test");
-            assertEquals(t.description(), t2.description());
-            assertEquals(t.url(), t2.url());
+            assertEquals(t.getName(), t2.getName());
+            assertEquals(t.getColor(), "123457");
+            assertEquals(t.getColor(), t2.getColor());
+            assertEquals(t.getDescription(), "this is a different test");
+            assertEquals(t.getDescription(), t2.getDescription());
+            assertEquals(t.getUrl(), t2.getUrl());
         } finally {
             cleanupLabel("test");
             cleanupLabel("test2");

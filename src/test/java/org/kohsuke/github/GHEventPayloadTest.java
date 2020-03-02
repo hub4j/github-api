@@ -114,7 +114,7 @@ public class GHEventPayloadTest {
         assertThat(event.getIssue().getTitle(), is("Spelling error in the README file"));
         assertThat(event.getIssue().getState(), is(GHIssueState.OPEN));
         assertThat(event.getIssue().getLabels().size(), is(1));
-        assertThat(event.getIssue().getLabels().iterator().next().name(), is("bug"));
+        assertThat(event.getIssue().getLabels().iterator().next().getName(), is("bug"));
         assertThat(event.getComment().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getComment().getBody(), is("You are totally right! I'll get this fixed right away."));
         assertThat(event.getRepository().getName(), is("public-repo"));
@@ -130,7 +130,7 @@ public class GHEventPayloadTest {
         assertThat(event.getIssue().getTitle(), is("Spelling error in the README file"));
         assertThat(event.getIssue().getState(), is(GHIssueState.OPEN));
         assertThat(event.getIssue().getLabels().size(), is(1));
-        assertThat(event.getIssue().getLabels().iterator().next().name(), is("bug"));
+        assertThat(event.getIssue().getLabels().iterator().next().getName(), is("bug"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));

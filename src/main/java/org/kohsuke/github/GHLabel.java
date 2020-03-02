@@ -19,14 +19,30 @@ import javax.annotation.Nonnull;
  */
 public class GHLabel {
 
+    @Nonnull
+    private String url, name, color, description;
+
+    @JacksonInject
+    private GitHub root;
+
+    // Late bind
+    private GHRepository repository;
+
+    GHLabel() {
+        url = "";
+        name = "";
+        color = "";
+        description = "";
+    }
+
     /**
      * Gets url.
      *
      * @return the url
      */
-    @Deprecated
+    @Nonnull
     public String getUrl() {
-        return url();
+        return url;
     }
 
     /**
@@ -34,9 +50,9 @@ public class GHLabel {
      *
      * @return the name
      */
-    @Deprecated
+    @Nonnull
     public String getName() {
-        return name();
+        return name;
     }
 
     /**
@@ -44,9 +60,9 @@ public class GHLabel {
      *
      * @return the color
      */
-    @Deprecated
+    @Nonnull
     public String getColor() {
-        return color();
+        return color;
     }
 
     /**
@@ -54,9 +70,9 @@ public class GHLabel {
      *
      * @return the description
      */
-    @Deprecated
+    @Nonnull
     public String getDescription() {
-        return description();
+        return description;
     }
 
     /**
@@ -90,27 +106,9 @@ public class GHLabel {
     static Collection<String> toNames(Collection<GHLabel> labels) {
         List<String> r = new ArrayList<>();
         for (GHLabel l : labels) {
-            r.add(l.name());
+            r.add(l.getName());
         }
         return r;
-    }
-
-    // NEW IMPLEMENTATION STARTS HERE
-
-    @Nonnull
-    private String url, name, color, description;
-
-    @JacksonInject
-    private GitHub root;
-
-    // Late bind
-    private GHRepository repository;
-
-    GHLabel() {
-        url = "";
-        name = "";
-        color = "";
-        description = "";
     }
 
     /**
@@ -163,42 +161,6 @@ public class GHLabel {
 
     }
 
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public String url() {
-        return url;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String name() {
-        return name;
-    }
-
-    /**
-     * Color code without leading '#', such as 'f29513'
-     *
-     * @return the color
-     */
-    public String color() {
-        return color;
-    }
-
-    /**
-     * Purpose of Label
-     *
-     * @return the description
-     */
-    public String description() {
-        return description;
-    }
-
     @Nonnull
     GHLabel lateBind(GHRepository repo) {
         if (repository == null) {
@@ -235,7 +197,7 @@ public class GHLabel {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").setRawUrlPath(url()).send();
+        root.createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
     }
 
     @Override
@@ -262,7 +224,7 @@ public class GHLabel {
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
             super(GHLabel.class, base.repository, base);
-            requester.method("PATCH").setRawUrlPath(base.url());
+            requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }
 
@@ -274,7 +236,7 @@ public class GHLabel {
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
             super(Updater.class, base.repository, base);
-            requester.method("PATCH").setRawUrlPath(base.url());
+            requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }
 

@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -115,8 +114,13 @@ public class GHLabel {
     }
 
     /**
-     * Creates a label in a repository.
+     * Begins the creation of a new instance.
      *
+     * Consumer must call {@link Creator#done()} to commit changes.
+     *
+     * @param repository
+     *            the repository in which the label will be created.
+     * @return a {@link Creator}
      * @throws IOException
      *             the io exception
      */
@@ -125,8 +129,13 @@ public class GHLabel {
     }
 
     /**
-     * Creates a label in a repository.
+     * Reads a label from a repository.
      *
+     * @param repository
+     *            the repository to read from
+     * @param name
+     *            the name of the label
+     * @return a label
      * @throws IOException
      *             the io exception
      */
@@ -139,8 +148,11 @@ public class GHLabel {
     }
 
     /**
-     * Creates a label in a repository.
+     * Reads all labels from a repository.
      *
+     * @param repository
+     *            the repository to read from
+     * @return iterable of all labels
      * @throws IOException
      *             the io exception
      */
@@ -187,6 +199,7 @@ public class GHLabel {
         return description;
     }
 
+    @Nonnull
     GHLabel lateBind(GHRepository repo) {
         if (repository == null) {
             repository = repo;
@@ -195,23 +208,23 @@ public class GHLabel {
     }
 
     /**
-     * Modifies a label in a repository.
+     * Begins a batch update
      *
-     * @throws IOException
-     *             the io exception
+     * Consumer must call {@link Updater#done()} to commit changes.
+     *
+     * @return a {@link Updater}
      */
-    public BatchUpdater update() throws IOException {
-        return new BatchUpdater(this);
+    public Updater update() {
+        return new Updater(this);
     }
 
     /**
-     * Modifies a label in a repository.
-     *
-     * @throws IOException
-     *             the io exception
+     * Begins a single property update.
+     * 
+     * @return a {@link Setter}
      */
-    public SingleUpdater set() throws IOException {
-        return new SingleUpdater(this);
+    public Setter set() {
+        return new Setter(this);
     }
 
     /**
@@ -241,155 +254,40 @@ public class GHLabel {
         return Objects.hash(url, name, color, repository);
     }
 
-    public static class SingleUpdater extends Builder<GHLabel> {
-        private SingleUpdater(@Nonnull GHLabel base) throws IOException {
-            super(GHLabel.class, base);
+    /**
+     * A {@link GHLabelBuilder} that updates a single property per request
+     *
+     * {@link #done()} is called automatically after the property is set.
+     */
+    public static class Setter extends GHLabelBuilder<GHLabel> {
+        private Setter(@Nonnull GHLabel base) {
+            super(GHLabel.class, base.repository, base);
             requester.method("PATCH").setRawUrlPath(base.url());
         }
     }
 
-    public static class BatchUpdater extends Builder<BatchUpdater> {
-        private BatchUpdater(@Nonnull GHLabel base) throws IOException {
-            super(BatchUpdater.class, base);
+    /**
+     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    public static class Updater extends GHLabelBuilder<Updater> {
+        private Updater(@Nonnull GHLabel base) {
+            super(Updater.class, base.repository, base);
             requester.method("PATCH").setRawUrlPath(base.url());
         }
     }
 
-    public static class Creator extends Builder<Creator> {
-        private Creator(@Nonnull GHRepository repository) throws IOException {
+    /**
+     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
+     *
+     * Consumer must call {@link #done()} to create the new instance.
+     */
+    public static class Creator extends GHLabelBuilder<Creator> {
+        private Creator(@Nonnull GHRepository repository) {
             super(Creator.class, repository);
             requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
         }
     }
 
-    public static class Builder<U> extends BaseBuilder<GHLabel, U> {
-
-        final GHRepository repository;
-
-        public Builder(@Nonnull Class<U> builderType, @Nonnull GHLabel label) throws IOException {
-            super(label.root, builderType, GHLabel.class, label);
-            repository = label.repository;
-        }
-
-        public Builder(@Nonnull Class<U> builderType, @Nonnull GHRepository repository) throws IOException {
-            super(repository.root, builderType, GHLabel.class, new GHLabel());
-            this.repository = repository;
-        }
-
-        public U name(String value) throws IOException {
-            return with("name", value);
-        }
-
-        public U color(String value) throws IOException {
-            return with("color", value);
-        }
-
-        public U description(String value) throws IOException {
-            return with("description", value);
-        }
-
-        @Override
-        protected void initialize(GHLabel base) throws IOException {
-            // Set initial values
-            name(base.name());
-            color(base.color());
-            description(base.description());
-        }
-
-        @Override
-        public GHLabel done() throws IOException {
-            return super.done().lateBind(repository);
-        }
-    }
-
-    /**
-     *
-     * @param <T>
-     * @param <U>
-     */
-    public abstract static class BaseBuilder<T, U> {
-
-        private final boolean initialized;
-        private final boolean immediate;
-
-        // TODO: Not sure how update-in-place behavior should be controlled, but
-        // it certainly can be controlled dynamically down to the instance level or inherited for all children of some
-        // connection.
-        protected boolean updateInPlace;
-        protected final Class<T> returnType;
-        protected final Requester requester;
-
-        @CheckForNull
-        protected final T baseInstance;
-
-        protected BaseBuilder(@Nonnull GitHub root,
-                @Nonnull Class<U> builderType,
-                @Nonnull Class<T> returnType,
-                @CheckForNull T baseInstance) throws IOException {
-            this.requester = root.createRequest();
-            this.immediate = returnType.equals(builderType);
-            this.returnType = returnType;
-            this.baseInstance = baseInstance;
-            this.updateInPlace = false;
-            if (baseInstance != null) {
-                initialize(baseInstance);
-            }
-            this.initialized = true;
-        }
-
-        /**
-         * Finishes an update, committing changes.
-         *
-         * This method may update-in-place or not. Either way it returns the resulting instance.
-         *
-         * @return an instance with updated current data
-         * @throws IOException
-         *             if there is an I/O Exception
-         */
-        public T done() throws IOException {
-            T result;
-            if (updateInPlace && baseInstance != null) {
-                result = requester.fetchInto(baseInstance);
-            } else {
-                result = requester.fetch(returnType);
-            }
-            return result;
-        };
-
-        protected abstract void initialize(T base) throws IOException;
-
-        /**
-         * Applies a value to a name for this builder.
-         *
-         * The internals of this method look terrifying, but they they're actually basically safe due to previous
-         * comparison of U and T determined by comparing class instances passed in during construction.
-         *
-         * If U is the same as T, this cause the builder to commit changes after the first value change and return a T
-         * from done().
-         *
-         * If U is not the same as T, the builder will batch together multiple changes and let the user call done() when
-         * they are ready.
-         *
-         * This little bit of roughness in this base class means all inheriting builders get to create BatchUpdater and
-         * SingleUpdater classes from almost identical code. Creator can be implemented with significant code reuse as
-         * well.
-         *
-         * There is probably a cleaner way to implement this, but I'm not sure what it is right now.
-         *
-         * @param name
-         * @param value
-         * @return
-         * @throws IOException
-         */
-        protected U with(String name, Object value) throws IOException {
-            requester.with(name, value);
-            if (initialized) {
-                if (immediate) {
-                    return (U) done();
-                }
-                return (U) this;
-            }
-            return null;
-        }
-    }
 }

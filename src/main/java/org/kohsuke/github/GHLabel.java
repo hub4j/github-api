@@ -102,10 +102,10 @@ public class GHLabel {
     private String url, name, color, description;
 
     @JacksonInject
-    protected GitHub root;
+    private GitHub root;
 
     // Late bind
-    protected GHRepository repository;
+    private GHRepository repository;
 
     GHLabel() {
         url = "";

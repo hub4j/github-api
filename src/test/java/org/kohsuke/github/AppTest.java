@@ -814,8 +814,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.url(), t2.url());
 
             // update works on multiple changes in one call
-            t.setColor("");
-            t2 = t.update(i -> i.color("000000").description("It is dark!"));
+            // t.setColor("");
+            t2 = t.update().color("000000").description("It is dark!").done();
 
             // instances are immutable, but update returns a new updated instance.
             assertEquals(t.color(), "123456");
@@ -824,9 +824,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t2.description(), "It is dark!");
 
             t = r.getLabel("test");
-            t.update(i -> i.description("this is also a test"));
+            GHLabel t3 = t.set().description("this is also a test");
 
-            GHLabel t3 = r.getLabel("test");
             assertEquals(t3.color(), "000000");
             assertEquals(t3.description(), "this is also a test");
             t.delete();

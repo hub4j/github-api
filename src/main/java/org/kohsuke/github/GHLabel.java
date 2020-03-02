@@ -1,14 +1,12 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -68,11 +66,11 @@ public class GHLabel {
      *            6-letter hex color code, like "f29513"
      * @throws IOException
      *             the io exception
-     * @deprecated use {@link #update(Consumer)} instead
+     * @deprecated use {@link #set()} instead
      */
     @Deprecated
     public void setColor(String newColor) throws IOException {
-        this.update(i -> i.color(newColor));
+        this.set().color(newColor);
     }
 
     /**
@@ -82,11 +80,11 @@ public class GHLabel {
      *            Description of label
      * @throws IOException
      *             the io exception
-     * @deprecated use {@link #update(Consumer)} instead
+     * @deprecated use {@link #set()} instead
      */
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        this.update(i -> i.description(newDescription));
+        this.set().description(newDescription);
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {
@@ -99,16 +97,20 @@ public class GHLabel {
 
     // NEW IMPLEMENTATION STARTS HERE
 
+    @JacksonInject
     @Nonnull
-    private final GitHub root;
+    protected final GitHub root;
 
     @Nonnull
     private final String url, name, color, description;
 
-    private GHRepository repository;
+    protected GHRepository repository;
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    private GHLabel(@Nonnull Builder builder) {
+    GHLabel() {
+        this(new GHLabelBuilder());
+    }
+
+    private GHLabel(@Nonnull GHLabelBuilder builder) {
         this.root = builder.root;
         this.url = builder.url;
         this.name = builder.name;
@@ -122,18 +124,8 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    public static GHLabel create(GHRepository repository, Consumer<Builder> initializer) throws IOException {
-        Builder builder = new Builder();
-        initializer.accept(builder);
-        return repository.root.createRequest()
-                .withUrlPath(repository.getApiTailUrl("labels"))
-                .method("POST")
-                .with("name", builder.name)
-                .with("color", builder.color)
-                .with("description", builder.description)
-                .fetch(GHLabel.class)
-                .lateBind(repository);
-
+    public static Creator create(GHRepository repository) throws IOException {
+        return new Creator(repository);
     }
 
     /**
@@ -212,18 +204,18 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    public GHLabel update(Consumer<Builder> updater) throws IOException {
-        Builder builder = new Builder(this);
-        updater.accept(builder);
+    public BatchUpdater update() throws IOException {
+        return new BatchUpdater(this);
+    }
 
-        return repository.root.createRequest()
-                .method("PATCH")
-                .with("name", builder.name)
-                .with("color", builder.color)
-                .with("description", builder.description)
-                .setRawUrlPath(url)
-                .fetch(GHLabel.class)
-                .lateBind(repository);
+    /**
+     * Modifies a label in a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public SingleUpdater set() throws IOException {
+        return new SingleUpdater(this);
     }
 
     /**
@@ -253,41 +245,115 @@ public class GHLabel {
         return Objects.hash(url, name, color, repository);
     }
 
-    public static class Builder {
+    public static class SingleUpdater extends Builder<GHLabel> {
+        private SingleUpdater(GHLabel base) throws IOException {
+            super(base, true);
+            requester.method("PATCH").setRawUrlPath(base.url());
+        }
+    }
+
+    public static class BatchUpdater extends Builder<BatchUpdater> {
+        private BatchUpdater(GHLabel base) throws IOException {
+            super(base, false);
+            requester.method("PATCH").setRawUrlPath(base.url());
+        }
+    }
+
+    public static class Creator extends Builder<Creator> {
+        private Creator(GHRepository repository) throws IOException {
+            super(repository);
+            requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
+        }
+    }
+
+    public static class GHLabelBuilder {
         private String url, name, color, description;
 
         @JacksonInject
         private GitHub root;
 
-        public Builder() {
+        public GHLabelBuilder() {
+            root = null;
             url = "";
             name = "";
             color = "";
             description = "";
         }
+    }
 
-        public Builder(GHLabel label) {
-            this.root = label.root;
-            // Url is maintained on the mutator but cannot be changed locally.
-            url = label.url();
-            name = label.name();
-            color = label.color();
-            description = label.description();
+    public static class Builder<U> extends BaseBuilder<GHLabel, U> {
+
+        final GHRepository repository;
+
+        public Builder(GHLabel label, boolean immediate) throws IOException {
+            super(label.root, GHLabel.class, label, immediate);
+            repository = label.repository;
         }
 
-        public Builder name(String value) {
-            name = value;
-            return this;
+        public Builder(GHRepository repository) throws IOException {
+            super(repository.root, GHLabel.class, new GHLabel(new GHLabelBuilder()), false);
+            this.repository = repository;
         }
 
-        public Builder color(String value) {
-            color = value;
-            return this;
+        public U name(String value) throws IOException {
+            return with("name", value);
         }
 
-        public Builder description(String value) {
-            description = value;
-            return this;
+        public U color(String value) throws IOException {
+            return with("color", value);
+        }
+
+        public U description(String value) throws IOException {
+            return with("description", value);
+        }
+
+        @Override
+        protected void initialize(GHLabel base) throws IOException {
+            // Set initial values
+            name(base.name());
+            color(base.color());
+            description(base.description());
+        }
+
+        @Override
+        public GHLabel done() throws IOException {
+            return requester.fetch(returnType).lateBind(repository);
+        }
+    }
+
+    /**
+     *
+     * @param <T>
+     * @param <U>
+     */
+    public abstract static class BaseBuilder<T, U> {
+
+        private final boolean initialized;
+        private final boolean immediate;
+        protected final Class<T> returnType;
+        protected final Requester requester;
+
+        protected BaseBuilder(GitHub root, Class<T> returnType, T base, boolean immediate) throws IOException {
+            this.requester = root.createRequest();
+            this.immediate = immediate;
+            this.returnType = returnType;
+            initialize(base);
+            this.initialized = true;
+        }
+
+        public abstract T done() throws IOException;
+
+        protected abstract void initialize(T base) throws IOException;
+
+        protected U with(String name, Object value) throws IOException {
+            requester.with(name, value);
+            if (initialized) {
+                if (immediate) {
+                    return (U) done();
+                }
+                return (U) this;
+            }
+            return null;
         }
     }
 }

@@ -26,7 +26,7 @@ public class GHLabel {
      */
     @Deprecated
     public String getUrl() {
-        return this.url();
+        return url();
     }
 
     /**
@@ -36,7 +36,7 @@ public class GHLabel {
      */
     @Deprecated
     public String getName() {
-        return this.name();
+        return name();
     }
 
     /**
@@ -46,7 +46,7 @@ public class GHLabel {
      */
     @Deprecated
     public String getColor() {
-        return this.color();
+        return color();
     }
 
     /**
@@ -56,7 +56,7 @@ public class GHLabel {
      */
     @Deprecated
     public String getDescription() {
-        return this.description();
+        return description();
     }
 
     /**
@@ -70,7 +70,7 @@ public class GHLabel {
      */
     @Deprecated
     public void setColor(String newColor) throws IOException {
-        this.set().color(newColor);
+        set().color(newColor);
     }
 
     /**
@@ -84,7 +84,7 @@ public class GHLabel {
      */
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-        this.set().description(newDescription);
+        set().description(newDescription);
     }
 
     static Collection<String> toNames(Collection<GHLabel> labels) {
@@ -156,7 +156,7 @@ public class GHLabel {
      * @return the url
      */
     public String url() {
-        return this.url;
+        return url;
     }
 
     /**
@@ -165,7 +165,7 @@ public class GHLabel {
      * @return the name
      */
     public String name() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -174,7 +174,7 @@ public class GHLabel {
      * @return the color
      */
     public String color() {
-        return this.color;
+        return color;
     }
 
     /**
@@ -183,12 +183,12 @@ public class GHLabel {
      * @return the description
      */
     public String description() {
-        return this.description;
+        return description;
     }
 
     GHLabel lateBind(GHRepository repo) {
         if (repository == null) {
-            this.repository = repo;
+            repository = repo;
         }
         return this;
     }

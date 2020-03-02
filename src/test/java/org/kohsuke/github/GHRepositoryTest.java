@@ -477,7 +477,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void checkWatchersCount() throws Exception {
         snapshotNotAllowed();
         GHRepository repo = getTempRepository();
-        int watchersCount = repo.getWatchers();
+        int watchersCount = repo.getWatchersCount();
         assertEquals(10, watchersCount);
     }
 

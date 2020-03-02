@@ -38,6 +38,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -67,6 +68,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,

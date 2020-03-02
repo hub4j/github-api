@@ -817,7 +817,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             // t.setColor("");
             t2 = t.update().color("000000").description("It is dark!").done();
 
-            // instances are immutable, but update returns a new updated instance.
+            // instances behave as immutable by default. Update returns a new updated instance.
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getDescription(), "");
             assertEquals(t2.getColor(), "000000");

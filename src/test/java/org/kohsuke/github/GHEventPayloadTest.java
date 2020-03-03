@@ -322,6 +322,7 @@ public class GHEventPayloadTest {
         GHEventPayload.CheckRun event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.CheckRun.class);
         assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
 
         // Checks the deserialization of check_run
@@ -340,13 +341,16 @@ public class GHEventPayloadTest {
         assertThat(checkRun.getConclusion(), is("success"));
         assertThat(checkRun.getUrl().toString(),
                 is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
-        assertThat(checkRun.getUrl().toString(),
-                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
         assertThat(checkRun.getHtmlUrl().toString(), is("https://github.com/Codertocat/Hello-World/runs/128620228"));
         assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
         assertThat(checkRun.getApp().getId(), is(29310L));
         assertThat(checkRun.getCheckSuite().getId(), is(118578147L));
         assertThat(checkRun.getOutput().getTitle(), is("check-run output"));
+        assertThat(checkRun.getOutput().getSummary(), nullValue());
+        assertThat(checkRun.getOutput().getText(), nullValue());
+        assertThat(checkRun.getOutput().getAnnotationsCount(), is(0));
+        assertThat(checkRun.getOutput().getAnnotationsUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
 
         // Checks the deserialization of sender
         assertThat(event.getSender().getId(), is(21031067L));
@@ -359,6 +363,7 @@ public class GHEventPayloadTest {
                 .parseEventPayload(payload.asReader(), GHEventPayload.CheckSuite.class);
 
         assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("completed"));
         assertThat(event.getSender().getId(), is(21031067L));
 
@@ -379,6 +384,11 @@ public class GHEventPayloadTest {
         assertThat(checkSuite.getHeadCommit().getTreeId(), is("31b122c26a97cf9af023e9ddab94a82c6e77b0ea"));
         assertThat(checkSuite.getHeadCommit().getAuthor().getName(), is("Codertocat"));
         assertThat(checkSuite.getHeadCommit().getCommitter().getName(), is("Codertocat"));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
+
         assertThat(checkSuite.getApp().getId(), is(29310L));
     }
 

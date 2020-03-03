@@ -5,7 +5,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A commit in a repository.
@@ -34,42 +38,11 @@ public class GHCommit {
 
         private int comment_count;
 
-        private String id;
-        private String timestamp;
-        private String treeId;
-
         static class Tree {
             String sha;
         }
 
         private Tree tree;
-
-        /**
-         * Gets id of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes
-         *
-         * @return id of the commit
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Gets timestamp of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes
-         *
-         * @return timestamp of the commit
-         */
-        public Date getTimestamp() {
-            return GitHubClient.parseDate(timestamp);
-        }
-
-        /**
-         * Gets id of the tree, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes
-         *
-         * @return id of the tree
-         */
-        public String getTreeId() {
-            return treeId;
-        }
 
         /**
          * Gets author.

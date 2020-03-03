@@ -132,6 +132,7 @@ public abstract class GHEventPayload {
          * @return the repository
          */
         public GHRepository getRepository() {
+            repository.root = root;
             return repository;
         }
 
@@ -187,6 +188,7 @@ public abstract class GHEventPayload {
          * @return the repository
          */
         public GHRepository getRepository() {
+            repository.root = root;
             return repository;
         }
     }

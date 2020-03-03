@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Represents a check suite.
@@ -25,7 +26,7 @@ public class GHCheckSuite extends GHObject {
     private String after;
     private int latestCheckRunsCount;
     private URL checkRunsUrl;
-    private GHCommit.ShortInfo headCommit;
+    private HeadCommit headCommit;
     private GHApp app;
     private GHPullRequest[] pullRequests;
 
@@ -136,7 +137,7 @@ public class GHCheckSuite extends GHObject {
      *
      * @return head commit
      */
-    public GHCommit.ShortInfo getHeadCommit() {
+    public HeadCommit getHeadCommit() {
         return headCommit;
     }
 
@@ -171,5 +172,68 @@ public class GHCheckSuite extends GHObject {
     @Override
     public URL getHtmlUrl() {
         return null;
+    }
+
+    public static class HeadCommit {
+        private String id;
+        private String treeId;
+        private String message;
+        private String timestamp;
+        private GitUser author;
+        private GitUser committer;
+
+        /**
+         * Gets id of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes
+         *
+         * @return id of the commit
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * Gets id of the tree.
+         *
+         * @return id of the tree
+         */
+        public String getTreeId() {
+            return treeId;
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return commit message.
+         */
+        public String getMessage() {
+            return message;
+        }
+
+        /**
+         * Gets timestamp of the commit.
+         *
+         * @return timestamp of the commit
+         */
+        public Date getTimestamp() {
+            return GitHubClient.parseDate(timestamp);
+        }
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        public GitUser getAuthor() {
+            return author;
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        public GitUser getCommitter() {
+            return committer;
+        }
     }
 }

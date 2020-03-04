@@ -25,9 +25,6 @@ public class GHLabel {
     @JacksonInject
     private GitHub root;
 
-    // Late bind
-    private GHRepository repository;
-
     GHLabel() {
         url = "";
         name = "";
@@ -140,8 +137,7 @@ public class GHLabel {
     public static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
         return repository.root.createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"), name)
-                .fetch(GHLabel.class)
-                .lateBind(repository);
+                .fetch(GHLabel.class);
 
     }
 
@@ -157,16 +153,8 @@ public class GHLabel {
     public static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
         return repository.root.createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))
-                .toIterable(GHLabel[].class, item -> item.lateBind(repository));
+                .toIterable(GHLabel[].class, null);
 
-    }
-
-    @Nonnull
-    GHLabel lateBind(GHRepository repo) {
-        if (repository == null) {
-            repository = repo;
-        }
-        return this;
     }
 
     /**
@@ -208,12 +196,12 @@ public class GHLabel {
             return false;
         final GHLabel ghLabel = (GHLabel) o;
         return Objects.equals(url, ghLabel.url) && Objects.equals(name, ghLabel.name)
-                && Objects.equals(color, ghLabel.color) && Objects.equals(repository, ghLabel.repository);
+                && Objects.equals(color, ghLabel.color) && Objects.equals(description, ghLabel.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, name, color, repository);
+        return Objects.hash(url, name, color, description);
     }
 
     /**
@@ -223,7 +211,7 @@ public class GHLabel {
      */
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
-            super(GHLabel.class, base.repository, base);
+            super(GHLabel.class, base.root, base);
             requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }
@@ -235,7 +223,7 @@ public class GHLabel {
      */
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
-            super(Updater.class, base.repository, base);
+            super(Updater.class, base.root, base);
             requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }
@@ -247,7 +235,7 @@ public class GHLabel {
      */
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {
-            super(Creator.class, repository);
+            super(Creator.class, repository.root, null);
             requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
         }
     }

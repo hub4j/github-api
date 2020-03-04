@@ -136,8 +136,7 @@ abstract class AbstractBuilder<R, S> {
         // well.
         if (commitChangesImmediately) {
             // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
-            // being
-            // based on the previous comparison of class instances passed to the constructor.
+            // being based on the previous comparison of class instances passed to the constructor.
             return (S) done();
         } else {
             return (S) this;

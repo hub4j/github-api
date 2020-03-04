@@ -803,9 +803,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         GHLabel t = null;
         GHLabel t2 = null;
+        GHLabel t3 = null;
         try {// CRUD
             t = r.createLabel("test", "123456");
             t2 = r.getLabel("test");
+            assertThat(t, not(sameInstance(t2)));
+            assertThat(t, equalTo(t2));
+
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
@@ -815,23 +819,36 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
             // update works on multiple changes in one call
             // t.setColor("");
-            t2 = t.update().color("000000").description("It is dark!").done();
+            t3 = t.update().color("000000").description("It is dark!").done();
 
             // instances behave as immutable by default. Update returns a new updated instance.
+            assertThat(t, not(sameInstance(t2)));
+            assertThat(t, equalTo(t2));
+
+            assertThat(t, not(sameInstance(t3)));
+            assertThat(t, not(equalTo(t3)));
+
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getDescription(), "");
-            assertEquals(t2.getColor(), "000000");
-            assertEquals(t2.getDescription(), "It is dark!");
+            assertEquals(t3.getColor(), "000000");
+            assertEquals(t3.getDescription(), "It is dark!");
 
             t = r.getLabel("test");
-            GHLabel t3 = t.set().description("this is also a test");
+
+            t3 = t.set().description("this is also a test");
+
+            // instances behave as immutable by default. Update returns a new updated instance.
+            assertThat(t, not(sameInstance(t3)));
+            assertThat(t, not(equalTo(t3)));
 
             assertEquals(t3.getColor(), "000000");
             assertEquals(t3.getDescription(), "this is also a test");
+
             t.delete();
 
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
+
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123457");
             assertEquals(t.getColor(), t2.getColor());

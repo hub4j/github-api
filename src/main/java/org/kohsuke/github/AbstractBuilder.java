@@ -6,6 +6,31 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
+ * An abstract data object builder/updater.
+ *
+ * This class can be use to make a Builder that supports both batch and single property changes.
+ * <p>
+ * Batching looks like this:
+ * 
+ * <pre>
+ * update().someName(value).otherName(value).done()
+ * </pre>
+ * </p>
+ * <p>
+ * Single changee look like this:
+ * 
+ * <pre>
+ * set().someName(value);
+ * set().otherName(value);
+ * </pre>
+ * </p>
+ * <p>
+ * If S is the same as R, {@link #with(String, Object)} will commit changes after the first value change and return a R
+ * from {@link #done()}.
+ * </p>
+ * <p>
+ * If S is not the same as R, {@link #with(String, Object)} will batch together multiple changes and let the user call
+ * {@link #done()} when they are ready.
  *
  * @param <R>
  *            Final return type for built by this builder returned when {@link #done()}} is called.
@@ -15,16 +40,24 @@ import javax.annotation.Nonnull;
  */
 abstract class AbstractBuilder<R, S> {
 
+    @Nonnull
+    private final Class<R> returnType;
+
+    @Nonnull
+    private final Class<S> intermediateReturnType;
+
+    private final boolean commitChangesImmediately;
+
+    @CheckForNull
+    private final R baseInstance;
+
+    @Nonnull
+    protected final Requester requester;
+
     // TODO: Not sure how update-in-place behavior should be controlled, but
     // it certainly can be controlled dynamically down to the instance level or inherited for all children of some
     // connection.
     protected boolean updateInPlace;
-    private final Class<R> returnType;
-    private final Class<S> intermediateReturnType;
-    protected final Requester requester;
-
-    @CheckForNull
-    private final R baseInstance;
 
     /**
      * Creates a builder.
@@ -32,7 +65,9 @@ abstract class AbstractBuilder<R, S> {
      * @param root
      *            the GitHub instance to connect to.
      * @param intermediateReturnType
-     *            the intermediate return type returned by calls to {@link #with(String, Object)}.
+     *            the intermediate return type of type {@link S} returned by calls to {@link #with(String, Object)}.
+     *            Must either be equal to {@code builtReturnType} or this instance must be castable to this class. If
+     *            not, the constructor will throw {@link IllegalArgumentException}.
      * @param builtReturnType
      *            the final return type for built by this builder returned when {@link #done()}} is called.
      * @param baseInstance
@@ -45,8 +80,15 @@ abstract class AbstractBuilder<R, S> {
         this.requester = root.createRequest();
         this.returnType = builtReturnType;
         this.intermediateReturnType = intermediateReturnType;
+        this.commitChangesImmediately = returnType.equals(intermediateReturnType);
+        if (!commitChangesImmediately && !intermediateReturnType.isInstance(this)) {
+            throw new IllegalArgumentException(
+                    "Argument \"intermediateReturnType\": This instance must be castable to intermediateReturnType or intermediateReturnType must be equal to builtReturnType.");
+        }
+
         this.baseInstance = baseInstance;
         this.updateInPlace = false;
+
     }
 
     /**
@@ -72,19 +114,11 @@ abstract class AbstractBuilder<R, S> {
     /**
      * Applies a value to a name for this builder.
      *
-     * The internals of this method look terrifying, but they they're actually basically safe due to previous comparison
-     * of U and T determined by comparing class instances passed in during construction.
+     * If S is the same as T, this method will commit changes after the first value change and return a T from
+     * {@link #done()}.
      *
-     * If U is the same as T, this cause the builder to commit changes after the first value change and return a T from
-     * done().
-     *
-     * If U is not the same as T, the builder will batch together multiple changes and let the user call done() when
-     * they are ready.
-     *
-     * This little bit of roughness in this base class means all inheriting builders get to create Updater and Setter
-     * classes from almost identical code. Creator can be implemented with significant code reuse as well.
-     *
-     * There is probably a cleaner way to implement this, but I'm not sure what it is right now.
+     * If S is not the same as T, this method will return an {@link S} and letting the caller batch together multiple
+     * changes and call {@link #done()} when they are ready.
      *
      * @param name
      *            the name of the field
@@ -97,10 +131,16 @@ abstract class AbstractBuilder<R, S> {
     @Nonnull
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
-        if (returnType.equals(intermediateReturnType)) {
-            return intermediateReturnType.cast(done());
+        // This little bit of roughness in this base class means all inheriting builders get to create Updater and
+        // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
+        // well.
+        if (commitChangesImmediately) {
+            // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
+            // being
+            // based on the previous comparison of class instances passed to the constructor.
+            return (S) done();
         } else {
-            return intermediateReturnType.cast(this);
+            return (S) this;
         }
     }
 }

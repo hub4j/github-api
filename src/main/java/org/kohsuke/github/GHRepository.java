@@ -56,6 +56,8 @@ import static org.kohsuke.github.Previews.*;
 
 /**
  * A repository on GitHub.
+ *
+ * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings({ "UnusedDeclaration" })
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },

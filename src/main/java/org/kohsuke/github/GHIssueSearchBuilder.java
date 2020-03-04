@@ -3,6 +3,7 @@ package org.kohsuke.github;
 /**
  * Search issues.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHub#searchIssues() GitHub#searchIssues()
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {

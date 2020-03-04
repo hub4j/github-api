@@ -14,6 +14,8 @@ import java.util.TreeMap;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
     /* package almost final */ GitHub root;

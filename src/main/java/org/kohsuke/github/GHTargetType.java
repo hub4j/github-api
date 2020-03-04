@@ -7,6 +7,7 @@ import java.util.Locale;
 /**
  * App installation target type.
  *
+ * @author Paulo Miguel Almeida
  * @see GHAppInstallation
  */
 public enum GHTargetType {

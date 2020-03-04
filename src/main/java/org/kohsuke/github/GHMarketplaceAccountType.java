@@ -7,6 +7,7 @@ import java.util.Locale;
 /**
  * GitHub Marketplace Account type.
  *
+ * @author Paulo Miguel Almeida
  * @see GHMarketplaceAccount
  */
 public enum GHMarketplaceAccountType {

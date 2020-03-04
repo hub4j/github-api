@@ -12,6 +12,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
 /**
  * A Github App Installation.
  *
+ * @author Paulo Miguel Almeida
  * @see GHApp#listInstallations() GHApp#listInstallations()
  * @see GHApp#getInstallationById(long) GHApp#getInstallationById(long)
  * @see GHApp#getInstallationByOrganization(String) GHApp#getInstallationByOrganization(String)

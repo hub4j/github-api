@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * {@link HttpConnector} wrapper that sets timeout
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class ImpatientHttpConnector implements HttpConnector {
     private final HttpConnector base;

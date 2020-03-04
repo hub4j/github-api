@@ -9,6 +9,8 @@ import javax.annotation.CheckForNull;
 /**
  * {@link IOException} for http exceptions because {@link HttpURLConnection} throws un-discerned {@link IOException} and
  * it can help to know the http response code to decide how to handle an http exceptions.
+ *
+ * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
 public class HttpException extends GHIOException {
     static final long serialVersionUID = 1L;

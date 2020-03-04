@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
  * In the non-blocking mode, the iterator will only report the set of notifications initially retrieved from GitHub,
  * then quit. This is useful for a batch application to process the current set of notifications.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHub#listNotifications() GitHub#listNotifications()
  * @see GHRepository#listNotifications() GHRepository#listNotifications()
  */

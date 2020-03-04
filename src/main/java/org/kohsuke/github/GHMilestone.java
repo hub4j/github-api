@@ -7,6 +7,8 @@ import java.util.Locale;
 
 /**
  * The type GHMilestone.
+ *
+ * @author Yusuke Kokubo
  */
 public class GHMilestone extends GHObject {
     GitHub root;

@@ -10,6 +10,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
 /**
  * Creates a access token for a GitHub App Installation
  *
+ * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */

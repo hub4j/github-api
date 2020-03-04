@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 /**
  * Pluggable strategy to determine what to do when the API abuse limit is hit.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler)
  * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">documentation</a>
  * @see RateLimitHandler
@@ -31,6 +32,7 @@ public abstract class AbuseLimitHandler {
      * @see <a href=
      *      "https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits">Dealing
      *      with abuse rate limits</a>
+     *
      */
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 

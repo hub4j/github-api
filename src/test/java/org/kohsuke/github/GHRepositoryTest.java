@@ -14,7 +14,8 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
-*/
+ * @author Liam Newman
+ */
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     protected GHRepository getRepository() throws IOException {

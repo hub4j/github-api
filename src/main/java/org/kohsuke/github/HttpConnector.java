@@ -11,6 +11,8 @@ import java.net.URL;
  *
  * <p>
  * For example, you can implement this to st custom timeouts.
+ *
+ * @author Kohsuke Kawaguchi
  */
 @FunctionalInterface
 public interface HttpConnector {

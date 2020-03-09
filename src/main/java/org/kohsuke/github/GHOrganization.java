@@ -137,13 +137,13 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      *
-     *  @see <a href=
-     *      "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeam(int id) throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/teams/%d", login, id))
-                .fetch(GHTeam.class).wrapUp(this);
+                .fetch(GHTeam.class)
+                .wrapUp(this);
     }
 
     /**
@@ -171,13 +171,13 @@ public class GHOrganization extends GHPerson {
      * @return the team by slug
      * @throws IOException
      *             the io exception
-     *  @see <a href=
-     *      "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/orgs/%s/teams/%s", login, slug))
-                .fetch(GHTeam.class).wrapUp(this);
+                .fetch(GHTeam.class)
+                .wrapUp(this);
     }
 
     /**

@@ -473,7 +473,7 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp-urlconnection</artifactId>
-      <version>3.12.3</version>
+      <version>4.4.1</version>
       <optional>true</optional>
     </dependency>
     <dependency>

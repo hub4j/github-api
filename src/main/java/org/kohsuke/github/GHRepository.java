@@ -1745,7 +1745,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * /** Lists all the commit statues attached to the given commit, newer ones first.
+     * /** Lists all the commit statuses attached to the given commit, newer ones first.
      *
      * @param sha1
      *            the sha 1
@@ -1771,6 +1771,27 @@ public class GHRepository extends GHObject {
     public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
         List<GHCommitStatus> v = listCommitStatuses(sha1).toList();
         return v.isEmpty() ? null : v.get(0);
+    }
+
+    /**
+     * Gets check runs for given ref.
+     *
+     * @param ref
+     *            ref
+     * @return check runs for given ref
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     *      for a specific ref</a>
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
+        GitHubRequest request = root.createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
+                .withPreview(ANTIOPE)
+                .build();
+        return new GHCheckRunsIterable(root, request);
     }
 
     /**

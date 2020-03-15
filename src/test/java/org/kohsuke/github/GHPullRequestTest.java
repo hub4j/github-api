@@ -118,6 +118,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Sample review comment", comment.getBody());
 
+        // Assert htmlUrl is not null
+        assertNotNull(comment.getHtmlUrl());
+
         comment.update("Updated review comment");
         comments = p.listReviewComments().toList();
         assertEquals(1, comments.size());

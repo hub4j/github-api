@@ -5,6 +5,7 @@ import java.io.IOException;
 /**
  * Modifies {@link GHRelease}.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRelease#update() GHRelease#update()
  */
 public class GHReleaseUpdater {

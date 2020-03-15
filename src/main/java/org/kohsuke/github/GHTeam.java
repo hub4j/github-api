@@ -7,6 +7,8 @@ import java.util.TreeMap;
 
 /**
  * A team in GitHub organization.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class GHTeam implements Refreshable {
     private String name;

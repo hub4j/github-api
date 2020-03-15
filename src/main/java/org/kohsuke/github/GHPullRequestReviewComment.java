@@ -33,6 +33,7 @@ import static org.kohsuke.github.Previews.*;
 /**
  * Review comment to the pull request
  *
+ * @author Julien Henry
  * @see GHPullRequest#listReviewComments() GHPullRequest#listReviewComments()
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
@@ -59,6 +60,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the gh pull request review comment
      * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
      */
+    @Deprecated
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
         result.body = body;

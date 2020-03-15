@@ -14,6 +14,8 @@ import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * The type GHOrganization.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
     GHOrganization wrapUp(GitHub root) {
@@ -38,6 +40,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -67,6 +70,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,

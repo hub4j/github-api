@@ -3,6 +3,7 @@ package org.kohsuke.github;
 /**
  * Search users.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHub#searchUsers() GitHub#searchUsers()
  */
 public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {

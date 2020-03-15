@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * The type GHIssueEvent.
+ *
+ * @author Martin van Zijl
  */
 public class GHIssueEvent {
     private GitHub root;

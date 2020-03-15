@@ -10,7 +10,8 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 /**
-*/
+ * @author Martin van Zijl
+ */
 public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
     @Before

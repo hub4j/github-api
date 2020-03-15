@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 /**
  * Represents the account that's logging into GitHub.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
 
@@ -189,6 +191,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      * @deprecated Use {@link #listRepositories()}
      */
+    @Deprecated
     public PagedIterable<GHRepository> listAllRepositories() {
         return listRepositories();
     }

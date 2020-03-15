@@ -25,6 +25,8 @@ import static com.github.tomakehurst.wiremock.common.Gzip.unGzipToString;
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version suptakes a laze approach allowing us to
  * automatically isolate snapshots for each method.
+ *
+ * @author Liam Newman
  */
 public class GitHubWireMockRule extends WireMockMultiServerRule {
 

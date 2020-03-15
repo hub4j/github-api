@@ -13,7 +13,8 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 
 /**
-*/
+ * @author Stephen Connolly
+ */
 public class PayloadRule implements TestRule {
 
     private final String type;

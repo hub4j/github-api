@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * A Github Marketplace Account Plan.
  *
+ * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {

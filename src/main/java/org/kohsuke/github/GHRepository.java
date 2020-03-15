@@ -74,7 +74,7 @@ public class GHRepository extends GHObject {
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner; // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
 
     private boolean allow_squash_merge;
     private boolean allow_merge_commit;
@@ -554,6 +554,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Has projects boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasProjects() {
+        return has_projects;
+    }
+
+    /**
      * Has wiki boolean.
      *
      * @return the boolean
@@ -978,6 +987,18 @@ public class GHRepository extends GHObject {
      */
     public void enableIssueTracker(boolean v) throws IOException {
         edit("has_issues", String.valueOf(v));
+    }
+
+    /**
+     * Enables or disables projects for this repository.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableProjects(boolean v) throws IOException {
+        edit("has_projects", String.valueOf(v));
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -106,11 +105,13 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertEquals("", github.getClient().login);
     }
 
-    @Ignore
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
-        GitHub hub = GitHub.connectAnonymously();
-        // GitHub hub = GitHub.connectToEnterpriseAnonymously(mockGitHub.apiServer().baseUrl());
+        // NOTE: We cannot test connectAnonymously on a general basis because it can hang if
+        // rate limit is reached. We connectToEnterpriseAnonymously as the nearest equivalent.
+        // GitHub hub = GitHub.connectAnonymously();
+
+        GitHub hub = GitHub.connectToEnterpriseAnonymously(mockGitHub.apiServer().baseUrl());
         try {
             hub.checkApiUrlValidity();
         } catch (IOException ioe) {

@@ -10,6 +10,7 @@ import static org.kohsuke.github.Previews.*;
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRepository#listCommitComments() GHRepository#listCommitComments()
  * @see GHCommit#listComments() GHCommit#listComments()
  * @see GHCommit#createComment(String, String, Integer, Integer) GHCommit#createComment(String, String, Integer,

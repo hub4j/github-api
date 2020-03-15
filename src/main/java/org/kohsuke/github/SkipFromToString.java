@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * Ignores this field for {@link GHObject#toString()}
+ *
+ * @author Kohsuke Kawaguchi
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

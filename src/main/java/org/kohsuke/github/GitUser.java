@@ -9,6 +9,8 @@ import java.util.Date;
  * <p>
  * In contrast, {@link GHUser} is an user of GitHub. Because Git allows a person to use multiple e-mail addresses and
  * names when creating a commit, there's generally no meaningful mapping between {@link GHUser} and {@link GitUser}.
+ *
+ * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")

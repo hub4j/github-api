@@ -3,6 +3,7 @@ package org.kohsuke.github;
 /**
  * Search repositories.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHub#searchRepositories() GitHub#searchRepositories()
  */
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {

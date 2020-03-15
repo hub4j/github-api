@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 /**
  * How is an user associated with a repository?
+ *
+ * @author Kohsuke Kawaguchi
  */
 public enum GHCommentAuthorAssociation {
     /**

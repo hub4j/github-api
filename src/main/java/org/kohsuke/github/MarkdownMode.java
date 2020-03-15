@@ -5,6 +5,7 @@ import java.util.Locale;
 /**
  * Rendering mode of markdown.
  *
+ * @author Kohsuke Kawaguchi
  * @see GitHub#renderMarkdown(String) GitHub#renderMarkdown(String)
  * @see GHRepository#renderMarkdown(String, MarkdownMode) GHRepository#renderMarkdown(String, MarkdownMode)
  */

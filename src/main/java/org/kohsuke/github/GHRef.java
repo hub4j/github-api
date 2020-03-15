@@ -7,6 +7,8 @@ import java.net.URL;
 
 /**
  * Provides information on a Git ref from GitHub.
+ *
+ * @author Michael Clarke
  */
 public class GHRef {
     /* package almost final */ GitHub root;

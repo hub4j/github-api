@@ -25,7 +25,8 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
-*/
+ * @author Liam Newman
+ */
 public abstract class AbstractGitHubWireMockTest extends Assert {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();

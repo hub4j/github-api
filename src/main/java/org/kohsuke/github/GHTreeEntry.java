@@ -7,6 +7,7 @@ import java.net.URL;
 /**
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
+ * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHTree
  */
 public class GHTreeEntry {

@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Builds up a creation of new {@link GHPullRequestReview}.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHPullRequest#createReview() GHPullRequest#createReview()
  */
 public class GHPullRequestReviewBuilder {

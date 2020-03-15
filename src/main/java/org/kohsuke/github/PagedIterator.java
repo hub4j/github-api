@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type parameter
+ * @author Kohsuke Kawaguchi
  */
 public class PagedIterator<T> implements Iterator<T> {
 

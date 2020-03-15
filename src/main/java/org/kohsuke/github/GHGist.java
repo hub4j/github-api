@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 /**
  * Gist
  *
+ * @author Kohsuke Kawaguchi
  * @see GHUser#listGists() GHUser#listGists()
  * @see GitHub#getGist(String) GitHub#getGist(String)
  * @see GitHub#createGist() GitHub#createGist()

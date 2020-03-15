@@ -41,6 +41,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
 /**
  * A pull request.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRepository#getPullRequest(int) GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({ "UnusedDeclaration" })
@@ -452,6 +453,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #createReview()}
      */
+    @Deprecated
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             GHPullRequestReviewComment... comments) throws IOException {
@@ -472,6 +474,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #createReview()}
      */
+    @Deprecated
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             List<GHPullRequestReviewComment> comments) throws IOException {

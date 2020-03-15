@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 
 /**
  * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
+ *
+ * @author Kanstantsin Shautsou
  */
 public class GHIOException extends IOException {
     protected Map<String, List<String>> responseHeaderFields;

@@ -11,6 +11,8 @@ import java.util.Objects;
 
 /**
  * A branch in a repository.
+ *
+ * @author Yusuke Kokubo
  */
 @SuppressFBWarnings(
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",

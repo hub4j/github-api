@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 
 /**
  * Builder pattern for updating a Gist.
+ *
+ * @author Martin van Zijl
  */
 public class GHGistUpdater {
     private final GHGist base;

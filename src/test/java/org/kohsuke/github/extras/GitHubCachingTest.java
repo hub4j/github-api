@@ -24,6 +24,8 @@ import static org.junit.Assert.fail;
 
 /**
  * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
+ *
+ * @author Liam Newman
  */
 public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 

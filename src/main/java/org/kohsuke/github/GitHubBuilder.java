@@ -93,6 +93,7 @@ public class GitHubBuilder implements Cloneable {
      * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
      *             clients of this library will all recognize one consistent set of coordinates.
      */
+    @Deprecated
     public static GitHubBuilder fromEnvironment(String loginVariableName,
             String passwordVariableName,
             String oauthVariableName) throws IOException {
@@ -122,6 +123,7 @@ public class GitHubBuilder implements Cloneable {
      * @deprecated Use {@link #fromEnvironment()} to pick up standard set of environment variables, so that different
      *             clients of this library will all recognize one consistent set of coordinates.
      */
+    @Deprecated
     public static GitHubBuilder fromEnvironment(String loginVariableName,
             String passwordVariableName,
             String oauthVariableName,
@@ -396,11 +398,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withProxy(final Proxy p) {
-        return withConnector(new ImpatientHttpConnector(new HttpConnector() {
-            public HttpURLConnection connect(URL url) throws IOException {
-                return (HttpURLConnection) url.openConnection(p);
-            }
-        }));
+        return withConnector(new ImpatientHttpConnector(url -> (HttpURLConnection) url.openConnection(p)));
     }
 
     /**

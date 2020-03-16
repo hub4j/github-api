@@ -5,6 +5,7 @@ import java.io.IOException;
 /**
  * Returns any accounts associated with a plan, including free plans
  *
+ * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan#listAccounts()
  */
 public class GHMarketplaceListAccountBuilder {

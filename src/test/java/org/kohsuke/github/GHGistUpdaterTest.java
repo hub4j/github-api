@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
-*/
+ * @author Martin van Zijl
+ */
 public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
 
     private GHGist gist;

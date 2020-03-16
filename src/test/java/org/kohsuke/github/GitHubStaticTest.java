@@ -14,6 +14,8 @@ import static org.hamcrest.core.Is.is;
 
 /**
  * Unit test for {@link GitHub} static helpers.
+ *
+ * @author Liam Newman
  */
 public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 

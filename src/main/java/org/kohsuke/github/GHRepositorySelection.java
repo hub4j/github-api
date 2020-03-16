@@ -5,6 +5,7 @@ import java.util.Locale;
 /**
  * App installation repository selection.
  *
+ * @author Paulo Miguel Almeida
  * @see GHAppInstallation
  */
 public enum GHRepositorySelection {

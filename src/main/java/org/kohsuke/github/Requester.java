@@ -33,6 +33,8 @@ import javax.annotation.Nonnull;
 
 /**
  * A thin helper for {@link GitHubRequest.Builder} that includes {@link GitHubClient}.
+ *
+ * @author Kohsuke Kawaguchi
  */
 class Requester extends GitHubRequest.Builder<Requester> {
     /* private */ final GitHubClient client;

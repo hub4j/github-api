@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type parameter
+ * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",

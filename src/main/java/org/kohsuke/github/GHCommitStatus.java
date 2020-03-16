@@ -6,6 +6,7 @@ import java.net.URL;
 /**
  * Represents a status of a commit.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRepository#getLastCommitStatus(String) GHRepository#getLastCommitStatus(String)
  * @see GHCommit#getLastStatus() GHCommit#getLastStatus()
  * @see GHRepository#createCommitStatus(String, GHCommitState, String, String) GHRepository#createCommitStatus(String,

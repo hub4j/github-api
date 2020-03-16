@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Generated OAuth token
  *
+ * @author janinko
  * @see GitHub#createToken(Collection, String, String) GitHub#createToken(Collection, String, String)
  * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">API documentation</a>
  */

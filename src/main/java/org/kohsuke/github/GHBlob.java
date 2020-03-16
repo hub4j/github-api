@@ -8,6 +8,7 @@ import java.util.Base64;
 /**
  * The type GHBlob.
  *
+ * @author Kanstantsin Shautsou
  * @author Kohsuke Kawaguchi
  * @see GHTreeEntry#asBlob() GHTreeEntry#asBlob()
  * @see GHRepository#getBlob(String) GHRepository#getBlob(String)

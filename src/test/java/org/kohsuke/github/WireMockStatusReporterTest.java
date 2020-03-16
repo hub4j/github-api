@@ -12,6 +12,8 @@ import static org.junit.Assume.assumeTrue;
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
  * <p>
  * The wiremock data for these tests should only be modified by hand - thus most are skipped when snapshotting.
+ *
+ * @author Liam Newman
  */
 public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 

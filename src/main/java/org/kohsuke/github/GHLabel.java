@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * The type GHLabel.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */

@@ -9,7 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
-*/
+ * @author Gunnar Skjold
+ */
 public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     private GHOrganization org;
     private GHProject project;

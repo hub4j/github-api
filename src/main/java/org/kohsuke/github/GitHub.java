@@ -725,7 +725,8 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      * 
-     * @deprecated Use {@link GHOrganization#getTeam(int)}
+     * @deprecated Use {@link GHOrganization#getTeam(int)} 
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
     @Deprecated
     public GHTeam getTeam(int id) throws IOException {

@@ -1,54 +1,55 @@
 {
-  "id": "5ffee54e-5b33-40f8-8eed-22f6474383bb",
+  "id": "de9b6c26-1f63-4cc3-b4f6-6691f9bf180c",
   "name": "teams_3451996",
   "request": {
     "url": "/teams/3451996",
     "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
     "bodyPatterns": [
       {
         "equalToJson": "{\"description\":\"Updated by API TestModified\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
-    ],
-    "headers": {
-      "Accept": {
-        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
-      }
-    }
+    ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "teams_3451996-5ffee54e-5b33-40f8-8eed-22f6474383bb.json",
+    "bodyFileName": "teams_3451996-de9b6c26-1f63-4cc3-b4f6-6691f9bf180c.json",
     "headers": {
-      "Date": "Thu, 03 Oct 2019 21:51:11 GMT",
+      "Date": "Tue, 17 Mar 2020 09:12:23 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4946",
-      "X-RateLimit-Reset": "1570141865",
+      "X-RateLimit-Remaining": "4441",
+      "X-RateLimit-Reset": "1584436622",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"49aed5d505fd19b6d2f60b14848e762c\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "W/\"c406eaf9f146399b1f43691171336958\"",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
       "X-Accepted-OAuth-Scopes": "admin:org, repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "Deprecation": "Sat, 01 Feb 2020 00:00:00 GMT",
+      "Sunset": "Mon, 01 Feb 2021 00:00:00 GMT",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CD3D:6B2E:17619FF:1B9D706:5D966D4F"
+      "X-GitHub-Request-Id": "F8C7:46E1:A3A43:151F17:5E709476",
+      "Link": "<https://developer.github.com/changes/2020-01-21-moving-the-team-api-endpoints/>; rel=\"deprecation\"; type=\"text/html\", <https://api.github.com/organizations/7544739/team/3451996>; rel=\"alternate\""
     }
   },
-  "uuid": "5ffee54e-5b33-40f8-8eed-22f6474383bb",
+  "uuid": "de9b6c26-1f63-4cc3-b4f6-6691f9bf180c",
   "persistent": true,
   "insertionIndex": 6
 }

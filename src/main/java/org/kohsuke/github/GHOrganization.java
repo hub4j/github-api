@@ -131,8 +131,8 @@ public class GHOrganization extends GHPerson {
     /**
      * Gets a single team by ID.
      *
-     * @param id
-     *            the id
+     * @param teamId
+     *            id of the team that we want to query for
      * @return the team
      * @throws IOException
      *             the io exception

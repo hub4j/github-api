@@ -139,9 +139,9 @@ public class GHOrganization extends GHPerson {
      *
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
-    public GHTeam getTeam(int id) throws IOException {
+    public GHTeam getTeam(int teamId) throws IOException {
         return root.createRequest()
-                .withUrlPath(String.format("/orgs/%s/teams/%d", login, id))
+                .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
                 .fetch(GHTeam.class)
                 .wrapUp(this);
     }

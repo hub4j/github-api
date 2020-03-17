@@ -119,7 +119,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(),
-                equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
+                containsString(
+                        "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
     }
 
     @Test

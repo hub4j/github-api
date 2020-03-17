@@ -1,0 +1,55 @@
+{
+  "id": "51846d5d-d6ae-4a92-b608-ecaa62c3b73b",
+  "name": "teams_3451996",
+  "request": {
+    "url": "/teams/3451996",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"privacy\":\"secret\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "teams_3451996-51846d5d-d6ae-4a92-b608-ecaa62c3b73b.json",
+    "headers": {
+      "Date": "Tue, 17 Mar 2020 09:12:26 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4433",
+      "X-RateLimit-Reset": "1584436621",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"6921bb0eae21f588783eaca69c02f0e0\"",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "admin:org, repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Deprecation": "Sat, 01 Feb 2020 00:00:00 GMT",
+      "Sunset": "Mon, 01 Feb 2021 00:00:00 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8CD:0B9D:AAA42:159570:5E70947A",
+      "Link": "<https://developer.github.com/changes/2020-01-21-moving-the-team-api-endpoints/>; rel=\"deprecation\"; type=\"text/html\", <https://api.github.com/organizations/7544739/team/3451996>; rel=\"alternate\""
+    }
+  },
+  "uuid": "51846d5d-d6ae-4a92-b608-ecaa62c3b73b",
+  "persistent": true,
+  "insertionIndex": 6
+}

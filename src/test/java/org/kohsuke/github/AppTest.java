@@ -245,7 +245,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertEquals(teamByName.getId(), teamById.getId());
         assertEquals(teamByName.getDescription(), teamById.getDescription());
     }
-    
+
     @Test
     public void testShouldFetchTeamFromOrganization() throws Exception {
         GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);

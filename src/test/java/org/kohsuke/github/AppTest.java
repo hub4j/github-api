@@ -236,10 +236,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testShouldFetchTeam() throws Exception {
-        GHOrganization j = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam teamByName = j.getTeams().get("Core Developers");
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
 
-        GHTeam teamById = j.getTeam(teamByName.getId());
+        GHTeam teamById = organization.getTeam(teamByName.getId());
         assertNotNull(teamById);
 
         assertEquals(teamByName.getId(), teamById.getId());

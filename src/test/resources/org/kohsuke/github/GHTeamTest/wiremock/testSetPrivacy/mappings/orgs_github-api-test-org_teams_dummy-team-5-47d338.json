@@ -1,0 +1,49 @@
+{
+  "id": "47d338fd-8730-4953-94f1-2261a3d6e6a3",
+  "name": "orgs_github-api-test-org_teams_dummy-team",
+  "request": {
+    "url": "/orgs/github-api-test-org/teams/dummy-team",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org_teams_dummy-team-47d338fd-8730-4953-94f1-2261a3d6e6a3.json",
+    "headers": {
+      "Date": "Tue, 17 Mar 2020 09:12:26 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4434",
+      "X-RateLimit-Reset": "1584436622",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"619dbe2e4e0378bda45903a72aae4856\"",
+      "Last-Modified": "Tue, 17 Mar 2020 09:12:25 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8CD:0B9D:AAA3D:15956A:5E709479"
+    }
+  },
+  "uuid": "47d338fd-8730-4953-94f1-2261a3d6e6a3",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-github-api-test-org-teams-dummy-team",
+  "requiredScenarioState": "scenario-1-orgs-github-api-test-org-teams-dummy-team-2",
+  "newScenarioState": "scenario-1-orgs-github-api-test-org-teams-dummy-team-3",
+  "insertionIndex": 5
+}

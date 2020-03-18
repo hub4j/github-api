@@ -234,16 +234,28 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return team.hasMember(gitHub.getMyself());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testShouldFetchTeam() throws Exception {
-        GHOrganization j = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam teamByName = j.getTeams().get("Core Developers");
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
 
         GHTeam teamById = gitHub.getTeam(teamByName.getId());
         assertNotNull(teamById);
 
-        assertEquals(teamByName, teamById);
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
+    }
+
+    @Test
+    public void testShouldFetchTeamFromOrganization() throws Exception {
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
+
+        GHTeam teamById = organization.getTeam(teamByName.getId());
+        assertNotNull(teamById);
+
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
     }
 
     @Ignore("Needs mocking check")

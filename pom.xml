@@ -33,11 +33,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.0.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.0.0</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>4.4.0</okhttp3.version>
+    <okhttp3.version>4.4.1</okhttp3.version>
     <okio.version>2.4.3</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
@@ -209,7 +209,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <source>8</source>
             <failOnWarnings>true</failOnWarnings>
@@ -233,7 +233,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.8.2</version>
+        <version>3.9.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -453,7 +453,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.6.1.202002131546-r</version>
+      <version>5.7.0.202003110725-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -491,7 +491,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.3.1</version>
+      <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -503,7 +503,7 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.26.2</version>
+      <version>2.26.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>

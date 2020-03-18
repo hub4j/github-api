@@ -724,7 +724,11 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
+     * 
+     * @deprecated Use {@link GHOrganization#getTeam(int)}
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
+    @Deprecated
     public GHTeam getTeam(int id) throws IOException {
         return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }

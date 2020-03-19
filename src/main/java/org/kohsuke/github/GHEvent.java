@@ -50,6 +50,7 @@ public enum GHEvent {
     PULL_REQUEST_REVIEW,
     PULL_REQUEST_REVIEW_COMMENT,
     PUSH,
+    REGISTRY_PACKAGE,
     RELEASE,
     REPOSITORY_DISPATCH, // only valid for org hooks
     REPOSITORY,

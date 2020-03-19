@@ -81,7 +81,6 @@ public class GHLabel {
      *             the io exception
      * @deprecated use {@link #set()} instead
      */
-    @Deprecated
     public void setColor(String newColor) throws IOException {
         set().color(newColor);
     }
@@ -95,7 +94,6 @@ public class GHLabel {
      *             the io exception
      * @deprecated use {@link #set()} instead
      */
-    @Deprecated
     public void setDescription(String newDescription) throws IOException {
         set().description(newDescription);
     }
@@ -119,7 +117,9 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    public static Creator create(GHRepository repository) throws IOException {
+    @Preview
+    @Deprecated
+    static Creator create(GHRepository repository) throws IOException {
         return new Creator(repository);
     }
 
@@ -134,7 +134,7 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    public static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
+    static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
         return repository.root.createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"), name)
                 .fetch(GHLabel.class);
@@ -150,7 +150,7 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    public static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
+    static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
         return repository.root.createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))
                 .toIterable(GHLabel[].class, null);
@@ -164,6 +164,8 @@ public class GHLabel {
      *
      * @return a {@link Updater}
      */
+    @Preview
+    @Deprecated
     public Updater update() {
         return new Updater(this);
     }
@@ -173,6 +175,8 @@ public class GHLabel {
      * 
      * @return a {@link Setter}
      */
+    @Preview
+    @Deprecated
     public Setter set() {
         return new Setter(this);
     }
@@ -209,6 +213,8 @@ public class GHLabel {
      *
      * {@link #done()} is called automatically after the property is set.
      */
+    @Preview
+    @Deprecated
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
             super(GHLabel.class, base.root, base);
@@ -221,6 +227,8 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to commit changes.
      */
+    @Preview
+    @Deprecated
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
             super(Updater.class, base.root, base);
@@ -233,6 +241,8 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to create the new instance.
      */
+    @Preview
+    @Deprecated
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {
             super(Creator.class, repository.root, null);

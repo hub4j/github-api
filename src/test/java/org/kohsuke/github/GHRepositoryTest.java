@@ -496,4 +496,31 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         List<GHUser> collaborators = repo.listCollaborators().toList();
         assertThat(collaborators.size(), greaterThan(10));
     }
+
+    @Test
+    public void getCheckRuns() throws Exception {
+        final int expectedCount = 8;
+        // Use github-api repository as it has checks set up
+        PagedIterable<GHCheckRun> checkRuns = gitHub.getOrganization("github-api")
+                .getRepository("github-api")
+                .getCheckRuns("78b9ff49d47daaa158eb373c4e2e040f739df8b9");
+        // Check if the paging works correctly
+        assertThat(checkRuns.withPageSize(2).iterator().nextPage(), hasSize(2));
+
+        // Check if the checkruns are all succeeded and if we got all of them
+        int checkRunsCount = 0;
+        for (GHCheckRun checkRun : checkRuns) {
+            assertThat(checkRun.getConclusion(), equalTo("success"));
+            checkRunsCount++;
+        }
+        assertThat(checkRunsCount, equalTo(expectedCount));
+    }
+
+    @Test
+    public void getLastCommitStatus() throws Exception {
+        GHCommitStatus status = getRepository().getLastCommitStatus("8051615eff597f4e49f4f47625e6fc2b49f26bfc");
+        assertThat(status.getId(), equalTo(9027542286L));
+        assertThat(status.getState(), equalTo(GHCommitState.SUCCESS));
+        assertThat(status.getContext(), equalTo("ci/circleci: build"));
+    }
 }

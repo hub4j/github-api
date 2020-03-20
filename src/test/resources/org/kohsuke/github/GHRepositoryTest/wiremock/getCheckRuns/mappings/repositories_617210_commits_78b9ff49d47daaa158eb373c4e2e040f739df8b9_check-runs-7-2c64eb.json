@@ -1,0 +1,44 @@
+{
+  "id": "2c64ebec-78aa-4073-86be-689da8b5914a",
+  "name": "repositories_617210_commits_78b9ff49d47daaa158eb373c4e2e040f739df8b9_check-runs",
+  "request": {
+    "url": "/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=4",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_617210_commits_78b9ff49d47daaa158eb373c4e2e040f739df8b9_check-runs-2c64ebec-78aa-4073-86be-689da8b5914a.json",
+    "headers": {
+      "Date": "Thu, 19 Mar 2020 16:20:03 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "33",
+      "X-RateLimit-Reset": "1584637771",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"677a878b33bbf484fdba9c2572e50cbd\"",
+      "X-GitHub-Media-Type": "github.antiope-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BDDE:30E5B:FEA4E9:12C8752:5E739BB3",
+      "Link": "<https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=3>; rel=\"prev\", <https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "2c64ebec-78aa-4073-86be-689da8b5914a",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -145,6 +145,7 @@ public class GHPullRequestReview extends GHObject {
      * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
      *             {@link #submit(String, GHPullRequestReviewEvent)}
      */
+    @Deprecated
     public void submit(String body, GHPullRequestReviewState state) throws IOException {
         submit(body, state.toEvent());
     }

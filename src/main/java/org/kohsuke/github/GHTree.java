@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
+ * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHCommit#getTree() GHCommit#getTree()
  * @see GHRepository#getTree(String) GHRepository#getTree(String)
  * @see GHTreeEntry#asTree() GHTreeEntry#asTree()

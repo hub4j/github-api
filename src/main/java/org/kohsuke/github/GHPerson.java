@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,12 +14,14 @@ import java.util.TreeMap;
 
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
     /* package almost final */ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatar_url, gravatar_id;
+    protected String login, avatar_url;
 
     // other fields (that only show up in full data)
     protected String location, blog, email, name, company, type;
@@ -115,31 +116,27 @@ public abstract class GHPerson extends GHObject {
      */
     @Deprecated
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
-        return new Iterable<List<GHRepository>>() {
-            public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager;
-                try {
-                    pager = GitHubPageIterator.create(root.getClient(),
-                            GHRepository[].class,
-                            root.createRequest().withUrlPath("users", login, "repos").build(),
-                            pageSize);
-                } catch (MalformedURLException e) {
-                    throw new GHException("Unable to build GitHub API URL", e);
+        return () -> {
+            final PagedIterator<GHRepository> pager;
+            try {
+                GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root.getClient(),
+                        GHRepository[].class,
+                        root.createRequest().withUrlPath("users", login, "repos").build(),
+                        pageSize);
+                pager = new PagedIterator<>(iterator, item -> item.wrap(root));
+            } catch (MalformedURLException e) {
+                throw new GHException("Unable to build GitHub API URL", e);
+            }
+
+            return new Iterator<List<GHRepository>>() {
+                public boolean hasNext() {
+                    return pager.hasNext();
                 }
 
-                return new Iterator<List<GHRepository>>() {
-                    public boolean hasNext() {
-                        return pager.hasNext();
-                    }
-
-                    public List<GHRepository> next() {
-                        GHRepository[] batch = pager.next();
-                        for (GHRepository r : batch)
-                            r.root = root;
-                        return Arrays.asList(batch);
-                    }
-                };
-            }
+                public List<GHRepository> next() {
+                    return pager.nextPage();
+                }
+            };
         };
     }
 
@@ -178,22 +175,18 @@ public abstract class GHPerson extends GHObject {
      * @return the gravatar id
      * @deprecated No longer available in the v3 API.
      */
+    @Deprecated
     public String getGravatarId() {
-        return gravatar_id;
+        return "";
     }
 
     /**
-     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105' that indicates the
-     * avatar image URL.
+     * Returns a string of the avatar image URL.
      *
      * @return the avatar url
      */
     public String getAvatarUrl() {
-        if (avatar_url != null)
-            return avatar_url;
-        if (gravatar_id != null)
-            return "https://secure.gravatar.com/avatar/" + gravatar_id;
-        return null;
+        return avatar_url;
     }
 
     /**

@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Class that wraps the list of GitHub's IP addresses.
  *
+ * @author Paulo Miguel Almeida
  * @see GitHub#getMeta() GitHub#getMeta()
  * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
  */

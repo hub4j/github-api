@@ -132,6 +132,7 @@ public abstract class GHEventPayload {
          * @return the repository
          */
         public GHRepository getRepository() {
+            repository.root = root;
             return repository;
         }
 
@@ -147,6 +148,48 @@ public abstract class GHEventPayload {
             } else {
                 checkRun.wrap(root);
             }
+        }
+    }
+
+    /**
+     * A check suite event has been requested, rerequested or completed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    public static class CheckSuite extends GHEventPayload {
+        private String action;
+        private GHCheckSuite checkSuite;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets the Check Suite object
+         *
+         * @return the Check Suite object
+         */
+        public GHCheckSuite getCheckSuite() {
+            return checkSuite;
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+            repository.root = root;
+            return repository;
         }
     }
 

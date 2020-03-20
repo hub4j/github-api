@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type of items on each page
+ * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
     /**

@@ -221,6 +221,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
          *
          * @param stream
          *            the stream to possibly wrap
+         *
          */
         private InputStream wrapStream(InputStream stream) throws IOException {
             String encoding = headerField("Content-Encoding");

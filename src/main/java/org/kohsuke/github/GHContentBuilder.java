@@ -10,6 +10,7 @@ import java.util.Base64;
  * <p>
  * Call various methods to build up parameters, then call {@link #commit()} to make the change effective.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRepository#createContent() GHRepository#createContent()
  */
 public final class GHContentBuilder {

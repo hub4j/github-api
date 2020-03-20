@@ -23,6 +23,7 @@ public class GHDeploymentStatusBuilder {
      *            the state
      * @deprecated Use {@link GHDeployment#createStatus(GHDeploymentState)}
      */
+    @Deprecated
     public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
         this(repo, (long) deploymentId, state);
     }

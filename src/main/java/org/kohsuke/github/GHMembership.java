@@ -7,6 +7,7 @@ import java.util.Locale;
 /**
  * Represents a membership of a user in an organization.
  *
+ * @author Kohsuke Kawaguchi
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
 public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {

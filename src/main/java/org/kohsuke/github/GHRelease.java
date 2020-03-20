@@ -71,6 +71,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      * @deprecated Use {@link #update()}
      */
+    @Deprecated
     public GHRelease setDraft(boolean draft) throws IOException {
         return update().draft(draft).update();
     }

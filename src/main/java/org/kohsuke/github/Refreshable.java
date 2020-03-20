@@ -5,6 +5,8 @@ import java.net.URL;
 
 /**
  * The interface Refreshable.
+ *
+ * @author Liam Newman
  */
 public interface Refreshable {
     /**

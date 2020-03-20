@@ -15,6 +15,7 @@ import java.util.Date;
  * }
  * </pre>
  *
+ * @author Kohsuke Kawaguchi
  * @see GHRepository#queryCommits() GHRepository#queryCommits()
  */
 public class GHCommitQueryBuilder {

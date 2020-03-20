@@ -46,6 +46,8 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * This library aims to be safe for use by multiple threads concurrently, although the library itself makes no attempt
  * to control/serialize potentially conflicting operations to GitHub, such as updating &amp; deleting a repository at
  * the same time.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class GitHub {
 
@@ -137,7 +139,10 @@ public class GitHub {
      * Version that connects to GitHub Enterprise.
      *
      * @param apiUrl
-     *            the api url
+     *            The URL of GitHub (or GitHub Enterprise) API endpoint, such as "https://api.github.com" or
+     *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
+     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
+     *            deprecated.
      * @param oauthAccessToken
      *            the oauth access token
      * @return the git hub
@@ -217,8 +222,7 @@ public class GitHub {
      * @return the git hub
      * @throws IOException
      *             the io exception
-     * @deprecated Either OAuth token or password is sufficient, so there's no point in passing both. Use
-     *             {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
+     * @deprecated Use {@link #connectUsingOAuth(String)}.
      */
     @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
@@ -235,7 +239,12 @@ public class GitHub {
      * @return the git hub
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
+     * @see <a href=
+     *      "https://developer.github.com/changes/2020-02-14-deprecating-password-auth/#changes-to-make">Deprecating
+     *      password authentication and OAuth authorizations API</a>
      */
+    @Deprecated
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
         return new GitHubBuilder().withPassword(login, password).build();
     }
@@ -715,7 +724,11 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
+     * 
+     * @deprecated Use {@link GHOrganization#getTeam(int)}
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
+    @Deprecated
     public GHTeam getTeam(int id) throws IOException {
         return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }

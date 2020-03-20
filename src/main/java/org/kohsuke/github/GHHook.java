@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * The type GHHook.
+ *
+ * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")

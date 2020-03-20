@@ -10,7 +10,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
-*/
+ * @author Kevin Harrington mad.hephaestus@gmail.com
+ */
 public class Github2faTest extends AbstractGitHubWireMockTest {
 
     @Test

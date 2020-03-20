@@ -4,6 +4,8 @@ package org.kohsuke.github;
  * Provides the media type strings for GitHub API previews
  *
  * https://developer.github.com/v3/previews/
+ *
+ * @author Kohsuke Kawaguchi
  */
 class Previews {
 

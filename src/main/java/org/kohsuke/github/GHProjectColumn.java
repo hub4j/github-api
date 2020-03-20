@@ -8,6 +8,8 @@ import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * The type GHProjectColumn.
+ *
+ * @author Gunnar Skjold
  */
 public class GHProjectColumn extends GHObject {
     protected GitHub root;

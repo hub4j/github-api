@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * A Github Marketplace plan.
  *
+ * @author Paulo Miguel Almeida
  * @see GitHub#listMarketplacePlans()
  */
 public class GHMarketplacePlan {

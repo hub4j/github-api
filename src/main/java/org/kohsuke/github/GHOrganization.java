@@ -14,6 +14,8 @@ import static org.kohsuke.github.Previews.INERTIA;
 
 /**
  * The type GHOrganization.
+ *
+ * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
     GHOrganization wrapUp(GitHub root) {
@@ -38,6 +40,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -67,6 +70,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -125,6 +129,24 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Gets a single team by ID.
+     *
+     * @param teamId
+     *            id of the team that we want to query for
+     * @return the team
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
+     */
+    public GHTeam getTeam(int teamId) throws IOException {
+        return root.createRequest()
+                .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
+                .fetch(GHTeam.class)
+                .wrapUp(this);
+    }
+
+    /**
      * Finds a team that has the given name in its {@link GHTeam#getName()}
      *
      * @param name
@@ -143,19 +165,19 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
-     *
+     * 
      * @param slug
      *            the slug
      * @return the team by slug
      * @throws IOException
      *             the io exception
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
-        for (GHTeam t : listTeams()) {
-            if (t.getSlug().equals(slug))
-                return t;
-        }
-        return null;
+        return root.createRequest()
+                .withUrlPath(String.format("/orgs/%s/teams/%s", login, slug))
+                .fetch(GHTeam.class)
+                .wrapUp(this);
     }
 
     /**

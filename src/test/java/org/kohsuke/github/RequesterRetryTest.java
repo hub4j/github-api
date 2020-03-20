@@ -30,7 +30,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.Matchers.*;
 
 /**
-*/
+ * @author Victor Martinez
+ */
 public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
     private static Logger log = Logger.getLogger(GitHubClient.class.getName()); // matches the logger in the affected

@@ -11,7 +11,10 @@ import java.net.URL;
  *
  * <p>
  * For example, you can implement this to st custom timeouts.
+ *
+ * @author Kohsuke Kawaguchi
  */
+@FunctionalInterface
 public interface HttpConnector {
     /**
      * Opens a connection to the given URL.
@@ -27,18 +30,12 @@ public interface HttpConnector {
     /**
      * Default implementation that uses {@link URL#openConnection()}.
      */
-    HttpConnector DEFAULT = new ImpatientHttpConnector(new HttpConnector() {
-        public HttpURLConnection connect(URL url) throws IOException {
-            return (HttpURLConnection) url.openConnection();
-        }
-    });
+    HttpConnector DEFAULT = new ImpatientHttpConnector(url -> (HttpURLConnection) url.openConnection());
 
     /**
      * Stub implementation that is always off-line.
      */
-    HttpConnector OFFLINE = new HttpConnector() {
-        public HttpURLConnection connect(URL url) throws IOException {
-            throw new IOException("Offline");
-        }
+    HttpConnector OFFLINE = url -> {
+        throw new IOException("Offline");
     };
 }

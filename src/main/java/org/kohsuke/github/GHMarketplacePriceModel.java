@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * GitHub Marketplace plan pricing model.
  *
+ * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan
  */
 public enum GHMarketplacePriceModel {

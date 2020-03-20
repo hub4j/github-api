@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.108-SNAPSHOT</version>
+  <version>1.109-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -33,16 +33,16 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.0.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.0.0</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>4.4.0</okhttp3.version>
+    <okhttp3.version>4.4.1</okhttp3.version>
     <okio.version>2.4.3</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
-    <jacoco.coverage.target.bundle.method>0.556</jacoco.coverage.target.bundle.method>
+    <jacoco.coverage.target.bundle.method>0.60</jacoco.coverage.target.bundle.method>
     <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
@@ -146,14 +146,12 @@
                       <exclude>org.kohsuke.github.example.*</exclude>
 
                       <!-- No methods -->
-                      <exclude>org.kohsuke.github.DeleteToken</exclude>
                       <exclude>org.kohsuke.github.Previews</exclude>
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                      <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
 
                       <!-- These fail coverage on windows because tests are disabled -->
                       <exclude>org.kohsuke.github.GHAsset</exclude>
@@ -161,7 +159,6 @@
                       <exclude>org.kohsuke.github.GHRelease</exclude>
 
                       <!-- TODO: These still need test coverage -->
-                      <exclude>org.kohsuke.github.GitHubClient.GHApiInfo</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
@@ -202,7 +199,6 @@
                       <exclude>org.kohsuke.github.GHTeam.Role</exclude>
                       <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
                       <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
-                      <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
                     </excludes>
                   </rule>
                 </rules>
@@ -213,7 +209,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <source>8</source>
             <failOnWarnings>true</failOnWarnings>
@@ -237,7 +233,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.8.2</version>
+        <version>3.9.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -457,7 +453,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.6.1.202002131546-r</version>
+      <version>5.7.0.202003110725-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -495,7 +491,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.3.1</version>
+      <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -507,7 +503,7 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.26.1</version>
+      <version>2.26.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.oneOf;
 
 /**
  * Unit test for simple App.
@@ -233,16 +234,28 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return team.hasMember(gitHub.getMyself());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testShouldFetchTeam() throws Exception {
-        GHOrganization j = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam teamByName = j.getTeams().get("Core Developers");
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
 
         GHTeam teamById = gitHub.getTeam(teamByName.getId());
         assertNotNull(teamById);
 
-        assertEquals(teamByName, teamById);
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
+    }
+
+    @Test
+    public void testShouldFetchTeamFromOrganization() throws Exception {
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
+
+        GHTeam teamById = organization.getTeam(teamByName.getId());
+        assertNotNull(teamById);
+
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
     }
 
     @Ignore("Needs mocking check")
@@ -861,10 +874,27 @@ public class AppTest extends AbstractGitHubWireMockTest {
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
+                // both read and unread are included
+                assertThat(t.getTitle(), is("Create a Jenkinsfile for Librecores CI in mor1kx"));
+                assertThat(t.getLastReadAt(), notNullValue());
+                assertThat(t.isRead(), equalTo(true));
+
                 t.markAsRead(); // test this by calling it once on old notfication
             }
-            assertNotNull(t.getTitle());
-            assertNotNull(t.getReason());
+            assertThat(t.getReason(), oneOf("subscribed", "mention", "review_requested", "comment"));
+            assertThat(t.getTitle(), notNullValue());
+            assertThat(t.getLastCommentUrl(), notNullValue());
+            assertThat(t.getRepository(), notNullValue());
+            assertThat(t.getUpdatedAt(), notNullValue());
+            assertThat(t.getType(), oneOf("Issue", "PullRequest"));
+
+            // both thread an unread are included
+            // assertThat(t.getLastReadAt(), notNullValue());
+            // assertThat(t.isRead(), equalTo(true));
+
+            // Doesn't exist on threads but is part of GHObject. :(
+            assertThat(t.getCreatedAt(), nullValue());
+
         }
         assertTrue(found);
         gitHub.listNotifications().markAsRead();

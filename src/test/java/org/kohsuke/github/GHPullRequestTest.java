@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -120,6 +121,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         // Assert htmlUrl is not null
         assertNotNull(comment.getHtmlUrl());
+        assertEquals(new URL("https://github.com/github-api-test-org/github-api/pull/266#discussion_r321995146"), comment.getHtmlUrl());
 
         comment.update("Updated review comment");
         comments = p.listReviewComments().toList();

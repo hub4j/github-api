@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.annotation.Nonnull;
  * The type GHLabel.
  *
  * @author Kohsuke Kawaguchi
+ * @see <a href="https://developer.github.com/v3/issues/labels/">Labels</a>
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */
@@ -22,14 +24,22 @@ public class GHLabel {
     @Nonnull
     private String url, name, color, description;
 
-    @JacksonInject
-    private GitHub root;
+    // Never null but not detectable at compile time
+    @Nonnull
+    private final GitHub root;
 
-    GHLabel() {
+    @JsonCreator
+    private GHLabel(@JacksonInject GitHub root) {
+        this.root = root;
         url = "";
         name = "";
         color = "";
         description = "";
+    }
+
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root);
     }
 
     /**
@@ -81,6 +91,7 @@ public class GHLabel {
      *             the io exception
      * @deprecated use {@link #set()} instead
      */
+    @Deprecated
     public void setColor(String newColor) throws IOException {
         set().color(newColor);
     }
@@ -94,6 +105,7 @@ public class GHLabel {
      *             the io exception
      * @deprecated use {@link #set()} instead
      */
+    @Deprecated
     public void setDescription(String newDescription) throws IOException {
         set().description(newDescription);
     }
@@ -217,7 +229,7 @@ public class GHLabel {
     @Deprecated
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
-            super(GHLabel.class, base.root, base);
+            super(GHLabel.class, base.getApiRoot(), base);
             requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }
@@ -231,7 +243,7 @@ public class GHLabel {
     @Deprecated
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
-            super(Updater.class, base.root, base);
+            super(Updater.class, base.getApiRoot(), base);
             requester.method("PATCH").setRawUrlPath(base.getUrl());
         }
     }

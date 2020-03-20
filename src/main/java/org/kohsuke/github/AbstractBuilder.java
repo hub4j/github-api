@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
  * </pre>
  * </p>
  * <p>
- * Single changee look like this:
+ * Single changes look like this:
  * 
  * <pre>
  * set().someName(value);
@@ -25,15 +25,15 @@ import javax.annotation.Nonnull;
  * </pre>
  * </p>
  * <p>
- * If S is the same as R, {@link #with(String, Object)} will commit changes after the first value change and return a R
+ * If {@link S} is the same as {@link R}, {@link #with(String, Object)} will commit changes after the first value change and return a {@link R}
  * from {@link #done()}.
  * </p>
  * <p>
- * If S is not the same as R, {@link #with(String, Object)} will batch together multiple changes and let the user call
+ * If {@link S} is not the same as {@link R}, {@link #with(String, Object)} will batch together multiple changes and let the user call
  * {@link #done()} when they are ready.
  *
  * @param <R>
- *            Final return type for built by this builder returned when {@link #done()}} is called.
+ *            Final return type built by this builder returned when {@link #done()}} is called.
  * @param <S>
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
@@ -43,9 +43,6 @@ abstract class AbstractBuilder<R, S> {
     @Nonnull
     private final Class<R> returnType;
 
-    @Nonnull
-    private final Class<S> intermediateReturnType;
-
     private final boolean commitChangesImmediately;
 
     @CheckForNull
@@ -54,8 +51,8 @@ abstract class AbstractBuilder<R, S> {
     @Nonnull
     protected final Requester requester;
 
-    // TODO: Not sure how update-in-place behavior should be controlled, but
-    // it certainly can be controlled dynamically down to the instance level or inherited for all children of some
+    // TODO: Not sure how update-in-place behavior should be controlled
+    // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of some
     // connection.
     protected boolean updateInPlace;
 
@@ -68,27 +65,25 @@ abstract class AbstractBuilder<R, S> {
      *            the intermediate return type of type {@link S} returned by calls to {@link #with(String, Object)}.
      *            Must either be equal to {@code builtReturnType} or this instance must be castable to this class. If
      *            not, the constructor will throw {@link IllegalArgumentException}.
-     * @param builtReturnType
+     * @param finalReturnType
      *            the final return type for built by this builder returned when {@link #done()}} is called.
      * @param baseInstance
      *            optional instance on which to base this builder.
      */
-    protected AbstractBuilder(@Nonnull GitHub root,
-            @Nonnull Class<S> intermediateReturnType,
-            @Nonnull Class<R> builtReturnType,
+    protected AbstractBuilder(@Nonnull Class<R> finalReturnType,
+                              @Nonnull Class<S> intermediateReturnType,
+                              @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
         this.requester = root.createRequest();
-        this.returnType = builtReturnType;
-        this.intermediateReturnType = intermediateReturnType;
+        this.returnType = finalReturnType;
         this.commitChangesImmediately = returnType.equals(intermediateReturnType);
         if (!commitChangesImmediately && !intermediateReturnType.isInstance(this)) {
             throw new IllegalArgumentException(
-                    "Argument \"intermediateReturnType\": This instance must be castable to intermediateReturnType or intermediateReturnType must be equal to builtReturnType.");
+                    "Argument \"intermediateReturnType\": This instance must be castable to intermediateReturnType or finalReturnType must be equal to intermediateReturnType.");
         }
 
         this.baseInstance = baseInstance;
         this.updateInPlace = false;
-
     }
 
     /**
@@ -101,6 +96,8 @@ abstract class AbstractBuilder<R, S> {
      *             if there is an I/O Exception
      */
     @Nonnull
+    @Preview
+    @Deprecated
     public R done() throws IOException {
         R result;
         if (updateInPlace && baseInstance != null) {
@@ -114,10 +111,10 @@ abstract class AbstractBuilder<R, S> {
     /**
      * Applies a value to a name for this builder.
      *
-     * If S is the same as T, this method will commit changes after the first value change and return a T from
+     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a {@link R} from
      * {@link #done()}.
      *
-     * If S is not the same as T, this method will return an {@link S} and letting the caller batch together multiple
+     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch together multiple
      * changes and call {@link #done()} when they are ready.
      *
      * @param name
@@ -129,8 +126,30 @@ abstract class AbstractBuilder<R, S> {
      *             if an I/O error occurs
      */
     @Nonnull
+    @Preview
+    @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
+        return continueOrDone();
+    }
+
+    /**
+     * Chooses whether to return a continuing builder or an updated data record
+     *
+     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a {@link R} from
+     * {@link #done()}.
+     *
+     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch together multiple
+     * changes and call {@link #done()} when they are ready.
+     *
+     * @return either a continuing builder or an updated data record
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Nonnull
+    @Preview
+    @Deprecated
+    protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
         // well.

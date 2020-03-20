@@ -28,28 +28,32 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
     protected GHLabelBuilder(@Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull GHLabel baseInstance) {
-        super(root, intermediateReturnType, GHLabel.class, baseInstance);
+        super(GHLabel.class, intermediateReturnType, root, baseInstance);
 
-        if (baseInstance == null) {
-            baseInstance = new GHLabel();
+        if (baseInstance != null) {
+            requester.with("name", baseInstance.getName());
+            requester.with("color", baseInstance.getColor());
+            requester.with("description", baseInstance.getDescription());
         }
-
-        requester.with("name", baseInstance.getName());
-        requester.with("color", baseInstance.getColor());
-        requester.with("description", baseInstance.getDescription());
     }
 
     @Nonnull
+    @Preview
+    @Deprecated
     public S name(String value) throws IOException {
         return with("name", value);
     }
 
     @Nonnull
+    @Preview
+    @Deprecated
     public S color(String value) throws IOException {
         return with("color", value);
     }
 
     @Nonnull
+    @Preview
+    @Deprecated
     public S description(String value) throws IOException {
         return with("description", value);
     }

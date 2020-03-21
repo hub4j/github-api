@@ -44,6 +44,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private String body;
     private GHUser user;
     private String path;
+    private String html_url;
     private int position = -1;
     private int original_position = -1;
     private long in_reply_to_id = -1L;
@@ -143,7 +144,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

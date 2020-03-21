@@ -1,0 +1,44 @@
+{
+  "id": "797b1c78-fa26-490b-84c8-bd33b21dc7f7",
+  "name": "repositories_617210_commits_78b9ff49d47daaa158eb373c4e2e040f739df8b9_check-runs",
+  "request": {
+    "url": "/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_617210_commits_78b9ff49d47daaa158eb373c4e2e040f739df8b9_check-runs-797b1c78-fa26-490b-84c8-bd33b21dc7f7.json",
+    "headers": {
+      "Date": "Thu, 19 Mar 2020 16:20:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "35",
+      "X-RateLimit-Reset": "1584637771",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"22040f1bbc4c4aeaee4a1f56379fc6d4\"",
+      "X-GitHub-Media-Type": "github.antiope-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BDDE:30E5B:FEA3E7:12C8610:5E739BB2",
+      "Link": "<https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=1>; rel=\"prev\", <https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=3>; rel=\"next\", <https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=4>; rel=\"last\", <https://api.github.com/repositories/617210/commits/78b9ff49d47daaa158eb373c4e2e040f739df8b9/check-runs?per_page=2&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "797b1c78-fa26-490b-84c8-bd33b21dc7f7",
+  "persistent": true,
+  "insertionIndex": 5
+}

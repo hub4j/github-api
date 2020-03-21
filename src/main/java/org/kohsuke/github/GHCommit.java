@@ -513,6 +513,19 @@ public class GHCommit {
     }
 
     /**
+     * Gets check-runs for given sha.
+     *
+     * @return check runs for given sha.
+     * @throws IOException
+     *             on error
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
+        return owner.getCheckRuns(sha);
+    }
+
+    /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
      * 
      * @throws IOException

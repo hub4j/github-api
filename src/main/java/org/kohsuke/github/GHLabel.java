@@ -24,7 +24,6 @@ public class GHLabel {
     @Nonnull
     private String url, name, color, description;
 
-    // Never null but not detectable at compile time
     @Nonnull
     private final GitHub root;
 

@@ -787,6 +787,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testRepoLabel() throws IOException {
+
         cleanupLabel("test");
         cleanupLabel("test2");
 

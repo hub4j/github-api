@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
  * </pre>
  * </p>
  * <p>
- * If {@link S} is the same as {@link R}, {@link #with(String, Object)} will commit changes after the first value change and return a {@link R}
- * from {@link #done()}.
+ * If {@link S} is the same as {@link R}, {@link #with(String, Object)} will commit changes after the first value change
+ * and return a {@link R} from {@link #done()}.
  * </p>
  * <p>
- * If {@link S} is not the same as {@link R}, {@link #with(String, Object)} will batch together multiple changes and let the user call
- * {@link #done()} when they are ready.
+ * If {@link S} is not the same as {@link R}, {@link #with(String, Object)} will batch together multiple changes and let
+ * the user call {@link #done()} when they are ready.
  *
  * @param <R>
  *            Final return type built by this builder returned when {@link #done()}} is called.
@@ -52,7 +52,8 @@ abstract class AbstractBuilder<R, S> {
     protected final Requester requester;
 
     // TODO: Not sure how update-in-place behavior should be controlled
-    // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of some
+    // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of
+    // some
     // connection.
     protected boolean updateInPlace;
 
@@ -71,8 +72,8 @@ abstract class AbstractBuilder<R, S> {
      *            optional instance on which to base this builder.
      */
     protected AbstractBuilder(@Nonnull Class<R> finalReturnType,
-                              @Nonnull Class<S> intermediateReturnType,
-                              @Nonnull GitHub root,
+            @Nonnull Class<S> intermediateReturnType,
+            @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
         this.requester = root.createRequest();
         this.returnType = finalReturnType;
@@ -111,11 +112,11 @@ abstract class AbstractBuilder<R, S> {
     /**
      * Applies a value to a name for this builder.
      *
-     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a {@link R} from
-     * {@link #done()}.
+     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a
+     * {@link R} from {@link #done()}.
      *
-     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch together multiple
-     * changes and call {@link #done()} when they are ready.
+     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch
+     * together multiple changes and call {@link #done()} when they are ready.
      *
      * @param name
      *            the name of the field
@@ -136,11 +137,11 @@ abstract class AbstractBuilder<R, S> {
     /**
      * Chooses whether to return a continuing builder or an updated data record
      *
-     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a {@link R} from
-     * {@link #done()}.
+     * If {@link S} is the same as {@link R}, this method will commit changes after the first value change and return a
+     * {@link R} from {@link #done()}.
      *
-     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch together multiple
-     * changes and call {@link #done()} when they are ready.
+     * If {@link S} is not the same as {@link R}, this method will return an {@link S} and letting the caller batch
+     * together multiple changes and call {@link #done()} when they are ready.
      *
      * @return either a continuing builder or an updated data record
      * @throws IOException

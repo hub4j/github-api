@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"color\":\"123456\",\"name\":\"test\",\"description\":\"\"}",
+        "equalToJson": "{\"color\":\"123456\",\"name\":\"test\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

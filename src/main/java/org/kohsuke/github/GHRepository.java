@@ -1900,7 +1900,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel createLabel(String name, String color) throws IOException {
-        return GHLabel.create(this).name(name).color(color).done();
+        return GHLabel.create(this).name(name).color(color).description("").done();
     }
 
     /**

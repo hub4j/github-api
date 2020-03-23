@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -22,18 +23,21 @@ import javax.annotation.Nonnull;
 public class GHLabel {
 
     @Nonnull
-    private String url, name, color, description;
+    private String url, name, color;
+
+    @CheckForNull
+    private String description;
 
     @Nonnull
     private final GitHub root;
 
     @JsonCreator
-    private GHLabel(@JacksonInject GitHub root) {
+    private GHLabel(@JacksonInject @Nonnull GitHub root) {
         this.root = root;
         url = "";
         name = "";
         color = "";
-        description = "";
+        description = null;
     }
 
     @Nonnull
@@ -76,7 +80,7 @@ public class GHLabel {
      *
      * @return the description
      */
-    @Nonnull
+    @CheckForNull
     public String getDescription() {
         return description;
     }
@@ -88,7 +92,7 @@ public class GHLabel {
      *            6-letter hex color code, like "f29513"
      * @throws IOException
      *             the io exception
-     * @deprecated use {@link #set()} instead
+     * @deprecated use {@link #set()} or {@link #update()} instead
      */
     @Deprecated
     public void setColor(String newColor) throws IOException {
@@ -102,7 +106,7 @@ public class GHLabel {
      *            Description of label
      * @throws IOException
      *             the io exception
-     * @deprecated use {@link #set()} instead
+     * @deprecated use {@link #set()} or {@link #update()} instead
      */
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
@@ -193,8 +197,7 @@ public class GHLabel {
     }
 
     /**
-     * Delete this label from this repository. Made static to make it clearer that this deletes the label entirely -
-     * different from adding removing labels from objects.
+     * Delete this label from the repository.
      *
      * @throws IOException
      *             the io exception

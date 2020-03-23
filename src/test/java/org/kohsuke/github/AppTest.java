@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -787,14 +788,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testRepoLabel() throws IOException {
-
         cleanupLabel("test");
         cleanupLabel("test2");
 
         GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
         List<GHLabel> lst = r.listLabels().toList();
         for (GHLabel l : lst) {
-            // System.out.println(l.getName());
+            assertThat(l.getUrl(), containsString(l.getName().replace(" ", "%20")));
         }
         assertTrue(lst.size() > 5);
         GHLabel e = r.getLabel("enhancement");
@@ -819,7 +819,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.getUrl(), t2.getUrl());
 
             // update works on multiple changes in one call
-            // t.setColor("");
             t3 = t.update().color("000000").description("It is dark!").done();
 
             // instances behave as immutable by default. Update returns a new updated instance.
@@ -834,8 +833,21 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t3.getColor(), "000000");
             assertEquals(t3.getDescription(), "It is dark!");
 
+            // Test deprecated methods
+            t.setDescription("Deprecated");
             t = r.getLabel("test");
 
+            // By using the old instance t when calling setDescription it also sets color to the old value
+            // this is a bad behavior, but it is expected
+            assertEquals(t.getColor(), "123456");
+            assertEquals(t.getDescription(), "Deprecated");
+
+            t.setColor("000000");
+            t = r.getLabel("test");
+            assertEquals(t.getColor(), "000000");
+            assertEquals(t.getDescription(), "Deprecated");
+
+            // set() makes a single change
             t3 = t.set().description("this is also a test");
 
             // instances behave as immutable by default. Update returns a new updated instance.
@@ -846,6 +858,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t3.getDescription(), "this is also a test");
 
             t.delete();
+            try {
+                t = r.getLabel("test");
+                fail("Test label should be deleted.");
+            } catch (IOException ex) {
+                assertThat(ex, instanceOf(FileNotFoundException.class));
+            }
 
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
@@ -856,6 +874,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.getDescription(), "this is a different test");
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
+            t.delete();
+
+            // Allow null description
+            t = GHLabel.create(r).name("test2").color("123458").done();
+            assertThat(t.getName(), equalTo("test2"));
+            assertThat(t.getDescription(), is(nullValue()));
+
         } finally {
             cleanupLabel("test");
             cleanupLabel("test2");
@@ -865,7 +890,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
             try {
-                GHLabel t = getGitHubBeforeAfter().getRepository("github-api-test-org/test-labels").getLabel("test");
+                GHLabel t = getGitHubBeforeAfter().getRepository("github-api-test-org/test-labels").getLabel(name);
                 t.delete();
             } catch (IOException e) {
 

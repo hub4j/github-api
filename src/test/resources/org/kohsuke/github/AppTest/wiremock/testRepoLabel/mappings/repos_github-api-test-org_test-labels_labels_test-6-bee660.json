@@ -1,5 +1,5 @@
 {
-  "id": "6c1d5bb5-c427-4743-b1c2-0bc8113b155f",
+  "id": "bee66039-139a-45d5-b7a9-79a79ceb82eb",
   "name": "repos_github-api-test-org_test-labels_labels_test",
   "request": {
     "url": "/repos/github-api-test-org/test-labels/labels/test",
@@ -12,36 +12,35 @@
   },
   "response": {
     "status": 200,
-    "body": "{\"id\":1596524803,\"node_id\":\"MDU6TGFiZWwxNTk2NTI0ODAz\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"123456\",\"default\":false,\"description\":\"\"}",
+    "body": "{\"id\":1932141986,\"node_id\":\"MDU6TGFiZWwxOTMyMTQxOTg2\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"123456\",\"default\":false,\"description\":\"\"}",
     "headers": {
-      "Date": "Sat, 05 Oct 2019 05:21:23 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
+      "Date": "Tue, 24 Mar 2020 19:31:27 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4834",
-      "X-RateLimit-Reset": "1570253246",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1585080825",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"f933a77094471805d575559f23304c39\"",
-      "Last-Modified": "Sat, 05 Oct 2019 05:21:23 GMT",
+      "ETag": "W/\"746fc424803851d22aad5357c01c224f\"",
+      "Last-Modified": "Tue, 24 Mar 2020 19:31:27 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FC58:3C9A:4B9415:5AADB7:5D982853"
+      "X-GitHub-Request-Id": "C6C5:5608:12336D:1FE9D0:5E7A600F"
     }
   },
-  "uuid": "6c1d5bb5-c427-4743-b1c2-0bc8113b155f",
+  "uuid": "bee66039-139a-45d5-b7a9-79a79ceb82eb",
   "persistent": true,
   "scenarioName": "scenario-1-repos-github-api-test-org-test-labels-labels-test",
   "requiredScenarioState": "Started",

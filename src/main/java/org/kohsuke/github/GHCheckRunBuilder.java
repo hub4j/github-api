@@ -26,6 +26,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
@@ -33,6 +34,7 @@ import java.util.List;
 
 /**
  * Drafts a check run.
+ *
  * @see GHCheckRun
  * @see GHRepository#createCheckRun
  * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
@@ -43,17 +45,19 @@ public final class GHCheckRunBuilder {
 
     private final @NonNull GHRepository repo;
     private final @NonNull Requester requester;
-    @CheckForNull DraftOutput output;
-    @CheckForNull List<DraftAction> actions;
+    @CheckForNull
+    DraftOutput output;
+    @CheckForNull
+    List<DraftAction> actions;
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this.repo = repo;
         requester = repo.root.createRequest()
-            .withPreview(Previews.ANTIOPE)
-            .method("POST")
-            .with("name", name)
-            .with("head_sha", headSHA)
-            .withUrlPath(repo.getApiTailUrl("check-runs"));
+                .withPreview(Previews.ANTIOPE)
+                .method("POST")
+                .with("name", name)
+                .with("head_sha", headSHA)
+                .withUrlPath(repo.getApiTailUrl("check-runs"));
     }
 
     public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
@@ -94,7 +98,9 @@ public final class GHCheckRunBuilder {
         return new DraftOutput(this, title, summary);
     }
 
-    public @NonNull GHCheckRunBuilder withAction(@NonNull String label, @NonNull String description, @NonNull String identifier) {
+    public @NonNull GHCheckRunBuilder withAction(@NonNull String label,
+            @NonNull String description,
+            @NonNull String identifier) {
         if (actions == null) {
             actions = new LinkedList<>();
         }
@@ -104,11 +110,11 @@ public final class GHCheckRunBuilder {
 
     public @NonNull GHCheckRun create() throws IOException {
         return requester
-            // TODO if >50 annotations, https://developer.github.com/v3/checks/runs/#update-a-check-run
-            .with("output", output)
-            .with("actions", actions)
-            .fetch(GHCheckRun.class)
-            .wrap(repo);
+                // TODO if >50 annotations, https://developer.github.com/v3/checks/runs/#update-a-check-run
+                .with("output", output)
+                .with("actions", actions)
+                .fetch(GHCheckRun.class)
+                .wrap(repo);
     }
 
     public static final class DraftOutput {
@@ -117,25 +123,34 @@ public final class GHCheckRunBuilder {
         private final @NonNull String title;
         private final @NonNull String summary;
         private @CheckForNull String text;
-        @CheckForNull List<DraftAnnotation> annotations;
-        @CheckForNull List<DraftImage> images;
-        
+        @CheckForNull
+        List<DraftAnnotation> annotations;
+        @CheckForNull
+        List<DraftImage> images;
+
         DraftOutput(GHCheckRunBuilder builder, String title, String summary) {
             this.builder = builder;
             this.title = title;
             this.summary = summary;
         }
-        
+
         public @NonNull DraftOutput withText(@CheckForNull String text) {
             this.text = text;
             return this;
         }
 
-        public @NonNull DraftAnnotation withAnnotation(@NonNull String path, int line, @NonNull String annotationLevel, @NonNull String message) {
+        public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
+                int line,
+                @NonNull String annotationLevel,
+                @NonNull String message) {
             return withAnnotation(path, line, line, annotationLevel, message);
         }
 
-        public @NonNull DraftAnnotation withAnnotation(@NonNull String path, int startLine, int endLine, @NonNull /* TODO enum? */String annotationLevel, @NonNull String message) {
+        public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
+                int startLine,
+                int endLine,
+                @NonNull /* TODO enum? */String annotationLevel,
+                @NonNull String message) {
             return new DraftAnnotation(this, path, startLine, endLine, annotationLevel, message);
         }
 
@@ -256,7 +271,7 @@ public final class GHCheckRunBuilder {
         public String getTitle() {
             return title;
         }
-        
+
         public String getRaw_details() {
             return raw_details;
         }
@@ -304,7 +319,7 @@ public final class GHCheckRunBuilder {
     }
 
     public static final class DraftAction {
-        
+
         private final @NonNull String label;
         private final @NonNull String description;
         private final @NonNull String identifier;

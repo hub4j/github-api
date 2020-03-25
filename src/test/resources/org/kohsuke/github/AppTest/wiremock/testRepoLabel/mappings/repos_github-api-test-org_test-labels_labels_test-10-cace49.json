@@ -1,0 +1,52 @@
+{
+  "id": "cace497a-c750-4a63-bfac-f0a8a155301c",
+  "name": "repos_github-api-test-org_test-labels_labels_test",
+  "request": {
+    "url": "/repos/github-api-test-org/test-labels/labels/test",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"color\":\"000000\",\"name\":\"test\",\"description\":\"Deprecated\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\":1932141986,\"node_id\":\"MDU6TGFiZWwxOTMyMTQxOTg2\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"Deprecated\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 24 Mar 2020 19:31:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4979",
+      "X-RateLimit-Reset": "1585080826",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"c2b4409465d0fa9da773d945ed7e93b7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C6C5:5608:1233C3:1FEA6A:5E7A6010"
+    }
+  },
+  "uuid": "cace497a-c750-4a63-bfac-f0a8a155301c",
+  "persistent": true,
+  "insertionIndex": 10
+}

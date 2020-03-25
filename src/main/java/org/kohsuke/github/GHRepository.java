@@ -1849,6 +1849,102 @@ public class GHRepository extends GHObject {
         return createCommitStatus(sha1, state, targetUrl, description, null);
     }
 
+    public GHCheckRun createCheckRun(@NonNull String name,
+            @NonNull String head_sha,
+            @CheckForNull String details_url,
+            @CheckForNull String external_id,
+            @CheckForNull String status,
+            @CheckForNull Date started_at,
+            @CheckForNull String conclusion,
+            @CheckForNull Date completed_at,
+            @CheckForNull CreateCheckRunOutput output,
+            @CheckForNull List<CreateCheckRunAction> actions) throws IOException {
+        return root.createRequest()
+                .method("POST")
+                .with("name", name)
+                .with("head_sha", head_sha)
+                .with("details_url", details_url)
+                .with("external_id", external_id)
+                .with("status", status)
+                .with("started_at", started_at != null ? GitHubClient.printDate(started_at) : null)
+                .with("conclusion", conclusion)
+                .with("completed_at", completed_at != null ? GitHubClient.printDate(completed_at) : null)
+                // TODO if >50 annotations, https://developer.github.com/v3/checks/runs/#update-a-check-run
+                .with("output", output)
+                .with("actions", actions)
+                .withUrlPath(String.format("/repos/%s/%s/check-runs", getOwnerName(), this.name))
+                .fetch(GHCheckRun.class)
+                .wrap(this);
+    }
+    public static final class CreateCheckRunOutput {
+        public final String title;
+        public final String summary;
+        public final String text;
+        public final List<CreateCheckRunAnnotation> annotations;
+        public final List<CreateCheckRunImage> images;
+        public CreateCheckRunOutput(@NonNull String title,
+                @NonNull String summary,
+                @CheckForNull String text,
+                @CheckForNull List<CreateCheckRunAnnotation> annotations,
+                @CheckForNull List<CreateCheckRunImage> images) {
+            this.title = title;
+            this.summary = summary;
+            this.text = text;
+            this.annotations = annotations;
+            this.images = images;
+        }
+    }
+    public static final class CreateCheckRunAnnotation {
+        public final String path;
+        public final int start_line;
+        public final int end_line;
+        public final Integer start_column;
+        public final Integer end_column;
+        public final String annotation_level;
+        public final String message;
+        public final String title;
+        public final String raw_details;
+        public CreateCheckRunAnnotation(@NonNull String path,
+                int start_line,
+                int end_line,
+                @CheckForNull Integer start_column,
+                @CheckForNull Integer end_column,
+                @NonNull String annotation_level,
+                @NonNull String message,
+                @CheckForNull String title,
+                @CheckForNull String raw_details) {
+            this.path = path;
+            this.start_line = start_line;
+            this.end_line = end_line;
+            this.start_column = start_column;
+            this.end_column = end_column;
+            this.annotation_level = annotation_level;
+            this.message = message;
+            this.title = title;
+            this.raw_details = raw_details;
+        }
+    }
+    public static final class CreateCheckRunImage {
+        public final String alt;
+        public final String image_url;
+        public final String caption;
+        public CreateCheckRunImage(@NonNull String alt, @NonNull String image_url, @CheckForNull String caption) {
+            this.alt = alt;
+            this.image_url = image_url;
+            this.caption = caption;
+        }
+    }
+    public static final class CreateCheckRunAction {
+        public final String label;
+        public final String description;
+        public final String identifier;
+        public CreateCheckRunAction(@NonNull String label, @NonNull String description, @NonNull String identifier) {
+            this.label = label;
+            this.description = description;
+            this.identifier = identifier;
+        }
+    }
+
     /**
      * Lists repository events.
      *

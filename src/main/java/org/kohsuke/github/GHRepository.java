@@ -1872,9 +1872,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHLabel> listLabels() throws IOException {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl("labels"))
-                .toIterable(GHLabel[].class, item -> item.wrapUp(this));
+        return GHLabel.readAll(this);
     }
 
     /**
@@ -1887,7 +1885,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel getLabel(String name) throws IOException {
-        return root.createRequest().withUrlPath(getApiTailUrl("labels/" + name)).fetch(GHLabel.class).wrapUp(this);
+        return GHLabel.read(this, name);
     }
 
     /**
@@ -1902,7 +1900,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel createLabel(String name, String color) throws IOException {
-        return createLabel(name, color, "");
+        return GHLabel.create(this).name(name).color(color).description("").done();
     }
 
     /**
@@ -1919,14 +1917,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel createLabel(String name, String color, String description) throws IOException {
-        return root.createRequest()
-                .method("POST")
-                .with("name", name)
-                .with("color", color)
-                .with("description", description)
-                .withUrlPath(getApiTailUrl("labels"))
-                .fetch(GHLabel.class)
-                .wrapUp(this);
+        return GHLabel.create(this).name(name).color(color).description(description).done();
     }
 
     /**

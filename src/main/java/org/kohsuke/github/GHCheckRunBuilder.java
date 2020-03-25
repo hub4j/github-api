@@ -43,11 +43,9 @@ import java.util.List;
 @Deprecated
 public final class GHCheckRunBuilder {
 
-    private final @NonNull GHRepository repo;
-    private final @NonNull Requester requester;
-    @CheckForNull
+    private final GHRepository repo;
+    private final Requester requester;
     DraftOutput output;
-    @CheckForNull
     List<DraftAction> actions;
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
@@ -119,13 +117,11 @@ public final class GHCheckRunBuilder {
 
     public static final class DraftOutput {
 
-        private final @NonNull GHCheckRunBuilder builder;
-        private final @NonNull String title;
-        private final @NonNull String summary;
-        private @CheckForNull String text;
-        @CheckForNull
+        private final GHCheckRunBuilder builder;
+        private final String title;
+        private final String summary;
+        private String text;
         List<DraftAnnotation> annotations;
-        @CheckForNull
         List<DraftImage> images;
 
         DraftOutput(GHCheckRunBuilder builder, String title, String summary) {
@@ -187,16 +183,16 @@ public final class GHCheckRunBuilder {
 
     public static final class DraftAnnotation {
 
-        private final @NonNull DraftOutput output;
-        private final @NonNull String path;
+        private final DraftOutput output;
+        private final String path;
         private final int start_line;
         private final int end_line;
-        private final @NonNull String annotation_level;
-        private final @NonNull String message;
-        private @CheckForNull Integer start_column;
-        private @CheckForNull Integer end_column;
-        private @CheckForNull String title;
-        private @CheckForNull String raw_details;
+        private final String annotation_level;
+        private final String message;
+        private Integer start_column;
+        private Integer end_column;
+        private String title;
+        private String raw_details;
 
         DraftAnnotation(DraftOutput output,
                 String path,
@@ -280,10 +276,10 @@ public final class GHCheckRunBuilder {
 
     public static final class DraftImage {
 
-        private final @NonNull DraftOutput output;
-        private final @NonNull String alt;
-        private final @NonNull String image_url;
-        private @CheckForNull String caption;
+        private final DraftOutput output;
+        private final String alt;
+        private final String image_url;
+        private String caption;
 
         DraftImage(DraftOutput output, String alt, String image_url) {
             this.output = output;
@@ -320,9 +316,9 @@ public final class GHCheckRunBuilder {
 
     public static final class DraftAction {
 
-        private final @NonNull String label;
-        private final @NonNull String description;
-        private final @NonNull String identifier;
+        private final String label;
+        private final String description;
+        private final String identifier;
 
         DraftAction(String label, String description, String identifier) {
             this.label = label;

@@ -24,6 +24,7 @@
 
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -121,9 +122,10 @@ public final class GHCheckRunBuilder {
                 .wrap(repo);
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class DraftOutput {
 
-        private final GHCheckRunBuilder builder;
+        private final transient GHCheckRunBuilder builder;
         private final String title;
         private final String summary;
         private String text;
@@ -165,31 +167,12 @@ public final class GHCheckRunBuilder {
             return builder;
         }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSummary() {
-            return summary;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public List<DraftAnnotation> getAnnotations() {
-            return annotations;
-        }
-
-        public List<DraftImage> getImages() {
-            return images;
-        }
-
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class DraftAnnotation {
 
-        private final DraftOutput output;
+        private final transient DraftOutput output;
         private final String path;
         private final int start_line;
         private final int end_line;
@@ -242,47 +225,12 @@ public final class GHCheckRunBuilder {
             return output;
         }
 
-        public String getPath() {
-            return path;
-        }
-
-        public int getStart_line() {
-            return start_line;
-        }
-
-        public int getEnd_line() {
-            return end_line;
-        }
-
-        public Integer getStart_column() {
-            return start_column;
-        }
-
-        public Integer getEnd_column() {
-            return end_column;
-        }
-
-        public String getAnnotation_level() {
-            return annotation_level;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getRaw_details() {
-            return raw_details;
-        }
-
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class DraftImage {
 
-        private final DraftOutput output;
+        private final transient DraftOutput output;
         private final String alt;
         private final String image_url;
         private String caption;
@@ -306,20 +254,9 @@ public final class GHCheckRunBuilder {
             return output;
         }
 
-        public String getAlt() {
-            return alt;
-        }
-
-        public String getImage_url() {
-            return image_url;
-        }
-
-        public String getCaption() {
-            return caption;
-        }
-
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class DraftAction {
 
         private final String label;
@@ -330,18 +267,6 @@ public final class GHCheckRunBuilder {
             this.label = label;
             this.description = description;
             this.identifier = identifier;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String getIdentifier() {
-            return identifier;
         }
 
     }

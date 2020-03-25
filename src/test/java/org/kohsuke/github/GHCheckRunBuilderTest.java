@@ -45,11 +45,14 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .withAnnotation("stuff.txt", 1, GHCheckRunAnnotationLevel.NOTICE, "hello to you too")
                 .withTitle("Look here")
                 .done()
+                .withImage("Unikitty", "https://i.pinimg.com/474x/9e/65/c0/9e65c0972294f1e10f648c9780a79fab.jpg")
+                .withCaption("Princess Unikitty")
+                .done()
                 .done()
                 .withAction("Help", "what I need help with", "doit")
                 .create();
         assertEquals("completed", checkRun.getStatus());
-        assertEquals(534940634, checkRun.id);
+        assertEquals(535049329, checkRun.id);
     }
 
 }

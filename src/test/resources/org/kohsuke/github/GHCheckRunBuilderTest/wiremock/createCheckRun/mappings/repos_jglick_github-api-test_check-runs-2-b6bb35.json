@@ -1,0 +1,51 @@
+{
+  "id": "b6bb3564-f156-4f76-989e-f40bba7920a6",
+  "name": "repos_jglick_github-api-test_check-runs",
+  "request": {
+    "url": "/repos/jglick/github-api-test/check-runs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"conclusion\":\"success\",\"output\":{\"title\":\"Some Title\",\"summary\":\"what happened…\",\"annotations\":[{\"path\":\"stuff.txt\",\"start_line\":1,\"end_line\":1,\"annotation_level\":\"notice\",\"message\":\"hello to you too\",\"title\":\"Look here\"}],\"images\":[{\"alt\":\"Unikitty\",\"image_url\":\"https://i.pinimg.com/474x/9e/65/c0/9e65c0972294f1e10f648c9780a79fab.jpg\",\"caption\":\"Princess Unikitty\"}]},\"completed_at\":\"1970-01-12T13:46:39Z\",\"name\":\"foo\",\"started_at\":\"1970-01-12T13:46:39Z\",\"external_id\":\"whatever\",\"details_url\":\"http://nowhere.net/stuff\",\"actions\":[{\"label\":\"Help\",\"description\":\"what I need help with\",\"identifier\":\"doit\"}],\"head_sha\":\"4a929d464a2fae7ee899ce603250f7dab304bc4b\",\"status\":\"completed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_jglick_github-api-test_check-runs-b6bb3564-f156-4f76-989e-f40bba7920a6.json",
+    "headers": {
+      "Date": "Wed, 25 Mar 2020 23:56:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4998",
+      "X-RateLimit-Reset": "1585184213",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"1e78bed0efbe7b4d64c4299cd800d901\"",
+      "Location": "https://api.github.com/repos/jglick/github-api-test/check-runs/535049329",
+      "X-GitHub-Media-Type": "github.antiope-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "9E44:69BD:10917:17733:5E7BEFC5"
+    }
+  },
+  "uuid": "b6bb3564-f156-4f76-989e-f40bba7920a6",
+  "persistent": true,
+  "insertionIndex": 2
+}

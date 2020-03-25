@@ -51,19 +51,20 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Gets status of the check run. It can be one of "queue", "in_progress", or "completed"
+     * Gets status of the check run.
      *
      * @return Status of the check run
+     * @see GHCheckRunStatus
      */
     public String getStatus() {
         return status;
     }
 
     /**
-     * Gets conclusion of a completed check run. It can be one of "success", "failure", "neutral", "cancelled",
-     * "time_out", or "action_required".
+     * Gets conclusion of a completed check run.
      *
      * @return Status of the check run
+     * @see GHCheckRunConclusion
      */
     public String getConclusion() {
         return conclusion;

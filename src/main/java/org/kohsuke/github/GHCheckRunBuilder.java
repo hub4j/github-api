@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Drafts a check run.
@@ -68,13 +69,18 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
-    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull /* TODO enum? */String status) {
-        requester.with("status", status);
+    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRunStatus status) {
+        if (status != null) {
+            // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
+            requester.with("status", status.toString().toLowerCase(Locale.ROOT));
+        }
         return this;
     }
 
-    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull /* TODO enum? */String conclusion) {
-        requester.with("conclusion", conclusion);
+    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRunConclusion conclusion) {
+        if (conclusion != null) {
+            requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
+        }
         return this;
     }
 
@@ -137,7 +143,7 @@ public final class GHCheckRunBuilder {
 
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int line,
-                @NonNull String annotationLevel,
+                @NonNull GHCheckRunAnnotationLevel annotationLevel,
                 @NonNull String message) {
             return withAnnotation(path, line, line, annotationLevel, message);
         }
@@ -145,7 +151,7 @@ public final class GHCheckRunBuilder {
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int startLine,
                 int endLine,
-                @NonNull /* TODO enum? */String annotationLevel,
+                @NonNull GHCheckRunAnnotationLevel annotationLevel,
                 @NonNull String message) {
             return new DraftAnnotation(this, path, startLine, endLine, annotationLevel, message);
         }
@@ -198,13 +204,13 @@ public final class GHCheckRunBuilder {
                 String path,
                 int start_line,
                 int end_line,
-                String annotation_level,
+                GHCheckRunAnnotationLevel annotation_level,
                 String message) {
             this.output = output;
             this.path = path;
             this.start_line = start_line;
             this.end_line = end_line;
-            this.annotation_level = annotation_level;
+            this.annotation_level = annotation_level.toString().toLowerCase(Locale.ROOT);
             this.message = message;
         }
 

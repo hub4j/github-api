@@ -8,7 +8,7 @@ import org.junit.Test;
 public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     // Issue 737
     @Test
-    public void testExpiredKeyVerification() throws Exception {
+    public void testExpiredKey() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -17,7 +17,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testNotSigningKeyVerification() throws Exception {
+    public void testNotSigningKey() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f02");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -26,7 +26,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testGpgverifyErrorVerification() throws Exception {
+    public void testGpgverifyError() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f03");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -35,7 +35,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testGpgverifyUnavailableVerification() throws Exception {
+    public void testGpgverifyUnavailable() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f04");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -45,7 +45,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testUnsignedVerification() throws Exception {
+    public void testUnsigned() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f05");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -54,7 +54,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testUnknownSignatureTypeVerification() throws Exception {
+    public void testUnknownSignatureType() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f06");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -64,7 +64,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testNoUserVerification() throws Exception {
+    public void testNoUser() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f07");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -73,7 +73,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testUnverifiedEmailVerification() throws Exception {
+    public void testUnverifiedEmail() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f08");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -82,7 +82,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testBadEmailVerification() throws Exception {
+    public void testBadEmail() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f09");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -91,7 +91,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testUnknownKeyVerification() throws Exception {
+    public void testUnknownKey() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f10");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -100,7 +100,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testMalformedSignatureVerification() throws Exception {
+    public void testMalformedSignature() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f11");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -110,7 +110,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testInvalidVerification() throws Exception {
+    public void testInvalid() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f12");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
@@ -119,7 +119,7 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testValidVerification() throws Exception {
+    public void testValid() throws Exception {
         GHRepository r = gitHub.getRepository("github-api/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f13");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");

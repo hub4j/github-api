@@ -103,14 +103,28 @@ public final class GHCheckRunBuilder {
     }
 
     /**
-     * Drafts the output section; use {@link DraftOutput#done} to continue.
+     * Drafts the output section.
+     *
+     * @param title
+     *            as in GitHub documentation
+     * @param summary
+     *            as in GitHub documentation
+     * @return use {@link DraftOutput#done} to continue
      */
     public @NonNull DraftOutput withOutput(@NonNull String title, @NonNull String summary) {
         return new DraftOutput(this, title, summary);
     }
 
     /**
-     * Drafts an action section; use {@link DraftOutput#done} to continue.
+     * Drafts an action section.
+     *
+     * @param label
+     *            as in GitHub documentation
+     * @param description
+     *            as in GitHub documentation
+     * @param identifier
+     *            as in GitHub documentation
+     * @return use {@link DraftOutput#done} to continue
      */
     public @NonNull GHCheckRunBuilder withAction(@NonNull String label,
             @NonNull String description,
@@ -125,6 +139,10 @@ public final class GHCheckRunBuilder {
     private static final int MAX_ANNOTATIONS = 50;
     /**
      * Actually creates the check run. (If more than fifty annotations were requested, this is done in batches.)
+     *
+     * @return the resulting run
+     * @throws IOException
+     *             for the usual reasons
      */
     public @NonNull GHCheckRun create() throws IOException {
         List<DraftAnnotation> extraAnnotations;
@@ -173,10 +191,17 @@ public final class GHCheckRunBuilder {
         }
 
         /**
-         * Drafts a single-line annotation section; use {@link DraftAnnotation#done} to continue.
+         * Drafts a single-line annotation section.
          *
+         * @param path
+         *            as in GitHub documentation
          * @param line
-         *            a single line
+         *            {@code startLine} and {@code endLine} together
+         * @param annotationLevel
+         *            as in GitHub documentation
+         * @param message
+         *            as in GitHub documentation
+         * @return use {@link DraftAnnotation#done} to continue
          */
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int line,
@@ -186,7 +211,19 @@ public final class GHCheckRunBuilder {
         }
 
         /**
-         * Drafts a potentially multiline annotation section; use {@link DraftAnnotation#done} to continue.
+         * Drafts a potentially multiline annotation section.
+         *
+         * @param path
+         *            as in GitHub documentation
+         * @param startLine
+         *            as in GitHub documentation
+         * @param endLine
+         *            as in GitHub documentation
+         * @param annotationLevel
+         *            as in GitHub documentation
+         * @param message
+         *            as in GitHub documentation
+         * @return use {@link DraftAnnotation#done} to continue
          */
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int startLine,
@@ -197,7 +234,13 @@ public final class GHCheckRunBuilder {
         }
 
         /**
-         * Drafts an image section; use {@link DraftImage#done} to continue.
+         * Drafts an image section.
+         *
+         * @param alt
+         *            as in GitHub documentation
+         * @param imageURL
+         *            as in GitHub documentation
+         * @return use {@link DraftImage#done} to continue
          */
         public @NonNull DraftImage withImage(@NonNull String alt, @NonNull String imageURL) {
             return new DraftImage(this, alt, imageURL);

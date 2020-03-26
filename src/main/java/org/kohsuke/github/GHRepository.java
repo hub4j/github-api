@@ -1849,6 +1849,15 @@ public class GHRepository extends GHObject {
         return createCommitStatus(sha1, state, targetUrl, description, null);
     }
 
+    /**
+     * Creates a check run for a commit.
+     *
+     * @param name
+     *            an identifier for the run
+     * @param headSHA
+     *            the commit hash
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
     @Preview
     @Deprecated
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {

@@ -102,10 +102,16 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * Drafts the output section; use {@link DraftOutput#done} to continue.
+     */
     public @NonNull DraftOutput withOutput(@NonNull String title, @NonNull String summary) {
         return new DraftOutput(this, title, summary);
     }
 
+    /**
+     * Drafts an action section; use {@link DraftOutput#done} to continue.
+     */
     public @NonNull GHCheckRunBuilder withAction(@NonNull String label,
             @NonNull String description,
             @NonNull String identifier) {
@@ -117,6 +123,9 @@ public final class GHCheckRunBuilder {
     }
 
     private static final int MAX_ANNOTATIONS = 50;
+    /**
+     * Actually creates the check run. (If more than fifty annotations were requested, this is done in batches.)
+     */
     public @NonNull GHCheckRun create() throws IOException {
         List<DraftAnnotation> extraAnnotations;
         if (output != null && output.annotations.size() > MAX_ANNOTATIONS) {
@@ -163,6 +172,12 @@ public final class GHCheckRunBuilder {
             return this;
         }
 
+        /**
+         * Drafts a single-line annotation section; use {@link DraftAnnotation#done} to continue.
+         *
+         * @param line
+         *            a single line
+         */
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int line,
                 @NonNull GHCheckRunAnnotationLevel annotationLevel,
@@ -170,6 +185,9 @@ public final class GHCheckRunBuilder {
             return withAnnotation(path, line, line, annotationLevel, message);
         }
 
+        /**
+         * Drafts a potentially multiline annotation section; use {@link DraftAnnotation#done} to continue.
+         */
         public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
                 int startLine,
                 int endLine,
@@ -178,6 +196,9 @@ public final class GHCheckRunBuilder {
             return new DraftAnnotation(this, path, startLine, endLine, annotationLevel, message);
         }
 
+        /**
+         * Drafts an image section; use {@link DraftImage#done} to continue.
+         */
         public @NonNull DraftImage withImage(@NonNull String alt, @NonNull String imageURL) {
             return new DraftImage(this, alt, imageURL);
         }

@@ -1,0 +1,52 @@
+{
+  "id": "d3ef0c04-12e0-4815-a871-ab7a397b00d7",
+  "name": "gists_209fef72c25fe4b3f673437603ab6d5d",
+  "request": {
+    "url": "/gists/209fef72c25fe4b3f673437603ab6d5d",
+    "method": "PATCH",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"Description updated by API\",\"files\":{\"new-file.txt\":{\"content\":\"Added by updater\"},\"rename-me.py\":{\"filename\":\"renamed.py\"},\"update-me.txt\":{\"content\":\"Content updated by API\"}}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "gists_209fef72c25fe4b3f673437603ab6d5d-2.json",
+    "headers": {
+      "Date": "Wed, 09 Oct 2019 18:06:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1570647617",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"428bc6a3a9c8f9c26b9023cf8ff0ac9f\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF56:13F4:1234695:150F007:5D9E21AE"
+    }
+  },
+  "uuid": "d3ef0c04-12e0-4815-a871-ab7a397b00d7",
+  "persistent": true,
+  "insertionIndex": 2
+}

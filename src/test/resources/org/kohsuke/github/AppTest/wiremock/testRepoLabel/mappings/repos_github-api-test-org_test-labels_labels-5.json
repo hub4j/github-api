@@ -1,0 +1,53 @@
+{
+  "id": "95656815-d16d-4592-9678-10766659ddeb",
+  "name": "repos_github-api-test-org_test-labels_labels",
+  "request": {
+    "url": "/repos/github-api-test-org/test-labels/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"color\":\"123456\",\"name\":\"test\",\"description\":\"\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "body": "{\"id\":1937402918,\"node_id\":\"MDU6TGFiZWwxOTM3NDAyOTE4\",\"url\":\"https://api.github.com/repos/github-api-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"123456\",\"default\":false,\"description\":\"\"}",
+    "headers": {
+      "Date": "Thu, 26 Mar 2020 21:52:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1585263137",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "\"48de34595ef7992c2e74e8ceb548cdfa\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/github-api-test-org/test-labels/labels/test",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E69B:9495:1D1D9:24565:5E7D2413"
+    }
+  },
+  "uuid": "95656815-d16d-4592-9678-10766659ddeb",
+  "persistent": true,
+  "insertionIndex": 5
+}

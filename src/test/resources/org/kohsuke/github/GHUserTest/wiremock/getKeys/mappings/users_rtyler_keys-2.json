@@ -1,0 +1,45 @@
+{
+  "id": "395dc00a-5234-4866-815c-d7b49cdd0157",
+  "name": "users_rtyler_keys",
+  "request": {
+    "url": "/users/rtyler/keys",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_rtyler_keys-2.json",
+    "headers": {
+      "Date": "Tue, 17 Sep 2019 12:55:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "41",
+      "X-RateLimit-Reset": "1568727505",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"257fbc4218f6908012a1054fb084df45\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EA4A:354F9:5E84CA9:7289633:5D80D7CA"
+    }
+  },
+  "uuid": "395dc00a-5234-4866-815c-d7b49cdd0157",
+  "persistent": true,
+  "insertionIndex": 2
+}

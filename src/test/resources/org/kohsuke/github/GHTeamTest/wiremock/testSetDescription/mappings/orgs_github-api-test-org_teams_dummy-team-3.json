@@ -1,0 +1,49 @@
+{
+  "id": "b239719e-8610-449b-91bd-a35f4cc00424",
+  "name": "orgs_github-api-test-org_teams_dummy-team",
+  "request": {
+    "url": "/orgs/github-api-test-org/teams/dummy-team",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_github-api-test-org_teams_dummy-team-3.json",
+    "headers": {
+      "Date": "Tue, 17 Mar 2020 09:12:22 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4444",
+      "X-RateLimit-Reset": "1584436622",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"a3be19ac98441e2833990a01948c5bbd\"",
+      "Last-Modified": "Tue, 17 Mar 2020 09:06:57 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8C7:46E1:A3A28:151EF6:5E709475"
+    }
+  },
+  "uuid": "b239719e-8610-449b-91bd-a35f4cc00424",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-github-api-test-org-teams-dummy-team",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-orgs-github-api-test-org-teams-dummy-team-2",
+  "insertionIndex": 3
+}

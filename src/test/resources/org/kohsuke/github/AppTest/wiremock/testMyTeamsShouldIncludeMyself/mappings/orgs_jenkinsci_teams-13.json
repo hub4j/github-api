@@ -1,0 +1,51 @@
+{
+  "id": "acf98bee-b6c1-4f33-b62e-f86b8d5445fe",
+  "name": "orgs_jenkinsci_teams",
+  "request": {
+    "url": "/orgs/jenkinsci/teams",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_jenkinsci_teams-13.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 00:21:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4905",
+      "X-RateLimit-Reset": "1570151182",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"22fea8e6d0291a5332cbfaed016d7bab\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D601:78E9:1113554:145BED5:5D96908B",
+      "Link": "<https://api.github.com/organizations/107424/teams?page=2>; rel=\"next\", <https://api.github.com/organizations/107424/teams?page=2>; rel=\"last\""
+    }
+  },
+  "uuid": "acf98bee-b6c1-4f33-b62e-f86b8d5445fe",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-jenkinsci-teams",
+  "requiredScenarioState": "scenario-1-orgs-jenkinsci-teams-5",
+  "newScenarioState": "scenario-1-orgs-jenkinsci-teams-6",
+  "insertionIndex": 13
+}

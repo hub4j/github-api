@@ -31,8 +31,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
-            assertEquals(expected.getCommitShortInfo().getVerification().getVerified(),
-                    commit.getCommitShortInfo().getVerification().getVerified());
+            assertEquals(expected.getCommitShortInfo().getVerification().isVerified(),
+                    commit.getCommitShortInfo().getVerification().isVerified());
             assertEquals(expected.getCommitShortInfo().getVerification().getReason(),
                     commit.getCommitShortInfo().getVerification().getReason());
             assertEquals(expected.getCommitShortInfo().getVerification().getSignature(),

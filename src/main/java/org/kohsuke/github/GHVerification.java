@@ -25,7 +25,7 @@ public class GHVerification {
      *
      * @return true if the signature is valid else returns false.
      */
-    public boolean getVerified() {
+    public boolean isVerified() {
         return verified;
     }
 

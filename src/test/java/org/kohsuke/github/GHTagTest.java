@@ -47,7 +47,7 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         assertEquals(tagName, tag.getTag());
         assertEquals(tagMessage, tag.getMessage());
         assertEquals(commitSha, tag.getObject().getSha());
-        assertFalse(tag.getVerification().getVerified());
+        assertFalse(tag.getVerification().isVerified());
         assertEquals(tag.getVerification().getReason(), GHVerification.Reason.UNSIGNED);
 
         // Make a reference to the newly created tag.

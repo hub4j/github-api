@@ -52,7 +52,24 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .withAction("Help", "what I need help with", "doit")
                 .create();
         assertEquals("completed", checkRun.getStatus());
+        assertEquals(1, checkRun.getOutput().getAnnotationsCount());
         assertEquals(535049329, checkRun.id);
+    }
+
+    @Test
+    public void createCheckRunManyAnnotations() throws Exception {
+        GHCheckRunBuilder.DraftOutput output = gitHub.getRepository("jglick/github-api-test")
+                .createCheckRun("big", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+                .withConclusion(GHCheckRunConclusion.SUCCESS)
+                .withOutput("Big Run", "Lots of stuff here »");
+        for (int i = 0; i < 101; i++) {
+            output.withAnnotation("stuff.txt", 1, GHCheckRunAnnotationLevel.NOTICE, "hello #" + i).done();
+        }
+        GHCheckRun checkRun = output.done().create();
+        assertEquals("completed", checkRun.getStatus());
+        assertEquals("Big Run", checkRun.getOutput().getTitle());
+        assertEquals(101, checkRun.getOutput().getAnnotationsCount());
+        assertEquals(537614832, checkRun.id);
     }
 
 }

@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,13 +116,30 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    private static final int MAX_ANNOTATIONS = 50;
     public @NonNull GHCheckRun create() throws IOException {
-        return requester
-                // TODO if >50 annotations, https://developer.github.com/v3/checks/runs/#update-a-check-run
-                .with("output", output)
-                .with("actions", actions)
-                .fetch(GHCheckRun.class)
-                .wrap(repo);
+        List<DraftAnnotation> extraAnnotations;
+        if (output != null && output.annotations.size() > MAX_ANNOTATIONS) {
+            extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());
+            output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);
+        } else {
+            extraAnnotations = Collections.emptyList();
+        }
+        GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
+        while (!extraAnnotations.isEmpty()) {
+            DraftOutput output2 = new DraftOutput(null, output.title, output.summary);
+            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
+            output2.annotations = extraAnnotations.subList(0, i);
+            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
+            run = repo.root.createRequest()
+                    .withPreview(Previews.ANTIOPE)
+                    .method("PATCH")
+                    .with("output", output2)
+                    .withUrlPath(repo.getApiTailUrl("check-runs/" + run.id))
+                    .fetch(GHCheckRun.class)
+                    .wrap(repo);
+        }
+        return run;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

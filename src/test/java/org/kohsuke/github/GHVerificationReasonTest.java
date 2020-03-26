@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * @author Sourabh Sarvotham Parkala
  */
-public class GHReasonTest extends AbstractGitHubWireMockTest {
+public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     // Issue 737
     @Test
     public void testExpiredKeyVerification() throws Exception {
@@ -13,7 +13,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.expired_key);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.EXPIRED_KEY);
     }
 
     @Test
@@ -22,7 +22,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f02");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.not_signing_key);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.NOT_SIGNING_KEY);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f03");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.gpgverify_error);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.GPGVERIFY_ERROR);
     }
 
     @Test
@@ -40,7 +40,8 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f04");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.gpgverify_unavailable);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(),
+                GHVerification.Reason.GPGVERIFY_UNAVAILABLE);
     }
 
     @Test
@@ -49,7 +50,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f05");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.unsigned);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNSIGNED);
     }
 
     @Test
@@ -58,7 +59,8 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f06");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.unknown_signature_type);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(),
+                GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE);
     }
 
     @Test
@@ -67,7 +69,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f07");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.no_user);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.NO_USER);
     }
 
     @Test
@@ -76,7 +78,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f08");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.unverified_email);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNVERIFIED_EMAIL);
     }
 
     @Test
@@ -85,7 +87,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f09");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.bad_email);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.BAD_EMAIL);
     }
 
     @Test
@@ -94,7 +96,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f10");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.unknown_key);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNKNOWN_KEY);
     }
 
     @Test
@@ -103,7 +105,8 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f11");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.malformed_signature);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(),
+                GHVerification.Reason.MALFORMED_SIGNATURE);
     }
 
     @Test
@@ -112,7 +115,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f12");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertFalse(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.invalid);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.INVALID);
     }
 
     @Test
@@ -121,7 +124,7 @@ public class GHReasonTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f13");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Sourabh Parkala");
         assertTrue(commit.getCommitShortInfo().getVerification().getVerified());
-        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHReason.valid);
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.VALID);
         assertNotNull(commit.getCommitShortInfo().getVerification().getPayload());
         assertNotNull(commit.getCommitShortInfo().getVerification().getSignature());
     }

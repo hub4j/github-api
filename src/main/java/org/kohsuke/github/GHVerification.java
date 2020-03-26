@@ -3,8 +3,13 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * The commit/tag would be signed by user. This object would hold the verification status. Whether the Commit/Tag is
- * signed or not.
+ * The commit/tag can be signed by user. This object holds the verification status. Whether the Commit/Tag is signed or
+ * not.
+ *
+ * @see <a href="https://developer.github.com/v3/git/tags/#signature-verification-object">tags signature
+ *      verificatiion</a>
+ * @see <a href="https://developer.github.com/v3/git/commits/#signature-verification-object">commits signature
+ *      verificatiion</a>
  *
  * @author Sourabh Sarvotham Parkala
  */
@@ -13,7 +18,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHVerification {
     private String signature, payload;
     private boolean verified;
-    private GHReason reason;
+    private Reason reason;
 
     /**
      * Indicates whether GitHub considers the signature in this commit to be verified.
@@ -27,10 +32,10 @@ public class GHVerification {
     /**
      * Gets reason for verification value.
      *
-     * @return return reason of type {@link GHReason}, such as "valid" or "unsigned". The possible values can be found
-     *         in {@link GHReason}}
+     * @return return reason of type {@link Reason}, such as "valid" or "unsigned". The possible values can be found in
+     *         {@link Reason}}
      */
-    public GHReason getReason() {
+    public Reason getReason() {
         return reason;
     }
 
@@ -50,5 +55,28 @@ public class GHVerification {
      */
     public String getPayload() {
         return payload;
+    }
+
+    /**
+     * The possible values for reason in verification object from github.
+     *
+     * @see <a href="https://developer.github.com/v3/repos/commits/#signature-verification-object">List of possible
+     *      reason values</a>
+     * @author Sourabh Sarvotham Parkala
+     */
+    public enum Reason {
+        EXPIRED_KEY,
+        NOT_SIGNING_KEY,
+        GPGVERIFY_ERROR,
+        GPGVERIFY_UNAVAILABLE,
+        UNSIGNED,
+        UNKNOWN_SIGNATURE_TYPE,
+        NO_USER,
+        UNVERIFIED_EMAIL,
+        BAD_EMAIL,
+        UNKNOWN_KEY,
+        MALFORMED_SIGNATURE,
+        INVALID,
+        VALID
     }
 }

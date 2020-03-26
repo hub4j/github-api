@@ -597,6 +597,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f23");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
         assertEquals(commit.getCommitShortInfo().getMessage(), "doc");
+        assertFalse(commit.getCommitShortInfo().getVerification().isVerified());
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNSIGNED);
     }
 
     @Ignore("Needs mocking check")

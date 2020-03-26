@@ -39,6 +39,8 @@ public class GHCommit {
 
         private int comment_count;
 
+        private GHVerification verification;
+
         static class Tree {
             String sha;
         }
@@ -99,6 +101,15 @@ public class GHCommit {
          */
         public int getCommentCount() {
             return comment_count;
+        }
+
+        /**
+         * Gets Verification Status.
+         *
+         * @return the Verification status
+         */
+        public GHVerification getVerification() {
+            return verification;
         }
     }
 

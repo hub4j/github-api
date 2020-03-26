@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -120,7 +121,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         .extractTextBodiesOver(255));
 
         // After taking the snapshot, format the output
-        formatJsonFiles(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath());
+        formatTestResources(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath(), false);
 
         if (this.rawServer() != null) {
             this.rawServer()
@@ -132,7 +133,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             .extractTextBodiesOver(255));
 
             // For raw server, only fix up mapping files
-            formatJsonFiles(new File(this.rawServer().getOptions().filesRoot().child("mappings").getPath()).toPath());
+            formatTestResources(new File(this.rawServer().getOptions().filesRoot().getPath()).toPath(), true);
         }
 
         if (this.uploadsServer() != null) {
@@ -144,7 +145,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             .captureHeader("Accept")
                             .extractTextBodiesOver(255));
 
-            formatJsonFiles(new File(this.uploadsServer().getOptions().filesRoot().getPath()).toPath());
+            formatTestResources(new File(this.uploadsServer().getOptions().filesRoot().getPath()).toPath(), false);
 
         }
     }
@@ -157,7 +158,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return server.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
-    private void formatJsonFiles(Path path) {
+    private void formatTestResources(Path path, boolean isRawServer) {
         // The more consistent we can make the json output the more meaningful it will be.
         Gson g = new Gson().newBuilder()
                 .serializeNulls()
@@ -176,8 +177,32 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 .create();
 
         try {
+            Map<String, String> idToIndex = new HashMap<>();
+
+            // Match all the ids to request indexes
             Files.walk(path).forEach(filePath -> {
                 try {
+                    if (filePath.toString().endsWith(".json") && filePath.toString().contains("/mappings/")) {
+                        String fileText = new String(Files.readAllBytes(filePath));
+                        Object parsedObject = g.fromJson(fileText, Object.class);
+                        addMappingId((Map<String, Object>) parsedObject, idToIndex);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Files could not be read: " + filePath.toString(), e);
+                }
+            });
+
+            // Update all
+            Files.walk(path).forEach(filePath -> {
+                try {
+                    Map.Entry<String, String> entry = getId(filePath, idToIndex);
+                    if (entry != null) {
+                        filePath = renameFileToIndex(filePath, entry);
+                    }
+                    // For raw server, only fix up mapping files
+                    if (isRawServer && !filePath.toString().contains("mappings")) {
+                        return;
+                    }
                     if (filePath.toString().endsWith(".json")) {
                         String fileText = new String(Files.readAllBytes(filePath));
                         // while recording responses we replaced all github calls localhost
@@ -193,16 +218,18 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             fileText = fileText.replace(this.uploadsServer().baseUrl(), "https://uploads.github.com");
                         }
 
+                        // point bodyFile in the mapping to the renamed body file
+                        if (entry != null && filePath.toString().contains("mappings")) {
+                            fileText = fileText.replace("-" + entry.getKey(), "-" + entry.getValue());
+                        }
+
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
-                        if (parsedObject instanceof Map && filePath.toString().contains("mappings")) {
-                            filePath = renameMappingFile(filePath, (Map<String, Object>) parsedObject);
-                        }
                         fileText = g.toJson(parsedObject);
                         Files.write(filePath, fileText.getBytes());
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("Files could not be written", e);
+                    throw new RuntimeException("Files could not be written: " + filePath.toString(), e);
                 }
             });
         } catch (IOException e) {
@@ -210,20 +237,29 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
-    private Path renameMappingFile(Path filePath, Map<String, Object> parsedObject) throws IOException {
-        // Shorten the file names
-        // For understandability, rename the files to include the response order
-        Path targetPath = filePath;
+    private void addMappingId(Map<String, Object> parsedObject, Map<String, String> idToIndex) {
         String id = (String) parsedObject.getOrDefault("id", null);
-        Long insertionIndex = ((Double) parsedObject.getOrDefault("insertionIndex", 0.0)).longValue();
+        long insertionIndex = ((Double) parsedObject.getOrDefault("insertionIndex", 0.0)).longValue();
         if (id != null && insertionIndex > 0) {
-            String filePathString = filePath.toString();
-            if (filePathString.contains(id)) {
-                targetPath = new File(filePathString.replace(id, insertionIndex.toString() + "-" + id.substring(0, 6)))
-                        .toPath();
-                Files.move(filePath, targetPath);
+            idToIndex.put(id, Long.toString(insertionIndex));
+        }
+    }
+
+    private Map.Entry<String, String> getId(Path filePath, Map<String, String> idToIndex) throws IOException {
+        Path targetPath = filePath;
+        String filePathString = filePath.toString();
+        for (Map.Entry<String, String> item : idToIndex.entrySet()) {
+            if (filePathString.contains(item.getKey())) {
+                return item;
             }
         }
+        return null;
+    }
+
+    private Path renameFileToIndex(Path filePath, Map.Entry<String, String> idToIndex) throws IOException {
+        String filePathString = filePath.toString();
+        Path targetPath = new File(filePathString.replace(idToIndex.getKey(), idToIndex.getValue())).toPath();
+        Files.move(filePath, targetPath);
 
         return targetPath;
     }

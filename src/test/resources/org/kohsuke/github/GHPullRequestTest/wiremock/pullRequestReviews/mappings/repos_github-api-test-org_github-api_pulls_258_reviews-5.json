@@ -1,0 +1,54 @@
+{
+  "id": "1fe517d8-5707-4f17-a46a-e58d3abb5991",
+  "name": "repos_github-api-test-org_github-api_pulls_258_reviews",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/pulls/258/reviews",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"comments\":[{\"body\":\"Some niggle\",\"path\":\"README.md\",\"position\":1}],\"body\":\"Some draft review\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api_pulls_258_reviews-5.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:24:10 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4963",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"661a313c46838fe76465f0af8e8c8d11\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF76:0A33:C54FA8:E7272B:5D74AC99"
+    }
+  },
+  "uuid": "1fe517d8-5707-4f17-a46a-e58d3abb5991",
+  "persistent": true,
+  "insertionIndex": 5
+}

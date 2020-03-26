@@ -35,14 +35,14 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
     public void createCheckRun() throws Exception {
         GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
                 .createCheckRun("foo", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
-                .withStatus(GHCheckRunStatus.COMPLETED)
-                .withConclusion(GHCheckRunConclusion.SUCCESS)
+                .withStatus(GHCheckRun.Status.COMPLETED)
+                .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withDetailsURL("http://nowhere.net/stuff")
                 .withExternalID("whatever")
                 .withStartedAt(new Date(999_999_000))
                 .withCompletedAt(new Date(999_999_999))
                 .withOutput("Some Title", "what happened…")
-                .withAnnotation("stuff.txt", 1, GHCheckRunAnnotationLevel.NOTICE, "hello to you too")
+                .withAnnotation("stuff.txt", 1, GHCheckRun.AnnotationLevel.NOTICE, "hello to you too")
                 .withTitle("Look here")
                 .done()
                 .withImage("Unikitty", "https://i.pinimg.com/474x/9e/65/c0/9e65c0972294f1e10f648c9780a79fab.jpg")
@@ -60,10 +60,10 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
     public void createCheckRunManyAnnotations() throws Exception {
         GHCheckRunBuilder.DraftOutput output = gitHub.getRepository("jglick/github-api-test")
                 .createCheckRun("big", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
-                .withConclusion(GHCheckRunConclusion.SUCCESS)
+                .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withOutput("Big Run", "Lots of stuff here »");
         for (int i = 0; i < 101; i++) {
-            output.withAnnotation("stuff.txt", 1, GHCheckRunAnnotationLevel.NOTICE, "hello #" + i).done();
+            output.withAnnotation("stuff.txt", 1, GHCheckRun.AnnotationLevel.NOTICE, "hello #" + i).done();
         }
         GHCheckRun checkRun = output.done().create();
         assertEquals("completed", checkRun.getStatus());

@@ -72,4 +72,17 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         assertEquals(537614832, checkRun.id);
     }
 
+    @Test
+    public void createCheckRunNoAnnotations() throws Exception {
+        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
+                .createCheckRun("quick", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+                .withConclusion(GHCheckRun.Conclusion.NEUTRAL)
+                .withOutput("Quick note", "nothing more to see here")
+                .done()
+                .create();
+        assertEquals("completed", checkRun.getStatus());
+        assertEquals(0, checkRun.getOutput().getAnnotationsCount());
+        assertEquals(538002758, checkRun.id);
+    }
+
 }

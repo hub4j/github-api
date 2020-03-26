@@ -1,0 +1,44 @@
+{
+  "id": "5a041c0b-f78f-418f-869f-d03ce8560234",
+  "name": "repos_jglick_github-api-test",
+  "request": {
+    "url": "/repos/jglick/github-api-test",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_jglick_github-api-test-5a041c0b-f78f-418f-869f-d03ce8560234.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 26 Mar 2020 23:06:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4995",
+      "X-RateLimit-Reset": "1585267375",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "W/\"86f2fbdaa6e2b8cebe6f2a0daaadbd61\"",
+      "Last-Modified": "Wed, 25 Mar 2020 22:26:13 GMT",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99C:5156:A9F757:12228E8:5E7D3576"
+    }
+  },
+  "uuid": "5a041c0b-f78f-418f-869f-d03ce8560234",
+  "persistent": true,
+  "insertionIndex": 1
+}

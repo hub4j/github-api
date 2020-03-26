@@ -1,0 +1,51 @@
+{
+  "id": "54b0d395-b091-4224-ab85-3539750cf2c3",
+  "name": "repos_jglick_github-api-test_check-runs",
+  "request": {
+    "url": "/repos/jglick/github-api-test/check-runs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"conclusion\":\"neutral\",\"output\":{\"title\":\"Quick note\",\"summary\":\"nothing more to see here\"},\"name\":\"quick\",\"head_sha\":\"4a929d464a2fae7ee899ce603250f7dab304bc4b\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_jglick_github-api-test_check-runs-54b0d395-b091-4224-ab85-3539750cf2c3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 26 Mar 2020 23:06:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4994",
+      "X-RateLimit-Reset": "1585267375",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "\"7f5afae1209e7a7677b93aafde36af14\"",
+      "Location": "https://api.github.com/repos/jglick/github-api-test/check-runs/538002758",
+      "X-GitHub-Media-Type": "github.antiope-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99C:5156:A9F77D:1222908:5E7D3576"
+    }
+  },
+  "uuid": "54b0d395-b091-4224-ab85-3539750cf2c3",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -27,6 +27,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.Date;
@@ -41,6 +42,7 @@ import java.util.Locale;
  * @see GHRepository#createCheckRun
  * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
  */
+@SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 @Preview
 @Deprecated
 public final class GHCheckRunBuilder {

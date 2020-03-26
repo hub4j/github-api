@@ -1,40 +1,43 @@
 {
-  "id" : "d88c8d05-98c9-37fd-8006-16662b366657",
-  "request" : {
-    "url" : "/marketplace_listing/plans/9/accounts?direction=desc",
-    "method" : "GET",
+  "id": "d88c8d05-98c9-37fd-8006-16662b366657",
+  "request": {
+    "url": "/marketplace_listing/plans/9/accounts?direction=desc",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
     }
   },
-  "response" : {
-    "status" : 200,
-    "bodyFileName" : "body-marketplace_listing-stubbed-plans-9-accounts-b1MbT.json",
-    "headers" : {
-      "Date" : "Mon, 09 Dec 2019 06:49:55 GMT",
-      "Content-Type" : "application/json; charset=utf-8",
-      "Transfer-Encoding" : "chunked",
-      "Server" : "GitHub.com",
-      "Status" : "200 OK",
-      "X-RateLimit-Limit" : "5000",
-      "X-RateLimit-Remaining" : "4993",
-      "X-RateLimit-Reset" : "1575877794",
-      "Cache-Control" : "public, max-age=60, s-maxage=60",
-      "Vary" : [ "Accept", "Accept-Encoding" ],
-      "ETag" : "W/\"c380429122e5063651ab282a7daf8e8a\"",
-      "X-GitHub-Media-Type" : "unknown, github.v3",
-      "Access-Control-Expose-Headers" : "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin" : "*",
-      "Strict-Transport-Security" : "max-age=31536000; includeSubdomains; preload",
-      "X-Frame-Options" : "deny",
-      "X-Content-Type-Options" : "nosniff",
-      "X-XSS-Protection" : "1; mode=block",
-      "Referrer-Policy" : "origin-when-cross-origin, strict-origin-when-cross-origin",
-      "Content-Security-Policy" : "default-src 'none'",
-      "X-GitHub-Request-Id" : "EDB6:515A:2215EDB:26BECF2:5DEDEE93"
+  "response": {
+    "status": 200,
+    "bodyFileName": "body-marketplace_listing-stubbed-plans-9-accounts-b1MbT.json",
+    "headers": {
+      "Date": "Mon, 09 Dec 2019 06:49:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4993",
+      "X-RateLimit-Reset": "1575877794",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"c380429122e5063651ab282a7daf8e8a\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EDB6:515A:2215EDB:26BECF2:5DEDEE93"
     }
   },
-  "uuid" : "d88c8d05-98c9-37fd-8006-16662b366657"
+  "uuid": "d88c8d05-98c9-37fd-8006-16662b366657"
 }

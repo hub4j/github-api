@@ -1,0 +1,46 @@
+{
+  "id": "8b1ba756-0fb7-49bf-8cd8-0febdccefd7e",
+  "name": "organizations_7544739_team_820406",
+  "request": {
+    "url": "/organizations/7544739/team/820406",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "organizations_7544739_team_820406-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 17 Mar 2020 10:16:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4906",
+      "X-RateLimit-Reset": "1584440312",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"1201d96396c062b2208db689dc6a3887\"",
+      "Last-Modified": "Sat, 10 May 2014 19:40:03 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FC63:2DE2:1A9560A:3DC8D98:5E70A364"
+    }
+  },
+  "uuid": "8b1ba756-0fb7-49bf-8cd8-0febdccefd7e",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -1,0 +1,51 @@
+{
+  "id": "7e396e4c-c5eb-4bc0-a5cd-3d9f75fac0f0",
+  "name": "repos_github-api-test-org_github-api",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api",
+    "method": "GET",
+    "headers": {
+      "If-None-Match": {
+        "equalTo": "\"4f508593b64df214fee8f6ab42df633c\""
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api-14.json",
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4963",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"31f73a7ecc35bbecec125851ce166af4\"",
+      "Last-Modified": "{{now offset='-7 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FBD4:8499:15E153D:19F4735:5D9258B4"
+    }
+  },
+  "uuid": "7e396e4c-c5eb-4bc0-a5cd-3d9f75fac0f0",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-github-api",
+  "requiredScenarioState": "scenario-3-repos-github-api-test-org-github-api-3",
+  "newScenarioState": "scenario-4-repos-github-api-test-org-github-api-0",
+  "insertionIndex": 14
+}

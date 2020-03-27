@@ -1,0 +1,46 @@
+{
+  "id": "4917724b-b110-4549-81b5-c329a13c467a",
+  "name": "repositories_206888201_issues_events",
+  "request": {
+    "url": "/repositories/206888201/issues/events?page=14",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_206888201_issues_events-16.json",
+    "headers": {
+      "Date": "Fri, 11 Oct 2019 03:33:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4967",
+      "X-RateLimit-Reset": "1570768157",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"092e91a5d64a54cbf0a6c0a36e903875\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C422:6D1D:15DAB7:194F3C:5D9FF816",
+      "Link": "<https://api.github.com/repositories/206888201/issues/events?page=13>; rel=\"prev\", <https://api.github.com/repositories/206888201/issues/events?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "4917724b-b110-4549-81b5-c329a13c467a",
+  "persistent": true,
+  "insertionIndex": 16
+}

@@ -1,0 +1,47 @@
+{
+  "id": "a3ad6065-e8f9-4470-91cc-ee3982bfb8df",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_issues-2.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 02:24:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "29",
+      "X-RateLimit-Reset": "1582338330",
+      "Cache-Control": "no-cache",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "EC02:6D35:5FF415:726834:5E5090DC",
+      "Link": "<https://api.github.com/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen&page=2>; rel=\"next\", <https://api.github.com/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen&page=2>; rel=\"last\""
+    }
+  },
+  "uuid": "a3ad6065-e8f9-4470-91cc-ee3982bfb8df",
+  "persistent": true,
+  "scenarioName": "scenario-1-search-issues",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-search-issues-2",
+  "insertionIndex": 2
+}

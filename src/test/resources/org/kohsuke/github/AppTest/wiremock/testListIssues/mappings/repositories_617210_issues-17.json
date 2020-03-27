@@ -1,0 +1,48 @@
+{
+  "id": "da0634f9-41a1-4bc9-aa50-956fc854efd8",
+  "name": "repositories_617210_issues",
+  "request": {
+    "url": "/repositories/617210/issues?state=closed&page=14",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_617210_issues-17.json",
+    "headers": {
+      "Date": "Fri, 10 Jan 2020 21:24:33 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4839",
+      "X-RateLimit-Reset": "1578694895",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"969c59ef0c6f3415a912cc5234181c77\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8CE:7D22:9DFF3E:C15789:5E18EB90",
+      "Link": "<https://api.github.com/repositories/617210/issues?state=closed&page=13>; rel=\"prev\", <https://api.github.com/repositories/617210/issues?state=closed&page=15>; rel=\"next\", <https://api.github.com/repositories/617210/issues?state=closed&page=21>; rel=\"last\", <https://api.github.com/repositories/617210/issues?state=closed&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "da0634f9-41a1-4bc9-aa50-956fc854efd8",
+  "persistent": true,
+  "insertionIndex": 17
+}

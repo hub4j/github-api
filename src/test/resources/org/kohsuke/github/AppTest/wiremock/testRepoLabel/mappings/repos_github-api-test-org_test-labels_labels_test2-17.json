@@ -1,0 +1,38 @@
+{
+  "id": "932ad601-65b1-4472-9b6a-13ead9cbc248",
+  "name": "repos_github-api-test-org_test-labels_labels_test2",
+  "request": {
+    "url": "/repos/github-api-test-org/test-labels/labels/test2",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Thu, 26 Mar 2020 21:52:22 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4978",
+      "X-RateLimit-Reset": "1585263137",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI",
+      "X-GitHub-Request-Id": "E69B:9495:1D21C:245BF:5E7D2416"
+    }
+  },
+  "uuid": "932ad601-65b1-4472-9b6a-13ead9cbc248",
+  "persistent": true,
+  "insertionIndex": 17
+}

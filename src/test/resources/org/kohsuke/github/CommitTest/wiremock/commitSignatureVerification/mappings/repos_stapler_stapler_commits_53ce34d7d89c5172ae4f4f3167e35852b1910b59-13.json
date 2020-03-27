@@ -1,0 +1,48 @@
+{
+  "id": "c380c36d-bac3-4be8-8b4f-8693388d7553",
+  "name": "repos_stapler_stapler_commits_53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+  "request": {
+    "url": "/repos/stapler/stapler/commits/53ce34d7d89c5172ae4f4f3167e35852b1910b59",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_stapler_stapler_commits_53ce34d7d89c5172ae4f4f3167e35852b1910b59-13.json",
+    "headers": {
+      "Date": "Thu, 12 Mar 2020 20:18:57 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1584045523",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"199e6b1eb2af3cae42fb379f1ac0b122\"",
+      "Last-Modified": "Wed, 03 Apr 2019 19:03:54 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, read:packages, repo, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DB8F:22CA3:3479C11:3E25139:5E6A9931"
+    }
+  },
+  "uuid": "c380c36d-bac3-4be8-8b4f-8693388d7553",
+  "persistent": true,
+  "insertionIndex": 13
+}

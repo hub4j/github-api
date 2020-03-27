@@ -1,0 +1,55 @@
+{
+  "id": "dc00c291-6359-453c-b7d9-ffc7e2c99ddb",
+  "name": "repos_github-api-test-org_temp-testcreaterepository_releases",
+  "request": {
+    "url": "/repos/github-api-test-org/temp-testCreateRepository/releases",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"tag_name\":\"release_tag\",\"name\":\"Test Release\",\"body\":\"How exciting!  To be able to programmatically create releases is a dream come true!\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_github-api-test-org_temp-testcreaterepository_releases-6.json",
+    "headers": {
+      "Date": "Wed, 27 Nov 2019 01:45:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4954",
+      "X-RateLimit-Reset": "1574822592",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"097682b0eaf95e24f2e37354b14a84b6\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/github-api-test-org/temp-testCreateRepository/releases/21786739",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D729:3497:963D68:B1F730:5DDDD538"
+    }
+  },
+  "uuid": "dc00c291-6359-453c-b7d9-ffc7e2c99ddb",
+  "persistent": true,
+  "insertionIndex": 6
+}

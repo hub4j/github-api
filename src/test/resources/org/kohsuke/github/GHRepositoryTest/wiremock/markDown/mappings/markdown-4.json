@@ -1,0 +1,47 @@
+{
+  "id": "82013a58-1976-472e-9bc9-2535b965c1ff",
+  "name": "markdown",
+  "request": {
+    "url": "/markdown",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"mode\":\"gfm\",\"context\":\"github-api/github-api\",\"text\":\"@kohsuke to fix issue #1\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "markdown-4.txt",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 20:15:46 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4841",
+      "X-RateLimit-Reset": "1570482632",
+      "X-CommonMarker-Version": "0.20.0",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "E94B:957A:38A6669:42F400F:5D9B9CF2"
+    }
+  },
+  "uuid": "82013a58-1976-472e-9bc9-2535b965c1ff",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * @see GHCheckRun
  * @see GHRepository#createCheckRun
- * @see <a href="https://developer.github.com/v3/checks/runs/">documentation</a>
+ * @see <a href="https://developer.github.com/v3/checks/runs/#create-a-check-run">documentation</a>
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 @Preview
@@ -169,6 +169,9 @@ public final class GHCheckRunBuilder {
         return run;
     }
 
+    /**
+     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
+     */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Output {
 
@@ -253,6 +256,9 @@ public final class GHCheckRunBuilder {
 
     }
 
+    /**
+     * @see <a href="https://developer.github.com/v3/checks/runs/#annotations-object">documentation</a>
+     */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Annotation {
 
@@ -311,6 +317,9 @@ public final class GHCheckRunBuilder {
 
     }
 
+    /**
+     * @see <a href="https://developer.github.com/v3/checks/runs/#images-object">documentation</a>
+     */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Image {
 
@@ -340,6 +349,9 @@ public final class GHCheckRunBuilder {
 
     }
 
+    /**
+     * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
+     */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Action {
 

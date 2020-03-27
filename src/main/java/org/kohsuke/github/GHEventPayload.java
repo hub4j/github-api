@@ -48,7 +48,7 @@ public abstract class GHEventPayload {
     }
 
     // List of events that still need to be added:
-    // CheckRunEvent CheckSuiteEvent ContentReferenceEvent
+    // ContentReferenceEvent
     // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
     // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
     // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
@@ -190,6 +190,20 @@ public abstract class GHEventPayload {
         public GHRepository getRepository() {
             repository.root = root;
             return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (checkSuite == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            if (repository != null) {
+                repository.wrap(root);
+                checkSuite.wrap(repository);
+            } else {
+                checkSuite.wrap(root);
+            }
         }
     }
 

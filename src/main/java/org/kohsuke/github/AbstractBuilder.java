@@ -11,19 +11,19 @@ import javax.annotation.Nonnull;
  * This class can be use to make a Builder that supports both batch and single property changes.
  * <p>
  * Batching looks like this:
+ * </p>
  * 
  * <pre>
  * update().someName(value).otherName(value).done()
  * </pre>
- * </p>
  * <p>
  * Single changes look like this:
+ * </p>
  * 
  * <pre>
  * set().someName(value);
  * set().otherName(value);
  * </pre>
- * </p>
  * <p>
  * If {@link S} is the same as {@link R}, {@link #with(String, Object)} will commit changes after the first value change
  * and return a {@link R} from {@link #done()}.

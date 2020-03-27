@@ -1,0 +1,54 @@
+{
+  "id": "9171d903-c9bb-400b-b09f-a95f1f7d9c03",
+  "name": "repos_github-api-test-org_github-api_issues_271",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api/issues/271",
+    "method": "PATCH",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"assignees\":[\"bitwiseman\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api_issues_271-5.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:25:05 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4837",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5d0c81990a41d7d8ce9f498c6ba14b4b\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF9F:80B3:C995DE:EB50EE:5D74ACD0"
+    }
+  },
+  "uuid": "9171d903-c9bb-400b-b09f-a95f1f7d9c03",
+  "persistent": true,
+  "insertionIndex": 5
+}

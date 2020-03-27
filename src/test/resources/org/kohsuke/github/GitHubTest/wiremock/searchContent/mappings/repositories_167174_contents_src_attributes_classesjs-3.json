@@ -1,0 +1,48 @@
+{
+  "id": "d7ab2e43-a548-4208-a44b-5d15b0c3b195",
+  "name": "repositories_167174_contents_src_attributes_classesjs",
+  "request": {
+    "url": "/repositories/167174/contents/src/attributes/classes.js?ref=cf84696fd1d7fe314a11492606529b5a658ee9e3",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_167174_contents_src_attributes_classesjs-3.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 20:19:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4816",
+      "X-RateLimit-Reset": "1570482632",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"f1571eb5d0685c8cea8a394d90c61f3d9b5a8f82\"",
+      "Last-Modified": "Mon, 29 Apr 2019 20:56:09 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E9A8:67D6:350D5FA:3F0F530:5D9B9DEC"
+    }
+  },
+  "uuid": "d7ab2e43-a548-4208-a44b-5d15b0c3b195",
+  "persistent": true,
+  "insertionIndex": 3
+}

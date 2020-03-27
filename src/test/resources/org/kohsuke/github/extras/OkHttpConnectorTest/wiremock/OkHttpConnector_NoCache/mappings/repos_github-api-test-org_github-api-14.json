@@ -1,0 +1,46 @@
+{
+  "id": "8a71a8b0-9915-4365-b581-5ca05b407fc6",
+  "name": "repos_github-api-test-org_github-api",
+  "request": {
+    "url": "/repos/github-api-test-org/github-api",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_github-api-14.json",
+    "headers": {
+      "Date": "Mon, 30 Sep 2019 17:16:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"bb6e00d619256e29fb3c48198a09436c\"",
+      "Last-Modified": "Mon, 30 Sep 2019 17:16:55 GMT",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "ED63:7341:128E90A:1606B21:5D923886"
+    }
+  },
+  "uuid": "8a71a8b0-9915-4365-b581-5ca05b407fc6",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-github-api",
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-github-api-10",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-github-api-11",
+  "insertionIndex": 14
+}

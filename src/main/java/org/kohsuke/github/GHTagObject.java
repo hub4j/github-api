@@ -19,6 +19,7 @@ public class GHTagObject {
     private String message;
     private GitUser tagger;
     private GHRef.GHObject object;
+    private GHVerification verification;
 
     GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
@@ -96,5 +97,14 @@ public class GHTagObject {
      */
     public GHRef.GHObject getObject() {
         return object;
+    }
+
+    /**
+     * Gets Verification Status.
+     *
+     * @return the Verification status
+     */
+    public GHVerification getVerification() {
+        return verification;
     }
 }

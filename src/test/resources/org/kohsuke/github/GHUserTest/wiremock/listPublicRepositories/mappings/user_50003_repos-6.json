@@ -1,0 +1,48 @@
+{
+  "id": "1e91f19a-22d2-4035-97b1-d5ef5e3664ba",
+  "name": "user_50003_repos",
+  "request": {
+    "url": "/user/50003/repos?per_page=30&page=4",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "user_50003_repos-6.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 20:46:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4784",
+      "X-RateLimit-Reset": "1570482632",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"986befafb1b581887789ee40f9015685\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EAB8:78ED:342EB20:3E4E8C4:5D9BA412",
+      "Link": "<https://api.github.com/user/50003/repos?per_page=30&page=3>; rel=\"prev\", <https://api.github.com/user/50003/repos?per_page=30&page=5>; rel=\"next\", <https://api.github.com/user/50003/repos?per_page=30&page=9>; rel=\"last\", <https://api.github.com/user/50003/repos?per_page=30&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "1e91f19a-22d2-4035-97b1-d5ef5e3664ba",
+  "persistent": true,
+  "insertionIndex": 6
+}

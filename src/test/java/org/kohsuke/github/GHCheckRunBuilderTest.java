@@ -58,7 +58,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void createCheckRunManyAnnotations() throws Exception {
-        GHCheckRunBuilder.DraftOutput output = gitHub.getRepository("jglick/github-api-test")
+        GHCheckRunBuilder.Output output = gitHub.getRepository("jglick/github-api-test")
                 .createCheckRun("big", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withOutput("Big Run", "Lots of stuff here »");

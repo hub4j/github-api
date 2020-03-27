@@ -50,8 +50,8 @@ public final class GHCheckRunBuilder {
 
     private final GHRepository repo;
     private final Requester requester;
-    DraftOutput output;
-    List<DraftAction> actions;
+    Output output;
+    List<Action> actions;
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this.repo = repo;
@@ -109,10 +109,10 @@ public final class GHCheckRunBuilder {
      *            as in GitHub documentation
      * @param summary
      *            as in GitHub documentation
-     * @return use {@link DraftOutput#done} to continue
+     * @return use {@link Output#done} to continue
      */
-    public @NonNull DraftOutput withOutput(@NonNull String title, @NonNull String summary) {
-        return new DraftOutput(this, title, summary);
+    public @NonNull Output withOutput(@NonNull String title, @NonNull String summary) {
+        return new Output(this, title, summary);
     }
 
     /**
@@ -124,7 +124,7 @@ public final class GHCheckRunBuilder {
      *            as in GitHub documentation
      * @param identifier
      *            as in GitHub documentation
-     * @return use {@link DraftOutput#done} to continue
+     * @return use {@link Output#done} to continue
      */
     public @NonNull GHCheckRunBuilder withAction(@NonNull String label,
             @NonNull String description,
@@ -132,7 +132,7 @@ public final class GHCheckRunBuilder {
         if (actions == null) {
             actions = new LinkedList<>();
         }
-        actions.add(new DraftAction(label, description, identifier));
+        actions.add(new Action(label, description, identifier));
         return this;
     }
 
@@ -145,7 +145,7 @@ public final class GHCheckRunBuilder {
      *             for the usual reasons
      */
     public @NonNull GHCheckRun create() throws IOException {
-        List<DraftAnnotation> extraAnnotations;
+        List<Annotation> extraAnnotations;
         if (output != null && output.annotations != null && output.annotations.size() > MAX_ANNOTATIONS) {
             extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());
             output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);
@@ -154,7 +154,7 @@ public final class GHCheckRunBuilder {
         }
         GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
         while (!extraAnnotations.isEmpty()) {
-            DraftOutput output2 = new DraftOutput(null, output.title, output.summary);
+            Output output2 = new Output(null, output.title, output.summary);
             int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
             output2.annotations = extraAnnotations.subList(0, i);
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
@@ -170,22 +170,22 @@ public final class GHCheckRunBuilder {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class DraftOutput {
+    public static final class Output {
 
         private final transient GHCheckRunBuilder builder;
         private final String title;
         private final String summary;
         private String text;
-        List<DraftAnnotation> annotations;
-        List<DraftImage> images;
+        List<Annotation> annotations;
+        List<Image> images;
 
-        DraftOutput(GHCheckRunBuilder builder, String title, String summary) {
+        Output(GHCheckRunBuilder builder, String title, String summary) {
             this.builder = builder;
             this.title = title;
             this.summary = summary;
         }
 
-        public @NonNull DraftOutput withText(@CheckForNull String text) {
+        public @NonNull Output withText(@CheckForNull String text) {
             this.text = text;
             return this;
         }
@@ -201,9 +201,9 @@ public final class GHCheckRunBuilder {
          *            as in GitHub documentation
          * @param message
          *            as in GitHub documentation
-         * @return use {@link DraftAnnotation#done} to continue
+         * @return use {@link Annotation#done} to continue
          */
-        public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
+        public @NonNull Annotation withAnnotation(@NonNull String path,
                 int line,
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
                 @NonNull String message) {
@@ -223,14 +223,14 @@ public final class GHCheckRunBuilder {
          *            as in GitHub documentation
          * @param message
          *            as in GitHub documentation
-         * @return use {@link DraftAnnotation#done} to continue
+         * @return use {@link Annotation#done} to continue
          */
-        public @NonNull DraftAnnotation withAnnotation(@NonNull String path,
+        public @NonNull Annotation withAnnotation(@NonNull String path,
                 int startLine,
                 int endLine,
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
                 @NonNull String message) {
-            return new DraftAnnotation(this, path, startLine, endLine, annotationLevel, message);
+            return new Annotation(this, path, startLine, endLine, annotationLevel, message);
         }
 
         /**
@@ -240,10 +240,10 @@ public final class GHCheckRunBuilder {
          *            as in GitHub documentation
          * @param imageURL
          *            as in GitHub documentation
-         * @return use {@link DraftImage#done} to continue
+         * @return use {@link Image#done} to continue
          */
-        public @NonNull DraftImage withImage(@NonNull String alt, @NonNull String imageURL) {
-            return new DraftImage(this, alt, imageURL);
+        public @NonNull Image withImage(@NonNull String alt, @NonNull String imageURL) {
+            return new Image(this, alt, imageURL);
         }
 
         public @NonNull GHCheckRunBuilder done() {
@@ -254,9 +254,9 @@ public final class GHCheckRunBuilder {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class DraftAnnotation {
+    public static final class Annotation {
 
-        private final transient DraftOutput output;
+        private final transient Output output;
         private final String path;
         private final int start_line;
         private final int end_line;
@@ -267,7 +267,7 @@ public final class GHCheckRunBuilder {
         private String title;
         private String raw_details;
 
-        DraftAnnotation(DraftOutput output,
+        Annotation(Output output,
                 String path,
                 int start_line,
                 int end_line,
@@ -281,27 +281,27 @@ public final class GHCheckRunBuilder {
             this.message = message;
         }
 
-        public @NonNull DraftAnnotation withStartColumn(@CheckForNull Integer startColumn) {
+        public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
             start_column = startColumn;
             return this;
         }
 
-        public @NonNull DraftAnnotation withEndColumn(@CheckForNull Integer endColumn) {
+        public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
             end_column = endColumn;
             return this;
         }
 
-        public @NonNull DraftAnnotation withTitle(@CheckForNull String title) {
+        public @NonNull Annotation withTitle(@CheckForNull String title) {
             this.title = title;
             return this;
         }
 
-        public @NonNull DraftAnnotation withRawDetails(@CheckForNull String rawDetails) {
+        public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
             raw_details = rawDetails;
             return this;
         }
 
-        public @NonNull DraftOutput done() {
+        public @NonNull Output done() {
             if (output.annotations == null) {
                 output.annotations = new LinkedList<>();
             }
@@ -312,25 +312,25 @@ public final class GHCheckRunBuilder {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class DraftImage {
+    public static final class Image {
 
-        private final transient DraftOutput output;
+        private final transient Output output;
         private final String alt;
         private final String image_url;
         private String caption;
 
-        DraftImage(DraftOutput output, String alt, String image_url) {
+        Image(Output output, String alt, String image_url) {
             this.output = output;
             this.alt = alt;
             this.image_url = image_url;
         }
 
-        public @NonNull DraftImage withCaption(@CheckForNull String caption) {
+        public @NonNull Image withCaption(@CheckForNull String caption) {
             this.caption = caption;
             return this;
         }
 
-        public @NonNull DraftOutput done() {
+        public @NonNull Output done() {
             if (output.images == null) {
                 output.images = new LinkedList<>();
             }
@@ -341,13 +341,13 @@ public final class GHCheckRunBuilder {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class DraftAction {
+    public static final class Action {
 
         private final String label;
         private final String description;
         private final String identifier;
 
-        DraftAction(String label, String description, String identifier) {
+        Action(String label, String description, String identifier) {
             this.label = label;
             this.description = description;
             this.identifier = identifier;

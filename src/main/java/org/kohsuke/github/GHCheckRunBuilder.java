@@ -50,8 +50,8 @@ public final class GHCheckRunBuilder {
 
     private final GHRepository repo;
     private final Requester requester;
-    Output output;
-    List<Action> actions;
+    private Output output;
+    private List<Action> actions;
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this.repo = repo;
@@ -102,37 +102,19 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
-    /**
-     * Drafts the output section.
-     *
-     * @param title
-     *            as in GitHub documentation
-     * @param summary
-     *            as in GitHub documentation
-     * @return use {@link Output#done} to continue
-     */
-    public @NonNull Output withOutput(@NonNull String title, @NonNull String summary) {
-        return new Output(this, title, summary);
+    public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
+        if (this.output != null) {
+            throw new IllegalStateException("cannot add Output twice");
+        }
+        this.output = output;
+        return this;
     }
 
-    /**
-     * Drafts an action section.
-     *
-     * @param label
-     *            as in GitHub documentation
-     * @param description
-     *            as in GitHub documentation
-     * @param identifier
-     *            as in GitHub documentation
-     * @return use {@link Output#done} to continue
-     */
-    public @NonNull GHCheckRunBuilder withAction(@NonNull String label,
-            @NonNull String description,
-            @NonNull String identifier) {
+    public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
         if (actions == null) {
             actions = new LinkedList<>();
         }
-        actions.add(new Action(label, description, identifier));
+        actions.add(action);
         return this;
     }
 
@@ -154,7 +136,7 @@ public final class GHCheckRunBuilder {
         }
         GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
         while (!extraAnnotations.isEmpty()) {
-            Output output2 = new Output(null, output.title, output.summary);
+            Output output2 = new Output(output.title, output.summary);
             int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
             output2.annotations = extraAnnotations.subList(0, i);
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
@@ -175,15 +157,13 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Output {
 
-        private final transient GHCheckRunBuilder builder;
         private final String title;
         private final String summary;
         private String text;
-        List<Annotation> annotations;
-        List<Image> images;
+        private List<Annotation> annotations;
+        private List<Image> images;
 
-        Output(GHCheckRunBuilder builder, String title, String summary) {
-            this.builder = builder;
+        public Output(@NonNull String title, @NonNull String summary) {
             this.title = title;
             this.summary = summary;
         }
@@ -193,65 +173,20 @@ public final class GHCheckRunBuilder {
             return this;
         }
 
-        /**
-         * Drafts a single-line annotation section.
-         *
-         * @param path
-         *            as in GitHub documentation
-         * @param line
-         *            {@code startLine} and {@code endLine} together
-         * @param annotationLevel
-         *            as in GitHub documentation
-         * @param message
-         *            as in GitHub documentation
-         * @return use {@link Annotation#done} to continue
-         */
-        public @NonNull Annotation withAnnotation(@NonNull String path,
-                int line,
-                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
-                @NonNull String message) {
-            return withAnnotation(path, line, line, annotationLevel, message);
+        public @NonNull Output add(@NonNull Annotation annotation) {
+            if (annotations == null) {
+                annotations = new LinkedList<>();
+            }
+            annotations.add(annotation);
+            return this;
         }
 
-        /**
-         * Drafts a potentially multiline annotation section.
-         *
-         * @param path
-         *            as in GitHub documentation
-         * @param startLine
-         *            as in GitHub documentation
-         * @param endLine
-         *            as in GitHub documentation
-         * @param annotationLevel
-         *            as in GitHub documentation
-         * @param message
-         *            as in GitHub documentation
-         * @return use {@link Annotation#done} to continue
-         */
-        public @NonNull Annotation withAnnotation(@NonNull String path,
-                int startLine,
-                int endLine,
-                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
-                @NonNull String message) {
-            return new Annotation(this, path, startLine, endLine, annotationLevel, message);
-        }
-
-        /**
-         * Drafts an image section.
-         *
-         * @param alt
-         *            as in GitHub documentation
-         * @param imageURL
-         *            as in GitHub documentation
-         * @return use {@link Image#done} to continue
-         */
-        public @NonNull Image withImage(@NonNull String alt, @NonNull String imageURL) {
-            return new Image(this, alt, imageURL);
-        }
-
-        public @NonNull GHCheckRunBuilder done() {
-            builder.output = this;
-            return builder;
+        public @NonNull Output add(@NonNull Image image) {
+            if (images == null) {
+                images = new LinkedList<>();
+            }
+            images.add(image);
+            return this;
         }
 
     }
@@ -262,7 +197,6 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Annotation {
 
-        private final transient Output output;
         private final String path;
         private final int start_line;
         private final int end_line;
@@ -273,17 +207,22 @@ public final class GHCheckRunBuilder {
         private String title;
         private String raw_details;
 
-        Annotation(Output output,
-                String path,
-                int start_line,
-                int end_line,
-                GHCheckRun.AnnotationLevel annotation_level,
-                String message) {
-            this.output = output;
+        public Annotation(@NonNull String path,
+                int line,
+                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
+                @NonNull String message) {
+            this(path, line, line, annotationLevel, message);
+        }
+
+        public Annotation(@NonNull String path,
+                int startLine,
+                int endLine,
+                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
+                @NonNull String message) {
             this.path = path;
-            this.start_line = start_line;
-            this.end_line = end_line;
-            this.annotation_level = annotation_level.toString().toLowerCase(Locale.ROOT);
+            start_line = startLine;
+            end_line = endLine;
+            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);
             this.message = message;
         }
 
@@ -307,14 +246,6 @@ public final class GHCheckRunBuilder {
             return this;
         }
 
-        public @NonNull Output done() {
-            if (output.annotations == null) {
-                output.annotations = new LinkedList<>();
-            }
-            output.annotations.add(this);
-            return output;
-        }
-
     }
 
     /**
@@ -323,28 +254,18 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Image {
 
-        private final transient Output output;
         private final String alt;
         private final String image_url;
         private String caption;
 
-        Image(Output output, String alt, String image_url) {
-            this.output = output;
+        public Image(@NonNull String alt, @NonNull String imageURL) {
             this.alt = alt;
-            this.image_url = image_url;
+            image_url = imageURL;
         }
 
         public @NonNull Image withCaption(@CheckForNull String caption) {
             this.caption = caption;
             return this;
-        }
-
-        public @NonNull Output done() {
-            if (output.images == null) {
-                output.images = new LinkedList<>();
-            }
-            output.images.add(this);
-            return output;
         }
 
     }
@@ -359,7 +280,7 @@ public final class GHCheckRunBuilder {
         private final String description;
         private final String identifier;
 
-        Action(String label, String description, String identifier) {
+        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
             this.label = label;
             this.description = description;
             this.identifier = identifier;

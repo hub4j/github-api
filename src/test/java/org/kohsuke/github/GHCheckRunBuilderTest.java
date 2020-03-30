@@ -87,4 +87,15 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         assertEquals(546384705, checkRun.id);
     }
 
+    @Test
+    public void createPendingCheckRun() throws Exception {
+        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
+                .createCheckRun("outstanding", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+                .withStatus(GHCheckRun.Status.IN_PROGRESS)
+                .create();
+        assertEquals("in_progress", checkRun.getStatus());
+        assertNull(checkRun.getConclusion());
+        assertEquals(546469053, checkRun.id);
+    }
+
 }

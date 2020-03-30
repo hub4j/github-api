@@ -1,23 +1,23 @@
 {
-  "id": 535049329,
-  "node_id": "MDg6Q2hlY2tSdW41MzUwNDkzMjk=",
+  "id": 546384705,
+  "node_id": "MDg6Q2hlY2tSdW41NDYzODQ3MDU=",
   "head_sha": "4a929d464a2fae7ee899ce603250f7dab304bc4b",
-  "external_id": "whatever",
-  "url": "https://api.github.com/repos/jglick/github-api-test/check-runs/535049329",
-  "html_url": "https://github.com/jglick/github-api-test/runs/535049329",
-  "details_url": "http://nowhere.net/stuff",
+  "external_id": "",
+  "url": "https://api.github.com/repos/jglick/github-api-test/check-runs/546384705",
+  "html_url": "https://github.com/jglick/github-api-test/runs/546384705",
+  "details_url": "http://nowhere.net/",
   "status": "completed",
-  "conclusion": "success",
-  "started_at": "1970-01-12T13:46:39Z",
-  "completed_at": "1970-01-12T13:46:39Z",
+  "conclusion": "neutral",
+  "started_at": "2020-03-30T18:23:33Z",
+  "completed_at": "2020-03-30T18:23:33Z",
   "output": {
-    "title": "Some Title",
-    "summary": "what happened…",
+    "title": "Quick note",
+    "summary": "nothing more to see here",
     "text": null,
-    "annotations_count": 1,
-    "annotations_url": "https://api.github.com/repos/jglick/github-api-test/check-runs/535049329/annotations"
+    "annotations_count": 0,
+    "annotations_url": "https://api.github.com/repos/jglick/github-api-test/check-runs/546384705/annotations"
   },
-  "name": "foo",
+  "name": "quick",
   "check_suite": {
     "id": 547824747
   },

@@ -53,7 +53,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .create();
         assertEquals("completed", checkRun.getStatus());
         assertEquals(1, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(535049329, checkRun.id);
+        assertEquals(546384586, checkRun.id);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         assertEquals("completed", checkRun.getStatus());
         assertEquals("Big Run", checkRun.getOutput().getTitle());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(537614832, checkRun.id);
+        assertEquals(546384622, checkRun.id);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .create();
         assertEquals("completed", checkRun.getStatus());
         assertEquals(0, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(538002758, checkRun.id);
+        assertEquals(546384705, checkRun.id);
     }
 
 }

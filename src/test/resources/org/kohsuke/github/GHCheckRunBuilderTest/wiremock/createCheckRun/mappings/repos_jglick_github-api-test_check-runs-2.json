@@ -1,5 +1,5 @@
 {
-  "id": "b6bb3564-f156-4f76-989e-f40bba7920a6",
+  "id": "3833d102-56d4-455f-9739-94238ae75575",
   "name": "repos_jglick_github-api-test_check-runs",
   "request": {
     "url": "/repos/jglick/github-api-test/check-runs",
@@ -19,22 +19,22 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_jglick_github-api-test_check-runs-b6bb3564-f156-4f76-989e-f40bba7920a6.json",
+    "bodyFileName": "repos_jglick_github-api-test_check-runs-2.json",
     "headers": {
-      "Date": "Wed, 25 Mar 2020 23:56:54 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
+      "Date": "Mon, 30 Mar 2020 18:23:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
       "X-RateLimit-Remaining": "4998",
-      "X-RateLimit-Reset": "1585184213",
+      "X-RateLimit-Reset": "1585596209",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"1e78bed0efbe7b4d64c4299cd800d901\"",
-      "Location": "https://api.github.com/repos/jglick/github-api-test/check-runs/535049329",
+      "ETag": "\"9b01fc978a7d5144b29fd153f0ed07e4\"",
+      "Location": "https://api.github.com/repos/jglick/github-api-test/check-runs/546384586",
       "X-GitHub-Media-Type": "github.antiope-preview; format=json",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -42,10 +42,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "9E44:69BD:10917:17733:5E7BEFC5"
+      "X-GitHub-Request-Id": "8558:2D60:F5B01C:2327144:5E823921"
     }
   },
-  "uuid": "b6bb3564-f156-4f76-989e-f40bba7920a6",
+  "uuid": "3833d102-56d4-455f-9739-94238ae75575",
   "persistent": true,
   "insertionIndex": 2
 }

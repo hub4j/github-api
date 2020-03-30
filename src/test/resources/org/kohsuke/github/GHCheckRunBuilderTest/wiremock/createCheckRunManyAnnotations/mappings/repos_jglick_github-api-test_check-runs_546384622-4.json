@@ -1,8 +1,8 @@
 {
-  "id": "da3dc357-3f47-4b52-bea3-72dc6c3030c2",
-  "name": "repos_jglick_github-api-test_check-runs_537614832",
+  "id": "64466539-6442-4de8-b824-fba68b6dfb48",
+  "name": "repos_jglick_github-api-test_check-runs_546384622",
   "request": {
-    "url": "/repos/jglick/github-api-test/check-runs/537614832",
+    "url": "/repos/jglick/github-api-test/check-runs/546384622",
     "method": "PATCH",
     "headers": {
       "Accept": {
@@ -19,21 +19,21 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_jglick_github-api-test_check-runs_537614832-da3dc357-3f47-4b52-bea3-72dc6c3030c2.json",
+    "bodyFileName": "repos_jglick_github-api-test_check-runs_546384622-4.json",
     "headers": {
-      "Date": "Thu, 26 Mar 2020 20:09:39 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
+      "Date": "Mon, 30 Mar 2020 18:23:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4986",
-      "X-RateLimit-Reset": "1585255383",
+      "X-RateLimit-Remaining": "4994",
+      "X-RateLimit-Reset": "1585596209",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"fd5621e42975914efcd25699d9194b3a\"",
+      "ETag": "W/\"7691a39148d96449f684f28b159f6dee\"",
       "X-GitHub-Media-Type": "github.antiope-preview; format=json",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -41,10 +41,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "EA66:62BA:0C23:126F:5E7D0C02"
+      "X-GitHub-Request-Id": "855C:28C5:5D196:14A90B:5E823924"
     }
   },
-  "uuid": "da3dc357-3f47-4b52-bea3-72dc6c3030c2",
+  "uuid": "64466539-6442-4de8-b824-fba68b6dfb48",
   "persistent": true,
   "insertionIndex": 4
 }

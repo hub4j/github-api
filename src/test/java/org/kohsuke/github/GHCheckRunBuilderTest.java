@@ -70,6 +70,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .create();
         assertEquals("completed", checkRun.getStatus());
         assertEquals("Big Run", checkRun.getOutput().getTitle());
+        assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
         assertEquals(546384622, checkRun.id);
     }

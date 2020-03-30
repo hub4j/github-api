@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static org.hamcrest.Matchers.containsString;
+
 @SuppressWarnings("deprecation") // preview
 public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
 
@@ -96,6 +98,20 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         assertEquals("in_progress", checkRun.getStatus());
         assertNull(checkRun.getConclusion());
         assertEquals(546469053, checkRun.id);
+    }
+
+    @Test
+    public void createCheckRunErrMissingConclusion() throws Exception {
+        try {
+            gitHub.getRepository("jglick/github-api-test")
+                    .createCheckRun("outstanding", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+                    .withStatus(GHCheckRun.Status.COMPLETED)
+                    .create();
+            fail("should have been rejected");
+        } catch (HttpException x) {
+            assertEquals(422, x.getResponseCode());
+            assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
+        }
     }
 
 }

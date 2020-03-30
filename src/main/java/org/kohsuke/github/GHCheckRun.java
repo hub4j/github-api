@@ -51,22 +51,31 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Gets status of the check run. It can be one of "queue", "in_progress", or "completed"
+     * Gets status of the check run.
      *
      * @return Status of the check run
+     * @see Status
      */
     public String getStatus() {
         return status;
     }
 
+    public static enum Status {
+        QUEUED, IN_PROGRESS, COMPLETED
+    }
+
     /**
-     * Gets conclusion of a completed check run. It can be one of "success", "failure", "neutral", "cancelled",
-     * "time_out", or "action_required".
+     * Gets conclusion of a completed check run.
      *
      * @return Status of the check run
+     * @see Conclusion
      */
     public String getConclusion() {
         return conclusion;
+    }
+
+    public static enum Conclusion {
+        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED
     }
 
     /**
@@ -241,6 +250,10 @@ public class GHCheckRun extends GHObject {
         public URL getAnnotationsUrl() {
             return annotationsUrl;
         }
+    }
+
+    public static enum AnnotationLevel {
+        NOTICE, WARNING, FAILURE
     }
 
 }

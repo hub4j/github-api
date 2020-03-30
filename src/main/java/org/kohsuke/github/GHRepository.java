@@ -1850,6 +1850,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Creates a check run for a commit.
+     *
+     * @param name
+     *            an identifier for the run
+     * @param headSHA
+     *            the commit hash
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview
+    @Deprecated
+    public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
+        return new GHCheckRunBuilder(this, name, headSHA);
+    }
+
+    /**
      * Lists repository events.
      *
      * @return the paged iterable

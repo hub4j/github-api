@@ -134,7 +134,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     protected void verifyAuthenticated(GitHub instance) {
         assertThat(
-                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
+                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_LOGIN and GITHUB_PASSWORD environment variables",
                 instance.isAnonymous(),
                 Matchers.is(false));
     }

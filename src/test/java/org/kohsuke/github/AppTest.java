@@ -77,8 +77,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCredentialValid() throws IOException {
         assertTrue(gitHub.isCredentialValid());
+
+        // TODO: Doh, this doesn't go through the proxy. Needs rewriting.
         GitHub connect = GitHub.connect("totally", "bogus");
         assertFalse(connect.isCredentialValid());
+
+        // TODO: Add GHE test - where RateLimit returns 404.
     }
 
     @Test

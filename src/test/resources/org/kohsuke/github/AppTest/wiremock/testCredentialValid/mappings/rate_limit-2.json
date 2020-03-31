@@ -1,8 +1,8 @@
 {
-  "id": "218a25c5-b10d-4371-a446-bd4b220c2402",
-  "name": "user",
+  "id": "776ae4cc-bd8c-4c7d-b299-4ba1b2c11ad0",
+  "name": "rate_limit",
   "request": {
-    "url": "/user",
+    "url": "/rate_limit",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,22 +12,16 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "rate_limit-2.json",
     "headers": {
-      "Date": "Tue, 31 Mar 2020 15:24:01 GMT",
+      "Date": "Tue, 31 Mar 2020 15:24:02 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4999",
+      "X-RateLimit-Remaining": "4998",
       "X-RateLimit-Reset": "1585671841",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
-      ],
-      "ETag": "W/\"740bb7db37d5437d08ea1aa5e652cf37\"",
-      "Last-Modified": "Fri, 27 Mar 2020 19:14:56 GMT",
+      "Cache-Control": "no-cache",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -37,10 +31,11 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FEBE:52B1:FCCA5:12311D:5E836091"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "FEBE:52B1:FCCEE:123132:5E836091"
     }
   },
-  "uuid": "218a25c5-b10d-4371-a446-bd4b220c2402",
+  "uuid": "776ae4cc-bd8c-4c7d-b299-4ba1b2c11ad0",
   "persistent": true,
-  "insertionIndex": 1
+  "insertionIndex": 2
 }

@@ -148,13 +148,15 @@ abstract class GitHubClient {
     }
 
     /**
-     * Ensures that the credential is valid.
+     * Ensures that the credential for this client is valid.
      *
      * @return the boolean
      */
     public boolean isCredentialValid() {
         try {
-            fetch(GHUser.class, "/user");
+            // If 404, ratelimit returns a default value.
+            // This works as credential test because invalid credentials returns 401, not 404
+            getRateLimit();
             return true;
         } catch (IOException e) {
             if (LOGGER.isLoggable(FINE))

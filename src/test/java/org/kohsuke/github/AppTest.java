@@ -77,8 +77,34 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCredentialValid() throws IOException {
         assertTrue(gitHub.isCredentialValid());
-        GitHub connect = GitHub.connect("totally", "bogus");
-        assertFalse(connect.isCredentialValid());
+        assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
+        assertThat(gitHub.lastRateLimit().getCore().getLimit(), equalTo(5000));
+
+        gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
+                .withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build();
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertFalse(gitHub.isCredentialValid());
+        // For invalid credentials, we get a 401 but it includes anonymous rate limit headers
+        assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
+        assertThat(gitHub.lastRateLimit().getCore().getLimit(), equalTo(60));
+    }
+
+    @Test
+    public void testCredentialValidEnterprise() throws IOException {
+        // Simulated GHE: getRateLimit returns 404
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertTrue(gitHub.isCredentialValid());
+        // lastRateLimit stays null when 404 is encountered
+        assertThat(gitHub.lastRateLimit(), nullValue());
+
+        gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
+                .withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build();
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertFalse(gitHub.isCredentialValid());
+        // Simulated GHE: For invalid credentials, we get a 401 that does not include ratelimit info
+        assertThat(gitHub.lastRateLimit(), nullValue());
     }
 
     @Test

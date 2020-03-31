@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
@@ -163,16 +163,20 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
     }
 
     private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining, boolean changedResetDate) {
-        // newer or unchange
-        int resetComparisionValue = changedResetDate ? 1 : 0;
-
         // Basic checks of values
         assertThat(rateLimit, notNullValue());
         assertThat(rateLimit.getLimit(), equalTo(previousLimit.getLimit()));
         assertThat(rateLimit.getRemaining(), equalTo(remaining));
 
         // Check that the reset date of the current limit is not older than the previous one
-        assertThat(rateLimit.getResetDate().compareTo(previousLimit.getResetDate()), equalTo(resetComparisionValue));
+        long diffMillis = rateLimit.getResetDate().getTime() - previousLimit.getResetDate().getTime();
+
+        assertThat(diffMillis, greaterThanOrEqualTo(0L));
+        if (changedResetDate) {
+            assertThat(diffMillis, greaterThan(1000L));
+        } else {
+            assertThat(diffMillis, lessThanOrEqualTo(1000L));
+        }
 
         // Additional checks for record values
         assertThat(rateLimit.getCore().getLimit(), equalTo(rateLimit.getLimit()));

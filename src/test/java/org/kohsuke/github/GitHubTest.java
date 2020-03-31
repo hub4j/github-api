@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
 /**
@@ -161,5 +163,48 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             else
                 assertNull(account.getOrganizationBillingEmail());
         }
+    }
+
+    @Test
+    public void gzip() throws Exception {
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // getResponseHeaderFields is deprecated but we'll use it for testing.
+        assertThat(org.getResponseHeaderFields(), notNullValue());
+
+        // WireMock should automatically gzip all responses
+        assertThat(org.getResponseHeaderFields().get("Content-Encoding").get(0), is("gzip"));
+        assertThat(org.getResponseHeaderFields().get("Content-eNcoding").get(0), is("gzip"));
+    }
+
+    @Test
+    public void testHeaderFieldName() throws Exception {
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // getResponseHeaderFields is deprecated but we'll use it for testing.
+        assertThat(org.getResponseHeaderFields(), notNullValue());
+
+        // Header field names must be case-insensitive
+        assertThat(org.getResponseHeaderFields().containsKey("CacHe-ContrOl"), is(true));
+
+        // The KeySet from header fields should also be case-insensitive
+        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
+        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
+
+        assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
+
+        // GitHub has started changing their headers to all lowercase.
+        // For this test we want the field names to be with mixed-case (harder to do comparison).
+        // Ensure that it remains that way, if test resources are ever refreshed.
+        boolean found = false;
+        for (String key : org.getResponseHeaderFields().keySet()) {
+            if (Objects.equals("Cache-Control", key)) {
+                found = true;
+                break;
+            }
+        }
+        assertThat("Must have the literal expected string 'Cache-Control' for header field name", found);
     }
 }

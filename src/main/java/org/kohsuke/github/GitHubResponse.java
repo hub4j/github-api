@@ -12,9 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -206,6 +207,9 @@ class GitHubResponse<T> {
      */
     static abstract class ResponseInfo {
 
+        private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
+                .nullsFirst(String.CASE_INSENSITIVE_ORDER);
+
         private final int statusCode;
         @Nonnull
         private final GitHubRequest request;
@@ -217,7 +221,12 @@ class GitHubResponse<T> {
                 @Nonnull Map<String, List<String>> headers) {
             this.request = request;
             this.statusCode = statusCode;
-            this.headers = Collections.unmodifiableMap(new HashMap<>(headers));
+
+            // Response header field names must be case-insensitive.
+            TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+            caseInsensitiveMap.putAll(headers);
+
+            this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
         }
 
         /**

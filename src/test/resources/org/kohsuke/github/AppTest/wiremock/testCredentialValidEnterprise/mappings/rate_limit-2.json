@@ -1,8 +1,8 @@
 {
-  "id": "27891e8f-aae7-459b-9860-a4f505cec688",
-  "name": "user",
+  "id": "c875f18e-a0af-4114-8d1f-123b5377a52c",
+  "name": "rate_limit",
   "request": {
-    "url": "/user",
+    "url": "/rate_limit",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -11,23 +11,14 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "user-1.json",
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3\"}",
     "headers": {
-      "Date": "Tue, 31 Mar 2020 16:23:54 GMT",
+      "Date": "Tue, 31 Mar 2020 16:23:55 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4995",
-      "X-RateLimit-Reset": "1585671841",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
-      ],
-      "ETag": "W/\"740bb7db37d5437d08ea1aa5e652cf37\"",
-      "Last-Modified": "Fri, 27 Mar 2020 19:14:56 GMT",
+      "Status": "404 Not Found",
+      "Cache-Control": "no-cache",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -37,10 +28,14 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C14E:8628:147B0:18E1A:5E836E9A"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C14E:8628:147DC:18E26:5E836E9A"
     }
   },
-  "uuid": "27891e8f-aae7-459b-9860-a4f505cec688",
+  "uuid": "c875f18e-a0af-4114-8d1f-123b5377a52c",
   "persistent": true,
-  "insertionIndex": 1
+  "scenarioName": "scenario-1-rate_limit",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-rate_limit-2",
+  "insertionIndex": 2
 }

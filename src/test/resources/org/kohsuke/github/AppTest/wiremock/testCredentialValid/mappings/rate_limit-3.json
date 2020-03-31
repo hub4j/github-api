@@ -1,5 +1,5 @@
 {
-  "id": "c875f18e-a0af-4114-8d1f-123b5377a52c",
+  "id": "5ba21199-9f1d-420c-87e9-ab30d3e73884",
   "name": "rate_limit",
   "request": {
     "url": "/rate_limit",
@@ -11,20 +11,17 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "rate_limit-2.json",
+    "status": 401,
+    "body": "{\"message\":\"Bad credentials\",\"documentation_url\":\"https://developer.github.com/v3\"}",
     "headers": {
       "Date": "Tue, 31 Mar 2020 16:23:55 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4994",
-      "X-RateLimit-Reset": "1585671841",
-      "Cache-Control": "no-cache",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "",
+      "Status": "401 Unauthorized",
       "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "59",
+      "X-RateLimit-Reset": "1585675435",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
@@ -32,13 +29,12 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "C14E:8628:147DC:18E26:5E836E9A"
+      "X-GitHub-Request-Id": "C14E:8628:147E6:18E5B:5E836E9B"
     }
   },
-  "uuid": "c875f18e-a0af-4114-8d1f-123b5377a52c",
+  "uuid": "5ba21199-9f1d-420c-87e9-ab30d3e73884",
   "persistent": true,
   "scenarioName": "scenario-1-rate_limit",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-rate_limit-2",
-  "insertionIndex": 2
+  "requiredScenarioState": "scenario-1-rate_limit-2",
+  "insertionIndex": 3
 }

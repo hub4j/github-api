@@ -1,6 +1,6 @@
 {
-  "id": 212446528,
-  "node_id": "MDEwOlJlcG9zaXRvcnkyMTI0NDY1Mjg=",
+  "id": 251751384,
+  "node_id": "MDEwOlJlcG9zaXRvcnkyNTE3NTEzODQ=",
   "name": "github-api-test-rename",
   "full_name": "bitwiseman/github-api-test-rename",
   "private": false,
@@ -64,9 +64,9 @@
   "labels_url": "https://api.github.com/repos/bitwiseman/github-api-test-rename/labels{/name}",
   "releases_url": "https://api.github.com/repos/bitwiseman/github-api-test-rename/releases{/id}",
   "deployments_url": "https://api.github.com/repos/bitwiseman/github-api-test-rename/deployments",
-  "created_at": "2019-10-02T21:40:00Z",
-  "updated_at": "2019-10-02T21:40:02Z",
-  "pushed_at": "2019-10-02T21:40:01Z",
+  "created_at": "2020-03-31T21:52:44Z",
+  "updated_at": "2020-03-31T21:52:46Z",
+  "pushed_at": "2020-03-31T21:52:45Z",
   "git_url": "git://github.com/bitwiseman/github-api-test-rename.git",
   "ssh_url": "git@github.com:bitwiseman/github-api-test-rename.git",
   "clone_url": "https://github.com/bitwiseman/github-api-test-rename.git",
@@ -99,6 +99,7 @@
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
+  "delete_branch_on_merge": false,
   "network_count": 0,
   "subscribers_count": 1
 }

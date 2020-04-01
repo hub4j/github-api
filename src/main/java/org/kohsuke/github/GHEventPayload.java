@@ -211,6 +211,7 @@ public abstract class GHEventPayload {
     /**
      * Represents a repository object specifically for {@link Installation} and {@link InstallationRepositories}.
      */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class InstallationRepository {
         private long id;
         private String nodeId;
@@ -270,6 +271,7 @@ public abstract class GHEventPayload {
      *
      * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
      */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class Installation extends GHEventPayload {
         private String action;
         private GHAppInstallation installation;
@@ -306,8 +308,10 @@ public abstract class GHEventPayload {
     /**
      * A repository has been added or removed from an installation.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative source</a>
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative
+     *      source</a>
      */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class InstallationRepositories extends GHEventPayload {
         private String action;
         private GHAppInstallation installation;

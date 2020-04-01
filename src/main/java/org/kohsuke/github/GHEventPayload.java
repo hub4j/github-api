@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -205,6 +206,160 @@ public abstract class GHEventPayload {
                 checkSuite.wrap(root);
             }
         }
+    }
+
+    /**
+     * Represents a repository object specifically for {@link Installation} and {@link InstallationRepositories}.
+     */
+    public static class InstallationRepository {
+        private long id;
+        private String nodeId;
+        private String name;
+        private String fullName;
+        @JsonProperty("private")
+        private boolean _private;
+
+        /**
+         * Gets id
+         *
+         * @return the id
+         */
+        public long getId() {
+            return id;
+        }
+
+        /**
+         * Gets node id
+         *
+         * @return the node id
+         */
+        public String getNodeId() {
+            return nodeId;
+        }
+
+        /**
+         * Gets name
+         *
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Gets full name
+         *
+         * @return the full name
+         */
+        public String getFullName() {
+            return fullName;
+        }
+
+        /**
+         * Is private boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isPrivate() {
+            return _private;
+        }
+    }
+
+    /**
+     * An installation has been installed, uninstalled, or its permissions have been changed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
+     */
+    public static class Installation extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private List<InstallationRepository> repositories;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets repositories
+         *
+         * @return the repositories
+         */
+        public List<InstallationRepository> getRepositories() {
+            return repositories;
+        };
+    }
+
+    /**
+     * A repository has been added or removed from an installation.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative source</a>
+     */
+    public static class InstallationRepositories extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private String repositorySelection;
+        private List<InstallationRepository> repositoriesAdded;
+        private List<InstallationRepository> repositoriesRemoved;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets installation selection
+         *
+         * @return the installation selection
+         */
+        public String getRepositorySelection() {
+            return repositorySelection;
+        }
+
+        /**
+         * Gets repositories added
+         *
+         * @return the repositories
+         */
+        public List<InstallationRepository> getRepositoriesAdded() {
+            return repositoriesAdded;
+        }
+
+        /**
+         * Gets repositories removed
+         *
+         * @return the repositories
+         */
+        public List<InstallationRepository> getRepositoriesRemoved() {
+            return repositoriesRemoved;
+        }
+
     }
 
     /**

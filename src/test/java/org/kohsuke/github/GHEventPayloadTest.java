@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -392,4 +393,43 @@ public class GHEventPayloadTest {
         assertThat(checkSuite.getApp().getId(), is(29310L));
     }
 
+    @Test
+    @Payload("installation_repositories")
+    public void InstallationRepositoriesEvent() throws Exception {
+        GHEventPayload.InstallationRepositories event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.InstallationRepositories.class);
+
+        assertThat(event.getAction(), is("added"));
+        assertThat(event.getInstallation().getId(), is(957387L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("Codertocat"));
+        assertThat(event.getRepositorySelection(), is("selected"));
+
+        assertThat(event.getRepositoriesAdded().get(0).getId(), is(186853007L));
+        assertThat(event.getRepositoriesAdded().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
+        assertThat(event.getRepositoriesAdded().get(0).getName(), is("Space"));
+        assertThat(event.getRepositoriesAdded().get(0).getFullName(), is("Codertocat/Space"));
+        assertThat(event.getRepositoriesAdded().get(0).isPrivate(), is(false));
+
+        assertThat(event.getRepositoriesRemoved(), is(Collections.emptyList()));
+        assertThat(event.getSender().getLogin(), is("Codertocat"));
+    }
+
+    @Test
+    @Payload("installation")
+    public void InstallationEvent() throws Exception {
+        GHEventPayload.Installation event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
+
+        assertThat(event.getAction(), is("deleted"));
+        assertThat(event.getInstallation().getId(), is(2L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
+
+        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
+        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
+        assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
+        assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
+        assertThat(event.getRepositories().get(0).isPrivate(), is(false));
+
+        assertThat(event.getSender().getLogin(), is("octocat"));
+    }
 }

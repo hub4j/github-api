@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRateLimit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRateLimit.java</span></div><h1>GHRateLimit.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.util.Objects;
+import java.util.logging.Logger;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import static java.util.logging.Level.FINEST;
+
+/**
+ * Rate limit.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+@SuppressFBWarnings(value = &quot;URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
+public class GHRateLimit {
+
+    /**
+     * Remaining calls that can be made.
+     *
+     * @deprecated This value should never have been made public. Use {@link #getRemaining()}
+     */
+    @Deprecated
+    public int remaining;
+
+    /**
+     * Allotted API call per hour.
+     *
+     * @deprecated This value should never have been made public. Use {@link #getLimit()}
+     */
+    @Deprecated
+    public int limit;
+
+    /**
+     * The time at which the current rate limit window resets in UTC epoch seconds. WARNING: this field was implemented
+     * using {@link Date#Date(long)} which expects UTC epoch milliseconds, so this Date instance is meaningless as a
+     * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
+     * multiplied by 1000.
+     *
+     * @deprecated This value should never have been made public. Use {@link #getResetDate()}
+     */
+    @Deprecated
+    public Date reset;
+
+    @Nonnull
+    private final Record core;
+
+    @Nonnull
+    private final Record search;
+
+    @Nonnull
+    private final Record graphql;
+
+    @Nonnull
+    private final Record integrationManifest;
+
+    @Nonnull
+    static GHRateLimit Unknown() {
+<span class="fc" id="L70">        return new GHRateLimit(new UnknownLimitRecord(),</span>
+                new UnknownLimitRecord(),
+                new UnknownLimitRecord(),
+                new UnknownLimitRecord());
+    }
+
+    @Nonnull
+    static GHRateLimit fromHeaderRecord(Record header) {
+<span class="fc" id="L78">        return new GHRateLimit(header, new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord());</span>
+    }
+
+    @JsonCreator
+    GHRateLimit(@Nonnull @JsonProperty(&quot;core&quot;) Record core,
+            @Nonnull @JsonProperty(&quot;search&quot;) Record search,
+            @Nonnull @JsonProperty(&quot;graphql&quot;) Record graphql,
+<span class="fc" id="L85">            @Nonnull @JsonProperty(&quot;integration_manifest&quot;) Record integrationManifest) {</span>
+        // The Nonnull annotation is ignored by Jackson, we have to check manually
+<span class="fc" id="L87">        Objects.requireNonNull(core);</span>
+<span class="fc" id="L88">        Objects.requireNonNull(search);</span>
+<span class="fc" id="L89">        Objects.requireNonNull(graphql);</span>
+<span class="fc" id="L90">        Objects.requireNonNull(integrationManifest);</span>
+
+<span class="fc" id="L92">        this.core = core;</span>
+<span class="fc" id="L93">        this.search = search;</span>
+<span class="fc" id="L94">        this.graphql = graphql;</span>
+<span class="fc" id="L95">        this.integrationManifest = integrationManifest;</span>
+
+        // Deprecated fields
+<span class="fc" id="L98">        this.remaining = core.getRemaining();</span>
+<span class="fc" id="L99">        this.limit = core.getLimit();</span>
+        // This is wrong but is how this was implemented. Kept for backward compat.
+<span class="fc" id="L101">        this.reset = new Date(core.getResetEpochSeconds());</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Returns the date at which the Core API rate limit will reset.
+     *
+     * @return the calculated date at which the rate limit has or will reset.
+     */
+    @Nonnull
+    public Date getResetDate() {
+<span class="fc" id="L111">        return getCore().getResetDate();</span>
+    }
+
+    /**
+     * Gets the remaining number of Core APIs requests allowed before this connection will be throttled.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getRemaining() {
+<span class="fc" id="L121">        return getCore().getRemaining();</span>
+    }
+
+    /**
+     * Gets the total number of Core API calls per hour allotted for this connection.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getLimit() {
+<span class="fc" id="L131">        return getCore().getLimit();</span>
+    }
+
+    /**
+     * Gets the time in epoch seconds when the Core API rate limit will reset.
+     *
+     * @return a long
+     * @since 1.100
+     */
+    public long getResetEpochSeconds() {
+<span class="fc" id="L141">        return getCore().getResetEpochSeconds();</span>
+    }
+
+    /**
+     * Whether the rate limit reset date for this instance has passed.
+     *
+     * @return true if the rate limit reset date has passed. Otherwise false.
+     * @since 1.100
+     */
+    public boolean isExpired() {
+<span class="fc" id="L151">        return getCore().isExpired();</span>
+    }
+
+    /**
+     * The core object provides your rate limit status for all non-search-related resources in the REST API.
+     *
+     * @return a rate limit record
+     * @since 1.100
+     */
+    @Nonnull
+    public Record getCore() {
+<span class="fc" id="L162">        return core;</span>
+    }
+
+    /**
+     * The search object provides your rate limit status for the Search API. TODO: integrate with header limit updating.
+     * Issue #605.
+     *
+     * @return a rate limit record
+     */
+    @Nonnull
+    Record getSearch() {
+<span class="nc" id="L173">        return search;</span>
+    }
+
+    /**
+     * The graphql object provides your rate limit status for the GraphQL API. TODO: integrate with header limit
+     * updating. Issue #605.
+     *
+     * @return a rate limit record
+     */
+    @Nonnull
+    Record getGraphQL() {
+<span class="nc" id="L184">        return graphql;</span>
+    }
+
+    /**
+     * The integration_manifest object provides your rate limit status for the GitHub App Manifest code conversion
+     * endpoint. TODO: integrate with header limit updating. Issue #605.
+     *
+     * @return a rate limit record
+     */
+    @Nonnull
+    Record getIntegrationManifest() {
+<span class="nc" id="L195">        return integrationManifest;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L200">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;search &quot; + getSearch().toString() + &quot;graphql &quot;</span>
+<span class="nc" id="L201">                + getGraphQL().toString() + &quot;integrationManifest &quot; + getIntegrationManifest().toString() + '}';</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L207">            return true;</span>
+        }
+<span class="pc bpc" id="L209" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L210">            return false;</span>
+        }
+<span class="fc" id="L212">        GHRateLimit rateLimit = (GHRateLimit) o;</span>
+<span class="pc bpc" id="L213" title="3 of 4 branches missed.">        return getCore().equals(rateLimit.getCore()) &amp;&amp; getSearch().equals(rateLimit.getSearch())</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                &amp;&amp; getGraphQL().equals(rateLimit.getGraphQL())</span>
+<span class="pc bnc" id="L215" title="All 2 branches missed.">                &amp;&amp; getIntegrationManifest().equals(rateLimit.getIntegrationManifest());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L220">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
+    }
+
+    /**
+     * Gets the appropriate {@link Record} for a particular url path.
+     *
+     * @param urlPath
+     *            the url path of the request
+     * @return the {@link Record} for a url path.
+     */
+    @Nonnull
+    Record getRecordForUrlPath(@Nonnull String urlPath) {
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (urlPath.equals(&quot;/rate_limit&quot;)) {</span>
+<span class="nc" id="L233">            return new UnknownLimitRecord();</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        } else if (urlPath.startsWith(&quot;/search&quot;)) {</span>
+<span class="nc" id="L235">            return getSearch();</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        } else if (urlPath.startsWith(&quot;/graphql&quot;)) {</span>
+<span class="nc" id="L237">            return getGraphQL();</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        } else if (urlPath.startsWith(&quot;/app-manifests&quot;)) {</span>
+<span class="nc" id="L239">            return getIntegrationManifest();</span>
+        } else {
+<span class="fc" id="L241">            return getCore();</span>
+        }
+    }
+
+    /**
+     * A limit record used as a placeholder when the the actual limit is not known.
+     * &lt;p&gt;
+     * Has a large limit and long duration so that it will doesn't expire too often.
+     *
+     * @since 1.100
+     */
+    public static class UnknownLimitRecord extends Record {
+
+        // One hour
+        private static final long unknownLimitResetSeconds = 60L * 60L;
+
+        static final int unknownLimit = 1000000;
+        static final int unknownRemaining = 999999;
+
+        private UnknownLimitRecord() {
+<span class="fc" id="L261">            super(unknownLimit, unknownRemaining, System.currentTimeMillis() / 1000L + unknownLimitResetSeconds);</span>
+<span class="fc" id="L262">        }</span>
+    }
+
+    /**
+     * A rate limit record.
+     *
+     * @since 1.100
+     */
+    public static class Record {
+        /**
+         * Remaining calls that can be made.
+         */
+        private final int remaining;
+
+        /**
+         * Allotted API call per hour.
+         */
+        private final int limit;
+
+        /**
+         * The time at which the current rate limit window resets in UTC epoch seconds.
+         *
+         * This is the raw value returned by the server.
+         */
+        private final long resetEpochSeconds;
+
+        /**
+         * EpochSeconds time (UTC) at which this instance was created.
+         */
+<span class="fc" id="L291">        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;</span>
+
+        /**
+         * The time at which the rate limit will reset. This value is calculated based on
+         * {@link #getResetEpochSeconds()} by calling {@link #calculateResetDate}. If the clock on the local machine not
+         * synchronized with the server clock, this time value will be adjusted to match the local machine's clock.
+         */
+        @Nonnull
+        private final Date resetDate;
+
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         */
+        public Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
+                @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
+                @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds) {
+<span class="fc" id="L314">            this(limit, remaining, resetEpochSeconds, null);</span>
+<span class="fc" id="L315">        }</span>
+
+        /**
+         * Instantiates a new Record. Called by Jackson data binding or during header parsing.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         * @param responseInfo
+         *            the response info
+         */
+        @JsonCreator
+        Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
+                @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
+                @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds,
+<span class="fc" id="L333">                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {</span>
+<span class="fc" id="L334">            this.limit = limit;</span>
+<span class="fc" id="L335">            this.remaining = remaining;</span>
+<span class="fc" id="L336">            this.resetEpochSeconds = resetEpochSeconds;</span>
+<span class="fc" id="L337">            String updatedAt = null;</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">            if (responseInfo != null) {</span>
+<span class="fc" id="L339">                updatedAt = responseInfo.headerField(&quot;Date&quot;);</span>
+            }
+<span class="fc" id="L341">            this.resetDate = calculateResetDate(updatedAt);</span>
+<span class="fc" id="L342">        }</span>
+
+        /**
+         * Recalculates the {@link #resetDate} relative to the local machine clock.
+         * &lt;p&gt;
+         * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetDate()} to make decisions about
+         * how long to wait for until for the rate limit to reset. That means that {@link #getResetDate()} needs to be
+         * accurate to the local machine.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When we say that the clock on two machines is &quot;synchronized&quot;, we mean that the UTC time returned from
+         * {@link System#currentTimeMillis()} on each machine is basically the same. For the purposes of rate limits an
+         * differences of up to a second can be ignored.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When the clock on the local machine is synchronized to the same time as the clock on the GitHub server (via a
+         * time service for example), the {@link #resetDate} generated directly from {@link #resetEpochSeconds} will be
+         * accurate for the local machine as well.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When the clock on the local machine is not synchronized with the server, the {@link #resetDate} must be
+         * recalculated relative to the local machine clock. This is done by taking the number of seconds between the
+         * response &quot;Date&quot; header and {@link #resetEpochSeconds} and then adding that to this record's
+         * {@link #createdAtEpochSeconds}.
+         *
+         * @param updatedAt
+         *            a string date in RFC 1123
+         * @return reset date based on the passed date
+         */
+        @Nonnull
+        private Date calculateResetDate(@CheckForNull String updatedAt) {
+<span class="fc" id="L373">            long updatedAtEpochSeconds = createdAtEpochSeconds;</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">            if (!StringUtils.isBlank(updatedAt)) {</span>
+                try {
+                    // Get the server date and reset data, will always return a time in GMT
+<span class="fc" id="L377">                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)</span>
+<span class="fc" id="L378">                            .toEpochSecond();</span>
+<span class="nc" id="L379">                } catch (DateTimeParseException e) {</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">                    if (LOGGER.isLoggable(FINEST)) {</span>
+<span class="nc" id="L381">                        LOGGER.log(FINEST, &quot;Malformed Date header value &quot; + updatedAt, e);</span>
+                    }
+<span class="fc" id="L383">                }</span>
+            }
+
+            // This may seem odd but it results in an accurate or slightly pessimistic reset date
+            // based on system time rather than assuming the system time synchronized with the server
+<span class="fc" id="L388">            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;</span>
+<span class="fc" id="L389">            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);</span>
+        }
+
+        /**
+         * Gets the remaining number of requests allowed before this connection will be throttled.
+         *
+         * @return an integer
+         */
+        public int getRemaining() {
+<span class="fc" id="L398">            return remaining;</span>
+        }
+
+        /**
+         * Gets the total number of API calls per hour allotted for this connection.
+         *
+         * @return an integer
+         */
+        public int getLimit() {
+<span class="fc" id="L407">            return limit;</span>
+        }
+
+        /**
+         * Gets the time in epoch seconds when the rate limit will reset.
+         *
+         * This is the raw value returned by the server. This value is not adjusted if local machine time is not
+         * synchronized with server time. If attempting to check when the rate limit will reset, use
+         * {@link #getResetDate()} or implement a {@link RateLimitChecker} instead.
+         *
+         * @return a long representing the time in epoch seconds when the rate limit will reset
+         * @see #getResetDate() #getResetDate()
+         */
+        public long getResetEpochSeconds() {
+<span class="fc" id="L421">            return resetEpochSeconds;</span>
+        }
+
+        /**
+         * Whether the rate limit reset date indicated by this instance is expired
+         *
+         * @return true if the rate limit reset date has passed. Otherwise false.
+         */
+        public boolean isExpired() {
+<span class="fc bfc" id="L430" title="All 2 branches covered.">            return getResetDate().getTime() &lt; System.currentTimeMillis();</span>
+        }
+
+        /**
+         * Returns the date at which the rate limit will reset, adjusted to local machine time if the local machine's
+         * clock not synchronized with to the same clock as the GitHub server.
+         *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
+         * @return the calculated date at which the rate limit has or will reset.
+         */
+        @Nonnull
+        public Date getResetDate() {
+<span class="fc" id="L443">            return new Date(resetDate.getTime());</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L448">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
+                    + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+<span class="pc bpc" id="L454" title="1 of 2 branches missed.">            if (this == o) {</span>
+<span class="nc" id="L455">                return true;</span>
+            }
+<span class="pc bpc" id="L457" title="2 of 4 branches missed.">            if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L458">                return false;</span>
+            }
+<span class="fc" id="L460">            Record record = (Record) o;</span>
+<span class="pc bpc" id="L461" title="1 of 4 branches missed.">            return getRemaining() == record.getRemaining() &amp;&amp; getLimit() == record.getLimit()</span>
+<span class="pc bpc" id="L462" title="1 of 2 branches missed.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
+<span class="pc bpc" id="L463" title="1 of 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
+        }
+
+        @Override
+        public int hashCode() {
+<span class="nc" id="L468">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
+        }
+    }
+
+<span class="fc" id="L472">    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

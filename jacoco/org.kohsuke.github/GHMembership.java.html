@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMembership.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMembership.java</span></div><h1>GHMembership.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+
+/**
+ * Represents a membership of a user in an organization.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
+ */
+<span class="fc" id="L13">public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {</span>
+    GitHub root;
+
+    String url;
+    String state;
+    String role;
+    GHUser user;
+    GHOrganization organization;
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="nc" id="L28">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public State getState() {
+<span class="fc" id="L37">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
+    public Role getRole() {
+<span class="fc" id="L46">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
+    public GHUser getUser() {
+<span class="fc" id="L55">        return user;</span>
+    }
+
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
+    public GHOrganization getOrganization() {
+<span class="nc" id="L64">        return organization;</span>
+    }
+
+    /**
+     * Accepts a pending invitation to an organization.
+     *
+     * @throws IOException
+     *             the io exception
+     * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
+     */
+    public void activate() throws IOException {
+<span class="nc" id="L75">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L76">    }</span>
+
+    GHMembership wrap(GitHub root) {
+<span class="fc" id="L79">        this.root = root;</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L81">            user = root.getUser(user.wrapUp(root));</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (organization != null)</span>
+<span class="fc" id="L83">            organization.wrapUp(root);</span>
+<span class="fc" id="L84">        return this;</span>
+    }
+
+    /**
+     * Role of a user in an organization.
+     */
+<span class="fc" id="L90">    public enum Role {</span>
+        /**
+         * Organization owner.
+         */
+<span class="fc" id="L94">        ADMIN,</span>
+        /**
+         * Non-owner organization member.
+         */
+<span class="fc" id="L98">        MEMBER;</span>
+    }
+
+    /**
+     * Whether a role is currently active or waiting for acceptance (pending)
+     */
+<span class="fc" id="L104">    public enum State {</span>
+<span class="fc" id="L105">        ACTIVE, PENDING;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

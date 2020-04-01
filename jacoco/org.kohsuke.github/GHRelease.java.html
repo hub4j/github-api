@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRelease.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRelease.java</span></div><h1>GHRelease.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.List;
+
+import static java.lang.String.*;
+
+/**
+ * Release in a github repository.
+ *
+ * @see GHRepository#getReleases() GHRepository#getReleases()
+ * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
+ */
+<span class="fc" id="L20">public class GHRelease extends GHObject {</span>
+    GitHub root;
+    GHRepository owner;
+
+    private String html_url;
+    private String assets_url;
+    private String upload_url;
+    private String tag_name;
+    private String target_commitish;
+    private String name;
+    private String body;
+    private boolean draft;
+    private boolean prerelease;
+    private Date published_at;
+    private String tarball_url;
+    private String zipball_url;
+
+    /**
+     * Gets assets url.
+     *
+     * @return the assets url
+     */
+    public String getAssetsUrl() {
+<span class="nc" id="L43">        return assets_url;</span>
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="nc" id="L52">        return body;</span>
+    }
+
+    /**
+     * Is draft boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDraft() {
+<span class="nc" id="L61">        return draft;</span>
+    }
+
+    /**
+     * Sets draft.
+     *
+     * @param draft
+     *            the draft
+     * @return the draft
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #update()}
+     */
+    @Deprecated
+    public GHRelease setDraft(boolean draft) throws IOException {
+<span class="nc" id="L76">        return update().draft(draft).update();</span>
+    }
+
+    public URL getHtmlUrl() {
+<span class="nc" id="L80">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L89">        return name;</span>
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+<span class="nc" id="L99">        this.name = name;</span>
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    public GHRepository getOwner() {
+<span class="fc" id="L108">        return owner;</span>
+    }
+
+    /**
+     * Sets owner.
+     *
+     * @param owner
+     *            the owner
+     */
+    public void setOwner(GHRepository owner) {
+<span class="nc" id="L118">        this.owner = owner;</span>
+<span class="nc" id="L119">    }</span>
+
+    /**
+     * Is prerelease boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPrerelease() {
+<span class="nc" id="L127">        return prerelease;</span>
+    }
+
+    /**
+     * Gets published at.
+     *
+     * @return the published at
+     */
+    public Date getPublished_at() {
+<span class="nc" id="L136">        return new Date(published_at.getTime());</span>
+    }
+
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
+    public GitHub getRoot() {
+<span class="nc" id="L145">        return root;</span>
+    }
+
+    /**
+     * Gets tag name.
+     *
+     * @return the tag name
+     */
+    public String getTagName() {
+<span class="fc" id="L154">        return tag_name;</span>
+    }
+
+    /**
+     * Gets target commitish.
+     *
+     * @return the target commitish
+     */
+    public String getTargetCommitish() {
+<span class="nc" id="L163">        return target_commitish;</span>
+    }
+
+    /**
+     * Gets upload url.
+     *
+     * @return the upload url
+     */
+    public String getUploadUrl() {
+<span class="fc" id="L172">        return upload_url;</span>
+    }
+
+    /**
+     * Gets zipball url.
+     *
+     * @return the zipball url
+     */
+    public String getZipballUrl() {
+<span class="nc" id="L181">        return zipball_url;</span>
+    }
+
+    /**
+     * Gets tarball url.
+     *
+     * @return the tarball url
+     */
+    public String getTarballUrl() {
+<span class="nc" id="L190">        return tarball_url;</span>
+    }
+
+    GHRelease wrap(GHRepository owner) {
+<span class="fc" id="L194">        this.owner = owner;</span>
+<span class="fc" id="L195">        this.root = owner.root;</span>
+<span class="fc" id="L196">        return this;</span>
+    }
+
+    static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        for (GHRelease release : releases) {</span>
+<span class="nc" id="L201">            release.wrap(owner);</span>
+        }
+<span class="nc" id="L203">        return releases;</span>
+    }
+
+    /**
+     * Because github relies on SNI (http://en.wikipedia.org/wiki/Server_Name_Indication) this method will only work on
+     * Java 7 or greater. Options for fixing this for earlier JVMs can be found here
+     * http://stackoverflow.com/questions/12361090/server-name-indication-sni-on-java but involve more complicated
+     * handling of the HTTP requests to github's API.
+     *
+     * @param file
+     *            the file
+     * @param contentType
+     *            the content type
+     * @return the gh asset
+     * @throws IOException
+     *             the io exception
+     */
+    public GHAsset uploadAsset(File file, String contentType) throws IOException {
+<span class="fc" id="L221">        FileInputStream s = new FileInputStream(file);</span>
+        try {
+<span class="fc" id="L223">            return uploadAsset(file.getName(), s, contentType);</span>
+        } finally {
+<span class="fc" id="L225">            s.close();</span>
+        }
+    }
+
+    /**
+     * Upload asset gh asset.
+     *
+     * @param filename
+     *            the filename
+     * @param stream
+     *            the stream
+     * @param contentType
+     *            the content type
+     * @return the gh asset
+     * @throws IOException
+     *             the io exception
+     */
+    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
+<span class="fc" id="L243">        Requester builder = owner.root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L244">        String url = getUploadUrl();</span>
+        // strip the helpful garbage from the url
+<span class="fc" id="L246">        url = url.substring(0, url.indexOf('{'));</span>
+<span class="fc" id="L247">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L248">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
+    }
+
+    /**
+     * Gets assets.
+     *
+     * @return the assets
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHAsset&gt; getAssets() throws IOException {
+<span class="fc" id="L259">        Requester builder = owner.root.createRequest();</span>
+
+<span class="fc" id="L261">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;))</span>
+<span class="fc" id="L262">                .toIterable(GHAsset[].class, item -&gt; item.wrap(this))</span>
+<span class="fc" id="L263">                .toList();</span>
+    }
+
+    /**
+     * Deletes this release.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="nc" id="L273">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + id)).send();</span>
+<span class="nc" id="L274">    }</span>
+
+    /**
+     * Updates this release via a builder.
+     *
+     * @return the gh release updater
+     */
+    public GHReleaseUpdater update() {
+<span class="nc" id="L282">        return new GHReleaseUpdater(this);</span>
+    }
+
+    private String getApiTailUrl(String end) {
+<span class="fc" id="L286">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, id, end));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

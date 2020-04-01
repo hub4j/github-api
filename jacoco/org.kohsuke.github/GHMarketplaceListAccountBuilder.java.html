@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplaceListAccountBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplaceListAccountBuilder.java</span></div><h1>GHMarketplaceListAccountBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+/**
+ * Returns any accounts associated with a plan, including free plans
+ *
+ * @author Paulo Miguel Almeida
+ * @see GHMarketplacePlan#listAccounts()
+ */
+public class GHMarketplaceListAccountBuilder {
+    private final GitHub root;
+    private final Requester builder;
+    private final long planId;
+
+<span class="fc" id="L16">    GHMarketplaceListAccountBuilder(GitHub root, long planId) {</span>
+<span class="fc" id="L17">        this.root = root;</span>
+<span class="fc" id="L18">        this.builder = root.createRequest();</span>
+<span class="fc" id="L19">        this.planId = planId;</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
+     * &lt;p&gt;
+     * If omitted, the default sorting strategy will be &quot;CREATED&quot;
+     *
+     * @param sort
+     *            the sort strategy
+     * @return a GHMarketplaceListAccountBuilder
+     */
+    public GHMarketplaceListAccountBuilder sort(Sort sort) {
+<span class="fc" id="L32">        this.builder.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L33">        return this;</span>
+    }
+
+    /**
+     * Orders the GitHub accounts results, Can be one of asc or desc. Ignored without the sort parameter.
+     *
+     * @param direction
+     *            the order strategy
+     * @return a GHMarketplaceListAccountBuilder
+     */
+    public GHMarketplaceListAccountBuilder direction(GHDirection direction) {
+<span class="fc" id="L44">        this.builder.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L45">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L51">    public enum Sort {</span>
+<span class="fc" id="L52">        CREATED, UPDATED</span>
+    }
+
+    /**
+     * List any accounts associated with the plan specified on construction with all the order/sort parameters set.
+     * &lt;p&gt;
+     * GitHub Apps must use a JWT to access this endpoint.
+     * &lt;p&gt;
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a paged iterable instance of GHMarketplaceAccountPlan
+     * @throws IOException
+     *             on error
+     */
+    public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() throws IOException {
+<span class="fc" id="L67">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
+<span class="fc" id="L68">                .toIterable(GHMarketplaceAccountPlan[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

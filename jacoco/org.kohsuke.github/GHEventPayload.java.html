@@ -1,0 +1,1592 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHEventPayload.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHEventPayload.java</span></div><h1>GHEventPayload.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.Reader;
+import java.util.List;
+
+/**
+ * Base type for types used in databinding of the event payload.
+ *
+ * @see GitHub#parseEventPayload(Reader, Class) GitHub#parseEventPayload(Reader, Class)
+ * @see GHEventInfo#getPayload(Class) GHEventInfo#getPayload(Class)
+ */
+@SuppressWarnings(&quot;UnusedDeclaration&quot;)
+public abstract class GHEventPayload {
+    protected GitHub root;
+
+    private GHUser sender;
+
+<span class="fc" id="L21">    GHEventPayload() {</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * Gets the sender or {@code null} if accessed via the events API.
+     *
+     * @return the sender or {@code null} if accessed via the events API.
+     */
+    public GHUser getSender() {
+<span class="fc" id="L30">        return sender;</span>
+    }
+
+    /**
+     * Sets sender.
+     *
+     * @param sender
+     *            the sender
+     */
+    public void setSender(GHUser sender) {
+<span class="nc" id="L40">        this.sender = sender;</span>
+<span class="nc" id="L41">    }</span>
+
+    void wrapUp(GitHub root) {
+<span class="fc" id="L44">        this.root = root;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (sender != null) {</span>
+<span class="fc" id="L46">            sender.wrapUp(root);</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+    // List of events that still need to be added:
+    // ContentReferenceEvent
+    // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
+    // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
+    // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
+    // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
+    // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
+
+    /**
+     * A check run event has been created, rerequested, completed, or has a requested_action.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/#checkrunevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L66">    public static class CheckRun extends GHEventPayload {</span>
+        private String action;
+        private int number;
+        private GHCheckRun checkRun;
+        private GHRequestedAction requestedAction;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L79">            return action;</span>
+        }
+
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
+        public int getNumber() {
+<span class="nc" id="L88">            return number;</span>
+        }
+
+        /**
+         * Sets Check Run object
+         *
+         * @param currentCheckRun
+         *            the check run object
+         */
+        public void setCheckRun(GHCheckRun currentCheckRun) {
+<span class="nc" id="L98">            this.checkRun = currentCheckRun;</span>
+<span class="nc" id="L99">        }</span>
+
+        /**
+         * Gets Check Run object
+         *
+         * @return the current checkRun object
+         */
+        public GHCheckRun getCheckRun() {
+<span class="fc" id="L107">            return checkRun;</span>
+        }
+
+        /**
+         * Sets the Requested Action object
+         *
+         * @param currentRequestedAction
+         *            the current action
+         */
+        public void setCheckRun(GHRequestedAction currentRequestedAction) {
+<span class="nc" id="L117">            this.requestedAction = currentRequestedAction;</span>
+<span class="nc" id="L118">        }</span>
+
+        /**
+         * Gets the Requested Action object
+         *
+         * @return the requested action
+         */
+        public GHRequestedAction getRequestedAction() {
+<span class="nc" id="L126">            return requestedAction;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L135">            repository.root = root;</span>
+<span class="fc" id="L136">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L141">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">            if (checkRun == null)</span>
+<span class="nc" id="L143">                throw new IllegalStateException(</span>
+                        &quot;Expected check_run payload, but got something else. Maybe we've got another type of event?&quot;);
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L146">                repository.wrap(root);</span>
+<span class="fc" id="L147">                checkRun.wrap(repository);</span>
+            } else {
+<span class="nc" id="L149">                checkRun.wrap(root);</span>
+            }
+<span class="fc" id="L151">        }</span>
+    }
+
+    /**
+     * A check suite event has been requested, rerequested or completed.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/#checkrunevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L162">    public static class CheckSuite extends GHEventPayload {</span>
+        private String action;
+        private GHCheckSuite checkSuite;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L173">            return action;</span>
+        }
+
+        /**
+         * Gets the Check Suite object
+         *
+         * @return the Check Suite object
+         */
+        public GHCheckSuite getCheckSuite() {
+<span class="fc" id="L182">            return checkSuite;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L191">            repository.root = root;</span>
+<span class="fc" id="L192">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L197">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            if (checkSuite == null)</span>
+<span class="nc" id="L199">                throw new IllegalStateException(</span>
+                        &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L202">                repository.wrap(root);</span>
+<span class="fc" id="L203">                checkSuite.wrap(repository);</span>
+            } else {
+<span class="nc" id="L205">                checkSuite.wrap(root);</span>
+            }
+<span class="fc" id="L207">        }</span>
+    }
+
+    /**
+     * A pull request status has changed.
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#pullrequestevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L218">    public static class PullRequest extends GHEventPayload {</span>
+        private String action;
+        private int number;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L230">            return action;</span>
+        }
+
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
+        public int getNumber() {
+<span class="fc" id="L239">            return number;</span>
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        public GHPullRequest getPullRequest() {
+<span class="fc" id="L248">            pull_request.root = root;</span>
+<span class="fc" id="L249">            return pull_request;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L258">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L263">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (pull_request == null)</span>
+<span class="nc" id="L265">                throw new IllegalStateException(</span>
+                        &quot;Expected pull_request payload, but got something else. Maybe we've got another type of event?&quot;);
+<span class="fc bfc" id="L267" title="All 2 branches covered.">            if (repository != null) {</span>
+<span class="fc" id="L268">                repository.wrap(root);</span>
+<span class="fc" id="L269">                pull_request.wrapUp(repository);</span>
+            } else {
+<span class="fc" id="L271">                pull_request.wrapUp(root);</span>
+            }
+<span class="fc" id="L273">        }</span>
+    }
+
+    /**
+     * A review was added to a pull request
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent&quot;&gt;authoritative
+     *      source&lt;/a&gt;
+     */
+<span class="fc" id="L282">    public static class PullRequestReview extends GHEventPayload {</span>
+        private String action;
+        private GHPullRequestReview review;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L294">            return action;</span>
+        }
+
+        /**
+         * Gets review.
+         *
+         * @return the review
+         */
+        public GHPullRequestReview getReview() {
+<span class="fc" id="L303">            return review;</span>
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        public GHPullRequest getPullRequest() {
+<span class="fc" id="L312">            return pull_request;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L321">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L326">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">            if (review == null)</span>
+<span class="nc" id="L328">                throw new IllegalStateException(</span>
+                        &quot;Expected pull_request_review payload, but got something else. Maybe we've got another type of event?&quot;);
+
+<span class="fc" id="L331">            review.wrapUp(pull_request);</span>
+
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L334">                repository.wrap(root);</span>
+<span class="fc" id="L335">                pull_request.wrapUp(repository);</span>
+            } else {
+<span class="nc" id="L337">                pull_request.wrapUp(root);</span>
+            }
+<span class="fc" id="L339">        }</span>
+    }
+
+    /**
+     * A review comment was added to a pull request
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent&quot;&gt;authoritative
+     *      source&lt;/a&gt;
+     */
+<span class="fc" id="L348">    public static class PullRequestReviewComment extends GHEventPayload {</span>
+        private String action;
+        private GHPullRequestReviewComment comment;
+        private GHPullRequest pull_request;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L360">            return action;</span>
+        }
+
+        /**
+         * Gets comment.
+         *
+         * @return the comment
+         */
+        public GHPullRequestReviewComment getComment() {
+<span class="fc" id="L369">            return comment;</span>
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        public GHPullRequest getPullRequest() {
+<span class="fc" id="L378">            return pull_request;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L387">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L392">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">            if (comment == null)</span>
+<span class="nc" id="L394">                throw new IllegalStateException(</span>
+                        &quot;Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?&quot;);
+
+<span class="fc" id="L397">            comment.wrapUp(pull_request);</span>
+
+<span class="pc bpc" id="L399" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L400">                repository.wrap(root);</span>
+<span class="fc" id="L401">                pull_request.wrapUp(repository);</span>
+            } else {
+<span class="nc" id="L403">                pull_request.wrapUp(root);</span>
+            }
+<span class="fc" id="L405">        }</span>
+    }
+
+    /**
+     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or
+     * reopened.
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#issueevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L416">    public static class Issue extends GHEventPayload {</span>
+        private String action;
+        private GHIssue issue;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getAction() {
+<span class="fc" id="L428">            return action;</span>
+        }
+
+        /**
+         * Gets issue.
+         *
+         * @return the issue
+         */
+        public GHIssue getIssue() {
+<span class="fc" id="L437">            return issue;</span>
+        }
+
+        /**
+         * Sets issue.
+         *
+         * @param issue
+         *            the issue
+         */
+        public void setIssue(GHIssue issue) {
+<span class="nc" id="L447">            this.issue = issue;</span>
+<span class="nc" id="L448">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L456">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L466">            this.repository = repository;</span>
+<span class="nc" id="L467">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L471">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L472" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L473">                repository.wrap(root);</span>
+<span class="fc" id="L474">                issue.wrap(repository);</span>
+            } else {
+<span class="nc" id="L476">                issue.wrap(root);</span>
+            }
+<span class="fc" id="L478">        }</span>
+    }
+
+    /**
+     * A comment was added to an issue
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#issuecommentevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L488">    public static class IssueComment extends GHEventPayload {</span>
+        private String action;
+        private GHIssueComment comment;
+        private GHIssue issue;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getAction() {
+<span class="fc" id="L501">            return action;</span>
+        }
+
+        /**
+         * Gets comment.
+         *
+         * @return the comment
+         */
+        public GHIssueComment getComment() {
+<span class="fc" id="L510">            return comment;</span>
+        }
+
+        /**
+         * Sets comment.
+         *
+         * @param comment
+         *            the comment
+         */
+        public void setComment(GHIssueComment comment) {
+<span class="nc" id="L520">            this.comment = comment;</span>
+<span class="nc" id="L521">        }</span>
+
+        /**
+         * Gets issue.
+         *
+         * @return the issue
+         */
+        public GHIssue getIssue() {
+<span class="fc" id="L529">            return issue;</span>
+        }
+
+        /**
+         * Sets issue.
+         *
+         * @param issue
+         *            the issue
+         */
+        public void setIssue(GHIssue issue) {
+<span class="nc" id="L539">            this.issue = issue;</span>
+<span class="nc" id="L540">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L548">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L558">            this.repository = repository;</span>
+<span class="nc" id="L559">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L563">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L564" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L565">                repository.wrap(root);</span>
+<span class="fc" id="L566">                issue.wrap(repository);</span>
+            } else {
+<span class="nc" id="L568">                issue.wrap(root);</span>
+            }
+<span class="fc" id="L570">            comment.wrapUp(issue);</span>
+<span class="fc" id="L571">        }</span>
+    }
+
+    /**
+     * A comment was added to a commit
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#commitcommentevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L581">    public static class CommitComment extends GHEventPayload {</span>
+        private String action;
+        private GHCommitComment comment;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getAction() {
+<span class="fc" id="L593">            return action;</span>
+        }
+
+        /**
+         * Gets comment.
+         *
+         * @return the comment
+         */
+        public GHCommitComment getComment() {
+<span class="fc" id="L602">            return comment;</span>
+        }
+
+        /**
+         * Sets comment.
+         *
+         * @param comment
+         *            the comment
+         */
+        public void setComment(GHCommitComment comment) {
+<span class="nc" id="L612">            this.comment = comment;</span>
+<span class="nc" id="L613">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L621">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L631">            this.repository = repository;</span>
+<span class="nc" id="L632">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L636">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L637" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L638">                repository.wrap(root);</span>
+<span class="fc" id="L639">                comment.wrap(repository);</span>
+            }
+<span class="fc" id="L641">        }</span>
+    }
+
+    /**
+     * A repository, branch, or tag was created
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#createevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L651">    public static class Create extends GHEventPayload {</span>
+        private String ref;
+        private String refType;
+        private String masterBranch;
+        private String description;
+        private GHRepository repository;
+
+        /**
+         * Gets ref.
+         *
+         * @return the ref
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getRef() {
+<span class="fc" id="L665">            return ref;</span>
+        }
+
+        /**
+         * Gets ref type.
+         *
+         * @return the ref type
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getRefType() {
+<span class="fc" id="L675">            return refType;</span>
+        }
+
+        /**
+         * Gets master branch.
+         *
+         * @return the master branch
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getMasterBranch() {
+<span class="fc" id="L685">            return masterBranch;</span>
+        }
+
+        /**
+         * Gets description.
+         *
+         * @return the description
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getDescription() {
+<span class="fc" id="L695">            return description;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L704">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L714">            this.repository = repository;</span>
+<span class="nc" id="L715">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L719">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L720" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L721">                repository.wrap(root);</span>
+            }
+<span class="fc" id="L723">        }</span>
+    }
+
+    /**
+     * A branch, or tag was deleted
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#deleteevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L733">    public static class Delete extends GHEventPayload {</span>
+        private String ref;
+        private String refType;
+        private GHRepository repository;
+
+        /**
+         * Gets ref.
+         *
+         * @return the ref
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getRef() {
+<span class="fc" id="L745">            return ref;</span>
+        }
+
+        /**
+         * Gets ref type.
+         *
+         * @return the ref type
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getRefType() {
+<span class="fc" id="L755">            return refType;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L764">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L774">            this.repository = repository;</span>
+<span class="nc" id="L775">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L779">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L780" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L781">                repository.wrap(root);</span>
+            }
+<span class="fc" id="L783">        }</span>
+    }
+
+    /**
+     * A deployment
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#deploymentevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L793">    public static class Deployment extends GHEventPayload {</span>
+        private GHDeployment deployment;
+        private GHRepository repository;
+
+        /**
+         * Gets deployment.
+         *
+         * @return the deployment
+         */
+        public GHDeployment getDeployment() {
+<span class="fc" id="L803">            return deployment;</span>
+        }
+
+        /**
+         * Sets deployment.
+         *
+         * @param deployment
+         *            the deployment
+         */
+        public void setDeployment(GHDeployment deployment) {
+<span class="nc" id="L813">            this.deployment = deployment;</span>
+<span class="nc" id="L814">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L822">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L832">            this.repository = repository;</span>
+<span class="nc" id="L833">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L837">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L838" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L839">                repository.wrap(root);</span>
+<span class="fc" id="L840">                deployment.wrap(repository);</span>
+            }
+<span class="fc" id="L842">        }</span>
+    }
+
+    /**
+     * A deployment
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#deploymentstatusevent&quot;&gt;authoritative
+     *      source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L853">    public static class DeploymentStatus extends GHEventPayload {</span>
+        private GHDeploymentStatus deploymentStatus;
+        private GHDeployment deployment;
+        private GHRepository repository;
+
+        /**
+         * Gets deployment status.
+         *
+         * @return the deployment status
+         */
+        public GHDeploymentStatus getDeploymentStatus() {
+<span class="fc" id="L864">            return deploymentStatus;</span>
+        }
+
+        /**
+         * Sets deployment status.
+         *
+         * @param deploymentStatus
+         *            the deployment status
+         */
+        public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
+<span class="nc" id="L874">            this.deploymentStatus = deploymentStatus;</span>
+<span class="nc" id="L875">        }</span>
+
+        /**
+         * Gets deployment.
+         *
+         * @return the deployment
+         */
+        public GHDeployment getDeployment() {
+<span class="fc" id="L883">            return deployment;</span>
+        }
+
+        /**
+         * Sets deployment.
+         *
+         * @param deployment
+         *            the deployment
+         */
+        public void setDeployment(GHDeployment deployment) {
+<span class="nc" id="L893">            this.deployment = deployment;</span>
+<span class="nc" id="L894">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L902">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L912">            this.repository = repository;</span>
+<span class="nc" id="L913">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L917">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L918" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L919">                repository.wrap(root);</span>
+<span class="fc" id="L920">                deployment.wrap(repository);</span>
+<span class="fc" id="L921">                deploymentStatus.wrap(repository);</span>
+            }
+<span class="fc" id="L923">        }</span>
+    }
+
+    /**
+     * A user forked a repository
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#forkevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L933">    public static class Fork extends GHEventPayload {</span>
+        private GHRepository forkee;
+        private GHRepository repository;
+
+        /**
+         * Gets forkee.
+         *
+         * @return the forkee
+         */
+        public GHRepository getForkee() {
+<span class="fc" id="L943">            return forkee;</span>
+        }
+
+        /**
+         * Sets forkee.
+         *
+         * @param forkee
+         *            the forkee
+         */
+        public void setForkee(GHRepository forkee) {
+<span class="nc" id="L953">            this.forkee = forkee;</span>
+<span class="nc" id="L954">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L962">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L972">            this.repository = repository;</span>
+<span class="nc" id="L973">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L977">            super.wrapUp(root);</span>
+<span class="fc" id="L978">            forkee.wrap(root);</span>
+<span class="pc bpc" id="L979" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L980">                repository.wrap(root);</span>
+            }
+<span class="fc" id="L982">        }</span>
+    }
+
+    /**
+     * A ping.
+     */
+<span class="nc" id="L988">    public static class Ping extends GHEventPayload {</span>
+        private GHRepository repository;
+        private GHOrganization organization;
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L999">            this.repository = repository;</span>
+<span class="nc" id="L1000">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="nc" id="L1008">            return repository;</span>
+        }
+
+        /**
+         * Gets organization.
+         *
+         * @return the organization
+         */
+        public GHOrganization getOrganization() {
+<span class="nc" id="L1017">            return organization;</span>
+        }
+
+        /**
+         * Sets organization.
+         *
+         * @param organization
+         *            the organization
+         */
+        public void setOrganization(GHOrganization organization) {
+<span class="nc" id="L1027">            this.organization = organization;</span>
+<span class="nc" id="L1028">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="nc" id="L1032">            super.wrapUp(root);</span>
+<span class="nc bnc" id="L1033" title="All 2 branches missed.">            if (repository != null)</span>
+<span class="nc" id="L1034">                repository.wrap(root);</span>
+<span class="nc bnc" id="L1035" title="All 2 branches missed.">            if (organization != null) {</span>
+<span class="nc" id="L1036">                organization.wrapUp(root);</span>
+            }
+<span class="nc" id="L1038">        }</span>
+
+    }
+
+    /**
+     * A repository was made public.
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#publicevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+<span class="fc" id="L1047">    public static class Public extends GHEventPayload {</span>
+        private GHRepository repository;
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L1057">            this.repository = repository;</span>
+<span class="nc" id="L1058">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L1066">            return repository;</span>
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L1071">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L1072" title="1 of 2 branches missed.">            if (repository != null)</span>
+<span class="fc" id="L1073">                repository.wrap(root);</span>
+<span class="fc" id="L1074">        }</span>
+
+    }
+
+    /**
+     * A commit was pushed.
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#pushevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UUF_UNUSED_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L1086">    public static class Push extends GHEventPayload {</span>
+        private String head, before;
+        private boolean created, deleted, forced;
+        private String ref;
+        private int size;
+        private List&lt;PushCommit&gt; commits;
+        private GHRepository repository;
+        private Pusher pusher;
+
+        /**
+         * The SHA of the HEAD commit on the repository
+         *
+         * @return the head
+         */
+        public String getHead() {
+<span class="fc" id="L1101">            return head;</span>
+        }
+
+        /**
+         * This is undocumented, but it looks like this captures the commit that the ref was pointing to before the
+         * push.
+         *
+         * @return the before
+         */
+        public String getBefore() {
+<span class="fc" id="L1111">            return before;</span>
+        }
+
+        @JsonSetter // alias
+        private void setAfter(String after) {
+<span class="fc" id="L1116">            head = after;</span>
+<span class="fc" id="L1117">        }</span>
+
+        /**
+         * The full Git ref that was pushed. Example: “refs/heads/master”
+         *
+         * @return the ref
+         */
+        public String getRef() {
+<span class="fc" id="L1125">            return ref;</span>
+        }
+
+        /**
+         * The number of commits in the push. Is this always the same as {@code getCommits().size()}?
+         *
+         * @return the size
+         */
+        public int getSize() {
+<span class="nc" id="L1134">            return size;</span>
+        }
+
+        /**
+         * Is created boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isCreated() {
+<span class="fc" id="L1143">            return created;</span>
+        }
+
+        /**
+         * Is deleted boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isDeleted() {
+<span class="fc" id="L1152">            return deleted;</span>
+        }
+
+        /**
+         * Is forced boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isForced() {
+<span class="fc" id="L1161">            return forced;</span>
+        }
+
+        /**
+         * The list of pushed commits.
+         *
+         * @return the commits
+         */
+        public List&lt;PushCommit&gt; getCommits() {
+<span class="fc" id="L1170">            return commits;</span>
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L1179">            return repository;</span>
+        }
+
+        /**
+         * Gets pusher.
+         *
+         * @return the pusher
+         */
+        public Pusher getPusher() {
+<span class="fc" id="L1188">            return pusher;</span>
+        }
+
+        /**
+         * Sets pusher.
+         *
+         * @param pusher
+         *            the pusher
+         */
+        public void setPusher(Pusher pusher) {
+<span class="nc" id="L1198">            this.pusher = pusher;</span>
+<span class="nc" id="L1199">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L1203">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L1204" title="1 of 2 branches missed.">            if (repository != null)</span>
+<span class="fc" id="L1205">                repository.wrap(root);</span>
+<span class="fc" id="L1206">        }</span>
+
+        /**
+         * The type Pusher.
+         */
+<span class="fc" id="L1211">        public static class Pusher {</span>
+            private String name, email;
+
+            /**
+             * Gets name.
+             *
+             * @return the name
+             */
+            public String getName() {
+<span class="fc" id="L1220">                return name;</span>
+            }
+
+            /**
+             * Sets name.
+             *
+             * @param name
+             *            the name
+             */
+            public void setName(String name) {
+<span class="nc" id="L1230">                this.name = name;</span>
+<span class="nc" id="L1231">            }</span>
+
+            /**
+             * Gets email.
+             *
+             * @return the email
+             */
+            public String getEmail() {
+<span class="fc" id="L1239">                return email;</span>
+            }
+
+            /**
+             * Sets email.
+             *
+             * @param email
+             *            the email
+             */
+            public void setEmail(String email) {
+<span class="nc" id="L1249">                this.email = email;</span>
+<span class="nc" id="L1250">            }</span>
+        }
+
+        /**
+         * Commit in a push
+         */
+<span class="fc" id="L1256">        public static class PushCommit {</span>
+            private GitUser author;
+            private GitUser committer;
+            private String url, sha, message;
+            private boolean distinct;
+            private List&lt;String&gt; added, removed, modified;
+
+            /**
+             * Gets author.
+             *
+             * @return the author
+             */
+            public GitUser getAuthor() {
+<span class="fc" id="L1269">                return author;</span>
+            }
+
+            /**
+             * Gets committer.
+             *
+             * @return the committer
+             */
+            public GitUser getCommitter() {
+<span class="fc" id="L1278">                return committer;</span>
+            }
+
+            /**
+             * Points to the commit API resource.
+             *
+             * @return the url
+             */
+            public String getUrl() {
+<span class="nc" id="L1287">                return url;</span>
+            }
+
+            /**
+             * Gets sha.
+             *
+             * @return the sha
+             */
+            public String getSha() {
+<span class="fc" id="L1296">                return sha;</span>
+            }
+
+            @JsonSetter
+            private void setId(String id) {
+<span class="fc" id="L1301">                sha = id;</span>
+<span class="fc" id="L1302">            }</span>
+
+            /**
+             * Gets message.
+             *
+             * @return the message
+             */
+            public String getMessage() {
+<span class="nc" id="L1310">                return message;</span>
+            }
+
+            /**
+             * Whether this commit is distinct from any that have been pushed before.
+             *
+             * @return the boolean
+             */
+            public boolean isDistinct() {
+<span class="nc" id="L1319">                return distinct;</span>
+            }
+
+            /**
+             * Gets added.
+             *
+             * @return the added
+             */
+            public List&lt;String&gt; getAdded() {
+<span class="fc" id="L1328">                return added;</span>
+            }
+
+            /**
+             * Gets removed.
+             *
+             * @return the removed
+             */
+            public List&lt;String&gt; getRemoved() {
+<span class="fc" id="L1337">                return removed;</span>
+            }
+
+            /**
+             * Gets modified.
+             *
+             * @return the modified
+             */
+            public List&lt;String&gt; getModified() {
+<span class="fc" id="L1346">                return modified;</span>
+            }
+        }
+    }
+
+    /**
+     * A release was added to the repo
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#releaseevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="nc" id="L1358">    public static class Release extends GHEventPayload {</span>
+        private String action;
+        private GHRelease release;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
+        public String getAction() {
+<span class="nc" id="L1370">            return action;</span>
+        }
+
+        /**
+         * Gets release.
+         *
+         * @return the release
+         */
+        public GHRelease getRelease() {
+<span class="nc" id="L1379">            return release;</span>
+        }
+
+        /**
+         * Sets release.
+         *
+         * @param release
+         *            the release
+         */
+        public void setRelease(GHRelease release) {
+<span class="nc" id="L1389">            this.release = release;</span>
+<span class="nc" id="L1390">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="nc" id="L1398">            return repository;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L1408">            this.repository = repository;</span>
+<span class="nc" id="L1409">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="nc" id="L1413">            super.wrapUp(root);</span>
+<span class="nc bnc" id="L1414" title="All 2 branches missed.">            if (repository != null) {</span>
+<span class="nc" id="L1415">                repository.wrap(root);</span>
+            }
+<span class="nc" id="L1417">        }</span>
+    }
+
+    /**
+     * A repository was created, deleted, made public, or made private.
+     *
+     * @see &lt;a href=&quot;http://developer.github.com/v3/activity/events/types/#repositoryevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
+            justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L1428">    public static class Repository extends GHEventPayload {</span>
+        private String action;
+        private GHRepository repository;
+        private GHOrganization organization;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+<span class="fc" id="L1439">            return action;</span>
+        }
+
+        /**
+         * Sets repository.
+         *
+         * @param repository
+         *            the repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L1449">            this.repository = repository;</span>
+<span class="nc" id="L1450">        }</span>
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L1458">            return repository;</span>
+        }
+
+        /**
+         * Gets organization.
+         *
+         * @return the organization
+         */
+        public GHOrganization getOrganization() {
+<span class="fc" id="L1467">            return organization;</span>
+        }
+
+        /**
+         * Sets organization.
+         *
+         * @param organization
+         *            the organization
+         */
+        public void setOrganization(GHOrganization organization) {
+<span class="nc" id="L1477">            this.organization = organization;</span>
+<span class="nc" id="L1478">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L1482">            super.wrapUp(root);</span>
+<span class="fc" id="L1483">            repository.wrap(root);</span>
+<span class="pc bpc" id="L1484" title="1 of 2 branches missed.">            if (organization != null) {</span>
+<span class="fc" id="L1485">                organization.wrapUp(root);</span>
+            }
+<span class="fc" id="L1487">        }</span>
+    }
+
+    /**
+     * A git commit status was changed.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/#statusevent&quot;&gt;authoritative source&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;Constructed by JSON deserialization&quot;)
+<span class="fc" id="L1496">    public static class Status extends GHEventPayload {</span>
+        private String context;
+        private String description;
+        private GHCommitState state;
+        private GHCommit commit;
+        private GHRepository repository;
+
+        /**
+         * Gets the status content.
+         * 
+         * @return status content
+         */
+        public String getContext() {
+<span class="fc" id="L1509">            return context;</span>
+        }
+
+        /**
+         * Gets the status description.
+         * 
+         * @return status description
+         */
+        public String getDescription() {
+<span class="fc" id="L1518">            return description;</span>
+        }
+
+        /**
+         * Gets the status state.
+         * 
+         * @return status state
+         */
+        public GHCommitState getState() {
+<span class="fc" id="L1527">            return state;</span>
+        }
+
+        /**
+         * Sets the status stage.
+         * 
+         * @param state
+         *            status state
+         */
+        public void setState(GHCommitState state) {
+<span class="nc" id="L1537">            this.state = state;</span>
+<span class="nc" id="L1538">        }</span>
+
+        /**
+         * Gets the commit associated with the status event.
+         * 
+         * @return commit
+         */
+        public GHCommit getCommit() {
+<span class="fc" id="L1546">            return commit;</span>
+        }
+
+        /**
+         * Sets the commit associated with the status event.
+         * 
+         * @param commit
+         *            commit
+         */
+        public void setCommit(GHCommit commit) {
+<span class="nc" id="L1556">            this.commit = commit;</span>
+<span class="nc" id="L1557">        }</span>
+
+        /**
+         * Gets the repository associated with the status event.
+         * 
+         * @return repository
+         */
+        public GHRepository getRepository() {
+<span class="fc" id="L1565">            return repository;</span>
+        }
+
+        /**
+         * Sets the repository associated with the status event.
+         * 
+         * @param repository
+         *            repository
+         */
+        public void setRepository(GHRepository repository) {
+<span class="nc" id="L1575">            this.repository = repository;</span>
+<span class="nc" id="L1576">        }</span>
+
+        @Override
+        void wrapUp(GitHub root) {
+<span class="fc" id="L1580">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L1581" title="1 of 2 branches missed.">            if (state == null) {</span>
+<span class="nc" id="L1582">                throw new IllegalStateException(</span>
+                        &quot;Expected status payload, but got something else. Maybe we've got another type of event?&quot;);
+            }
+<span class="pc bpc" id="L1585" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L1586">                repository.wrap(root);</span>
+<span class="fc" id="L1587">                commit.wrapUp(repository);</span>
+            }
+<span class="fc" id="L1589">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubRateLimitChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubRateLimitChecker.java</span></div><h1>GitHubRateLimitChecker.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+
+/**
+ * A GitHub API Rate Limit Checker called before each request. This class provides the basic infrastructure for calling
+ * the appropriate {@link RateLimitChecker} for a request and retrying as many times as needed. This class supports more
+ * complex throttling strategies and polling, but leaves the specifics to the {@link RateLimitChecker} implementations.
+ * &lt;p&gt;
+ * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+ * number of requests remaining is returned in the response header and can also be requested using
+ * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the &quot;rate limit&quot;.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
+ * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
+ * met.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each {@link GitHub}
+ * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
+ * &lt;/p&gt;
+ */
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">class GitHubRateLimitChecker {</span>
+
+    @Nonnull
+    private final RateLimitChecker core;
+
+    @Nonnull
+    private final RateLimitChecker search;
+
+    @Nonnull
+    private final RateLimitChecker graphql;
+
+    @Nonnull
+    private final RateLimitChecker integrationManifest;
+
+    GitHubRateLimitChecker() {
+<span class="fc" id="L43">        this(RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE);</span>
+<span class="fc" id="L44">    }</span>
+
+    GitHubRateLimitChecker(@Nonnull RateLimitChecker core,
+            @Nonnull RateLimitChecker search,
+            @Nonnull RateLimitChecker graphql,
+<span class="fc" id="L49">            @Nonnull RateLimitChecker integrationManifest) {</span>
+<span class="fc" id="L50">        this.core = Objects.requireNonNull(core);</span>
+
+        // for now only support rate limiting on core
+        // remove these asserts when that changes
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">        assert search == RateLimitChecker.NONE;</span>
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">        assert graphql == RateLimitChecker.NONE;</span>
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">        assert integrationManifest == RateLimitChecker.NONE;</span>
+
+<span class="fc" id="L58">        this.search = Objects.requireNonNull(search);</span>
+<span class="fc" id="L59">        this.graphql = Objects.requireNonNull(graphql);</span>
+<span class="fc" id="L60">        this.integrationManifest = Objects.requireNonNull(integrationManifest);</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Checks whether there is sufficient requests remaining within this client's rate limit quota to make the current
+     * request.
+     * &lt;p&gt;
+     * This method does not do the actual check. Instead it select the appropriate {@link RateLimitChecker} and
+     * {@link GHRateLimit.Record} for the current request's urlPath. If the {@link RateLimitChecker} for this the
+     * current request's urlPath is {@link RateLimitChecker#NONE} the rate limit is not checked. If not, it calls
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)}. which decides if the rate limit has been
+     * exceeded and then sleeps for as long is it choose.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * It is up to the {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} which decide if the rate limit
+     * has been exceeded. If it has, that method will sleep for as long is it chooses and then return {@code true}. If
+     * not, that method will return {@code false}.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * As long as {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} returns {@code true}, this method
+     * will request updated rate limit information and call
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} again. This looping allows implementers of
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} to apply any number of strategies to
+     * controlling the speed at which requests are made. When it returns {@code false} this method will return and the
+     * request will be sent.
+     * &lt;/p&gt;
+     *
+     * @param client
+     *            the {@link GitHubClient} to check
+     * @param request
+     *            the {@link GitHubRequest} to check against
+     * @throws IOException
+     *             if there is an I/O error
+     */
+    void checkRateLimit(GitHubClient client, GitHubRequest request) throws IOException {
+<span class="fc" id="L95">        RateLimitChecker guard = selectChecker(request.urlPath());</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (guard == RateLimitChecker.NONE) {</span>
+<span class="fc" id="L97">            return;</span>
+        }
+
+        // For the first rate limit, accept the current limit if a valid one is already present.
+<span class="fc" id="L101">        GHRateLimit rateLimit = client.rateLimit();</span>
+<span class="fc" id="L102">        GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());</span>
+<span class="fc" id="L103">        long waitCount = 0;</span>
+        try {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            while (guard.checkRateLimit(rateLimitRecord, waitCount)) {</span>
+<span class="fc" id="L106">                waitCount++;</span>
+
+                // When rate limit is exceeded, sleep for one additional second beyond when the
+                // called {@link RateLimitChecker} sleeps.
+                // Reset time is only accurate to the second, so adding a one second buffer for safety is a good idea.
+                // This also keeps polling clients from querying too often.
+<span class="fc" id="L112">                Thread.sleep(1000);</span>
+
+                // After the first wait, always request a new rate limit from the server.
+<span class="fc" id="L115">                rateLimit = client.getRateLimit();</span>
+<span class="fc" id="L116">                rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());</span>
+            }
+<span class="nc" id="L118">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L119">            throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);</span>
+<span class="fc" id="L120">        }</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Gets the appropriate {@link RateLimitChecker} for a particular url path. Similar to
+     * {@link GHRateLimit#getRecordForUrlPath(String)}.
+     *
+     * @param urlPath
+     *            the url path of the request
+     * @return the {@link RateLimitChecker} for a url path.
+     */
+    @Nonnull
+    private RateLimitChecker selectChecker(@Nonnull String urlPath) {
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (urlPath.equals(&quot;/rate_limit&quot;)) {</span>
+<span class="fc" id="L134">            return RateLimitChecker.NONE;</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        } else if (urlPath.startsWith(&quot;/search&quot;)) {</span>
+<span class="fc" id="L136">            return search;</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        } else if (urlPath.startsWith(&quot;/graphql&quot;)) {</span>
+<span class="nc" id="L138">            return graphql;</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        } else if (urlPath.startsWith(&quot;/app-manifests&quot;)) {</span>
+<span class="nc" id="L140">            return integrationManifest;</span>
+        } else {
+<span class="fc" id="L142">            return core;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

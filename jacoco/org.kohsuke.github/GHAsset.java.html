@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAsset.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHAsset.java</span></div><h1>GHAsset.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.URL;
+
+/**
+ * Asset in a release.
+ *
+ * @see GHRelease#getAssets() GHRelease#getAssets()
+ */
+<span class="fc" id="L11">public class GHAsset extends GHObject {</span>
+    GitHub root;
+    GHRepository owner;
+    private String name;
+    private String label;
+    private String state;
+    private String content_type;
+    private long size;
+    private long download_count;
+    private String browser_download_url;
+
+    /**
+     * Gets content type.
+     *
+     * @return the content type
+     */
+    public String getContentType() {
+<span class="nc" id="L28">        return content_type;</span>
+    }
+
+    /**
+     * Sets content type.
+     *
+     * @param contentType
+     *            the content type
+     * @throws IOException
+     *             the io exception
+     */
+    public void setContentType(String contentType) throws IOException {
+<span class="nc" id="L40">        edit(&quot;content_type&quot;, contentType);</span>
+<span class="nc" id="L41">        this.content_type = contentType;</span>
+<span class="nc" id="L42">    }</span>
+
+    /**
+     * Gets download count.
+     *
+     * @return the download count
+     */
+    public long getDownloadCount() {
+<span class="nc" id="L50">        return download_count;</span>
+    }
+
+    /**
+     * Gets label.
+     *
+     * @return the label
+     */
+    public String getLabel() {
+<span class="fc" id="L59">        return label;</span>
+    }
+
+    /**
+     * Sets label.
+     *
+     * @param label
+     *            the label
+     * @throws IOException
+     *             the io exception
+     */
+    public void setLabel(String label) throws IOException {
+<span class="fc" id="L71">        edit(&quot;label&quot;, label);</span>
+<span class="fc" id="L72">        this.label = label;</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L81">        return name;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    public GHRepository getOwner() {
+<span class="nc" id="L90">        return owner;</span>
+    }
+
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
+    public GitHub getRoot() {
+<span class="nc" id="L99">        return root;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
+    public long getSize() {
+<span class="nc" id="L108">        return size;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="nc" id="L117">        return state;</span>
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L125">        return null;</span>
+    }
+
+    /**
+     * Gets browser download url.
+     *
+     * @return the browser download url
+     */
+    public String getBrowserDownloadUrl() {
+<span class="nc" id="L134">        return browser_download_url;</span>
+    }
+
+    private void edit(String key, Object value) throws IOException {
+<span class="fc" id="L138">        root.createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L148">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L149">    }</span>
+
+    private String getApiRoute() {
+<span class="fc" id="L152">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + id;</span>
+    }
+
+    GHAsset wrap(GHRelease release) {
+<span class="fc" id="L156">        this.owner = release.getOwner();</span>
+<span class="fc" id="L157">        this.root = owner.root;</span>
+<span class="fc" id="L158">        return this;</span>
+    }
+
+    /**
+     * Wrap gh asset [ ].
+     *
+     * @param assets
+     *            the assets
+     * @param release
+     *            the release
+     * @return the gh asset [ ]
+     */
+    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for (GHAsset aTo : assets) {</span>
+<span class="nc" id="L172">            aTo.wrap(release);</span>
+        }
+<span class="nc" id="L174">        return assets;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDeployment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDeployment.java</span></div><h1>GHDeployment.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.URL;
+
+/**
+ * Represents a deployment
+ *
+ * @see &lt;a href=&quot;https://developer.github.com/v3/repos/deployments/&quot;&gt;documentation&lt;/a&gt;
+ * @see GHRepository#listDeployments(String, String, String, String) GHRepository#listDeployments(String, String,
+ *      String, String)
+ * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
+ */
+<span class="fc" id="L14">public class GHDeployment extends GHObject {</span>
+    private GHRepository owner;
+    private GitHub root;
+    protected String sha;
+    protected String ref;
+    protected String task;
+    protected Object payload;
+    protected String environment;
+    protected String description;
+    protected String statuses_url;
+    protected String repository_url;
+    protected GHUser creator;
+
+    GHDeployment wrap(GHRepository owner) {
+<span class="fc" id="L28">        this.owner = owner;</span>
+<span class="fc" id="L29">        this.root = owner.root;</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (creator != null)</span>
+<span class="fc" id="L31">            creator.wrapUp(root);</span>
+<span class="fc" id="L32">        return this;</span>
+    }
+
+    /**
+     * Gets statuses url.
+     *
+     * @return the statuses url
+     */
+    public URL getStatusesUrl() {
+<span class="nc" id="L41">        return GitHubClient.parseURL(statuses_url);</span>
+    }
+
+    /**
+     * Gets repository url.
+     *
+     * @return the repository url
+     */
+    public URL getRepositoryUrl() {
+<span class="nc" id="L50">        return GitHubClient.parseURL(repository_url);</span>
+    }
+
+    /**
+     * Gets task.
+     *
+     * @return the task
+     */
+    public String getTask() {
+<span class="nc" id="L59">        return task;</span>
+    }
+
+    /**
+     * Gets payload.
+     *
+     * @return the payload
+     */
+    public String getPayload() {
+<span class="nc" id="L68">        return (String) payload;</span>
+    }
+
+    /**
+     * Gets environment.
+     *
+     * @return the environment
+     */
+    public String getEnvironment() {
+<span class="fc" id="L77">        return environment;</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getCreator() throws IOException {
+<span class="fc" id="L88">        return root.intern(creator);</span>
+    }
+
+    /**
+     * Gets ref.
+     *
+     * @return the ref
+     */
+    public String getRef() {
+<span class="fc" id="L97">        return ref;</span>
+    }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L106">        return sha;</span>
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L114">        return null;</span>
+    }
+
+    /**
+     * Create status gh deployment status builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh deployment status builder
+     */
+    public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
+<span class="nc" id="L125">        return new GHDeploymentStatusBuilder(owner, id, state);</span>
+    }
+
+    /**
+     * List statuses paged iterable.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
+<span class="nc" id="L134">        return root.createRequest()</span>
+<span class="nc" id="L135">                .withUrlPath(statuses_url)</span>
+<span class="nc" id="L136">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

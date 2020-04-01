@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTreeEntry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTreeEntry.java</span></div><h1>GHTreeEntry.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+/**
+ * Provides information for Git Trees https://developer.github.com/v3/git/trees/
+ *
+ * @author Daniel Teixeira - https://github.com/ddtxra
+ * @see GHTree
+ */
+<span class="fc" id="L13">public class GHTreeEntry {</span>
+    /* package almost final */GHTree tree;
+
+    private String path, mode, type, sha, url;
+    private long size;
+
+    /**
+     * Get the path such as &quot;subdir/file.txt&quot;
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L25">        return path;</span>
+    }
+
+    /**
+     * Get mode such as 100644
+     *
+     * @return the mode
+     */
+    public String getMode() {
+<span class="nc" id="L34">        return mode;</span>
+    }
+
+    /**
+     * Gets the size of the file, such as 132
+     *
+     * @return The size of the path or 0 if it is a directory
+     */
+    public long getSize() {
+<span class="nc" id="L43">        return size;</span>
+    }
+
+    /**
+     * Gets the type such as: &quot;blob&quot;, &quot;tree&quot;, etc.
+     *
+     * @return The type
+     */
+    public String getType() {
+<span class="nc" id="L52">        return type;</span>
+    }
+
+    /**
+     * SHA1 of this object.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="nc" id="L61">        return sha;</span>
+    }
+
+    /**
+     * API URL to this Git data, such as https://api.github.com/repos/jenkinsci
+     * /jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="nc" id="L71">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * If this tree entry represents a file, then return its information. Otherwise null.
+     *
+     * @return the gh blob
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBlob asBlob() throws IOException {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="nc" id="L83">            return tree.repo.getBlob(sha);</span>
+        else
+<span class="nc" id="L85">            return null;</span>
+    }
+
+    /**
+     * If this tree entry represents a file, then return its content. Otherwise null.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    public InputStream readAsBlob() throws IOException {
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L97">            return tree.repo.readBlob(sha);</span>
+        else
+<span class="nc" id="L99">            return null;</span>
+    }
+
+    /**
+     * If this tree entry represents a directory, then return it. Otherwise null.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTree asTree() throws IOException {
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (type.equals(&quot;tree&quot;))</span>
+<span class="fc" id="L111">            return tree.repo.getTree(sha);</span>
+        else
+<span class="nc" id="L113">            return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

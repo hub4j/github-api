@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueEvent.java</span></div><h1>GHIssueEvent.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.Date;
+
+/**
+ * The type GHIssueEvent.
+ *
+ * @author Martin van Zijl
+ */
+<span class="fc" id="L10">public class GHIssueEvent {</span>
+    private GitHub root;
+
+    private long id;
+    private String node_id;
+    private String url;
+    private GHUser actor;
+    private String event;
+    private String commit_id;
+    private String commit_url;
+    private String created_at;
+
+    private GHIssue issue;
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L30">        return id;</span>
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+<span class="nc" id="L39">        return node_id;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+<span class="nc" id="L48">        return url;</span>
+    }
+
+    /**
+     * Gets actor.
+     *
+     * @return the actor
+     */
+    public GHUser getActor() {
+<span class="nc" id="L57">        return actor;</span>
+    }
+
+    /**
+     * Gets event.
+     *
+     * @return the event
+     */
+    public String getEvent() {
+<span class="fc" id="L66">        return event;</span>
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+<span class="nc" id="L75">        return commit_id;</span>
+    }
+
+    /**
+     * Gets commit url.
+     *
+     * @return the commit url
+     */
+    public String getCommitUrl() {
+<span class="nc" id="L84">        return commit_url;</span>
+    }
+
+    /**
+     * Gets created at.
+     *
+     * @return the created at
+     */
+    public Date getCreatedAt() {
+<span class="fc" id="L93">        return GitHubClient.parseDate(created_at);</span>
+    }
+
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
+    public GitHub getRoot() {
+<span class="nc" id="L102">        return root;</span>
+    }
+
+    /**
+     * Gets issue.
+     *
+     * @return the issue
+     */
+    public GHIssue getIssue() {
+<span class="fc" id="L111">        return issue;</span>
+    }
+
+    GHIssueEvent wrapUp(GitHub root) {
+<span class="fc" id="L115">        this.root = root;</span>
+<span class="fc" id="L116">        return this;</span>
+    }
+
+    GHIssueEvent wrapUp(GHIssue parent) {
+<span class="fc" id="L120">        this.issue = parent;</span>
+<span class="fc" id="L121">        this.root = parent.root;</span>
+<span class="fc" id="L122">        return this;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L127">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L128">                getIssue().getNumber(),</span>
+<span class="nc" id="L129">                getEvent(),</span>
+<span class="nc" id="L130">                getActor().getLogin(),</span>
+<span class="nc" id="L131">                getCreatedAt().toString());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

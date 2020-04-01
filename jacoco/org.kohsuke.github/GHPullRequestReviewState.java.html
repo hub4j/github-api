@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestReviewState.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestReviewState.java</span></div><h1>GHPullRequestReviewState.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Current state of {@link GHPullRequestReview}
+ */
+<span class="fc" id="L6">public enum GHPullRequestReviewState {</span>
+<span class="fc" id="L7">    PENDING,</span>
+<span class="fc" id="L8">    APPROVED,</span>
+<span class="fc" id="L9">    CHANGES_REQUESTED,</span>
+    /**
+     * @deprecated This was the thing when this API was in preview, but it changed when it became public. Use
+     *             {@link #CHANGES_REQUESTED}. Left here for compatibility.
+     */
+<span class="fc" id="L14">    REQUEST_CHANGES,</span>
+<span class="fc" id="L15">    COMMENTED,</span>
+<span class="fc" id="L16">    DISMISSED;</span>
+
+    /**
+     * Action string.
+     *
+     * @return the string
+     * @deprecated This was an internal method accidentally exposed. Left here for compatibility.
+     */
+    public String action() {
+<span class="nc" id="L25">        GHPullRequestReviewEvent e = toEvent();</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        return e == null ? null : e.action();</span>
+    }
+
+    GHPullRequestReviewEvent toEvent() {
+<span class="nc bnc" id="L30" title="All 6 branches missed.">        switch (this) {</span>
+            case PENDING :
+<span class="nc" id="L32">                return GHPullRequestReviewEvent.PENDING;</span>
+            case APPROVED :
+<span class="nc" id="L34">                return GHPullRequestReviewEvent.APPROVE;</span>
+            case CHANGES_REQUESTED :
+<span class="nc" id="L36">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
+            case REQUEST_CHANGES :
+<span class="nc" id="L38">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
+            case COMMENTED :
+<span class="nc" id="L40">                return GHPullRequestReviewEvent.COMMENT;</span>
+        }
+<span class="nc" id="L42">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

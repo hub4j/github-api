@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PagedIterable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">PagedIterable.java</span></div><h1>PagedIterable.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+/**
+ * {@link Iterable} that returns {@link PagedIterator}. {@link PagedIterable} is thread-safe but {@link PagedIterator}
+ * is not. Any one instance of {@link PagedIterator} should only be called from a single thread.
+ *
+ * @param &lt;T&gt;
+ *            the type of items on each page
+ * @author Kohsuke Kawaguchi
+ */
+<span class="fc" id="L23">public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {</span>
+    /**
+     * Page size. 0 is default.
+     */
+<span class="fc" id="L27">    private int pageSize = 0;</span>
+
+    /**
+     * Sets the pagination size.
+     *
+     * &lt;p&gt;
+     * When set to non-zero, each API call will retrieve this many entries.
+     *
+     * @param size
+     *            the size
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;T&gt; withPageSize(int size) {
+<span class="fc" id="L40">        this.pageSize = size;</span>
+<span class="fc" id="L41">        return this;</span>
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Nonnull
+    public final PagedIterator&lt;T&gt; iterator() {
+<span class="fc" id="L51">        return _iterator(pageSize);</span>
+    }
+
+    /**
+     * Iterator over page items.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
+    @Nonnull
+    public abstract PagedIterator&lt;T&gt; _iterator(int pageSize);
+
+    /**
+     * Eagerly walk {@link PagedIterator} and return the result in an array.
+     *
+     * @param iterator
+     *            the {@link PagedIterator} to read
+     * @return an array of all elements from the {@link PagedIterator}
+     * @throws IOException
+     *             if an I/O exception occurs.
+     */
+    protected T[] toArray(final PagedIterator&lt;T&gt; iterator) throws IOException {
+        try {
+<span class="fc" id="L75">            ArrayList&lt;T[]&gt; pages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L76">            int totalSize = 0;</span>
+            T[] item;
+            do {
+<span class="fc" id="L79">                item = iterator.nextPageArray();</span>
+<span class="fc" id="L80">                totalSize += Array.getLength(item);</span>
+<span class="fc" id="L81">                pages.add(item);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            } while (iterator.hasNext());</span>
+
+<span class="fc" id="L84">            Class&lt;T[]&gt; type = (Class&lt;T[]&gt;) item.getClass();</span>
+
+<span class="fc" id="L86">            return concatenatePages(type, pages, totalSize);</span>
+<span class="fc" id="L87">        } catch (GHException e) {</span>
+            // if there was an exception inside the iterator it is wrapped as a GHException
+            // if the wrapped exception is an IOException, throw that
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (e.getCause() instanceof IOException) {</span>
+<span class="fc" id="L91">                throw (IOException) e.getCause();</span>
+            } else {
+<span class="nc" id="L93">                throw e;</span>
+            }
+        }
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in an array.
+     *
+     * @return the list
+     * @throws IOException
+     *             if an I/O exception occurs.
+     */
+    @Nonnull
+    public T[] toArray() throws IOException {
+<span class="fc" id="L107">        return toArray(iterator());</span>
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a list.
+     *
+     * @return the list
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
+    @Nonnull
+    public List&lt;T&gt; toList() throws IOException {
+<span class="fc" id="L119">        return Collections.unmodifiableList(Arrays.asList(this.toArray()));</span>
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a set.
+     *
+     * @return the set
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
+    @Nonnull
+    public Set&lt;T&gt; toSet() throws IOException {
+<span class="fc" id="L131">        return Collections.unmodifiableSet(new LinkedHashSet&lt;&gt;(Arrays.asList(this.toArray())));</span>
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a list.
+     *
+     * @return the list
+     * @deprecated Use {@link #toList()} instead.
+     */
+    @Nonnull
+    @Deprecated
+    public List&lt;T&gt; asList() {
+        try {
+<span class="fc" id="L144">            return this.toList();</span>
+<span class="fc" id="L145">        } catch (IOException e) {</span>
+<span class="fc" id="L146">            throw new GHException(&quot;Failed to retrieve list: &quot; + e.getMessage(), e);</span>
+        }
+    }
+
+    /**
+     * Eagerly walk {@link Iterable} and return the result in a set.
+     *
+     * @return the set
+     * @deprecated Use {@link #toSet()} instead.
+     */
+    @Nonnull
+    @Deprecated
+    public Set&lt;T&gt; asSet() {
+        try {
+<span class="nc" id="L160">            return this.toSet();</span>
+<span class="nc" id="L161">        } catch (IOException e) {</span>
+<span class="nc" id="L162">            throw new GHException(&quot;Failed to retrieve list: &quot; + e.getMessage(), e);</span>
+        }
+    }
+
+    /**
+     * Concatenates a list of arrays into a single array.
+     * 
+     * @param type
+     *            the type of array to be returned.
+     * @param pages
+     *            the list of arrays to be concatenated.
+     * @param totalLength
+     *            the total length of the returned array.
+     * @return an array containing all elements from all pages.
+     */
+    @Nonnull
+    private T[] concatenatePages(Class&lt;T[]&gt; type, List&lt;T[]&gt; pages, int totalLength) {
+
+<span class="fc" id="L180">        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));</span>
+
+<span class="fc" id="L182">        int position = 0;</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        for (T[] page : pages) {</span>
+<span class="fc" id="L184">            final int pageLength = Array.getLength(page);</span>
+<span class="fc" id="L185">            System.arraycopy(page, 0, result, position, pageLength);</span>
+<span class="fc" id="L186">            position += pageLength;</span>
+<span class="fc" id="L187">        }</span>
+<span class="fc" id="L188">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

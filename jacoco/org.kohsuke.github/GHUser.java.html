@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHUser.java</span></div><h1>GHUser.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2010, Kohsuke Kawaguchi
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * Represents an user of GitHub.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+<span class="fc" id="L36">public class GHUser extends GHPerson {</span>
+
+    /**
+     * Gets keys.
+     *
+     * @return the keys
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHKey&gt; getKeys() throws IOException {
+<span class="fc" id="L46">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
+    }
+
+    /**
+     * Follow this user.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void follow() throws IOException {
+<span class="nc" id="L56">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L57">    }</span>
+
+    /**
+     * Unfollow this user.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unfollow() throws IOException {
+<span class="nc" id="L66">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L67">    }</span>
+
+    /**
+     * Lists the users that this user is following
+     *
+     * @return the follows
+     * @throws IOException
+     *             the io exception
+     */
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet&lt;GHUser&gt; getFollows() throws IOException {
+<span class="nc" id="L78">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
+    }
+
+    /**
+     * Lists the users that this user is following
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listFollows() {
+<span class="fc" id="L87">        return listUser(&quot;following&quot;);</span>
+    }
+
+    /**
+     * Lists the users who are following this user.
+     *
+     * @return the followers
+     * @throws IOException
+     *             the io exception
+     */
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet&lt;GHUser&gt; getFollowers() throws IOException {
+<span class="nc" id="L99">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
+    }
+
+    /**
+     * Lists the users who are following this user.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listFollowers() {
+<span class="fc" id="L108">        return listUser(&quot;followers&quot;);</span>
+    }
+
+    private PagedIterable&lt;GHUser&gt; listUser(final String suffix) {
+<span class="fc" id="L112">        return root.createRequest()</span>
+<span class="fc" id="L113">                .withUrlPath(getApiTailUrl(suffix))</span>
+<span class="fc" id="L114">                .toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Lists all the subscribed (aka watched) repositories.
+     * &lt;p&gt;
+     * https://developer.github.com/v3/activity/watching/
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listSubscriptions() {
+<span class="nc" id="L125">        return listRepositories(&quot;subscriptions&quot;);</span>
+    }
+
+    /**
+     * Lists all the repositories that this user has starred.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listStarredRepositories() {
+<span class="nc" id="L134">        return listRepositories(&quot;starred&quot;);</span>
+    }
+
+    private PagedIterable&lt;GHRepository&gt; listRepositories(final String suffix) {
+<span class="nc" id="L138">        return root.createRequest()</span>
+<span class="nc" id="L139">                .withUrlPath(getApiTailUrl(suffix))</span>
+<span class="nc" id="L140">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified organization.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
+     */
+    public boolean isMemberOf(GHOrganization org) {
+<span class="nc" id="L151">        return org.hasMember(this);</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified team.
+     *
+     * @param team
+     *            the team
+     * @return the boolean
+     */
+    public boolean isMemberOf(GHTeam team) {
+<span class="nc" id="L162">        return team.hasMember(this);</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified organization as a public member.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
+     */
+    public boolean isPublicMemberOf(GHOrganization org) {
+<span class="nc" id="L173">        return org.hasPublicMember(this);</span>
+    }
+
+    static GHUser[] wrap(GHUser[] users, GitHub root) {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        for (GHUser f : users)</span>
+<span class="fc" id="L178">            f.root = root;</span>
+<span class="fc" id="L179">        return users;</span>
+    }
+
+    /**
+     * Gets the organization that this user belongs to publicly.
+     *
+     * @return the organizations
+     * @throws IOException
+     *             the io exception
+     */
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
+<span class="fc" id="L191">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="fc" id="L192">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L193">        for (GHOrganization o : root.createRequest()</span>
+<span class="fc" id="L194">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L195">                .toIterable(GHOrganization[].class, null)</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
+<span class="fc" id="L198">                orgs.add(root.getOrganization(o.getLogin()));</span>
+        }
+<span class="fc" id="L200">        return orgs;</span>
+    }
+
+    /**
+     * Lists events performed by a user (this includes private events if the caller is authenticated.
+     */
+    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
+<span class="nc" id="L207">        return root.createRequest()</span>
+<span class="nc" id="L208">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
+<span class="nc" id="L209">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Lists Gists created by this user.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHGist&gt; listGists() throws IOException {
+<span class="nc" id="L220">        return root.createRequest()</span>
+<span class="nc" id="L221">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L222">                .toIterable(GHGist[].class, null);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L227">        return login.hashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L233">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L234">            return this.login.equals(that.login);</span>
+        }
+<span class="nc" id="L236">        return false;</span>
+    }
+
+    String getApiTailUrl(String tail) {
+<span class="pc bpc" id="L240" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L241">            tail = '/' + tail;</span>
+<span class="fc" id="L242">        return &quot;/users/&quot; + login + tail;</span>
+    }
+
+    GHUser wrapUp(GitHub root) {
+<span class="fc" id="L246">        super.wrapUp(root);</span>
+<span class="fc" id="L247">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

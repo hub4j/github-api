@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHLicense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHLicense.java</span></div><h1>GHLicense.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2016, Duncan Dickinson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The GitHub Preview API's license information
+ *
+ * @author Duncan Dickinson
+ * @see GitHub#getLicense(String) GitHub#getLicense(String)
+ * @see GHRepository#getLicense() GHRepository#getLicense()
+ * @see &lt;a href=&quot;https://developer.github.com/v3/licenses/&quot;&gt;https://developer.github.com/v3/licenses/&lt;/a&gt;
+ */
+@SuppressWarnings({ &quot;UnusedDeclaration&quot; })
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="fc" id="L46">public class GHLicense extends GHObject {</span>
+    @SuppressFBWarnings(&quot;IS2_INCONSISTENT_SYNC&quot;)
+    // root is set before the object is returned to the app
+    /* package almost final */ GitHub root;
+
+    // these fields are always present, even in the short form
+    protected String key, name;
+
+    // the rest is only after populated
+    protected Boolean featured;
+
+    protected String html_url, description, category, implementation, body;
+
+<span class="fc" id="L59">    protected List&lt;String&gt; required = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L60">    protected List&lt;String&gt; permitted = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L61">    protected List&lt;String&gt; forbidden = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Gets key.
+     *
+     * @return a mnemonic for the license
+     */
+    public String getKey() {
+<span class="fc" id="L69">        return key;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the license name
+     */
+    public String getName() {
+<span class="fc" id="L78">        return name;</span>
+    }
+
+    /**
+     * @return API URL of this object.
+     */
+    @WithBridgeMethods(value = String.class, adapterMethod = &quot;urlToString&quot;)
+    public URL getUrl() {
+<span class="fc" id="L86">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Featured licenses are bold in the new repository drop-down
+     *
+     * @return True if the license is featured, false otherwise
+     * @throws IOException
+     *             the io exception
+     */
+    public Boolean isFeatured() throws IOException {
+<span class="nc" id="L97">        populate();</span>
+<span class="nc" id="L98">        return featured;</span>
+    }
+
+    public URL getHtmlUrl() throws IOException {
+<span class="fc" id="L102">        populate();</span>
+<span class="fc" id="L103">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     * @throws IOException
+     *             the io exception
+     */
+    public String getDescription() throws IOException {
+<span class="nc" id="L114">        populate();</span>
+<span class="nc" id="L115">        return description;</span>
+    }
+
+    /**
+     * Gets category.
+     *
+     * @return the category
+     * @throws IOException
+     *             the io exception
+     */
+    public String getCategory() throws IOException {
+<span class="nc" id="L126">        populate();</span>
+<span class="nc" id="L127">        return category;</span>
+    }
+
+    /**
+     * Gets implementation.
+     *
+     * @return the implementation
+     * @throws IOException
+     *             the io exception
+     */
+    public String getImplementation() throws IOException {
+<span class="nc" id="L138">        populate();</span>
+<span class="nc" id="L139">        return implementation;</span>
+    }
+
+    /**
+     * Gets required.
+     *
+     * @return the required
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;String&gt; getRequired() throws IOException {
+<span class="nc" id="L150">        populate();</span>
+<span class="nc" id="L151">        return required;</span>
+    }
+
+    /**
+     * Gets permitted.
+     *
+     * @return the permitted
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;String&gt; getPermitted() throws IOException {
+<span class="nc" id="L162">        populate();</span>
+<span class="nc" id="L163">        return permitted;</span>
+    }
+
+    /**
+     * Gets forbidden.
+     *
+     * @return the forbidden
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;String&gt; getForbidden() throws IOException {
+<span class="nc" id="L174">        populate();</span>
+<span class="nc" id="L175">        return forbidden;</span>
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     * @throws IOException
+     *             the io exception
+     */
+    public String getBody() throws IOException {
+<span class="nc" id="L186">        populate();</span>
+<span class="nc" id="L187">        return body;</span>
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     * &lt;p&gt;
+     * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    protected synchronized void populate() throws IOException {
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (description != null)</span>
+<span class="fc" id="L200">            return; // already populated</span>
+
+<span class="fc" id="L202">        root.createRequest().withUrlPath(url).fetchInto(this);</span>
+<span class="fc" id="L203">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L208">            return true;</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (!(o instanceof GHLicense))</span>
+<span class="nc" id="L210">            return false;</span>
+
+<span class="nc" id="L212">        GHLicense that = (GHLicense) o;</span>
+<span class="nc" id="L213">        return this.url.equals(that.url);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L218">        return url.hashCode();</span>
+    }
+
+    GHLicense wrap(GitHub root) {
+<span class="fc" id="L222">        this.root = root;</span>
+<span class="fc" id="L223">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

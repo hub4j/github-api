@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCommit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCommit.java</span></div><h1>GHCommit.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * A commit in a repository.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHRepository#getCommit(String) GHRepository#getCommit(String)
+ * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
+ */
+@SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
+<span class="fc" id="L22">public class GHCommit {</span>
+    private GHRepository owner;
+
+    private ShortInfo commit;
+
+    /**
+     * Short summary of this commit.
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                    &quot;UWF_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L34">    public static class ShortInfo {</span>
+        private GHAuthor author;
+        private GHAuthor committer;
+
+        private String message;
+
+        private int comment_count;
+
+        private GHVerification verification;
+
+<span class="fc" id="L44">        static class Tree {</span>
+            String sha;
+        }
+
+        private Tree tree;
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+        public GitUser getAuthor() {
+<span class="fc" id="L57">            return author;</span>
+        }
+
+        /**
+         * Gets authored date.
+         *
+         * @return the authored date
+         */
+        public Date getAuthoredDate() {
+<span class="nc" id="L66">            return GitHubClient.parseDate(author.date);</span>
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+        public GitUser getCommitter() {
+<span class="nc" id="L76">            return committer;</span>
+        }
+
+        /**
+         * Gets commit date.
+         *
+         * @return the commit date
+         */
+        public Date getCommitDate() {
+<span class="nc" id="L85">            return GitHubClient.parseDate(committer.date);</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return Commit message.
+         */
+        public String getMessage() {
+<span class="fc" id="L94">            return message;</span>
+        }
+
+        /**
+         * Gets comment count.
+         *
+         * @return the comment count
+         */
+        public int getCommentCount() {
+<span class="nc" id="L103">            return comment_count;</span>
+        }
+
+        /**
+         * Gets Verification Status.
+         *
+         * @return the Verification status
+         */
+        public GHVerification getVerification() {
+<span class="fc" id="L112">            return verification;</span>
+        }
+    }
+
+    /**
+     * The type GHAuthor.
+     *
+     * @deprecated Use {@link GitUser} instead.
+     */
+<span class="fc" id="L121">    public static class GHAuthor extends GitUser {</span>
+        private String date;
+    }
+
+    /**
+     * The type Stats.
+     */
+<span class="fc" id="L128">    public static class Stats {</span>
+        int total, additions, deletions;
+    }
+
+    /**
+     * A file that was modified.
+     */
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;It's being initilized by JSON deserialization&quot;)
+<span class="fc" id="L136">    public static class File {</span>
+        String status;
+        int changes, additions, deletions;
+        String raw_url, blob_url, sha, patch;
+        String filename, previous_filename;
+
+        /**
+         * Gets lines changed.
+         *
+         * @return Number of lines added + removed.
+         */
+        public int getLinesChanged() {
+<span class="fc" id="L148">            return changes;</span>
+        }
+
+        /**
+         * Gets lines added.
+         *
+         * @return Number of lines added.
+         */
+        public int getLinesAdded() {
+<span class="nc" id="L157">            return additions;</span>
+        }
+
+        /**
+         * Gets lines deleted.
+         *
+         * @return Number of lines removed.
+         */
+        public int getLinesDeleted() {
+<span class="nc" id="L166">            return deletions;</span>
+        }
+
+        /**
+         * Gets status.
+         *
+         * @return &quot;modified&quot;, &quot;added&quot;, or &quot;removed&quot;
+         */
+        public String getStatus() {
+<span class="fc" id="L175">            return status;</span>
+        }
+
+        /**
+         * Gets file name.
+         *
+         * @return Full path in the repository.
+         */
+        @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;,
+                justification = &quot;It's a part of the library's API and cannot be renamed&quot;)
+        public String getFileName() {
+<span class="fc" id="L186">            return filename;</span>
+        }
+
+        /**
+         * Gets previous filename.
+         *
+         * @return Previous path, in case file has moved.
+         */
+        public String getPreviousFilename() {
+<span class="nc" id="L195">            return previous_filename;</span>
+        }
+
+        /**
+         * Gets patch.
+         *
+         * @return The actual change.
+         */
+        public String getPatch() {
+<span class="nc" id="L204">            return patch;</span>
+        }
+
+        /**
+         * Gets raw url.
+         *
+         * @return URL like
+         *         'https://raw.github.com/jenkinsci/jenkins/4eb17c197dfdcf8ef7ff87eb160f24f6a20b7f0e/core/pom.xml' that
+         *         resolves to the actual content of the file.
+         */
+        public URL getRawUrl() {
+<span class="nc" id="L215">            return GitHubClient.parseURL(raw_url);</span>
+        }
+
+        /**
+         * Gets blob url.
+         *
+         * @return URL like
+         *         'https://github.com/jenkinsci/jenkins/blob/1182e2ebb1734d0653142bd422ad33c21437f7cf/core/pom.xml'
+         *         that resolves to the HTML page that describes this file.
+         */
+        public URL getBlobUrl() {
+<span class="nc" id="L226">            return GitHubClient.parseURL(blob_url);</span>
+        }
+
+        /**
+         * Gets sha.
+         *
+         * @return [0 -9a-f]{40} SHA1 checksum.
+         */
+        public String getSha() {
+<span class="nc" id="L235">            return sha;</span>
+        }
+    }
+
+    /**
+     * The type Parent.
+     */
+<span class="fc" id="L242">    public static class Parent {</span>
+        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
+        String url;
+        String sha;
+    }
+
+<span class="fc" id="L248">    static class User {</span>
+        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
+        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
+        String url, avatar_url, gravatar_id;
+        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
+        int id;
+
+        String login;
+    }
+
+    String url, html_url, sha;
+    List&lt;File&gt; files;
+    Stats stats;
+    List&lt;Parent&gt; parents;
+    User author, committer;
+
+    /**
+     * Gets commit short info.
+     *
+     * @return the commit short info
+     * @throws IOException
+     *             the io exception
+     */
+    public ShortInfo getCommitShortInfo() throws IOException {
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (commit == null)</span>
+<span class="nc" id="L273">            populate();</span>
+<span class="fc" id="L274">        return commit;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that contains the commit.
+     */
+    public GHRepository getOwner() {
+<span class="nc" id="L283">        return owner;</span>
+    }
+
+    /**
+     * Gets lines changed.
+     *
+     * @return the number of lines added + removed.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
+     */
+    public int getLinesChanged() throws IOException {
+<span class="nc" id="L294">        populate();</span>
+<span class="nc" id="L295">        return stats.total;</span>
+    }
+
+    /**
+     * Gets lines added.
+     *
+     * @return Number of lines added.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
+     */
+    public int getLinesAdded() throws IOException {
+<span class="nc" id="L306">        populate();</span>
+<span class="nc" id="L307">        return stats.additions;</span>
+    }
+
+    /**
+     * Gets lines deleted.
+     *
+     * @return Number of lines removed.
+     * @throws IOException
+     *             if the field was not populated and refresh fails
+     */
+    public int getLinesDeleted() throws IOException {
+<span class="nc" id="L318">        populate();</span>
+<span class="nc" id="L319">        return stats.deletions;</span>
+    }
+
+    /**
+     * Use this method to walk the tree.
+     *
+     * @return a GHTree to walk
+     * @throws IOException
+     *             on error
+     */
+    public GHTree getTree() throws IOException {
+<span class="fc" id="L330">        return owner.getTree(getCommitShortInfo().tree.sha);</span>
+    }
+
+    /**
+     * Gets html url.
+     *
+     * @return URL of this commit like
+     *         &quot;https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000&quot;
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L340">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets sha 1.
+     *
+     * @return [0 -9a-f]{40} SHA1 checksum.
+     */
+    public String getSHA1() {
+<span class="fc" id="L349">        return sha;</span>
+    }
+
+    /**
+     * List of files changed/added/removed in this commit.
+     *
+     * @return Can be empty but never null.
+     * @throws IOException
+     *             on error
+     */
+    public List&lt;File&gt; getFiles() throws IOException {
+<span class="fc" id="L360">        populate();</span>
+<span class="pc bpc" id="L361" title="1 of 2 branches missed.">        return files != null ? Collections.unmodifiableList(files) : Collections.&lt;File&gt;emptyList();</span>
+    }
+
+    /**
+     * Gets parent sha 1 s.
+     *
+     * @return SHA1 of parent commit objects.
+     */
+    public List&lt;String&gt; getParentSHA1s() {
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">        if (parents == null)</span>
+<span class="nc" id="L371">            return Collections.emptyList();</span>
+<span class="fc" id="L372">        return new AbstractList&lt;String&gt;() {</span>
+            @Override
+            public String get(int index) {
+<span class="fc" id="L375">                return parents.get(index).sha;</span>
+            }
+
+            @Override
+            public int size() {
+<span class="fc" id="L380">                return parents.size();</span>
+            }
+        };
+    }
+
+    /**
+     * Resolves the parent commit objects and return them.
+     *
+     * @return parent commit objects
+     * @throws IOException
+     *             on error
+     */
+    public List&lt;GHCommit&gt; getParents() throws IOException {
+<span class="fc" id="L393">        List&lt;GHCommit&gt; r = new ArrayList&lt;GHCommit&gt;();</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">        for (String sha1 : getParentSHA1s())</span>
+<span class="fc" id="L395">            r.add(owner.getCommit(sha1));</span>
+<span class="fc" id="L396">        return r;</span>
+    }
+
+    /**
+     * Gets author.
+     *
+     * @return the author
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getAuthor() throws IOException {
+<span class="nc" id="L407">        return resolveUser(author);</span>
+    }
+
+    /**
+     * Gets the date the change was authored on.
+     *
+     * @return the date the change was authored on.
+     * @throws IOException
+     *             if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getAuthoredDate() throws IOException {
+<span class="nc" id="L418">        return getCommitShortInfo().getAuthoredDate();</span>
+    }
+
+    /**
+     * Gets committer.
+     *
+     * @return the committer
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getCommitter() throws IOException {
+<span class="nc" id="L429">        return resolveUser(committer);</span>
+    }
+
+    /**
+     * Gets the date the change was committed on.
+     *
+     * @return the date the change was committed on.
+     * @throws IOException
+     *             if the information was not already fetched and an attempt at fetching the information failed.
+     */
+    public Date getCommitDate() throws IOException {
+<span class="nc" id="L440">        return getCommitShortInfo().getCommitDate();</span>
+    }
+
+    private GHUser resolveUser(User author) throws IOException {
+<span class="nc bnc" id="L444" title="All 4 branches missed.">        if (author == null || author.login == null)</span>
+<span class="nc" id="L445">            return null;</span>
+<span class="nc" id="L446">        return owner.root.getUser(author.login);</span>
+    }
+
+    /**
+     * List comments paged iterable.
+     *
+     * @return {@link PagedIterable} with all the commit comments in this repository.
+     */
+    public PagedIterable&lt;GHCommitComment&gt; listComments() {
+<span class="nc" id="L455">        return owner.root.createRequest()</span>
+<span class="nc" id="L456">                .withUrlPath(</span>
+<span class="nc" id="L457">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="nc" id="L458">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(owner));</span>
+    }
+
+    /**
+     * Creates a commit comment.
+     * &lt;p&gt;
+     * I'm not sure how path/line/position parameters interact with each other.
+     *
+     * @param body
+     *            body of the comment
+     * @param path
+     *            path of file being commented on
+     * @param line
+     *            target line for comment
+     * @param position
+     *            position on line
+     * @return created GHCommitComment
+     * @throws IOException
+     *             if comment is not created
+     */
+    public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
+<span class="fc" id="L479">        GHCommitComment r = owner.root.createRequest()</span>
+<span class="fc" id="L480">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L481">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L482">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L483">                .with(&quot;line&quot;, line)</span>
+<span class="fc" id="L484">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L485">                .withUrlPath(</span>
+<span class="fc" id="L486">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L487">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L488">        return r.wrap(owner);</span>
+    }
+
+    /**
+     * Create comment gh commit comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh commit comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommitComment createComment(String body) throws IOException {
+<span class="fc" id="L501">        return createComment(body, null, null, null);</span>
+    }
+
+    /**
+     * List statuses paged iterable.
+     *
+     * @return status of this commit, newer ones first.
+     * @throws IOException
+     *             if statuses cannot be read
+     */
+    public PagedIterable&lt;GHCommitStatus&gt; listStatuses() throws IOException {
+<span class="nc" id="L512">        return owner.listCommitStatuses(sha);</span>
+    }
+
+    /**
+     * Gets last status.
+     *
+     * @return the last status of this commit, which is what gets shown in the UI.
+     * @throws IOException
+     *             on error
+     */
+    public GHCommitStatus getLastStatus() throws IOException {
+<span class="fc" id="L523">        return owner.getLastCommitStatus(sha);</span>
+    }
+
+    /**
+     * Gets check-runs for given sha.
+     *
+     * @return check runs for given sha.
+     * @throws IOException
+     *             on error
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable&lt;GHCheckRun&gt; getCheckRuns() throws IOException {
+<span class="nc" id="L536">        return owner.getCheckRuns(sha);</span>
+    }
+
+    /**
+     * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
+     * 
+     * @throws IOException
+     *             on error
+     */
+    void populate() throws IOException {
+<span class="pc bpc" id="L546" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
+<span class="fc" id="L547">            owner.root.createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
+<span class="fc" id="L548">    }</span>
+
+    GHCommit wrapUp(GHRepository owner) {
+<span class="fc" id="L551">        this.owner = owner;</span>
+<span class="fc" id="L552">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

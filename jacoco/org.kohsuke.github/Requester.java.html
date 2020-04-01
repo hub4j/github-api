@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Requester.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">Requester.java</span></div><h1>Requester.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2010, Kohsuke Kawaguchi
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.util.Iterator;
+import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
+
+/**
+ * A thin helper for {@link GitHubRequest.Builder} that includes {@link GitHubClient}.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
+    /* private */ final GitHubClient client;
+
+<span class="fc" id="L42">    Requester(GitHubClient client) {</span>
+<span class="fc" id="L43">        this.client = client;</span>
+<span class="fc" id="L44">        this.withApiUrl(client.getApiUrl());</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Sends a request to the specified URL and checks that it is sucessful.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void send() throws IOException {
+        // Send expects there to be some body response, but doesn't care what it is.
+        // If there isn't a body, this will throw.
+<span class="fc" id="L56">        client.sendRequest(this, (responseInfo) -&gt; responseInfo.getBodyAsString());</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Sends a request and parses the response into the given type via databinding.
+     *
+     * @param &lt;T&gt;
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return an instance of {@link T}
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public &lt;T&gt; T fetch(@Nonnull Class&lt;T&gt; type) throws IOException {
+<span class="fc" id="L71">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, type)).body();</span>
+    }
+
+    /**
+     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param &lt;T&gt;
+     *            the type parameter
+     * @param existingInstance
+     *            the existing instance
+     * @return the updated instance
+     * @throws IOException
+     *             the io exception
+     */
+    public &lt;T&gt; T fetchInto(@Nonnull T existingInstance) throws IOException {
+<span class="fc" id="L86">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, existingInstance))</span>
+<span class="fc" id="L87">                .body();</span>
+    }
+
+    /**
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
+     *
+     * @return the int
+     * @throws IOException
+     *             the io exception
+     */
+    public int fetchHttpStatusCode() throws IOException {
+<span class="fc" id="L99">        return client.sendRequest(build(), null).statusCode();</span>
+    }
+
+    /**
+     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
+     * {@link #fetch(Class)} where possible.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    public InputStream fetchStream() throws IOException {
+<span class="fc" id="L111">        return client.sendRequest(this, (responseInfo) -&gt; responseInfo.bodyStream()).body();</span>
+    }
+
+    /**
+     * Creates {@link PagedIterable &lt;R&gt;} from this builder using the provided {@link Consumer&lt;R&gt;}.
+     * &lt;p&gt;
+     * This method and the {@link PagedIterable &lt;R&gt;} do not actually begin fetching data until {@link Iterator#next()}
+     * or {@link Iterator#hasNext()} are called.
+     * &lt;/p&gt;
+     *
+     * @param type
+     *            the type of the pages to retrieve.
+     * @param itemInitializer
+     *            the consumer to execute on each paged item retrieved.
+     * @param &lt;R&gt;
+     *            the element type for the pages returned from
+     * @return the {@link PagedIterable} for this builder.
+     */
+    public &lt;R&gt; PagedIterable&lt;R&gt; toIterable(Class&lt;R[]&gt; type, Consumer&lt;R&gt; itemInitializer) {
+        try {
+<span class="fc" id="L131">            return new GitHubPageContentsIterable&lt;&gt;(client, build(), type, itemInitializer);</span>
+<span class="nc" id="L132">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L133">            throw new GHException(e.getMessage(), e);</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

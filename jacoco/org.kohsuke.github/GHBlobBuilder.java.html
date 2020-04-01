@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHBlobBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHBlobBuilder.java</span></div><h1>GHBlobBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.util.Base64;
+
+/**
+ * Builder pattern for creating a new blob. Based on https://developer.github.com/v3/git/blobs/#create-a-blob
+ */
+public class GHBlobBuilder {
+    private final GHRepository repo;
+    private final Requester req;
+
+<span class="fc" id="L13">    GHBlobBuilder(GHRepository repo) {</span>
+<span class="fc" id="L14">        this.repo = repo;</span>
+<span class="fc" id="L15">        req = repo.root.createRequest();</span>
+<span class="fc" id="L16">    }</span>
+
+    /**
+     * Configures a blob with the specified text {@code content}.
+     *
+     * @param content
+     *            string text of the blob
+     * @return a GHBlobBuilder
+     */
+    public GHBlobBuilder textContent(String content) {
+<span class="nc" id="L26">        req.with(&quot;content&quot;, content);</span>
+<span class="nc" id="L27">        req.with(&quot;encoding&quot;, &quot;utf-8&quot;);</span>
+<span class="nc" id="L28">        return this;</span>
+    }
+
+    /**
+     * Configures a blob with the specified binary {@code content}.
+     *
+     * @param content
+     *            byte array of the blob
+     * @return a GHBlobBuilder
+     */
+    public GHBlobBuilder binaryContent(byte[] content) {
+<span class="fc" id="L39">        String base64Content = Base64.getEncoder().encodeToString(content);</span>
+<span class="fc" id="L40">        req.with(&quot;content&quot;, base64Content);</span>
+<span class="fc" id="L41">        req.with(&quot;encoding&quot;, &quot;base64&quot;);</span>
+<span class="fc" id="L42">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L46">        return String.format(&quot;/repos/%s/%s/git/blobs&quot;, repo.getOwnerName(), repo.getName());</span>
+    }
+
+    /**
+     * Creates a blob based on the parameters specified thus far.
+     *
+     * @return a GHBlob
+     * @throws IOException
+     *             if the blob cannot be created.
+     */
+    public GHBlob create() throws IOException {
+<span class="fc" id="L57">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHBlob.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

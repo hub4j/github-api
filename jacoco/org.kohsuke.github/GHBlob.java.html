@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHBlob.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHBlob.java</span></div><h1>GHBlob.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Base64;
+
+/**
+ * The type GHBlob.
+ *
+ * @author Kanstantsin Shautsou
+ * @author Kohsuke Kawaguchi
+ * @see GHTreeEntry#asBlob() GHTreeEntry#asBlob()
+ * @see GHRepository#getBlob(String) GHRepository#getBlob(String)
+ * @see &lt;a href=&quot;https://developer.github.com/v3/git/blobs/#get-a-blob&quot;&gt;Get a blob&lt;/a&gt;
+ */
+<span class="fc" id="L17">public class GHBlob {</span>
+    private String content, encoding, url, sha;
+    private long size;
+
+    /**
+     * Gets url.
+     *
+     * @return API URL of this blob.
+     */
+    public URL getUrl() {
+<span class="nc" id="L27">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L36">        return sha;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return Number of bytes in this blob.
+     */
+    public long getSize() {
+<span class="fc" id="L45">        return size;</span>
+    }
+
+    /**
+     * Gets encoding.
+     *
+     * @return the encoding
+     */
+    public String getEncoding() {
+<span class="nc" id="L54">        return encoding;</span>
+    }
+
+    /**
+     * Gets content.
+     *
+     * @return Encoded content. You probably want {@link #read()}
+     */
+    public String getContent() {
+<span class="nc" id="L63">        return content;</span>
+    }
+
+    /**
+     * Read input stream.
+     *
+     * @return the actual bytes of the blob.
+     */
+    public InputStream read() {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+            try {
+<span class="fc" id="L74">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L75">                return new ByteArrayInputStream(decoder.decode(content));</span>
+<span class="nc" id="L76">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L77">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+            }
+        }
+
+<span class="nc" id="L81">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

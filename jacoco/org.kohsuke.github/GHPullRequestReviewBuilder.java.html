@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestReviewBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestReviewBuilder.java</span></div><h1>GHPullRequestReviewBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Builds up a creation of new {@link GHPullRequestReview}.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHPullRequest#createReview() GHPullRequest#createReview()
+ */
+public class GHPullRequestReviewBuilder {
+    private final GHPullRequest pr;
+    private final Requester builder;
+<span class="fc" id="L16">    private final List&lt;DraftReviewComment&gt; comments = new ArrayList&lt;DraftReviewComment&gt;();</span>
+
+<span class="fc" id="L18">    GHPullRequestReviewBuilder(GHPullRequest pr) {</span>
+<span class="fc" id="L19">        this.pr = pr;</span>
+<span class="fc" id="L20">        this.builder = pr.root.createRequest();</span>
+<span class="fc" id="L21">    }</span>
+
+    // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
+    // List&lt;GHPullRequestReviewComment&gt; comments) throws IOException
+
+    /**
+     * The SHA of the commit that needs a review. Not using the latest commit SHA may render your review comment
+     * outdated if a subsequent commit modifies the line you specify as the position. Defaults to the most recent commit
+     * in the pull request when you do not specify a value.
+     *
+     * @param commitId
+     *            the commit id
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder commitId(String commitId) {
+<span class="nc" id="L36">        builder.with(&quot;commit_id&quot;, commitId);</span>
+<span class="nc" id="L37">        return this;</span>
+    }
+
+    /**
+     * Required when using REQUEST_CHANGES or COMMENT for the event parameter. The body text of the pull request review.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder body(String body) {
+<span class="fc" id="L48">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L49">        return this;</span>
+    }
+
+    /**
+     * The review action you want to perform. The review actions include: APPROVE, REQUEST_CHANGES, or COMMENT. By
+     * leaving this blank, you set the review action state to PENDING, which means you will need to
+     * {@linkplain GHPullRequestReview#submit(String, GHPullRequestReviewEvent) submit the pull request review} when you
+     * are ready.
+     *
+     * @param event
+     *            the event
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder event(GHPullRequestReviewEvent event) {
+<span class="nc" id="L63">        builder.with(&quot;event&quot;, event.action());</span>
+<span class="nc" id="L64">        return this;</span>
+    }
+
+    /**
+     * Comment gh pull request review builder.
+     *
+     * @param body
+     *            The relative path to the file that necessitates a review comment.
+     * @param path
+     *            The position in the diff where you want to add a review comment. Note this value is not the same as
+     *            the line number in the file. For help finding the position value, read the note below.
+     * @param position
+     *            Text of the review comment.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder comment(String body, String path, int position) {
+<span class="fc" id="L80">        comments.add(new DraftReviewComment(body, path, position));</span>
+<span class="fc" id="L81">        return this;</span>
+    }
+
+    /**
+     * Create gh pull request review.
+     *
+     * @return the gh pull request review
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReview create() throws IOException {
+<span class="fc" id="L92">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L93">                .with(&quot;comments&quot;, comments)</span>
+<span class="fc" id="L94">                .withUrlPath(pr.getApiRoute() + &quot;/reviews&quot;)</span>
+<span class="fc" id="L95">                .fetch(GHPullRequestReview.class)</span>
+<span class="fc" id="L96">                .wrapUp(pr);</span>
+    }
+
+    private static class DraftReviewComment {
+        private String body;
+        private String path;
+        private int position;
+
+<span class="fc" id="L104">        DraftReviewComment(String body, String path, int position) {</span>
+<span class="fc" id="L105">            this.body = body;</span>
+<span class="fc" id="L106">            this.path = path;</span>
+<span class="fc" id="L107">            this.position = position;</span>
+<span class="fc" id="L108">        }</span>
+
+        /**
+         * Gets body.
+         *
+         * @return the body
+         */
+        public String getBody() {
+<span class="nc" id="L116">            return body;</span>
+        }
+
+        /**
+         * Gets path.
+         *
+         * @return the path
+         */
+        public String getPath() {
+<span class="nc" id="L125">            return path;</span>
+        }
+
+        /**
+         * Gets position.
+         *
+         * @return the position
+         */
+        public int getPosition() {
+<span class="nc" id="L134">            return position;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

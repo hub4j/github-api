@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Previews.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">Previews.java</span></div><h1>Previews.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Provides the media type strings for GitHub API previews
+ *
+ * https://developer.github.com/v3/previews/
+ *
+ * @author Kohsuke Kawaguchi
+ */
+<span class="nc" id="L10">class Previews {</span>
+    /**
+     * Check-runs and check-suites
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#check-runs-and-check-suites-api&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String ANTIOPE = &quot;application/vnd.github.antiope-preview+json&quot;;
+
+    /**
+     * Commit Search
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#commit-search&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String CLOAK = &quot;application/vnd.github.cloak-preview+json&quot;;
+
+    /**
+     * Owners of GitHub Apps can now uninstall an app using the Apps API
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#uninstall-a-github-app&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String GAMBIT = &quot;application/vnd.github.gambit-preview+json&quot;;
+
+    /**
+     * Manage projects
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#projects&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String INERTIA = &quot;application/vnd.github.inertia-preview+json&quot;;
+
+    /**
+     * Require multiple approving reviews
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#require-multiple-approving-reviews&quot;&gt;GitHub API
+     *      Previews&lt;/a&gt;
+     */
+    static final String LUKE_CAGE = &quot;application/vnd.github.luke-cage-preview+json&quot;;
+
+    /**
+     * Manage integrations through the API
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#integrations&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String MACHINE_MAN = &quot;application/vnd.github.machine-man-preview+json&quot;;
+
+    /**
+     * View a list of repository topics in calls that return repository results
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#repository-topics&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String MERCY = &quot;application/vnd.github.mercy-preview+json&quot;;
+
+    /**
+     * Draft pull requests
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#draft-pull-requests&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String SHADOW_CAT = &quot;application/vnd.github.shadow-cat-preview+json&quot;;
+
+    /**
+     * Reactions
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#reactions&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String SQUIRREL_GIRL = &quot;application/vnd.github.squirrel-girl-preview+json&quot;;
+
+    /**
+     * Require signed commits
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/#require-signed-commits&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    static final String ZZZAX = &quot;application/vnd.github.zzzax-preview+json&quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

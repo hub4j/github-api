@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequest.java</span></div><h1>GHPullRequest.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2010, Kohsuke Kawaguchi
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.CheckForNull;
+
+import static org.kohsuke.github.Previews.SHADOW_CAT;
+
+/**
+ * A pull request.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHRepository#getPullRequest(int) GHRepository#getPullRequest(int)
+ */
+@SuppressWarnings({ &quot;UnusedDeclaration&quot; })
+<span class="fc" id="L48">public class GHPullRequest extends GHIssue implements Refreshable {</span>
+
+    private static final String COMMENTS_ACTION = &quot;/comments&quot;;
+    private static final String REQUEST_REVIEWERS = &quot;/requested_reviewers&quot;;
+
+    private String patch_url, diff_url, issue_url;
+    private GHCommitPointer base;
+    private String merged_at;
+    private GHCommitPointer head;
+
+    // details that are only available when obtained from ID
+    private GHUser merged_by;
+    private int review_comments, additions, commits;
+    private boolean merged, maintainer_can_modify;
+    // making these package private to all for testing
+    boolean draft;
+    private Boolean mergeable;
+    private int deletions;
+    private String mergeable_state;
+    private int changed_files;
+    private String merge_commit_sha;
+
+    // pull request reviewers
+    private GHUser[] requested_reviewers;
+    private GHTeam[] requested_teams;
+
+    /**
+     * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API route as
+     * opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route on this
+     * object to fill in those missing details
+     */
+    private transient boolean fetchedIssueDetails;
+
+    GHPullRequest wrapUp(GHRepository owner) {
+<span class="fc" id="L82">        this.wrap(owner);</span>
+<span class="fc" id="L83">        return wrapUp(owner.root);</span>
+    }
+
+    GHPullRequest wrapUp(GitHub root) {
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (owner != null)</span>
+<span class="fc" id="L88">            owner.wrap(root);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (base != null)</span>
+<span class="fc" id="L90">            base.wrapUp(root);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (head != null)</span>
+<span class="fc" id="L92">            head.wrapUp(root);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (merged_by != null)</span>
+<span class="fc" id="L94">            merged_by.wrapUp(root);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (requested_reviewers != null)</span>
+<span class="fc" id="L96">            GHUser.wrap(requested_reviewers, root);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (requested_teams != null)</span>
+<span class="fc" id="L98">            GHTeam.wrapUp(requested_teams, this);</span>
+<span class="fc" id="L99">        return this;</span>
+    }
+
+    @Override
+    protected String getApiRoute() {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (owner == null) {</span>
+            // Issues returned from search to do not have an owner. Attempt to use url.
+<span class="nc" id="L106">            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+        }
+<span class="fc" id="L108">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/pulls/&quot; + number;</span>
+    }
+
+    /**
+     * The URL of the patch file. like https://github.com/jenkinsci/jenkins/pull/100.patch
+     *
+     * @return the patch url
+     */
+    public URL getPatchUrl() {
+<span class="nc" id="L117">        return GitHubClient.parseURL(patch_url);</span>
+    }
+
+    /**
+     * The URL of the patch file. like https://github.com/jenkinsci/jenkins/pull/100.patch
+     *
+     * @return the issue url
+     */
+    public URL getIssueUrl() {
+<span class="nc" id="L126">        return GitHubClient.parseURL(issue_url);</span>
+    }
+
+    /**
+     * This points to where the change should be pulled into, but I'm not really sure what exactly it means.
+     *
+     * @return the base
+     */
+    public GHCommitPointer getBase() {
+<span class="fc" id="L135">        return base;</span>
+    }
+
+    /**
+     * The change that should be pulled. The tip of the commits to merge.
+     *
+     * @return the head
+     */
+    public GHCommitPointer getHead() {
+<span class="fc" id="L144">        return head;</span>
+    }
+
+    /**
+     * Gets issue updated at.
+     *
+     * @return the issue updated at
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public Date getIssueUpdatedAt() throws IOException {
+<span class="nc" id="L156">        return super.getUpdatedAt();</span>
+    }
+
+    /**
+     * The diff file, like https://github.com/jenkinsci/jenkins/pull/100.diff
+     *
+     * @return the diff url
+     */
+    public URL getDiffUrl() {
+<span class="nc" id="L165">        return GitHubClient.parseURL(diff_url);</span>
+    }
+
+    /**
+     * Gets merged at.
+     *
+     * @return the merged at
+     */
+    public Date getMergedAt() {
+<span class="nc" id="L174">        return GitHubClient.parseDate(merged_at);</span>
+    }
+
+    @Override
+    public Collection&lt;GHLabel&gt; getLabels() throws IOException {
+<span class="fc" id="L179">        fetchIssue();</span>
+<span class="fc" id="L180">        return super.getLabels();</span>
+    }
+
+    @Override
+    public GHUser getClosedBy() {
+<span class="nc" id="L185">        return null;</span>
+    }
+
+    @Override
+    public PullRequest getPullRequest() {
+<span class="nc" id="L190">        return null;</span>
+    }
+
+    //
+    // details that are only available via get with ID
+    //
+
+    /**
+     * Gets merged by.
+     *
+     * @return the merged by
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getMergedBy() throws IOException {
+<span class="fc" id="L205">        populate();</span>
+<span class="fc" id="L206">        return merged_by;</span>
+    }
+
+    /**
+     * Gets review comments.
+     *
+     * @return the review comments
+     * @throws IOException
+     *             the io exception
+     */
+    public int getReviewComments() throws IOException {
+<span class="fc" id="L217">        populate();</span>
+<span class="fc" id="L218">        return review_comments;</span>
+    }
+
+    /**
+     * Gets additions.
+     *
+     * @return the additions
+     * @throws IOException
+     *             the io exception
+     */
+    public int getAdditions() throws IOException {
+<span class="fc" id="L229">        populate();</span>
+<span class="fc" id="L230">        return additions;</span>
+    }
+
+    /**
+     * Gets commits.
+     *
+     * @return the commits
+     * @throws IOException
+     *             the io exception
+     */
+    public int getCommits() throws IOException {
+<span class="nc" id="L241">        populate();</span>
+<span class="nc" id="L242">        return commits;</span>
+    }
+
+    /**
+     * Is merged boolean.
+     *
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isMerged() throws IOException {
+<span class="fc" id="L253">        populate();</span>
+<span class="fc" id="L254">        return merged;</span>
+    }
+
+    /**
+     * Can maintainer modify boolean.
+     *
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean canMaintainerModify() throws IOException {
+<span class="fc" id="L265">        populate();</span>
+<span class="fc" id="L266">        return maintainer_can_modify;</span>
+    }
+
+    /**
+     * Is draft boolean.
+     *
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isDraft() throws IOException {
+<span class="fc" id="L277">        populate();</span>
+<span class="fc" id="L278">        return draft;</span>
+    }
+
+    /**
+     * Is this PR mergeable?
+     *
+     * @return null if the state has not been determined yet, for example when a PR is newly created. If this method is
+     *         called on an instance whose mergeable state is not yet known, API call is made to retrieve the latest
+     *         state.
+     * @throws IOException
+     *             the io exception
+     */
+    public Boolean getMergeable() throws IOException {
+<span class="fc" id="L291">        refresh(mergeable);</span>
+<span class="fc" id="L292">        return mergeable;</span>
+    }
+
+    /**
+     * for test purposes only
+     */
+    @Deprecated
+    Boolean getMergeableNoRefresh() throws IOException {
+<span class="fc" id="L300">        return mergeable;</span>
+    }
+
+    /**
+     * Gets deletions.
+     *
+     * @return the deletions
+     * @throws IOException
+     *             the io exception
+     */
+    public int getDeletions() throws IOException {
+<span class="fc" id="L311">        populate();</span>
+<span class="fc" id="L312">        return deletions;</span>
+    }
+
+    /**
+     * Gets mergeable state.
+     *
+     * @return the mergeable state
+     * @throws IOException
+     *             the io exception
+     */
+    public String getMergeableState() throws IOException {
+<span class="fc" id="L323">        populate();</span>
+<span class="fc" id="L324">        return mergeable_state;</span>
+    }
+
+    /**
+     * Gets changed files.
+     *
+     * @return the changed files
+     * @throws IOException
+     *             the io exception
+     */
+    public int getChangedFiles() throws IOException {
+<span class="fc" id="L335">        populate();</span>
+<span class="fc" id="L336">        return changed_files;</span>
+    }
+
+    /**
+     * See &lt;a href=&quot;https://developer.github.com/changes/2013-04-25-deprecating-merge-commit-sha&quot;&gt;GitHub blog post&lt;/a&gt;
+     *
+     * @return the merge commit sha
+     * @throws IOException
+     *             the io exception
+     */
+    public String getMergeCommitSha() throws IOException {
+<span class="fc" id="L347">        populate();</span>
+<span class="fc" id="L348">        return merge_commit_sha;</span>
+    }
+
+    /**
+     * Gets requested reviewers.
+     *
+     * @return the requested reviewers
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHUser&gt; getRequestedReviewers() throws IOException {
+<span class="fc" id="L359">        refresh(requested_reviewers);</span>
+<span class="fc" id="L360">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
+    }
+
+    /**
+     * Gets requested teams.
+     *
+     * @return the requested teams
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHTeam&gt; getRequestedTeams() throws IOException {
+<span class="fc" id="L371">        refresh(requested_teams);</span>
+<span class="fc" id="L372">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    private void populate() throws IOException {
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (mergeable_state != null)</span>
+<span class="fc" id="L382">            return; // already populated</span>
+<span class="fc" id="L383">        refresh();</span>
+<span class="fc" id="L384">    }</span>
+
+    /**
+     * Repopulates this object.
+     */
+    public void refresh() throws IOException {
+<span class="fc bfc" id="L390" title="All 2 branches covered.">        if (root.isOffline()) {</span>
+<span class="fc" id="L391">            return; // cannot populate, will have to live with what we have</span>
+        }
+<span class="fc" id="L393">        root.createRequest().withPreview(SHADOW_CAT).withUrlPath(url).fetchInto(this).wrapUp(owner);</span>
+<span class="fc" id="L394">    }</span>
+
+    /**
+     * Retrieves all the files associated to this pull request.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHPullRequestFileDetail&gt; listFiles() {
+<span class="nc" id="L402">        return root.createRequest()</span>
+<span class="nc" id="L403">                .withUrlPath(String.format(&quot;%s/files&quot;, getApiRoute()))</span>
+<span class="nc" id="L404">                .toIterable(GHPullRequestFileDetail[].class, null);</span>
+    }
+
+    /**
+     * Retrieves all the reviews associated to this pull request.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHPullRequestReview&gt; listReviews() {
+<span class="fc" id="L413">        return root.createRequest()</span>
+<span class="fc" id="L414">                .withUrlPath(String.format(&quot;%s/reviews&quot;, getApiRoute()))</span>
+<span class="fc" id="L415">                .toIterable(GHPullRequestReview[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * Obtains all the review comments associated with this pull request.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() throws IOException {
+<span class="fc" id="L426">        return root.createRequest()</span>
+<span class="fc" id="L427">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
+<span class="fc" id="L428">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * Retrieves all the commits associated to this pull request.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHPullRequestCommitDetail&gt; listCommits() {
+<span class="nc" id="L437">        return root.createRequest()</span>
+<span class="nc" id="L438">                .withUrlPath(String.format(&quot;%s/commits&quot;, getApiRoute()))</span>
+<span class="nc" id="L439">                .toIterable(GHPullRequestCommitDetail[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * Create review gh pull request review.
+     *
+     * @param body
+     *            the body
+     * @param event
+     *            the event
+     * @param comments
+     *            the comments
+     * @return the gh pull request review
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #createReview()}
+     */
+    @Deprecated
+    public GHPullRequestReview createReview(String body,
+            @CheckForNull GHPullRequestReviewState event,
+            GHPullRequestReviewComment... comments) throws IOException {
+<span class="nc" id="L460">        return createReview(body, event, Arrays.asList(comments));</span>
+    }
+
+    /**
+     * Create review gh pull request review.
+     *
+     * @param body
+     *            the body
+     * @param event
+     *            the event
+     * @param comments
+     *            the comments
+     * @return the gh pull request review
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #createReview()}
+     */
+    @Deprecated
+    public GHPullRequestReview createReview(String body,
+            @CheckForNull GHPullRequestReviewState event,
+            List&lt;GHPullRequestReviewComment&gt; comments) throws IOException {
+<span class="nc" id="L481">        GHPullRequestReviewBuilder b = createReview().body(body);</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        for (GHPullRequestReviewComment c : comments) {</span>
+<span class="nc" id="L483">            b.comment(c.getBody(), c.getPath(), c.getPosition());</span>
+<span class="nc" id="L484">        }</span>
+<span class="nc" id="L485">        return b.create();</span>
+    }
+
+    /**
+     * Create review gh pull request review builder.
+     *
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder createReview() {
+<span class="fc" id="L494">        return new GHPullRequestReviewBuilder(this);</span>
+    }
+
+    /**
+     * Create review comment gh pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @param sha
+     *            the sha
+     * @param path
+     *            the path
+     * @param position
+     *            the position
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
+            throws IOException {
+<span class="fc" id="L514">        return root.createRequest()</span>
+<span class="fc" id="L515">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L516">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L517">                .with(&quot;commit_id&quot;, sha)</span>
+<span class="fc" id="L518">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L519">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L520">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
+<span class="fc" id="L521">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L522">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Request reviewers.
+     *
+     * @param reviewers
+     *            the reviewers
+     * @throws IOException
+     *             the io exception
+     */
+    public void requestReviewers(List&lt;GHUser&gt; reviewers) throws IOException {
+<span class="fc" id="L534">        root.createRequest()</span>
+<span class="fc" id="L535">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L536">                .with(&quot;reviewers&quot;, getLogins(reviewers))</span>
+<span class="fc" id="L537">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L538">                .send();</span>
+<span class="fc" id="L539">    }</span>
+
+    /**
+     * Request team reviewers.
+     *
+     * @param teams
+     *            the teams
+     * @throws IOException
+     *             the io exception
+     */
+    public void requestTeamReviewers(List&lt;GHTeam&gt; teams) throws IOException {
+<span class="fc" id="L550">        List&lt;String&gt; teamReviewers = new ArrayList&lt;String&gt;(teams.size());</span>
+<span class="fc bfc" id="L551" title="All 2 branches covered.">        for (GHTeam team : teams) {</span>
+<span class="fc" id="L552">            teamReviewers.add(team.getSlug());</span>
+<span class="fc" id="L553">        }</span>
+<span class="fc" id="L554">        root.createRequest()</span>
+<span class="fc" id="L555">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L556">                .with(&quot;team_reviewers&quot;, teamReviewers)</span>
+<span class="fc" id="L557">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L558">                .send();</span>
+<span class="fc" id="L559">    }</span>
+
+    /**
+     * Merge this pull request.
+     * &lt;p&gt;
+     * The equivalent of the big green &quot;Merge pull request&quot; button.
+     *
+     * @param msg
+     *            Commit message. If null, the default one will be used.
+     * @throws IOException
+     *             the io exception
+     */
+    public void merge(String msg) throws IOException {
+<span class="nc" id="L572">        merge(msg, null);</span>
+<span class="nc" id="L573">    }</span>
+
+    /**
+     * Merge this pull request.
+     * &lt;p&gt;
+     * The equivalent of the big green &quot;Merge pull request&quot; button.
+     *
+     * @param msg
+     *            Commit message. If null, the default one will be used.
+     * @param sha
+     *            SHA that pull request head must match to allow merge.
+     * @throws IOException
+     *             the io exception
+     */
+    public void merge(String msg, String sha) throws IOException {
+<span class="nc" id="L588">        merge(msg, sha, null);</span>
+<span class="nc" id="L589">    }</span>
+
+    /**
+     * Merge this pull request, using the specified merge method.
+     * &lt;p&gt;
+     * The equivalent of the big green &quot;Merge pull request&quot; button.
+     *
+     * @param msg
+     *            Commit message. If null, the default one will be used.
+     * @param sha
+     *            the sha
+     * @param method
+     *            SHA that pull request head must match to allow merge.
+     * @throws IOException
+     *             the io exception
+     */
+    public void merge(String msg, String sha, MergeMethod method) throws IOException {
+<span class="fc" id="L606">        root.createRequest()</span>
+<span class="fc" id="L607">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L608">                .with(&quot;commit_message&quot;, msg)</span>
+<span class="fc" id="L609">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L610">                .with(&quot;merge_method&quot;, method)</span>
+<span class="fc" id="L611">                .withUrlPath(getApiRoute() + &quot;/merge&quot;)</span>
+<span class="fc" id="L612">                .send();</span>
+<span class="fc" id="L613">    }</span>
+
+    /**
+     * The enum MergeMethod.
+     */
+<span class="fc" id="L618">    public enum MergeMethod {</span>
+<span class="fc" id="L619">        MERGE, SQUASH, REBASE</span>
+    }
+
+    private void fetchIssue() throws IOException {
+<span class="pc bpc" id="L623" title="1 of 2 branches missed.">        if (!fetchedIssueDetails) {</span>
+<span class="fc" id="L624">            root.createRequest().withUrlPath(getIssuesApiRoute()).fetchInto(this);</span>
+<span class="fc" id="L625">            fetchedIssueDetails = true;</span>
+        }
+<span class="fc" id="L627">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

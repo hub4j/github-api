@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckRun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckRun.java</span></div><h1>GHCheckRun.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
+
+/**
+ * Represents a check run.
+ *
+ * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/&quot;&gt;documentation&lt;/a&gt;
+ */
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="fc" id="L16">public class GHCheckRun extends GHObject {</span>
+    GHRepository owner;
+    GitHub root;
+
+    private String status;
+    private String conclusion;
+    private String name;
+    private String headSha;
+    private String nodeId;
+    private String externalId;
+    private String startedAt;
+    private String completedAt;
+    private URL htmlUrl;
+    private URL detailsUrl;
+    private Output output;
+    private GHApp app;
+    private GHPullRequest[] pullRequests;
+    private GHCheckSuite checkSuite;
+
+    GHCheckRun wrap(GHRepository owner) {
+<span class="fc" id="L36">        this.owner = owner;</span>
+<span class="fc" id="L37">        this.root = owner.root;</span>
+<span class="fc" id="L38">        return this;</span>
+    }
+
+    GHCheckRun wrap(GitHub root) {
+<span class="fc" id="L42">        this.root = root;</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="nc" id="L44">            owner.wrap(root);</span>
+        }
+<span class="fc" id="L46">        return this;</span>
+    }
+
+    GHPullRequest[] wrap() {
+<span class="nc" id="L50">        return pullRequests;</span>
+    }
+
+    /**
+     * Gets status of the check run.
+     *
+     * @return Status of the check run
+     * @see Status
+     */
+    public String getStatus() {
+<span class="fc" id="L60">        return status;</span>
+    }
+
+<span class="fc" id="L63">    public static enum Status {</span>
+<span class="fc" id="L64">        QUEUED, IN_PROGRESS, COMPLETED</span>
+    }
+
+    /**
+     * Gets conclusion of a completed check run.
+     *
+     * @return Status of the check run
+     * @see Conclusion
+     */
+    public String getConclusion() {
+<span class="fc" id="L74">        return conclusion;</span>
+    }
+
+<span class="fc" id="L77">    public static enum Conclusion {</span>
+<span class="fc" id="L78">        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED</span>
+    }
+
+    /**
+     * Gets the custom name of this check run.
+     *
+     * @return Name of the check run
+     */
+    public String getName() {
+<span class="fc" id="L87">        return name;</span>
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+<span class="fc" id="L96">        return headSha;</span>
+    }
+
+    /**
+     * Gets the pull requests participated in this check run.
+     *
+     * @return Pull requests of this check run
+     */
+    GHPullRequest[] getPullRequests() throws IOException {
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="nc" id="L107">                singlePull.refresh();</span>
+            }
+        }
+<span class="nc" id="L110">        return pullRequests;</span>
+    }
+
+    /**
+     * Gets the HTML URL: https://github.com/[owner]/[repo-name]/runs/[check-run-id], usually an GitHub Action page of
+     * the check run.
+     *
+     * @return HTML URL
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="fc" id="L121">        return htmlUrl;</span>
+    }
+
+    /**
+     * Gets the global node id to access most objects in GitHub.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
+     * @return Global node id
+     */
+    public String getNodeId() {
+<span class="fc" id="L131">        return nodeId;</span>
+    }
+
+    /**
+     * Gets a reference for the check run on the integrator's system.
+     *
+     * @return Reference id
+     */
+    public String getExternalId() {
+<span class="fc" id="L140">        return externalId;</span>
+    }
+
+    /**
+     * Gets the details URL from which to find full details of the check run on the integrator's site.
+     *
+     * @return Details URL
+     */
+    public URL getDetailsUrl() {
+<span class="fc" id="L149">        return detailsUrl;</span>
+    }
+
+    /**
+     * Gets the start time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *
+     * @return Timestamp of the start time
+     */
+    public Date getStartedAt() {
+<span class="fc" id="L158">        return GitHubClient.parseDate(startedAt);</span>
+    }
+
+    /**
+     * Gets the completed time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *
+     * @return Timestamp of the completed time
+     */
+    public Date getCompletedAt() {
+<span class="fc" id="L167">        return GitHubClient.parseDate(completedAt);</span>
+    }
+
+    /**
+     * Gets the GitHub app this check run belongs to, included in response.
+     *
+     * @return GitHub App
+     */
+    public GHApp getApp() {
+<span class="fc" id="L176">        return app;</span>
+    }
+
+    /**
+     * Gets the check suite this check run belongs to
+     *
+     * @return Check suite
+     */
+    public GHCheckSuite getCheckSuite() {
+<span class="fc" id="L185">        return checkSuite;</span>
+    }
+
+    /**
+     * Gets an output for a check run.
+     *
+     * @return Output of a check run
+     */
+    public Output getOutput() {
+<span class="fc" id="L194">        return output;</span>
+    }
+
+    /**
+     * Represents an output in a check run to include summary and other results.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
+     */
+<span class="fc" id="L202">    public static class Output {</span>
+        private String title;
+        private String summary;
+        private String text;
+        private int annotationsCount;
+        private URL annotationsUrl;
+
+        /**
+         * Gets the title of check run.
+         *
+         * @return title of check run
+         */
+        public String getTitle() {
+<span class="fc" id="L215">            return title;</span>
+        }
+
+        /**
+         * Gets the summary of the check run, note that it supports Markdown.
+         *
+         * @return summary of check run
+         */
+        public String getSummary() {
+<span class="fc" id="L224">            return summary;</span>
+        }
+
+        /**
+         * Gets the details of the check run, note that it supports Markdown.
+         *
+         * @return Details of the check run
+         */
+        public String getText() {
+<span class="fc" id="L233">            return text;</span>
+        }
+
+        /**
+         * Gets the annotation count of a check run.
+         *
+         * @return annotation count of a check run
+         */
+        public int getAnnotationsCount() {
+<span class="fc" id="L242">            return annotationsCount;</span>
+        }
+
+        /**
+         * Gets the URL of annotations.
+         *
+         * @return URL of annotations
+         */
+        public URL getAnnotationsUrl() {
+<span class="fc" id="L251">            return annotationsUrl;</span>
+        }
+    }
+
+<span class="fc" id="L255">    public static enum AnnotationLevel {</span>
+<span class="fc" id="L256">        NOTICE, WARNING, FAILURE</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

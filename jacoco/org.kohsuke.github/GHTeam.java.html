@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTeam.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTeam.java</span></div><h1>GHTeam.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+/**
+ * A team in GitHub organization.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+<span class="fc" id="L13">public class GHTeam implements Refreshable {</span>
+    private String name;
+    private String permission;
+    private String slug;
+    private String description;
+    private Privacy privacy;
+
+    private int id;
+    private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
+
+    protected /* final */ GitHub root;
+
+<span class="fc" id="L25">    public enum Privacy {</span>
+<span class="fc" id="L26">        SECRET, // only visible to organization owners and members of this team.</span>
+<span class="fc" id="L27">        CLOSED // visible to all members of this organization.</span>
+    }
+
+    /**
+     * Member's role in a team
+     */
+<span class="nc" id="L33">    public enum Role {</span>
+        /**
+         * A normal member of the team
+         */
+<span class="nc" id="L37">        MEMBER,</span>
+        /**
+         * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
+         * name and description.
+         */
+<span class="nc" id="L42">        MAINTAINER</span>
+    }
+
+    GHTeam wrapUp(GHOrganization owner) {
+<span class="fc" id="L46">        this.organization = owner;</span>
+<span class="fc" id="L47">        this.root = owner.root;</span>
+<span class="fc" id="L48">        return this;</span>
+    }
+
+    GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
+<span class="fc" id="L52">        this.organization.wrapUp(root);</span>
+<span class="fc" id="L53">        return wrapUp(organization);</span>
+    }
+
+    static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (GHTeam t : teams) {</span>
+<span class="fc" id="L58">            t.root = owner.root;</span>
+        }
+<span class="fc" id="L60">        return teams;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L69">        return name;</span>
+    }
+
+    /**
+     * Gets permission.
+     *
+     * @return the permission
+     */
+    public String getPermission() {
+<span class="fc" id="L78">        return permission;</span>
+    }
+
+    /**
+     * Gets slug.
+     *
+     * @return the slug
+     */
+    public String getSlug() {
+<span class="fc" id="L87">        return slug;</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L96">        return description;</span>
+    }
+
+    /**
+     * Gets the privacy state.
+     *
+     * @return the privacy state.
+     */
+    public Privacy getPrivacy() {
+<span class="fc" id="L105">        return privacy;</span>
+    }
+
+    /**
+     * Sets description.
+     *
+     * @param description
+     *            the description
+     * @throws IOException
+     *             the io exception
+     */
+    public void setDescription(String description) throws IOException {
+<span class="fc" id="L117">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;description&quot;, description).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Updates the team's privacy setting.
+     *
+     * @param privacy
+     *            the privacy
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPrivacy(Privacy privacy) throws IOException {
+<span class="fc" id="L129">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;privacy&quot;, privacy).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public int getId() {
+<span class="fc" id="L138">        return id;</span>
+    }
+
+    /**
+     * Retrieves the current members.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHUser&gt; listMembers() throws IOException {
+<span class="nc" id="L149">        return root.createRequest().withUrlPath(api(&quot;/members&quot;)).toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Gets members.
+     *
+     * @return the members
+     * @throws IOException
+     *             the io exception
+     */
+    public Set&lt;GHUser&gt; getMembers() throws IOException {
+<span class="nc" id="L160">        return listMembers().toSet();</span>
+    }
+
+    /**
+     * Checks if this team has the specified user as a member.
+     *
+     * @param user
+     *            the user
+     * @return the boolean
+     */
+    public boolean hasMember(GHUser user) {
+        try {
+<span class="fc" id="L172">            root.createRequest().withUrlPath(&quot;/teams/&quot; + id + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L173">            return true;</span>
+<span class="nc" id="L174">        } catch (IOException ignore) {</span>
+<span class="nc" id="L175">            return false;</span>
+        }
+    }
+
+    /**
+     * Gets repositories.
+     *
+     * @return the repositories
+     * @throws IOException
+     *             the io exception
+     */
+    public Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
+<span class="fc" id="L187">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
+<span class="fc" id="L189">            m.put(r.getName(), r);</span>
+<span class="fc" id="L190">        }</span>
+<span class="fc" id="L191">        return m;</span>
+    }
+
+    /**
+     * List repositories paged iterable.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listRepositories() {
+<span class="fc" id="L200">        return root.createRequest()</span>
+<span class="fc" id="L201">                .withUrlPath(api(&quot;/repos&quot;))</span>
+<span class="fc" id="L202">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+    }
+
+    /**
+     * Adds a member to the team.
+     * &lt;p&gt;
+     * The user will be invited to the organization if required.
+     *
+     * @param u
+     *            the u
+     * @throws IOException
+     *             the io exception
+     * @since 1.59
+     */
+    public void add(GHUser u) throws IOException {
+<span class="nc" id="L217">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L218">    }</span>
+
+    /**
+     * Adds a member to the team
+     * &lt;p&gt;
+     * The user will be invited to the organization if required.
+     *
+     * @param user
+     *            github user
+     * @param role
+     *            role for the new member
+     * @throws IOException
+     *             the io exception
+     */
+    public void add(GHUser user, Role role) throws IOException {
+<span class="nc" id="L233">        root.createRequest()</span>
+<span class="nc" id="L234">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L235">                .with(&quot;role&quot;, role)</span>
+<span class="nc" id="L236">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
+<span class="nc" id="L237">                .send();</span>
+<span class="nc" id="L238">    }</span>
+
+    /**
+     * Removes a member to the team.
+     *
+     * @param u
+     *            the u
+     * @throws IOException
+     *             the io exception
+     */
+    public void remove(GHUser u) throws IOException {
+<span class="nc" id="L249">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/members/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L250">    }</span>
+
+    /**
+     * Add.
+     *
+     * @param r
+     *            the r
+     * @throws IOException
+     *             the io exception
+     */
+    public void add(GHRepository r) throws IOException {
+<span class="nc" id="L261">        add(r, null);</span>
+<span class="nc" id="L262">    }</span>
+
+    /**
+     * Add.
+     *
+     * @param r
+     *            the r
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+<span class="nc" id="L275">        root.createRequest()</span>
+<span class="nc" id="L276">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L277">                .with(&quot;permission&quot;, permission)</span>
+<span class="nc" id="L278">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="nc" id="L279">                .send();</span>
+<span class="nc" id="L280">    }</span>
+
+    /**
+     * Remove.
+     *
+     * @param r
+     *            the r
+     * @throws IOException
+     *             the io exception
+     */
+    public void remove(GHRepository r) throws IOException {
+<span class="nc" id="L291">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName())).send();</span>
+<span class="nc" id="L292">    }</span>
+
+    /**
+     * Deletes this team.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="nc" id="L301">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="nc" id="L302">    }</span>
+
+    private String api(String tail) {
+<span class="fc" id="L305">        return &quot;/teams/&quot; + id + tail;</span>
+    }
+
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     * @throws IOException
+     *             the io exception
+     */
+    public GHOrganization getOrganization() throws IOException {
+<span class="fc" id="L316">        refresh(organization);</span>
+<span class="fc" id="L317">        return organization;</span>
+    }
+
+    @Override
+    public void refresh() throws IOException {
+<span class="fc" id="L322">        root.createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root);</span>
+<span class="fc" id="L323">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

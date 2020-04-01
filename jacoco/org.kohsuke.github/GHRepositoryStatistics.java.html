@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryStatistics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryStatistics.java</span></div><h1>GHRepositoryStatistics.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+/**
+ * Statistics for a GitHub repository.
+ *
+ * @author Martin van Zijl
+ */
+public class GHRepositoryStatistics {
+
+    private final GHRepository repo;
+    private final GitHub root;
+
+    private static final int MAX_WAIT_ITERATIONS = 3;
+    private static final int WAIT_SLEEP_INTERVAL = 5000;
+
+    /**
+     * Instantiates a new Gh repository statistics.
+     *
+     * @param repo
+     *            the repo
+     */
+<span class="fc" id="L32">    public GHRepositoryStatistics(GHRepository repo) {</span>
+<span class="fc" id="L33">        this.repo = repo;</span>
+<span class="fc" id="L34">        this.root = repo.root;</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Get contributors list with additions, deletions, and commit count. See
+     * https://developer.github.com/v3/repos/statistics/#get-contributors-list-with-additions-deletions-and-commit-counts
+     *
+     * @return the contributor stats
+     * @throws IOException
+     *             the io exception
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    public PagedIterable&lt;ContributorStats&gt; getContributorStats() throws IOException, InterruptedException {
+<span class="fc" id="L48">        return getContributorStats(true);</span>
+    }
+
+    /**
+     * Gets contributor stats.
+     *
+     * @param waitTillReady
+     *            Whether to sleep the thread if necessary until the statistics are ready. This is true by default.
+     * @return the contributor stats
+     * @throws IOException
+     *             the io exception
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    @Preview
+    @Deprecated
+    @SuppressWarnings(&quot;SleepWhileInLoop&quot;)
+    @SuppressFBWarnings(value = { &quot;RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE&quot; }, justification = &quot;JSON API&quot;)
+    public PagedIterable&lt;ContributorStats&gt; getContributorStats(boolean waitTillReady)
+            throws IOException, InterruptedException {
+<span class="fc" id="L68">        PagedIterable&lt;GHRepositoryStatistics.ContributorStats&gt; stats = getContributorStatsImpl();</span>
+
+<span class="pc bpc" id="L70" title="3 of 4 branches missed.">        if (stats == null &amp;&amp; waitTillReady) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            for (int i = 0; i &lt; MAX_WAIT_ITERATIONS; i += 1) {</span>
+                // Wait a few seconds and try again.
+<span class="nc" id="L73">                Thread.sleep(WAIT_SLEEP_INTERVAL);</span>
+<span class="nc" id="L74">                stats = getContributorStatsImpl();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (stats != null) {</span>
+<span class="nc" id="L76">                    break;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L81">        return stats;</span>
+    }
+
+    /**
+     * This gets the actual statistics from the server. Returns null if they are still being cached.
+     */
+    private PagedIterable&lt;ContributorStats&gt; getContributorStatsImpl() throws IOException {
+<span class="fc" id="L88">        return root.createRequest()</span>
+<span class="fc" id="L89">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
+<span class="fc" id="L90">                .toIterable(ContributorStats[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * The type ContributorStats.
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                    &quot;URF_UNREAD_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L100">    public static class ContributorStats extends GHObject {</span>
+        /* package almost final */ private GitHub root;
+        private GHUser author;
+        private int total;
+        private List&lt;Week&gt; weeks;
+
+        @Override
+        public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L108">            throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+        }
+
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
+        public GitHub getRoot() {
+<span class="nc" id="L117">            return root;</span>
+        }
+
+        /**
+         * Gets author.
+         *
+         * @return The author described by these statistics.
+         */
+        public GHUser getAuthor() {
+<span class="fc" id="L126">            return author;</span>
+        }
+
+        /**
+         * Gets total.
+         *
+         * @return The total number of commits authored by the contributor.
+         */
+        public int getTotal() {
+<span class="fc" id="L135">            return total;</span>
+        }
+
+        /**
+         * Convenience method to look up week with particular timestamp.
+         *
+         * @param timestamp
+         *            The timestamp to look for.
+         * @return The week starting with the given timestamp. Throws an exception if it is not found.
+         * @throws NoSuchElementException
+         *             the no such element exception
+         */
+        public Week getWeek(long timestamp) throws NoSuchElementException {
+            // maybe store the weeks in a map to make this more efficient?
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            for (Week week : weeks) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                if (week.getWeekTimestamp() == timestamp) {</span>
+<span class="fc" id="L151">                    return week;</span>
+                }
+<span class="fc" id="L153">            }</span>
+
+            // this is safer than returning null
+<span class="nc" id="L156">            throw new NoSuchElementException();</span>
+        }
+
+        /**
+         * Gets weeks.
+         *
+         * @return The total number of commits authored by the contributor.
+         */
+        public List&lt;Week&gt; getWeeks() {
+<span class="fc" id="L165">            return weeks;</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L170">            return author.getLogin() + &quot; made &quot; + String.valueOf(total) + &quot; contributions over &quot;</span>
+<span class="nc" id="L171">                    + String.valueOf(weeks.size()) + &quot; weeks&quot;;</span>
+        }
+
+        /**
+         * The type Week.
+         */
+        @SuppressFBWarnings(
+                value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                        &quot;URF_UNREAD_FIELD&quot; },
+                justification = &quot;JSON API&quot;)
+<span class="fc" id="L181">        public static class Week {</span>
+
+            private long w;
+            private int a;
+            private int d;
+            private int c;
+
+            /**
+             * Gets week timestamp.
+             *
+             * @return Start of the week, as a UNIX timestamp.
+             */
+            public long getWeekTimestamp() {
+<span class="fc" id="L194">                return w;</span>
+            }
+
+            /**
+             * Gets number of additions.
+             *
+             * @return The number of additions for the week.
+             */
+            public int getNumberOfAdditions() {
+<span class="fc" id="L203">                return a;</span>
+            }
+
+            /**
+             * Gets number of deletions.
+             *
+             * @return The number of deletions for the week.
+             */
+            public int getNumberOfDeletions() {
+<span class="fc" id="L212">                return d;</span>
+            }
+
+            /**
+             * Gets number of commits.
+             *
+             * @return The number of commits for the week.
+             */
+            public int getNumberOfCommits() {
+<span class="fc" id="L221">                return c;</span>
+            }
+
+            @Override
+            public String toString() {
+<span class="nc" id="L226">                return String.format(&quot;Week starting %d - Additions: %d, Deletions: %d, Commits: %d&quot;, w, a, d, c);</span>
+            }
+        }
+
+        ContributorStats wrapUp(GitHub root) {
+<span class="fc" id="L231">            this.root = root;</span>
+<span class="fc" id="L232">            return this;</span>
+        }
+    }
+
+    /**
+     * Get the last year of commit activity data. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
+     *
+     * @return the commit activity
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;CommitActivity&gt; getCommitActivity() throws IOException {
+<span class="fc" id="L245">        return root.createRequest()</span>
+<span class="fc" id="L246">                .withUrlPath(getApiTailUrl(&quot;commit_activity&quot;))</span>
+<span class="fc" id="L247">                .toIterable(CommitActivity[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * The type CommitActivity.
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="fc" id="L256">    public static class CommitActivity extends GHObject {</span>
+        /* package almost final */ private GitHub root;
+        private List&lt;Integer&gt; days;
+        private int total;
+        private long week;
+
+        /**
+         * Gets days.
+         *
+         * @return The number of commits for each day of the week. 0 = Sunday, 1 = Monday, etc.
+         */
+        public List&lt;Integer&gt; getDays() {
+<span class="fc" id="L268">            return days;</span>
+        }
+
+        /**
+         * Gets total.
+         *
+         * @return The total number of commits for the week.
+         */
+        public int getTotal() {
+<span class="fc" id="L277">            return total;</span>
+        }
+
+        /**
+         * Gets week.
+         *
+         * @return The start of the week as a UNIX timestamp.
+         */
+        public long getWeek() {
+<span class="fc" id="L286">            return week;</span>
+        }
+
+        CommitActivity wrapUp(GitHub root) {
+<span class="fc" id="L290">            this.root = root;</span>
+<span class="fc" id="L291">            return this;</span>
+        }
+
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
+        public GitHub getRoot() {
+<span class="nc" id="L300">            return root;</span>
+        }
+
+        @Override
+        public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L305">            throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+        }
+    }
+
+    /**
+     * Get the number of additions and deletions per week. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-number-of-additions-and-deletions-per-week
+     *
+     * @return the code frequency
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;CodeFrequency&gt; getCodeFrequency() throws IOException {
+        // Map to arrays first, since there are no field names in the
+        // returned JSON.
+        try {
+<span class="fc" id="L321">            Integer[][] list = root.createRequest()</span>
+<span class="fc" id="L322">                    .withUrlPath(getApiTailUrl(&quot;code_frequency&quot;))</span>
+<span class="fc" id="L323">                    .fetch(Integer[][].class);</span>
+
+            // Convert to proper objects.
+<span class="fc" id="L326">            List&lt;CodeFrequency&gt; returnList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">            for (Integer[] item : list) {</span>
+<span class="fc" id="L328">                CodeFrequency cf = new CodeFrequency(Arrays.asList(item));</span>
+<span class="fc" id="L329">                returnList.add(cf);</span>
+            }
+
+<span class="fc" id="L332">            return returnList;</span>
+<span class="nc" id="L333">        } catch (MismatchedInputException e) {</span>
+            // This sometimes happens when retrieving code frequency statistics
+            // for a repository for the first time. It is probably still being
+            // generated, so return null.
+<span class="nc" id="L337">            return null;</span>
+        }
+    }
+
+    /**
+     * The type CodeFrequency.
+     */
+    public static class CodeFrequency {
+        private int week;
+        private int additions;
+        private int deletions;
+
+<span class="fc" id="L349">        private CodeFrequency(List&lt;Integer&gt; item) {</span>
+<span class="fc" id="L350">            week = item.get(0);</span>
+<span class="fc" id="L351">            additions = item.get(1);</span>
+<span class="fc" id="L352">            deletions = item.get(2);</span>
+<span class="fc" id="L353">        }</span>
+
+        /**
+         * Gets week timestamp.
+         *
+         * @return The start of the week as a UNIX timestamp.
+         */
+        public int getWeekTimestamp() {
+<span class="fc" id="L361">            return week;</span>
+        }
+
+        /**
+         * Gets additions.
+         *
+         * @return The number of additions for the week.
+         */
+        public long getAdditions() {
+<span class="fc" id="L370">            return additions;</span>
+        }
+
+        /**
+         * Gets deletions.
+         *
+         * @return The number of deletions for the week. NOTE: This will be a NEGATIVE number.
+         */
+        public long getDeletions() {
+            // TODO: Perhaps return Math.abs(deletions),
+            // since most developers may not expect a negative number.
+<span class="fc" id="L381">            return deletions;</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L386">            return &quot;Week starting &quot; + getWeekTimestamp() + &quot; has &quot; + getAdditions() + &quot; additions and &quot;</span>
+<span class="nc" id="L387">                    + Math.abs(getDeletions()) + &quot; deletions&quot;;</span>
+        }
+    }
+
+    /**
+     * Get the weekly commit count for the repository owner and everyone else. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
+     *
+     * @return the participation
+     * @throws IOException
+     *             the io exception
+     */
+    public Participation getParticipation() throws IOException {
+<span class="fc" id="L400">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;participation&quot;)).fetch(Participation.class);</span>
+    }
+
+    /**
+     * The type Participation.
+     */
+<span class="fc" id="L406">    public static class Participation extends GHObject {</span>
+        /* package almost final */ private GitHub root;
+        private List&lt;Integer&gt; all;
+        private List&lt;Integer&gt; owner;
+
+        @Override
+        public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L413">            throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+        }
+
+        /**
+         * Gets root.
+         *
+         * @return the root
+         */
+        public GitHub getRoot() {
+<span class="nc" id="L422">            return root;</span>
+        }
+
+        /**
+         * Gets all commits.
+         *
+         * @return The list of commit counts for everyone combined, for the last 52 weeks.
+         */
+        public List&lt;Integer&gt; getAllCommits() {
+<span class="fc" id="L431">            return all;</span>
+        }
+
+        /**
+         * Gets owner commits.
+         *
+         * @return The list of commit counts for the owner, for the last 52 weeks.
+         */
+        public List&lt;Integer&gt; getOwnerCommits() {
+<span class="fc" id="L440">            return owner;</span>
+        }
+
+        Participation wrapUp(GitHub root) {
+<span class="nc" id="L444">            this.root = root;</span>
+<span class="nc" id="L445">            return this;</span>
+        }
+    }
+
+    /**
+     * Get the number of commits per hour in each day. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-number-of-commits-per-hour-in-each-day
+     *
+     * @return the punch card
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;PunchCardItem&gt; getPunchCard() throws IOException {
+        // Map to ArrayLists first, since there are no field names in the
+        // returned JSON.
+<span class="fc" id="L460">        Integer[][] list = root.createRequest().withUrlPath(getApiTailUrl(&quot;punch_card&quot;)).fetch(Integer[][].class);</span>
+
+        // Convert to proper objects.
+<span class="fc" id="L463">        ArrayList&lt;PunchCardItem&gt; returnList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        for (Integer[] item : list) {</span>
+<span class="fc" id="L465">            PunchCardItem pci = new PunchCardItem(Arrays.asList(item));</span>
+<span class="fc" id="L466">            returnList.add(pci);</span>
+        }
+
+<span class="fc" id="L469">        return returnList;</span>
+    }
+
+    /**
+     * The type PunchCardItem.
+     */
+    public static class PunchCardItem {
+        private int dayOfWeek;
+        private int hourOfDay;
+        private int numberOfCommits;
+
+<span class="fc" id="L480">        private PunchCardItem(List&lt;Integer&gt; item) {</span>
+<span class="fc" id="L481">            dayOfWeek = item.get(0);</span>
+<span class="fc" id="L482">            hourOfDay = item.get(1);</span>
+<span class="fc" id="L483">            numberOfCommits = item.get(2);</span>
+<span class="fc" id="L484">        }</span>
+
+        /**
+         * Gets day of week.
+         *
+         * @return The day of the week. 0 = Sunday, 1 = Monday, etc.
+         */
+        public int getDayOfWeek() {
+<span class="fc" id="L492">            return dayOfWeek;</span>
+        }
+
+        /**
+         * Gets hour of day.
+         *
+         * @return The hour of the day from 0 to 23.
+         */
+        public long getHourOfDay() {
+<span class="fc" id="L501">            return hourOfDay;</span>
+        }
+
+        /**
+         * Gets number of commits.
+         *
+         * @return The number of commits for the day and hour.
+         */
+        public long getNumberOfCommits() {
+<span class="fc" id="L510">            return numberOfCommits;</span>
+        }
+
+        public String toString() {
+<span class="nc" id="L514">            return &quot;Day &quot; + getDayOfWeek() + &quot; Hour &quot; + getHourOfDay() + &quot;: &quot; + getNumberOfCommits() + &quot; commits&quot;;</span>
+        }
+    }
+
+    String getApiTailUrl(String tail) {
+<span class="fc" id="L519">        return repo.getApiTailUrl(&quot;stats/&quot; + tail);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

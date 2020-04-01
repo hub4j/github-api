@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDeploymentStatusBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDeploymentStatusBuilder.java</span></div><h1>GHDeploymentStatusBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+/**
+ * Creates a new deployment status.
+ *
+ * @see GHDeployment#createStatus(GHDeploymentState) GHDeployment#createStatus(GHDeploymentState)
+ */
+public class GHDeploymentStatusBuilder {
+    private final Requester builder;
+    private GHRepository repo;
+    private long deploymentId;
+
+    /**
+     * Instantiates a new Gh deployment status builder.
+     *
+     * @param repo
+     *            the repo
+     * @param deploymentId
+     *            the deployment id
+     * @param state
+     *            the state
+     * @deprecated Use {@link GHDeployment#createStatus(GHDeploymentState)}
+     */
+    @Deprecated
+    public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
+<span class="nc" id="L28">        this(repo, (long) deploymentId, state);</span>
+<span class="nc" id="L29">    }</span>
+
+<span class="nc" id="L31">    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {</span>
+<span class="nc" id="L32">        this.repo = repo;</span>
+<span class="nc" id="L33">        this.deploymentId = deploymentId;</span>
+<span class="nc" id="L34">        this.builder = repo.root.createRequest().method(&quot;POST&quot;);</span>
+<span class="nc" id="L35">        this.builder.with(&quot;state&quot;, state);</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * Description gh deployment status builder.
+     *
+     * @param description
+     *            the description
+     * @return the gh deployment status builder
+     */
+    public GHDeploymentStatusBuilder description(String description) {
+<span class="nc" id="L46">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="nc" id="L47">        return this;</span>
+    }
+
+    /**
+     * Target url gh deployment status builder.
+     *
+     * @param targetUrl
+     *            the target url
+     * @return the gh deployment status builder
+     */
+    public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
+<span class="nc" id="L58">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
+<span class="nc" id="L59">        return this;</span>
+    }
+
+    /**
+     * Create gh deployment status.
+     *
+     * @return the gh deployment status
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeploymentStatus create() throws IOException {
+<span class="nc" id="L70">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
+<span class="nc" id="L71">                .fetch(GHDeploymentStatus.class)</span>
+<span class="nc" id="L72">                .wrap(repo);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

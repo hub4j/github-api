@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHGistBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHGistBuilder.java</span></div><h1>GHGistBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+
+/**
+ * Builder pattern for creating a new Gist.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHub#createGist() GitHub#createGist()
+ */
+public class GHGistBuilder {
+    private final GitHub root;
+    private final Requester req;
+<span class="fc" id="L16">    private final LinkedHashMap&lt;String, Object&gt; files = new LinkedHashMap&lt;String, Object&gt;();</span>
+
+    /**
+     * Instantiates a new Gh gist builder.
+     *
+     * @param root
+     *            the root
+     */
+<span class="fc" id="L24">    public GHGistBuilder(GitHub root) {</span>
+<span class="fc" id="L25">        this.root = root;</span>
+<span class="fc" id="L26">        req = root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Description gh gist builder.
+     *
+     * @param desc
+     *            the desc
+     * @return the gh gist builder
+     */
+    public GHGistBuilder description(String desc) {
+<span class="fc" id="L37">        req.with(&quot;description&quot;, desc);</span>
+<span class="fc" id="L38">        return this;</span>
+    }
+
+    /**
+     * Public gh gist builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh gist builder
+     */
+    public GHGistBuilder public_(boolean v) {
+<span class="fc" id="L49">        req.with(&quot;public&quot;, v);</span>
+<span class="fc" id="L50">        return this;</span>
+    }
+
+    /**
+     * File gh gist builder.
+     *
+     * @param fileName
+     *            the file name
+     * @param content
+     *            the content
+     * @return Adds a new file.
+     */
+    public GHGistBuilder file(String fileName, String content) {
+<span class="fc" id="L63">        files.put(fileName, Collections.singletonMap(&quot;content&quot;, content));</span>
+<span class="fc" id="L64">        return this;</span>
+    }
+
+    /**
+     * Creates a Gist based on the parameters specified thus far.
+     *
+     * @return created Gist
+     * @throws IOException
+     *             if Gist cannot be created.
+     */
+    public GHGist create() throws IOException {
+<span class="fc" id="L75">        req.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L76">        return req.withUrlPath(&quot;/gists&quot;).fetch(GHGist.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

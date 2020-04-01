@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryTraffic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryTraffic.java</span></div><h1>GHRepositoryTraffic.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * The type GHRepositoryTraffic.
+ */
+public abstract class GHRepositoryTraffic implements TrafficInfo {
+    private int count;
+    private int uniques;
+
+<span class="fc" id="L13">    GHRepositoryTraffic() {</span>
+<span class="fc" id="L14">    }</span>
+
+<span class="fc" id="L16">    GHRepositoryTraffic(int count, int uniques) {</span>
+<span class="fc" id="L17">        this.count = count;</span>
+<span class="fc" id="L18">        this.uniques = uniques;</span>
+<span class="fc" id="L19">    }</span>
+
+    public int getCount() {
+<span class="fc" id="L22">        return count;</span>
+    }
+
+    public int getUniques() {
+<span class="fc" id="L26">        return uniques;</span>
+    }
+
+    /**
+     * Gets daily info.
+     *
+     * @return the daily info
+     */
+    public abstract List&lt;? extends DailyInfo&gt; getDailyInfo();
+
+    /**
+     * The type DailyInfo.
+     */
+    public static abstract class DailyInfo implements TrafficInfo {
+        private String timestamp;
+        private int count;
+        private int uniques;
+
+        /**
+         * Gets timestamp.
+         *
+         * @return the timestamp
+         */
+        public Date getTimestamp() {
+<span class="fc" id="L50">            return GitHubClient.parseDate(timestamp);</span>
+        }
+
+        public int getCount() {
+<span class="fc" id="L54">            return count;</span>
+        }
+
+        public int getUniques() {
+<span class="fc" id="L58">            return uniques;</span>
+        }
+
+<span class="fc" id="L61">        DailyInfo() {</span>
+<span class="fc" id="L62">        }</span>
+
+<span class="fc" id="L64">        DailyInfo(String timestamp, Integer count, Integer uniques) {</span>
+<span class="fc" id="L65">            this.timestamp = timestamp;</span>
+<span class="fc" id="L66">            this.count = count;</span>
+<span class="fc" id="L67">            this.uniques = uniques;</span>
+<span class="fc" id="L68">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHProject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHProject.java</span></div><h1>GHProject.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright 2018 Martin van Zijl.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+
+import static org.kohsuke.github.Previews.INERTIA;
+
+/**
+ * A GitHub project.
+ *
+ * @author Martin van Zijl
+ * @see &lt;a href=&quot;https://developer.github.com/v3/projects/&quot;&gt;Projects&lt;/a&gt;
+ */
+<span class="fc" id="L39">public class GHProject extends GHObject {</span>
+    protected GitHub root;
+    protected GHObject owner;
+
+    private String owner_url;
+    private String html_url;
+    private String node_id;
+    private String name;
+    private String body;
+    private int number;
+    private String state;
+    private GHUser creator;
+
+    @Override
+    public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L54">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
+    public GitHub getRoot() {
+<span class="nc" id="L63">        return root;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     * @throws IOException
+     *             the io exception
+     */
+    public GHObject getOwner() throws IOException {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (owner == null) {</span>
+            try {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
+<span class="nc" id="L77">                    owner = root.createRequest()</span>
+<span class="nc" id="L78">                            .withUrlPath(getOwnerUrl().getPath())</span>
+<span class="nc" id="L79">                            .fetch(GHOrganization.class)</span>
+<span class="nc" id="L80">                            .wrapUp(root);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
+<span class="nc" id="L82">                    owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
+<span class="nc" id="L84">                    owner = root.createRequest()</span>
+<span class="nc" id="L85">                            .withUrlPath(getOwnerUrl().getPath())</span>
+<span class="nc" id="L86">                            .fetch(GHRepository.class)</span>
+<span class="nc" id="L87">                            .wrap(root);</span>
+                }
+<span class="nc" id="L89">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L90">                return null;</span>
+<span class="nc" id="L91">            }</span>
+        }
+<span class="nc" id="L93">        return owner;</span>
+    }
+
+    /**
+     * Gets owner url.
+     *
+     * @return the owner url
+     */
+    public URL getOwnerUrl() {
+<span class="nc" id="L102">        return GitHubClient.parseURL(owner_url);</span>
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id
+     */
+    public String getNode_id() {
+<span class="nc" id="L111">        return node_id;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L120">        return name;</span>
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L129">        return body;</span>
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
+<span class="nc" id="L138">        return number;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public ProjectState getState() {
+<span class="fc" id="L147">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+<span class="nc" id="L156">        return creator;</span>
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    public GHProject wrap(GHRepository repo) {
+<span class="nc" id="L167">        this.owner = repo;</span>
+<span class="nc" id="L168">        this.root = repo.root;</span>
+<span class="nc" id="L169">        return this;</span>
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param root
+     *            the root
+     * @return the gh project
+     */
+    public GHProject wrap(GitHub root) {
+<span class="fc" id="L180">        this.root = root;</span>
+<span class="fc" id="L181">        return this;</span>
+    }
+
+    private void edit(String key, Object value) throws IOException {
+<span class="fc" id="L185">        root.createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L186">    }</span>
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+<span class="fc" id="L194">        return &quot;/projects/&quot; + id;</span>
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     * @throws IOException
+     *             the io exception
+     */
+    public void setName(String name) throws IOException {
+<span class="fc" id="L206">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L207">    }</span>
+
+    /**
+     * Sets body.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void setBody(String body) throws IOException {
+<span class="fc" id="L218">        edit(&quot;body&quot;, body);</span>
+<span class="fc" id="L219">    }</span>
+
+    /**
+     * The enum ProjectState.
+     */
+<span class="fc" id="L224">    public enum ProjectState {</span>
+<span class="fc" id="L225">        OPEN, CLOSED</span>
+    }
+
+    /**
+     * Sets state.
+     *
+     * @param state
+     *            the state
+     * @throws IOException
+     *             the io exception
+     */
+    public void setState(ProjectState state) throws IOException {
+<span class="fc" id="L237">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
+<span class="fc" id="L238">    }</span>
+
+    /**
+     * The enum ProjectStateFilter.
+     */
+<span class="nc" id="L243">    public static enum ProjectStateFilter {</span>
+<span class="nc" id="L244">        ALL, OPEN, CLOSED</span>
+    }
+
+    /**
+     * Set the permission level that all members of the project's organization will have on this project. Only
+     * applicable for organization-owned projects.
+     *
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public void setOrganizationPermission(GHPermissionType permission) throws IOException {
+<span class="nc" id="L257">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
+<span class="nc" id="L258">    }</span>
+
+    /**
+     * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
+     *
+     * @param isPublic
+     *            the is public
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPublic(boolean isPublic) throws IOException {
+<span class="nc" id="L269">        edit(&quot;public&quot;, isPublic);</span>
+<span class="nc" id="L270">    }</span>
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L279">        root.createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L280">    }</span>
+
+    /**
+     * List columns paged iterable.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHProjectColumn&gt; listColumns() throws IOException {
+<span class="nc" id="L290">        final GHProject project = this;</span>
+<span class="nc" id="L291">        return root.createRequest()</span>
+<span class="nc" id="L292">                .withPreview(INERTIA)</span>
+<span class="nc" id="L293">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, id))</span>
+<span class="nc" id="L294">                .toIterable(GHProjectColumn[].class, item -&gt; item.wrap(project));</span>
+    }
+
+    /**
+     * Create column gh project column.
+     *
+     * @param name
+     *            the name
+     * @return the gh project column
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProjectColumn createColumn(String name) throws IOException {
+<span class="fc" id="L307">        return root.createRequest()</span>
+<span class="fc" id="L308">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L309">                .withPreview(INERTIA)</span>
+<span class="fc" id="L310">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L311">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, id))</span>
+<span class="fc" id="L312">                .fetch(GHProjectColumn.class)</span>
+<span class="fc" id="L313">                .wrap(this);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

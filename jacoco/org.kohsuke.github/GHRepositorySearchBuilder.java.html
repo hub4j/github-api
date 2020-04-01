@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositorySearchBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositorySearchBuilder.java</span></div><h1>GHRepositorySearchBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Search repositories.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHub#searchRepositories() GitHub#searchRepositories()
+ */
+public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&gt; {
+    GHRepositorySearchBuilder(GitHub root) {
+<span class="fc" id="L11">        super(root, RepositorySearchResult.class);</span>
+<span class="fc" id="L12">    }</span>
+
+    /**
+     * Search terms.
+     */
+    public GHRepositorySearchBuilder q(String term) {
+<span class="fc" id="L18">        super.q(term);</span>
+<span class="fc" id="L19">        return this;</span>
+    }
+
+    /**
+     * In gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder in(String v) {
+<span class="nc" id="L30">        return q(&quot;in:&quot; + v);</span>
+    }
+
+    /**
+     * Size gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder size(String v) {
+<span class="nc" id="L41">        return q(&quot;size:&quot; + v);</span>
+    }
+
+    /**
+     * Forks gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder forks(String v) {
+<span class="nc" id="L52">        return q(&quot;forks:&quot; + v);</span>
+    }
+
+    /**
+     * Created gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder created(String v) {
+<span class="nc" id="L63">        return q(&quot;created:&quot; + v);</span>
+    }
+
+    /**
+     * Pushed gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder pushed(String v) {
+<span class="nc" id="L74">        return q(&quot;pushed:&quot; + v);</span>
+    }
+
+    /**
+     * User gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder user(String v) {
+<span class="nc" id="L85">        return q(&quot;user:&quot; + v);</span>
+    }
+
+    /**
+     * Repo gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder repo(String v) {
+<span class="nc" id="L96">        return q(&quot;repo:&quot; + v);</span>
+    }
+
+    /**
+     * Language gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder language(String v) {
+<span class="fc" id="L107">        return q(&quot;language:&quot; + v);</span>
+    }
+
+    /**
+     * Stars gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder stars(String v) {
+<span class="nc" id="L118">        return q(&quot;stars:&quot; + v);</span>
+    }
+
+    /**
+     * Topic gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder topic(String v) {
+<span class="nc" id="L129">        return q(&quot;topic:&quot; + v);</span>
+    }
+
+    /**
+     * Order gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder order(GHDirection v) {
+<span class="nc" id="L140">        req.with(&quot;order&quot;, v);</span>
+<span class="nc" id="L141">        return this;</span>
+    }
+
+    /**
+     * Sort gh repository search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder sort(Sort sort) {
+<span class="fc" id="L152">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L153">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L159">    public enum Sort {</span>
+<span class="fc" id="L160">        STARS, FORKS, UPDATED</span>
+    }
+
+    private static class RepositorySearchResult extends SearchResult&lt;GHRepository&gt; {
+        private GHRepository[] items;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            for (GHRepository item : items)</span>
+<span class="fc" id="L169">                item.wrap(root);</span>
+<span class="fc" id="L170">            return items;</span>
+        }
+    }
+
+    @Override
+    protected String getApiUrl() {
+<span class="fc" id="L176">        return &quot;/search/repositories&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

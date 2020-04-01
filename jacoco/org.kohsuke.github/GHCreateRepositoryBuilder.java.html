@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCreateRepositoryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCreateRepositoryBuilder.java</span></div><h1>GHCreateRepositoryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.URL;
+
+/**
+ * Creates a repository
+ *
+ * @author Kohsuke Kawaguchi
+ */
+public class GHCreateRepositoryBuilder {
+    private final GitHub root;
+    protected final Requester builder;
+    private final String apiUrlTail;
+
+<span class="fc" id="L16">    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {</span>
+<span class="fc" id="L17">        this.root = root;</span>
+<span class="fc" id="L18">        this.apiUrlTail = apiUrlTail;</span>
+<span class="fc" id="L19">        this.builder = root.createRequest();</span>
+<span class="fc" id="L20">        this.builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Description for repository
+     *
+     * @param description
+     *            description of repository
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder description(String description) {
+<span class="fc" id="L31">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L32">        return this;</span>
+    }
+
+    /**
+     * Homepage for repository
+     *
+     * @param homepage
+     *            homepage of repository
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder homepage(URL homepage) {
+<span class="nc" id="L43">        return homepage(homepage.toExternalForm());</span>
+    }
+
+    /**
+     * Homepage for repository
+     *
+     * @param homepage
+     *            homepage of repository
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder homepage(String homepage) {
+<span class="fc" id="L54">        this.builder.with(&quot;homepage&quot;, homepage);</span>
+<span class="fc" id="L55">        return this;</span>
+    }
+
+    /**
+     * Creates a private repository
+     *
+     * @param enabled
+     *            private if true
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder private_(boolean enabled) {
+<span class="fc" id="L66">        this.builder.with(&quot;private&quot;, enabled);</span>
+<span class="fc" id="L67">        return this;</span>
+    }
+
+    /**
+     * Enables issue tracker
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder issues(boolean enabled) {
+<span class="nc" id="L78">        this.builder.with(&quot;has_issues&quot;, enabled);</span>
+<span class="nc" id="L79">        return this;</span>
+    }
+
+    /**
+     * Enables projects
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder projects(boolean enabled) {
+<span class="nc" id="L90">        this.builder.with(&quot;has_projects&quot;, enabled);</span>
+<span class="nc" id="L91">        return this;</span>
+    }
+
+    /**
+     * Enables wiki
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder wiki(boolean enabled) {
+<span class="nc" id="L102">        this.builder.with(&quot;has_wiki&quot;, enabled);</span>
+<span class="nc" id="L103">        return this;</span>
+    }
+
+    /**
+     * Enables downloads
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder downloads(boolean enabled) {
+<span class="nc" id="L114">        this.builder.with(&quot;has_downloads&quot;, enabled);</span>
+<span class="nc" id="L115">        return this;</span>
+    }
+
+    /**
+     * If true, create an initial commit with empty README.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder autoInit(boolean enabled) {
+<span class="fc" id="L126">        this.builder.with(&quot;auto_init&quot;, enabled);</span>
+<span class="fc" id="L127">        return this;</span>
+    }
+
+    /**
+     * Allow or disallow squash-merging pull requests.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder allowSquashMerge(boolean enabled) {
+<span class="nc" id="L138">        this.builder.with(&quot;allow_squash_merge&quot;, enabled);</span>
+<span class="nc" id="L139">        return this;</span>
+    }
+
+    /**
+     * Allow or disallow merging pull requests with a merge commit.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder allowMergeCommit(boolean enabled) {
+<span class="nc" id="L150">        this.builder.with(&quot;allow_merge_commit&quot;, enabled);</span>
+<span class="nc" id="L151">        return this;</span>
+    }
+
+    /**
+     * Allow or disallow rebase-merging pull requests.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder allowRebaseMerge(boolean enabled) {
+<span class="nc" id="L162">        this.builder.with(&quot;allow_rebase_merge&quot;, enabled);</span>
+<span class="nc" id="L163">        return this;</span>
+    }
+
+    /**
+     * Creates a default .gitignore
+     *
+     * @param language
+     *            template to base the ignore file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
+     */
+    public GHCreateRepositoryBuilder gitignoreTemplate(String language) {
+<span class="nc" id="L174">        this.builder.with(&quot;gitignore_template&quot;, language);</span>
+<span class="nc" id="L175">        return this;</span>
+    }
+
+    /**
+     * Desired license template to apply
+     *
+     * @param license
+     *            template to base the license file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
+     */
+    public GHCreateRepositoryBuilder licenseTemplate(String license) {
+<span class="nc" id="L186">        this.builder.with(&quot;license_template&quot;, license);</span>
+<span class="nc" id="L187">        return this;</span>
+    }
+
+    /**
+     * The team that gets granted access to this repository. Only valid for creating a repository in an organization.
+     *
+     * @param team
+     *            team to grant access to
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder team(GHTeam team) {
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (team != null)</span>
+<span class="fc" id="L199">            this.builder.with(&quot;team_id&quot;, team.getId());</span>
+<span class="fc" id="L200">        return this;</span>
+    }
+
+    /**
+     * Creates a repository with all the parameters.
+     *
+     * @return the gh repository
+     * @throws IOException
+     *             if repsitory cannot be created
+     */
+    public GHRepository create() throws IOException {
+<span class="fc" id="L211">        return builder.method(&quot;POST&quot;).withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

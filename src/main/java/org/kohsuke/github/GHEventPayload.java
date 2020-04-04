@@ -1,12 +1,10 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -211,64 +209,6 @@ public abstract class GHEventPayload {
     }
 
     /**
-     * Represents a repository object specifically for {@link Installation} and {@link InstallationRepositories}.
-     */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-    public static class InstallationRepository {
-        private long id;
-        private String nodeId;
-        private String name;
-        private String fullName;
-        @JsonProperty("private")
-        private boolean _private;
-
-        /**
-         * Gets id
-         *
-         * @return the id
-         */
-        public long getId() {
-            return id;
-        }
-
-        /**
-         * Gets node id
-         *
-         * @return the node id
-         */
-        public String getNodeId() {
-            return nodeId;
-        }
-
-        /**
-         * Gets name
-         *
-         * @return the name
-         */
-        public String getName() {
-            return name;
-        }
-
-        /**
-         * Gets full name
-         *
-         * @return the full name
-         */
-        public String getFullName() {
-            return fullName;
-        }
-
-        /**
-         * Is private boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isPrivate() {
-            return _private;
-        }
-    }
-
-    /**
      * An installation has been installed, uninstalled, or its permissions have been changed.
      *
      * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
@@ -396,10 +336,10 @@ public abstract class GHEventPayload {
             else
                 installation.wrapUp(root);
 
-            List<GHRepository> repositories = Collections.emptyList();
+            List<GHRepository> repositories;
             if (action == "added")
                 repositories = repositoriesAdded;
-            else
+            else // action == "removed"
                 repositories = repositoriesRemoved;
 
             if (repositories != null && !repositories.isEmpty()) {

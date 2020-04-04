@@ -405,7 +405,6 @@ public class GHEventPayloadTest {
         assertThat(event.getRepositorySelection(), is("selected"));
 
         assertThat(event.getRepositoriesAdded().get(0).getId(), is(186853007L));
-        assertThat(event.getRepositoriesAdded().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
         assertThat(event.getRepositoriesAdded().get(0).getName(), is("Space"));
         assertThat(event.getRepositoriesAdded().get(0).getFullName(), is("Codertocat/Space"));
         assertThat(event.getRepositoriesAdded().get(0).isPrivate(), is(false));
@@ -425,7 +424,6 @@ public class GHEventPayloadTest {
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
         assertThat(event.getRepositories().get(0).getId(), is(1296269L));
-        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
         assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
         assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
         assertThat(event.getRepositories().get(0).isPrivate(), is(false));

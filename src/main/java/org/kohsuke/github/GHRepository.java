@@ -2130,7 +2130,7 @@ public class GHRepository extends GHObject {
 
     GHRepository wrap(GitHub root) {
         this.root = root;
-        if (root.isOffline()) {
+        if (root.isOffline() && owner != null) {
             owner.wrapUp(root);
         }
         return this;
@@ -2791,5 +2791,18 @@ public class GHRepository extends GHObject {
                 .withUrlPath(getApiTailUrl("git/tags"))
                 .fetch(GHTagObject.class)
                 .wrap(this);
+    }
+
+    /**
+     * Repopulates this object.
+     *
+     * @throws java.io.IOException
+     *             The IO exception
+     */
+    public void refresh() throws IOException {
+        if (root.isOffline())
+            return; // can't populate if the root is offline
+
+        root.createRequest().withApiUrl(root.getApiUrl() + full_name).fetchInto(this).wrap(root);
     }
 }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -275,7 +277,7 @@ public abstract class GHEventPayload {
     public static class Installation extends GHEventPayload {
         private String action;
         private GHAppInstallation installation;
-        private List<InstallationRepository> repositories;
+        private List<GHRepository> repositories;
 
         /**
          * Gets action
@@ -300,9 +302,30 @@ public abstract class GHEventPayload {
          *
          * @return the repositories
          */
-        public List<InstallationRepository> getRepositories() {
+        public List<GHRepository> getRepositories() {
             return repositories;
         };
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.refresh();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+        }
     }
 
     /**
@@ -316,8 +339,8 @@ public abstract class GHEventPayload {
         private String action;
         private GHAppInstallation installation;
         private String repositorySelection;
-        private List<InstallationRepository> repositoriesAdded;
-        private List<InstallationRepository> repositoriesRemoved;
+        private List<GHRepository> repositoriesAdded;
+        private List<GHRepository> repositoriesRemoved;
 
         /**
          * Gets action
@@ -351,7 +374,7 @@ public abstract class GHEventPayload {
          *
          * @return the repositories
          */
-        public List<InstallationRepository> getRepositoriesAdded() {
+        public List<GHRepository> getRepositoriesAdded() {
             return repositoriesAdded;
         }
 
@@ -360,10 +383,36 @@ public abstract class GHEventPayload {
          *
          * @return the repositories
          */
-        public List<InstallationRepository> getRepositoriesRemoved() {
+        public List<GHRepository> getRepositoriesRemoved() {
             return repositoriesRemoved;
         }
 
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            List<GHRepository> repositories = Collections.emptyList();
+            if (action == "added")
+                repositories = repositoriesAdded;
+            else
+                repositories = repositoriesRemoved;
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.refresh();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+        }
     }
 
     /**

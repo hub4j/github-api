@@ -40,13 +40,40 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 "a test repository",
                 "http://github-api.kohsuke.org/",
                 true);
+
         assertThat(r.hasIssues(), is(true));
+        assertThat(r.hasWiki(), is(true));
+        assertThat(r.hasDownloads(), is(true));
+        assertThat(r.hasProjects(), is(true));
 
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
+        r.enableProjects(false);
+
         r.renameTo(targetName);
-        getUser().getRepository(targetName).delete();
+
+        // local instance remains unchanged
+        assertThat(r.getName(), equalTo("github-api-test-rename"));
+        assertThat(r.hasIssues(), is(true));
+        assertThat(r.hasWiki(), is(true));
+        assertThat(r.hasDownloads(), is(true));
+        assertThat(r.hasProjects(), is(true));
+
+        r = gitHub.getMyself().getRepository(targetName);
+
+        // values are updated
+        assertThat(r.hasIssues(), is(false));
+        assertThat(r.hasWiki(), is(false));
+        assertThat(r.hasDownloads(), is(false));
+        assertThat(r.getName(), equalTo(targetName));
+
+        // ISSUE: #765
+        // From what I can tell this is a bug in GithHub.
+        // updating `has_projects` doesn't seem to do anything
+        assertThat(r.hasProjects(), is(true));
+
+        r.delete();
     }
 
     @Test
@@ -58,14 +85,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .homepage("http://github-api.kohsuke.org/")
                 .autoInit(true)
                 .create();
-        r.enableIssueTracker(false);
-        r.enableDownloads(false);
-        r.enableWiki(false);
         if (mockGitHub.isUseProxy()) {
             Thread.sleep(3000);
         }
         assertNotNull(r.getReadme());
-        getUser().getRepository(name).delete();
+
+        r.delete();
     }
 
     private void cleanupUserRepository(final String name) throws IOException {

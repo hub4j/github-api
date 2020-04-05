@@ -1559,6 +1559,11 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
+        // Also accept e.g. "refs/heads/branch" for consistency with createRef().
+        if (refName.startsWith("refs/")) {
+            refName = refName.replaceFirst("refs/", "");
+        }
+
         return root.createRequest()
                 .withUrlPath(getApiTailUrl(String.format("git/refs/%s", refName)))
                 .fetch(GHRef.class)

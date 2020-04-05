@@ -65,7 +65,7 @@ import static org.kohsuke.github.Previews.*;
 public class GHRepository extends GHObject {
     /* package almost final */ GitHub root;
 
-    private String description, homepage, name, full_name;
+    private String nodeId, description, homepage, name, full_name;
     private String html_url; // this is the UI
     /*
      * The license information makes use of the preview API.
@@ -183,6 +183,15 @@ public class GHRepository extends GHObject {
 
     private static class GHRepoPermission {
         boolean pull, push, admin;
+    }
+
+    /**
+     * Gets node id
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**
@@ -2794,12 +2803,12 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Repopulates this object.
+     * Populate this object.
      *
      * @throws java.io.IOException
      *             The IO exception
      */
-    public void refresh() throws IOException {
+    void populate() throws IOException {
         if (root.isOffline())
             return; // can't populate if the root is offline
 

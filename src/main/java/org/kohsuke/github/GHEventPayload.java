@@ -259,7 +259,7 @@ public abstract class GHEventPayload {
                 try {
                     for (GHRepository singleRepo : repositories) { // warp each of the repository
                         singleRepo.wrap(root);
-                        singleRepo.refresh();
+                        singleRepo.populate();
                     }
                 } catch (IOException e) {
                     throw new GHException("Failed to refresh repositories", e);
@@ -346,7 +346,7 @@ public abstract class GHEventPayload {
                 try {
                     for (GHRepository singleRepo : repositories) { // warp each of the repository
                         singleRepo.wrap(root);
-                        singleRepo.refresh();
+                        singleRepo.populate();
                     }
                 } catch (IOException e) {
                     throw new GHException("Failed to refresh repositories", e);

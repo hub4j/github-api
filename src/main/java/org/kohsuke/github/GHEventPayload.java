@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
@@ -203,6 +204,153 @@ public abstract class GHEventPayload {
                 checkSuite.wrap(repository);
             } else {
                 checkSuite.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * An installation has been installed, uninstalled, or its permissions have been changed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class Installation extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private List<GHRepository> repositories;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets repositories
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositories() {
+            return repositories;
+        };
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.populate();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * A repository has been added or removed from an installation.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative
+     *      source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class InstallationRepositories extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private String repositorySelection;
+        private List<GHRepository> repositoriesAdded;
+        private List<GHRepository> repositoriesRemoved;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets installation selection
+         *
+         * @return the installation selection
+         */
+        public String getRepositorySelection() {
+            return repositorySelection;
+        }
+
+        /**
+         * Gets repositories added
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesAdded() {
+            return repositoriesAdded;
+        }
+
+        /**
+         * Gets repositories removed
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesRemoved() {
+            return repositoriesRemoved;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            List<GHRepository> repositories;
+            if (action == "added")
+                repositories = repositoriesAdded;
+            else // action == "removed"
+                repositories = repositoriesRemoved;
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.populate();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
             }
         }
     }

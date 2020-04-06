@@ -231,6 +231,17 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Git http transport url string.
+     *
+     * @return the string
+     * @deprecated Typo of {@link #getHttpTransportUrl()}
+     */
+    @Deprecated
+    public String gitHttpTransportUrl() {
+        return clone_url;
+    }
+
+    /**
      * Gets the Subversion URL to access this repository: https://github.com/rails/rails
      *
      * @return the svn url

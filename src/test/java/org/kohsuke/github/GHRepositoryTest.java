@@ -27,6 +27,31 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testGetters() throws IOException {
+        GHRepository r = getTempRepository();
+
+        assertThat(r.hasAdminAccess(), is(true));
+        assertThat(r.hasDownloads(), is(true));
+        assertThat(r.hasIssues(), is(true));
+        assertThat(r.hasPages(), is(false));
+        assertThat(r.hasProjects(), is(true));
+        assertThat(r.hasPullAccess(), is(true));
+        assertThat(r.hasPushAccess(), is(true));
+        assertThat(r.hasWiki(), is(true));
+
+        assertThat(r.isAllowMergeCommit(), is(true));
+        assertThat(r.isAllowRebaseMerge(), is(true));
+        assertThat(r.isAllowSquashMerge(), is(true));
+
+        String httpTransport = "https://github.com/github-api-test-org/temp-testGetters.git";
+        assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
+        assertThat(r.gitHttpTransportUrl(), equalTo(httpTransport));
+
+        assertThat(r.getName(), equalTo("temp-testGetters"));
+        assertThat(r.getFullName(), equalTo("github-api-test-org/temp-testGetters"));
+    }
+
+    @Test
     public void archive() throws Exception {
         snapshotNotAllowed();
 
@@ -272,14 +297,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(actual.contains("class=\"user-mention\""));
         assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
-    }
-
-    @Test
-    public void getMergeOptions() throws IOException {
-        GHRepository r = getTempRepository();
-        assertNotNull(r.isAllowMergeCommit());
-        assertNotNull(r.isAllowRebaseMerge());
-        assertNotNull(r.isAllowSquashMerge());
     }
 
     @Test

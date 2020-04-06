@@ -425,6 +425,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getRefWithPrefix() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRef refWithoutPrefix = repo.getRef("heads/master");
+        GHRef refWithPrefix = repo.getRef("refs/heads/master");
+        assertThat(refWithoutPrefix.getRef(), equalTo(refWithPrefix.getRef()));
+    }
+
+    @Test
     public void listRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
         List<GHRef> refs = repo.listRefs("heads").toList();

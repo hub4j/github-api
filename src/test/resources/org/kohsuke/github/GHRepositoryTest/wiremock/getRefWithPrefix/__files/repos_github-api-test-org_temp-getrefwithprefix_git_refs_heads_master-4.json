@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/master",
+  "node_id": "MDM6UmVmMjUzMjgyMTQ5Om1hc3Rlcg==",
+  "url": "https://api.github.com/repos/github-api-test-org/temp-getRefWithPrefix/git/refs/heads/master",
+  "object": {
+    "sha": "6d0ef2a84df4eb5222d9d1ff14203713f1833771",
+    "type": "commit",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-getRefWithPrefix/git/commits/6d0ef2a84df4eb5222d9d1ff14203713f1833771"
+  }
+}

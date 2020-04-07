@@ -1,0 +1,48 @@
+{
+  "id": "e2ecf292-54f5-475c-a5ce-f5a68d383a16",
+  "name": "repos_github-api-test-org_temp-testdisableprotectiononly",
+  "request": {
+    "url": "/repos/github-api-test-org/temp-testDisableProtectionOnly",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_temp-testdisableprotectiononly-e2ecf292-54f5-475c-a5ce-f5a68d383a16.json",
+    "headers": {
+      "Date": "Mon, 06 Apr 2020 12:25:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4926",
+      "X-RateLimit-Reset": "1586177716",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"720a808c8c4e708cc849295c3460fd0b\"",
+      "Last-Modified": "Mon, 06 Apr 2020 12:25:18 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8132:6389:4E43F5:6286EE:5E8B1FAF"
+    }
+  },
+  "uuid": "e2ecf292-54f5-475c-a5ce-f5a68d383a16",
+  "persistent": true,
+  "insertionIndex": 2
+}

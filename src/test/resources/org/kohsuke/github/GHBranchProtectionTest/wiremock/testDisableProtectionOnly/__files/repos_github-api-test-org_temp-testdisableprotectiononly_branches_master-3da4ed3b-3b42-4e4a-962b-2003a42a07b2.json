@@ -1,0 +1,89 @@
+{
+  "name": "master",
+  "commit": {
+    "sha": "f2e92a7002bf8ac91750d647a0be2c15411e2942",
+    "node_id": "MDY6Q29tbWl0MjUzNDkwMDY2OmYyZTkyYTcwMDJiZjhhYzkxNzUwZDY0N2EwYmUyYzE1NDExZTI5NDI=",
+    "commit": {
+      "author": {
+        "name": "Sladyn",
+        "email": "sladynnunes98@gmail.com",
+        "date": "2020-04-06T12:25:15Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-04-06T12:25:15Z"
+      },
+      "message": "Initial commit",
+      "tree": {
+        "sha": "e0f408fb90498b93fb29f15f65a716d635b935aa",
+        "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/git/trees/e0f408fb90498b93fb29f15f65a716d635b935aa"
+      },
+      "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/git/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeix+rCRBK7hj4Ov3rIwAAdHIIAAqSgHCUcQf1yvtvaDYKbIqg\nQn+VcaCXqJWl8wcxNNcp3VAzUEmUAsB64hOWN1pxOFikfrTt+YXw8Jn8LJUKrs0r\ne+tNjoBAWFRn6zMK4SAiEgbVsuMztDg7TBiAt12+cJ3F8vrTlovCfpvUqSD2b1HG\nq/bE4Ihrmz90Jr8PALTHLdDV+zZEt/Dz1iVQuQ6PHD+Fo3j9PQNmsl1csi5+c+wA\netoAj+BuA34LIwxJJYpZ0GvkB/+4kBU316h8SlcmCTZepKRgeEqfmgT+MisUfMGe\nRXxixhZTkk6nozvsk+r3km8OouOKuijSJ3Ik+PJ+2gE6LxsasByktDLswIE0VW8=\n=Y+YS\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree e0f408fb90498b93fb29f15f65a716d635b935aa\nauthor Sladyn <sladynnunes98@gmail.com> 1586175915 +0530\ncommitter GitHub <noreply@github.com> 1586175915 +0530\n\nInitial commit"
+      }
+    },
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942",
+    "html_url": "https://github.com/github-api-test-org/temp-testDisableProtectionOnly/commit/f2e92a7002bf8ac91750d647a0be2c15411e2942",
+    "comments_url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942/comments",
+    "author": {
+      "login": "sladyn98",
+      "id": 28837406,
+      "node_id": "MDQ6VXNlcjI4ODM3NDA2",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/28837406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/sladyn98",
+      "html_url": "https://github.com/sladyn98",
+      "followers_url": "https://api.github.com/users/sladyn98/followers",
+      "following_url": "https://api.github.com/users/sladyn98/following{/other_user}",
+      "gists_url": "https://api.github.com/users/sladyn98/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/sladyn98/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/sladyn98/subscriptions",
+      "organizations_url": "https://api.github.com/users/sladyn98/orgs",
+      "repos_url": "https://api.github.com/users/sladyn98/repos",
+      "events_url": "https://api.github.com/users/sladyn98/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/sladyn98/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": []
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/branches/master",
+    "html": "https://github.com/github-api-test-org/temp-testDisableProtectionOnly/tree/master"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/branches/master/protection"
+}

@@ -23,9 +23,7 @@ This the default behavior.
 
     `mvn install -Dtest.github.useProxy -Dtest=WireMockStatusReporterTest`
 
-4. The above should report no test failures and include the following console output:
-
-    `WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: <your login>`
+4. The above should report no test failures
 
 Whenever you run tests with `-Dtest.github.useProxy`, they will try to get data from local files but will fallback to proxying to github if not found.
 

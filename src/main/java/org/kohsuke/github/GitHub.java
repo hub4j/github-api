@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.*;
@@ -1188,6 +1190,32 @@ public class GitHub {
                         .withUrlPath("/markdown/raw")
                         .fetchStream(),
                 "UTF-8");
+    }
+
+    /**
+     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     *
+     * @return an {@link ObjectWriter} instance that can be further configured.
+     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
+     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
+     */
+    @Deprecated
+    @Nonnull
+    public static ObjectWriter getMappingObjectWriter() {
+        return GitHubClient.getMappingObjectWriter();
+    }
+
+    /**
+     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
+     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
+     */
+    @Deprecated
+    @Nonnull
+    public static ObjectReader getMappingObjectReader() {
+        return GitHubClient.getMappingObjectReader(GitHub.offline());
     }
 
     @Nonnull

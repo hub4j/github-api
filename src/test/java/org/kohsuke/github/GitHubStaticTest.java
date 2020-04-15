@@ -8,8 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -128,6 +127,32 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat("Lower limit record with earlier reset should not replace higher",
                 GitHubClient.shouldReplace(record2, record4),
                 is(false));
+
+    }
+
+    @Test
+    public void testMappingReaderWriter() throws Exception {
+
+        // This test ensures that data objects can be written and read in a raw form from string.
+        // This behavior is completely unsupported and should not be used but given that some
+        // clients, such as Jenkins Blue Ocean, have already implemented their own Jackson
+        // Reader and Writer that bind this library's data objects from outside this library
+        // this makes sure they don't break.
+
+        GHRepository repo = getTempRepository();
+        assertThat(repo.root, not(nullValue()));
+
+        String repoString = GitHub.getMappingObjectWriter().writeValueAsString(repo);
+        assertThat(repoString, not(nullValue()));
+        assertThat(repoString, containsString("testMappingReaderWriter"));
+
+        GHRepository readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);
+
+        // This should never happen if these methods aren't used
+        assertThat(readRepo.root, nullValue());
+
+        String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(readRepo);
+        assertThat(readRepoString, equalTo(repoString));
 
     }
 

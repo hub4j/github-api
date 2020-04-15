@@ -24,7 +24,7 @@ public abstract class GHObject {
     /**
      * Capture response HTTP headers on the state object.
      */
-    protected Map<String, List<String>> responseHeaderFields;
+    protected transient Map<String, List<String>> responseHeaderFields;
 
     protected String url;
     protected long id;

@@ -5,6 +5,8 @@ import java.util.Date;
 /**
  * The type GHIssueEvent.
  *
+ * @see <a href="https://developer.github.com/v3/issues/events/">Github documentation for issue events</a>
+ *
  * @author Martin van Zijl
  */
 public class GHIssueEvent {

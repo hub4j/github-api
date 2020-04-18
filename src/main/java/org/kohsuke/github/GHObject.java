@@ -28,6 +28,7 @@ public abstract class GHObject {
 
     protected String url;
     protected long id;
+    protected String node_id;
     protected String created_at;
     protected String updated_at;
 
@@ -121,6 +122,17 @@ public abstract class GHObject {
     @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = "longToStringOrInt")
     public long getId() {
         return id;
+    }
+
+    /**
+     * Get Global node_id from Github object.
+     * 
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
+     * 
+     * @return Global Node ID.
+     */
+    public String getNodeId() {
+        return node_id;
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getId")

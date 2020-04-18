@@ -731,7 +731,7 @@ public class GitHub {
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
     @Deprecated
-    public GHTeam getTeam(int id) throws IOException {
+    public GHTeam getTeam(long id) throws IOException {
         return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }
 

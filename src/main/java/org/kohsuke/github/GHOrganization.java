@@ -127,7 +127,7 @@ public class GHOrganization extends GHPerson {
                 .withUrlPath(String.format("/orgs/%s/teams", login))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this));
     }
-    
+
     /**
      * Gets a single team by ID.
      *
@@ -145,7 +145,7 @@ public class GHOrganization extends GHPerson {
                 .fetch(GHTeam.class)
                 .wrapUp(this);
     }
-    
+
     /**
      * Gets a single team by ID.
      *
@@ -158,7 +158,7 @@ public class GHOrganization extends GHPerson {
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
     public GHTeam getTeam(int teamId) throws IOException {
-        return getTeam((long)teamId);
+        return getTeam((long) teamId);
     }
 
     /**

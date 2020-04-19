@@ -291,7 +291,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHTeam teamByName = organization.getTeams().get("Core Developers");
 
-        GHTeam teamById = gitHub.getTeam(teamByName.getId());
+        GHTeam teamById = gitHub.getTeam((int) teamByName.getId());
         assertNotNull(teamById);
 
         assertEquals(teamByName.getId(), teamById.getId());

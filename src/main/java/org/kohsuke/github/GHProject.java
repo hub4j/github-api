@@ -42,7 +42,6 @@ public class GHProject extends GHObject {
 
     private String owner_url;
     private String html_url;
-    private String node_id;
     private String name;
     private String body;
     private int number;
@@ -105,10 +104,12 @@ public class GHProject extends GHObject {
     /**
      * Gets node id.
      *
+     * @deprecated Use {@link GHObject#getNodeId()}
      * @return the node id
      */
+    @Deprecated
     public String getNode_id() {
-        return node_id;
+        return getNodeId();
     }
 
     /**

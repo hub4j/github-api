@@ -4,12 +4,16 @@ import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
+ *
  * <p>
  * The wiremock data for these tests should only be modified by hand - thus most are skipped when snapshotting.
  *
@@ -27,15 +31,16 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.getClient().login, not(equalTo(STUBBED_USER_LOGIN)));
 
         // If this user query fails, either the proxying config has broken (unlikely)
-        // or your auth settings are not being retrieved from the environemnt.
+        // or your auth settings are not being retrieved from the environment.
         // Check your settings.
         GHUser user = gitHub.getMyself();
         assertThat(user.getLogin(), notNullValue());
 
-        // System.out.println();
-        // System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user
-        // login: " + user.getLogin());
-        // System.out.println();
+        System.out.println();
+        System.out.println(
+                "WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: "
+                        + user.getLogin());
+        System.out.println();
     }
 
     @Test

@@ -1,8 +1,8 @@
 {
-  "id": "331a04ec-31ba-497c-98c6-8fff6cce8e27",
-  "name": "repos_github-api-test-org_temp-testdisableprotectiononly_branches_master_protection",
+  "id": "fc1a35dc-4e0b-42f3-8209-cdcb10c22061",
+  "name": "repos_github-api-test-org_temp-testgetprotection_branches_master_protection",
   "request": {
-    "url": "/repos/github-api-test-org/temp-testDisableProtectionOnly/branches/master/protection",
+    "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master/protection",
     "method": "PUT",
     "headers": {
       "Accept": {
@@ -19,36 +19,34 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_temp-testdisableprotectiononly_branches_master_protection-331a04ec-31ba-497c-98c6-8fff6cce8e27.json",
+    "bodyFileName": "repos_github-api-test-org_temp-testgetprotection_branches_master_protection-5.json",
     "headers": {
-      "Date": "Mon, 06 Apr 2020 12:35:36 GMT",
+      "Date": "Mon, 20 Apr 2020 08:18:47 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4831",
-      "X-RateLimit-Reset": "1586177716",
+      "X-RateLimit-Remaining": "4880",
+      "X-RateLimit-Reset": "1587370940",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"807a9b4a2da9009925b6ad08258e1169\"",
+      "ETag": "W/\"85947a574037691379fb4fb191aa311e\"",
       "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.luke-cage-preview; format=json",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset",
-      "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D9B6:7E40:49DA85:5E5B14:5E8B2218"
+      "X-GitHub-Request-Id": "D61E:711F:2B87AA:384FE6:5E9D5AE6"
     }
   },
-  "uuid": "331a04ec-31ba-497c-98c6-8fff6cce8e27",
+  "uuid": "fc1a35dc-4e0b-42f3-8209-cdcb10c22061",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 5
 }

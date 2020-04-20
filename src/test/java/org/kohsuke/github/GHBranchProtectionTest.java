@@ -56,8 +56,9 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testDisableProtectionOnly() throws Exception {
+        GHBranchProtection protection = branch.enableProtection().enable();
         branch.disableProtection();
-        System.out.println(repo.getBranch(BRANCH).isProtected());
+        assertFalse(repo.getBranch(BRANCH).isProtected());
     }
 
     @Test
@@ -78,5 +79,12 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
 
         protection.disableSignedCommits();
         assertFalse(protection.getRequiredSignatures());
+    }
+
+    @Test
+    public void testGetProtectionTest() throws Exception {
+        GHBranchProtection protection = branch.enableProtection().enable();
+        GHBranchProtection protectionTest = branch.getProtection();
+        assertTrue(protectionTest instanceof GHBranchProtection);
     }
 }

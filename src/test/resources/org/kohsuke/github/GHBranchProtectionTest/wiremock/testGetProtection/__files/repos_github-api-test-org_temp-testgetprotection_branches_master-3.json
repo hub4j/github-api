@@ -1,36 +1,36 @@
 {
   "name": "master",
   "commit": {
-    "sha": "f2e92a7002bf8ac91750d647a0be2c15411e2942",
-    "node_id": "MDY6Q29tbWl0MjUzNDkwMDY2OmYyZTkyYTcwMDJiZjhhYzkxNzUwZDY0N2EwYmUyYzE1NDExZTI5NDI=",
+    "sha": "fe352bd9e8dd386691a68be4dd59c9fd24da63d7",
+    "node_id": "MDY6Q29tbWl0MjU3MjE0OTc3OmZlMzUyYmQ5ZThkZDM4NjY5MWE2OGJlNGRkNTljOWZkMjRkYTYzZDc=",
     "commit": {
       "author": {
         "name": "Sladyn",
         "email": "sladynnunes98@gmail.com",
-        "date": "2020-04-06T12:25:15Z"
+        "date": "2020-04-20T08:15:11Z"
       },
       "committer": {
         "name": "GitHub",
         "email": "noreply@github.com",
-        "date": "2020-04-06T12:25:15Z"
+        "date": "2020-04-20T08:15:11Z"
       },
       "message": "Initial commit",
       "tree": {
-        "sha": "e0f408fb90498b93fb29f15f65a716d635b935aa",
-        "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/git/trees/e0f408fb90498b93fb29f15f65a716d635b935aa"
+        "sha": "7e4b67f31859a5c6348d83419539ba9fa8864ed0",
+        "url": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/git/trees/7e4b67f31859a5c6348d83419539ba9fa8864ed0"
       },
-      "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/git/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942",
+      "url": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/git/commits/fe352bd9e8dd386691a68be4dd59c9fd24da63d7",
       "comment_count": 0,
       "verification": {
         "verified": true,
         "reason": "valid",
-        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeix+rCRBK7hj4Ov3rIwAAdHIIAAqSgHCUcQf1yvtvaDYKbIqg\nQn+VcaCXqJWl8wcxNNcp3VAzUEmUAsB64hOWN1pxOFikfrTt+YXw8Jn8LJUKrs0r\ne+tNjoBAWFRn6zMK4SAiEgbVsuMztDg7TBiAt12+cJ3F8vrTlovCfpvUqSD2b1HG\nq/bE4Ihrmz90Jr8PALTHLdDV+zZEt/Dz1iVQuQ6PHD+Fo3j9PQNmsl1csi5+c+wA\netoAj+BuA34LIwxJJYpZ0GvkB/+4kBU316h8SlcmCTZepKRgeEqfmgT+MisUfMGe\nRXxixhZTkk6nozvsk+r3km8OouOKuijSJ3Ik+PJ+2gE6LxsasByktDLswIE0VW8=\n=Y+YS\n-----END PGP SIGNATURE-----\n",
-        "payload": "tree e0f408fb90498b93fb29f15f65a716d635b935aa\nauthor Sladyn <sladynnunes98@gmail.com> 1586175915 +0530\ncommitter GitHub <noreply@github.com> 1586175915 +0530\n\nInitial commit"
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJenVoPCRBK7hj4Ov3rIwAAdHIIADxk98COSq8twY32znmzSQDe\nMWe+qYegYWwQr3qN/T6MS2WWDleXzyE0Jmp2eLY3xAO0dQeIy/axlcgaZkx4rq/w\nwpOh0XMmpe3cijrOtZlqKebyXl1ctCndaob+4WN55R07BPOL6Skl7mokmFBFsLkr\nnT4VnB3fJuhy0CuES75VZ6lQ839nNPkJ9Afmq/mTy/RAr6ZeBL3oH4hHGoB7JJ07\n0Q/7zSs3yZQGZ87g9rGjt54B3pXX2qmJtNP5uxW9NtdOQefvMDmQkj+jvHWMVrgb\n0g2foW0M+/sSSs925Rz8QweLB1UK+f7wSmyGJpkT3UJg9zaQ6oSUKO/F4gtvyFU=\n=GtXJ\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 7e4b67f31859a5c6348d83419539ba9fa8864ed0\nauthor Sladyn <sladynnunes98@gmail.com> 1587370511 +0530\ncommitter GitHub <noreply@github.com> 1587370511 +0530\n\nInitial commit"
       }
     },
-    "url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942",
-    "html_url": "https://github.com/github-api-test-org/temp-testDisableProtectionOnly/commit/f2e92a7002bf8ac91750d647a0be2c15411e2942",
-    "comments_url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/commits/f2e92a7002bf8ac91750d647a0be2c15411e2942/comments",
+    "url": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/commits/fe352bd9e8dd386691a68be4dd59c9fd24da63d7",
+    "html_url": "https://github.com/github-api-test-org/temp-testGetProtection/commit/fe352bd9e8dd386691a68be4dd59c9fd24da63d7",
+    "comments_url": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/commits/fe352bd9e8dd386691a68be4dd59c9fd24da63d7/comments",
     "author": {
       "login": "sladyn98",
       "id": 28837406,
@@ -74,8 +74,8 @@
     "parents": []
   },
   "_links": {
-    "self": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/branches/master",
-    "html": "https://github.com/github-api-test-org/temp-testDisableProtectionOnly/tree/master"
+    "self": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/branches/master",
+    "html": "https://github.com/github-api-test-org/temp-testGetProtection/tree/master"
   },
   "protected": false,
   "protection": {
@@ -85,5 +85,5 @@
       "contexts": []
     }
   },
-  "protection_url": "https://api.github.com/repos/github-api-test-org/temp-testDisableProtectionOnly/branches/master/protection"
+  "protection_url": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/branches/master/protection"
 }

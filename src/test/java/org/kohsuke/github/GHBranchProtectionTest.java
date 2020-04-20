@@ -82,9 +82,9 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testGetProtectionTest() throws Exception {
+    public void testGetProtection() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
-        GHBranchProtection protectionTest = branch.getProtection();
+        GHBranchProtection protectionTest = repo.getBranch(BRANCH).getProtection();
         assertTrue(protectionTest instanceof GHBranchProtection);
     }
 }

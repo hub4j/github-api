@@ -1,0 +1,40 @@
+{
+  "id": "60b50898-f2af-4e49-882e-facd861bd374",
+  "name": "repos_github-api-test-org_temp-testgetprotection_branches_master_protection",
+  "request": {
+    "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master/protection",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Branch not protected\",\"documentation_url\":\"https://developer.github.com/v3/repos/branches/#remove-branch-protection\"}",
+    "headers": {
+      "Date": "Mon, 20 Apr 2020 11:43:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4845",
+      "X-RateLimit-Reset": "1587385073",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BB96:659F:3A6383:49C440:5E9D8ACC"
+    }
+  },
+  "uuid": "60b50898-f2af-4e49-882e-facd861bd374",
+  "persistent": true,
+  "insertionIndex": 6
+}

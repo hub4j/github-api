@@ -137,9 +137,25 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      *
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
+     */
+    @Deprecated
+    public GHTeam getTeam(int teamId) throws IOException {
+        return getTeam((long) teamId);
+    }
+
+    /**
+     * Gets a single team by ID.
+     *
+     * @param teamId
+     *            id of the team that we want to query for
+     * @return the team
+     * @throws IOException
+     *             the io exception
+     *
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
-    public GHTeam getTeam(int teamId) throws IOException {
+    public GHTeam getTeam(long teamId) throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
                 .fetch(GHTeam.class)

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -10,14 +11,14 @@ import java.util.TreeMap;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHTeam implements Refreshable {
+public class GHTeam extends GHObject implements Refreshable {
+    private String html_url;
     private String name;
     private String permission;
     private String slug;
     private String description;
     private Privacy privacy;
 
-    private int id;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     protected /* final */ GitHub root;
@@ -127,15 +128,6 @@ public class GHTeam implements Refreshable {
      */
     public void setPrivacy(Privacy privacy) throws IOException {
         root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -320,5 +312,10 @@ public class GHTeam implements Refreshable {
     @Override
     public void refresh() throws IOException {
         root.createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root);
+    }
+
+    @Override
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
     }
 }

@@ -137,13 +137,11 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      *
-     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
-    public GHTeam getTeam(long teamId) throws IOException {
-        return root.createRequest()
-                .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
-                .fetch(GHTeam.class)
-                .wrapUp(this);
+    @Deprecated
+    public GHTeam getTeam(int teamId) throws IOException {
+        return getTeam((long) teamId);
     }
 
     /**
@@ -155,10 +153,13 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      *
-     * @deprecated Use {@link GHOrganization#getTeam(long)}
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
-    public GHTeam getTeam(int teamId) throws IOException {
-        return getTeam((long) teamId);
+    public GHTeam getTeam(long teamId) throws IOException {
+        return root.createRequest()
+                .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
+                .fetch(GHTeam.class)
+                .wrapUp(this);
     }
 
     /**

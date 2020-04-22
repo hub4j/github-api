@@ -413,7 +413,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(GHUser.class)
+    @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
         client.requireCredential();
         synchronized (this) {

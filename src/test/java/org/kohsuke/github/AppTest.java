@@ -308,6 +308,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         assertEquals(teamByName.getId(), teamById.getId());
         assertEquals(teamByName.getDescription(), teamById.getDescription());
+
+        GHTeam teamById2 = organization.getTeam((int) teamByName.getId());
+        assertNotNull(teamById2);
+
+        assertEquals(teamByName.getId(), teamById2.getId());
+        assertEquals(teamByName.getDescription(), teamById2.getDescription());
+
     }
 
     @Ignore("Needs mocking check")

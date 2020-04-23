@@ -1,8 +1,8 @@
 {
-  "id": "2337b0a7-eeca-48be-a266-0a068a79e12e",
-  "name": "repos_github-api-test-org_temp-testgetprotection",
+  "id": "12d8726c-e383-45d3-8da7-cfec0d043b64",
+  "name": "repos_github-api-test-org_temp-testgetprotection_branches_master",
   "request": {
-    "url": "/repos/github-api-test-org/temp-testGetProtection",
+    "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,24 +12,23 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_github-api-test-org_temp-testgetprotection-2.json",
+    "bodyFileName": "repos_github-api-test-org_temp-testgetprotection_branches_master-7.json",
     "headers": {
-      "Date": "Thu, 23 Apr 2020 17:42:04 GMT",
+      "Date": "Thu, 23 Apr 2020 17:42:06 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4933",
+      "X-RateLimit-Remaining": "4928",
       "X-RateLimit-Reset": "1587666973",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"d13b13503d75ee6f873b07336e3980d6\"",
-      "Last-Modified": "Thu, 23 Apr 2020 17:42:03 GMT",
+      "ETag": "W/\"dc3ff5ae90ceaed2515f7c337b51a17e\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -37,10 +36,12 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F2F9:7AE6:6C1B6:848F3:5EA1D366"
+      "X-GitHub-Request-Id": "F2F9:7AE6:6C1F9:84A53:5EA1D36D"
     }
   },
-  "uuid": "2337b0a7-eeca-48be-a266-0a068a79e12e",
+  "uuid": "12d8726c-e383-45d3-8da7-cfec0d043b64",
   "persistent": true,
-  "insertionIndex": 2
+  "scenarioName": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master",
+  "requiredScenarioState": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master-3",
+  "insertionIndex": 7
 }

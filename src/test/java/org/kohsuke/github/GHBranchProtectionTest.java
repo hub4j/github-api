@@ -86,5 +86,6 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         GHBranchProtection protection = branch.enableProtection().enable();
         GHBranchProtection protectionTest = repo.getBranch(BRANCH).getProtection();
         assertTrue(protectionTest instanceof GHBranchProtection);
+        assertTrue(repo.getBranch(BRANCH).isProtected());
     }
 }

@@ -77,9 +77,9 @@
     "self": "https://api.github.com/repos/github-api-test-org/temp-testGetProtection/branches/master",
     "html": "https://github.com/github-api-test-org/temp-testGetProtection/tree/master"
   },
-  "protected": false,
+  "protected": true,
   "protection": {
-    "enabled": false,
+    "enabled": true,
     "required_status_checks": {
       "enforcement_level": "off",
       "contexts": []

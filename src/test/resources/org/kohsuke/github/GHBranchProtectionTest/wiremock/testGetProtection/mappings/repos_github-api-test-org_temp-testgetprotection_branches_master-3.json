@@ -1,5 +1,5 @@
 {
-  "id": "6af0c781-30dd-4c9a-bb73-6efa52595ffc",
+  "id": "1b37059d-fd2e-4bf9-91aa-320203aad872",
   "name": "repos_github-api-test-org_temp-testgetprotection_branches_master",
   "request": {
     "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master",
@@ -14,20 +14,20 @@
     "status": 200,
     "bodyFileName": "repos_github-api-test-org_temp-testgetprotection_branches_master-3.json",
     "headers": {
-      "Date": "Mon, 20 Apr 2020 08:15:16 GMT",
+      "Date": "Thu, 23 Apr 2020 17:42:05 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4912",
-      "X-RateLimit-Reset": "1587370940",
+      "X-RateLimit-Remaining": "4932",
+      "X-RateLimit-Reset": "1587666972",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"e854e72f207b42cc1b5edbaa30f35024\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "W/\"7fdb679ba6b890c4bb0b4d403e27fbef\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -36,10 +36,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D5CC:4297:AB95D:E2BAA:5E9D5A14"
+      "X-GitHub-Request-Id": "F2F9:7AE6:6C1BD:84A13:5EA1D36C"
     }
   },
-  "uuid": "6af0c781-30dd-4c9a-bb73-6efa52595ffc",
+  "uuid": "1b37059d-fd2e-4bf9-91aa-320203aad872",
   "persistent": true,
+  "scenarioName": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master-2",
   "insertionIndex": 3
 }

@@ -57,6 +57,7 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testDisableProtectionOnly() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
+        assertTrue(repo.getBranch(BRANCH).isProtected());
         branch.disableProtection();
         assertFalse(repo.getBranch(BRANCH).isProtected());
     }

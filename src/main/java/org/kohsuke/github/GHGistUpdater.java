@@ -1,8 +1,11 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * Builder pattern for updating a Gist.
@@ -12,7 +15,7 @@ import java.util.LinkedHashMap;
 public class GHGistUpdater {
     private final GHGist base;
     private final Requester builder;
-    LinkedHashMap<String, Object> files;
+    LinkedHashMap<String, Map<String, String>> files;
 
     GHGistUpdater(GHGist base) {
         this.base = base;
@@ -32,16 +35,15 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater addFile(String fileName, String content) throws IOException {
+    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
         updateFile(fileName, content);
         return this;
     }
 
-    // // This method does not work.
-    // public GHGistUpdater deleteFile(String fileName) throws IOException {
-    // files.put(fileName, Collections.singletonMap("filename", null));
-    // return this;
-    // }
+    public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
+        files.put(fileName, null);
+        return this;
+    }
 
     /**
      * Rename file gh gist updater.
@@ -54,8 +56,9 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater renameFile(String fileName, String newFileName) throws IOException {
-        files.put(fileName, Collections.singletonMap("filename", newFileName));
+    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) throws IOException {
+        Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
+        file.put("filename", newFileName);
         return this;
     }
 
@@ -70,8 +73,31 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater updateFile(String fileName, String content) throws IOException {
-        files.put(fileName, Collections.singletonMap("content", content));
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+        Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
+        file.put("content", content);
+        return this;
+    }
+
+    /**
+     * Update file name and content
+     *
+     * @param fileName
+     *            the file name
+     * @param newFileName
+     *            the new file name
+     * @param content
+     *            the content
+     * @return the gh gist updater
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
+            throws IOException {
+        Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
+        file.put("content", content);
+        file.put("filename", newFileName);
+        files.put(fileName, file);
         return this;
     }
 

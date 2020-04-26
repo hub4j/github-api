@@ -8,38 +8,38 @@
   "git_push_url": "https://gist.github.com/11a257b91982aafd6370089ef877a682.git",
   "html_url": "https://gist.github.com/11a257b91982aafd6370089ef877a682",
   "files": {
-    "abc.txt": {
-      "filename": "abc.txt",
+    "ab.txt": {
+      "filename": "ab.txt",
       "type": "text/plain",
       "language": "Text",
-      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/f2ba8f84ab5c1bce84a7b441cb1959cfc7093b7f/abc.txt",
+      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/f2ba8f84ab5c1bce84a7b441cb1959cfc7093b7f/ab.txt",
       "size": 3,
       "truncated": false,
       "content": "abc"
-    },
-    "def.txt": {
-      "filename": "def.txt",
-      "type": "text/plain",
-      "language": "Text",
-      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/0c003832e7bfa9ca8b5c2035c9bd684a5f2623bc/def.txt",
-      "size": 3,
-      "truncated": false,
-      "content": "def"
     },
     "ghi.txt": {
       "filename": "ghi.txt",
       "type": "text/plain",
       "language": "Text",
-      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/45a82e295c52473114c57c18f4f52368df2a3cfd/ghi.txt",
+      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/c036c168e478a94fde05f915c9670df03fa4ce84/ghi.txt",
+      "size": 2,
+      "truncated": false,
+      "content": "gh"
+    },
+    "klm.txt": {
+      "filename": "klm.txt",
+      "type": "text/plain",
+      "language": "Text",
+      "raw_url": "https://gist.githubusercontent.com/bitwiseman/11a257b91982aafd6370089ef877a682/raw/8df050ad266e0e86aa01a534dd9faf202f8c3d80/klm.txt",
       "size": 3,
       "truncated": false,
-      "content": "ghi"
+      "content": "nop"
     }
   },
   "public": false,
   "created_at": "2020-04-27T17:24:06Z",
-  "updated_at": "2020-04-27T17:24:06Z",
-  "description": "Test Gist",
+  "updated_at": "2020-04-27T17:24:08Z",
+  "description": "Gist Test",
   "comments": 0,
   "user": null,
   "comments_url": "https://api.github.com/gists/11a257b91982aafd6370089ef877a682/comments",
@@ -65,6 +65,66 @@
   },
   "forks": [],
   "history": [
+    {
+      "user": {
+        "login": "bitwiseman",
+        "id": 1958953,
+        "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+        "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/bitwiseman",
+        "html_url": "https://github.com/bitwiseman",
+        "followers_url": "https://api.github.com/users/bitwiseman/followers",
+        "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+        "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+        "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+        "repos_url": "https://api.github.com/users/bitwiseman/repos",
+        "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "version": "1ba147d5e2114bad9da3eaf42bc88843f91da2c9",
+      "committed_at": "2020-04-27T17:24:08Z",
+      "change_status": {
+        "total": 5,
+        "additions": 2,
+        "deletions": 3
+      },
+      "url": "https://api.github.com/gists/11a257b91982aafd6370089ef877a682/1ba147d5e2114bad9da3eaf42bc88843f91da2c9"
+    },
+    {
+      "user": {
+        "login": "bitwiseman",
+        "id": 1958953,
+        "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+        "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/bitwiseman",
+        "html_url": "https://github.com/bitwiseman",
+        "followers_url": "https://api.github.com/users/bitwiseman/followers",
+        "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+        "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+        "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+        "repos_url": "https://api.github.com/users/bitwiseman/repos",
+        "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "version": "a26d6b3c15d9e0732af78c9b6a0f5a82a5495b0f",
+      "committed_at": "2020-04-27T17:24:07Z",
+      "change_status": {
+        "total": 1,
+        "additions": 1,
+        "deletions": 0
+      },
+      "url": "https://api.github.com/gists/11a257b91982aafd6370089ef877a682/a26d6b3c15d9e0732af78c9b6a0f5a82a5495b0f"
+    },
     {
       "user": {
         "login": "bitwiseman",

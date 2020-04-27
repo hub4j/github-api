@@ -1,42 +1,34 @@
 {
-  "id": "971e54f9-b6df-4cc0-b04e-19c3772ba46a",
-  "name": "gists",
+  "id": "1b37059d-fd2e-4bf9-91aa-320203aad872",
+  "name": "repos_github-api-test-org_temp-testgetprotection_branches_master",
   "request": {
-    "url": "/gists",
-    "method": "POST",
+    "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"public\":false,\"description\":\"Test Gist\",\"files\":{\"abc.txt\":{\"content\":\"abc\"},\"def.txt\":{\"content\":\"def\"},\"ghi.txt\":{\"content\":\"ghi\"}}}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    }
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "gists-2.json",
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_temp-testgetprotection_branches_master-3.json",
     "headers": {
-      "Date": "Mon, 27 Apr 2020 17:24:06 GMT",
+      "Date": "Thu, 23 Apr 2020 17:42:05 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4975",
-      "X-RateLimit-Reset": "1588010945",
+      "X-RateLimit-Remaining": "4932",
+      "X-RateLimit-Reset": "1587666972",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"7b67efd855ab094b8909712c7e622749\"",
+      "ETag": "W/\"7fdb679ba6b890c4bb0b4d403e27fbef\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/gists/11a257b91982aafd6370089ef877a682",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -44,10 +36,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FA20:78D7:86994:A56E8:5EA71534"
+      "X-GitHub-Request-Id": "F2F9:7AE6:6C1BD:84A13:5EA1D36C"
     }
   },
-  "uuid": "971e54f9-b6df-4cc0-b04e-19c3772ba46a",
+  "uuid": "1b37059d-fd2e-4bf9-91aa-320203aad872",
   "persistent": true,
-  "insertionIndex": 2
+  "scenarioName": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-github-api-test-org-temp-testGetProtection-branches-master-2",
+  "insertionIndex": 3
 }

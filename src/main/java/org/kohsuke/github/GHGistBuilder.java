@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
+import javax.annotation.Nonnull;
+
 /**
  * Builder pattern for creating a new Gist.
  *
@@ -59,7 +61,7 @@ public class GHGistBuilder {
      *            the content
      * @return Adds a new file.
      */
-    public GHGistBuilder file(String fileName, String content) {
+    public GHGistBuilder file(@Nonnull String fileName, @Nonnull String content) {
         files.put(fileName, Collections.singletonMap("content", content));
         return this;
     }

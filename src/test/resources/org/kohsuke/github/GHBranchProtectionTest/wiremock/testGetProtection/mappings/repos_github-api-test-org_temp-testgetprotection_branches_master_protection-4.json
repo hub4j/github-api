@@ -1,0 +1,52 @@
+{
+  "id": "d52c7355-8eac-4c62-b83d-54ebacfc0c70",
+  "name": "repos_github-api-test-org_temp-testgetprotection_branches_master_protection",
+  "request": {
+    "url": "/repos/github-api-test-org/temp-testGetProtection/branches/master/protection",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.luke-cage-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"required_pull_request_reviews\":null,\"required_status_checks\":null,\"restrictions\":null,\"enforce_admins\":false}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_github-api-test-org_temp-testgetprotection_branches_master_protection-4.json",
+    "headers": {
+      "Date": "Thu, 23 Apr 2020 17:42:05 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4931",
+      "X-RateLimit-Reset": "1587666973",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"028cd5293b7178833f675036daf5ecf7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.luke-cage-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F2F9:7AE6:6C1C8:84A1F:5EA1D36D"
+    }
+  },
+  "uuid": "d52c7355-8eac-4c62-b83d-54ebacfc0c70",
+  "persistent": true,
+  "insertionIndex": 4
+}

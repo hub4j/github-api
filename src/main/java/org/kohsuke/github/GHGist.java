@@ -172,7 +172,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root.createRequest().method("PUT").setRawUrlPath(getApiTailUrl("star")).send();
+        root.createRequest().method("PUT").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**
@@ -182,7 +182,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root.createRequest().method("DELETE").setRawUrlPath(getApiTailUrl("star")).send();
+        root.createRequest().method("DELETE").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**

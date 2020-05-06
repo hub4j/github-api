@@ -7,9 +7,12 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Integration test for {@link GHContent}.
@@ -157,5 +160,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 + "123456789012345678901234567890123456789012345678901234567890"
                 + "123456789012345678901234567890123456789012345678901234567890");
         ghContentBuilder.commit();
+    }
+
+    @Test
+    public void testGetFileContentWithNonAsciiPath() throws Exception {
+        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-dir-with-nonascii-entry/B\u00F6rnstein.txt");
+        assertThat(IOUtils.readLines(fileContent.read(), StandardCharsets.UTF_8), hasItems("test"));
     }
 }

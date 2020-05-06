@@ -1,0 +1,18 @@
+{
+  "name": "B??????rnstein.txt",
+  "path": "ghcontent-ro/a-dir-with-nonascii-entry/B??????rnstein.txt",
+  "sha": "9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+  "size": 5,
+  "url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-nonascii-entry/B%C3%B6rnstein.txt?ref=master",
+  "html_url": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-nonascii-entry/B%C3%B6rnstein.txt",
+  "git_url": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+  "download_url": "https://raw.githubusercontent.com/github-api-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-dir-with-nonascii-entry/B%C3%B6rnstein.txt",
+  "type": "file",
+  "content": "dGVzdAo=\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-nonascii-entry/B%C3%B6rnstein.txt?ref=master",
+    "git": "https://api.github.com/repos/github-api-test-org/GHContentIntegrationTest/git/blobs/9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+    "html": "https://github.com/github-api-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-dir-with-nonascii-entry/B%C3%B6rnstein.txt"
+  }
+}

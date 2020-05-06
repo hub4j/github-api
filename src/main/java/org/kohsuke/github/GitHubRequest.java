@@ -658,7 +658,7 @@ class GitHubRequest {
      */
     private static String urlPathEncode(String value) {
         try {
-            return new URI(null, null, value, null, null).toString();
+            return new URI(null, null, value, null, null).toASCIIString();
         } catch (URISyntaxException ex) {
             throw new AssertionError(ex);
         }

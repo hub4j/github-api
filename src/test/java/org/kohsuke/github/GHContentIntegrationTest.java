@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * Integration test for {@link GHContent}.

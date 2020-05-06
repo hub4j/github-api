@@ -583,13 +583,17 @@ class GitHubRequest {
          * when needing to set query parameters on requests methods that don't usually have them, such as
          * {@link GHRelease#uploadAsset(String, InputStream, String)}.
          *
-         * @param urlOrPath
+         * @param rawUrlPath
          *            the content type
          * @return the request builder
          */
-        B setRawUrlPath(String urlOrPath) {
-            Objects.requireNonNull(urlOrPath);
-            this.urlPath = urlOrPath;
+        B setRawUrlPath(@Nonnull String rawUrlPath) {
+            Objects.requireNonNull(rawUrlPath);
+            // This method should only work for full urls, which must start with "http"
+            if (!rawUrlPath.startsWith("http")) {
+                throw new GHException("Raw URL must start with 'http'");
+            }
+            this.urlPath = rawUrlPath;
             return (B) this;
         }
 
@@ -603,10 +607,10 @@ class GitHubRequest {
          *            the content type
          * @return the request builder
          */
-        public B withUrlPath(String... urlPathItems) {
+        public B withUrlPath(@Nonnull String urlPath, @Nonnull String... urlPathItems) {
             // full url may be set and reset as needed
-            if (urlPathItems.length == 1 && !urlPathItems[0].startsWith("/")) {
-                return setRawUrlPath(urlPathItems[0]);
+            if (urlPathItems.length == 0 && !urlPath.startsWith("/")) {
+                return setRawUrlPath(urlPath);
             }
 
             // Once full url is set, do not allow path setting
@@ -614,7 +618,10 @@ class GitHubRequest {
                 throw new GHException("Cannot append to url path after setting a full url");
             }
 
-            String tailUrlPath = String.join("/", urlPathItems);
+            String tailUrlPath = urlPath;
+            if (urlPathItems.length != 0) {
+                tailUrlPath += "/" + String.join("/", urlPathItems);
+            }
 
             if (this.urlPath.endsWith("/")) {
                 tailUrlPath = StringUtils.stripStart(tailUrlPath, "/");

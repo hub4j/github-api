@@ -101,7 +101,7 @@ public class GHBranch {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-        return root.createRequest().withUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);
+        return root.createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);
     }
 
     /**
@@ -120,7 +120,7 @@ public class GHBranch {
      *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(protection_url).send();
+        root.createRequest().method("DELETE").setRawUrlPath(protection_url).send();
     }
 
     /**

@@ -1,42 +1,35 @@
 {
-  "id": "971e54f9-b6df-4cc0-b04e-19c3772ba46a",
-  "name": "gists",
+  "id": "4d428d73-9af7-49af-aadd-cefd9eeefeff",
+  "name": "user",
   "request": {
-    "url": "/gists",
-    "method": "POST",
+    "url": "/user",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"public\":false,\"description\":\"Test Gist\",\"files\":{\"abc.txt\":{\"content\":\"abc\"},\"def.txt\":{\"content\":\"def\"},\"ghi.txt\":{\"content\":\"ghi\"}}}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ]
+    }
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "gists-2.json",
+    "status": 200,
+    "bodyFileName": "user-1.json",
     "headers": {
-      "Date": "Mon, 27 Apr 2020 17:24:06 GMT",
+      "Date": "Thu, 23 Apr 2020 17:59:01 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4975",
-      "X-RateLimit-Reset": "1588010945",
+      "X-RateLimit-Remaining": "4913",
+      "X-RateLimit-Reset": "1587666973",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"7b67efd855ab094b8909712c7e622749\"",
+      "ETag": "W/\"ab45a166d7cdaf4738db7876a0b1d296\"",
+      "Last-Modified": "Sun, 19 Apr 2020 04:18:55 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/gists/11a257b91982aafd6370089ef877a682",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -44,10 +37,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FA20:78D7:86994:A56E8:5EA71534"
+      "X-GitHub-Request-Id": "F68E:7228:10E570:149284:5EA1D765"
     }
   },
-  "uuid": "971e54f9-b6df-4cc0-b04e-19c3772ba46a",
+  "uuid": "4d428d73-9af7-49af-aadd-cefd9eeefeff",
   "persistent": true,
-  "insertionIndex": 2
+  "insertionIndex": 1
 }

@@ -51,6 +51,30 @@ public class GHGist extends GHObject {
     }
 
     /**
+     * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as "aa5a315d61ae9438b18d". If the id
+     * is numeric, this method will get it. If id is not numeric, this will throw a runtime
+     * {@link NumberFormatException}.
+     *
+     * @return id of the Gist.
+     * @deprecated Use {@link #getGistId()} instead.
+     */
+    @Deprecated
+    @Override
+    public long getId() {
+        return Long.parseLong(getGistId());
+    }
+
+    /**
+     * Gets the id for this Gist. Unlike most other GitHub objects, the id for Gists can be non-numeric, such as
+     * "aa5a315d61ae9438b18d". This should be used instead of {@link #getId()}.
+     *
+     * @return id of this Gist
+     */
+    public String getGistId() {
+        return this.id;
+    }
+
+    /**
      * Gets owner.
      *
      * @return User that owns this Gist.
@@ -97,6 +121,11 @@ public class GHGist extends GHObject {
         return git_push_url;
     }
 
+    /**
+     * Get the html url.
+     * 
+     * @return the github html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

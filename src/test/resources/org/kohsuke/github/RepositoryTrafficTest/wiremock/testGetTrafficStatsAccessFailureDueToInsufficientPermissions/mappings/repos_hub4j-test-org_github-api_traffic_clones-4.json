@@ -1,0 +1,39 @@
+{
+  "id": "8036aa5a-d2cd-4e2e-8f3e-86561b4b9756",
+  "name": "repos_hub4j-test-org_github-api_traffic_clones",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/traffic/clones",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 403,
+    "body": "{\"message\":\"Must have push access to repository\",\"documentation_url\":\"https://developer.github.com/v3/repos/traffic/#clones\"}",
+    "headers": {
+      "Date": "Wed, 04 Dec 2019 16:25:00 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "403 Forbidden",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "52",
+      "X-RateLimit-Reset": "1575480297",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A5B8:1E5E0:8522B61:9F46BED:5DE7DDDB"
+    }
+  },
+  "uuid": "8036aa5a-d2cd-4e2e-8f3e-86561b4b9756",
+  "persistent": true,
+  "insertionIndex": 4
+}

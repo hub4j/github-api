@@ -71,7 +71,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         GHRepository repo = null;
 
         // Valid repository, stubbed
-        repo = gitHub.getRepository("github-api/github-api");
+        repo = gitHub.getRepository("hub4j/github-api");
         assertThat(repo.getDescription(), equalTo("this is a stubbed description"));
 
         // Invalid repository, without stub - fails 404 when not proxying
@@ -107,7 +107,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         GHRepository repo = null;
 
         // Valid repository, stubbed
-        repo = gitHub.getRepository("github-api/github-api");
+        repo = gitHub.getRepository("hub4j/github-api");
         assertThat(repo.getDescription(), equalTo("this is a stubbed description"));
 
         // Valid repository, without stub - succeeds when proxying

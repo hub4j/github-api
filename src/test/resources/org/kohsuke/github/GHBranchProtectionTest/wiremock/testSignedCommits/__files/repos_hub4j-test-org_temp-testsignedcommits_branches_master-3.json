@@ -1,0 +1,89 @@
+{
+  "name": "master",
+  "commit": {
+    "sha": "9ef208e9f31fee7de1f0d10728f914022791e127",
+    "node_id": "MDY6Q29tbWl0MjIyNTk2MTE3OjllZjIwOGU5ZjMxZmVlN2RlMWYwZDEwNzI4ZjkxNDAyMjc5MWUxMjc=",
+    "commit": {
+      "author": {
+        "name": "Liam Newman",
+        "email": "bitwiseman@gmail.com",
+        "date": "2019-11-19T03:01:53Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2019-11-19T03:01:53Z"
+      },
+      "message": "Initial commit",
+      "tree": {
+        "sha": "5bc9e3c14a62b6c19ec7ea436245290591751fc4",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/git/trees/5bc9e3c14a62b6c19ec7ea436245290591751fc4"
+      },
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/git/commits/9ef208e9f31fee7de1f0d10728f914022791e127",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJd01shCRBK7hj4Ov3rIwAAdHIIADWylhXW45yghg2gvvoO7JjK\n/0+CpNsQyfSiLQ9hFkAFfWUstUr1DhknQGFWdKKyDEXtPDu0J/Ed/d5yb9ebiz1n\nvCTQcSK0VxNkVVtf1+wYNi8+9OOb+GfAt6pUtqbYzV2pAUdgqsSOO/g/1svGlGPq\nz8+aV17OuGnY+IIB3FA0LWYG4b+b9LmZQHjiWSOpyJvZ+i4JVyJGYokrb4BzhkUy\ng30rjoVw8+q9deJjUAs/p8X0X2VtG3K4BSiIXraF54qi1yoYrjJlMOsGfl1MA4iE\n/Omt7fiVdhfy85+BAPthu4+HssuHgVPbWKU17DF0CMy0HYYiPirY4uioNiXkkT8=\n=p6ni\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 5bc9e3c14a62b6c19ec7ea436245290591751fc4\nauthor Liam Newman <bitwiseman@gmail.com> 1574132513 -0800\ncommitter GitHub <noreply@github.com> 1574132513 -0800\n\nInitial commit"
+      }
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/commits/9ef208e9f31fee7de1f0d10728f914022791e127",
+    "html_url": "https://github.com/hub4j-test-org/temp-testSignedCommits/commit/9ef208e9f31fee7de1f0d10728f914022791e127",
+    "comments_url": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/commits/9ef208e9f31fee7de1f0d10728f914022791e127/comments",
+    "author": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": []
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/branches/master",
+    "html": "https://github.com/hub4j-test-org/temp-testSignedCommits/tree/master"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/branches/master/protection"
+}

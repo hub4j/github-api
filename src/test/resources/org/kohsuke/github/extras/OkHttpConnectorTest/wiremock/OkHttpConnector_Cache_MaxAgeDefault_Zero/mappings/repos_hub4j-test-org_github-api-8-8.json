@@ -1,0 +1,41 @@
+{
+  "id": "441d13d0-ac48-49e1-84f8-8276a75a1dec",
+  "name": "repos_hub4j-test-org_github-api",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api",
+    "method": "GET"
+  },
+  "response": {
+    "status": 304,
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Server": "GitHub.com",
+      "Status": "304 Not Modified",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4968",
+      "X-RateLimit-Reset": "{{now offset='1 hours' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"295ae3430c604f3d10b6eb145fe511b5\"",
+      "Last-Modified": "{{now offset='-7 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FBD4:8499:15E10D2:19F3F82:5D9258A8"
+    }
+  },
+  "uuid": "441d13d0-ac48-49e1-84f8-8276a75a1dec",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-github-api-3",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-2",
+  "insertionIndex": 8
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableProtectionOnly/branches/master/protection",
+  "enforce_admins": {
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableProtectionOnly/branches/master/protection/enforce_admins",
+    "enabled": false
+  }
+}

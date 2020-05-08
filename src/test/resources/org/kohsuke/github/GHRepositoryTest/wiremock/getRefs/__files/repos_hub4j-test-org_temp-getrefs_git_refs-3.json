@@ -1,0 +1,12 @@
+[
+  {
+    "ref": "refs/heads/master",
+    "node_id": "MDM6UmVmMjMzMTMxOTY3Om1hc3Rlcg==",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-getRefs/git/refs/heads/master",
+    "object": {
+      "sha": "10d62bfddf1d50e2a3ef51666200102921ed548a",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-getRefs/git/commits/10d62bfddf1d50e2a3ef51666200102921ed548a"
+    }
+  }
+]

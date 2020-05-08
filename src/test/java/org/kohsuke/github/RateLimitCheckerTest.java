@@ -55,7 +55,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
         // Should succeed without querying rate limit
         // Also due to earlier reset date, new value is ignored.
-        GHOrganization org = gitHub.getOrganization("github-api-test-org");
+        GHOrganization org = gitHub.getOrganization("hub4j-test-org");
         updateTestRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
         assertThat(rateLimit.getCore().getRemaining(), equalTo(4501));
@@ -89,7 +89,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

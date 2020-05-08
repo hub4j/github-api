@@ -1,11 +1,11 @@
 [
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/6",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/6/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/6/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/6/events",
-    "html_url": "https://github.com/github-api/github-api/pull/6",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/6",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/6/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/6/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/6/events",
+    "html_url": "https://github.com/hub4j/github-api/pull/6",
     "id": 2827735,
     "node_id": "MDExOlB1bGxSZXF1ZXN0Njg1NDQ3",
     "number": 6,
@@ -42,20 +42,20 @@
     "closed_at": "2012-03-08T20:50:19Z",
     "author_association": "COLLABORATOR",
     "pull_request": {
-      "url": "https://api.github.com/repos/github-api/github-api/pulls/6",
-      "html_url": "https://github.com/github-api/github-api/pull/6",
-      "diff_url": "https://github.com/github-api/github-api/pull/6.diff",
-      "patch_url": "https://github.com/github-api/github-api/pull/6.patch"
+      "url": "https://api.github.com/repos/hub4j/github-api/pulls/6",
+      "html_url": "https://github.com/hub4j/github-api/pull/6",
+      "diff_url": "https://github.com/hub4j/github-api/pull/6.diff",
+      "patch_url": "https://github.com/hub4j/github-api/pull/6.patch"
     },
     "body": "please review my patch.\n\nthanks.\n### \n\nテストコードも書いた方が良いと思うのですがどう書くのが適切なのかちょっとわからないでいます…。\n"
   },
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/5",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/5/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/5/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/5/events",
-    "html_url": "https://github.com/github-api/github-api/issues/5",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/5",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/5/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/5/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/5/events",
+    "html_url": "https://github.com/hub4j/github-api/issues/5",
     "id": 2766701,
     "node_id": "MDU6SXNzdWUyNzY2NzAx",
     "number": 5,
@@ -94,12 +94,12 @@
     "body": "I written like below;\n\nGitHub gh = GitHub.connect(\"YusukeKokubo\", \"xxx\", \"xxx\");\nGHUser user = gh.getMyself();\nuser.getRepositories();\n\nand got exception\n\nException in thread \"main\" java.io.FileNotFoundException: https://api.github.com/user/YusukeKokubo/repos?per_page=100&page=1\n"
   },
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/4",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/4/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/4/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/4/events",
-    "html_url": "https://github.com/github-api/github-api/issues/4",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/4",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/4/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/4/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/4/events",
+    "html_url": "https://github.com/hub4j/github-api/issues/4",
     "id": 2733631,
     "node_id": "MDU6SXNzdWUyNzMzNjMx",
     "number": 4,
@@ -138,12 +138,12 @@
     "body": "The link to Javadoc currently points at http://github-api.kohsuke.org/apidocs/index.html, which seems incorrect.\n\nThanks.\n"
   },
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/3",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/3/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/3/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/3/events",
-    "html_url": "https://github.com/github-api/github-api/pull/3",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/3",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/3/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/3/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/3/events",
+    "html_url": "https://github.com/hub4j/github-api/pull/3",
     "id": 2706585,
     "node_id": "MDExOlB1bGxSZXF1ZXN0NjQ1NDI4",
     "number": 3,
@@ -180,20 +180,20 @@
     "closed_at": "2012-01-03T19:12:31Z",
     "author_association": "CONTRIBUTOR",
     "pull_request": {
-      "url": "https://api.github.com/repos/github-api/github-api/pulls/3",
-      "html_url": "https://github.com/github-api/github-api/pull/3",
-      "diff_url": "https://github.com/github-api/github-api/pull/3.diff",
-      "patch_url": "https://github.com/github-api/github-api/pull/3.patch"
+      "url": "https://api.github.com/repos/hub4j/github-api/pulls/3",
+      "html_url": "https://github.com/hub4j/github-api/pull/3",
+      "diff_url": "https://github.com/hub4j/github-api/pull/3.diff",
+      "patch_url": "https://github.com/hub4j/github-api/pull/3.patch"
     },
     "body": "If you have a private repo on an organization, you need to access it via an authenticated API call.  \n\nThis adds support for querying organization repos to GHOrganization.\n\n(I needed this for a fix to the jenkins github plugin... pull request for that one coming momentarily.)\n"
   },
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/2",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/2/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/2/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/2/events",
-    "html_url": "https://github.com/github-api/github-api/pull/2",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/2",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/2/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/2/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/2/events",
+    "html_url": "https://github.com/hub4j/github-api/pull/2",
     "id": 1576990,
     "node_id": "MDExOlB1bGxSZXF1ZXN0MzExMTA0",
     "number": 2,
@@ -230,20 +230,20 @@
     "closed_at": "2011-09-06T20:28:30Z",
     "author_association": "COLLABORATOR",
     "pull_request": {
-      "url": "https://api.github.com/repos/github-api/github-api/pulls/2",
-      "html_url": "https://github.com/github-api/github-api/pull/2",
-      "diff_url": "https://github.com/github-api/github-api/pull/2.diff",
-      "patch_url": "https://github.com/github-api/github-api/pull/2.patch"
+      "url": "https://api.github.com/repos/hub4j/github-api/pulls/2",
+      "html_url": "https://github.com/hub4j/github-api/pull/2",
+      "diff_url": "https://github.com/hub4j/github-api/pull/2.diff",
+      "patch_url": "https://github.com/hub4j/github-api/pull/2.patch"
     },
     "body": "expose issue_updated_at.\n\nIt looks like a better representation of update time for an pull request than updated_at\n"
   },
   {
-    "url": "https://api.github.com/repos/github-api/github-api/issues/1",
-    "repository_url": "https://api.github.com/repos/github-api/github-api",
-    "labels_url": "https://api.github.com/repos/github-api/github-api/issues/1/labels{/name}",
-    "comments_url": "https://api.github.com/repos/github-api/github-api/issues/1/comments",
-    "events_url": "https://api.github.com/repos/github-api/github-api/issues/1/events",
-    "html_url": "https://github.com/github-api/github-api/pull/1",
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/1",
+    "repository_url": "https://api.github.com/repos/hub4j/github-api",
+    "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/1/labels{/name}",
+    "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/1/comments",
+    "events_url": "https://api.github.com/repos/hub4j/github-api/issues/1/events",
+    "html_url": "https://github.com/hub4j/github-api/pull/1",
     "id": 1198638,
     "node_id": "MDExOlB1bGxSZXF1ZXN0MjE2OTYy",
     "number": 1,
@@ -280,10 +280,10 @@
     "closed_at": "2011-07-11T18:20:33Z",
     "author_association": "COLLABORATOR",
     "pull_request": {
-      "url": "https://api.github.com/repos/github-api/github-api/pulls/1",
-      "html_url": "https://github.com/github-api/github-api/pull/1",
-      "diff_url": "https://github.com/github-api/github-api/pull/1.diff",
-      "patch_url": "https://github.com/github-api/github-api/pull/1.patch"
+      "url": "https://api.github.com/repos/hub4j/github-api/pulls/1",
+      "html_url": "https://github.com/hub4j/github-api/pull/1",
+      "diff_url": "https://github.com/hub4j/github-api/pull/1.diff",
+      "patch_url": "https://github.com/hub4j/github-api/pull/1.patch"
     },
     "body": "I've written a github oauth authentication plugin for jenkins and I used github-api for the interactions with github once I have the token.\n\nMy first pass implementation of the plugin works so I want to contribute the github-api changes back.\n\nChanges:\n1. setup the Github class using the oauth token.\n2. get a list of organizations that the **current** user belongs to.\n"
   }

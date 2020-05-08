@@ -31,7 +31,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
-    final static String GITHUB_API_TEST_ORG = "github-api-test-org";
+    final static String GITHUB_API_TEST_ORG = "hub4j-test-org";
 
     final static String STUBBED_USER_LOGIN = "placeholder-user";
     final static String STUBBED_USER_PASSWORD = "placeholder-password";

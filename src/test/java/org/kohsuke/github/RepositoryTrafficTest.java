@@ -36,7 +36,7 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api").getRepository("github-api");
+        return gitHub.getOrganization("hub4j").getRepository("github-api");
     }
 
     @Test

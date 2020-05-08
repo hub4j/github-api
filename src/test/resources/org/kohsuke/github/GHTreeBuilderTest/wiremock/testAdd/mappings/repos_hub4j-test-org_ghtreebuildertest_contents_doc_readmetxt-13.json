@@ -1,0 +1,48 @@
+{
+  "id": "5f081830-6fd0-42fa-a754-aee9a8ec37f8",
+  "name": "repos_hub4j-test-org_ghtreebuildertest_contents_doc_readmetxt",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHTreeBuilderTest/contents/doc/readme.txt",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghtreebuildertest_contents_doc_readmetxt-13.json",
+    "headers": {
+      "Date": "Thu, 09 Jan 2020 03:40:21 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4821",
+      "X-RateLimit-Reset": "1578544466",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"fbbc875b17d1e17da06b4ee8fda46e2596c41f3c\"",
+      "Last-Modified": "Thu, 09 Jan 2020 03:40:20 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E86E:34E9:1D0F84:24276E:5E16A0A5"
+    }
+  },
+  "uuid": "5f081830-6fd0-42fa-a754-aee9a8ec37f8",
+  "persistent": true,
+  "insertionIndex": 13
+}

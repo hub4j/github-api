@@ -26,7 +26,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = getGitHubBeforeAfter().getRepository("github-api-test-org/GHContentIntegrationTest");
+            repo = getGitHubBeforeAfter().getRepository("hub4j-test-org/GHContentIntegrationTest");
             try {
                 GHContent content = repo.getFileContent(createdFilename);
                 if (content != null) {
@@ -39,12 +39,12 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     @Before
     public void setUp() throws Exception {
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
+        repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
     }
 
     @Test
     public void testGetFileContent() throws Exception {
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
+        repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
         assertTrue(content.isFile());
@@ -123,7 +123,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(),
                     endsWith(
-                            "/repos/github-api-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
+                            "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
         }
     }
 

@@ -122,7 +122,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         // Assert htmlUrl is not null
         assertNotNull(comment.getHtmlUrl());
-        assertEquals(new URL("https://github.com/github-api-test-org/github-api/pull/266#discussion_r321995146"),
+        assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
                 comment.getHtmlUrl());
 
         comment.update("Updated review comment");
@@ -156,7 +156,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         // System.out.println(p.getUrl());
         assertTrue(p.getRequestedReviewers().isEmpty());
 
-        GHOrganization testOrg = gitHub.getOrganization("github-api-test-org");
+        GHOrganization testOrg = gitHub.getOrganization("hub4j-test-org");
         GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");
 
         p.requestTeamReviewers(Collections.singletonList(testTeam));
@@ -258,7 +258,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests()
                 .state(GHIssueState.OPEN)
-                .head("github-api-test-org:test/stable")
+                .head("hub4j-test-org:test/stable")
                 .base("master")
                 .list()
                 .toList();
@@ -329,6 +329,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

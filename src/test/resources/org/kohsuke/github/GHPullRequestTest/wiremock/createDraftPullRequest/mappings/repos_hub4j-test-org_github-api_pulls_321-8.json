@@ -1,0 +1,50 @@
+{
+  "id": "ec3d9059-949c-4244-830a-41beea0ddb2b",
+  "name": "repos_hub4j-test-org_github-api_pulls_321",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/321",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_321-8.json",
+    "headers": {
+      "Date": "Mon, 21 Oct 2019 22:34:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4858",
+      "X-RateLimit-Reset": "1571700639",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"aafccc1379665e90dc144ced21f1f80c\"",
+      "Last-Modified": "Mon, 21 Oct 2019 22:34:48 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.shadow-cat-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FB3F:7FDF:C18F5:E6C09:5DAE3289"
+    }
+  },
+  "uuid": "ec3d9059-949c-4244-830a-41beea0ddb2b",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-pulls-321",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-321-3",
+  "insertionIndex": 8
+}

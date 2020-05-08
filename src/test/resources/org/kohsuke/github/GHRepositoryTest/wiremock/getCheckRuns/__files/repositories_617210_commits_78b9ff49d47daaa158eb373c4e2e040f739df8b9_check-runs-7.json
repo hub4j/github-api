@@ -6,9 +6,9 @@
       "node_id": "MDg6Q2hlY2tSdW41MTQ5ODI3NDE=",
       "head_sha": "78b9ff49d47daaa158eb373c4e2e040f739df8b9",
       "external_id": "1117c5e3-7879-562b-d0b9-3c449bc32976",
-      "url": "https://api.github.com/repos/github-api/github-api/check-runs/514982741",
-      "html_url": "https://github.com/github-api/github-api/runs/514982741",
-      "details_url": "https://github.com/github-api/github-api/runs/514982741",
+      "url": "https://api.github.com/repos/hub4j/github-api/check-runs/514982741",
+      "html_url": "https://github.com/hub4j/github-api/runs/514982741",
+      "details_url": "https://github.com/hub4j/github-api/runs/514982741",
       "status": "completed",
       "conclusion": "success",
       "started_at": "2020-03-17T21:37:30Z",
@@ -18,7 +18,7 @@
         "summary": null,
         "text": null,
         "annotations_count": 0,
-        "annotations_url": "https://api.github.com/repos/github-api/github-api/check-runs/514982741/annotations"
+        "annotations_url": "https://api.github.com/repos/hub4j/github-api/check-runs/514982741/annotations"
       },
       "name": "site (Java 11)",
       "check_suite": {
@@ -106,9 +106,9 @@
       "node_id": "MDg6Q2hlY2tSdW41MTQ5ODI3MjE=",
       "head_sha": "78b9ff49d47daaa158eb373c4e2e040f739df8b9",
       "external_id": "1a964363-bc45-576e-c37e-1bfbfad21938",
-      "url": "https://api.github.com/repos/github-api/github-api/check-runs/514982721",
-      "html_url": "https://github.com/github-api/github-api/runs/514982721",
-      "details_url": "https://github.com/github-api/github-api/runs/514982721",
+      "url": "https://api.github.com/repos/hub4j/github-api/check-runs/514982721",
+      "html_url": "https://github.com/hub4j/github-api/runs/514982721",
+      "details_url": "https://github.com/hub4j/github-api/runs/514982721",
       "status": "completed",
       "conclusion": "success",
       "started_at": "2020-03-17T21:37:31Z",
@@ -118,7 +118,7 @@
         "summary": null,
         "text": null,
         "annotations_count": 0,
-        "annotations_url": "https://api.github.com/repos/github-api/github-api/check-runs/514982721/annotations"
+        "annotations_url": "https://api.github.com/repos/hub4j/github-api/check-runs/514982721/annotations"
       },
       "name": "build-only (Java 11)",
       "check_suite": {

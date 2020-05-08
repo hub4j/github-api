@@ -11,7 +11,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
-    private static String REPO_NAME = "github-api-test-org/GHTreeBuilderTest";
+    private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
 
     private static String PATH_SCRIPT = "app/run.sh";
     private static String CONTENT_SCRIPT = "#!/bin/bash\necho Hello\n";

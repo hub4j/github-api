@@ -160,10 +160,10 @@
     }
   },
   {
-    "url": "https://api.github.com/orgs/github-api-test-org/memberships/bitwiseman",
+    "url": "https://api.github.com/orgs/hub4j-test-org/memberships/bitwiseman",
     "state": "active",
     "role": "admin",
-    "organization_url": "https://api.github.com/orgs/github-api-test-org",
+    "organization_url": "https://api.github.com/orgs/hub4j-test-org",
     "user": {
       "login": "bitwiseman",
       "id": 1958953,
@@ -185,16 +185,16 @@
       "site_admin": false
     },
     "organization": {
-      "login": "github-api-test-org",
+      "login": "hub4j-test-org",
       "id": 7544739,
       "node_id": "MDEyOk9yZ2FuaXphdGlvbjc1NDQ3Mzk=",
-      "url": "https://api.github.com/orgs/github-api-test-org",
-      "repos_url": "https://api.github.com/orgs/github-api-test-org/repos",
-      "events_url": "https://api.github.com/orgs/github-api-test-org/events",
-      "hooks_url": "https://api.github.com/orgs/github-api-test-org/hooks",
-      "issues_url": "https://api.github.com/orgs/github-api-test-org/issues",
-      "members_url": "https://api.github.com/orgs/github-api-test-org/members{/member}",
-      "public_members_url": "https://api.github.com/orgs/github-api-test-org/public_members{/member}",
+      "url": "https://api.github.com/orgs/hub4j-test-org",
+      "repos_url": "https://api.github.com/orgs/hub4j-test-org/repos",
+      "events_url": "https://api.github.com/orgs/hub4j-test-org/events",
+      "hooks_url": "https://api.github.com/orgs/hub4j-test-org/hooks",
+      "issues_url": "https://api.github.com/orgs/hub4j-test-org/issues",
+      "members_url": "https://api.github.com/orgs/hub4j-test-org/members{/member}",
+      "public_members_url": "https://api.github.com/orgs/hub4j-test-org/public_members{/member}",
       "avatar_url": "https://avatars3.githubusercontent.com/u/7544739?v=4",
       "description": null
     }
@@ -360,10 +360,10 @@
     }
   },
   {
-    "url": "https://api.github.com/orgs/github-api/memberships/bitwiseman",
+    "url": "https://api.github.com/orgs/hub4j/memberships/bitwiseman",
     "state": "active",
     "role": "admin",
-    "organization_url": "https://api.github.com/orgs/github-api",
+    "organization_url": "https://api.github.com/orgs/hub4j",
     "user": {
       "login": "bitwiseman",
       "id": 1958953,
@@ -385,16 +385,16 @@
       "site_admin": false
     },
     "organization": {
-      "login": "github-api",
+      "login": "hub4j",
       "id": 54909825,
       "node_id": "MDEyOk9yZ2FuaXphdGlvbjU0OTA5ODI1",
-      "url": "https://api.github.com/orgs/github-api",
-      "repos_url": "https://api.github.com/orgs/github-api/repos",
-      "events_url": "https://api.github.com/orgs/github-api/events",
-      "hooks_url": "https://api.github.com/orgs/github-api/hooks",
-      "issues_url": "https://api.github.com/orgs/github-api/issues",
-      "members_url": "https://api.github.com/orgs/github-api/members{/member}",
-      "public_members_url": "https://api.github.com/orgs/github-api/public_members{/member}",
+      "url": "https://api.github.com/orgs/hub4j",
+      "repos_url": "https://api.github.com/orgs/hub4j/repos",
+      "events_url": "https://api.github.com/orgs/hub4j/events",
+      "hooks_url": "https://api.github.com/orgs/hub4j/hooks",
+      "issues_url": "https://api.github.com/orgs/hub4j/issues",
+      "members_url": "https://api.github.com/orgs/hub4j/members{/member}",
+      "public_members_url": "https://api.github.com/orgs/hub4j/public_members{/member}",
       "avatar_url": "https://avatars3.githubusercontent.com/u/54909825?v=4",
       "description": null
     }

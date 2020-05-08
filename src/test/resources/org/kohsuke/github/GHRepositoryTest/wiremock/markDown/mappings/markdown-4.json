@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"mode\":\"gfm\",\"context\":\"github-api/github-api\",\"text\":\"@kohsuke to fix issue #1\"}",
+        "equalToJson": "{\"mode\":\"gfm\",\"context\":\"hub4j/github-api\",\"text\":\"@kohsuke to fix issue #1\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

@@ -1,8 +1,8 @@
 {
-  "id": "16595685-993b-4503-af17-d4bcd896f3bc",
-  "name": "repositories_40763577_contents_ghcontent-ro_a-file-with-o",
+  "id": "81bb8a8d-644f-4287-b516-9f4692e548b4",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-file-with-o",
   "request": {
-    "url": "/repositories/40763577/contents/ghcontent-ro/a-file-with-%C3%B6",
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-%C3%B6",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,15 +12,15 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repositories_40763577_contents_ghcontent-ro_a-file-with-o-5.json",
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-file-with-o-5.json",
     "headers": {
-      "Date": "Mon, 11 May 2020 13:24:56 GMT",
+      "Date": "Mon, 11 May 2020 14:25:17 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4994",
-      "X-RateLimit-Reset": "1589207093",
+      "X-RateLimit-Remaining": "4995",
+      "X-RateLimit-Reset": "1589210715",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
@@ -37,10 +37,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "2ADC:2F216:390A3B:417A8D:5EB95227"
+      "X-GitHub-Request-Id": "2C04:41154:BF5F6A:DADBF4:5EB9604C"
     }
   },
-  "uuid": "16595685-993b-4503-af17-d4bcd896f3bc",
+  "uuid": "81bb8a8d-644f-4287-b516-9f4692e548b4",
   "persistent": true,
   "insertionIndex": 5
 }

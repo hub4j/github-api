@@ -163,7 +163,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetFileContentWithNonAsciiPath() throws Exception {
-        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-dir-with-nonascii-entry/B\u00F6rnstein.txt");
+        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-file-with-\u00F6");
         assertThat(IOUtils.readLines(fileContent.read(), StandardCharsets.UTF_8), hasItems("test"));
     }
 }

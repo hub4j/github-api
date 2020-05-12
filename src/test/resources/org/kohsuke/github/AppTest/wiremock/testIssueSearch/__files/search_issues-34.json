@@ -199,12 +199,12 @@
       "score": 1
     },
     {
-      "url": "https://api.github.com/repos/github-api/github-api/issues/178",
-      "repository_url": "https://api.github.com/repos/github-api/github-api",
-      "labels_url": "https://api.github.com/repos/github-api/github-api/issues/178/labels{/name}",
-      "comments_url": "https://api.github.com/repos/github-api/github-api/issues/178/comments",
-      "events_url": "https://api.github.com/repos/github-api/github-api/issues/178/events",
-      "html_url": "https://github.com/github-api/github-api/issues/178",
+      "url": "https://api.github.com/repos/hub4j/github-api/issues/178",
+      "repository_url": "https://api.github.com/repos/hub4j/github-api",
+      "labels_url": "https://api.github.com/repos/hub4j/github-api/issues/178/labels{/name}",
+      "comments_url": "https://api.github.com/repos/hub4j/github-api/issues/178/comments",
+      "events_url": "https://api.github.com/repos/hub4j/github-api/issues/178/events",
+      "html_url": "https://github.com/hub4j/github-api/issues/178",
       "id": 68225402,
       "node_id": "MDU6SXNzdWU2ODIyNTQwMg==",
       "number": 178,

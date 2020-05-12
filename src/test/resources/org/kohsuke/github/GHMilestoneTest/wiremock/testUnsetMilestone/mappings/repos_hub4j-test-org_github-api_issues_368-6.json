@@ -1,0 +1,52 @@
+{
+  "id": "de40d490-10aa-4a9c-a0ef-2bc4c1c7ccea",
+  "name": "repos_hub4j-test-org_github-api_issues_368",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/368",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"milestone\":1}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues_368-6.json",
+    "headers": {
+      "Date": "Sun, 05 Apr 2020 04:12:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4956",
+      "X-RateLimit-Reset": "1586062476",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"eeca7474dc0b6117d9f5b64d03c21d14\"",
+      "X-OAuth-Scopes": "admin:org, admin:repo_hook, delete_repo, gist, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8F8C:6DE8:376421:3EEA4F:5E895AC2"
+    }
+  },
+  "uuid": "de40d490-10aa-4a9c-a0ef-2bc4c1c7ccea",
+  "persistent": true,
+  "insertionIndex": 6
+}

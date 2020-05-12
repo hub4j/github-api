@@ -1,0 +1,37 @@
+{
+  "id": "7de879eb-606f-4789-9adf-753bdcac139a",
+  "name": "repos_hub4j-test-org_github-api_subscription",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/subscription",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Thu, 03 Oct 2019 18:56:07 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4904",
+      "X-RateLimit-Reset": "1570132527",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "F360:3620:11B6326:1537102:5D964447"
+    }
+  },
+  "uuid": "7de879eb-606f-4789-9adf-753bdcac139a",
+  "persistent": true,
+  "insertionIndex": 6
+}

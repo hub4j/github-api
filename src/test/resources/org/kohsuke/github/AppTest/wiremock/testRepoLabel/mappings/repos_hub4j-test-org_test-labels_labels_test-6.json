@@ -1,0 +1,49 @@
+{
+  "id": "3e2f3c6f-2300-4da5-a68a-e8ffc23cbaa7",
+  "name": "repos_hub4j-test-org_test-labels_labels_test",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-labels/labels/test",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\":1937402918,\"node_id\":\"MDU6TGFiZWwxOTM3NDAyOTE4\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"123456\",\"default\":false,\"description\":\"\"}",
+    "headers": {
+      "Date": "Thu, 26 Mar 2020 21:52:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4989",
+      "X-RateLimit-Reset": "1585263137",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "W/\"48de34595ef7992c2e74e8ceb548cdfa\"",
+      "Last-Modified": "Thu, 26 Mar 2020 21:52:19 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E69B:9495:1D1E0:24570:5E7D2413"
+    }
+  },
+  "uuid": "3e2f3c6f-2300-4da5-a68a-e8ffc23cbaa7",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-test-labels-labels-test",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-test-labels-labels-test-2",
+  "insertionIndex": 6
+}

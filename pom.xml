@@ -8,9 +8,9 @@
   <description>GitHub API for Java</description>
 
   <scm>
-    <connection>scm:git:git@github.com/github-api/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/github-api/${project.artifactId}.git</developerConnection>
-    <url>https://github.com/github-api/github-api/</url>
+    <connection>scm:git:git@github.com/hub4j/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hub4j/${project.artifactId}.git</developerConnection>
+    <url>https://github.com/hub4j/github-api/</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -27,7 +27,7 @@
     </repository>
     <site>
       <id>github-pages</id>
-      <url>gitsite:git@github.com/github-api/${project.artifactId}.git</url>
+      <url>gitsite:git@github.com/hub4j/${project.artifactId}.git</url>
     </site>
   </distributionManagement>
 

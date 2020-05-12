@@ -1,0 +1,43 @@
+{
+  "id": "735e8274-2b9f-4e56-b7eb-efb51671aa16",
+  "name": "orgs_hub4j-test-org",
+  "request": {
+    "url": "/orgs/hub4j-test-org",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_hub4j-test-org-3.json",
+    "headers": {
+      "Date": "Mon, 30 Sep 2019 16:55:14 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4716",
+      "X-RateLimit-Reset": "1569866107",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"daa553b1db7b807d5eafb289f3b6b214\"",
+      "Last-Modified": "Mon, 20 Apr 2015 00:42:30 GMT",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EC54:5ED2:1696DAE:1AB3F7C:5D923372"
+    }
+  },
+  "uuid": "735e8274-2b9f-4e56-b7eb-efb51671aa16",
+  "persistent": true,
+  "insertionIndex": 3
+}

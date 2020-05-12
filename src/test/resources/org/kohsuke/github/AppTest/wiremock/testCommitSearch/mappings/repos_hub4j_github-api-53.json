@@ -1,0 +1,51 @@
+{
+  "id": "df143360-27af-463f-9d79-8c257992e7a8",
+  "name": "repos_hub4j_github-api",
+  "request": {
+    "url": "/repos/hub4j/github-api",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j_github-api-53.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 02:23:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4885",
+      "X-RateLimit-Reset": "1582341553",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9d5d38e5710ac5b39e093ef4305c2ce4\"",
+      "Last-Modified": "Fri, 21 Feb 2020 23:58:56 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EBD8:0A38:5FB2C0:724C52:5E5090A3"
+    }
+  },
+  "uuid": "df143360-27af-463f-9d79-8c257992e7a8",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-github-api-github-api",
+  "requiredScenarioState": "scenario-2-repos-github-api-github-api-50",
+  "newScenarioState": "scenario-2-repos-github-api-github-api-51",
+  "insertionIndex": 53
+}

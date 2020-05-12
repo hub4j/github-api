@@ -1,0 +1,15 @@
+{
+  "sha": "68a5bb512f28e6a9aa9a1b2068d9517929817dbb",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/68a5bb512f28e6a9aa9a1b2068d9517929817dbb",
+  "tree": [
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "958337fe1f522a58e5e7098cc61a2917db1c9643",
+      "size": 19,
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/958337fe1f522a58e5e7098cc61a2917db1c9643"
+    }
+  ],
+  "truncated": false
+}

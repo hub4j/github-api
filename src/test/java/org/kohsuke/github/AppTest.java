@@ -198,7 +198,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetIssues() throws Exception {
-        List<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+        List<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
@@ -211,7 +211,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testListIssues() throws IOException {
-        Iterable<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+        Iterable<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .listIssues(GHIssueState.CLOSED);
 
@@ -329,7 +329,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testFetchPullRequestAsList() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         assertEquals("master", r.getMasterBranch());
         PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
         List<GHPullRequest> prs = i.toList();
@@ -635,7 +635,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCommitStatus() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
 
         GHCommitStatus state;
 
@@ -651,7 +651,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCommitShortInfo() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f23");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
         assertEquals(commit.getCommitShortInfo().getMessage(), "doc");
@@ -814,7 +814,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test // issue #99
     public void testReadme() throws IOException {
-        GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();
+        GHContent readme = gitHub.getRepository("hub4j-test-org/test-readme").getReadme();
         assertEquals(readme.getName(), "README.md");
         assertEquals(readme.getContent(), "This is a markdown readme.\n");
     }
@@ -822,7 +822,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testTrees() throws IOException {
-        GHTree masterTree = gitHub.getRepository("github-api/github-api").getTree("master");
+        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTree("master");
         boolean foundReadme = false;
         for (GHTreeEntry e : masterTree.getTree()) {
             if ("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))) {
@@ -835,7 +835,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testTreesRecursive() throws IOException {
-        GHTree masterTree = gitHub.getRepository("github-api/github-api").getTreeRecursive("master", 1);
+        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTreeRecursive("master", 1);
         boolean foundThisFile = false;
         for (GHTreeEntry e : masterTree.getTree()) {
             if (e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")) {
@@ -851,7 +851,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         cleanupLabel("test");
         cleanupLabel("test2");
 
-        GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
+        GHRepository r = gitHub.getRepository("hub4j-test-org/test-labels");
         List<GHLabel> lst = r.listLabels().toList();
         for (GHLabel l : lst) {
             assertThat(l.getUrl(), containsString(l.getName().replace(" ", "%20")));
@@ -950,7 +950,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
             try {
-                GHLabel t = getGitHubBeforeAfter().getRepository("github-api-test-org/test-labels").getLabel(name);
+                GHLabel t = getGitHubBeforeAfter().getRepository("hub4j-test-org/test-labels").getLabel(name);
                 t.delete();
             } catch (IOException e) {
 
@@ -1019,7 +1019,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void reactions() throws Exception {
-        GHIssue i = gitHub.getRepository("github-api/github-api").getIssue(311);
+        GHIssue i = gitHub.getRepository("hub4j/github-api").getIssue(311);
 
         List<GHReaction> l;
         // retrieval
@@ -1091,7 +1091,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void blob() throws Exception {
         Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
 
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
 
         assertBlobContent(r.readBlob(sha1));

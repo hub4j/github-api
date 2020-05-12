@@ -50,7 +50,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     @Before
@@ -113,7 +113,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         try {
             // status code is a different code path that should also be covered by this.
             gitHub.createRequest()
-                    .withUrlPath("/repos/github-api-test-org/github-api/branches/test/timeout")
+                    .withUrlPath("/repos/hub4j-test-org/github-api/branches/test/timeout")
                     .fetchHttpStatusCode();
             fail();
         } catch (Exception e) {
@@ -260,7 +260,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         } catch (Exception e) {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
             assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
-            assertThat(e.getCause().getMessage(), containsString("github-api-test-org-missing"));
+            assertThat(e.getCause().getMessage(), containsString("hub4j-test-org-missing"));
             String capturedLog = getTestCapturedLog();
             assertFalse(capturedLog.contains("will try 2 more time"));
             assertFalse(capturedLog.contains("will try 1 more time"));

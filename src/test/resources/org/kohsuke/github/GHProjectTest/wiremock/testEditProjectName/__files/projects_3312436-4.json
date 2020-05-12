@@ -1,7 +1,7 @@
 {
-  "owner_url": "https://api.github.com/orgs/github-api-test-org",
+  "owner_url": "https://api.github.com/orgs/hub4j-test-org",
   "url": "https://api.github.com/projects/3312436",
-  "html_url": "https://github.com/orgs/github-api-test-org/projects/22",
+  "html_url": "https://github.com/orgs/hub4j-test-org/projects/22",
   "columns_url": "https://api.github.com/projects/3312436/columns",
   "id": 3312436,
   "node_id": "MDc6UHJvamVjdDMzMTI0MzY=",

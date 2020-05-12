@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"organization\":\"github-api-test-org\"}",
+        "equalToJson": "{\"organization\":\"hub4j-test-org\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

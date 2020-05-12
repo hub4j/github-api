@@ -91,7 +91,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("github-api/github-api");
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
@@ -157,7 +157,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("github-api/github-api");
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));

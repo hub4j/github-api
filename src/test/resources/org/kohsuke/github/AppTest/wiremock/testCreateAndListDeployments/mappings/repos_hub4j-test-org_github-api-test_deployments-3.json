@@ -1,0 +1,56 @@
+{
+  "id": "702b7123-86c1-41e0-bee7-f3cb89a3236d",
+  "name": "repos_hub4j-test-org_github-api-test_deployments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-test/deployments",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"master\",\"environment\":\"unittest\",\"payload\":\"{\\\"user\\\":\\\"atmos\\\",\\\"room_id\\\":123456}\",\"description\":\"question\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api-test_deployments-3.json",
+    "headers": {
+      "Date": "Thu, 03 Oct 2019 18:57:57 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4749",
+      "X-RateLimit-Reset": "1570132527",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"c76b22eae3a1d091db2c789a39fecda9\"",
+      "Last-Modified": "Thu, 03 Oct 2019 18:57:57 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api-test/deployments/173089055",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F3AD:3618:10E8DF:149FEF:5D9644B5"
+    }
+  },
+  "uuid": "702b7123-86c1-41e0-bee7-f3cb89a3236d",
+  "persistent": true,
+  "insertionIndex": 3
+}

@@ -23,7 +23,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     @Test
@@ -43,12 +43,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isAllowRebaseMerge(), is(true));
         assertThat(r.isAllowSquashMerge(), is(true));
 
-        String httpTransport = "https://github.com/github-api-test-org/temp-testGetters.git";
+        String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
         assertThat(r.gitHttpTransportUrl(), equalTo(httpTransport));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
-        assertThat(r.getFullName(), equalTo("github-api-test-org/temp-testGetters"));
+        assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getMessage(),
                     equalTo("Server returned HTTP response code: 200, message: '404 Not Found' for URL: "
                             + mockGitHub.apiServer().baseUrl()
-                            + "/repos/github-api-test-org/github-api/branches/test/NonExistent"));
+                            + "/repos/hub4j-test-org/github-api/branches/test/NonExistent"));
         }
     }
 
@@ -127,7 +127,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listContributors() throws IOException {
-        GHRepository r = gitHub.getOrganization("github-api").getRepository("github-api");
+        GHRepository r = gitHub.getOrganization("hub4j").getRepository("github-api");
         int i = 0;
         boolean kohsuke = false;
 
@@ -147,7 +147,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void getPermission() throws Exception {
         kohsuke();
-        GHRepository r = gitHub.getRepository("github-api-test-org/test-permission");
+        GHRepository r = gitHub.getRepository("hub4j-test-org/test-permission");
         assertEquals(GHPermissionType.ADMIN, r.getPermission("kohsuke"));
         assertEquals(GHPermissionType.READ, r.getPermission("dude"));
         r = gitHub.getOrganization("apache").getRepository("groovy");
@@ -244,7 +244,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listLanguages() throws IOException {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         String mainLanguage = r.getLanguage();
         assertTrue(r.listLanguages().containsKey(mainLanguage));
     }
@@ -273,7 +273,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test // issue #162
     public void testIssue162() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         List<GHContent> contents = r.getDirectoryContent("", "gh-pages");
         for (GHContent content : contents) {
             if (content.isFile()) {
@@ -289,11 +289,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void markDown() throws Exception {
         assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
 
-        String actual = IOUtils.toString(gitHub.getRepository("github-api/github-api")
-                .renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
+        String actual = IOUtils.toString(
+                gitHub.getRepository("hub4j/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
         // System.out.println(actual);
         assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
-        assertTrue(actual.contains("href=\"https://github.com/github-api/github-api/pull/1\""));
+        assertTrue(actual.contains("href=\"https://github.com/hub4j/github-api/pull/1\""));
         assertTrue(actual.contains("class=\"user-mention\""));
         assertTrue(actual.contains("class=\"issue-link "));
         assertTrue(actual.contains("to fix issue"));
@@ -301,7 +301,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void setMergeOptions() throws IOException {
-        // String repoName = "github-api-test-org/test-mergeoptions";
+        // String repoName = "hub4j-test-org/test-mergeoptions";
         GHRepository r = getTempRepository();
 
         // at least one merge option must be selected
@@ -466,8 +466,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             fail();
         } catch (Exception e) {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
-            assertThat(e.getMessage(),
-                    containsString("/repos/github-api-test-org/temp-listRefsEmptyTags/git/refs/tags"));
+            assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
         }
 
         try {
@@ -477,8 +476,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         } catch (Exception e) {
             assertThat(e, instanceOf(GHException.class));
             assertThat(e.getMessage(), containsString("Failed to retrieve "));
-            assertThat(e.getMessage(),
-                    containsString("/repos/github-api-test-org/temp-listRefsEmptyTags/git/refs/tags"));
+            assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
             assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
         }
     }
@@ -526,7 +524,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void getCheckRuns() throws Exception {
         final int expectedCount = 8;
         // Use github-api repository as it has checks set up
-        PagedIterable<GHCheckRun> checkRuns = gitHub.getOrganization("github-api")
+        PagedIterable<GHCheckRun> checkRuns = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .getCheckRuns("78b9ff49d47daaa158eb373c4e2e040f739df8b9");
         // Check if the paging works correctly

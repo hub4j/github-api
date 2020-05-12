@@ -452,7 +452,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

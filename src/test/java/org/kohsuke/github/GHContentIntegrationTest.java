@@ -163,8 +163,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetFileContentWithNonAsciiPath() throws Exception {
-        final GHContent fileContent = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest")
-                .getFileContent("ghcontent-ro/a-file-with-\u00F6");
+        final GHRepository repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
+        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-file-with-\u00F6");
         assertThat(IOUtils.readLines(fileContent.read(), StandardCharsets.UTF_8), hasItems("test"));
+        
+        final GHContent fileContent2 = repo.getFileContent(fileContent.getPath());
+        assertThat(IOUtils.readLines(fileContent2.read(), StandardCharsets.UTF_8), hasItems("test"));
     }
 }

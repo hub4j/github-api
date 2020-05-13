@@ -1,0 +1,41 @@
+{
+  "id": "a29178aa-386e-408d-b43c-325fd78cdab1",
+  "name": "repos_github-api-test-org_ghcontentintegrationtest",
+  "request": {
+    "url": "/repos/github-api-test-org/GHContentIntegrationTest",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 301,
+    "body": "{\"message\":\"Moved Permanently\",\"url\":\"https://api.github.com/repositories/40763577\",\"documentation_url\":\"https://developer.github.com/v3/#http-redirects\"}",
+    "headers": {
+      "Date": "Mon, 11 May 2020 14:30:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "301 Moved Permanently",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1589210714",
+      "X-OAuth-Scopes": "",
+      "X-Accepted-OAuth-Scopes": "admin:repo_hook, delete_repo, read:repo_hook, repo, repo:status, repo_deployment, security_events, write:repo_hook",
+      "Location": "https://api.github.com/repositories/40763577",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "2A14:1D7EB:808DF5D:945C600:5EB96188"
+    }
+  },
+  "uuid": "a29178aa-386e-408d-b43c-325fd78cdab1",
+  "persistent": true,
+  "insertionIndex": 4
+}

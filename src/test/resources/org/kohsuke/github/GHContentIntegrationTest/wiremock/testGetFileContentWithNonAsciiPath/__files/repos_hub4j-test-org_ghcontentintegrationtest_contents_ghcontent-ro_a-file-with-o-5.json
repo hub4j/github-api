@@ -1,0 +1,18 @@
+{
+  "name": "a-file-with-ö",
+  "path": "ghcontent-ro/a-file-with-ö",
+  "sha": "9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+  "size": 5,
+  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-%C3%B6?ref=master",
+  "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-file-with-%C3%B6",
+  "git_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-file-with-%C3%B6",
+  "type": "file",
+  "content": "dGVzdAo=\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-%C3%B6?ref=master",
+    "git": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/9daeafb9864cf43055ae93beb0afd6c7d144bfa4",
+    "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-file-with-%C3%B6"
+  }
+}

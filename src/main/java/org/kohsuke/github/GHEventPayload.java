@@ -337,7 +337,7 @@ public abstract class GHEventPayload {
                 installation.wrapUp(root);
 
             List<GHRepository> repositories;
-            if (action == "added")
+            if ("added".equals(action))
                 repositories = repositoriesAdded;
             else // action == "removed"
                 repositories = repositoriesRemoved;

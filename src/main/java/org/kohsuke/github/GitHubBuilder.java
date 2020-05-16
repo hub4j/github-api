@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Properties;

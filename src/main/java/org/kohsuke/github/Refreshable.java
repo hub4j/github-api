@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * The interface Refreshable.

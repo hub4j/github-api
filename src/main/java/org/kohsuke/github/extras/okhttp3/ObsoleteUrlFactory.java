@@ -280,14 +280,15 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             if (c > '\u001f' && c < '\u007f')
                 continue;
 
-            Buffer buffer = new Buffer();
-            buffer.writeUtf8(s, 0, i);
-            buffer.writeUtf8CodePoint('?');
-            for (int j = i + Character.charCount(c); j < length; j += Character.charCount(c)) {
-                c = s.codePointAt(j);
-                buffer.writeUtf8CodePoint(c > '\u001f' && c < '\u007f' ? c : '?');
+            try (Buffer buffer = new Buffer()) {
+                buffer.writeUtf8(s, 0, i);
+                buffer.writeUtf8CodePoint('?');
+                for (int j = i + Character.charCount(c); j < length; j += Character.charCount(c)) {
+                    c = s.codePointAt(j);
+                    buffer.writeUtf8CodePoint(c > '\u001f' && c < '\u007f' ? c : '?');
+                }
+                return buffer.readUtf8();
             }
-            return buffer.readUtf8();
         }
         return s;
     }

@@ -210,21 +210,31 @@ abstract class GitHubClient {
     /**
      * Gets the current rate limit from the server.
      *
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In
+     * that, if {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. Otherwise, a
+     * placeholder {@link GHRateLimit} instance with {@link GHRateLimit.UnknownLimitRecord}s will be returned.
+     *
      * @return the rate limit
      * @throws IOException
      *             the io exception
      */
+    @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
-        GHRateLimit rateLimit;
+        GHRateLimit result;
         try {
-            rateLimit = fetch(JsonRateLimit.class, "/rate_limit").resources;
+            result = fetch(JsonRateLimit.class, "/rate_limit").resources;
         } catch (FileNotFoundException e) {
-            // GitHub Enterprise doesn't have the rate limit
-            // return a default rate limit that
-            rateLimit = GHRateLimit.Unknown();
+            // GitHub Enterprise doesn't have the rate_limit endpoint
+            // However some newer versions of GHE include rate limit header information
+            // Use that if available
+            result = lastRateLimit();
+            if (result == null || result.isExpired()) {
+                // return a default rate limit
+                result = GHRateLimit.Unknown();
+            }
         }
 
-        return this.rateLimit = rateLimit;
+        return rateLimit = result;
     }
 
     /**
@@ -243,9 +253,13 @@ abstract class GitHubClient {
     /**
      * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
      *
+     * If {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. If the information
+     * returned from the last call to {@link #getRateLimit()} is not {@code null} and is not expired, then it will be
+     * returned. Otherwise, the result of a call to {@link #getRateLimit()} will be returned.
+     *
      * @return the current rate limit data.
      * @throws IOException
-     *             if we couldn't get the current rate limit data.
+     *             if there was an error getting current rate limit data.
      */
     @Nonnull
     public GHRateLimit rateLimit() throws IOException {
@@ -254,11 +268,11 @@ abstract class GitHubClient {
                 return headerRateLimit;
             }
         }
-        GHRateLimit rateLimit = this.rateLimit;
-        if (rateLimit == null || rateLimit.isExpired()) {
-            rateLimit = getRateLimit();
+        GHRateLimit result = this.rateLimit;
+        if (result == null || result.isExpired()) {
+            result = getRateLimit();
         }
-        return rateLimit;
+        return result;
     }
 
     /**

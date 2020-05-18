@@ -227,7 +227,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         Thread.sleep(1500);
 
         // -------------------------------------------------------------
-        // First call to /user gets response without rate limit information
+        // Some versions of GHE include header rate limit information, some do not
+        // This response mocks the behavior without header rate limit information
         gitHub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
@@ -246,6 +247,10 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // Give this a moment
         Thread.sleep(1500);
 
+        // -------------------------------------------------------------
+        // GHE returns 404 from /rate_limit
+        // Some versions of GHE include header rate limit information, some do not
+        // This response mocks the behavior without header rate limit information
         // Always requests new info
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
@@ -266,12 +271,13 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
 
         // -------------------------------------------------------------
-        // Second call to /user gets response with rate limit information
+        // Some versions of GHE include header rate limit information, some do not
+        // This response mocks the behavior with header rate limit information
         gitHub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(5));
 
-        // Since we already had rate limit info these don't request again
+        // Since just got rate limit from header, these don't request again
         rateLimit = gitHub.lastRateLimit();
         assertThat(rateLimit, notNullValue());
         assertThat(rateLimit.getLimit(), equalTo(5000));
@@ -293,17 +299,30 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // Give this a moment
         Thread.sleep(1500);
 
+        // -------------------------------------------------------------
+        // GHE returns 404 from /rate_limit
+        // Some versions of GHE include header rate limit information, some do not
+        // This response mocks the behavior with header rate limit information
+        // Mocks that other requests come in since previous call
         // Always requests new info
         rateLimit = gitHub.getRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
 
-        assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
-        assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
-        assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
+        // getRateLimit() uses headerRateLimit if /rate_limit returns a 404
+        // and headerRateLimit is available and not expired
+        assertThat(rateLimit, notNullValue());
+        assertThat(rateLimit.getLimit(), equalTo(5000));
+        // 11 requests since previous api call
+        // This verifies that header rate limit info is recorded even for /rate_limit endpoint and 404 response
+        assertThat(rateLimit.getRemaining(), equalTo(4967));
+        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+
+        // getRateLimit() uses headerRateLimit if /rate_limit returns a 404
+        // and headerRateLimit is available and not expired
+        assertThat(rateLimit, sameInstance(gitHub.lastRateLimit()));
 
         // ratelimit() should prefer headerRateLimit when getRateLimit fails and headerRateLimit is not expired
-        assertThat(gitHub.rateLimit(), equalTo(headerRateLimit));
+        assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
 
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
 

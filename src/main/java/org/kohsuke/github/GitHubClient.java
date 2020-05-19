@@ -224,7 +224,7 @@ abstract class GitHubClient {
         try {
             result = fetch(JsonRateLimit.class, "/rate_limit").resources;
         } catch (FileNotFoundException e) {
-            // GitHub Enterprise doesn't have the rate_limit endpoint
+            // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
             // However some newer versions of GHE include rate limit header information
             // Use that if available
             result = lastRateLimit();

@@ -100,7 +100,7 @@ public class GHReleaseUpdater {
      */
     public GHRelease update() throws IOException {
         return builder.method("PATCH")
-                .withUrlPath(base.owner.getApiTailUrl("releases/" + base.id))
+                .withUrlPath(base.owner.getApiTailUrl("releases/" + base.getId()))
                 .fetch(GHRelease.class)
                 .wrap(base.owner);
     }

@@ -46,13 +46,16 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        if (created_at != null) {
+        if (super.getCreatedAt() != null) {
             return; // already populated
         }
         if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequest().withUrlPath(url).fetchInto(this);
+        URL url = getUrl();
+        if (url != null) {
+            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this);
+        }
     }
 
     /**

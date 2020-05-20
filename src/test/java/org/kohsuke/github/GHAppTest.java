@@ -28,8 +28,8 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
     @Test
     public void getGitHubApp() throws IOException {
         GHApp app = gitHub.getApp();
-        assertThat(app.id, is((long) 11111));
-        assertThat(app.getOwner().id, is((long) 111111111));
+        assertThat(app.getId(), is((long) 11111));
+        assertThat(app.getOwner().getId(), is((long) 111111111));
         assertThat(app.getOwner().login, is("bogus"));
         assertThat(app.getName(), is("Bogus-Development"));
         assertThat(app.getDescription(), is(""));
@@ -132,8 +132,8 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         Map<String, GHPermissionType> appPermissions = appInstallation.getPermissions();
         GHUser appAccount = appInstallation.getAccount();
 
-        assertThat(appInstallation.id, is((long) 11111111));
-        assertThat(appAccount.id, is((long) 111111111));
+        assertThat(appInstallation.getId(), is((long) 11111111));
+        assertThat(appAccount.getId(), is((long) 111111111));
         assertThat(appAccount.login, is("bogus"));
         assertThat(appInstallation.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
         assertThat(appInstallation.getAccessTokenUrl(), endsWith("/app/installations/11111111/access_tokens"));

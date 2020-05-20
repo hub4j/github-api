@@ -192,7 +192,7 @@ public class GHProject extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/projects/" + id;
+        return "/projects/" + getId();
     }
 
     /**
@@ -291,7 +291,7 @@ public class GHProject extends GHObject {
         final GHProject project = this;
         return root.createRequest()
                 .withPreview(INERTIA)
-                .withUrlPath(String.format("/projects/%d/columns", id))
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .toIterable(GHProjectColumn[].class, item -> item.wrap(project));
     }
 
@@ -309,7 +309,7 @@ public class GHProject extends GHObject {
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
-                .withUrlPath(String.format("/projects/%d/columns", id))
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .fetch(GHProjectColumn.class)
                 .wrap(this);
     }

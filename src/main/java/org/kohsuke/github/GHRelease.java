@@ -270,7 +270,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + id)).send();
+        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 
     /**
@@ -283,6 +283,6 @@ public class GHRelease extends GHObject {
     }
 
     private String getApiTailUrl(String end) {
-        return owner.getApiTailUrl(format("releases/%s/%s", id, end));
+        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
     }
 }

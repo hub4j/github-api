@@ -149,6 +149,6 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     private String getApiRoute() {
         return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
-                + "/issues/comments/" + id;
+                + "/issues/comments/" + getId();
     }
 }

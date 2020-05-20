@@ -157,7 +157,7 @@ public class GHOrganization extends GHPerson {
      */
     public GHTeam getTeam(long teamId) throws IOException {
         return root.createRequest()
-                .withUrlPath(String.format("/organizations/%d/team/%d", id, teamId))
+                .withUrlPath(String.format("/organizations/%d/team/%d", getId(), teamId))
                 .fetch(GHTeam.class)
                 .wrapUp(this);
     }

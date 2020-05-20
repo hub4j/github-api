@@ -22,6 +22,6 @@ class GHOrgHook extends GHHook {
 
     @Override
     String getApiRoute() {
-        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), id);
+        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), getId());
     }
 }

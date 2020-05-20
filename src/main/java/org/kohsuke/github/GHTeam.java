@@ -161,7 +161,7 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.createRequest().withUrlPath("/teams/" + id + "/members/" + user.getLogin()).send();
+            root.createRequest().withUrlPath("/teams/" + getId() + "/members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -294,7 +294,7 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     private String api(String tail) {
-        return "/teams/" + id + tail;
+        return "/teams/" + getId() + tail;
     }
 
     /**

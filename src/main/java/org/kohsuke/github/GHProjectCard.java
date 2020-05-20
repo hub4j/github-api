@@ -213,7 +213,7 @@ public class GHProjectCard extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return String.format("/projects/columns/cards/%d", id);
+        return String.format("/projects/columns/cards/%d", getId());
     }
 
     /**

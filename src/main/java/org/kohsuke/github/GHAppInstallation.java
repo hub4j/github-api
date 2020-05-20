@@ -296,7 +296,7 @@ public class GHAppInstallation extends GHObject {
         root.createRequest()
                 .method("DELETE")
                 .withPreview(GAMBIT)
-                .withUrlPath(String.format("/app/installations/%d", id))
+                .withUrlPath(String.format("/app/installations/%d", getId()))
                 .send();
     }
 
@@ -315,7 +315,9 @@ public class GHAppInstallation extends GHObject {
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
-        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id), permissions);
+        return new GHAppCreateTokenBuilder(root,
+                String.format("/app/installations/%d/access_tokens", getId()),
+                permissions);
     }
 
     /**
@@ -330,6 +332,6 @@ public class GHAppInstallation extends GHObject {
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken() {
-        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id));
+        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));
     }
 }

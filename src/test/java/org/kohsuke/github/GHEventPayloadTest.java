@@ -7,14 +7,16 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.TimeZone;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-public class GHEventPayloadTest {
+public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Rule
     public final PayloadRule payload = new PayloadRule(".json");
+
+    public GHEventPayloadTest() {
+        useDefaultGitHub = false;
+    }
 
     @Test
     public void commit_comment() throws Exception {
@@ -281,6 +283,65 @@ public class GHEventPayloadTest {
         assertThat(event.getPusher().getName(), is("baxterthehacker"));
         assertThat(event.getPusher().getEmail(), is("baxterthehacker@users.noreply.github.com"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    }
+
+    @Test
+    @Payload("push.fork")
+    public void pushToFork() throws Exception {
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+        GHEventPayload.Push event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
+        assertThat(event.getRef(), is("refs/heads/changes"));
+        assertThat(event.getBefore(), is("85c44b352958bf6d81b74ab8b21920f1d313a287"));
+        assertThat(event.getHead(), is("1393706f1364742defbc28ba459082630ca979af"));
+        assertThat(event.isCreated(), is(false));
+        assertThat(event.isDeleted(), is(false));
+        assertThat(event.isForced(), is(false));
+        assertThat(event.getCommits().size(), is(1));
+        assertThat(event.getCommits().get(0).getSha(), is("1393706f1364742defbc28ba459082630ca979af"));
+        assertThat(event.getCommits().get(0).getAuthor().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getCommits().get(0).getCommitter().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getCommits().get(0).getAdded().size(), is(6));
+        assertThat(event.getCommits().get(0).getRemoved().size(), is(0));
+        assertThat(event.getCommits().get(0).getModified().size(), is(2));
+        assertThat(event.getCommits().get(0).getModified().get(0),
+                is("src/main/java/org/kohsuke/github/GHLicense.java"));
+        assertThat(event.getRepository().getName(), is("github-api"));
+        assertThat(event.getRepository().getOwnerName(), is("hub4j-test-org"));
+        assertThat(event.getRepository().getUrl().toExternalForm(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getPusher().getName(), is("bitwiseman"));
+        assertThat(event.getPusher().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getSender().getLogin(), is("bitwiseman"));
+
+        assertThat(event.getRepository().isFork(), is(true));
+
+        // in offliine mode, we should not populate missing fields
+        assertThat(event.getRepository().getSource(), is(nullValue()));
+        assertThat(event.getRepository().getParent(), is(nullValue()));
+
+        assertThat(event.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl().toString(),
+                is("https://github.com/hub4j-test-org/github-api.git"));
+
+        // Test repository populate
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+
+        event.getRepository().populate();
+
+        // After populate the url is fixed to point to the correct API endpoint
+        assertThat(event.getRepository().getUrl().toString(),
+                is(mockGitHub.apiServer().baseUrl() + "/repos/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+
+        // Source
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getSource().getFullName(), is("hub4j/github-api"));
+
+        // Parent
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getParent().getFullName(), is("hub4j/github-api"));
     }
 
     // TODO implement support classes and write test

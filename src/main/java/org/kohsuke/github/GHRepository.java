@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -47,6 +48,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
@@ -2477,6 +2479,9 @@ public class GHRepository extends GHObject {
      * @see #getParent() #getParent()
      */
     public GHRepository getSource() throws IOException {
+        if (fork && source == null) {
+            populate();
+        }
         if (source == null)
             return null;
         if (source.root == null)
@@ -2495,6 +2500,10 @@ public class GHRepository extends GHObject {
      * @see #getSource() #getSource()
      */
     public GHRepository getParent() throws IOException {
+        if (fork && parent == null) {
+            populate();
+        }
+
         if (parent == null)
             return null;
         if (parent.root == null)
@@ -2828,6 +2837,20 @@ public class GHRepository extends GHObject {
         if (root.isOffline())
             return; // can't populate if the root is offline
 
-        root.createRequest().withApiUrl(root.getApiUrl() + full_name).fetchInto(this).wrap(root);
+        final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+
+        try {
+            // IMPORTANT: the url for repository records is does not reliably point to the API url.
+            // There is bug in Push event payloads that returns the wrong url.
+            // All other occurrences of "url" take the form "https://api.github.com/...".
+            // For Push event repository records, they take the form "https://github.com/{fullName}".
+            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+        } catch (HttpException e) {
+            if (e.getCause() instanceof JsonParseException) {
+                root.createRequest().withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
+            } else {
+                throw e;
+            }
+        }
     }
 }

@@ -34,5 +34,8 @@
   },
   "uuid": "445e28ce-5a3d-4014-ae8a-041e2e73312d",
   "persistent": true,
-  "insertionIndex": 2
+  "scenarioName": "rate-limit",
+  "requiredScenarioState": "rate-limit-2",
+  "newScenarioState": "rate-limit-3",
+  "insertionIndex": 4
 }

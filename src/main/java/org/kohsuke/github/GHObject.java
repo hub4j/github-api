@@ -26,11 +26,12 @@ public abstract class GHObject {
      */
     protected transient Map<String, List<String>> responseHeaderFields;
 
-    protected String url;
-    protected long id;
-    protected String node_id;
-    protected String created_at;
-    protected String updated_at;
+    private String url;
+
+    private long id;
+    private String nodeId;
+    private String createdAt;
+    private String updatedAt;
 
     GHObject() {
     }
@@ -75,12 +76,12 @@ public abstract class GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
-        return GitHubClient.parseDate(created_at);
+        return GitHubClient.parseDate(createdAt);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getCreatedAt")
     private Object createdAtStr(Date id, Class type) {
-        return created_at;
+        return createdAt;
     }
 
     /**
@@ -111,7 +112,7 @@ public abstract class GHObject {
      *             on error
      */
     public Date getUpdatedAt() throws IOException {
-        return GitHubClient.parseDate(updated_at);
+        return GitHubClient.parseDate(updatedAt);
     }
 
     /**
@@ -122,7 +123,7 @@ public abstract class GHObject {
      * @return Global Node ID.
      */
     public String getNodeId() {
-        return node_id;
+        return nodeId;
     }
 
     /**

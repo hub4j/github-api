@@ -111,7 +111,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return owner.getApiRoute() + "/reviews/" + id;
+        return owner.getApiRoute() + "/reviews/" + getId();
     }
 
     /**

@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 
@@ -179,10 +180,12 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Gets api url.
      *
-     * @return the api url
+     * @return API URL of this object.
+     * @deprecated use {@link #getUrl()}
      */
+    @Deprecated
     public URL getApiURL() {
-        return GitHubClient.parseURL(url);
+        return getUrl();
     }
 
     /**
@@ -570,7 +573,8 @@ public class GHIssue extends GHObject implements Reactable {
     protected String getIssuesApiRoute() {
         if (owner == null) {
             // Issues returned from search to do not have an owner. Attempt to use url.
-            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), ""), "/");
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
     }

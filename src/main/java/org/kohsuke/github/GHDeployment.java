@@ -122,7 +122,7 @@ public class GHDeployment extends GHObject {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-        return new GHDeploymentStatusBuilder(owner, id, state);
+        return new GHDeploymentStatusBuilder(owner, getId(), state);
     }
 
     /**

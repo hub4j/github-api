@@ -153,7 +153,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + id;
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + getId();
     }
 
     /**

@@ -144,7 +144,7 @@ public final class GHCheckRunBuilder {
                     .withPreview(Previews.ANTIOPE)
                     .method("PATCH")
                     .with("output", output2)
-                    .withUrlPath(repo.getApiTailUrl("check-runs/" + run.id))
+                    .withUrlPath(repo.getApiTailUrl("check-runs/" + run.getId()))
                     .fetch(GHCheckRun.class)
                     .wrap(repo);
         }

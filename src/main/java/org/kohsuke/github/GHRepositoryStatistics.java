@@ -1,12 +1,13 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -315,21 +316,12 @@ public class GHRepositoryStatistics {
      *             the io exception
      */
     public List<CodeFrequency> getCodeFrequency() throws IOException {
-        // Map to arrays first, since there are no field names in the
-        // returned JSON.
         try {
-            Integer[][] list = root.createRequest()
+            CodeFrequency[] list = root.createRequest()
                     .withUrlPath(getApiTailUrl("code_frequency"))
-                    .fetch(Integer[][].class);
+                    .fetch(CodeFrequency[].class);
 
-            // Convert to proper objects.
-            List<CodeFrequency> returnList = new ArrayList<>();
-            for (Integer[] item : list) {
-                CodeFrequency cf = new CodeFrequency(Arrays.asList(item));
-                returnList.add(cf);
-            }
-
-            return returnList;
+            return Arrays.asList(list);
         } catch (MismatchedInputException e) {
             // This sometimes happens when retrieving code frequency statistics
             // for a repository for the first time. It is probably still being
@@ -342,10 +334,12 @@ public class GHRepositoryStatistics {
      * The type CodeFrequency.
      */
     public static class CodeFrequency {
-        private int week;
-        private int additions;
-        private int deletions;
 
+        private final int week;
+        private final int additions;
+        private final int deletions;
+
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         private CodeFrequency(List<Integer> item) {
             week = item.get(0);
             additions = item.get(1);
@@ -428,7 +422,7 @@ public class GHRepositoryStatistics {
          * @return The list of commit counts for everyone combined, for the last 52 weeks.
          */
         public List<Integer> getAllCommits() {
-            return all;
+            return Collections.unmodifiableList(all);
         }
 
         /**
@@ -437,7 +431,7 @@ public class GHRepositoryStatistics {
          * @return The list of commit counts for the owner, for the last 52 weeks.
          */
         public List<Integer> getOwnerCommits() {
-            return owner;
+            return Collections.unmodifiableList(owner);
         }
 
         Participation wrapUp(GitHub root) {
@@ -455,28 +449,22 @@ public class GHRepositoryStatistics {
      *             the io exception
      */
     public List<PunchCardItem> getPunchCard() throws IOException {
-        // Map to ArrayLists first, since there are no field names in the
-        // returned JSON.
-        Integer[][] list = root.createRequest().withUrlPath(getApiTailUrl("punch_card")).fetch(Integer[][].class);
-
-        // Convert to proper objects.
-        ArrayList<PunchCardItem> returnList = new ArrayList<>();
-        for (Integer[] item : list) {
-            PunchCardItem pci = new PunchCardItem(Arrays.asList(item));
-            returnList.add(pci);
-        }
-
-        return returnList;
+        PunchCardItem[] list = root.createRequest()
+                .withUrlPath(getApiTailUrl("punch_card"))
+                .fetch(PunchCardItem[].class);
+        return Arrays.asList(list);
     }
 
     /**
      * The type PunchCardItem.
      */
     public static class PunchCardItem {
-        private int dayOfWeek;
-        private int hourOfDay;
-        private int numberOfCommits;
 
+        private final int dayOfWeek;
+        private final int hourOfDay;
+        private final int numberOfCommits;
+
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         private PunchCardItem(List<Integer> item) {
             dayOfWeek = item.get(0);
             hourOfDay = item.get(1);

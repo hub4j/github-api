@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
@@ -103,7 +104,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     protected String getApiRoute() {
         if (owner == null) {
             // Issues returned from search to do not have an owner. Attempt to use url.
-            return StringUtils.prependIfMissing(getUrl().toString().replace(root.getApiUrl(), ""), "/");
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
     }
@@ -387,10 +390,14 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Repopulates this object.
      */
     public void refresh() throws IOException {
-        if (root.isOffline()) {
+        if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequest().withPreview(SHADOW_CAT).withUrlPath(url).fetchInto(this).wrapUp(owner);
+
+        URL url = getUrl();
+        if (url != null) {
+            root.createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);
+        }
     }
 
     /**

@@ -1,0 +1,102 @@
+[
+  {
+    "ref": "refs/heads/changes",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvY2hhbmdlcw==",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/changes",
+    "object": {
+      "sha": "1393706f1364742defbc28ba459082630ca979af",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/1393706f1364742defbc28ba459082630ca979af"
+    }
+  },
+  {
+    "ref": "refs/heads/gh-pages",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvZ2gtcGFnZXM=",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/gh-pages",
+    "object": {
+      "sha": "4e64a0f9c3d561ab8587d2f7b03074b8745b5943",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/4e64a0f9c3d561ab8587d2f7b03074b8745b5943"
+    }
+  },
+  {
+    "ref": "refs/heads/master",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvbWFzdGVy",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/master",
+    "object": {
+      "sha": "8051615eff597f4e49f4f47625e6fc2b49f26bfc",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/8051615eff597f4e49f4f47625e6fc2b49f26bfc"
+    }
+  },
+  {
+    "ref": "refs/heads/test/#UrlEncode",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC8jVXJsRW5jb2Rl",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/%23UrlEncode",
+    "object": {
+      "sha": "14fa3698221f91613b9e1d809434326e5ed546af",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/14fa3698221f91613b9e1d809434326e5ed546af"
+    }
+  },
+  {
+    "ref": "refs/heads/test/mergeable_branch",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC9tZXJnZWFibGVfYnJhbmNo",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/mergeable_branch",
+    "object": {
+      "sha": "b036909fcf45565c82c888ee326ebd0e382f6173",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/b036909fcf45565c82c888ee326ebd0e382f6173"
+    }
+  },
+  {
+    "ref": "refs/heads/test/rc",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC9yYw==",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/rc",
+    "object": {
+      "sha": "14fa3698221f91613b9e1d809434326e5ed546af",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/14fa3698221f91613b9e1d809434326e5ed546af"
+    }
+  },
+  {
+    "ref": "refs/heads/test/squashMerge",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC9zcXVhc2hNZXJnZQ==",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/squashMerge",
+    "object": {
+      "sha": "80902706c65747f9d8a7dbf82c451658efe2516d",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/80902706c65747f9d8a7dbf82c451658efe2516d"
+    }
+  },
+  {
+    "ref": "refs/heads/test/stable",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC9zdGFibGU=",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/stable",
+    "object": {
+      "sha": "1f40fdf4acf1adb246c109c21a22f617e4bd1ca8",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/1f40fdf4acf1adb246c109c21a22f617e4bd1ca8"
+    }
+  },
+  {
+    "ref": "refs/heads/test/unmergeable",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC91bm1lcmdlYWJsZQ==",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/unmergeable",
+    "object": {
+      "sha": "d4080cf9e2fa0959966d201f3dd60105fdf5bd97",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/d4080cf9e2fa0959966d201f3dd60105fdf5bd97"
+    }
+  },
+  {
+    "ref": "refs/heads/test/updateContentSquashMerge",
+    "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvdGVzdC91cGRhdGVDb250ZW50U3F1YXNoTWVyZ2U=",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/test/updateContentSquashMerge",
+    "object": {
+      "sha": "36526be0a94e2d315c30379c7a561b1f7125a35f",
+      "type": "commit",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/36526be0a94e2d315c30379c7a561b1f7125a35f"
+    }
+  }
+]

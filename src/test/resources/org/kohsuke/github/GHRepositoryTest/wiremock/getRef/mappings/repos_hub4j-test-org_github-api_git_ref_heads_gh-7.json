@@ -1,8 +1,8 @@
 {
-  "id": "79569c1e-168b-4816-930b-1ac370e164b9",
-  "name": "repos_hub4j_github-api_git_refs_heads_master",
+  "id": "019cbb3c-4211-4212-b6ff-fc2a505e4dd0",
+  "name": "repos_hub4j-test-org_github-api_git_ref_heads_gh",
   "request": {
-    "url": "/repos/hub4j/github-api/git/ref/heads/master",
+    "url": "/repos/hub4j-test-org/github-api/git/ref/heads/gh",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -11,24 +11,16 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "repos_hub4j_github-api_git_refs_heads_master-3.json",
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-single-reference\"}",
     "headers": {
-      "Date": "Thu, 21 May 2020 01:53:46 GMT",
+      "Date": "Wed, 20 May 2020 23:48:57 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Status": "404 Not Found",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4998",
-      "X-RateLimit-Reset": "1590029625",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
-      ],
-      "ETag": "W/\"26677f2557ca0b327908d0e7832aea69\"",
-      "Last-Modified": "Wed, 20 May 2020 22:54:46 GMT",
+      "X-RateLimit-Remaining": "4947",
+      "X-RateLimit-Reset": "1590020149",
       "X-Poll-Interval": "300",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
@@ -39,10 +31,11 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6EA:403C:271AF9:2E9847:5EC5DF2A"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "EFC6:5429:F7779:126AFA:5EC5C1E9"
     }
   },
-  "uuid": "79569c1e-168b-4816-930b-1ac370e164b9",
+  "uuid": "019cbb3c-4211-4212-b6ff-fc2a505e4dd0",
   "persistent": true,
-  "insertionIndex": 3
+  "insertionIndex": 7
 }

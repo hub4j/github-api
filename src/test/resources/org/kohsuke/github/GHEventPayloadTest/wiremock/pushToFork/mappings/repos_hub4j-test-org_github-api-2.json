@@ -43,8 +43,5 @@
   },
   "uuid": "90aa0017-3f50-4829-bda4-6531fbcfba60",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-2",
   "insertionIndex": 2
 }

@@ -335,6 +335,10 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is(mockGitHub.apiServer().baseUrl() + "/repos/hub4j-test-org/github-api"));
         assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
 
+        // ensure that root has been bound after populate
+        event.getRepository().getSource().getRef("heads/master");
+        event.getRepository().getParent().getRef("heads/master");
+
         // Source
         event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
         assertThat(event.getRepository().getSource().getFullName(), is("hub4j/github-api"));
@@ -342,6 +346,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         // Parent
         event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
         assertThat(event.getRepository().getParent().getFullName(), is("hub4j/github-api"));
+
     }
 
     // TODO implement support classes and write test

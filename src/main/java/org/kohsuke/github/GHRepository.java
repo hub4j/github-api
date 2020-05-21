@@ -2160,6 +2160,12 @@ public class GHRepository extends GHObject {
         if (root.isOffline() && owner != null) {
             owner.wrapUp(root);
         }
+        if (source != null) {
+            source.wrap(root);
+        }
+        if (parent != null) {
+            parent.wrap(root);
+        }
         return this;
     }
 
@@ -2482,10 +2488,10 @@ public class GHRepository extends GHObject {
         if (fork && source == null) {
             populate();
         }
-        if (source == null)
+        if (source == null) {
             return null;
-        if (source.root == null)
-            source = root.getRepository(source.getFullName());
+        }
+
         return source;
     }
 
@@ -2504,10 +2510,9 @@ public class GHRepository extends GHObject {
             populate();
         }
 
-        if (parent == null)
+        if (parent == null) {
             return null;
-        if (parent.root == null)
-            parent = root.getRepository(parent.getFullName());
+        }
         return parent;
     }
 

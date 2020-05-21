@@ -340,9 +340,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
             fail("Invalid rate limit missing some records should throw");
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(IOException.class));
-            assertThat(e.getCause().getCause(), instanceOf(ValueInstantiationException.class));
-            assertThat(e.getCause().getCause().getMessage(),
+            assertThat(e.getCause(), instanceOf(ValueInstantiationException.class));
+            assertThat(e.getCause().getMessage(),
                     containsString(
                             "Cannot construct instance of `org.kohsuke.github.GHRateLimit`, problem: `java.lang.NullPointerException`"));
         }
@@ -352,9 +351,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
             fail("Invalid rate limit record missing a value should throw");
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(IOException.class));
-            assertThat(e.getCause().getCause(), instanceOf(MismatchedInputException.class));
-            assertThat(e.getCause().getCause().getMessage(),
+            assertThat(e.getCause(), instanceOf(MismatchedInputException.class));
+            assertThat(e.getCause().getMessage(),
                     containsString("Missing required creator property 'reset' (index 2)"));
         }
 

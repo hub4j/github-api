@@ -1,14 +1,12 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
-import com.github.tomakehurst.wiremock.verification.*;
 import com.google.gson.*;
 
 import java.io.File;
@@ -19,6 +17,8 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.common.Gzip.unGzipToString;
@@ -264,6 +264,24 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return targetPath;
     }
 
+    @Nonnull
+    public String mapToMockGitHub(String body) {
+        body = body.replace("https://api.github.com", this.apiServer().baseUrl());
+
+        if (this.rawServer() != null) {
+            body = body.replace("https://raw.githubusercontent.com", this.rawServer().baseUrl());
+        } else {
+            body = body.replace("https://raw.githubusercontent.com", this.apiServer().baseUrl() + "/raw");
+        }
+
+        if (this.uploadsServer() != null) {
+            body = body.replace("https://uploads.github.com", this.uploadsServer().baseUrl());
+        } else {
+            body = body.replace("https://uploads.github.com", this.apiServer().baseUrl() + "/uploads");
+        }
+        return body;
+    }
+
     /**
      * A number of modifications are needed as runtime to make responses target the WireMock server and not accidentally
      * switch to using the live github servers.
@@ -286,19 +304,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
                 String body;
                 body = getBodyAsString(response, headers);
-                body = body.replace("https://api.github.com", rule.apiServer().baseUrl());
-
-                if (rule.rawServer() != null) {
-                    body = body.replace("https://raw.githubusercontent.com", rule.rawServer().baseUrl());
-                } else {
-                    body = body.replace("https://raw.githubusercontent.com", rule.apiServer().baseUrl() + "/raw");
-                }
-
-                if (rule.uploadsServer() != null) {
-                    body = body.replace("https://uploads.github.com", rule.uploadsServer().baseUrl());
-                } else {
-                    body = body.replace("https://uploads.github.com", rule.apiServer().baseUrl() + "/uploads");
-                }
+                body = rule.mapToMockGitHub(body);
 
                 builder.body(body);
 

@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/master",
+  "node_id": "MDM6UmVmNjE3MjEwOnJlZnMvaGVhZHMvbWFzdGVy",
+  "url": "https://api.github.com/repos/hub4j/github-api/git/refs/heads/master",
+  "object": {
+    "sha": "ba12efea9d8604cad5c174620628aceb1fe224fb",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j/github-api/git/commits/ba12efea9d8604cad5c174620628aceb1fe224fb"
+  }
+}

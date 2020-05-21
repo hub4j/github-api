@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +17,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -30,6 +33,8 @@ import javax.annotation.Nonnull;
  *            the type of the data parsed from the body of a {@link ResponseInfo}.
  */
 class GitHubResponse<T> {
+
+    private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());
 
     private final int statusCode;
 
@@ -83,9 +88,10 @@ class GitHubResponse<T> {
             inject.addValue(ResponseInfo.class, responseInfo);
 
             return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
+        } catch (JsonMappingException | JsonParseException e) {
+            String message = "Failed to deserialize: " + data;
+            LOGGER.log(Level.FINE, message);
+            throw e;
         }
     }
 
@@ -108,9 +114,10 @@ class GitHubResponse<T> {
         String data = responseInfo.getBodyAsString();
         try {
             return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);
-        } catch (JsonMappingException e) {
-            String message = "Failed to deserialize " + data;
-            throw new IOException(message, e);
+        } catch (JsonMappingException | JsonParseException e) {
+            String message = "Failed to deserialize: " + data;
+            LOGGER.log(Level.FINE, message);
+            throw e;
         }
     }
 
@@ -307,6 +314,7 @@ class GitHubResponse<T> {
          * @throws IOException
          *             if an I/O Exception occurs.
          */
+        @Nonnull
         String getBodyAsString() throws IOException {
             InputStreamReader r = null;
             try {

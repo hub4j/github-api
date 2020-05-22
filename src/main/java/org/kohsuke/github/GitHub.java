@@ -26,9 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import com.neuronrobotics.bowlerstudio.scripting.PasswordManager;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+
 
 import java.awt.Desktop;
 import java.io.*;
@@ -917,10 +915,10 @@ public class GitHub {
         int WEBSERVER_PORT =3737;
         String state = sb.toString();// unguessable random temporary string for use in API
         com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress("localhost", WEBSERVER_PORT), 0);
-        class MyHttpHandler implements  HttpHandler{
+        class MyHttpHandler implements  com.sun.net.httpserver.HttpHandler{
         	public String tempCode = null;
 			@Override
-			public void handle(HttpExchange exchange) throws IOException {
+			public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
 				tempCode = exchange.getRequestHeaders().getFirst("code");
 			}
 		};

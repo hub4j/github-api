@@ -893,8 +893,11 @@ public class GitHub {
      *       
      * @note This method blocks for a very long time when waiting for user feedback
      */
-    public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,boolean allowSignup, String login,
-    		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
+    public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,
+    		boolean allowSignup, 
+    		String login,
+    		@Nonnull  String OAuthApplicationclient_id,
+    		@Nonnull  String OAuthApplicationSecret,
     		URL redirect_after_auth) 
     				throws Exception {
     	// chose a Character random from this String 

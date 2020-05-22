@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -854,7 +855,76 @@ public class GitHub {
 
         return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
     }
+    /**
+     * Creates a new authorization.
+     * <p>
+     * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
+     *
+     * @param scope
+     *            the scope
 
+     * @param login the username desired to login as
+     * 			null means let the users browser decide
+     * @param OAuthApplicationID the public ID for the OAuth application that is requesting the token
+     * 
+     * @param OAuthApplicationSecret the secret code passed to GitHub to identify the application
+     * @param allowSignup If you want the user to signup for Github in the flow, set true
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps">Documentation</a>
+     * 
+     * @note this method will use http://localhost:3737/success as the 'Authorization callback URL'
+     * 		 this method will start an http server on port 3737 for the duration of the call
+     *       the server will be closed when the user authenticates the application via the web browser
+     *       or the server will be closed after 200 seconds.
+     *       
+     * @note This method blocks for a very long time when waiting for user feedback
+     */
+    public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,boolean allowSignup, String login,
+    		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
+    		URL redirect_after_auth) 
+    				throws IOException {
+        String tempCode = null;
+        String state = null;
+        // TODO block here until webflow complete
+        return createOAuthTokenWebFlowStepTwo(OAuthApplicationclient_id,OAuthApplicationSecret,tempCode,state,redirect_after_auth);
+    }
+    /**
+     * Creates a new authorization.
+     * <p>
+     * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
+     * 
+	 * @param state the unguessable random string you provided in Step 1. See https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github
+	 * 
+     * @param OAuthApplicationID the public ID for the OAuth application that is requesting the token
+     * 
+     * @param OAuthApplicationSecret the secret code passed to GitHub to identify the application
+     * @return the gh authorization
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github">Documentation</a>
+     * 
+     */
+    public GHAuthorization createOAuthTokenWebFlowStepTwo( 
+    		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
+    		@Nonnull String temp_OAuth_Code,
+    		String state,
+    		URL redirect_after_auth) 
+    				throws IOException {
+        Requester requester = createRequest()
+        						.setRawUrlPath("https://github.com/login/oauth/access_token")
+        						.with("client_id", OAuthApplicationclient_id)
+        						.with("client_secret", OAuthApplicationSecret)
+        						.with("code", temp_OAuth_Code)
+        						
+        						;
+        if(state!=null)
+        	requester.with("state", state);
+        if(redirect_after_auth!=null)
+        	requester.with("redirect_uri", redirect_after_auth.toExternalForm());
+        return requester.method("POST").fetch(GHAuthorization.class).wrap(this);
+    }
     /**
      * Creates a new authorization using an OTP.
      * <p>
@@ -889,6 +959,8 @@ public class GitHub {
             return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
         }
     }
+    
+    
 
     /**
      * Create or get auth gh authorization.

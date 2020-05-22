@@ -26,8 +26,15 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import com.neuronrobotics.bowlerstudio.scripting.PasswordManager;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
+import java.awt.Desktop;
 import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,9 +45,9 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+
 import static org.kohsuke.github.Previews.INERTIA;
 import static org.kohsuke.github.Previews.MACHINE_MAN;
-
 /**
  * Root of the GitHub API.
  *
@@ -868,8 +875,13 @@ public class GitHub {
      * @param OAuthApplicationID the public ID for the OAuth application that is requesting the token
      * 
      * @param OAuthApplicationSecret the secret code passed to GitHub to identify the application
+     * 				BE CAREFUL HERE this key needs to be kept secret so be mindful of that when 
+     * 				using this API
+     * 
      * @param allowSignup If you want the user to signup for Github in the flow, set true
+     * 
      * @return the gh authorization
+     * 
      * @throws IOException
      *             the io exception
      * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps">Documentation</a>
@@ -884,12 +896,79 @@ public class GitHub {
     public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,boolean allowSignup, String login,
     		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
     		URL redirect_after_auth) 
-    				throws IOException {
-        String tempCode = null;
-        String state = null;
-        // TODO block here until webflow complete
-        return createOAuthTokenWebFlowStepTwo(OAuthApplicationclient_id,OAuthApplicationSecret,tempCode,state,redirect_after_auth);
+    				throws Exception {
+    	// chose a Character random from this String 
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                    + "0123456789"
+                                    + "abcdefghijklmnopqrstuvxyz"; 
+  
+        // create StringBuffer size of AlphaNumericString 
+        StringBuilder sb = new StringBuilder(20); 
+        for (int i = 0; i < 20; i++) { 
+            // generate a random number between 
+            // 0 to AlphaNumericString variable length 
+            int index  = (int)(AlphaNumericString.length() * Math.random());  
+            // add Character one by one in end of sb 
+            sb.append(AlphaNumericString.charAt(index)); 
+        } 
+        int WEBSERVER_PORT =3737;
+        String state = sb.toString();// unguessable random temporary string for use in API
+        com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress("localhost", WEBSERVER_PORT), 0);
+        class MyHttpHandler implements  HttpHandler{
+        	public String tempCode = null;
+			@Override
+			public void handle(HttpExchange exchange) throws IOException {
+				tempCode = exchange.getRequestHeaders().getFirst("code");
+			}
+		};
+		MyHttpHandler handler=new MyHttpHandler();
+		server.createContext("/success", handler);
+        server.setExecutor(null); // creates a default executor
+        server.start();
+        
+        
+		String doRequest = "https://github.com/login/oauth/authorize?" +
+		"client_id=" + OAuthApplicationclient_id + "&"	
+		+ "redirect_uri=http%3A%2F%2Flocalhost%3A"+WEBSERVER_PORT+"%2Fsuccess" + "&" +
+		"response_type=code" + "&" + 
+		login!=null?"login="+login.replaceAll("@", "%40") + "&":"" + 
+		"allow_signup=true" + "&" + 
+		"state="+state + "&" +
+		"scope=";
+        int i=0;
+		for (String s:scope) {
+			s = s.replaceAll(":", "%3A");
+			doRequest += s ;
+			if(i!=scope.size()-1)
+				doRequest +=  "%20";
+			i++;
+		}
+		doRequest = doRequest.trim();
+		// Send request in step 1
+		// https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#1-request-a-users-github-identity
+		// User interaction is needed to approve the authorization
+		// Open this URL in a desktop browser
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+			Desktop.getDesktop().browse(new URI(doRequest));
+		
+        
+        // block here until webflow complete
+        long start = System.currentTimeMillis();
+		// 200 second timeout
+		while (System.currentTimeMillis() - start < 200 * 1000 && handler.tempCode == null) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				break;
+			}
+
+		}
+		server.stop(0);
+        return createOAuthTokenWebFlowStepTwo(OAuthApplicationclient_id,OAuthApplicationSecret,handler.tempCode,state,redirect_after_auth);
     }
+    
     /**
      * Creates a new authorization.
      * <p>
@@ -922,7 +1001,7 @@ public class GitHub {
         if(state!=null)
         	requester.with("state", state);
         if(redirect_after_auth!=null)
-        	requester.with("redirect_uri", redirect_after_auth.toExternalForm());
+        	requester.with("redirect_uri", redirect_after_auth);// TODO is there a correct way to encode the URL?
         return requester.method("POST").fetch(GHAuthorization.class).wrap(this);
     }
     /**

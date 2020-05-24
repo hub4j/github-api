@@ -27,19 +27,19 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-
 import static org.kohsuke.github.Previews.INERTIA;
 import static org.kohsuke.github.Previews.MACHINE_MAN;
+
 /**
  * Root of the GitHub API.
  *

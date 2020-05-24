@@ -28,20 +28,12 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 
-import java.awt.Desktop;
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
@@ -898,7 +890,7 @@ public class GitHub {
     		String login,
     		@Nonnull  String OAuthApplicationclient_id,
     		@Nonnull  String OAuthApplicationSecret,
-    		URL redirect_after_auth) 
+    		java.net.URL redirect_after_auth) 
     				throws Exception {
     	// chose a Character random from this String 
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -916,7 +908,7 @@ public class GitHub {
         } 
         int WEBSERVER_PORT =3737;
         String state = sb.toString();// unguessable random temporary string for use in API
-        com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress("localhost", WEBSERVER_PORT), 0);
+        com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new java.net.InetSocketAddress("localhost", WEBSERVER_PORT), 0);
         class MyHttpHandler implements  com.sun.net.httpserver.HttpHandler{
         	public String tempCode = null;
         	public String myState;
@@ -927,7 +919,7 @@ public class GitHub {
 			@Override
 			public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
 
-				URI requestURI = exchange.getRequestURI();
+				java.net.URI requestURI = exchange.getRequestURI();
 				String query = requestURI.getQuery();
 				System.out.println(query);
 				String[] allQuery = query.split("&");
@@ -969,8 +961,8 @@ public class GitHub {
 		// https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#1-request-a-users-github-identity
 		// User interaction is needed to approve the authorization
 		// Open this URL in a desktop browser
-		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
-			Desktop.getDesktop().browse(new URI(doRequest));
+		if (java.awt.Desktop.isDesktopSupported() && java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.BROWSE))
+			java.awt.Desktop.getDesktop().browse(new java.net.URI(doRequest));
 		
         
         // block here until webflow complete
@@ -1010,7 +1002,7 @@ public class GitHub {
     		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
     		@Nonnull String temp_OAuth_Code,
     		String state,
-    		URL redirect_after_auth) 
+    		java.net.URL redirect_after_auth) 
     				throws IOException {
         Requester requester = createRequest()
         						.setRawUrlPath("https://github.com/login/oauth/access_token")

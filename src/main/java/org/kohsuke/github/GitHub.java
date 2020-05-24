@@ -34,11 +34,13 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -917,12 +919,30 @@ public class GitHub {
         com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress("localhost", WEBSERVER_PORT), 0);
         class MyHttpHandler implements  com.sun.net.httpserver.HttpHandler{
         	public String tempCode = null;
+        	public String myState;
+        	
+        	public MyHttpHandler(String state) {
+        		myState=state;
+        	}
 			@Override
 			public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
-				tempCode = exchange.getRequestHeaders().getFirst("code");
+
+				URI requestURI = exchange.getRequestURI();
+				String query = requestURI.getQuery();
+				System.out.println(query);
+				String[] allQuery = query.split("&");
+				String[] codeParts = allQuery[0].split("=");
+				String[] stateParts = allQuery[1].split("=");
+				if (myState.contentEquals(stateParts[1]))
+					tempCode = codeParts[1];
+				String response = "This is the response";
+				exchange.sendResponseHeaders(200, response.length());
+				OutputStream os = exchange.getResponseBody();
+				os.write(response.getBytes());
+				os.close();
 			}
 		};
-		MyHttpHandler handler=new MyHttpHandler();
+		MyHttpHandler handler=new MyHttpHandler(state);
 		server.createContext("/success", handler);
         server.setExecutor(null); // creates a default executor
         server.start();
@@ -932,7 +952,7 @@ public class GitHub {
 		"client_id=" + OAuthApplicationclient_id + "&"	
 		+ "redirect_uri=http%3A%2F%2Flocalhost%3A"+WEBSERVER_PORT+"%2Fsuccess" + "&" +
 		"response_type=code" + "&" + 
-		login!=null?"login="+login.replaceAll("@", "%40") + "&":"" + 
+		(login!=null?"login="+login.replaceAll("@", "%40") + "&":"") + 
 		"allow_signup=true" + "&" + 
 		"state="+state + "&" +
 		"scope=";

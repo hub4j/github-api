@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class GithubWebFlowOAuthTest extends AbstractGitHubWireMockTest {
 
     @Test
-    public void test2faToken() throws Exception {
+    public void testWebFlowToken() throws Exception {
         assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         List<String> asList = Arrays

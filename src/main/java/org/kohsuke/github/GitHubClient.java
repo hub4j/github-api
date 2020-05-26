@@ -45,7 +45,7 @@ import static java.util.logging.Level.*;
  * A GitHub API Client
  * <p>
  * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link #rateLimit()}.
+ * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
  * </p>
  */
 abstract class GitHubClient {
@@ -71,9 +71,10 @@ abstract class GitHubClient {
 
     private HttpConnector connector;
 
-    private final Object headerRateLimitLock = new Object();
-    private GHRateLimit headerRateLimit = null;
-    private volatile GHRateLimit rateLimit = null;
+    private final Object rateLimitLock = new Object();
+
+    @Nonnull
+    private GHRateLimit rateLimit = GHRateLimit.Default();
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -211,9 +212,11 @@ abstract class GitHubClient {
     /**
      * Gets the current rate limit from the server.
      *
-     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In
-     * that, if {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. Otherwise, a
-     * placeholder {@link GHRateLimit} instance with {@link GHRateLimit.UnknownLimitRecord}s will be returned.
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
+     * case, if the most recent {@link GHRateLimit} will be returned.
+     *
+     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
+     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      *
      * @return the rate limit
      * @throws IOException
@@ -221,59 +224,87 @@ abstract class GitHubClient {
      */
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
+        return getRateLimit("/rate_limit");
+    }
+
+    @Nonnull
+    GHRateLimit getRateLimit(@Nonnull String urlPath) throws IOException {
         GHRateLimit result;
         try {
             result = fetch(JsonRateLimit.class, "/rate_limit").resources;
         } catch (FileNotFoundException e) {
             // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+            LOGGER.log(FINE, "/rate_limit returned 404 Not Found.");
+
             // However some newer versions of GHE include rate limit header information
-            // Use that if available
-            result = lastRateLimit();
-            if (result == null || result.isExpired()) {
-                // return a default rate limit
-                result = GHRateLimit.Unknown();
-            }
+            // If the header info is missing and the endpoint returns 404, fill the rate limit
+            // with unknown
+            result = GHRateLimit.Unknown(urlPath);
         }
-
-        return rateLimit = result;
+        return updateRateLimit(result);
     }
 
     /**
-     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit (for example
-     * GitHub Enterprise) or if no requests have been made.
+     * Returns the most recently observed rate limit data.
      *
-     * @return the most recently observed rate limit data or {@code null}.
+     * Generally, instead of calling this you should implement a {@link RateLimitChecker} or call
+     *
+     * @return the most recently observed rate limit data. This may include expired or
+     *         {@link GHRateLimit.UnknownLimitRecord} entries.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
-    @CheckForNull
-    public GHRateLimit lastRateLimit() {
-        synchronized (headerRateLimitLock) {
-            return headerRateLimit;
+    @Nonnull
+    @Deprecated
+    GHRateLimit lastRateLimit() {
+        synchronized (rateLimitLock) {
+            return rateLimit;
         }
     }
 
     /**
-     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     * Gets the current rate limit for an endpoint while trying not to actually make any remote requests unless
+     * absolutely necessary.
      *
-     * If {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. If the information
-     * returned from the last call to {@link #getRateLimit()} is not {@code null} and is not expired, then it will be
-     * returned. Otherwise, the result of a call to {@link #getRateLimit()} will be returned.
+     * If the {@link GHRateLimit.Record} for {@code urlPath} is not expired, it is returned. If the
+     * {@link GHRateLimit.Record} for {@code urlPath} is expired, {@link #getRateLimit()} will be called to get the
+     * current rate limit.
      *
-     * @return the current rate limit data.
+     * @param urlPath
+     *            the path for the endpoint to get the rate limit for.
+     *
+     * @return the current rate limit data. {@link GHRateLimit.Record}s in this instance may be expired when returned.
      * @throws IOException
      *             if there was an error getting current rate limit data.
      */
     @Nonnull
-    public GHRateLimit rateLimit() throws IOException {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
-                return headerRateLimit;
+    GHRateLimit rateLimit(@Nonnull String urlPath) throws IOException {
+        synchronized (rateLimitLock) {
+            if (rateLimit.getRecordForUrlPath(urlPath).isExpired()) {
+                getRateLimit(urlPath);
             }
+            return rateLimit;
         }
-        GHRateLimit result = this.rateLimit;
-        if (result == null || result.isExpired()) {
-            result = getRateLimit();
+    }
+
+    /**
+     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
+     * out of order, we want to pick the one with the most recent info from the server. Calls
+     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)}
+     *
+     * @param observed
+     *            {@link GHRateLimit.Record} constructed from the response header information
+     */
+    private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
+        synchronized (rateLimitLock) {
+            observed = rateLimit.getMergedRateLimit(observed);
+
+            if (rateLimit != observed) {
+                rateLimit = observed;
+                LOGGER.log(FINE, "Rate limit now: {0}", rateLimit);
+            }
+            return rateLimit;
         }
-        return result;
     }
 
     /**
@@ -517,58 +548,25 @@ abstract class GitHubClient {
     }
 
     private void noteRateLimit(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
-        if (responseInfo.request().urlPath().startsWith("/search")) {
-            // the search API uses a different rate limit
-            return;
-        }
-
-        String limitString = responseInfo.headerField("X-RateLimit-Limit");
-        if (StringUtils.isBlank(limitString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-        String remainingString = responseInfo.headerField("X-RateLimit-Remaining");
-        if (StringUtils.isBlank(remainingString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-        String resetString = responseInfo.headerField("X-RateLimit-Reset");
-        if (StringUtils.isBlank(resetString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-
-        int limit, remaining;
-        long reset;
         try {
+            String limitString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Limit"),
+                    "Missing X-RateLimit-Limit");
+            String remainingString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Remaining"),
+                    "Missing X-RateLimit-Remaining");
+            String resetString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Reset"),
+                    "Missing X-RateLimit-Reset");
+            int limit, remaining;
+            long reset;
             limit = Integer.parseInt(limitString);
-        } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limitString, e);
-            }
-            return;
-        }
-        try {
-
             remaining = Integer.parseInt(remainingString);
-        } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remainingString, e);
-            }
-            return;
-        }
-        try {
             reset = Long.parseLong(resetString);
-        } catch (NumberFormatException e) {
+            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
+            updateRateLimit(GHRateLimit.fromHeaderRecord(observed, responseInfo.request().urlPath()));
+        } catch (NumberFormatException | NullPointerException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + resetString, e);
+                LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
             }
-            return;
         }
-
-        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
-
-        updateCoreRateLimit(observed);
     }
 
     private static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
@@ -586,23 +584,6 @@ abstract class GitHubClient {
         if (isAnonymous())
             throw new IllegalStateException(
                     "This operation requires a credential but none is given to the GitHub constructor");
-    }
-
-    /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server. Calls
-     * {@link #shouldReplace(GHRateLimit.Record, GHRateLimit.Record)}
-     *
-     * @param observed
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     */
-    private void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit == null || shouldReplace(observed, headerRateLimit.getCore())) {
-                headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
-                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
-            }
-        }
     }
 
     private static class GHApiInfo {
@@ -651,37 +632,6 @@ abstract class GitHubClient {
             return response.statusCode() == HTTP_UNAUTHORIZED && response.headerField("X-GitHub-Media-Type") != null;
         } catch (IOException e) {
             return false;
-        }
-    }
-
-    /**
-     * Determine if one {@link GHRateLimit.Record} should replace another. Header date is only accurate to the second,
-     * so we look at the information in the record itself.
-     *
-     * {@link GHRateLimit.UnknownLimitRecord}s are always replaced by regular {@link GHRateLimit.Record}s. Regular
-     * {@link GHRateLimit.Record}s are never replaced by {@link GHRateLimit.UnknownLimitRecord}s. Candidates with
-     * resetEpochSeconds later than current record are more recent. Candidates with the same reset and a lower remaining
-     * count are more recent. Candidates with an earlier reset are older.
-     *
-     * @param candidate
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     * @param current
-     *            the current {@link GHRateLimit.Record} record
-     */
-    static boolean shouldReplace(@Nonnull GHRateLimit.Record candidate, @Nonnull GHRateLimit.Record current) {
-        if (candidate instanceof GHRateLimit.UnknownLimitRecord
-                && !(current instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Unknown candidate never replaces a regular record
-            return false;
-        } else if (current instanceof GHRateLimit.UnknownLimitRecord
-                && !(candidate instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Any real record should replace an unknown Record.
-            return true;
-        } else {
-            // records of the same type compare to each other as normal.
-            return current.getResetEpochSeconds() < candidate.getResetEpochSeconds()
-                    || (current.getResetEpochSeconds() == candidate.getResetEpochSeconds()
-                            && current.getRemaining() > candidate.getRemaining());
         }
     }
 

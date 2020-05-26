@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.oneOf;
 
@@ -108,7 +109,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
-        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
         assertFalse(gitHub.isCredentialValid());
         // For invalid credentials, we get a 401 but it includes anonymous rate limit headers
         assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
@@ -118,18 +119,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCredentialValidEnterprise() throws IOException {
         // Simulated GHE: getRateLimit returns 404
-        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit().getCore().isExpired(), is(true));
         assertTrue(gitHub.isCredentialValid());
-        // lastRateLimit stays null when 404 is encountered
-        assertThat(gitHub.lastRateLimit(), nullValue());
+
+        // lastRateLimitUpdates because 404 still includes header rate limit info
+        assertThat(gitHub.lastRateLimit(), notNullValue());
+        assertThat(gitHub.lastRateLimit(), not(equalTo(GHRateLimit.Default())));
+        assertThat(gitHub.lastRateLimit().getCore().isExpired(), is(false));
 
         gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
-        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
         assertFalse(gitHub.isCredentialValid());
         // Simulated GHE: For invalid credentials, we get a 401 that does not include ratelimit info
-        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
     }
 
     @Test

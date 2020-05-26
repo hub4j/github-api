@@ -373,12 +373,19 @@ public class GitHub {
     }
 
     /**
-     * Gets the current rate limit.
+     * Gets the current rate limit from the server.
+     *
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
+     * case, if the most recent {@link GHRateLimit} will be returned.
+     *
+     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
+     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      *
      * @return the rate limit
      * @throws IOException
      *             the io exception
      */
+    @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
         return client.getRateLimit();
     }
@@ -388,8 +395,11 @@ public class GitHub {
      * GitHub Enterprise) or if no requests have been made.
      *
      * @return the most recently observed rate limit data or {@code null}.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
-    @CheckForNull
+    @Nonnull
+    @Deprecated
     public GHRateLimit lastRateLimit() {
         return client.lastRateLimit();
     }
@@ -400,10 +410,13 @@ public class GitHub {
      * @return the current rate limit data.
      * @throws IOException
      *             if we couldn't get the current rate limit data.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
     @Nonnull
+    @Deprecated
     public GHRateLimit rateLimit() throws IOException {
-        return client.rateLimit();
+        return client.rateLimit("");
     }
 
     /**

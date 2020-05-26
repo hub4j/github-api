@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
@@ -39,6 +40,8 @@ class GitHubRateLimitChecker {
     @Nonnull
     private final RateLimitChecker integrationManifest;
 
+    private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());
+
     GitHubRateLimitChecker() {
         this(RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE);
     }
@@ -48,13 +51,6 @@ class GitHubRateLimitChecker {
             @Nonnull RateLimitChecker graphql,
             @Nonnull RateLimitChecker integrationManifest) {
         this.core = Objects.requireNonNull(core);
-
-        // for now only support rate limiting on core
-        // remove these asserts when that changes
-        assert search == RateLimitChecker.NONE;
-        assert graphql == RateLimitChecker.NONE;
-        assert integrationManifest == RateLimitChecker.NONE;
-
         this.search = Objects.requireNonNull(search);
         this.graphql = Objects.requireNonNull(graphql);
         this.integrationManifest = Objects.requireNonNull(integrationManifest);
@@ -98,7 +94,7 @@ class GitHubRateLimitChecker {
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
-        GHRateLimit rateLimit = client.rateLimit();
+        GHRateLimit rateLimit = client.rateLimit(request.urlPath());
         GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
         long waitCount = 0;
         try {
@@ -112,7 +108,7 @@ class GitHubRateLimitChecker {
                 Thread.sleep(1000);
 
                 // After the first wait, always request a new rate limit from the server.
-                rateLimit = client.getRateLimit();
+                rateLimit = client.getRateLimit(request.urlPath());
                 rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
             }
         } catch (InterruptedException e) {

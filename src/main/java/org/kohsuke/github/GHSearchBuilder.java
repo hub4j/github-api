@@ -25,6 +25,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         super(root);
         this.receiverType = receiverType;
         req.withUrlPath(getApiUrl());
+        req.rateLimit(GitHubRateLimitSpecifier.SEARCH);
     }
 
     /**

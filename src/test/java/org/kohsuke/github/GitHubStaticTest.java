@@ -68,14 +68,14 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         GHRateLimit.UnknownLimitRecord.unknownLimitResetSeconds = 5;
         GHRateLimit.UnknownLimitRecord.reset();
 
-        GHRateLimit.Record unknown0 = GHRateLimit.Unknown("").getCore();
+        GHRateLimit.Record unknown0 = GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore();
 
         Thread.sleep(2000);
 
         // To reduce object creation: There is only one valid Unknown record at a time.
         assertThat("Unknown current should should limit the creation of new unknown records",
                 unknown0,
-                sameInstance(GHRateLimit.Unknown("").getCore()));
+                sameInstance(GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore()));
 
         // For testing, we create an new unknown.
         GHRateLimit.Record unknown1 = new GHRateLimit.UnknownLimitRecord();
@@ -108,7 +108,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         GHRateLimit.Record unknownExpired0 = unknown0;
         GHRateLimit.Record unknownExpired1 = unknown1;
-        unknown0 = GHRateLimit.Unknown("").getCore();
+        unknown0 = GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore();
 
         // Rate-limit records maybe created and returned in different orders.
         // We should update to the unexpired regular records over unknowns.

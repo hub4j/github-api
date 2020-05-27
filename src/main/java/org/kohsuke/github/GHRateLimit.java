@@ -26,7 +26,6 @@ import static java.util.logging.Level.FINEST;
  */
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHRateLimit {
-
     /**
      * Remaining calls that can be made.
      *
@@ -75,32 +74,35 @@ public class GHRateLimit {
     }
 
     @Nonnull
-    static GHRateLimit Unknown(String urlPath) {
-        return fromHeaderRecord(UnknownLimitRecord.current(), urlPath);
+    static GHRateLimit Unknown(@Nonnull GitHubRateLimitSpecifier endpoint) {
+        return fromHeaderRecord(UnknownLimitRecord.current(), endpoint);
     }
 
     @Nonnull
-    static GHRateLimit fromHeaderRecord(@Nonnull Record header, String urlPath) {
-        if (urlPath.startsWith("/search")) {
+    static GHRateLimit fromHeaderRecord(@Nonnull Record header, @Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) {
+        if (rateLimitSpecifier == GitHubRateLimitSpecifier.CORE
+                || rateLimitSpecifier == GitHubRateLimitSpecifier.NONE) {
+            return new GHRateLimit(header,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT);
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.SEARCH) {
             return new GHRateLimit(UnknownLimitRecord.DEFAULT,
                     header,
                     UnknownLimitRecord.DEFAULT,
                     UnknownLimitRecord.DEFAULT);
-        } else if (urlPath.startsWith("/graphql")) {
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.GRAPHQL) {
             return new GHRateLimit(UnknownLimitRecord.DEFAULT,
                     UnknownLimitRecord.DEFAULT,
                     header,
                     UnknownLimitRecord.DEFAULT);
-        } else if (urlPath.startsWith("/app-manifests")) {
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.INTEGRATION_MANIFEST) {
             return new GHRateLimit(UnknownLimitRecord.DEFAULT,
                     UnknownLimitRecord.DEFAULT,
                     UnknownLimitRecord.DEFAULT,
                     header);
         } else {
-            return new GHRateLimit(header,
-                    UnknownLimitRecord.DEFAULT,
-                    UnknownLimitRecord.DEFAULT,
-                    UnknownLimitRecord.DEFAULT);
+            throw new IllegalArgumentException("Unknown rate limit specifier: " + rateLimitSpecifier.toString());
         }
     }
 
@@ -272,20 +274,24 @@ public class GHRateLimit {
     /**
      * Gets the appropriate {@link Record} for a particular url path.
      *
-     * @param urlPath
-     *            the url path of the request
+     * @param endpoint
+     *            the rate limit endpoint specifier
      * @return the {@link Record} for a url path.
      */
     @Nonnull
-    Record getRecordForUrlPath(@Nonnull String urlPath) {
-        if (urlPath.startsWith("/search")) {
-            return getSearch();
-        } else if (urlPath.startsWith("/graphql")) {
-            return getGraphQL();
-        } else if (urlPath.startsWith("/app-manifests")) {
-            return getIntegrationManifest();
-        } else {
+    Record getRecordForUrlPath(@Nonnull GitHubRateLimitSpecifier endpoint) {
+        if (endpoint == GitHubRateLimitSpecifier.CORE) {
             return getCore();
+        } else if (endpoint == GitHubRateLimitSpecifier.SEARCH) {
+            return getSearch();
+        } else if (endpoint == GitHubRateLimitSpecifier.GRAPHQL) {
+            return getGraphQL();
+        } else if (endpoint == GitHubRateLimitSpecifier.INTEGRATION_MANIFEST) {
+            return getIntegrationManifest();
+        } else if (endpoint == GitHubRateLimitSpecifier.NONE) {
+            return UnknownLimitRecord.DEFAULT;
+        } else {
+            throw new IllegalArgumentException("Unknown rate limit specifier: " + endpoint.toString());
         }
     }
 

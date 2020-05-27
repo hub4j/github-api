@@ -88,14 +88,14 @@ class GitHubRateLimitChecker {
      *             if there is an I/O error
      */
     void checkRateLimit(GitHubClient client, GitHubRequest request) throws IOException {
-        RateLimitChecker guard = selectChecker(request.urlPath());
+        RateLimitChecker guard = selectChecker(request.rateLimitSpecifier());
         if (guard == RateLimitChecker.NONE) {
             return;
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
-        GHRateLimit rateLimit = client.rateLimit(request.urlPath());
-        GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
+        GHRateLimit rateLimit = client.rateLimit(request.rateLimitSpecifier());
+        GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.rateLimitSpecifier());
         long waitCount = 0;
         try {
             while (guard.checkRateLimit(rateLimitRecord, waitCount)) {
@@ -108,8 +108,8 @@ class GitHubRateLimitChecker {
                 Thread.sleep(1000);
 
                 // After the first wait, always request a new rate limit from the server.
-                rateLimit = client.getRateLimit(request.urlPath());
-                rateLimitRecord = rateLimit.getRecordForUrlPath(request.urlPath());
+                rateLimit = client.getRateLimit(request.rateLimitSpecifier());
+                rateLimitRecord = rateLimit.getRecordForUrlPath(request.rateLimitSpecifier());
             }
         } catch (InterruptedException e) {
             throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);
@@ -118,24 +118,26 @@ class GitHubRateLimitChecker {
 
     /**
      * Gets the appropriate {@link RateLimitChecker} for a particular url path. Similar to
-     * {@link GHRateLimit#getRecordForUrlPath(String)}.
+     * {@link GHRateLimit#getRecordForUrlPath(GitHubRateLimitSpecifier)}.
      *
-     * @param urlPath
-     *            the url path of the request
-     * @return the {@link RateLimitChecker} for a url path.
+     * @param rateLimitSpecifier
+     *            the rate limit endpoint specifier
+     * @return the {@link RateLimitChecker} for a particular specifier
      */
     @Nonnull
-    private RateLimitChecker selectChecker(@Nonnull String urlPath) {
-        if (urlPath.equals("/rate_limit")) {
+    private RateLimitChecker selectChecker(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) {
+        if (rateLimitSpecifier == GitHubRateLimitSpecifier.NONE) {
             return RateLimitChecker.NONE;
-        } else if (urlPath.startsWith("/search")) {
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.CORE) {
+            return core;
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.SEARCH) {
             return search;
-        } else if (urlPath.startsWith("/graphql")) {
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.GRAPHQL) {
             return graphql;
-        } else if (urlPath.startsWith("/app-manifests")) {
+        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.INTEGRATION_MANIFEST) {
             return integrationManifest;
         } else {
-            return core;
+            throw new IllegalArgumentException("Unknown rate limit specifier: " + rateLimitSpecifier.toString());
         }
     }
 }

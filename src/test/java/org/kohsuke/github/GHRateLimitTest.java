@@ -57,9 +57,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
 
         // 4897 is just the what the limit was when the snapshot was taken
-        previousLimit = GHRateLimit.fromHeaderRecord(new GHRateLimit.Record(5000,
-                4897,
-                (templating.testStartDate.getTime() + Duration.ofHours(1).toMillis()) / 1000L), "");
+        previousLimit = GHRateLimit.fromHeaderRecord(
+                new GHRateLimit.Record(5000,
+                        4897,
+                        (templating.testStartDate.getTime() + Duration.ofHours(1).toMillis()) / 1000L),
+                GitHubRateLimitSpecifier.CORE);
 
         // -------------------------------------------------------------
         // /user gets response with rate limit information
@@ -160,8 +162,26 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         assertThat(gitHub.rateLimit(), not(sameInstance(headerRateLimit)));
         assertThat(gitHub.rateLimit(), sameInstance(gitHub.lastRateLimit()));
+        headerRateLimit = gitHub.lastRateLimit();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        // Verify the requesting a search url updates the search rate limit
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(30));
+
+        Object searchResult = gitHub.createRequest()
+                .rateLimit(GitHubRateLimitSpecifier.SEARCH)
+                .setRawUrlPath(mockGitHub.apiServer().baseUrl()
+                        + "/search/repositories?q=tetris+language:assembly&sort=stars&order=desc")
+                .fetch(Object.class);
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(6));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(29));
+
     }
 
     private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining) {

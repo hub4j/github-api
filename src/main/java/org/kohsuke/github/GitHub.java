@@ -416,7 +416,7 @@ public class GitHub {
     @Nonnull
     @Deprecated
     public GHRateLimit rateLimit() throws IOException {
-        return client.rateLimit("");
+        return client.rateLimit(GitHubRateLimitSpecifier.CORE);
     }
 
     /**

@@ -143,6 +143,7 @@ abstract class GitHubClient {
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
+        // TODO: make this work for rate limit
         return this
                 .sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build(),
                         (responseInfo) -> GitHubResponse.parseBody(responseInfo, type))
@@ -224,14 +225,21 @@ abstract class GitHubClient {
      */
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
-        return getRateLimit("/rate_limit");
+        return getRateLimit(GitHubRateLimitSpecifier.NONE);
     }
 
     @Nonnull
-    GHRateLimit getRateLimit(@Nonnull String urlPath) throws IOException {
+    GHRateLimit getRateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) throws IOException {
         GHRateLimit result;
         try {
-            result = fetch(JsonRateLimit.class, "/rate_limit").resources;
+            GitHubRequest request = GitHubRequest.newBuilder()
+                    .rateLimit(GitHubRateLimitSpecifier.NONE)
+                    .withApiUrl(getApiUrl())
+                    .withUrlPath("/rate_limit")
+                    .build();
+            result = this
+                    .sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, JsonRateLimit.class))
+                    .body().resources;
         } catch (FileNotFoundException e) {
             // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
             LOGGER.log(FINE, "/rate_limit returned 404 Not Found.");
@@ -239,7 +247,7 @@ abstract class GitHubClient {
             // However some newer versions of GHE include rate limit header information
             // If the header info is missing and the endpoint returns 404, fill the rate limit
             // with unknown
-            result = GHRateLimit.Unknown(urlPath);
+            result = GHRateLimit.Unknown(rateLimitSpecifier);
         }
         return updateRateLimit(result);
     }
@@ -270,18 +278,18 @@ abstract class GitHubClient {
      * {@link GHRateLimit.Record} for {@code urlPath} is expired, {@link #getRateLimit()} will be called to get the
      * current rate limit.
      *
-     * @param urlPath
-     *            the path for the endpoint to get the rate limit for.
+     * @param rateLimitSpecifier
+     *            the specifier for the endpoint to get the rate limit for.
      *
      * @return the current rate limit data. {@link GHRateLimit.Record}s in this instance may be expired when returned.
      * @throws IOException
      *             if there was an error getting current rate limit data.
      */
     @Nonnull
-    GHRateLimit rateLimit(@Nonnull String urlPath) throws IOException {
+    GHRateLimit rateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) throws IOException {
         synchronized (rateLimitLock) {
-            if (rateLimit.getRecordForUrlPath(urlPath).isExpired()) {
-                getRateLimit(urlPath);
+            if (rateLimit.getRecordForUrlPath(rateLimitSpecifier).isExpired()) {
+                getRateLimit(rateLimitSpecifier);
             }
             return rateLimit;
         }
@@ -561,7 +569,7 @@ abstract class GitHubClient {
             remaining = Integer.parseInt(remainingString);
             reset = Long.parseLong(resetString);
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
-            updateRateLimit(GHRateLimit.fromHeaderRecord(observed, responseInfo.request().urlPath()));
+            updateRateLimit(GHRateLimit.fromHeaderRecord(observed, responseInfo.request().rateLimitSpecifier()));
         } catch (NumberFormatException | NullPointerException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);

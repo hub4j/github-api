@@ -45,6 +45,7 @@ class GitHubRequest {
     private final String apiUrl;
     private final String urlPath;
     private final String method;
+    private final GitHubRateLimitSpecifier rateLimitSpecifier;
     private final InputStream body;
     private final boolean forceBody;
 
@@ -56,6 +57,7 @@ class GitHubRequest {
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
+            @Nonnull GitHubRateLimitSpecifier rateLimitSpecifier,
             @CheckForNull InputStream body,
             boolean forceBody) throws MalformedURLException {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
@@ -64,6 +66,7 @@ class GitHubRequest {
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
+        this.rateLimitSpecifier = rateLimitSpecifier;
         this.body = body;
         this.forceBody = forceBody;
         String tailApiUrl = buildTailApiUrl();
@@ -117,6 +120,16 @@ class GitHubRequest {
     @Nonnull
     public String method() {
         return method;
+    }
+
+    /**
+     * The rate limit endpoint for this request.
+     *
+     * @return the rate limit endpoint specifier.
+     */
+    @Nonnull
+    public GitHubRateLimitSpecifier rateLimitSpecifier() {
+        return rateLimitSpecifier;
     }
 
     /**
@@ -217,7 +230,15 @@ class GitHubRequest {
      * @return a {@link Builder} based on this request.
      */
     public Builder<?> toBuilder() {
-        return new Builder<>(args, headers, injectedMappingValues, apiUrl, urlPath, method, body, forceBody);
+        return new Builder<>(args,
+                headers,
+                injectedMappingValues,
+                apiUrl,
+                urlPath,
+                method,
+                rateLimitSpecifier,
+                body,
+                forceBody);
     }
 
     private String buildTailApiUrl() {
@@ -281,6 +302,10 @@ class GitHubRequest {
          */
         @Nonnull
         private String method;
+
+        @Nonnull
+        private GitHubRateLimitSpecifier rateLimitSpecifier;
+
         private InputStream body;
         private boolean forceBody;
 
@@ -294,6 +319,7 @@ class GitHubRequest {
                     GitHubClient.GITHUB_URL,
                     "/",
                     "GET",
+                    GitHubRateLimitSpecifier.CORE,
                     null,
                     false);
         }
@@ -304,6 +330,7 @@ class GitHubRequest {
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
+                @Nonnull GitHubRateLimitSpecifier rateLimitSpecifier,
                 @CheckForNull @WillClose InputStream body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
@@ -312,6 +339,7 @@ class GitHubRequest {
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
+            this.rateLimitSpecifier = rateLimitSpecifier;
             this.body = body;
             this.forceBody = forceBody;
         }
@@ -324,7 +352,15 @@ class GitHubRequest {
          *             if the GitHub API URL cannot be constructed
          */
         public GitHubRequest build() throws MalformedURLException {
-            return new GitHubRequest(args, headers, injectedMappingValues, apiUrl, urlPath, method, body, forceBody);
+            return new GitHubRequest(args,
+                    headers,
+                    injectedMappingValues,
+                    apiUrl,
+                    urlPath,
+                    method,
+                    rateLimitSpecifier,
+                    body,
+                    forceBody);
         }
 
         /**
@@ -559,6 +595,18 @@ class GitHubRequest {
          */
         public B method(@Nonnull String method) {
             this.method = method;
+            return (B) this;
+        }
+
+        /**
+         * Method requester.
+         *
+         * @param rateLimitSpecifier
+         *            the rate limit specifier for this request. Default is {@link GitHubRateLimitSpecifier#CORE}.
+         * @return the request builder
+         */
+        public B rateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) {
+            this.rateLimitSpecifier = rateLimitSpecifier;
             return (B) this;
         }
 

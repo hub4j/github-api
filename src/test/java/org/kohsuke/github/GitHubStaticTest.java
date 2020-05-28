@@ -68,17 +68,14 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         GHRateLimit.UnknownLimitRecord.unknownLimitResetSeconds = 5;
         GHRateLimit.UnknownLimitRecord.reset();
 
-        GHRateLimit.Record unknown0 = GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore();
+        GHRateLimit.Record unknown0 = GHRateLimit.UnknownLimitRecord.current();
+
+        GHRateLimit.UnknownLimitRecord.reset();
 
         Thread.sleep(2000);
 
-        // To reduce object creation: There is only one valid Unknown record at a time.
-        assertThat("Unknown current should should limit the creation of new unknown records",
-                unknown0,
-                sameInstance(GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore()));
-
         // For testing, we create an new unknown.
-        GHRateLimit.Record unknown1 = new GHRateLimit.UnknownLimitRecord();
+        GHRateLimit.Record unknown1 = GHRateLimit.UnknownLimitRecord.current();
 
         assertThat("Valid unknown should not replace an existing one, regardless of created or reset time",
                 unknown1.currentOrUpdated(unknown0),
@@ -89,6 +86,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         // Sleep to make different created time
         Thread.sleep(2000);
+
+        // To reduce object creation: There is only one valid Unknown record at a time.
+        assertThat("Unknown current should should limit the creation of new unknown records",
+                unknown1,
+                sameInstance(GHRateLimit.UnknownLimitRecord.current()));
 
         long epochSeconds = Instant.now().getEpochSecond();
 
@@ -108,7 +110,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         GHRateLimit.Record unknownExpired0 = unknown0;
         GHRateLimit.Record unknownExpired1 = unknown1;
-        unknown0 = GHRateLimit.Unknown(GitHubRateLimitSpecifier.CORE).getCore();
+        unknown0 = GHRateLimit.UnknownLimitRecord.current();
 
         // Rate-limit records maybe created and returned in different orders.
         // We should update to the unexpired regular records over unknowns.

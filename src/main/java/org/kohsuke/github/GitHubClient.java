@@ -74,7 +74,7 @@ abstract class GitHubClient {
     private final Object rateLimitLock = new Object();
 
     @Nonnull
-    private GHRateLimit rateLimit = GHRateLimit.Default();
+    private GHRateLimit rateLimit = GHRateLimit.DEFAULT;
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -144,10 +144,8 @@ abstract class GitHubClient {
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
         // TODO: make this work for rate limit
-        return this
-                .sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build(),
-                        (responseInfo) -> GitHubResponse.parseBody(responseInfo, type))
-                .body();
+        GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
+        return this.sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
 
     /**
@@ -225,15 +223,15 @@ abstract class GitHubClient {
      */
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
-        return getRateLimit(GitHubRateLimitSpecifier.NONE);
+        return getRateLimit(RateLimitTarget.NONE);
     }
 
     @Nonnull
-    GHRateLimit getRateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) throws IOException {
+    GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         GHRateLimit result;
         try {
             GitHubRequest request = GitHubRequest.newBuilder()
-                    .rateLimit(GitHubRateLimitSpecifier.NONE)
+                    .rateLimit(RateLimitTarget.NONE)
                     .withApiUrl(getApiUrl())
                     .withUrlPath("/rate_limit")
                     .build();
@@ -247,7 +245,7 @@ abstract class GitHubClient {
             // However some newer versions of GHE include rate limit header information
             // If the header info is missing and the endpoint returns 404, fill the rate limit
             // with unknown
-            result = GHRateLimit.Unknown(rateLimitSpecifier);
+            result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
         }
         return updateRateLimit(result);
     }
@@ -278,18 +276,18 @@ abstract class GitHubClient {
      * {@link GHRateLimit.Record} for {@code urlPath} is expired, {@link #getRateLimit()} will be called to get the
      * current rate limit.
      *
-     * @param rateLimitSpecifier
-     *            the specifier for the endpoint to get the rate limit for.
+     * @param rateLimitTarget
+     *            the endpoint to get the rate limit for.
      *
      * @return the current rate limit data. {@link GHRateLimit.Record}s in this instance may be expired when returned.
      * @throws IOException
      *             if there was an error getting current rate limit data.
      */
     @Nonnull
-    GHRateLimit rateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) throws IOException {
+    GHRateLimit rateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         synchronized (rateLimitLock) {
-            if (rateLimit.getRecordForUrlPath(rateLimitSpecifier).isExpired()) {
-                getRateLimit(rateLimitSpecifier);
+            if (rateLimit.getRecord(rateLimitTarget).isExpired()) {
+                getRateLimit(rateLimitTarget);
             }
             return rateLimit;
         }
@@ -569,7 +567,7 @@ abstract class GitHubClient {
             remaining = Integer.parseInt(remainingString);
             reset = Long.parseLong(resetString);
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
-            updateRateLimit(GHRateLimit.fromHeaderRecord(observed, responseInfo.request().rateLimitSpecifier()));
+            updateRateLimit(GHRateLimit.fromRecord(observed, responseInfo.request().rateLimitTarget()));
         } catch (NumberFormatException | NullPointerException e) {
             if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);

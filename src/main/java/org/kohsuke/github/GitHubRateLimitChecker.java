@@ -57,6 +57,24 @@ class GitHubRateLimitChecker {
     }
 
     /**
+     * Constructs a new {@link GitHubRateLimitChecker} with a new checker for a particular target.
+     *
+     * Only one checker is allowed per target.
+     *
+     * @param checker
+     *            the {@link RateLimitChecker} to apply.
+     * @param rateLimitTarget
+     *            the {@link RateLimitTarget} for this checker
+     * @return a new {@link GitHubRateLimitChecker}
+     */
+    GitHubRateLimitChecker with(@Nonnull RateLimitChecker checker, @Nonnull RateLimitTarget rateLimitTarget) {
+        return new GitHubRateLimitChecker(rateLimitTarget == RateLimitTarget.CORE ? checker : core,
+                rateLimitTarget == RateLimitTarget.SEARCH ? checker : search,
+                rateLimitTarget == RateLimitTarget.GRAPHQL ? checker : graphql,
+                rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST ? checker : integrationManifest);
+    }
+
+    /**
      * Checks whether there is sufficient requests remaining within this client's rate limit quota to make the current
      * request.
      * <p>
@@ -88,14 +106,14 @@ class GitHubRateLimitChecker {
      *             if there is an I/O error
      */
     void checkRateLimit(GitHubClient client, GitHubRequest request) throws IOException {
-        RateLimitChecker guard = selectChecker(request.rateLimitSpecifier());
+        RateLimitChecker guard = selectChecker(request.rateLimitTarget());
         if (guard == RateLimitChecker.NONE) {
             return;
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
-        GHRateLimit rateLimit = client.rateLimit(request.rateLimitSpecifier());
-        GHRateLimit.Record rateLimitRecord = rateLimit.getRecordForUrlPath(request.rateLimitSpecifier());
+        GHRateLimit rateLimit = client.rateLimit(request.rateLimitTarget());
+        GHRateLimit.Record rateLimitRecord = rateLimit.getRecord(request.rateLimitTarget());
         long waitCount = 0;
         try {
             while (guard.checkRateLimit(rateLimitRecord, waitCount)) {
@@ -108,8 +126,8 @@ class GitHubRateLimitChecker {
                 Thread.sleep(1000);
 
                 // After the first wait, always request a new rate limit from the server.
-                rateLimit = client.getRateLimit(request.rateLimitSpecifier());
-                rateLimitRecord = rateLimit.getRecordForUrlPath(request.rateLimitSpecifier());
+                rateLimit = client.getRateLimit(request.rateLimitTarget());
+                rateLimitRecord = rateLimit.getRecord(request.rateLimitTarget());
             }
         } catch (InterruptedException e) {
             throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);
@@ -118,26 +136,26 @@ class GitHubRateLimitChecker {
 
     /**
      * Gets the appropriate {@link RateLimitChecker} for a particular url path. Similar to
-     * {@link GHRateLimit#getRecordForUrlPath(GitHubRateLimitSpecifier)}.
+     * {@link GHRateLimit#getRecord(RateLimitTarget)}.
      *
-     * @param rateLimitSpecifier
-     *            the rate limit endpoint specifier
-     * @return the {@link RateLimitChecker} for a particular specifier
+     * @param rateLimitTarget
+     *            the rate limit to check
+     * @return the {@link RateLimitChecker} for a particular target
      */
     @Nonnull
-    private RateLimitChecker selectChecker(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) {
-        if (rateLimitSpecifier == GitHubRateLimitSpecifier.NONE) {
+    private RateLimitChecker selectChecker(@Nonnull RateLimitTarget rateLimitTarget) {
+        if (rateLimitTarget == RateLimitTarget.NONE) {
             return RateLimitChecker.NONE;
-        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.CORE) {
+        } else if (rateLimitTarget == RateLimitTarget.CORE) {
             return core;
-        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.SEARCH) {
+        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {
             return search;
-        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.GRAPHQL) {
+        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {
             return graphql;
-        } else if (rateLimitSpecifier == GitHubRateLimitSpecifier.INTEGRATION_MANIFEST) {
+        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {
             return integrationManifest;
         } else {
-            throw new IllegalArgumentException("Unknown rate limit specifier: " + rateLimitSpecifier.toString());
+            throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
         }
     }
 }

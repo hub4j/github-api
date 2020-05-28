@@ -46,7 +46,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
 
-        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
 
         // Checks the rate limit before getting myself
         gitHub.getMyself();

@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
 /**
- * Specifies which rate limit record is used by a request
+ * Specifies the rate limit record of an operation.
+ * 
+ * @see GitHubBuilder#withRateLimitChecker(RateLimitChecker, RateLimitTarget)
  */
-enum GitHubRateLimitSpecifier {
+public enum RateLimitTarget {
     /**
      * Selects or updates the {@link GHRateLimit#getCore()} record.
      */

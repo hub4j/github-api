@@ -45,7 +45,7 @@ class GitHubRequest {
     private final String apiUrl;
     private final String urlPath;
     private final String method;
-    private final GitHubRateLimitSpecifier rateLimitSpecifier;
+    private final RateLimitTarget rateLimitTarget;
     private final InputStream body;
     private final boolean forceBody;
 
@@ -57,7 +57,7 @@ class GitHubRequest {
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
-            @Nonnull GitHubRateLimitSpecifier rateLimitSpecifier,
+            @Nonnull RateLimitTarget rateLimitTarget,
             @CheckForNull InputStream body,
             boolean forceBody) throws MalformedURLException {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
@@ -66,7 +66,7 @@ class GitHubRequest {
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
-        this.rateLimitSpecifier = rateLimitSpecifier;
+        this.rateLimitTarget = rateLimitTarget;
         this.body = body;
         this.forceBody = forceBody;
         String tailApiUrl = buildTailApiUrl();
@@ -123,13 +123,13 @@ class GitHubRequest {
     }
 
     /**
-     * The rate limit endpoint for this request.
+     * The rate limit target for this request.
      *
-     * @return the rate limit endpoint specifier.
+     * @return the rate limit to use for this request.
      */
     @Nonnull
-    public GitHubRateLimitSpecifier rateLimitSpecifier() {
-        return rateLimitSpecifier;
+    public RateLimitTarget rateLimitTarget() {
+        return rateLimitTarget;
     }
 
     /**
@@ -236,7 +236,7 @@ class GitHubRequest {
                 apiUrl,
                 urlPath,
                 method,
-                rateLimitSpecifier,
+                rateLimitTarget,
                 body,
                 forceBody);
     }
@@ -304,7 +304,7 @@ class GitHubRequest {
         private String method;
 
         @Nonnull
-        private GitHubRateLimitSpecifier rateLimitSpecifier;
+        private RateLimitTarget rateLimitTarget;
 
         private InputStream body;
         private boolean forceBody;
@@ -319,7 +319,7 @@ class GitHubRequest {
                     GitHubClient.GITHUB_URL,
                     "/",
                     "GET",
-                    GitHubRateLimitSpecifier.CORE,
+                    RateLimitTarget.CORE,
                     null,
                     false);
         }
@@ -330,7 +330,7 @@ class GitHubRequest {
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
-                @Nonnull GitHubRateLimitSpecifier rateLimitSpecifier,
+                @Nonnull RateLimitTarget rateLimitTarget,
                 @CheckForNull @WillClose InputStream body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
@@ -339,7 +339,7 @@ class GitHubRequest {
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
-            this.rateLimitSpecifier = rateLimitSpecifier;
+            this.rateLimitTarget = rateLimitTarget;
             this.body = body;
             this.forceBody = forceBody;
         }
@@ -358,7 +358,7 @@ class GitHubRequest {
                     apiUrl,
                     urlPath,
                     method,
-                    rateLimitSpecifier,
+                    rateLimitTarget,
                     body,
                     forceBody);
         }
@@ -601,12 +601,12 @@ class GitHubRequest {
         /**
          * Method requester.
          *
-         * @param rateLimitSpecifier
-         *            the rate limit specifier for this request. Default is {@link GitHubRateLimitSpecifier#CORE}.
+         * @param rateLimitTarget
+         *            the rate limit target for this request. Default is {@link RateLimitTarget#CORE}.
          * @return the request builder
          */
-        public B rateLimit(@Nonnull GitHubRateLimitSpecifier rateLimitSpecifier) {
-            this.rateLimitSpecifier = rateLimitSpecifier;
+        public B rateLimit(@Nonnull RateLimitTarget rateLimitTarget) {
+            this.rateLimitTarget = rateLimitTarget;
             return (B) this;
         }
 

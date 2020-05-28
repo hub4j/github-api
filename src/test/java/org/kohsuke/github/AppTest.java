@@ -109,7 +109,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
-        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
         assertFalse(gitHub.isCredentialValid());
         // For invalid credentials, we get a 401 but it includes anonymous rate limit headers
         assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
@@ -119,22 +119,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCredentialValidEnterprise() throws IOException {
         // Simulated GHE: getRateLimit returns 404
-        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
         assertThat(gitHub.lastRateLimit().getCore().isExpired(), is(true));
         assertTrue(gitHub.isCredentialValid());
 
         // lastRateLimitUpdates because 404 still includes header rate limit info
         assertThat(gitHub.lastRateLimit(), notNullValue());
-        assertThat(gitHub.lastRateLimit(), not(equalTo(GHRateLimit.Default())));
+        assertThat(gitHub.lastRateLimit(), not(equalTo(GHRateLimit.DEFAULT)));
         assertThat(gitHub.lastRateLimit().getCore().isExpired(), is(false));
 
         gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
-        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
         assertFalse(gitHub.isCredentialValid());
         // Simulated GHE: For invalid credentials, we get a 401 that does not include ratelimit info
-        assertThat(gitHub.lastRateLimit(), equalTo(GHRateLimit.Default()));
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
     }
 
     @Test

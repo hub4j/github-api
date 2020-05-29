@@ -52,6 +52,7 @@ public class GHDiscussionBuilder {
     public GHDiscussion create() throws IOException {
         return builder.method("POST")
                 .withUrlPath("/orgs/" + team.getOrganization().getName() + "/teams/" + team.getSlug() + "/discussions")
-                .fetch(GHDiscussion.class);
+                .fetch(GHDiscussion.class)
+                .wrapUp(team.root);
     }
 }

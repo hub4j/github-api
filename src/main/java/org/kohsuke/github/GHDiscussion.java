@@ -10,6 +10,7 @@ import java.net.URL;
  */
 public class GHDiscussion extends GHObject {
 
+    protected GitHub root;
     protected String body, title, html_url;
 
     @Override
@@ -18,6 +19,7 @@ public class GHDiscussion extends GHObject {
     }
 
     public GHDiscussion wrapUp(GitHub root) {
+        this.root = root;
         return this;
     }
 

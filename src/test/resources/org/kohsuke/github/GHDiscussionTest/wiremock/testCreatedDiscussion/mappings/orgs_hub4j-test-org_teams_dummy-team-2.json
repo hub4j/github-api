@@ -1,0 +1,40 @@
+{
+  "id": "87a05847-f898-4c2c-9efa-c16e9592ec00",
+  "name": "orgs_hub4j-test-org_teams_dummy-team",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams/dummy-team",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/teams/#get-team-by-name\"}",
+    "headers": {
+      "Date": "Fri, 29 May 2020 14:11:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4970",
+      "X-RateLimit-Reset": "1590761617",
+      "X-OAuth-Scopes": "admin:org, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D7D6:28A9C:27E916:2FB9A5:5ED11823"
+    }
+  },
+  "uuid": "87a05847-f898-4c2c-9efa-c16e9592ec00",
+  "persistent": true,
+  "insertionIndex": 2
+}

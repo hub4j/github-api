@@ -320,6 +320,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param name
      *            the name
      * @return the gh create discussion builder
+     * @throws IOException
+     *             the io exception
      */
     public GHDiscussionBuilder createDiscussion(String name) throws IOException {
         return new GHDiscussionBuilder(this, name);

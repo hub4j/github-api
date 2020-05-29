@@ -131,6 +131,19 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Retrieves the discussions.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
+        return root.createRequest()
+                .withUrlPath(api("/discussions"))
+                .toIterable(GHDiscussion[].class, item -> item.wrapUp(root));
+    }
+
+    /**
      * Retrieves the current members.
      *
      * @return the paged iterable
@@ -295,6 +308,21 @@ public class GHTeam extends GHObject implements Refreshable {
 
     private String api(String tail) {
         return "/teams/" + getId() + tail;
+    }
+
+    /**
+     * Starts a builder that creates a new discussion.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHDiscussionBuilder#create()} to finally
+     * create a discussion.
+     *
+     * @param name
+     *            the name
+     * @return the gh create discussion builder
+     */
+    public GHDiscussionBuilder createDiscussion(String name) throws IOException {
+        return new GHDiscussionBuilder(this, name);
     }
 
     /**

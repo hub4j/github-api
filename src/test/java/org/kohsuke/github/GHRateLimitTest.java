@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -169,11 +170,13 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // Verify the requesting a search url updates the search rate limit
         assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(30));
 
-        Object searchResult = gitHub.createRequest()
+        HashMap<String, Object> searchResult = (HashMap<String, Object>) gitHub.createRequest()
                 .rateLimit(RateLimitTarget.SEARCH)
                 .setRawUrlPath(mockGitHub.apiServer().baseUrl()
-                        + "/search/repositories?q=tetris+language:assembly&sort=stars&order=desc")
-                .fetch(Object.class);
+                        + "/search/repositories?q=tetris+language%3Aassembly&sort=stars&order=desc")
+                .fetch(HashMap.class);
+
+        assertThat(searchResult.get("total_count"), equalTo(1918));
 
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
 
@@ -182,6 +185,21 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
         assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(29));
 
+        PagedSearchIterable<GHRepository> searchResult2 = gitHub.searchRepositories()
+                .q("tetris")
+                .language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS)
+                .order(GHDirection.DESC)
+                .list();
+
+        assertThat(searchResult2.getTotalCount(), equalTo(1918));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(7));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(28));
     }
 
     private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining) {
@@ -300,6 +318,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // ratelimit() tries not to make additional requests, uses queried rate limit since header not available
         Thread.sleep(1500);
         assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
 
         // -------------------------------------------------------------
         // Some versions of GHE include header rate limit information, some do not
@@ -353,11 +372,49 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // getRateLimit() uses headerRateLimit if /rate_limit returns a 404
         // and headerRateLimit is available and not expired
         assertThat(rateLimit, sameInstance(gitHub.lastRateLimit()));
+        headerRateLimit = rateLimit;
 
         // ratelimit() should prefer headerRateLimit when getRateLimit fails and headerRateLimit is not expired
         assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
 
         assertThat(mockGitHub.getRequestCount(), equalTo(6));
+
+        // Verify the requesting a search url updates the search rate limit
+        // Core rate limit record should not change while search is updated.
+        assertThat(gitHub.lastRateLimit().getSearch(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(gitHub.lastRateLimit().getSearch().isExpired(), equalTo(true));
+
+        HashMap<String, Object> searchResult = (HashMap<String, Object>) gitHub.createRequest()
+                .rateLimit(RateLimitTarget.SEARCH)
+                .setRawUrlPath(mockGitHub.apiServer().baseUrl()
+                        + "/search/repositories?q=tetris+language%3Aassembly&sort=stars&order=desc")
+                .fetch(Object.class);
+
+        assertThat(searchResult.get("total_count"), equalTo(1918));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(7));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(29));
+
+        PagedSearchIterable<GHRepository> searchResult2 = gitHub.searchRepositories()
+                .q("tetris")
+                .language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS)
+                .order(GHDirection.DESC)
+                .list();
+
+        assertThat(searchResult2.getTotalCount(), equalTo(1918));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(8));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(28));
+
     }
 
     @Test

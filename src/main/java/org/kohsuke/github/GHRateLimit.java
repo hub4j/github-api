@@ -321,6 +321,8 @@ public class GHRateLimit {
      */
     public static class UnknownLimitRecord extends Record {
 
+        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).toMillis() / 1000;
+
         /**
          * The number of seconds until a {@link UnknownLimitRecord} will expire.
          *
@@ -333,7 +335,7 @@ public class GHRateLimit {
          *
          * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
          */
-        static long unknownLimitResetSeconds = Duration.ofSeconds(30).toMillis() / 1000;
+        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
 
         static final int unknownLimit = 1000000;
         static final int unknownRemaining = 999999;
@@ -361,8 +363,12 @@ public class GHRateLimit {
             return current;
         }
 
+        /**
+         * Reset the current UnknownLimitRecord. For use during testing only.
+         */
         static synchronized void reset() {
             current = DEFAULT;
+            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
         }
     }
 

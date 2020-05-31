@@ -65,14 +65,14 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGitHubRateLimitShouldReplaceRateLimit() throws Exception {
 
-        GHRateLimit.UnknownLimitRecord.unknownLimitResetSeconds = 5;
         GHRateLimit.UnknownLimitRecord.reset();
+        GHRateLimit.UnknownLimitRecord.unknownLimitResetSeconds = 5;
 
         GHRateLimit.Record unknown0 = GHRateLimit.UnknownLimitRecord.current();
 
+        Thread.sleep(1500);
         GHRateLimit.UnknownLimitRecord.reset();
-
-        Thread.sleep(2000);
+        GHRateLimit.UnknownLimitRecord.unknownLimitResetSeconds = 5;
 
         // For testing, we create an new unknown.
         GHRateLimit.Record unknown1 = GHRateLimit.UnknownLimitRecord.current();
@@ -85,7 +85,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
                 sameInstance(unknown0));
 
         // Sleep to make different created time
-        Thread.sleep(2000);
+        Thread.sleep(1500);
 
         // To reduce object creation: There is only one valid Unknown record at a time.
         assertThat("Unknown current should should limit the creation of new unknown records",
@@ -103,7 +103,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         GHRateLimit.Record recordExpired1 = new GHRateLimit.Record(10, 10, epochSeconds + 2L);
 
         // Sleep to make expired and different created time
-        Thread.sleep(3000);
+        Thread.sleep(4000);
 
         GHRateLimit.Record recordWorst = new GHRateLimit.Record(Integer.MAX_VALUE, Integer.MAX_VALUE, Long.MIN_VALUE);
         GHRateLimit.Record record00 = new GHRateLimit.Record(10, 10, epochSeconds + 10L);
@@ -123,21 +123,18 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
                 unknownExpired1.currentOrUpdated(unknownExpired0),
                 sameInstance(unknownExpired1));
 
-        assertThat(
-                "Expired unknown should not be replaced by expired earlier normal record, regardless of created or reset time",
+        assertThat("Expired unknown should not be replaced by expired earlier normal record",
                 unknownExpired0.currentOrUpdated(recordExpired0),
                 sameInstance(unknownExpired0));
-        assertThat(
-                "Expired normal record should not be replace an expired earlier unknown record, regardless of created or reset time",
+        assertThat("Expired normal record should not be replaced an expired earlier unknown record",
                 recordExpired0.currentOrUpdated(unknownExpired0),
                 sameInstance(recordExpired0));
 
-        assertThat(
-                "Expired unknown should be replaced by expired later normal record, regardless of created or reset time",
+        assertThat("Expired unknown should be replaced by expired later normal record",
                 unknownExpired0.currentOrUpdated(recordExpired1),
                 sameInstance(recordExpired1));
         assertThat(
-                "Expired later normal record should not be replace an expired unknown record, regardless of created or reset time",
+                "Expired later normal record should not be replaced an expired unknown record, regardless of created or reset time",
                 recordExpired1.currentOrUpdated(unknownExpired0),
                 sameInstance(recordExpired1));
 
@@ -151,7 +148,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat("Valid unknown should replace an expired normal record",
                 recordExpired1.currentOrUpdated(unknown0),
                 sameInstance(unknown0));
-        assertThat("Expired normal record should not replace a valid unknown record",
+        assertThat("Valid unknown record should not be replaced by expired normal record",
                 unknown0.currentOrUpdated(recordExpired1),
                 sameInstance(unknown0));
 

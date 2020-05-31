@@ -24,13 +24,13 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The GitHub Preview API's license information
@@ -79,14 +79,6 @@ import java.util.List;
     }
 
     /**
-     * @return API URL of this object.
-     */
-    @WithBridgeMethods(value = String.class, adapterMethod = &quot;urlToString&quot;)
-    public URL getUrl() {
-<span class="fc" id="L86">        return GitHubClient.parseURL(url);</span>
-    }
-
-    /**
      * Featured licenses are bold in the new repository drop-down
      *
      * @return True if the license is featured, false otherwise
@@ -94,13 +86,13 @@ import java.util.List;
      *             the io exception
      */
     public Boolean isFeatured() throws IOException {
-<span class="nc" id="L97">        populate();</span>
-<span class="nc" id="L98">        return featured;</span>
+<span class="nc" id="L89">        populate();</span>
+<span class="nc" id="L90">        return featured;</span>
     }
 
     public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L102">        populate();</span>
-<span class="fc" id="L103">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L94">        populate();</span>
+<span class="fc" id="L95">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -111,8 +103,8 @@ import java.util.List;
      *             the io exception
      */
     public String getDescription() throws IOException {
-<span class="nc" id="L114">        populate();</span>
-<span class="nc" id="L115">        return description;</span>
+<span class="fc" id="L106">        populate();</span>
+<span class="fc" id="L107">        return description;</span>
     }
 
     /**
@@ -123,8 +115,8 @@ import java.util.List;
      *             the io exception
      */
     public String getCategory() throws IOException {
-<span class="nc" id="L126">        populate();</span>
-<span class="nc" id="L127">        return category;</span>
+<span class="nc" id="L118">        populate();</span>
+<span class="nc" id="L119">        return category;</span>
     }
 
     /**
@@ -135,8 +127,8 @@ import java.util.List;
      *             the io exception
      */
     public String getImplementation() throws IOException {
-<span class="nc" id="L138">        populate();</span>
-<span class="nc" id="L139">        return implementation;</span>
+<span class="nc" id="L130">        populate();</span>
+<span class="nc" id="L131">        return implementation;</span>
     }
 
     /**
@@ -147,8 +139,8 @@ import java.util.List;
      *             the io exception
      */
     public List&lt;String&gt; getRequired() throws IOException {
-<span class="nc" id="L150">        populate();</span>
-<span class="nc" id="L151">        return required;</span>
+<span class="nc" id="L142">        populate();</span>
+<span class="nc" id="L143">        return required;</span>
     }
 
     /**
@@ -159,8 +151,8 @@ import java.util.List;
      *             the io exception
      */
     public List&lt;String&gt; getPermitted() throws IOException {
-<span class="nc" id="L162">        populate();</span>
-<span class="nc" id="L163">        return permitted;</span>
+<span class="nc" id="L154">        populate();</span>
+<span class="nc" id="L155">        return permitted;</span>
     }
 
     /**
@@ -171,8 +163,8 @@ import java.util.List;
      *             the io exception
      */
     public List&lt;String&gt; getForbidden() throws IOException {
-<span class="nc" id="L174">        populate();</span>
-<span class="nc" id="L175">        return forbidden;</span>
+<span class="nc" id="L166">        populate();</span>
+<span class="nc" id="L167">        return forbidden;</span>
     }
 
     /**
@@ -183,8 +175,8 @@ import java.util.List;
      *             the io exception
      */
     public String getBody() throws IOException {
-<span class="nc" id="L186">        populate();</span>
-<span class="nc" id="L187">        return body;</span>
+<span class="nc" id="L178">        populate();</span>
+<span class="nc" id="L179">        return body;</span>
     }
 
     /**
@@ -196,31 +188,38 @@ import java.util.List;
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (description != null)</span>
-<span class="fc" id="L200">            return; // already populated</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (description != null)</span>
+<span class="fc" id="L192">            return; // already populated</span>
 
-<span class="fc" id="L202">        root.createRequest().withUrlPath(url).fetchInto(this);</span>
-<span class="fc" id="L203">    }</span>
+<span class="pc bpc" id="L194" title="2 of 4 branches missed.">        if (root == null || root.isOffline()) {</span>
+<span class="nc" id="L195">            return; // cannot populate, will have to live with what we have</span>
+        }
+
+<span class="fc" id="L198">        URL url = getUrl();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (url != null) {</span>
+<span class="fc" id="L200">            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
+        }
+<span class="fc" id="L202">    }</span>
 
     @Override
     public boolean equals(Object o) {
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L208">            return true;</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (!(o instanceof GHLicense))</span>
-<span class="nc" id="L210">            return false;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L207">            return true;</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (!(o instanceof GHLicense))</span>
+<span class="nc" id="L209">            return false;</span>
 
-<span class="nc" id="L212">        GHLicense that = (GHLicense) o;</span>
-<span class="nc" id="L213">        return this.url.equals(that.url);</span>
+<span class="nc" id="L211">        GHLicense that = (GHLicense) o;</span>
+<span class="nc" id="L212">        return Objects.equals(getUrl(), that.getUrl());</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L218">        return url.hashCode();</span>
+<span class="nc" id="L217">        return Objects.hashCode(getUrl());</span>
     }
 
     GHLicense wrap(GitHub root) {
-<span class="fc" id="L222">        this.root = root;</span>
-<span class="fc" id="L223">        return this;</span>
+<span class="fc" id="L221">        this.root = root;</span>
+<span class="fc" id="L222">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -112,10 +112,12 @@ import java.util.List;
      * Gets api url.
      *
      * @return the api url
+     * @deprecated use {@link #getUrl()}
      */
+    @Deprecated
     @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;, justification = &quot;It's a part of the library API, cannot be changed&quot;)
     public URL getApiURL() {
-<span class="nc" id="L118">        return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L120">        return getUrl();</span>
     }
 
     /**
@@ -123,7 +125,7 @@ import java.util.List;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L126">        return null;</span>
+<span class="nc" id="L128">        return null;</span>
     }
 
     /**
@@ -132,7 +134,7 @@ import java.util.List;
      * @return the note
      */
     public String getNote() {
-<span class="nc" id="L135">        return note;</span>
+<span class="nc" id="L137">        return note;</span>
     }
 
     /**
@@ -141,7 +143,7 @@ import java.util.List;
      * @return the note url
      */
     public URL getNoteUrl() {
-<span class="nc" id="L144">        return GitHubClient.parseURL(note_url);</span>
+<span class="nc" id="L146">        return GitHubClient.parseURL(note_url);</span>
     }
 
     /**
@@ -150,12 +152,12 @@ import java.util.List;
      * @return the fingerprint
      */
     public String getFingerprint() {
-<span class="nc" id="L153">        return fingerprint;</span>
+<span class="nc" id="L155">        return fingerprint;</span>
     }
 
     GHAuthorization wrap(GitHub root) {
-<span class="fc" id="L157">        this.root = root;</span>
-<span class="fc" id="L158">        return this;</span>
+<span class="fc" id="L159">        this.root = root;</span>
+<span class="fc" id="L160">        return this;</span>
     }
 
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },

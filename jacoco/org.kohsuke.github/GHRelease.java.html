@@ -270,7 +270,7 @@ import static java.lang.String.*;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L273">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + id)).send();</span>
+<span class="nc" id="L273">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
 <span class="nc" id="L274">    }</span>
 
     /**
@@ -283,7 +283,7 @@ import static java.lang.String.*;
     }
 
     private String getApiTailUrl(String end) {
-<span class="fc" id="L286">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, id, end));</span>
+<span class="fc" id="L286">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

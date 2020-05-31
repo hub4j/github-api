@@ -59,10 +59,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param root
      *            the root
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRoot(GitHub root) {
-<span class="nc" id="L64">        this.root = root;</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L66">        this.root = root;</span>
+<span class="nc" id="L67">    }</span>
 
     /**
      * Gets account.
@@ -70,7 +72,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the account
      */
     public GHUser getAccount() {
-<span class="fc" id="L73">        return account;</span>
+<span class="fc" id="L75">        return account;</span>
     }
 
     /**
@@ -78,10 +80,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param account
      *            the account
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAccount(GHUser account) {
-<span class="nc" id="L83">        this.account = account;</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L87">        this.account = account;</span>
+<span class="nc" id="L88">    }</span>
 
     /**
      * Gets access token url.
@@ -89,7 +93,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the access token url
      */
     public String getAccessTokenUrl() {
-<span class="fc" id="L92">        return accessTokenUrl;</span>
+<span class="fc" id="L96">        return accessTokenUrl;</span>
     }
 
     /**
@@ -97,10 +101,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param accessTokenUrl
      *            the access token url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAccessTokenUrl(String accessTokenUrl) {
-<span class="nc" id="L102">        this.accessTokenUrl = accessTokenUrl;</span>
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L108">        this.accessTokenUrl = accessTokenUrl;</span>
+<span class="nc" id="L109">    }</span>
 
     /**
      * Gets repositories url.
@@ -108,7 +114,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the repositories url
      */
     public String getRepositoriesUrl() {
-<span class="fc" id="L111">        return repositoriesUrl;</span>
+<span class="fc" id="L117">        return repositoriesUrl;</span>
     }
 
     /**
@@ -116,10 +122,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param repositoriesUrl
      *            the repositories url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositoriesUrl(String repositoriesUrl) {
-<span class="nc" id="L121">        this.repositoriesUrl = repositoriesUrl;</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L129">        this.repositoriesUrl = repositoriesUrl;</span>
+<span class="nc" id="L130">    }</span>
 
     /**
      * Gets app id.
@@ -127,7 +135,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the app id
      */
     public long getAppId() {
-<span class="fc" id="L130">        return appId;</span>
+<span class="fc" id="L138">        return appId;</span>
     }
 
     /**
@@ -135,10 +143,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param appId
      *            the app id
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAppId(long appId) {
-<span class="nc" id="L140">        this.appId = appId;</span>
-<span class="nc" id="L141">    }</span>
+<span class="nc" id="L150">        this.appId = appId;</span>
+<span class="nc" id="L151">    }</span>
 
     /**
      * Gets target id.
@@ -146,7 +156,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the target id
      */
     public long getTargetId() {
-<span class="fc" id="L149">        return targetId;</span>
+<span class="fc" id="L159">        return targetId;</span>
     }
 
     /**
@@ -154,10 +164,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param targetId
      *            the target id
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setTargetId(long targetId) {
-<span class="nc" id="L159">        this.targetId = targetId;</span>
-<span class="nc" id="L160">    }</span>
+<span class="nc" id="L171">        this.targetId = targetId;</span>
+<span class="nc" id="L172">    }</span>
 
     /**
      * Gets target type.
@@ -165,7 +177,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the target type
      */
     public GHTargetType getTargetType() {
-<span class="fc" id="L168">        return targetType;</span>
+<span class="fc" id="L180">        return targetType;</span>
     }
 
     /**
@@ -173,10 +185,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param targetType
      *            the target type
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setTargetType(GHTargetType targetType) {
-<span class="nc" id="L178">        this.targetType = targetType;</span>
-<span class="nc" id="L179">    }</span>
+<span class="nc" id="L192">        this.targetType = targetType;</span>
+<span class="nc" id="L193">    }</span>
 
     /**
      * Gets permissions.
@@ -184,7 +198,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the permissions
      */
     public Map&lt;String, GHPermissionType&gt; getPermissions() {
-<span class="fc" id="L187">        return permissions;</span>
+<span class="fc" id="L201">        return permissions;</span>
     }
 
     /**
@@ -192,10 +206,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="nc" id="L197">        this.permissions = permissions;</span>
-<span class="nc" id="L198">    }</span>
+<span class="nc" id="L213">        this.permissions = permissions;</span>
+<span class="nc" id="L214">    }</span>
 
     /**
      * Gets events.
@@ -203,7 +219,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L206">        return events;</span>
+<span class="fc" id="L222">        return events;</span>
     }
 
     /**
@@ -211,10 +227,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param events
      *            the events
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="nc" id="L216">        this.events = events;</span>
-<span class="nc" id="L217">    }</span>
+<span class="nc" id="L234">        this.events = events;</span>
+<span class="nc" id="L235">    }</span>
 
     /**
      * Gets single file name.
@@ -222,7 +240,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the single file name
      */
     public String getSingleFileName() {
-<span class="fc" id="L225">        return singleFileName;</span>
+<span class="fc" id="L243">        return singleFileName;</span>
     }
 
     /**
@@ -230,10 +248,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param singleFileName
      *            the single file name
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setSingleFileName(String singleFileName) {
-<span class="nc" id="L235">        this.singleFileName = singleFileName;</span>
-<span class="nc" id="L236">    }</span>
+<span class="nc" id="L255">        this.singleFileName = singleFileName;</span>
+<span class="nc" id="L256">    }</span>
 
     /**
      * Gets repository selection.
@@ -241,7 +261,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L244">        return repositorySelection;</span>
+<span class="fc" id="L264">        return repositorySelection;</span>
     }
 
     /**
@@ -249,14 +269,16 @@ import static org.kohsuke.github.Previews.GAMBIT;
      *
      * @param repositorySelection
      *            the repository selection
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="nc" id="L254">        this.repositorySelection = repositorySelection;</span>
-<span class="nc" id="L255">    }</span>
+<span class="nc" id="L276">        this.repositorySelection = repositorySelection;</span>
+<span class="nc" id="L277">    }</span>
 
     GHAppInstallation wrapUp(GitHub root) {
-<span class="fc" id="L258">        this.root = root;</span>
-<span class="fc" id="L259">        return this;</span>
+<span class="fc" id="L280">        this.root = root;</span>
+<span class="fc" id="L281">        return this;</span>
     }
 
     /**
@@ -271,12 +293,12 @@ import static org.kohsuke.github.Previews.GAMBIT;
     @Preview
     @Deprecated
     public void deleteInstallation() throws IOException {
-<span class="fc" id="L274">        root.createRequest()</span>
-<span class="fc" id="L275">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L276">                .withPreview(GAMBIT)</span>
-<span class="fc" id="L277">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
-<span class="fc" id="L278">                .send();</span>
-<span class="fc" id="L279">    }</span>
+<span class="fc" id="L296">        root.createRequest()</span>
+<span class="fc" id="L297">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L298">                .withPreview(GAMBIT)</span>
+<span class="fc" id="L299">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId()))</span>
+<span class="fc" id="L300">                .send();</span>
+<span class="fc" id="L301">    }</span>
 
     /**
      * Starts a builder that creates a new App Installation Token.
@@ -293,7 +315,9 @@ import static org.kohsuke.github.Previews.GAMBIT;
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L296">        return new GHAppCreateTokenBuilder(root, String.format(&quot;/app/installations/%d/access_tokens&quot;, id), permissions);</span>
+<span class="fc" id="L318">        return new GHAppCreateTokenBuilder(root,</span>
+<span class="fc" id="L319">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
+                permissions);
     }
 
     /**
@@ -308,7 +332,7 @@ import static org.kohsuke.github.Previews.GAMBIT;
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken() {
-<span class="fc" id="L311">        return new GHAppCreateTokenBuilder(root, String.format(&quot;/app/installations/%d/access_tokens&quot;, id));</span>
+<span class="fc" id="L335">        return new GHAppCreateTokenBuilder(root, String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

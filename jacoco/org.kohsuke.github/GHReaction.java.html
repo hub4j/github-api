@@ -58,7 +58,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L61">        root.createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + id).send();</span>
+<span class="fc" id="L61">        root.createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + getId()).send();</span>
 <span class="fc" id="L62">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

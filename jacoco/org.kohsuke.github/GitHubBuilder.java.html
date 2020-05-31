@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -24,7 +23,7 @@ import javax.annotation.Nonnull;
 public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
-<span class="fc" id="L27">    /* private */ String endpoint = GitHubClient.GITHUB_URL;</span>
+<span class="fc" id="L26">    /* private */ String endpoint = GitHubClient.GITHUB_URL;</span>
     /* private */ String user;
     /* private */ String password;
     /* private */ String oauthToken;
@@ -32,15 +31,15 @@ public class GitHubBuilder implements Cloneable {
 
     private HttpConnector connector;
 
-<span class="fc" id="L35">    private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;</span>
-<span class="fc" id="L36">    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;</span>
-<span class="fc" id="L37">    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();</span>
+<span class="fc" id="L34">    private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;</span>
+<span class="fc" id="L35">    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;</span>
+<span class="fc" id="L36">    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();</span>
 
     /**
      * Instantiates a new Git hub builder.
      */
-<span class="fc" id="L42">    public GitHubBuilder() {</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L41">    public GitHubBuilder() {</span>
+<span class="fc" id="L42">    }</span>
 
     /**
      * First check if the credentials are configured in the environment. We use environment first because users are not
@@ -57,25 +56,25 @@ public class GitHubBuilder implements Cloneable {
      *             If there are no credentials defined in the ~/.github properties file or the process environment.
      */
     static GitHubBuilder fromCredentials() throws IOException {
-<span class="fc" id="L60">        Exception cause = null;</span>
-<span class="fc" id="L61">        GitHubBuilder builder = null;</span>
+<span class="fc" id="L59">        Exception cause = null;</span>
+<span class="fc" id="L60">        GitHubBuilder builder = null;</span>
 
-<span class="fc" id="L63">        builder = fromEnvironment();</span>
+<span class="fc" id="L62">        builder = fromEnvironment();</span>
 
-<span class="pc bpc" id="L65" title="2 of 6 branches missed.">        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)</span>
-<span class="fc" id="L66">            return builder;</span>
+<span class="pc bpc" id="L64" title="2 of 6 branches missed.">        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)</span>
+<span class="fc" id="L65">            return builder;</span>
 
         try {
-<span class="fc" id="L69">            builder = fromPropertyFile();</span>
+<span class="fc" id="L68">            builder = fromPropertyFile();</span>
 
-<span class="pc bpc" id="L71" title="5 of 6 branches missed.">            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)</span>
-<span class="fc" id="L72">                return builder;</span>
-<span class="nc" id="L73">        } catch (FileNotFoundException e) {</span>
+<span class="pc bpc" id="L70" title="5 of 6 branches missed.">            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)</span>
+<span class="fc" id="L71">                return builder;</span>
+<span class="nc" id="L72">        } catch (FileNotFoundException e) {</span>
             // fall through
-<span class="nc" id="L75">            cause = e;</span>
-<span class="nc" id="L76">        }</span>
-<span class="nc" id="L77">        throw (IOException) new IOException(&quot;Failed to resolve credentials from ~/.github or the environment.&quot;)</span>
-<span class="nc" id="L78">                .initCause(cause);</span>
+<span class="nc" id="L74">            cause = e;</span>
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">        throw (IOException) new IOException(&quot;Failed to resolve credentials from ~/.github or the environment.&quot;)</span>
+<span class="nc" id="L77">                .initCause(cause);</span>
     }
 
     /**
@@ -97,14 +96,14 @@ public class GitHubBuilder implements Cloneable {
     public static GitHubBuilder fromEnvironment(String loginVariableName,
             String passwordVariableName,
             String oauthVariableName) throws IOException {
-<span class="nc" id="L100">        return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, &quot;&quot;);</span>
+<span class="nc" id="L99">        return fromEnvironment(loginVariableName, passwordVariableName, oauthVariableName, &quot;&quot;);</span>
     }
 
     private static void loadIfSet(String envName, Properties p, String propName) {
-<span class="fc" id="L104">        String v = System.getenv(envName);</span>
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (v != null)</span>
-<span class="fc" id="L106">            p.put(propName, v);</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L103">        String v = System.getenv(envName);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (v != null)</span>
+<span class="fc" id="L105">            p.put(propName, v);</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * From environment git hub builder.
@@ -128,12 +127,12 @@ public class GitHubBuilder implements Cloneable {
             String passwordVariableName,
             String oauthVariableName,
             String endpointVariableName) throws IOException {
-<span class="fc" id="L131">        Properties env = new Properties();</span>
-<span class="fc" id="L132">        loadIfSet(loginVariableName, env, &quot;login&quot;);</span>
-<span class="fc" id="L133">        loadIfSet(passwordVariableName, env, &quot;password&quot;);</span>
-<span class="fc" id="L134">        loadIfSet(oauthVariableName, env, &quot;oauth&quot;);</span>
-<span class="fc" id="L135">        loadIfSet(endpointVariableName, env, &quot;endpoint&quot;);</span>
-<span class="fc" id="L136">        return fromProperties(env);</span>
+<span class="fc" id="L130">        Properties env = new Properties();</span>
+<span class="fc" id="L131">        loadIfSet(loginVariableName, env, &quot;login&quot;);</span>
+<span class="fc" id="L132">        loadIfSet(passwordVariableName, env, &quot;password&quot;);</span>
+<span class="fc" id="L133">        loadIfSet(oauthVariableName, env, &quot;oauth&quot;);</span>
+<span class="fc" id="L134">        loadIfSet(endpointVariableName, env, &quot;endpoint&quot;);</span>
+<span class="fc" id="L135">        return fromProperties(env);</span>
     }
 
     /**
@@ -162,14 +161,14 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromEnvironment() throws IOException {
-<span class="fc" id="L165">        Properties props = new Properties();</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : System.getenv().entrySet()) {</span>
-<span class="fc" id="L167">            String name = e.getKey().toLowerCase(Locale.ENGLISH);</span>
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">            if (name.startsWith(&quot;github_&quot;))</span>
-<span class="nc" id="L169">                name = name.substring(7);</span>
-<span class="fc" id="L170">            props.put(name, e.getValue());</span>
-<span class="fc" id="L171">        }</span>
-<span class="fc" id="L172">        return fromProperties(props);</span>
+<span class="fc" id="L164">        Properties props = new Properties();</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : System.getenv().entrySet()) {</span>
+<span class="fc" id="L166">            String name = e.getKey().toLowerCase(Locale.ENGLISH);</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">            if (name.startsWith(&quot;github_&quot;))</span>
+<span class="nc" id="L168">                name = name.substring(7);</span>
+<span class="fc" id="L169">            props.put(name, e.getValue());</span>
+<span class="fc" id="L170">        }</span>
+<span class="fc" id="L171">        return fromProperties(props);</span>
     }
 
     /**
@@ -180,9 +179,9 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromPropertyFile() throws IOException {
-<span class="fc" id="L183">        File homeDir = new File(System.getProperty(&quot;user.home&quot;));</span>
-<span class="fc" id="L184">        File propertyFile = new File(homeDir, &quot;.github&quot;);</span>
-<span class="fc" id="L185">        return fromPropertyFile(propertyFile.getPath());</span>
+<span class="fc" id="L182">        File homeDir = new File(System.getProperty(&quot;user.home&quot;));</span>
+<span class="fc" id="L183">        File propertyFile = new File(homeDir, &quot;.github&quot;);</span>
+<span class="fc" id="L184">        return fromPropertyFile(propertyFile.getPath());</span>
     }
 
     /**
@@ -195,16 +194,16 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromPropertyFile(String propertyFileName) throws IOException {
-<span class="fc" id="L198">        Properties props = new Properties();</span>
-<span class="fc" id="L199">        FileInputStream in = null;</span>
+<span class="fc" id="L197">        Properties props = new Properties();</span>
+<span class="fc" id="L198">        FileInputStream in = null;</span>
         try {
-<span class="fc" id="L201">            in = new FileInputStream(propertyFileName);</span>
-<span class="fc" id="L202">            props.load(in);</span>
+<span class="fc" id="L200">            in = new FileInputStream(propertyFileName);</span>
+<span class="fc" id="L201">            props.load(in);</span>
         } finally {
-<span class="fc" id="L204">            IOUtils.closeQuietly(in);</span>
+<span class="fc" id="L203">            IOUtils.closeQuietly(in);</span>
         }
 
-<span class="fc" id="L207">        return fromProperties(props);</span>
+<span class="fc" id="L206">        return fromProperties(props);</span>
     }
 
     /**
@@ -215,12 +214,12 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public static GitHubBuilder fromProperties(Properties props) {
-<span class="fc" id="L218">        GitHubBuilder self = new GitHubBuilder();</span>
-<span class="fc" id="L219">        self.withOAuthToken(props.getProperty(&quot;oauth&quot;), props.getProperty(&quot;login&quot;));</span>
-<span class="fc" id="L220">        self.withJwtToken(props.getProperty(&quot;jwt&quot;));</span>
-<span class="fc" id="L221">        self.withPassword(props.getProperty(&quot;login&quot;), props.getProperty(&quot;password&quot;));</span>
-<span class="fc" id="L222">        self.withEndpoint(props.getProperty(&quot;endpoint&quot;, GitHubClient.GITHUB_URL));</span>
-<span class="fc" id="L223">        return self;</span>
+<span class="fc" id="L217">        GitHubBuilder self = new GitHubBuilder();</span>
+<span class="fc" id="L218">        self.withOAuthToken(props.getProperty(&quot;oauth&quot;), props.getProperty(&quot;login&quot;));</span>
+<span class="fc" id="L219">        self.withJwtToken(props.getProperty(&quot;jwt&quot;));</span>
+<span class="fc" id="L220">        self.withPassword(props.getProperty(&quot;login&quot;), props.getProperty(&quot;password&quot;));</span>
+<span class="fc" id="L221">        self.withEndpoint(props.getProperty(&quot;endpoint&quot;, GitHubClient.GITHUB_URL));</span>
+<span class="fc" id="L222">        return self;</span>
     }
 
     /**
@@ -234,8 +233,8 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withEndpoint(String endpoint) {
-<span class="fc" id="L237">        this.endpoint = endpoint;</span>
-<span class="fc" id="L238">        return this;</span>
+<span class="fc" id="L236">        this.endpoint = endpoint;</span>
+<span class="fc" id="L237">        return this;</span>
     }
 
     /**
@@ -248,9 +247,9 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withPassword(String user, String password) {
-<span class="fc" id="L251">        this.user = user;</span>
-<span class="fc" id="L252">        this.password = password;</span>
-<span class="fc" id="L253">        return this;</span>
+<span class="fc" id="L250">        this.user = user;</span>
+<span class="fc" id="L251">        this.password = password;</span>
+<span class="fc" id="L252">        return this;</span>
     }
 
     /**
@@ -261,7 +260,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken) {
-<span class="nc" id="L264">        return withOAuthToken(oauthToken, null);</span>
+<span class="nc" id="L263">        return withOAuthToken(oauthToken, null);</span>
     }
 
     /**
@@ -274,9 +273,9 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
-<span class="fc" id="L277">        this.oauthToken = oauthToken;</span>
-<span class="fc" id="L278">        this.user = user;</span>
-<span class="fc" id="L279">        return this;</span>
+<span class="fc" id="L276">        this.oauthToken = oauthToken;</span>
+<span class="fc" id="L277">        this.user = user;</span>
+<span class="fc" id="L278">        return this;</span>
     }
 
     /**
@@ -288,7 +287,7 @@ public class GitHubBuilder implements Cloneable {
      * @see GHAppInstallation#createToken(java.util.Map) GHAppInstallation#createToken(java.util.Map)
      */
     public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-<span class="fc" id="L291">        return withOAuthToken(appInstallationToken, &quot;&quot;);</span>
+<span class="fc" id="L290">        return withOAuthToken(appInstallationToken, &quot;&quot;);</span>
     }
 
     /**
@@ -299,8 +298,8 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withJwtToken(String jwtToken) {
-<span class="fc" id="L302">        this.jwtToken = jwtToken;</span>
-<span class="fc" id="L303">        return this;</span>
+<span class="fc" id="L301">        this.jwtToken = jwtToken;</span>
+<span class="fc" id="L302">        return this;</span>
     }
 
     /**
@@ -311,8 +310,8 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withConnector(HttpConnector connector) {
-<span class="fc" id="L314">        this.connector = connector;</span>
-<span class="fc" id="L315">        return this;</span>
+<span class="fc" id="L313">        this.connector = connector;</span>
+<span class="fc" id="L314">        return this;</span>
     }
 
     /**
@@ -338,8 +337,8 @@ public class GitHubBuilder implements Cloneable {
      * @see #withRateLimitChecker(RateLimitChecker)
      */
     public GitHubBuilder withRateLimitHandler(RateLimitHandler handler) {
-<span class="fc" id="L341">        this.rateLimitHandler = handler;</span>
-<span class="fc" id="L342">        return this;</span>
+<span class="fc" id="L340">        this.rateLimitHandler = handler;</span>
+<span class="fc" id="L341">        return this;</span>
     }
 
     /**
@@ -355,8 +354,8 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
-<span class="fc" id="L358">        this.abuseLimitHandler = handler;</span>
-<span class="fc" id="L359">        return this;</span>
+<span class="fc" id="L357">        this.abuseLimitHandler = handler;</span>
+<span class="fc" id="L358">        return this;</span>
     }
 
     /**
@@ -382,11 +381,11 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
-<span class="fc" id="L385">        this.rateLimitChecker = new GitHubRateLimitChecker(coreRateLimitChecker,</span>
+<span class="fc" id="L384">        this.rateLimitChecker = new GitHubRateLimitChecker(coreRateLimitChecker,</span>
                 RateLimitChecker.NONE,
                 RateLimitChecker.NONE,
                 RateLimitChecker.NONE);
-<span class="fc" id="L389">        return this;</span>
+<span class="fc" id="L388">        return this;</span>
     }
 
     /**
@@ -398,7 +397,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withProxy(final Proxy p) {
-<span class="nc" id="L401">        return withConnector(new ImpatientHttpConnector(url -&gt; (HttpURLConnection) url.openConnection(p)));</span>
+<span class="nc" id="L400">        return withConnector(new ImpatientHttpConnector(url -&gt; (HttpURLConnection) url.openConnection(p)));</span>
     }
 
     /**
@@ -409,7 +408,7 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public GitHub build() throws IOException {
-<span class="fc" id="L412">        return new GitHub(endpoint,</span>
+<span class="fc" id="L411">        return new GitHub(endpoint,</span>
                 user,
                 oauthToken,
                 jwtToken,
@@ -423,9 +422,9 @@ public class GitHubBuilder implements Cloneable {
     @Override
     public GitHubBuilder clone() {
         try {
-<span class="fc" id="L426">            return (GitHubBuilder) super.clone();</span>
-<span class="nc" id="L427">        } catch (CloneNotSupportedException e) {</span>
-<span class="nc" id="L428">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
+<span class="fc" id="L425">            return (GitHubBuilder) super.clone();</span>
+<span class="nc" id="L426">        } catch (CloneNotSupportedException e) {</span>
+<span class="nc" id="L427">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
         }
     }
 }

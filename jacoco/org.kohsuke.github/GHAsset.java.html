@@ -149,7 +149,7 @@ import java.net.URL;
 <span class="fc" id="L149">    }</span>
 
     private String getApiRoute() {
-<span class="fc" id="L152">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + id;</span>
+<span class="fc" id="L152">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + getId();</span>
     }
 
     GHAsset wrap(GHRelease release) {

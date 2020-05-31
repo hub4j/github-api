@@ -5,9 +5,11 @@ import java.util.Date;
 /**
  * The type GHIssueEvent.
  *
+ * @see &lt;a href=&quot;https://developer.github.com/v3/issues/events/&quot;&gt;Github documentation for issue events&lt;/a&gt;
+ *
  * @author Martin van Zijl
  */
-<span class="fc" id="L10">public class GHIssueEvent {</span>
+<span class="fc" id="L12">public class GHIssueEvent {</span>
     private GitHub root;
 
     private long id;
@@ -18,6 +20,9 @@ import java.util.Date;
     private String commit_id;
     private String commit_url;
     private String created_at;
+    private GHMilestone milestone;
+    private GHLabel label;
+    private GHUser assignee;
 
     private GHIssue issue;
 
@@ -27,7 +32,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L30">        return id;</span>
+<span class="fc" id="L35">        return id;</span>
     }
 
     /**
@@ -36,7 +41,7 @@ import java.util.Date;
      * @return the node id
      */
     public String getNodeId() {
-<span class="nc" id="L39">        return node_id;</span>
+<span class="nc" id="L44">        return node_id;</span>
     }
 
     /**
@@ -45,7 +50,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L48">        return url;</span>
+<span class="nc" id="L53">        return url;</span>
     }
 
     /**
@@ -54,7 +59,7 @@ import java.util.Date;
      * @return the actor
      */
     public GHUser getActor() {
-<span class="nc" id="L57">        return actor;</span>
+<span class="nc" id="L62">        return actor;</span>
     }
 
     /**
@@ -63,7 +68,7 @@ import java.util.Date;
      * @return the event
      */
     public String getEvent() {
-<span class="fc" id="L66">        return event;</span>
+<span class="fc" id="L71">        return event;</span>
     }
 
     /**
@@ -72,7 +77,7 @@ import java.util.Date;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="nc" id="L75">        return commit_id;</span>
+<span class="nc" id="L80">        return commit_id;</span>
     }
 
     /**
@@ -81,7 +86,7 @@ import java.util.Date;
      * @return the commit url
      */
     public String getCommitUrl() {
-<span class="nc" id="L84">        return commit_url;</span>
+<span class="nc" id="L89">        return commit_url;</span>
     }
 
     /**
@@ -90,7 +95,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L93">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L98">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -99,7 +104,7 @@ import java.util.Date;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L102">        return root;</span>
+<span class="nc" id="L107">        return root;</span>
     }
 
     /**
@@ -108,27 +113,57 @@ import java.util.Date;
      * @return the issue
      */
     public GHIssue getIssue() {
-<span class="fc" id="L111">        return issue;</span>
+<span class="fc" id="L116">        return issue;</span>
+    }
+
+    /**
+     * Get the {@link GHMilestone} that this issue was added to or removed from. Only present for events &quot;milestoned&quot;
+     * and &quot;demilestoned&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the milestone
+     */
+    public GHMilestone getMilestone() {
+<span class="fc" id="L126">        return milestone;</span>
+    }
+
+    /**
+     * Get the {@link GHLabel} that was added to or removed from the issue. Only present for events &quot;labeled&quot; and
+     * &quot;unlabeled&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the label
+     */
+    public GHLabel getLabel() {
+<span class="fc" id="L136">        return label;</span>
+    }
+
+    /**
+     * Get the {@link GHUser} that was assigned or unassigned from the issue. Only present for events &quot;assigned&quot; and
+     * &quot;unassigned&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the user
+     */
+    public GHUser getAssignee() {
+<span class="fc" id="L146">        return assignee;</span>
     }
 
     GHIssueEvent wrapUp(GitHub root) {
-<span class="fc" id="L115">        this.root = root;</span>
-<span class="fc" id="L116">        return this;</span>
+<span class="fc" id="L150">        this.root = root;</span>
+<span class="fc" id="L151">        return this;</span>
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L120">        this.issue = parent;</span>
-<span class="fc" id="L121">        this.root = parent.root;</span>
-<span class="fc" id="L122">        return this;</span>
+<span class="fc" id="L155">        this.issue = parent;</span>
+<span class="fc" id="L156">        this.root = parent.root;</span>
+<span class="fc" id="L157">        return this;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L127">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L128">                getIssue().getNumber(),</span>
-<span class="nc" id="L129">                getEvent(),</span>
-<span class="nc" id="L130">                getActor().getLogin(),</span>
-<span class="nc" id="L131">                getCreatedAt().toString());</span>
+<span class="nc" id="L162">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L163">                getIssue().getNumber(),</span>
+<span class="nc" id="L164">                getEvent(),</span>
+<span class="nc" id="L165">                getActor().getLogin(),</span>
+<span class="nc" id="L166">                getCreatedAt().toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

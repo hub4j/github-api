@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHGistUpdater.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHGistUpdater.java</span></div><h1>GHGistUpdater.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * Builder pattern for updating a Gist.
@@ -12,14 +15,14 @@ import java.util.LinkedHashMap;
 public class GHGistUpdater {
     private final GHGist base;
     private final Requester builder;
-    LinkedHashMap&lt;String, Object&gt; files;
+    LinkedHashMap&lt;String, Map&lt;String, String&gt;&gt; files;
 
-<span class="fc" id="L17">    GHGistUpdater(GHGist base) {</span>
-<span class="fc" id="L18">        this.base = base;</span>
-<span class="fc" id="L19">        this.builder = base.root.createRequest();</span>
+<span class="fc" id="L20">    GHGistUpdater(GHGist base) {</span>
+<span class="fc" id="L21">        this.base = base;</span>
+<span class="fc" id="L22">        this.builder = base.root.createRequest();</span>
 
-<span class="fc" id="L21">        files = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L24">        files = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L25">    }</span>
 
     /**
      * Add file gh gist updater.
@@ -32,16 +35,15 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater addFile(String fileName, String content) throws IOException {
-<span class="fc" id="L36">        updateFile(fileName, content);</span>
-<span class="fc" id="L37">        return this;</span>
+    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+<span class="fc" id="L39">        updateFile(fileName, content);</span>
+<span class="fc" id="L40">        return this;</span>
     }
 
-    // // This method does not work.
-    // public GHGistUpdater deleteFile(String fileName) throws IOException {
-    // files.put(fileName, Collections.singletonMap(&quot;filename&quot;, null));
-    // return this;
-    // }
+    public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
+<span class="fc" id="L44">        files.put(fileName, null);</span>
+<span class="fc" id="L45">        return this;</span>
+    }
 
     /**
      * Rename file gh gist updater.
@@ -54,9 +56,10 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater renameFile(String fileName, String newFileName) throws IOException {
-<span class="fc" id="L58">        files.put(fileName, Collections.singletonMap(&quot;filename&quot;, newFileName));</span>
-<span class="fc" id="L59">        return this;</span>
+    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) throws IOException {
+<span class="fc" id="L60">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L61">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L62">        return this;</span>
     }
 
     /**
@@ -70,9 +73,32 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater updateFile(String fileName, String content) throws IOException {
-<span class="fc" id="L74">        files.put(fileName, Collections.singletonMap(&quot;content&quot;, content));</span>
-<span class="fc" id="L75">        return this;</span>
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+<span class="fc" id="L77">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L78">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L79">        return this;</span>
+    }
+
+    /**
+     * Update file name and content
+     *
+     * @param fileName
+     *            the file name
+     * @param newFileName
+     *            the new file name
+     * @param content
+     *            the content
+     * @return the gh gist updater
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
+            throws IOException {
+<span class="fc" id="L97">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L98">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L99">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L100">        files.put(fileName, file);</span>
+<span class="fc" id="L101">        return this;</span>
     }
 
     /**
@@ -83,8 +109,8 @@ public class GHGistUpdater {
      * @return the gh gist updater
      */
     public GHGistUpdater description(String desc) {
-<span class="fc" id="L86">        builder.with(&quot;description&quot;, desc);</span>
-<span class="fc" id="L87">        return this;</span>
+<span class="fc" id="L112">        builder.with(&quot;description&quot;, desc);</span>
+<span class="fc" id="L113">        return this;</span>
     }
 
     /**
@@ -95,8 +121,8 @@ public class GHGistUpdater {
      *             the io exception
      */
     public GHGist update() throws IOException {
-<span class="fc" id="L98">        builder.with(&quot;files&quot;, files);</span>
-<span class="fc" id="L99">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
+<span class="fc" id="L124">        builder.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L125">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

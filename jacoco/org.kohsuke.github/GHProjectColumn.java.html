@@ -115,7 +115,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L118">        return String.format(&quot;/projects/columns/%d&quot;, id);</span>
+<span class="fc" id="L118">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
     }
 
     /**
@@ -139,7 +139,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 <span class="nc" id="L139">        final GHProjectColumn column = this;</span>
 <span class="nc" id="L140">        return root.createRequest()</span>
 <span class="nc" id="L141">                .withPreview(INERTIA)</span>
-<span class="nc" id="L142">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, id))</span>
+<span class="nc" id="L142">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
 <span class="nc" id="L143">                .toIterable(GHProjectCard[].class, item -&gt; item.wrap(column));</span>
     }
 
@@ -157,7 +157,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 <span class="fc" id="L157">                .method(&quot;POST&quot;)</span>
 <span class="fc" id="L158">                .withPreview(INERTIA)</span>
 <span class="fc" id="L159">                .with(&quot;note&quot;, note)</span>
-<span class="fc" id="L160">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, id))</span>
+<span class="fc" id="L160">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
 <span class="fc" id="L161">                .fetch(GHProjectCard.class)</span>
 <span class="fc" id="L162">                .wrap(this);</span>
     }
@@ -177,7 +177,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 <span class="fc" id="L177">                .withPreview(INERTIA)</span>
 <span class="pc bpc" id="L178" title="1 of 2 branches missed.">                .with(&quot;content_type&quot;, issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;)</span>
 <span class="fc" id="L179">                .with(&quot;content_id&quot;, issue.getId())</span>
-<span class="fc" id="L180">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, id))</span>
+<span class="fc" id="L180">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
 <span class="fc" id="L181">                .fetch(GHProjectCard.class)</span>
 <span class="fc" id="L182">                .wrap(this);</span>
     }

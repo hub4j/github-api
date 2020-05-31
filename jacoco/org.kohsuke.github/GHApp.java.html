@@ -39,10 +39,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param owner
      *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOwner(GHUser owner) {
-<span class="nc" id="L44">        this.owner = owner;</span>
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L46">        this.owner = owner;</span>
+<span class="nc" id="L47">    }</span>
 
     /**
      * Gets name.
@@ -50,7 +52,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L53">        return name;</span>
+<span class="fc" id="L55">        return name;</span>
     }
 
     /**
@@ -58,10 +60,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param name
      *            the name
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setName(String name) {
-<span class="nc" id="L63">        this.name = name;</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L67">        this.name = name;</span>
+<span class="nc" id="L68">    }</span>
 
     /**
      * Gets description.
@@ -69,7 +73,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L72">        return description;</span>
+<span class="fc" id="L76">        return description;</span>
     }
 
     /**
@@ -77,10 +81,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param description
      *            the description
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setDescription(String description) {
-<span class="nc" id="L82">        this.description = description;</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L88">        this.description = description;</span>
+<span class="nc" id="L89">    }</span>
 
     /**
      * Gets external url.
@@ -88,7 +94,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the external url
      */
     public String getExternalUrl() {
-<span class="fc" id="L91">        return externalUrl;</span>
+<span class="fc" id="L97">        return externalUrl;</span>
     }
 
     /**
@@ -96,10 +102,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param externalUrl
      *            the external url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setExternalUrl(String externalUrl) {
-<span class="nc" id="L101">        this.externalUrl = externalUrl;</span>
-<span class="nc" id="L102">    }</span>
+<span class="nc" id="L109">        this.externalUrl = externalUrl;</span>
+<span class="nc" id="L110">    }</span>
 
     /**
      * Gets events.
@@ -107,7 +115,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L110">        return events;</span>
+<span class="fc" id="L118">        return events;</span>
     }
 
     /**
@@ -115,10 +123,12 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param events
      *            the events
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="nc" id="L120">        this.events = events;</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L130">        this.events = events;</span>
+<span class="nc" id="L131">    }</span>
 
     /**
      * Gets installations count.
@@ -126,7 +136,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the installations count
      */
     public long getInstallationsCount() {
-<span class="fc" id="L129">        return installationsCount;</span>
+<span class="fc" id="L139">        return installationsCount;</span>
     }
 
     /**
@@ -134,13 +144,15 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param installationsCount
      *            the installations count
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setInstallationsCount(long installationsCount) {
-<span class="nc" id="L139">        this.installationsCount = installationsCount;</span>
-<span class="nc" id="L140">    }</span>
+<span class="nc" id="L151">        this.installationsCount = installationsCount;</span>
+<span class="nc" id="L152">    }</span>
 
     public URL getHtmlUrl() {
-<span class="fc" id="L143">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L155">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -149,7 +161,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L152">        return permissions;</span>
+<span class="fc" id="L164">        return permissions;</span>
     }
 
     /**
@@ -157,14 +169,16 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map&lt;String, String&gt; permissions) {
-<span class="nc" id="L162">        this.permissions = permissions;</span>
-<span class="nc" id="L163">    }</span>
+<span class="nc" id="L176">        this.permissions = permissions;</span>
+<span class="nc" id="L177">    }</span>
 
     GHApp wrapUp(GitHub root) {
-<span class="fc" id="L166">        this.root = root;</span>
-<span class="fc" id="L167">        return this;</span>
+<span class="fc" id="L180">        this.root = root;</span>
+<span class="fc" id="L181">        return this;</span>
     }
 
     /**
@@ -178,10 +192,10 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
     @Preview
     @Deprecated
     public PagedIterable&lt;GHAppInstallation&gt; listInstallations() {
-<span class="fc" id="L181">        return root.createRequest()</span>
-<span class="fc" id="L182">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L183">                .withUrlPath(&quot;/app/installations&quot;)</span>
-<span class="fc" id="L184">                .toIterable(GHAppInstallation[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L195">        return root.createRequest()</span>
+<span class="fc" id="L196">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L197">                .withUrlPath(&quot;/app/installations&quot;)</span>
+<span class="fc" id="L198">                .toIterable(GHAppInstallation[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -199,11 +213,11 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
-<span class="fc" id="L202">        return root.createRequest()</span>
-<span class="fc" id="L203">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L204">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
-<span class="fc" id="L205">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L206">                .wrapUp(root);</span>
+<span class="fc" id="L216">        return root.createRequest()</span>
+<span class="fc" id="L217">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L218">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
+<span class="fc" id="L219">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L220">                .wrapUp(root);</span>
     }
 
     /**
@@ -222,11 +236,11 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-<span class="fc" id="L225">        return root.createRequest()</span>
-<span class="fc" id="L226">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L227">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
-<span class="fc" id="L228">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L229">                .wrapUp(root);</span>
+<span class="fc" id="L239">        return root.createRequest()</span>
+<span class="fc" id="L240">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L241">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
+<span class="fc" id="L242">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L243">                .wrapUp(root);</span>
     }
 
     /**
@@ -247,11 +261,11 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-<span class="fc" id="L250">        return root.createRequest()</span>
-<span class="fc" id="L251">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L252">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
-<span class="fc" id="L253">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L254">                .wrapUp(root);</span>
+<span class="fc" id="L264">        return root.createRequest()</span>
+<span class="fc" id="L265">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L266">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
+<span class="fc" id="L267">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L268">                .wrapUp(root);</span>
     }
 
     /**
@@ -269,11 +283,11 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
     @Preview
     @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-<span class="fc" id="L272">        return root.createRequest()</span>
-<span class="fc" id="L273">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L274">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
-<span class="fc" id="L275">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L276">                .wrapUp(root);</span>
+<span class="fc" id="L286">        return root.createRequest()</span>
+<span class="fc" id="L287">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L288">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
+<span class="fc" id="L289">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L290">                .wrapUp(root);</span>
     }
 
 }

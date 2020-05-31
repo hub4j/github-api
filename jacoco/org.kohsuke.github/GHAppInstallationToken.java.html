@@ -37,10 +37,12 @@ import java.util.Map;
      *
      * @param root
      *            the root
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRoot(GitHub root) {
-<span class="nc" id="L42">        this.root = root;</span>
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L44">        this.root = root;</span>
+<span class="nc" id="L45">    }</span>
 
     /**
      * Gets permissions.
@@ -48,7 +50,7 @@ import java.util.Map;
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L51">        return permissions;</span>
+<span class="fc" id="L53">        return permissions;</span>
     }
 
     /**
@@ -56,10 +58,12 @@ import java.util.Map;
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map&lt;String, String&gt; permissions) {
-<span class="nc" id="L61">        this.permissions = permissions;</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L65">        this.permissions = permissions;</span>
+<span class="nc" id="L66">    }</span>
 
     /**
      * Gets token.
@@ -67,7 +71,7 @@ import java.util.Map;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L70">        return token;</span>
+<span class="fc" id="L74">        return token;</span>
     }
 
     /**
@@ -75,10 +79,12 @@ import java.util.Map;
      *
      * @param token
      *            the token
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setToken(String token) {
-<span class="nc" id="L80">        this.token = token;</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L86">        this.token = token;</span>
+<span class="nc" id="L87">    }</span>
 
     /**
      * Gets repositories.
@@ -86,7 +92,7 @@ import java.util.Map;
      * @return the repositories
      */
     public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L89">        return repositories;</span>
+<span class="fc" id="L95">        return repositories;</span>
     }
 
     /**
@@ -94,10 +100,12 @@ import java.util.Map;
      *
      * @param repositories
      *            the repositories
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositories(List&lt;GHRepository&gt; repositories) {
-<span class="nc" id="L99">        this.repositories = repositories;</span>
-<span class="nc" id="L100">    }</span>
+<span class="nc" id="L107">        this.repositories = repositories;</span>
+<span class="nc" id="L108">    }</span>
 
     /**
      * Gets repository selection.
@@ -105,7 +113,7 @@ import java.util.Map;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L108">        return repositorySelection;</span>
+<span class="fc" id="L116">        return repositorySelection;</span>
     }
 
     /**
@@ -113,10 +121,12 @@ import java.util.Map;
      *
      * @param repositorySelection
      *            the repository selection
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="nc" id="L118">        this.repositorySelection = repositorySelection;</span>
-<span class="nc" id="L119">    }</span>
+<span class="nc" id="L128">        this.repositorySelection = repositorySelection;</span>
+<span class="nc" id="L129">    }</span>
 
     /**
      * Gets expires at.
@@ -127,17 +137,17 @@ import java.util.Map;
      */
     @WithBridgeMethods(value = String.class, adapterMethod = &quot;expiresAtStr&quot;)
     public Date getExpiresAt() throws IOException {
-<span class="fc" id="L130">        return GitHubClient.parseDate(expires_at);</span>
+<span class="fc" id="L140">        return GitHubClient.parseDate(expires_at);</span>
     }
 
     @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getExpiresAt&quot;)
     private Object expiresAtStr(Date id, Class type) {
-<span class="nc" id="L135">        return expires_at;</span>
+<span class="nc" id="L145">        return expires_at;</span>
     }
 
     GHAppInstallationToken wrapUp(GitHub root) {
-<span class="fc" id="L139">        this.root = root;</span>
-<span class="fc" id="L140">        return this;</span>
+<span class="fc" id="L149">        this.root = root;</span>
+<span class="fc" id="L150">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

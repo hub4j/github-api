@@ -101,7 +101,7 @@ public class GHBranch {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-<span class="nc" id="L104">        return root.createRequest().withUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);</span>
+<span class="fc" id="L104">        return root.createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);</span>
     }
 
     /**
@@ -120,8 +120,8 @@ public class GHBranch {
      *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
-<span class="nc" id="L123">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(protection_url).send();</span>
-<span class="nc" id="L124">    }</span>
+<span class="fc" id="L123">        root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protection_url).send();</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Enables branch protection to control what commit statuses are required to push.

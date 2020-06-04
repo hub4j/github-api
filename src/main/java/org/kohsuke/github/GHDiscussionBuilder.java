@@ -64,6 +64,8 @@ public class GHDiscussionBuilder {
     /**
      * Update a discussion with all the parameters.
      *
+     * @param number
+     *            number of the discussion to be updated
      * @return the gh discussion
      * @throws IOException
      *             if discussion cannot be updated

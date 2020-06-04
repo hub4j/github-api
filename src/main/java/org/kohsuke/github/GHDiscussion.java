@@ -10,10 +10,11 @@ import java.net.URL;
  */
 public class GHDiscussion extends GHObject {
 
-    protected GitHub root;
-    protected GHOrganization organization;
-    protected GHTeam team;
-    protected String body, title, html_url;
+    @JacksonInject
+    private GitHub root;
+    private GHOrganization organization;
+    private GHTeam team;
+    private String body, title, htmlUrl;
 
     @Override
     public URL getHtmlUrl() throws IOException {

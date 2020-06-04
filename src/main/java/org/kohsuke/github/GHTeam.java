@@ -140,7 +140,7 @@ public class GHTeam extends GHObject implements Refreshable {
     public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
         return root.createRequest()
                 .withUrlPath(api("/discussions"))
-                .toIterable(GHDiscussion[].class, item -> item.wrapUp(root));
+                .toIterable(GHDiscussion[].class, item -> item.wrapUp(this));
     }
 
     /**

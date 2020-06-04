@@ -114,6 +114,8 @@ public class GHDiscussion extends GHObject {
     /**
      * Delete the discussion
      *
+     * @param number
+     *            the number
      * @throws IOException
      *             the io exception
      */

@@ -34,7 +34,6 @@ public class GHDiscussion extends GHObject {
 
     public GHDiscussion wrapUp(GHOrganization owner) {
         this.organization = owner;
-        this.root = owner.root;
         return this;
     }
 

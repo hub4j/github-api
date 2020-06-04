@@ -138,9 +138,13 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
-        return root.createRequest()
-                .withUrlPath(api("/discussions"))
-                .toIterable(GHDiscussion[].class, item -> item.wrapUp(this));
+        return root.createRequest().withUrlPath(api("/discussions")).toIterable(GHDiscussion[].class, item -> {
+            try {
+                item.wrapUp(this);
+            } catch (IOException e) {
+                throw new GHException("Failed to retrieve discussions", e);
+            }
+        });
     }
 
     /**

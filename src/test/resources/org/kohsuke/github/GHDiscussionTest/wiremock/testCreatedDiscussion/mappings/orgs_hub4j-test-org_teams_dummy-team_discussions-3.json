@@ -1,8 +1,8 @@
 {
   "id": "00d7317e-48cb-4f70-9efb-148d34750fdb",
-  "name": "orgs_null_teams_dummy-team_discussions",
+  "name": "orgs_hub4j-test-org_teams_dummy-team_discussions",
   "request": {
-    "url": "/orgs/null/teams/dummy-team/discussions",
+    "url": "/orgs/hub4j-test-org/teams/dummy-team/discussions",
     "method": "POST",
     "headers": {
       "Accept": {

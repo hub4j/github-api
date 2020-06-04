@@ -22,7 +22,6 @@ public class GHDiscussion extends GHObject {
     }
 
     public GHDiscussion wrapUp(GHTeam team) throws IOException {
-        this.root = team.root;
         this.organization = team.getOrganization();
         this.team = team;
         return this;

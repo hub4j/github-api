@@ -53,6 +53,6 @@ public class GHDiscussionBuilder {
         return builder.method("POST")
                 .withUrlPath("/orgs/" + team.getOrganization().getName() + "/teams/" + team.getSlug() + "/discussions")
                 .fetch(GHDiscussion.class)
-                .wrapUp(team.root);
+                .wrapUp(team);
     }
 }

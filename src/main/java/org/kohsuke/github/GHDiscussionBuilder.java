@@ -67,8 +67,6 @@ public class GHDiscussionBuilder {
      * @param number
      *            number of the discussion to be updated
      * @return the gh discussion
-     * @throws IOException
-     *             if discussion cannot be updated
      */
     public GHDiscussion update(String number) {
         try {

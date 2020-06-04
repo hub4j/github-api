@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -19,7 +21,7 @@ public class GHDiscussion extends GHObject {
 
     @Override
     public URL getHtmlUrl() throws IOException {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     public GHDiscussion wrapUp(GHTeam team) throws IOException {

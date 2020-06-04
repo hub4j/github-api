@@ -1,0 +1,50 @@
+{
+  "id": "ee07ede6-da15-4639-991a-5d47d2b1bb33",
+  "name": "orgs_hub4j-test-org_teams_dummy-team",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams/dummy-team",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_hub4j-test-org_teams_dummy-team-2.json",
+    "headers": {
+      "Date": "Thu, 04 Jun 2020 16:17:23 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1591291038",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5b8a20b94c28536e4d7b9af6bd1a2f0a\"",
+      "Last-Modified": "Tue, 02 Jun 2020 19:31:50 GMT",
+      "X-OAuth-Scopes": "admin:org, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FAF6:C609:2660AA:2E8275:5ED91E93"
+    }
+  },
+  "uuid": "ee07ede6-da15-4639-991a-5d47d2b1bb33",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-hub4j-test-org-teams-dummy-team",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-orgs-hub4j-test-org-teams-dummy-team-2",
+  "insertionIndex": 2
+}

@@ -66,4 +66,63 @@ public class GHDiscussion extends GHObject {
     public String getNumber() {
         return number;
     }
+
+    /**
+     * Sets body.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void setBody(String body) throws IOException {
+        edit("body", body);
+    }
+
+    /**
+     * Sets title.
+     *
+     * @param title
+     *            the title
+     * @throws IOException
+     *             the io exception
+     */
+    public void setTitle(String title) throws IOException {
+        edit("title", title);
+    }
+
+    /**
+     * Edit the discussion
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    private void edit(String key, Object value) throws IOException {
+        root.createRequest()
+                .method("PATCH")
+                // .withPreview(INERTIA)
+                .with(key, value)
+                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
+                        + number)
+                .send();
+    }
+
+    /**
+     * Delete the discussion
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete(String number) throws IOException {
+        root.createRequest()
+                // .withPreview(INERTIA)
+                .method("DELETE")
+                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
+                        + number)
+                .send();
+    }
 }

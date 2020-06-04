@@ -1,0 +1,41 @@
+{
+  "id": "097b4abb-4b15-4b1a-9867-ee6281df6499",
+  "name": "orgs_hub4j-test-org_teams_dummy-team_discussions_8",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams/dummy-team/discussions/8",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Thu, 04 Jun 2020 16:17:24 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1591291038",
+      "X-OAuth-Scopes": "admin:org, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "FAF6:C609:2661A5:2E83A5:5ED91E93"
+    }
+  },
+  "uuid": "097b4abb-4b15-4b1a-9867-ee6281df6499",
+  "persistent": true,
+  "insertionIndex": 4
+}

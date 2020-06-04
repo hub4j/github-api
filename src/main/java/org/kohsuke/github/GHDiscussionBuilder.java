@@ -73,8 +73,8 @@ public class GHDiscussionBuilder {
     public GHDiscussion update(String number) {
         try {
             return builder.method("PATCH")
-                    .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
-                            + number)
+                    .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug()
+                            + "/discussions/" + number)
                     .fetch(GHDiscussion.class)
                     .wrapUp(team);
         } catch (IOException e) {

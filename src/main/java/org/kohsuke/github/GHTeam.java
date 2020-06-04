@@ -148,6 +148,25 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Gets a single discussion by ID.
+     *
+     * @param discussionId
+     *            id of the discussion that we want to query for
+     * @return the discussion
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
+     */
+    public GHDiscussion getDiscussion(String discussionId) throws IOException {
+        return root.createRequest()
+                .withUrlPath("/orgs/" + this.getOrganization().getLogin() + "/teams/" + this.getSlug() + "/discussions/"
+                        + discussionId)
+                .fetch(GHDiscussion.class)
+                .wrapUp(this);
+    }
+
+    /**
      * Retrieves the current members.
      *
      * @return the paged iterable

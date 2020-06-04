@@ -70,12 +70,16 @@ public class GHDiscussionBuilder {
      * @throws IOException
      *             if discussion cannot be updated
      */
-    public GHDiscussion update(String number) throws IOException {
-        return builder.method("PATCH")
-                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
-                        + number)
-                .fetch(GHDiscussion.class)
-                .wrapUp(team);
+    public GHDiscussion update(String number) {
+        try {
+            return builder.method("PATCH")
+                    .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
+                            + number)
+                    .fetch(GHDiscussion.class)
+                    .wrapUp(team);
+        } catch (IOException e) {
+            throw new GHException("Discussion to be updated not found", e);
+        }
     }
 
     /**

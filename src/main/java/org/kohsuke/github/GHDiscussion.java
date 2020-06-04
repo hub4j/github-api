@@ -7,6 +7,7 @@ import java.net.URL;
  * A discussion in GitHub Team.
  *
  * @author Charles Moulliard
+ * @see <a href="https://developer.github.com/v3/teams/discussions">GitHub Team Discussions</a>
  */
 public class GHDiscussion extends GHObject {
 

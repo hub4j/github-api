@@ -336,8 +336,6 @@ public class GHTeam extends GHObject implements Refreshable {
      *
      * @param number
      *            the number
-     * @throws IOException
-     *             the io exception
      */
     public void deleteDiscussion(String number) {
         try {

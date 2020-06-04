@@ -1,0 +1,47 @@
+{
+  "id": "00d7317e-48cb-4f70-9efb-148d34750fdb",
+  "name": "orgs_null_teams_dummy-team_discussions",
+  "request": {
+    "url": "/orgs/null/teams/dummy-team/discussions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Dummy\",\"body\":\"This is a dummy discussion\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3\"}",
+    "headers": {
+      "Date": "Thu, 04 Jun 2020 05:21:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4967",
+      "X-RateLimit-Reset": "1591249749",
+      "X-OAuth-Scopes": "admin:org, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D969:2285A:ADDDF8:CE87CD:5ED884F1"
+    }
+  },
+  "uuid": "00d7317e-48cb-4f70-9efb-148d34750fdb",
+  "persistent": true,
+  "insertionIndex": 3
+}

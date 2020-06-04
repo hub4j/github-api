@@ -331,12 +331,31 @@ public class GHTeam extends GHObject implements Refreshable {
         return new GHDiscussionBuilder(this, name);
     }
 
+    /**
+     * Creates a builder that delete the discussion
+     *
+     * @param number
+     *            the number
+     * @throws IOException
+     *             the io exception
+     */
     public void deleteDiscussion(String number) {
         try {
             new GHDiscussionBuilder(this, name).delete(number);
         } catch (IOException e) {
             throw new GHException("Failed to delete the discussion : " + number, e);
         }
+    }
+
+    /**
+     * Starts a builder that update a new discussion.
+     *
+     * @throws IOException
+     *             the io exception
+     * @return the GHDiscussionBuilder
+     */
+    public GHDiscussionBuilder updateDiscussion() throws IOException {
+        return new GHDiscussionBuilder(this);
     }
 
     /**

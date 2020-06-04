@@ -18,6 +18,11 @@ public class GHDiscussionBuilder {
         builder.with("title", title);
     }
 
+    public GHDiscussionBuilder(GHTeam team) {
+        this.team = team;
+        this.builder = team.root.createRequest();
+    }
+
     /**
      * Title for this discussion.
      *
@@ -52,6 +57,21 @@ public class GHDiscussionBuilder {
     public GHDiscussion create() throws IOException {
         return builder.method("POST")
                 .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions")
+                .fetch(GHDiscussion.class)
+                .wrapUp(team);
+    }
+
+    /**
+     * Update a discussion with all the parameters.
+     *
+     * @return the gh discussion
+     * @throws IOException
+     *             if discussion cannot be updated
+     */
+    public GHDiscussion update(String number) throws IOException {
+        return builder.method("PATCH")
+                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
+                        + number)
                 .fetch(GHDiscussion.class)
                 .wrapUp(team);
     }

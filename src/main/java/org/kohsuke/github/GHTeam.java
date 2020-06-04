@@ -331,6 +331,14 @@ public class GHTeam extends GHObject implements Refreshable {
         return new GHDiscussionBuilder(this, name);
     }
 
+    public void deleteDiscussion(String number) {
+        try {
+            new GHDiscussionBuilder(this, name).delete(number);
+        } catch (IOException e) {
+            throw new GHException("Failed to delete the discussion : " + number, e);
+        }
+    }
+
     /**
      * Gets organization.
      *

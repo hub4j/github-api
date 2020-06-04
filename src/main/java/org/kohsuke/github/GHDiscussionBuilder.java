@@ -55,4 +55,19 @@ public class GHDiscussionBuilder {
                 .fetch(GHDiscussion.class)
                 .wrapUp(team);
     }
+
+    /**
+     * Delete this discussion from the team.
+     *
+     * @param number
+     *            number of the discussion
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete(String number) throws IOException {
+        builder.method("DELETE")
+                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
+                        + number)
+                .send();
+    }
 }

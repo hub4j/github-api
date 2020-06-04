@@ -17,7 +17,7 @@ public class GHDiscussion extends GHObject {
     private GitHub root;
     private GHOrganization organization;
     private GHTeam team;
-    private String body, title, htmlUrl;
+    private String number, body, title, htmlUrl;
 
     @Override
     public URL getHtmlUrl() throws IOException {
@@ -56,5 +56,14 @@ public class GHDiscussion extends GHObject {
      */
     public String getBody() {
         return body;
+    }
+
+    /**
+     * The number of this discussion.
+     *
+     * @return the number
+     */
+    public String getNumber() {
+        return number;
     }
 }

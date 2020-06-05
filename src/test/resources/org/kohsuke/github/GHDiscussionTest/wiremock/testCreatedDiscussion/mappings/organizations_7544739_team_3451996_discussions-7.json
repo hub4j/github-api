@@ -1,0 +1,47 @@
+{
+  "id": "5f6075fe-cdc4-4fb6-a2cb-ee22cb4e85b8",
+  "name": "organizations_7544739_team_3451996_discussions",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Some Discussion\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 422,
+    "body": "{\"message\":\"Invalid request.\\n\\n\\\"body\\\" wasn't supplied.\",\"documentation_url\":\"https://developer.github.com/v3/teams/discussions/#create-a-discussion\"}",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "422 Unprocessable Entity",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4748",
+      "X-RateLimit-Reset": "1591398936",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "CFF1:24BF:54932E:64DB9C:5EDAD06D"
+    }
+  },
+  "uuid": "5f6075fe-cdc4-4fb6-a2cb-ee22cb4e85b8",
+  "persistent": true,
+  "insertionIndex": 7
+}

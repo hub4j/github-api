@@ -2,96 +2,73 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
-/**
- * Creates a Discussion.
- *
- * https://developer.github.com/v3/teams/discussions/#create-a-discussion
- */
-public class GHDiscussionBuilder {
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
-    protected final Requester builder;
+/**
+ * Base class for creating or updating a discussion.
+ *
+ * @param <S>
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
+ *            the same as {@link GHLabel}, this builder will commit changes after each call to
+ *            {@link #with(String, Object)}.
+ */
+class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
+
     private final GHTeam team;
 
-    public GHDiscussionBuilder(GHTeam team, String title) {
-        this.team = team;
-        this.builder = team.root.createRequest();
-        builder.with("title", title);
-    }
+    /**
+     *
+     * @param intermediateReturnType
+     *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
+     *            {@link S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
+     *            {@link #with(String, Object)}.
+     * @param team
+     *            the GitHub team. Updates will be sent to the root of this team.
+     * @param baseInstance
+     *            instance on which to base this builder. If {@code null} a new instance will be created.
+     */
+    protected GHDiscussionBuilder(@Nonnull Class<S> intermediateReturnType,
+            @Nonnull GHTeam team,
+            @CheckForNull GHDiscussion baseInstance) {
+        super(GHDiscussion.class, intermediateReturnType, team.root, baseInstance);
 
-    public GHDiscussionBuilder(GHTeam team) {
         this.team = team;
-        this.builder = team.root.createRequest();
+
+        if (baseInstance != null) {
+            requester.with("title", baseInstance.getTitle());
+            requester.with("body", baseInstance.getBody());
+        }
     }
 
     /**
      * Title for this discussion.
      *
-     * @param title
+     * @param value
      *            title of discussion
-     * @return a builder to continue with building
+     * @return either a continuing builder or an updated {@link GHDiscussion}
      */
-    public GHDiscussionBuilder title(String title) {
-        this.builder.with("title", title);
-        return this;
+    @Nonnull
+    public S title(String value) throws IOException {
+        return with("title", value);
     }
 
     /**
      * Body content for this discussion.
      *
-     * @param body
-     *            title of discussion
-     * @return a builder to continue with building
+     * @param value
+     *            body of discussion
+     *
+     * @return either a continuing builder or an updated {@link GHDiscussion}
      */
-    public GHDiscussionBuilder body(String body) {
-        this.builder.with("body", body);
-        return this;
+    @Nonnull
+    public S body(String value) throws IOException {
+        return with("body", value);
     }
 
-    /**
-     * Creates a discussion with all the parameters.
-     *
-     * @return the gh discussion
-     * @throws IOException
-     *             if discussion cannot be created
-     */
-    public GHDiscussion create() throws IOException {
-        return builder.method("POST")
-                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions")
-                .fetch(GHDiscussion.class)
-                .wrapUp(team);
-    }
-
-    /**
-     * Update a discussion with all the parameters.
-     *
-     * @param number
-     *            number of the discussion to be updated
-     * @return the gh discussion
-     */
-    public GHDiscussion update(String number) {
-        try {
-            return builder.method("PATCH")
-                    .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug()
-                            + "/discussions/" + number)
-                    .fetch(GHDiscussion.class)
-                    .wrapUp(team);
-        } catch (IOException e) {
-            throw new GHException("Discussion to be updated not found", e);
-        }
-    }
-
-    /**
-     * Delete this discussion from the team.
-     *
-     * @param number
-     *            number of the discussion
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete(String number) throws IOException {
-        builder.method("DELETE")
-                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
-                        + number)
-                .send();
+    @Nonnull
+    @Override
+    public GHDiscussion done() throws IOException {
+        return super.done().wrapUp(team);
     }
 }

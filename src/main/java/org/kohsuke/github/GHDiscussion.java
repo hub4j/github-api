@@ -1,9 +1,13 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 /**
  * A discussion in GitHub Team.
@@ -15,29 +19,31 @@ public class GHDiscussion extends GHObject {
 
     @JacksonInject
     private GitHub root;
-    private GHOrganization organization;
     private GHTeam team;
-    private String number, body, title, htmlUrl;
+    private long number;
+    private String body, title, htmlUrl;
+
+    @JsonProperty(value = "private")
+    private boolean isPrivate;
 
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
     }
 
-    public GHDiscussion wrapUp(GHTeam team) throws IOException {
-        this.organization = team.getOrganization();
+    GHDiscussion wrapUp(GHTeam team) {
         this.team = team;
         return this;
     }
 
-    public GHDiscussion wrapUp(GitHub root) {
-        this.root = root;
-        return this;
-    }
-
-    public GHDiscussion wrapUp(GHOrganization owner) {
-        this.organization = owner;
-        return this;
+    /**
+     * Get the team to which this discussion belongs.
+     *
+     * @return the team for this discussion
+     */
+    @Nonnull
+    public GHTeam getTeam() {
+        return team;
     }
 
     /**
@@ -63,68 +69,141 @@ public class GHDiscussion extends GHObject {
      *
      * @return the number
      */
-    public String getNumber() {
+    public long getNumber() {
         return number;
     }
 
     /**
-     * Sets body.
+     * Whether the discussion is private to the team.
      *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
+     * @return {@code true} if discussion is private.
      */
-    public void setBody(String body) throws IOException {
-        edit("body", body);
+    public boolean isPrivate() {
+        return isPrivate;
     }
 
     /**
-     * Sets title.
+     * Begins the creation of a new instance.
      *
-     * @param title
-     *            the title
+     * Consumer must call {@link GHDiscussion.Creator#done()} to commit changes.
+     *
+     * @param team
+     *            the team in which the discussion will be created.
+     * @return a {@link GHLabel.Creator}
      * @throws IOException
      *             the io exception
      */
-    public void setTitle(String title) throws IOException {
-        edit("title", title);
+    static GHDiscussion.Creator create(GHTeam team) throws IOException {
+        return new GHDiscussion.Creator(team);
+    }
+
+    static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
+        return team.root.createRequest()
+                .setRawUrlPath(team.getUrl().toString() + "/discussions/" + discussionNumber)
+                .fetch(GHDiscussion.class)
+                .wrapUp(team);
+    }
+
+    static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
+        return team.root.createRequest()
+                .setRawUrlPath(team.getUrl().toString() + "/discussions")
+                .toIterable(GHDiscussion[].class, item -> item.wrapUp(team));
     }
 
     /**
-     * Edit the discussion
+     * Begins a batch update
      *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     * @throws IOException
-     *             the io exception
+     * Consumer must call {@link GHDiscussion.Updater#done()} to commit changes.
+     *
+     * @return a {@link GHDiscussion.Updater}
      */
-    private void edit(String key, Object value) throws IOException {
-        root.createRequest()
-                .method("PATCH")
-                // .withPreview(INERTIA)
-                .with(key, value)
-                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
-                        + number)
-                .send();
+    @Preview
+    @Deprecated
+    public GHDiscussion.Updater update() {
+        return new GHDiscussion.Updater(this);
+    }
+
+    /**
+     * Begins a single property update.
+     *
+     * @return a {@link GHDiscussion.Setter}
+     */
+    @Preview
+    @Deprecated
+    public GHDiscussion.Setter set() {
+        return new GHDiscussion.Setter(this);
     }
 
     /**
      * Delete the discussion
      *
-     * @param number
-     *            the number
      * @throws IOException
      *             the io exception
      */
-    public void delete(String number) throws IOException {
-        root.createRequest()
-                // .withPreview(INERTIA)
+    public void delete() throws IOException {
+        team.root.createRequest()
                 .method("DELETE")
-                .withUrlPath("/orgs/" + team.getOrganization().getLogin() + "/teams/" + team.getSlug() + "/discussions/"
-                        + number)
+                .setRawUrlPath(team.getUrl().toString() + "/discussions/" + number)
                 .send();
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that updates a single property per request
+     *
+     * {@link #done()} is called automatically after the property is set.
+     */
+    public static class Setter extends GHDiscussionBuilder<GHDiscussion> {
+        private Setter(@Nonnull GHDiscussion base) {
+            super(GHDiscussion.class, base.team, base);
+            requester.method("PATCH").setRawUrlPath(base.getUrl().toString());
+        }
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    public static class Updater extends GHDiscussionBuilder<Updater> {
+        private Updater(@Nonnull GHDiscussion base) {
+            super(GHDiscussion.Updater.class, base.team, base);
+            requester.method("PATCH").setRawUrlPath(base.getUrl().toString());
+        }
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
+     *
+     * Consumer must call {@link #done()} to create the new instance.
+     */
+    public static class Creator extends GHDiscussionBuilder<Creator> {
+
+        private Creator(@Nonnull GHTeam team) {
+            super(GHDiscussion.Creator.class, team, null);
+            requester.method("POST").withUrlPath(team.getUrl().toString() + "/discussions");
+        }
+
+        @Nonnull
+        public Creator private_(boolean value) throws IOException {
+            return with("private", value);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHDiscussion that = (GHDiscussion) o;
+        return number == that.number && Objects.equals(getUrl(), that.getUrl()) && Objects.equals(team, that.team)
+                && Objects.equals(body, that.body) && Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(team, number, body, title);
     }
 }

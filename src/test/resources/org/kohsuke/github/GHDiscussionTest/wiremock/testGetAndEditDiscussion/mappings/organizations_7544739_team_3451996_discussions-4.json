@@ -1,0 +1,54 @@
+{
+  "id": "e79f0ed5-72dc-4708-a682-f5ed836916f7",
+  "name": "organizations_7544739_team_3451996_discussions",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Some Discussion\",\"body\":\"This is a test discussion\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "organizations_7544739_team_3451996_discussions-4.json",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:24 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4765",
+      "X-RateLimit-Reset": "1591398936",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"5ac9c6b83b3a7e3f162a47846a4964a3\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "Location": "https://api.github.com/organizations/7544739/team/3451996/discussions/56",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CFE9:75EF:A6D267:C63324:5EDAD068"
+    }
+  },
+  "uuid": "e79f0ed5-72dc-4708-a682-f5ed836916f7",
+  "persistent": true,
+  "insertionIndex": 4
+}

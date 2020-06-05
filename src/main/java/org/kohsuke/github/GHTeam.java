@@ -3,8 +3,11 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+
+import javax.annotation.Nonnull;
 
 /**
  * A team in GitHub organization.
@@ -137,33 +140,27 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
+    @Nonnull
     public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
-        return root.createRequest().withUrlPath(api("/discussions")).toIterable(GHDiscussion[].class, item -> {
-            try {
-                item.wrapUp(this);
-            } catch (IOException e) {
-                throw new GHException("Failed to retrieve discussions", e);
-            }
-        });
+        return GHDiscussion.readAll(this);
     }
 
     /**
      * Gets a single discussion by ID.
      *
-     * @param discussionId
+     * @param discussionNumber
      *            id of the discussion that we want to query for
      * @return the discussion
+     * @throws java.io.FileNotFoundException
+     *             if the discussion does not exist
      * @throws IOException
      *             the io exception
      *
      * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
      */
-    public GHDiscussion getDiscussion(String discussionId) throws IOException {
-        return root.createRequest()
-                .withUrlPath("/orgs/" + this.getOrganization().getLogin() + "/teams/" + this.getSlug() + "/discussions/"
-                        + discussionId)
-                .fetch(GHDiscussion.class)
-                .wrapUp(this);
+    @Nonnull
+    public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
+        return GHDiscussion.read(this, discussionNumber);
     }
 
     /**
@@ -334,45 +331,18 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
-     * Starts a builder that creates a new discussion.
+     * Begins the creation of a new instance.
      *
-     * <p>
-     * You use the returned builder to set various properties, then call {@link GHDiscussionBuilder#create()} to finally
-     * create a discussion.
+     * Consumer must call {@link GHDiscussion.Creator#done()} to commit changes.
      *
-     * @param name
-     *            the name
-     * @return the gh create discussion builder
+     * @param title
+     *            title of the discussion to be created
+     * @return a {@link GHDiscussion.Creator}
      * @throws IOException
      *             the io exception
      */
-    public GHDiscussionBuilder createDiscussion(String name) throws IOException {
-        return new GHDiscussionBuilder(this, name);
-    }
-
-    /**
-     * Creates a builder that delete the discussion
-     *
-     * @param number
-     *            the number
-     */
-    public void deleteDiscussion(String number) {
-        try {
-            new GHDiscussionBuilder(this, name).delete(number);
-        } catch (IOException e) {
-            throw new GHException("Failed to delete the discussion : " + number, e);
-        }
-    }
-
-    /**
-     * Starts a builder that update a new discussion.
-     *
-     * @throws IOException
-     *             the io exception
-     * @return the GHDiscussionBuilder
-     */
-    public GHDiscussionBuilder updateDiscussion() throws IOException {
-        return new GHDiscussionBuilder(this);
+    public GHDiscussion.Creator createDiscussion(String title) throws IOException {
+        return GHDiscussion.create(this).title(title);
     }
 
     /**
@@ -395,5 +365,24 @@ public class GHTeam extends GHObject implements Refreshable {
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHTeam ghTeam = (GHTeam) o;
+        return Objects.equals(name, ghTeam.name) && Objects.equals(getUrl(), ghTeam.getUrl())
+                && Objects.equals(permission, ghTeam.permission) && Objects.equals(slug, ghTeam.slug)
+                && Objects.equals(description, ghTeam.description) && privacy == ghTeam.privacy;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, getUrl(), permission, slug, description, privacy);
     }
 }

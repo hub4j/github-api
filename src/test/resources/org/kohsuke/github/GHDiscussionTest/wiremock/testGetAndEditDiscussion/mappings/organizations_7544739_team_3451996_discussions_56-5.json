@@ -1,0 +1,49 @@
+{
+  "id": "53d0c47f-53a0-47dd-b2cc-13d775574fa6",
+  "name": "organizations_7544739_team_3451996_discussions_56",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions/56",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "organizations_7544739_team_3451996_discussions_56-5.json",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4764",
+      "X-RateLimit-Reset": "1591398936",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5ac9c6b83b3a7e3f162a47846a4964a3\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "read:discussion, write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CFE9:75EF:A6D283:C63345:5EDAD068"
+    }
+  },
+  "uuid": "53d0c47f-53a0-47dd-b2cc-13d775574fa6",
+  "persistent": true,
+  "scenarioName": "scenario-2-organizations-7544739-team-3451996-discussions-56",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-organizations-7544739-team-3451996-discussions-56-2",
+  "insertionIndex": 5
+}

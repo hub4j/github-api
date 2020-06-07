@@ -1005,6 +1005,7 @@ public class GitHub {
     		java.net.URL redirect_after_auth) 
     				throws IOException {
         Requester requester = createRequest()
+        						.method("POST")
         						.setRawUrlPath("https://github.com/login/oauth/access_token")
         						.with("client_id", OAuthApplicationclient_id)
         						.with("client_secret", OAuthApplicationSecret)

@@ -173,6 +173,19 @@ public class GHUser extends GHPerson {
         return org.hasPublicMember(this);
     }
 
+    /**
+     * Returns true if this user is marked as hireable, false otherwise
+     *
+     * @return if the user is marked as hireable
+     */
+    public boolean isHireable() {
+        return hireable;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
     static GHUser[] wrap(GHUser[] users, GitHub root) {
         for (GHUser f : users)
             f.root = root;

@@ -102,4 +102,11 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
             repository.delete();
         }
     }
+
+    @Test
+    public void verifyBioAndHireable() throws IOException {
+        GHUser u = gitHub.getUser("GitHub");
+        assertNotNull(u.getBio());
+        assertNotNull(u.isHireable());
+    }
 }

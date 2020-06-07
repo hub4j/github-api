@@ -105,8 +105,9 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void verifyBioAndHireable() throws IOException {
-        GHUser u = gitHub.getUser("GitHub");
-        assertNotNull(u.getBio());
-        assertNotNull(u.isHireable());
+        GHUser u = gitHub.getUser("Chew");
+        assertThat(u.getBio(), equalTo("I like to program things and I hope to program something cool one day :D"));
+        assertTrue(u.isHireable());
+        assertNotNull(u.getTwitterUsername());
     }
 }

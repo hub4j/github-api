@@ -199,6 +199,15 @@ public class GHDiscussion extends GHObject {
             requester.method("POST").setRawUrlPath(getRawUrlPath(team, null));
         }
 
+        /**
+         * Sets whether this discussion is private to this team.
+         *
+         * @param value
+         *            privacy of this discussion
+         * @return either a continuing builder or an updated {@link GHDiscussion}
+         * @throws IOException
+         *             if there is an I/O Exception
+         */
         @Nonnull
         public Creator private_(boolean value) throws IOException {
             return with("private", value);

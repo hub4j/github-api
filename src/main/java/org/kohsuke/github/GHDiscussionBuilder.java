@@ -47,6 +47,8 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      * @param value
      *            title of discussion
      * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
      */
     @Nonnull
     public S title(String value) throws IOException {
@@ -57,15 +59,19 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      * Body content for this discussion.
      *
      * @param value
-     *            body of discussion
-     *
+     *            body of discussion*
      * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
      */
     @Nonnull
     public S body(String value) throws IOException {
         return with("body", value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nonnull
     @Override
     public GHDiscussion done() throws IOException {

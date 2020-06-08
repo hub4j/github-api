@@ -107,6 +107,13 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         assertThat(discussion2, equalTo(discussion));
         assertThat(discussion2.getTitle(), equalTo("Title changed"));
         assertThat(discussion2.getBody(), equalTo("This is a test discussion changed"));
+
+        discussion = discussion.update().body("This is a test discussion updated").title("Title updated").done();
+
+        assertThat(discussion.getTeam(), notNullValue());
+        assertThat(discussion.getTitle(), equalTo("Title updated"));
+        assertThat(discussion.getBody(), equalTo("This is a test discussion updated"));
+
     }
 
     @Test

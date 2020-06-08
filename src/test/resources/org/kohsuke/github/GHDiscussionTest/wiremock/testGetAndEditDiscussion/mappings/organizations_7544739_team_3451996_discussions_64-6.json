@@ -1,8 +1,8 @@
 {
-  "id": "bbb97fbf-b03e-4c58-a7f9-2c3e1dceb705",
-  "name": "organizations_7544739_team_3451996_discussions_56",
+  "id": "faec08a3-a746-45c3-ac33-52d830e37854",
+  "name": "organizations_7544739_team_3451996_discussions_64",
   "request": {
-    "url": "/organizations/7544739/team/3451996/discussions/56",
+    "url": "/organizations/7544739/team/3451996/discussions/64",
     "method": "PATCH",
     "headers": {
       "Accept": {
@@ -19,22 +19,22 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "organizations_7544739_team_3451996_discussions_56-6.json",
+    "bodyFileName": "organizations_7544739_team_3451996_discussions_64-6.json",
     "headers": {
-      "Date": "Fri, 05 Jun 2020 23:08:25 GMT",
+      "Date": "Mon, 08 Jun 2020 18:43:31 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4763",
-      "X-RateLimit-Reset": "1591398936",
+      "X-RateLimit-Remaining": "4955",
+      "X-RateLimit-Reset": "1591642578",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"133b00edb2314d912112fabf14ad7ace\"",
+      "ETag": "W/\"e8f61210b01e7faca044ff4ab01e37c7\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "write:discussion",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -44,10 +44,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CFE9:75EF:A6D2A2:C63368:5EDAD069"
+      "X-GitHub-Request-Id": "E996:682F:301CC5:39F05B:5EDE86D3"
     }
   },
-  "uuid": "bbb97fbf-b03e-4c58-a7f9-2c3e1dceb705",
+  "uuid": "faec08a3-a746-45c3-ac33-52d830e37854",
   "persistent": true,
   "insertionIndex": 6
 }

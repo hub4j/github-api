@@ -24,10 +24,10 @@ public abstract class GHPerson extends GHObject {
     protected String login, avatar_url;
 
     // other fields (that only show up in full data)
-    protected String location, blog, email, name, company, type;
+    protected String location, blog, email, bio, name, company, type, twitter_username;
     protected String html_url;
     protected int followers, following, public_repos, public_gists;
-    protected boolean site_admin;
+    protected boolean site_admin, hireable;
 
     // other fields (that only show up in full data) that require privileged scope
     protected Integer total_private_repos;
@@ -235,6 +235,18 @@ public abstract class GHPerson extends GHObject {
     public String getLocation() throws IOException {
         populate();
         return location;
+    }
+
+    /**
+     * Gets the Twitter Username of this user, like "GitHub"
+     * 
+     * @return the Twitter username
+     * @throws IOException
+     *             the io exception
+     */
+    public String getTwitterUsername() throws IOException {
+        populate();
+        return twitter_username;
     }
 
     public Date getCreatedAt() throws IOException {

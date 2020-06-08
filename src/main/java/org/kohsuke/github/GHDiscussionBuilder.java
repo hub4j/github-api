@@ -46,6 +46,8 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *
      * @param value
      *            title of discussion
+     * @throws IOException
+     *             the io exception
      * @return either a continuing builder or an updated {@link GHDiscussion}
      */
     @Nonnull
@@ -58,7 +60,8 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *
      * @param value
      *            body of discussion
-     *
+     * @throws IOException
+     *             the io exception
      * @return either a continuing builder or an updated {@link GHDiscussion}
      */
     @Nonnull

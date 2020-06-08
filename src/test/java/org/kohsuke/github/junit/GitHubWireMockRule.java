@@ -110,43 +110,33 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             return;
         }
 
-        // "If-None-Match" header used for ETag matching for caching connections
-        // "Accept" header is used to specify previews. If it changes expected data may not be retrieved.
-        this.apiServer()
-                .snapshotRecord(recordSpec().forTarget("https://api.github.com")
-                        .captureHeader("If-None-Match")
-                        .captureHeader("If-Modified-Since")
-                        .captureHeader("Cache-Control")
-                        .captureHeader("Accept")
-                        .extractTextBodiesOver(255));
+        recordSnapshot(this.apiServer(), "https://api.github.com", false);
 
-        // After taking the snapshot, format the output
-        formatTestResources(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath(), false);
+        // For raw server, only fix up mapping files
+        recordSnapshot(this.rawServer(), "https://raw.githubusercontent.com", true);
 
-        if (this.rawServer() != null) {
-            this.rawServer()
-                    .snapshotRecord(recordSpec().forTarget("https://raw.githubusercontent.com")
-                            .captureHeader("If-None-Match")
-                            .captureHeader("If-Modified-Since")
-                            .captureHeader("Cache-Control")
-                            .captureHeader("Accept")
-                            .extractTextBodiesOver(255));
+        recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
+    }
 
-            // For raw server, only fix up mapping files
-            formatTestResources(new File(this.rawServer().getOptions().filesRoot().getPath()).toPath(), true);
-        }
+    private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
+        if (server != null) {
 
-        if (this.uploadsServer() != null) {
-            this.uploadsServer()
-                    .snapshotRecord(recordSpec().forTarget("https://uploads.github.com")
-                            .captureHeader("If-None-Match")
-                            .captureHeader("If-Modified-Since")
-                            .captureHeader("Cache-Control")
-                            .captureHeader("Accept")
-                            .extractTextBodiesOver(255));
+            server.snapshotRecord(recordSpec().forTarget(target)
+                    // "If-None-Match" header used for ETag matching for caching connections
+                    .captureHeader("If-None-Match")
+                    // "If-Modified-Since" header used for ETag matching for caching connections
+                    .captureHeader("If-Modified-Since")
+                    .captureHeader("Cache-Control")
+                    // "Accept" header is used to specify previews. If it changes expected data may not be retrieved.
+                    .captureHeader("Accept")
+                    // This is required, or some requests will return data from unexpected stubs
+                    // For example, if you update "title" and "body", and then update just "title" to the same value
+                    // the mock framework will treat those two requests as equivalent, which we do not want.
+                    .chooseBodyMatchTypeAutomatically(true, false, false)
+                    .extractTextBodiesOver(255));
 
-            formatTestResources(new File(this.uploadsServer().getOptions().filesRoot().getPath()).toPath(), false);
-
+            // After taking the snapshot, format the output
+            formatTestResources(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath(), false);
         }
     }
 

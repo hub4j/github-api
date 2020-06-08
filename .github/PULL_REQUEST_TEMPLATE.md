@@ -10,3 +10,7 @@ We love getting PRs, but we hate asking people for the same basic changes every 
 - [ ] Run `mvn clean compile` locally. This may reformat your code, commit those changes.
 - [ ] Run `mvn -D enable-ci clean install site` locally. If this command doesn't succeed, your change will not pass CI.
 
+# When creating a PR: 
+
+- [ ] Fill in the "Description" above. 
+- [ ] Enable "Allow edits from maintainers". 

@@ -8,22 +8,23 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * A GitHub API Rate Limit Checker called before each request. This class provides the basic infrastructure for calling
- * the appropriate {@link RateLimitChecker} for a request and retrying as many times as needed. This class supports more
- * complex throttling strategies and polling, but leaves the specifics to the {@link RateLimitChecker} implementations.
+ * A GitHub API Rate Limit Checker called before each request.
+ *
  * <p>
- * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
- * number of requests remaining is returned in the response header and can also be requested using
- * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+ * GitHub allots a certain number of requests to each user or application per period of time. The number of requests
+ * remaining and the time when the number will be reset is returned in the response header and can also be requested
+ * using {@link GitHub#getRateLimit()}. The "requests per interval" is referred to as the "rate limit".
  * </p>
  * <p>
- * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
- * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
- * met.
+ * Different parts of the GitHub API have separate rate limits, but most of REST API uses {@link RateLimitTarget#CORE}.
+ * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit. GitHub prefers that
+ * clients stop before exceeding their rate limit rather than stopping after they exceed it.
  * </p>
  * <p>
- * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each {@link GitHub}
- * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
+ * This class provides the infrastructure for calling the appropriate {@link RateLimitChecker} before each request and
+ * retrying than call many times as needed. Each {@link RateLimitChecker} decides whether to wait and for how long. This
+ * allows for a wide range of {@link RateLimitChecker} implementations, including complex throttling strategies and
+ * polling.
  * </p>
  */
 class GitHubRateLimitChecker {
@@ -59,12 +60,13 @@ class GitHubRateLimitChecker {
     /**
      * Constructs a new {@link GitHubRateLimitChecker} with a new checker for a particular target.
      *
-     * Only one checker is allowed per target.
+     * Only one {@link RateLimitChecker} is allowed per target.
      *
      * @param checker
      *            the {@link RateLimitChecker} to apply.
      * @param rateLimitTarget
-     *            the {@link RateLimitTarget} for this checker
+     *            the {@link RateLimitTarget} for this checker. If {@link RateLimitTarget#NONE}, checker will be ignored
+     *            and no change will be made.
      * @return a new {@link GitHubRateLimitChecker}
      */
     GitHubRateLimitChecker with(@Nonnull RateLimitChecker checker, @Nonnull RateLimitTarget rateLimitTarget) {
@@ -78,24 +80,29 @@ class GitHubRateLimitChecker {
      * Checks whether there is sufficient requests remaining within this client's rate limit quota to make the current
      * request.
      * <p>
-     * This method does not do the actual check. Instead it select the appropriate {@link RateLimitChecker} and
-     * {@link GHRateLimit.Record} for the current request's urlPath. If the {@link RateLimitChecker} for this the
-     * current request's urlPath is {@link RateLimitChecker#NONE} the rate limit is not checked. If not, it calls
-     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)}. which decides if the rate limit has been
-     * exceeded and then sleeps for as long is it choose.
+     * This method does not do the actual check. Instead it selects the appropriate {@link RateLimitChecker} and
+     * {@link GHRateLimit.Record} for the current request's {@link RateLimitTarget}. It then calls
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)}.
      * </p>
      * <p>
-     * It is up to the {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} which decide if the rate limit
-     * has been exceeded. If it has, that method will sleep for as long is it chooses and then return {@code true}. If
-     * not, that method will return {@code false}.
+     * It is up to {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} to which decide if the rate limit
+     * has been exceeded. If it has, {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} will sleep for as
+     * long is it chooses and then return {@code true}. If not, that method will return {@code false}.
      * </p>
      * <p>
      * As long as {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} returns {@code true}, this method
      * will request updated rate limit information and call
-     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} again. This looping allows implementers of
-     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} to apply any number of strategies to
-     * controlling the speed at which requests are made. When it returns {@code false} this method will return and the
-     * request will be sent.
+     * {@link RateLimitChecker#checkRateLimit(GHRateLimit.Record, long)} again. This looping allows different
+     * {@link RateLimitChecker} implementations to apply any number of strategies to controlling the speed at which
+     * requests are made.
+     * </p>
+     * <p>
+     * When the {@link RateLimitChecker} returns {@code false} this method will return and the request processing will
+     * continue.
+     * </p>
+     * <p>
+     * If the {@link RateLimitChecker} for this the current request's urlPath is {@link RateLimitChecker#NONE} the rate
+     * limit is not checked.
      * </p>
      *
      * @param client
@@ -135,8 +142,9 @@ class GitHubRateLimitChecker {
     }
 
     /**
-     * Gets the appropriate {@link RateLimitChecker} for a particular url path. Similar to
-     * {@link GHRateLimit#getRecord(RateLimitTarget)}.
+     * Gets the appropriate {@link RateLimitChecker} for a particular target.
+     *
+     * Analogous with {@link GHRateLimit#getRecord(RateLimitTarget)}.
      *
      * @param rateLimitTarget
      *            the rate limit to check

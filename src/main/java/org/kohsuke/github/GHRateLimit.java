@@ -30,7 +30,7 @@ public class GHRateLimit {
     /**
      * Remaining calls that can be made.
      *
-     * @deprecated This value should never have been made public. Use {@link #getRemaining()}
+     * @deprecated This field should never have been made public. Use {@link #getRemaining()}
      */
     @Deprecated
     public int remaining;
@@ -38,7 +38,7 @@ public class GHRateLimit {
     /**
      * Allotted API call per hour.
      *
-     * @deprecated This value should never have been made public. Use {@link #getLimit()}
+     * @deprecated This field should never have been made public. Use {@link #getLimit()}
      */
     @Deprecated
     public int limit;
@@ -49,7 +49,7 @@ public class GHRateLimit {
      * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
      * multiplied by 1000.
      *
-     * @deprecated This value should never have been made public. Use {@link #getResetDate()}
+     * @deprecated This field should never have been made public. Use {@link #getResetDate()}
      */
     @Deprecated
     public Date reset;
@@ -197,7 +197,7 @@ public class GHRateLimit {
      * The core object provides the rate limit status for all non-search-related resources in the REST API.
      *
      * @return a rate limit record
-     * @since 1.112
+     * @since 1.100
      */
     @Nonnull
     public Record getCore() {
@@ -208,7 +208,7 @@ public class GHRateLimit {
      * The search record provides the rate limit status for the Search API.
      *
      * @return a rate limit record
-     * @since 1.112
+     * @since 1.115
      */
     @Nonnull
     public Record getSearch() {
@@ -219,7 +219,7 @@ public class GHRateLimit {
      * The graphql record provides the rate limit status for the GraphQL API.
      *
      * @return a rate limit record
-     * @since 1.112
+     * @since 1.115
      */
     @Nonnull
     public Record getGraphQL() {
@@ -231,7 +231,7 @@ public class GHRateLimit {
      * endpoint.
      *
      * @return a rate limit record
-     * @since 1.112
+     * @since 1.115
      */
     @Nonnull
     public Record getIntegrationManifest() {
@@ -268,9 +268,9 @@ public class GHRateLimit {
      * {@link Record}s from each.
      * 
      * @param newLimit
-     *            {@link GHRateLimit} with potentially updated information. If null, the current instance is returned.
-     * @return a merged {@link GHRateLimit} with the latest {@link Record}s. If the merged instance is equivalent to
-     *         either of the two existing limits, the matching instance is returned.
+     *            {@link GHRateLimit} with potentially updated {@link Record}s.
+     * @return a merged {@link GHRateLimit} with the latest {@link Record}s from these two instances. If the merged
+     *         instance is equal to the current instance, the current instance is returned.
      */
     @Nonnull
     GHRateLimit getMergedRateLimit(@Nonnull GHRateLimit newLimit) {
@@ -321,7 +321,7 @@ public class GHRateLimit {
      */
     public static class UnknownLimitRecord extends Record {
 
-        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).toMillis() / 1000;
+        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();
 
         /**
          * The number of seconds until a {@link UnknownLimitRecord} will expire.

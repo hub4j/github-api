@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -143,7 +142,6 @@ abstract class GitHubClient {
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
-        // TODO: make this work for rate limit
         GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
         return this.sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
@@ -209,10 +207,11 @@ abstract class GitHubClient {
     }
 
     /**
-     * Gets the current rate limit from the server.
+     * Gets the current full rate limit information from the server.
      *
      * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
-     * case, if the most recent {@link GHRateLimit} will be returned.
+     * case, the most recent {@link GHRateLimit} information will be returned, including rate limit information returned
+     * in the response header for this request in if was present.
      *
      * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
      * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
@@ -294,9 +293,10 @@ abstract class GitHubClient {
     }
 
     /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server. Calls
-     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)}
+     * Update the Rate Limit with the latest info from response header.
+     *
+     * Due to multi-threading, requests might complete out of order. This method calls
+     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)} to ensure the most current records are used.
      *
      * @param observed
      *            {@link GHRateLimit.Record} constructed from the response header information

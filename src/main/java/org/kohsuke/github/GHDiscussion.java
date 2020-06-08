@@ -74,6 +74,18 @@ public class GHDiscussion extends GHObject {
     }
 
     /**
+     * The id number of this discussion. GitHub discussions have "number" instead of "id". This is provided for
+     * convenience.
+     *
+     * @return the id number for this discussion
+     * @see #getNumber()
+     */
+    @Override
+    public long getId() {
+        return getNumber();
+    }
+
+    /**
      * Whether the discussion is private to the team.
      *
      * @return {@code true} if discussion is private.

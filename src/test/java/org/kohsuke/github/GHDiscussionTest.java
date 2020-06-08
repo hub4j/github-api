@@ -38,7 +38,7 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     public void testCreatedDiscussion() throws IOException {
         GHDiscussion discussion = team.createDiscussion("Some Discussion").body("This is a public discussion").done();
         assertThat(discussion, notNullValue());
-        assertThat(discussion.getTeam(), notNullValue());
+        assertThat(discussion.getTeam(), equalTo(team));
         assertThat(discussion.getTitle(), equalTo("Some Discussion"));
         assertThat(discussion.getBody(), equalTo("This is a public discussion"));
         assertThat(discussion.isPrivate(), is(false));
@@ -48,6 +48,7 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
                 .private_(false)
                 .done();
         assertThat(discussion, notNullValue());
+        assertThat(discussion.getTeam(), equalTo(team));
         assertThat(discussion.getTitle(), equalTo("Some Discussion"));
         assertThat(discussion.getBody(), equalTo("This is another public discussion"));
         assertThat(discussion.isPrivate(), is(false));
@@ -57,6 +58,7 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
                 .private_(true)
                 .done();
         assertThat(discussion, notNullValue());
+        assertThat(discussion.getTeam(), equalTo(team));
         assertThat(discussion.getTitle(), equalTo("Some Discussion"));
         assertThat(discussion.getBody(), equalTo("This is a private (secret) discussion"));
         assertThat(discussion.isPrivate(), is(true));
@@ -76,7 +78,16 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         GHDiscussion created = team.createDiscussion("Some Discussion").body("This is a test discussion").done();
 
         GHDiscussion discussion = team.getDiscussion(created.getNumber());
-        assertThat(discussion.getTeam(), notNullValue());
+
+        // Test convenience getId() override
+        assertThat(discussion.getNumber(), equalTo(created.getId()));
+        assertThat(discussion.getTeam(), equalTo(team));
+        assertThat(discussion.getTitle(), equalTo("Some Discussion"));
+        assertThat(discussion.getBody(), equalTo("This is a test discussion"));
+        assertThat(discussion.isPrivate(), is(false));
+
+        // Test equality
+        assertThat(discussion, equalTo(created));
 
         discussion = discussion.set().body("This is a test discussion changed");
         assertThat(discussion.getTeam(), notNullValue());

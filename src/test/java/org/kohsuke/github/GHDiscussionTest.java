@@ -74,6 +74,21 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testUpdatedDiscussion() throws IOException {
+        GHDiscussion discussion = team.createDiscussion("Some Discussion").body("This is a public discussion").done();
+        assertThat(discussion, notNullValue());
+        assertThat(discussion.getTeam(), equalTo(team));
+        assertThat(discussion.getTitle(), equalTo("Some Discussion"));
+        assertThat(discussion.getBody(), equalTo("This is a public discussion"));
+        assertThat(discussion.isPrivate(), is(false));
+
+        discussion.set().body("This is a public discussion changed");
+        discussion.update();
+        assertThat(discussion, notNullValue());
+        assertThat(discussion.getBody(), equalTo("This is a public discussion changed"));
+    }
+
+    @Test
     public void testGetAndEditDiscussion() throws IOException {
         GHDiscussion created = team.createDiscussion("Some Discussion").body("This is a test discussion").done();
 

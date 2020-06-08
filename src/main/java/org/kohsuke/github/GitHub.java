@@ -861,16 +861,18 @@ public class GitHub {
      *
      * @param scope
      *            the scope
-
-     * @param login the username desired to login as
-     * 			null means let the users browser decide
-     * @param OAuthApplicationID the public ID for the OAuth application that is requesting the token
      * 
-     * @param OAuthApplicationSecret the secret code passed to GitHub to identify the application
-     * 				BE CAREFUL HERE this key needs to be kept secret so be mindful of that when 
-     * 				using this API
+     * @param login
+     *            the username desired to login as null means let the users browser decide
+     * @param OAuthApplicationID
+     *            the public ID for the OAuth application that is requesting the token
      * 
-     * @param allowSignup If you want the user to signup for Github in the flow, set true
+     * @param OAuthApplicationSecret
+     *            the secret code passed to GitHub to identify the application BE CAREFUL HERE this key needs to be kept
+     *            secret so be mindful of that when using this API
+     * 
+     * @param allowSignup
+     *            If you want the user to signup for Github in the flow, set true
      * 
      * @return the gh authorization
      * 
@@ -878,144 +880,143 @@ public class GitHub {
      *             the io exception
      * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps">Documentation</a>
      * 
-     * @note this method will use http://localhost:3737/success as the 'Authorization callback URL'
-     * 		 this method will start an http server on port 3737 for the duration of the call
-     *       the server will be closed when the user authenticates the application via the web browser
-     *       or the server will be closed after 200 seconds.
-     *       
+     * @note this method will use http://localhost:3737/success as the 'Authorization callback URL' this method will
+     *       start an http server on port 3737 for the duration of the call the server will be closed when the user
+     *       authenticates the application via the web browser or the server will be closed after 200 seconds.
+     * 
      * @note This method blocks for a very long time when waiting for user feedback
      */
     public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,
-    		boolean allowSignup, 
-    		String login,
-    		@Nonnull  String OAuthApplicationclient_id,
-    		@Nonnull  String OAuthApplicationSecret,
-    		java.net.URL redirect_after_auth) 
-    				throws Exception {
-    	// chose a Character random from this String 
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                    + "0123456789"
-                                    + "abcdefghijklmnopqrstuvxyz"; 
-  
-        // create StringBuffer size of AlphaNumericString 
-        StringBuilder sb = new StringBuilder(20); 
-        for (int i = 0; i < 20; i++) { 
-            // generate a random number between 
-            // 0 to AlphaNumericString variable length 
-            int index  = (int)(AlphaNumericString.length() * Math.random());  
-            // add Character one by one in end of sb 
-            sb.append(AlphaNumericString.charAt(index)); 
-        } 
-        int WEBSERVER_PORT =3737;
-        String state = sb.toString();// unguessable random temporary string for use in API
-        com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new java.net.InetSocketAddress("localhost", WEBSERVER_PORT), 0);
-        class MyHttpHandler implements  com.sun.net.httpserver.HttpHandler{
-        	public String tempCode = null;
-        	public String myState;
-        	
-        	public MyHttpHandler(String state) {
-        		myState=state;
-        	}
-			@Override
-			public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
+            boolean allowSignup,
+            String login,
+            @Nonnull String OAuthApplicationclient_id,
+            @Nonnull String OAuthApplicationSecret,
+            java.net.URL redirect_after_auth) throws Exception {
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz";
 
-				java.net.URI requestURI = exchange.getRequestURI();
-				String query = requestURI.getQuery();
-				System.out.println(query);
-				String[] allQuery = query.split("&");
-				String[] codeParts = allQuery[0].split("=");
-				String[] stateParts = allQuery[1].split("=");
-				if (myState.contentEquals(stateParts[1]))
-					tempCode = codeParts[1];
-				String response = "This is the response";
-				exchange.sendResponseHeaders(200, response.length());
-				OutputStream os = exchange.getResponseBody();
-				os.write(response.getBytes());
-				os.close();
-			}
-		};
-		MyHttpHandler handler=new MyHttpHandler(state);
-		server.createContext("/success", handler);
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(20);
+        for (int i = 0; i < 20; i++) {
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index = (int) (AlphaNumericString.length() * Math.random());
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        int WEBSERVER_PORT = 3737;
+        String state = sb.toString();// unguessable random temporary string for use in API
+        com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer
+                .create(new java.net.InetSocketAddress("localhost", WEBSERVER_PORT), 0);
+        class MyHttpHandler implements com.sun.net.httpserver.HttpHandler {
+            public String tempCode = null;
+            public String myState;
+
+            public MyHttpHandler(String state) {
+                myState = state;
+            }
+            @Override
+            public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
+
+                java.net.URI requestURI = exchange.getRequestURI();
+                String query = requestURI.getQuery();
+                System.out.println(query);
+                String[] allQuery = query.split("&");
+                String[] codeParts = allQuery[0].split("=");
+                String[] stateParts = allQuery[1].split("=");
+                if (myState.contentEquals(stateParts[1]))
+                    tempCode = codeParts[1];
+                String response = "This is the response";
+                exchange.sendResponseHeaders(200, response.length());
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        };
+        MyHttpHandler handler = new MyHttpHandler(state);
+        server.createContext("/success", handler);
         server.setExecutor(null); // creates a default executor
         server.start();
-        
-        
-		String doRequest = "https://github.com/login/oauth/authorize?" +
-		"client_id=" + OAuthApplicationclient_id + "&"	
-		+ "redirect_uri=http%3A%2F%2Flocalhost%3A"+WEBSERVER_PORT+"%2Fsuccess" + "&" +
-		"response_type=code" + "&" + 
-		(login!=null?"login="+login.replaceAll("@", "%40") + "&":"") + 
-		"allow_signup=true" + "&" + 
-		"state="+state + "&" +
-		"scope=";
-        int i=0;
-		for (String s:scope) {
-			s = s.replaceAll(":", "%3A");
-			doRequest += s ;
-			if(i!=scope.size()-1)
-				doRequest +=  "%20";
-			i++;
-		}
-		doRequest = doRequest.trim();
-		// Send request in step 1
-		// https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#1-request-a-users-github-identity
-		// User interaction is needed to approve the authorization
-		// Open this URL in a desktop browser
-		if (java.awt.Desktop.isDesktopSupported() && java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.BROWSE))
-			java.awt.Desktop.getDesktop().browse(new java.net.URI(doRequest));
-		
-        
+
+        String doRequest = "https://github.com/login/oauth/authorize?" + "client_id=" + OAuthApplicationclient_id + "&"
+                + "redirect_uri=http%3A%2F%2Flocalhost%3A" + WEBSERVER_PORT + "%2Fsuccess" + "&" + "response_type=code"
+                + "&" + (login != null ? "login=" + login.replaceAll("@", "%40") + "&" : "") + "allow_signup=true" + "&"
+                + "state=" + state + "&" + "scope=";
+        int i = 0;
+        for (String s : scope) {
+            s = s.replaceAll(":", "%3A");
+            doRequest += s;
+            if (i != scope.size() - 1)
+                doRequest += "%20";
+            i++;
+        }
+        doRequest = doRequest.trim();
+        // Send request in step 1
+        // https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#1-request-a-users-github-identity
+        // User interaction is needed to approve the authorization
+        // Open this URL in a desktop browser
+        if (java.awt.Desktop.isDesktopSupported()
+                && java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.BROWSE))
+            java.awt.Desktop.getDesktop().browse(new java.net.URI(doRequest));
+
         // block here until webflow complete
         long start = System.currentTimeMillis();
-		// 200 second timeout
-		while (System.currentTimeMillis() - start < 200 * 1000 && handler.tempCode == null) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				break;
-			}
+        // 200 second timeout
+        while (System.currentTimeMillis() - start < 200 * 1000 && handler.tempCode == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                break;
+            }
 
-		}
-		server.stop(0);
-        return createOAuthTokenWebFlowStepTwo(OAuthApplicationclient_id,OAuthApplicationSecret,handler.tempCode,state,redirect_after_auth);
+        }
+        server.stop(0);
+        return createOAuthTokenWebFlowStepTwo(OAuthApplicationclient_id,
+                OAuthApplicationSecret,
+                handler.tempCode,
+                state,
+                redirect_after_auth);
     }
-    
+
     /**
      * Creates a new authorization.
      * <p>
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
      * 
-	 * @param state the unguessable random string you provided in Step 1. See https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github
-	 * 
-     * @param OAuthApplicationID the public ID for the OAuth application that is requesting the token
+     * @param state
+     *            the unguessable random string you provided in Step 1. See
+     *            https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github
      * 
-     * @param OAuthApplicationSecret the secret code passed to GitHub to identify the application
+     * @param OAuthApplicationID
+     *            the public ID for the OAuth application that is requesting the token
+     * 
+     * @param OAuthApplicationSecret
+     *            the secret code passed to GitHub to identify the application
      * @return the gh authorization
      * @throws IOException
      *             the io exception
-     * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github">Documentation</a>
+     * @see <a href=
+     *      "https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github">Documentation</a>
      * 
      */
-    public GHAuthorization createOAuthTokenWebFlowStepTwo( 
-    		@Nonnull  String OAuthApplicationclient_id,@Nonnull  String OAuthApplicationSecret,
-    		@Nonnull String temp_OAuth_Code,
-    		String state,
-    		java.net.URL redirect_after_auth) 
-    				throws IOException {
-        Requester requester = createRequest()
-        						.method("POST")
-        						.setRawUrlPath("https://github.com/login/oauth/access_token")
-        						.with("client_id", OAuthApplicationclient_id)
-        						.with("client_secret", OAuthApplicationSecret)
-        						.with("code", temp_OAuth_Code)
-        						
-        						;
-        if(state!=null)
-        	requester.with("state", state);
-        if(redirect_after_auth!=null)
-        	requester.with("redirect_uri", redirect_after_auth);// TODO is there a correct way to encode the URL?
+    public GHAuthorization createOAuthTokenWebFlowStepTwo(@Nonnull String OAuthApplicationclient_id,
+            @Nonnull String OAuthApplicationSecret,
+            @Nonnull String temp_OAuth_Code,
+            String state,
+            java.net.URL redirect_after_auth) throws IOException {
+        Requester requester = createRequest().method("POST")
+                .setRawUrlPath("https://github.com/login/oauth/access_token")
+                .with("client_id", OAuthApplicationclient_id)
+                .with("client_secret", OAuthApplicationSecret)
+                .with("code", temp_OAuth_Code)
+
+        ;
+        if (state != null)
+            requester.with("state", state);
+        if (redirect_after_auth != null)
+            requester.with("redirect_uri", redirect_after_auth);// TODO is there a correct way to encode the URL?
         return requester.method("POST").fetch(GHAuthorization.class).wrap(this);
     }
     /**
@@ -1052,8 +1053,6 @@ public class GitHub {
             return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
         }
     }
-    
-    
 
     /**
      * Create or get auth gh authorization.

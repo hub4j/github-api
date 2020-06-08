@@ -1,0 +1,53 @@
+{
+  "id": "70813a75-593d-4dfd-bd15-eb23c23e3eb6",
+  "name": "organizations_7544739_team_3451996_discussions_56",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions/56",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Title changed\",\"body\":\"This is a test discussion changed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "organizations_7544739_team_3451996_discussions_56-7.json",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4762",
+      "X-RateLimit-Reset": "1591398936",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"76715078d14f86f37cd6d9550be203e4\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CFE9:75EF:A6D2C9:C6338F:5EDAD069"
+    }
+  },
+  "uuid": "70813a75-593d-4dfd-bd15-eb23c23e3eb6",
+  "persistent": true,
+  "insertionIndex": 7
+}

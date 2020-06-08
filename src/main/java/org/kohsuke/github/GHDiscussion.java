@@ -2,11 +2,13 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -111,14 +113,14 @@ public class GHDiscussion extends GHObject {
 
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
         return team.root.createRequest()
-                .setRawUrlPath(team.getUrl().toString() + "/discussions/" + discussionNumber)
+                .setRawUrlPath(getRawUrlPath(team, discussionNumber))
                 .fetch(GHDiscussion.class)
                 .wrapUp(team);
     }
 
     static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
         return team.root.createRequest()
-                .setRawUrlPath(team.getUrl().toString() + "/discussions")
+                .setRawUrlPath(getRawUrlPath(team, null))
                 .toIterable(GHDiscussion[].class, item -> item.wrapUp(team));
     }
 
@@ -153,10 +155,12 @@ public class GHDiscussion extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        team.root.createRequest()
-                .method("DELETE")
-                .setRawUrlPath(team.getUrl().toString() + "/discussions/" + number)
-                .send();
+        team.root.createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
+    }
+
+    @NotNull
+    private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
+        return team.getUrl().toString() + "/discussions" + (discussionNumber == null ? "" : "/" + discussionNumber);
     }
 
     /**
@@ -192,7 +196,7 @@ public class GHDiscussion extends GHObject {
 
         private Creator(@Nonnull GHTeam team) {
             super(GHDiscussion.Creator.class, team, null);
-            requester.method("POST").withUrlPath(team.getUrl().toString() + "/discussions");
+            requester.method("POST").setRawUrlPath(getRawUrlPath(team, null));
         }
 
         @Nonnull

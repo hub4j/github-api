@@ -173,10 +173,23 @@ import java.util.*;
 <span class="nc" id="L173">        return org.hasPublicMember(this);</span>
     }
 
+    /**
+     * Returns true if this user is marked as hireable, false otherwise
+     *
+     * @return if the user is marked as hireable
+     */
+    public boolean isHireable() {
+<span class="fc" id="L182">        return hireable;</span>
+    }
+
+    public String getBio() {
+<span class="fc" id="L186">        return bio;</span>
+    }
+
     static GHUser[] wrap(GHUser[] users, GitHub root) {
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        for (GHUser f : users)</span>
-<span class="fc" id="L178">            f.root = root;</span>
-<span class="fc" id="L179">        return users;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for (GHUser f : users)</span>
+<span class="fc" id="L191">            f.root = root;</span>
+<span class="fc" id="L192">        return users;</span>
     }
 
     /**
@@ -188,25 +201,25 @@ import java.util.*;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
-<span class="fc" id="L191">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="fc" id="L192">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="fc" id="L193">        for (GHOrganization o : root.createRequest()</span>
-<span class="fc" id="L194">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
-<span class="fc" id="L195">                .toIterable(GHOrganization[].class, null)</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
-<span class="fc" id="L198">                orgs.add(root.getOrganization(o.getLogin()));</span>
+<span class="fc" id="L204">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="fc" id="L205">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L206">        for (GHOrganization o : root.createRequest()</span>
+<span class="fc" id="L207">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L208">                .toIterable(GHOrganization[].class, null)</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
+<span class="fc" id="L211">                orgs.add(root.getOrganization(o.getLogin()));</span>
         }
-<span class="fc" id="L200">        return orgs;</span>
+<span class="fc" id="L213">        return orgs;</span>
     }
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L207">        return root.createRequest()</span>
-<span class="nc" id="L208">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
-<span class="nc" id="L209">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
+<span class="nc" id="L220">        return root.createRequest()</span>
+<span class="nc" id="L221">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
+<span class="nc" id="L222">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -217,34 +230,34 @@ import java.util.*;
      *             the io exception
      */
     public PagedIterable&lt;GHGist&gt; listGists() throws IOException {
-<span class="nc" id="L220">        return root.createRequest()</span>
-<span class="nc" id="L221">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
-<span class="nc" id="L222">                .toIterable(GHGist[].class, null);</span>
+<span class="nc" id="L233">        return root.createRequest()</span>
+<span class="nc" id="L234">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L235">                .toIterable(GHGist[].class, null);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L227">        return login.hashCode();</span>
+<span class="fc" id="L240">        return login.hashCode();</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L233">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L234">            return this.login.equals(that.login);</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L246">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L247">            return this.login.equals(that.login);</span>
         }
-<span class="nc" id="L236">        return false;</span>
+<span class="nc" id="L249">        return false;</span>
     }
 
     String getApiTailUrl(String tail) {
-<span class="pc bpc" id="L240" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L241">            tail = '/' + tail;</span>
-<span class="fc" id="L242">        return &quot;/users/&quot; + login + tail;</span>
+<span class="pc bpc" id="L253" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L254">            tail = '/' + tail;</span>
+<span class="fc" id="L255">        return &quot;/users/&quot; + login + tail;</span>
     }
 
     GHUser wrapUp(GitHub root) {
-<span class="fc" id="L246">        super.wrapUp(root);</span>
-<span class="fc" id="L247">        return this;</span>
+<span class="fc" id="L259">        super.wrapUp(root);</span>
+<span class="fc" id="L260">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

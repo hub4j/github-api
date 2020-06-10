@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDiscussionBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDiscussionBuilder.java</span></div><h1>GHDiscussionBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * Base class for creating or updating a discussion.
+ *
+ * @param &lt;S&gt;
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
+ *            the same as {@link GHLabel}, this builder will commit changes after each call to
+ *            {@link #with(String, Object)}.
+ */
+class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt; {
+
+    private final GHTeam team;
+
+    /**
+     *
+     * @param intermediateReturnType
+     *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
+     *            {@link S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
+     *            {@link #with(String, Object)}.
+     * @param team
+     *            the GitHub team. Updates will be sent to the root of this team.
+     * @param baseInstance
+     *            instance on which to base this builder. If {@code null} a new instance will be created.
+     */
+    protected GHDiscussionBuilder(@Nonnull Class&lt;S&gt; intermediateReturnType,
+            @Nonnull GHTeam team,
+            @CheckForNull GHDiscussion baseInstance) {
+<span class="fc" id="L34">        super(GHDiscussion.class, intermediateReturnType, team.root, baseInstance);</span>
+
+<span class="fc" id="L36">        this.team = team;</span>
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (baseInstance != null) {</span>
+<span class="fc" id="L39">            requester.with(&quot;title&quot;, baseInstance.getTitle());</span>
+<span class="fc" id="L40">            requester.with(&quot;body&quot;, baseInstance.getBody());</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Title for this discussion.
+     *
+     * @param value
+     *            title of discussion
+     * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
+     */
+    @Nonnull
+    public S title(String value) throws IOException {
+<span class="fc" id="L55">        return with(&quot;title&quot;, value);</span>
+    }
+
+    /**
+     * Body content for this discussion.
+     *
+     * @param value
+     *            body of discussion*
+     * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
+     */
+    @Nonnull
+    public S body(String value) throws IOException {
+<span class="fc" id="L69">        return with(&quot;body&quot;, value);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Nonnull
+    @Override
+    public GHDiscussion done() throws IOException {
+<span class="fc" id="L78">        return super.done().wrapUp(team);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

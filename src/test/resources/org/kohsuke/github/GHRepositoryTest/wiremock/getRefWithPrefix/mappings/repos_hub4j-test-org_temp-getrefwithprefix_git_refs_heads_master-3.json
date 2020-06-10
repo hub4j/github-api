@@ -1,8 +1,8 @@
 {
-  "id": "40a78e64-129b-473f-bdd1-f7f5471cc2a8",
-  "name": "repos_hub4j-test-org_github-api_git_refs_heads",
+  "id": "376d4598-61d9-4379-bd13-16a70c8b49ac",
+  "name": "repos_hub4j-test-org_temp-getrefwithprefix_git_refs_heads_master",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/git/refs/heads",
+    "url": "/repos/hub4j-test-org/temp-getRefWithPrefix/git/refs/heads/master",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,24 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_github-api_git_refs_heads-4.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-getrefwithprefix_git_refs_heads_master-3.json",
     "headers": {
-      "Date": "Thu, 21 May 2020 00:01:19 GMT",
+      "Date": "Sun, 05 Apr 2020 16:39:23 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4925",
-      "X-RateLimit-Reset": "1590020148",
+      "X-RateLimit-Remaining": "4806",
+      "X-RateLimit-Reset": "1586107929",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"a9f5e1ba57020a2637f5d1564b4b8e60\"",
-      "Last-Modified": "Wed, 20 May 2020 00:06:59 GMT",
+      "ETag": "W/\"94a0e0fde791301d3625ecb33739e457\"",
+      "Last-Modified": "Sun, 05 Apr 2020 16:39:21 GMT",
       "X-Poll-Interval": "300",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-OAuth-Scopes": "admin:org, admin:repo_hook, delete_repo, gist, repo",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -39,13 +38,13 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F020:533D:1B068:214BA:5EC5C4CF"
+      "X-GitHub-Request-Id": "B856:3D6D:513345:5C5868:5E8A09BB"
     }
   },
-  "uuid": "40a78e64-129b-473f-bdd1-f7f5471cc2a8",
+  "uuid": "376d4598-61d9-4379-bd13-16a70c8b49ac",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-git-refs-heads",
+  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-getRefWithPrefix-git-refs-heads-master",
   "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-git-refs-heads-2",
-  "insertionIndex": 4
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-temp-getRefWithPrefix-git-refs-heads-master-2",
+  "insertionIndex": 3
 }

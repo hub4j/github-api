@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -435,91 +434,19 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void listRefs() throws Exception {
-        GHRepository repo = getRepository();
-
-        List<GHRef> ghRefs;
-
-        // handle refs/*
-        ghRefs = repo.listRefs("heads").toList();
-        List<GHRef> ghRefsWithPrefix = repo.listRefs("refs/heads").toList();
-
-        assertThat(ghRefs, notNullValue());
-        assertThat(ghRefs.size(), greaterThan(3));
-        assertThat(ghRefs.get(0).getRef(), equalTo("refs/heads/changes"));
-        assertThat(ghRefsWithPrefix.size(), equalTo(ghRefs.size()));
-        assertThat(ghRefsWithPrefix.get(0).getRef(), equalTo(ghRefs.get(0).getRef()));
-
-        // git/refs/heads/gh-pages
-        // passing a specific ref to listRefs will fail to parse due to returning a single item not an array
-        try {
-            ghRefs = repo.listRefs("heads/gh-pages").toList();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(JsonMappingException.class));
-        }
-
-        // git/refs/heads/gh
-        ghRefs = repo.listRefs("heads/gh").toList();
-        assertThat(ghRefs, notNullValue());
-        assertThat(ghRefs.size(), equalTo(1));
-        assertThat(ghRefs.get(0).getRef(), equalTo("refs/heads/gh-pages"));
-
-        // git/refs/headz
-        try {
-            ghRefs = repo.listRefs("headz").toList();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHFileNotFoundException.class));
-            assertThat(e.getMessage(),
-                    containsString(
-                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
-        }
+        GHRepository repo = getTempRepository();
+        List<GHRef> refs = repo.listRefs().toList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), equalTo(1));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
     }
 
     @Test
-    public void getRef() throws Exception {
-        GHRepository repo = getRepository();
-
-        GHRef ghRef;
-
-        // handle refs/*
-        ghRef = repo.getRef("heads/gh-pages");
-        GHRef ghRefWithPrefix = repo.getRef("refs/heads/gh-pages");
-
-        assertThat(ghRef, notNullValue());
-        assertThat(ghRef.getRef(), equalTo("refs/heads/gh-pages"));
-        assertThat(ghRefWithPrefix.getRef(), equalTo(ghRef.getRef()));
-
-        // git/refs/heads/gh-pages
-        ghRef = repo.getRef("heads/gh-pages");
-        assertThat(ghRef, notNullValue());
-        assertThat(ghRef.getRef(), equalTo("refs/heads/gh-pages"));
-
-        // git/refs/heads/gh
-        try {
-            ghRef = repo.getRef("heads/gh");
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHFileNotFoundException.class));
-            assertThat(e.getMessage(),
-                    containsString(
-                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-single-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
-        }
-
-        // git/refs/headz
-        try {
-            ghRef = repo.getRef("headz");
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHFileNotFoundException.class));
-            assertThat(e.getMessage(),
-                    containsString(
-                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-single-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
-        }
+    public void getRefWithPrefix() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRef refWithoutPrefix = repo.getRef("heads/master");
+        GHRef refWithPrefix = repo.getRef("refs/heads/master");
+        assertThat(refWithoutPrefix.getRef(), equalTo(refWithPrefix.getRef()));
     }
 
     @Test

@@ -1,8 +1,8 @@
 {
-  "id": "2566ff9b-e3b9-4819-9103-74a9c8d67bc0",
-  "name": "repos_hub4j-test-org_github-api",
+  "id": "efdb254c-0993-4b3e-8094-b67bb6261b43",
+  "name": "repos_hub4j-test-org_temp-listrefs_git_refs",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api",
+    "url": "/repos/hub4j-test-org/temp-listRefs/git/refs",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,36 +12,38 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_github-api-3.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-listrefs_git_refs-3.json",
     "headers": {
-      "Date": "Thu, 21 May 2020 00:01:19 GMT",
+      "Date": "Fri, 10 Jan 2020 21:18:45 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4926",
-      "X-RateLimit-Reset": "1590020148",
+      "X-RateLimit-Remaining": "4907",
+      "X-RateLimit-Reset": "1578694499",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"312e4c361c7730b8cbae6f074a82248e\"",
-      "Last-Modified": "Thu, 16 Jan 2020 21:22:56 GMT",
+      "ETag": "W/\"8b1d346181ca603baeb51ac7847b5553\"",
+      "Last-Modified": "Fri, 10 Jan 2020 21:18:44 GMT",
+      "X-Poll-Interval": "300",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F020:533D:1B065:214B6:5EC5C4CF"
+      "X-GitHub-Request-Id": "F689:89C6:A2C55F:C7906D:5E18EA35"
     }
   },
-  "uuid": "2566ff9b-e3b9-4819-9103-74a9c8d67bc0",
+  "uuid": "efdb254c-0993-4b3e-8094-b67bb6261b43",
   "persistent": true,
   "insertionIndex": 3
 }

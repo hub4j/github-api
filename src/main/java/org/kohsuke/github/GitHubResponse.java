@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -212,7 +213,7 @@ class GitHubResponse<T> {
      * Initial response information supplied to a {@link BodyHandler} when a response is initially received and before
      * the body is processed.
      */
-    static abstract class ResponseInfo {
+    static abstract class ResponseInfo implements Closeable {
 
         private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
                 .nullsFirst(String.CASE_INSENSITIVE_ORDER);
@@ -317,12 +318,8 @@ class GitHubResponse<T> {
         @Nonnull
         String getBodyAsString() throws IOException {
             InputStreamReader r = null;
-            try {
-                r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);
-                return IOUtils.toString(r);
-            } finally {
-                IOUtils.closeQuietly(r);
-            }
+            r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);
+            return IOUtils.toString(r);
         }
     }
 

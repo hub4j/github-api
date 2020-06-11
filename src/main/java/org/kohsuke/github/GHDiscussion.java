@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -158,7 +157,6 @@ public class GHDiscussion extends GHObject {
         team.root.createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
     }
 
-    @NotNull
     private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
         return team.getUrl().toString() + "/discussions" + (discussionNumber == null ? "" : "/" + discussionNumber);
     }

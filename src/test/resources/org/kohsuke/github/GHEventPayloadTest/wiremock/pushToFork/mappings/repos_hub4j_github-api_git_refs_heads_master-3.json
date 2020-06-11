@@ -2,7 +2,7 @@
   "id": "79569c1e-168b-4816-930b-1ac370e164b9",
   "name": "repos_hub4j_github-api_git_refs_heads_master",
   "request": {
-    "url": "/repos/hub4j/github-api/git/ref/heads/master",
+    "url": "/repos/hub4j/github-api/git/refs/heads/master",
     "method": "GET",
     "headers": {
       "Accept": {

@@ -2,7 +2,7 @@
   "id": "257aa346-b2fa-4808-a587-ce26a6859bf7",
   "name": "repos_jenkinsci_jenkins_git_refs_heads_master",
   "request": {
-    "url": "/repos/jenkinsci/jenkins/git/ref/heads/master",
+    "url": "/repos/jenkinsci/jenkins/git/refs/heads/master",
     "method": "GET",
     "headers": {
       "Accept": {

@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -1589,10 +1590,29 @@ public class GHRepository extends GHObject {
             refName = refName.replaceFirst("refs/", "");
         }
 
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(String.format("git/ref/%s", refName)))
-                .fetch(GHRef.class)
-                .wrap(root);
+        // We would expect this to use `git/ref/%s` but some versions of GHE seem to not support it
+        // Instead use `git/refs/%s` and check the result actually matches the ref
+        GHRef result = null;
+        try {
+            result = root.createRequest()
+                    .withUrlPath(getApiTailUrl(String.format("git/refs/%s", refName)))
+                    .fetch(GHRef.class)
+                    .wrap(root);
+        } catch (IOException e) {
+            // If the parse exception is due to the above returning an array instead of a single ref
+            // that means the individual ref did not exist
+            if (!(e.getCause() instanceof JsonMappingException)) {
+                throw e;
+            }
+        }
+
+        // Verify that the ref returned is the one requested
+        if (result == null || !result.getRef().equals("refs/" + refName)) {
+            throw new GHFileNotFoundException(String.format("git/refs/%s", refName)
+                    + " {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}");
+        }
+        return result;
+
     }
 
     /**

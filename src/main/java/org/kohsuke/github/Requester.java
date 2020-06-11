@@ -23,6 +23,9 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -108,7 +111,10 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public InputStream fetchStream() throws IOException {
-        return client.sendRequest(this, (responseInfo) -> responseInfo.bodyStream()).body();
+        return client
+                .sendRequest(this,
+                        (responseInfo) -> new ByteArrayInputStream(IOUtils.toByteArray(responseInfo.bodyStream())))
+                .body();
     }
 
     /**

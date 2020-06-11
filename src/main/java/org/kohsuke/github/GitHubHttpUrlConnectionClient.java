@@ -235,6 +235,10 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
 
         private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
+        @Override
+        public void close() throws IOException {
+            IOUtils.closeQuietly(connection.getInputStream());
+        }
     }
 
 }

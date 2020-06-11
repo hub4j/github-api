@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
@@ -351,38 +352,42 @@ abstract class GitHubClient {
 
             GitHubResponse.ResponseInfo responseInfo = null;
             try {
-                if (LOGGER.isLoggable(FINE)) {
-                    LOGGER.log(FINE,
-                            "GitHub API request [" + (login == null ? "anonymous" : login) + "]: " + request.method()
-                                    + " " + request.url().toString());
+                try {
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE,
+                                "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
+                                        + request.method() + " " + request.url().toString());
+                    }
+
+                    rateLimitChecker.checkRateLimit(this, request);
+
+                    responseInfo = getResponseInfo(request);
+                    noteRateLimit(responseInfo);
+                    detectOTPRequired(responseInfo);
+
+                    if (isInvalidCached404Response(responseInfo)) {
+                        // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+                        // "If-Modified-Since" or "If-None-Match" values.
+                        // This makes GitHub give us current data (not incorrectly cached data)
+                        request = request.toBuilder().withHeader("Cache-Control", "no-cache").build();
+                        continue;
+                    }
+                    if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
+                        return createResponse(responseInfo, handler);
+                    }
+                } catch (IOException e) {
+                    // For transient errors, retry
+                    if (retryConnectionError(e, request.url(), retries)) {
+                        continue;
+                    }
+
+                    throw interpretApiError(e, request, responseInfo);
                 }
 
-                rateLimitChecker.checkRateLimit(this, request);
-
-                responseInfo = getResponseInfo(request);
-                noteRateLimit(responseInfo);
-                detectOTPRequired(responseInfo);
-
-                if (isInvalidCached404Response(responseInfo)) {
-                    // Setting "Cache-Control" to "no-cache" stops the cache from supplying
-                    // "If-Modified-Since" or "If-None-Match" values.
-                    // This makes GitHub give us current data (not incorrectly cached data)
-                    request = request.toBuilder().withHeader("Cache-Control", "no-cache").build();
-                    continue;
-                }
-                if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
-                    return createResponse(responseInfo, handler);
-                }
-            } catch (IOException e) {
-                // For transient errors, retry
-                if (retryConnectionError(e, request.url(), retries)) {
-                    continue;
-                }
-
-                throw interpretApiError(e, request, responseInfo);
+                handleLimitingErrors(responseInfo);
+            } finally {
+                IOUtils.closeQuietly(responseInfo);
             }
-
-            handleLimitingErrors(responseInfo);
 
         } while (--retries >= 0);
 

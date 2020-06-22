@@ -75,7 +75,7 @@ public class GHTeamBuilder {
      *            parentTeamId of team
      * @return a builder to continue with building
      */
-    public GHTeamBuilder parentTeamId(int parentTeamId) {
+    public GHTeamBuilder parentTeamId(long parentTeamId) {
         this.builder.with("parent_team_id", parentTeamId);
         return this;
     }

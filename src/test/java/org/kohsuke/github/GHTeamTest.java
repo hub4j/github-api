@@ -63,7 +63,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHTeam team = org.getTeamBySlug(teamSlug);
-        Set<GHTeam> result = team.getChildTeams(org);
+        Set<GHTeam> result = team.getChildTeams();
 
         assertEquals(1, result.size());
         assertEquals("child-team-for-dummy", result.toArray(new GHTeam[]{})[0].getName());

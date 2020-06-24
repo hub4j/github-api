@@ -177,16 +177,14 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Retrieves the teams that are members of this team.
      *
-     * @param organization
-     *            the organization that owns this team
      * @return the paged iterable
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHTeam> listChildTeams(GHOrganization organization) throws IOException {
+    public PagedIterable<GHTeam> listChildTeams() throws IOException {
         return root.createRequest()
                 .withUrlPath(api("/teams"))
-                .toIterable(GHTeam[].class, item -> item.wrapUp(organization));
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
     }
 
     /**
@@ -203,14 +201,12 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Gets the teams that are members of this team.
      *
-     * @param organization
-     *            the organization that owns this team
      * @return the members
      * @throws IOException
      *             the io exception
      */
-    public Set<GHTeam> getChildTeams(GHOrganization organization) throws IOException {
-        return listChildTeams(organization).toSet();
+    public Set<GHTeam> getChildTeams() throws IOException {
+        return listChildTeams().toSet();
     }
 
     /**

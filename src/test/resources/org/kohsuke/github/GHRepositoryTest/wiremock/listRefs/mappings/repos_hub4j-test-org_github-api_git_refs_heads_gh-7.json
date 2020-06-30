@@ -1,0 +1,48 @@
+{
+  "id": "d7c5941a-83ca-4a46-9ece-2e19d0cf979b",
+  "name": "repos_hub4j-test-org_github-api_git_refs_heads_gh",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/git/refs/heads/gh",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_git_refs_heads_gh-7.json",
+    "headers": {
+      "Date": "Thu, 21 May 2020 00:01:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4922",
+      "X-RateLimit-Reset": "1590020149",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"aa03a3ba0ec8d4fa83439f8d4390fa91\"",
+      "Last-Modified": "Thu, 16 Jan 2020 21:22:56 GMT",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F020:533D:1B070:214C3:5EC5C4D0"
+    }
+  },
+  "uuid": "d7c5941a-83ca-4a46-9ece-2e19d0cf979b",
+  "persistent": true,
+  "insertionIndex": 7
+}

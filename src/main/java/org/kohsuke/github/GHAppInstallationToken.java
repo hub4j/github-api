@@ -37,7 +37,9 @@ public class GHAppInstallationToken {
      *
      * @param root
      *            the root
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRoot(GitHub root) {
         this.root = root;
     }
@@ -56,7 +58,9 @@ public class GHAppInstallationToken {
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map<String, String> permissions) {
         this.permissions = permissions;
     }
@@ -75,7 +79,9 @@ public class GHAppInstallationToken {
      *
      * @param token
      *            the token
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setToken(String token) {
         this.token = token;
     }
@@ -94,7 +100,9 @@ public class GHAppInstallationToken {
      *
      * @param repositories
      *            the repositories
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositories(List<GHRepository> repositories) {
         this.repositories = repositories;
     }
@@ -113,7 +121,9 @@ public class GHAppInstallationToken {
      *
      * @param repositorySelection
      *            the repository selection
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
         this.repositorySelection = repositorySelection;
     }
@@ -127,7 +137,7 @@ public class GHAppInstallationToken {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "expiresAtStr")
     public Date getExpiresAt() throws IOException {
-        return GitHub.parseDate(expires_at);
+        return GitHubClient.parseDate(expires_at);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getExpiresAt")

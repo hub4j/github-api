@@ -1,0 +1,52 @@
+{
+  "id": "9fb96a01-8e78-4eaa-b108-02ebdf17400f",
+  "name": "repos_bitwiseman_github-api-test-rename",
+  "request": {
+    "url": "/repos/bitwiseman/github-api-test-rename",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"github-api-test-rename2\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_bitwiseman_github-api-test-rename-7.json",
+    "headers": {
+      "Date": "Tue, 31 Mar 2020 21:52:47 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4949",
+      "X-RateLimit-Reset": "1585694557",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9058ae4164d77e4b7b058f9d891bf651\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E4E1:4164:31A6F:3BB42:5E83BBAF"
+    }
+  },
+  "uuid": "9fb96a01-8e78-4eaa-b108-02ebdf17400f",
+  "persistent": true,
+  "insertionIndex": 7
+}

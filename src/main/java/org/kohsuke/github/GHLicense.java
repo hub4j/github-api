@@ -24,13 +24,13 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The GitHub Preview API's license information
@@ -79,14 +79,6 @@ public class GHLicense extends GHObject {
     }
 
     /**
-     * @return API URL of this object.
-     */
-    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
-    public URL getUrl() {
-        return GitHub.parseURL(url);
-    }
-
-    /**
      * Featured licenses are bold in the new repository drop-down
      *
      * @return True if the license is featured, false otherwise
@@ -100,7 +92,7 @@ public class GHLicense extends GHObject {
 
     public URL getHtmlUrl() throws IOException {
         populate();
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -199,7 +191,14 @@ public class GHLicense extends GHObject {
         if (description != null)
             return; // already populated
 
-        root.createRequest().withUrlPath(url).fetchInto(this);
+        if (root == null || root.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
+
+        URL url = getUrl();
+        if (url != null) {
+            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this);
+        }
     }
 
     @Override
@@ -210,12 +209,12 @@ public class GHLicense extends GHObject {
             return false;
 
         GHLicense that = (GHLicense) o;
-        return this.url.equals(that.url);
+        return Objects.equals(getUrl(), that.getUrl());
     }
 
     @Override
     public int hashCode() {
-        return url.hashCode();
+        return Objects.hashCode(getUrl());
     }
 
     GHLicense wrap(GitHub root) {

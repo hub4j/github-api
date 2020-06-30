@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHPullRequest pr : getRepository(this.gitHubBeforeAfter).getPullRequests(GHIssueState.OPEN)) {
+        for (GHPullRequest pr : getRepository(this.getGitHubBeforeAfter()).getPullRequests(GHIssueState.OPEN)) {
             pr.close();
         }
     }
@@ -57,7 +58,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p2.isDraft(), is(true));
 
-        p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().asList().get(0);
+        p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().toList().get(0);
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p.isDraft(), is(true));
 
@@ -92,14 +93,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
-        List<GHPullRequestReview> reviews = p.listReviews().asList();
+        List<GHPullRequestReview> reviews = p.listReviews().toList();
         assertThat(reviews.size(), is(1));
         GHPullRequestReview review = reviews.get(0);
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
-        List<GHPullRequestReviewComment> comments = review.listReviewComments().asList();
+        List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Some niggle", comment.getBody());
@@ -112,21 +113,26 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "pullRequestReviewComments";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         // System.out.println(p.getUrl());
-        assertTrue(p.listReviewComments().asList().isEmpty());
+        assertTrue(p.listReviewComments().toList().isEmpty());
         p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
-        List<GHPullRequestReviewComment> comments = p.listReviewComments().asList();
+        List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
         assertEquals(1, comments.size());
         GHPullRequestReviewComment comment = comments.get(0);
         assertEquals("Sample review comment", comment.getBody());
 
+        // Assert htmlUrl is not null
+        assertNotNull(comment.getHtmlUrl());
+        assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
+                comment.getHtmlUrl());
+
         comment.update("Updated review comment");
-        comments = p.listReviewComments().asList();
+        comments = p.listReviewComments().toList();
         assertEquals(1, comments.size());
         comment = comments.get(0);
         assertEquals("Updated review comment", comment.getBody());
 
         comment.delete();
-        comments = p.listReviewComments().asList();
+        comments = p.listReviewComments().toList();
         assertTrue(comments.isEmpty());
     }
 
@@ -150,7 +156,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         // System.out.println(p.getUrl());
         assertTrue(p.getRequestedReviewers().isEmpty());
 
-        GHOrganization testOrg = gitHub.getOrganization("github-api-test-org");
+        GHOrganization testOrg = gitHub.getOrganization("hub4j-test-org");
         GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");
 
         p.requestTeamReviewers(Collections.singletonList(testTeam));
@@ -252,10 +258,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests()
                 .state(GHIssueState.OPEN)
-                .head("github-api-test-org:test/stable")
+                .head("hub4j-test-org:test/stable")
                 .base("master")
                 .list()
-                .asList();
+                .toList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
@@ -274,7 +280,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 .head("test/stable")
                 .base("master")
                 .list()
-                .asList();
+                .toList();
         assertNotNull(prs);
         assertEquals(1, prs.size());
         assertEquals("test/stable", prs.get(0).getHead().getRef());
@@ -323,6 +329,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

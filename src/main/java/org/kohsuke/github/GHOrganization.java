@@ -40,6 +40,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -69,6 +70,7 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHRepository createRepository(String name,
             String description,
             String homepage,
@@ -88,7 +90,7 @@ public class GHOrganization extends GHPerson {
      *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
-     * finally createa repository.
+     * finally create a repository.
      *
      * @param name
      *            the name
@@ -127,6 +129,40 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Gets a single team by ID.
+     *
+     * @param teamId
+     *            id of the team that we want to query for
+     * @return the team
+     * @throws IOException
+     *             the io exception
+     *
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
+     */
+    @Deprecated
+    public GHTeam getTeam(int teamId) throws IOException {
+        return getTeam((long) teamId);
+    }
+
+    /**
+     * Gets a single team by ID.
+     *
+     * @param teamId
+     *            id of the team that we want to query for
+     * @return the team
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
+     */
+    public GHTeam getTeam(long teamId) throws IOException {
+        return root.createRequest()
+                .withUrlPath(String.format("/organizations/%d/team/%d", getId(), teamId))
+                .fetch(GHTeam.class)
+                .wrapUp(this);
+    }
+
+    /**
      * Finds a team that has the given name in its {@link GHTeam#getName()}
      *
      * @param name
@@ -145,19 +181,19 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
-     *
+     * 
      * @param slug
      *            the slug
      * @return the team by slug
      * @throws IOException
      *             the io exception
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
-        for (GHTeam t : listTeams()) {
-            if (t.getSlug().equals(slug))
-                return t;
-        }
-        return null;
+        return root.createRequest()
+                .withUrlPath(String.format("/orgs/%s/teams/%s", login, slug))
+                .fetch(GHTeam.class)
+                .wrapUp(this);
     }
 
     /**
@@ -255,7 +291,7 @@ public class GHOrganization extends GHPerson {
      * @deprecated use {@link #listMembers()}
      */
     public List<GHUser> getMembers() throws IOException {
-        return listMembers().asList();
+        return listMembers().toList();
     }
 
     /**
@@ -281,7 +317,7 @@ public class GHOrganization extends GHPerson {
     }
 
     private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
-        return listMembers(suffix, null);
+        return listMembers(suffix, null, null);
     }
 
     /**
@@ -294,13 +330,28 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
-        return listMembers("members", filter);
+        return listMembers("members", filter, null);
     }
 
-    private PagedIterable<GHUser> listMembers(final String suffix, final String filter) throws IOException {
-        String filterParams = (filter == null) ? "" : ("?filter=" + filter);
+    /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listMembersWithRole(String role) throws IOException {
+        return listMembers("members", null, role);
+    }
+
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role)
+            throws IOException {
         return root.createRequest()
-                .withUrlPath(String.format("/orgs/%s/%s%s", login, suffix, filterParams))
+                .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
+                .with("filter", filter)
+                .with("role", role)
                 .toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
@@ -386,7 +437,7 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String, Collection)}
+     *             {@link #createTeam(String)}
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
@@ -412,7 +463,7 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String, GHRepository...)}
+     *             {@link #createTeam(String)}
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
@@ -429,7 +480,9 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
         Requester post = root.createRequest().method("POST").with("name", name);
         List<String> repo_names = new ArrayList<String>();
@@ -450,9 +503,26 @@ public class GHOrganization extends GHPerson {
      * @return the gh team
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
      */
+    @Deprecated
     public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
         return createTeam(name, Arrays.asList(repositories));
+    }
+
+    /**
+     * Starts a builder that creates a new team.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
+     * create a team.
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
+     */
+    public GHTeamBuilder createTeam(String name) {
+        return new GHTeamBuilder(root, login, name);
     }
 
     /**

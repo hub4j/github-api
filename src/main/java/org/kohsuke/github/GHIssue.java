@@ -26,6 +26,7 @@ package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,6 +37,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 
@@ -63,22 +65,13 @@ public class GHIssue extends GHObject implements Reactable {
     protected int comments;
     @SkipFromToString
     protected String body;
-    // for backward compatibility with < 1.63, this collection needs to hold instances of Label, not GHLabel
-    protected List<Label> labels;
+    protected List<GHLabel> labels;
     protected GHUser user;
     protected String title, html_url;
     protected GHIssue.PullRequest pull_request;
     protected GHMilestone milestone;
     protected GHUser closed_by;
     protected boolean locked;
-
-    /**
-     * The type Label.
-     *
-     * @deprecated use {@link GHLabel}
-     */
-    public static class Label extends GHLabel {
-    }
 
     GHIssue wrap(GHRepository owner) {
         this.owner = owner;
@@ -98,12 +91,6 @@ public class GHIssue extends GHObject implements Reactable {
         if (closed_by != null)
             closed_by.wrapUp(root);
         return this;
-    }
-
-    static GHIssue[] wrap(GHIssue[] issues, GHRepository owner) {
-        for (GHIssue i : issues)
-            i.wrap(owner);
-        return issues;
     }
 
     /**
@@ -137,7 +124,7 @@ public class GHIssue extends GHObject implements Reactable {
      * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -178,7 +165,7 @@ public class GHIssue extends GHObject implements Reactable {
         if (labels == null) {
             return Collections.emptyList();
         }
-        return Collections.<GHLabel>unmodifiableList(labels);
+        return Collections.unmodifiableList(labels);
     }
 
     /**
@@ -187,16 +174,18 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the closed at
      */
     public Date getClosedAt() {
-        return GitHub.parseDate(closed_at);
+        return GitHubClient.parseDate(closed_at);
     }
 
     /**
      * Gets api url.
      *
-     * @return the api url
+     * @return API URL of this object.
+     * @deprecated use {@link #getUrl()}
      */
+    @Deprecated
     public URL getApiURL() {
-        return GitHub.parseURL(url);
+        return getUrl();
     }
 
     /**
@@ -240,6 +229,13 @@ public class GHIssue extends GHObject implements Reactable {
 
     private void edit(String key, Object value) throws IOException {
         root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Identical to edit(), but allows null for the value.
+     */
+    private void editNullable(String key, Object value) throws IOException {
+        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     private void editIssue(String key, Object value) throws IOException {
@@ -291,15 +287,19 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Sets milestone.
+     * Sets the milestone for this issue.
      *
      * @param milestone
-     *            the milestone
+     *            The milestone to assign this issue to. Use null to remove the milestone for this issue.
      * @throws IOException
-     *             the io exception
+     *             The io exception
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
-        edit("milestone", milestone.getNumber());
+        if (milestone == null) {
+            editNullable("milestone", null);
+        } else {
+            edit("milestone", milestone.getNumber());
+        }
     }
 
     /**
@@ -434,7 +434,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @see #listComments() #listComments()
      */
     public List<GHIssueComment> getComments() throws IOException {
-        return listComments().asList();
+        return listComments().toList();
     }
 
     /**
@@ -453,7 +453,7 @@ public class GHIssue extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.createRequest()
+        return root.createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
@@ -465,10 +465,10 @@ public class GHIssue extends GHObject implements Reactable {
     @Preview
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.createRequest()
+        return root.createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
+                .toIterable(GHReaction[].class, item -> item.wrap(root));
     }
 
     /**
@@ -571,6 +571,11 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the issues api route
      */
     protected String getIssuesApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+        }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
     }
 
@@ -677,7 +682,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the diff url
          */
         public URL getDiffUrl() {
-            return GitHub.parseURL(diff_url);
+            return GitHubClient.parseURL(diff_url);
         }
 
         /**
@@ -686,7 +691,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the patch url
          */
         public URL getPatchUrl() {
-            return GitHub.parseURL(patch_url);
+            return GitHubClient.parseURL(patch_url);
         }
 
         /**
@@ -695,7 +700,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(html_url);
+            return GitHubClient.parseURL(html_url);
         }
     }
 

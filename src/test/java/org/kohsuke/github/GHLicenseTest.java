@@ -30,6 +30,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.hamcrest.Matchers.*;
+
 /**
  * @author Duncan Dickinson
  */
@@ -91,7 +93,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("github-api/github-api");
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
@@ -157,7 +159,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("github-api/github-api");
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
         GHLicense license = repo.getLicense();
         assertNotNull("The license is populated", license);
         assertTrue("The key is correct", license.getKey().equals("mit"));
@@ -189,5 +191,22 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         } else {
             fail("Expected the license to be Base64 encoded but instead it was " + content.getEncoding());
         }
+    }
+
+    /**
+     * Accesses the 'bndtools/bnd' repo using {@link GitHub#getRepository(String)} and then calls
+     * {@link GHRepository#getLicense()}. The description is null due to multiple licences
+     *
+     * @throws IOException
+     *             if test fails
+     */
+    @Test
+    public void checkRepositoryLicenseForIndeterminate() throws IOException {
+        GHRepository repo = gitHub.getRepository("bndtools/bnd");
+        GHLicense license = repo.getLicense();
+        assertNotNull("The license is populated", license);
+        assertThat(license.getKey(), equalTo("other"));
+        assertThat(license.getDescription(), is(nullValue()));
+        assertThat(license.getUrl(), is(nullValue()));
     }
 }

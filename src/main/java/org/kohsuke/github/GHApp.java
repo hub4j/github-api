@@ -39,7 +39,9 @@ public class GHApp extends GHObject {
      *
      * @param owner
      *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOwner(GHUser owner) {
         this.owner = owner;
     }
@@ -58,7 +60,9 @@ public class GHApp extends GHObject {
      *
      * @param name
      *            the name
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setName(String name) {
         this.name = name;
     }
@@ -77,7 +81,9 @@ public class GHApp extends GHObject {
      *
      * @param description
      *            the description
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setDescription(String description) {
         this.description = description;
     }
@@ -96,7 +102,9 @@ public class GHApp extends GHObject {
      *
      * @param externalUrl
      *            the external url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setExternalUrl(String externalUrl) {
         this.externalUrl = externalUrl;
     }
@@ -115,7 +123,9 @@ public class GHApp extends GHObject {
      *
      * @param events
      *            the events
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setEvents(List<GHEvent> events) {
         this.events = events;
     }
@@ -134,13 +144,15 @@ public class GHApp extends GHObject {
      *
      * @param installationsCount
      *            the installations count
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setInstallationsCount(long installationsCount) {
         this.installationsCount = installationsCount;
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(htmlUrl);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -157,7 +169,9 @@ public class GHApp extends GHObject {
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map<String, String> permissions) {
         this.permissions = permissions;
     }

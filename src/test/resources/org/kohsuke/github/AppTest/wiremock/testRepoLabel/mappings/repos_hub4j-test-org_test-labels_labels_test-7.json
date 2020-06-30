@@ -1,0 +1,52 @@
+{
+  "id": "6d637a44-3eff-4110-bb1f-dd9002d0e051",
+  "name": "repos_hub4j-test-org_test-labels_labels_test",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-labels/labels/test",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"color\":\"000000\",\"name\":\"test\",\"description\":\"It is dark!\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\":1937402918,\"node_id\":\"MDU6TGFiZWwxOTM3NDAyOTE4\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"It is dark!\"}",
+    "headers": {
+      "Date": "Thu, 26 Mar 2020 21:52:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1585263137",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "W/\"14706c3016a6b3a0cfce85c5b6389c4e\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E69B:9495:1D1E3:24577:5E7D2414"
+    }
+  },
+  "uuid": "6d637a44-3eff-4110-bb1f-dd9002d0e051",
+  "persistent": true,
+  "insertionIndex": 7
+}

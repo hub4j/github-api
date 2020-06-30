@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -71,8 +70,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        GHEmail[] addresses = root.createRequest().withUrlPath("/user/emails").fetchArray(GHEmail[].class);
-        return Collections.unmodifiableList(Arrays.asList(addresses));
+        return root.createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
     }
 
     /**
@@ -86,8 +84,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return Collections.unmodifiableList(
-                Arrays.asList(root.createRequest().withUrlPath("/user/keys").fetchArray(GHKey[].class)));
+        return root.createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
     }
 
     /**
@@ -101,8 +98,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(
-                root.createRequest().withUrlPath("/users/" + getLogin() + "/keys").fetchArray(GHVerifiedKey[].class)));
+        return root.createRequest()
+                .withUrlPath("/users/" + getLogin() + "/keys")
+                .toIterable(GHVerifiedKey[].class, null)
+                .toList();
     }
 
     /**
@@ -115,7 +114,10 @@ public class GHMyself extends GHUser {
     public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class)) {
+        for (GHOrganization o : root.createRequest()
+                .withUrlPath("/user/orgs")
+                .toIterable(GHOrganization[].class, null)
+                .toArray()) {
             if (names.add(o.getLogin())) // in case of rumoured duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -189,6 +191,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      * @deprecated Use {@link #listRepositories()}
      */
+    @Deprecated
     public PagedIterable<GHRepository> listAllRepositories() {
         return listRepositories();
     }

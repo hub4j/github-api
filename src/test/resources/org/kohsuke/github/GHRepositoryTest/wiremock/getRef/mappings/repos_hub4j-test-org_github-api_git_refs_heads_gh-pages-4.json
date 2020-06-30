@@ -1,0 +1,51 @@
+{
+  "id": "22eb7d57-2a85-4948-9103-c4c76c279d00",
+  "name": "repos_hub4j-test-org_github-api_git_refs_heads_gh-pages",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/git/refs/heads/gh-pages",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_git_refs_heads_gh-pages-4.json",
+    "headers": {
+      "Date": "Thu, 11 Jun 2020 02:20:47 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4915",
+      "X-RateLimit-Reset": "1591843209",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"1ab7db857cfacd7c05c569c1a71ecc8c\"",
+      "Last-Modified": "Wed, 10 Jun 2020 23:27:59 GMT",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E5B0:5D6A:3A9AC:47E36:5EE194FF"
+    }
+  },
+  "uuid": "22eb7d57-2a85-4948-9103-c4c76c279d00",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-git-refs-heads-gh-pages",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-git-refs-heads-gh-pages-2",
+  "insertionIndex": 4
+}

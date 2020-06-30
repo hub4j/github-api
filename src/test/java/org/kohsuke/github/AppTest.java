@@ -3,11 +3,14 @@ package org.kohsuke.github;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHOrganization.Permission;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -17,8 +20,8 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.oneOf;
 
 /**
  * Unit test for simple App.
@@ -37,13 +40,40 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 "a test repository",
                 "http://github-api.kohsuke.org/",
                 true);
+
         assertThat(r.hasIssues(), is(true));
+        assertThat(r.hasWiki(), is(true));
+        assertThat(r.hasDownloads(), is(true));
+        assertThat(r.hasProjects(), is(true));
 
         r.enableIssueTracker(false);
         r.enableDownloads(false);
         r.enableWiki(false);
+        r.enableProjects(false);
+
         r.renameTo(targetName);
-        getUser().getRepository(targetName).delete();
+
+        // local instance remains unchanged
+        assertThat(r.getName(), equalTo("github-api-test-rename"));
+        assertThat(r.hasIssues(), is(true));
+        assertThat(r.hasWiki(), is(true));
+        assertThat(r.hasDownloads(), is(true));
+        assertThat(r.hasProjects(), is(true));
+
+        r = gitHub.getMyself().getRepository(targetName);
+
+        // values are updated
+        assertThat(r.hasIssues(), is(false));
+        assertThat(r.hasWiki(), is(false));
+        assertThat(r.hasDownloads(), is(false));
+        assertThat(r.getName(), equalTo(targetName));
+
+        // ISSUE: #765
+        // From what I can tell this is a bug in GithHub.
+        // updating `has_projects` doesn't seem to do anything
+        assertThat(r.hasProjects(), is(true));
+
+        r.delete();
     }
 
     @Test
@@ -55,27 +85,51 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .homepage("http://github-api.kohsuke.org/")
                 .autoInit(true)
                 .create();
-        r.enableIssueTracker(false);
-        r.enableDownloads(false);
-        r.enableWiki(false);
         if (mockGitHub.isUseProxy()) {
             Thread.sleep(3000);
         }
         assertNotNull(r.getReadme());
-        getUser().getRepository(name).delete();
+
+        r.delete();
     }
 
     private void cleanupUserRepository(final String name) throws IOException {
         if (mockGitHub.isUseProxy()) {
-            cleanupRepository(getUser(gitHubBeforeAfter).getLogin() + "/" + name);
+            cleanupRepository(getUser(getGitHubBeforeAfter()).getLogin() + "/" + name);
         }
     }
 
     @Test
     public void testCredentialValid() throws IOException {
         assertTrue(gitHub.isCredentialValid());
-        GitHub connect = GitHub.connect("totally", "bogus");
-        assertFalse(connect.isCredentialValid());
+        assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
+        assertThat(gitHub.lastRateLimit().getCore().getLimit(), equalTo(5000));
+
+        gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
+                .withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build();
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertFalse(gitHub.isCredentialValid());
+        // For invalid credentials, we get a 401 but it includes anonymous rate limit headers
+        assertThat(gitHub.lastRateLimit().getCore(), not(instanceOf(GHRateLimit.UnknownLimitRecord.class)));
+        assertThat(gitHub.lastRateLimit().getCore().getLimit(), equalTo(60));
+    }
+
+    @Test
+    public void testCredentialValidEnterprise() throws IOException {
+        // Simulated GHE: getRateLimit returns 404
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertTrue(gitHub.isCredentialValid());
+        // lastRateLimit stays null when 404 is encountered
+        assertThat(gitHub.lastRateLimit(), nullValue());
+
+        gitHub = getGitHubBuilder().withOAuthToken("bogus", "user")
+                .withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build();
+        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertFalse(gitHub.isCredentialValid());
+        // Simulated GHE: For invalid credentials, we get a 401 that does not include ratelimit info
+        assertThat(gitHub.lastRateLimit(), nullValue());
     }
 
     @Test
@@ -116,7 +170,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .create();
         assertNotNull(deployment.getCreator());
         assertNotNull(deployment.getId());
-        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").asList();
+        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").toList();
         assertNotNull(deployments);
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
@@ -144,7 +198,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetIssues() throws Exception {
-        List<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+        List<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
@@ -157,7 +211,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testListIssues() throws IOException {
-        Iterable<GHIssue> closedIssues = gitHub.getOrganization("github-api")
+        Iterable<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .listIssues(GHIssueState.CLOSED);
 
@@ -232,16 +286,35 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return team.hasMember(gitHub.getMyself());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testShouldFetchTeam() throws Exception {
-        GHOrganization j = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam teamByName = j.getTeams().get("Core Developers");
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
 
-        GHTeam teamById = gitHub.getTeam(teamByName.getId());
+        GHTeam teamById = gitHub.getTeam((int) teamByName.getId());
         assertNotNull(teamById);
 
-        assertEquals(teamByName, teamById);
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
+    }
+
+    @Test
+    public void testShouldFetchTeamFromOrganization() throws Exception {
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam teamByName = organization.getTeams().get("Core Developers");
+
+        GHTeam teamById = organization.getTeam(teamByName.getId());
+        assertNotNull(teamById);
+
+        assertEquals(teamByName.getId(), teamById.getId());
+        assertEquals(teamByName.getDescription(), teamById.getDescription());
+
+        GHTeam teamById2 = organization.getTeam((int) teamByName.getId());
+        assertNotNull(teamById2);
+
+        assertEquals(teamByName.getId(), teamById2.getId());
+        assertEquals(teamByName.getDescription(), teamById2.getDescription());
+
     }
 
     @Ignore("Needs mocking check")
@@ -256,10 +329,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testFetchPullRequestAsList() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         assertEquals("master", r.getMasterBranch());
         PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
-        List<GHPullRequest> prs = i.asList();
+        List<GHPullRequest> prs = i.toList();
         assertNotNull(prs);
         assertTrue(prs.size() > 0);
     }
@@ -430,7 +503,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(hook);
 
         if (mockGitHub.isUseProxy()) {
-            r = gitHubBeforeAfter.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+            r = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
             for (GHHook h : r.getHooks()) {
                 h.delete();
             }
@@ -562,14 +635,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCommitStatus() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
 
         GHCommitStatus state;
 
         // state = r.createCommitStatus("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396", GHCommitState.FAILURE,
         // "http://kohsuke.org/", "testing!");
 
-        List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").asList();
+        List<GHCommitStatus> lst = r.listCommitStatuses("ecbfdd7315ef2cf04b2be7f11a072ce0bd00c396").toList();
         state = lst.get(0);
         // System.out.println(state);
         assertEquals("testing!", state.getDescription());
@@ -578,10 +651,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCommitShortInfo() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f23");
         assertEquals(commit.getCommitShortInfo().getAuthor().getName(), "Kohsuke Kawaguchi");
         assertEquals(commit.getCommitShortInfo().getMessage(), "doc");
+        assertFalse(commit.getCommitShortInfo().getVerification().isVerified());
+        assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNSIGNED);
     }
 
     @Ignore("Needs mocking check")
@@ -706,29 +781,40 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(all.isEmpty());
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testCommitSearch() throws IOException {
-        PagedSearchIterable<GHCommit> r = gitHub.searchCommits().author("kohsuke").list();
+        PagedSearchIterable<GHCommit> r = gitHub.searchCommits()
+                .org("github-api")
+                .repo("github-api")
+                .author("kohsuke")
+                .sort(GHCommitSearchBuilder.Sort.COMMITTER_DATE)
+                .list();
         assertTrue(r.getTotalCount() > 0);
 
         GHCommit firstCommit = r.iterator().next();
         assertTrue(firstCommit.getFiles().size() > 0);
     }
 
-    @Ignore("Needs mocking check")
     @Test
     public void testIssueSearch() throws IOException {
-        PagedSearchIterable<GHIssue> r = gitHub.searchIssues().mentions("kohsuke").isOpen().list();
-        for (GHIssue i : r) {
-            // System.out.println(i.getTitle());
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .mentions("kohsuke")
+                .isOpen()
+                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .list();
+        assertTrue(r.getTotalCount() > 0);
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            PagedIterable<GHIssueComment> comments = issue.listComments();
+            for (GHIssueComment comment : comments) {
+                assertThat(comment, notNullValue());
+            }
         }
     }
 
-    @Ignore("Needs mocking check")
     @Test // issue #99
     public void testReadme() throws IOException {
-        GHContent readme = gitHub.getRepository("github-api-test-org/test-readme").getReadme();
+        GHContent readme = gitHub.getRepository("hub4j-test-org/test-readme").getReadme();
         assertEquals(readme.getName(), "README.md");
         assertEquals(readme.getContent(), "This is a markdown readme.\n");
     }
@@ -736,7 +822,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testTrees() throws IOException {
-        GHTree masterTree = gitHub.getRepository("github-api/github-api").getTree("master");
+        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTree("master");
         boolean foundReadme = false;
         for (GHTreeEntry e : masterTree.getTree()) {
             if ("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))) {
@@ -749,7 +835,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testTreesRecursive() throws IOException {
-        GHTree masterTree = gitHub.getRepository("github-api/github-api").getTreeRecursive("master", 1);
+        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTreeRecursive("master", 1);
         boolean foundThisFile = false;
         for (GHTreeEntry e : masterTree.getTree()) {
             if (e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")) {
@@ -765,10 +851,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         cleanupLabel("test");
         cleanupLabel("test2");
 
-        GHRepository r = gitHub.getRepository("github-api-test-org/test-labels");
-        List<GHLabel> lst = r.listLabels().asList();
+        GHRepository r = gitHub.getRepository("hub4j-test-org/test-labels");
+        List<GHLabel> lst = r.listLabels().toList();
         for (GHLabel l : lst) {
-            // System.out.println(l.getName());
+            assertThat(l.getUrl(), containsString(l.getName().replace(" ", "%20")));
         }
         assertTrue(lst.size() > 5);
         GHLabel e = r.getLabel("enhancement");
@@ -778,9 +864,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         GHLabel t = null;
         GHLabel t2 = null;
+        GHLabel t3 = null;
         try {// CRUD
             t = r.createLabel("test", "123456");
             t2 = r.getLabel("test");
+            assertThat(t, not(sameInstance(t2)));
+            assertThat(t, equalTo(t2));
+
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
@@ -788,28 +878,69 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
 
-            t.setColor("000000");
+            // update works on multiple changes in one call
+            t3 = t.update().color("000000").description("It is dark!").done();
 
-            // This is annoying behavior, but it is by design at this time.
-            // Verifying so we can know when it is fixed.
+            // instances behave as immutable by default. Update returns a new updated instance.
+            assertThat(t, not(sameInstance(t2)));
+            assertThat(t, equalTo(t2));
+
+            assertThat(t, not(sameInstance(t3)));
+            assertThat(t, not(equalTo(t3)));
+
             assertEquals(t.getColor(), "123456");
+            assertEquals(t.getDescription(), "");
+            assertEquals(t3.getColor(), "000000");
+            assertEquals(t3.getDescription(), "It is dark!");
 
+            // Test deprecated methods
+            t.setDescription("Deprecated");
             t = r.getLabel("test");
-            t.setDescription("this is also a test");
 
-            GHLabel t3 = r.getLabel("test");
+            // By using the old instance t when calling setDescription it also sets color to the old value
+            // this is a bad behavior, but it is expected
+            assertEquals(t.getColor(), "123456");
+            assertEquals(t.getDescription(), "Deprecated");
+
+            t.setColor("000000");
+            t = r.getLabel("test");
+            assertEquals(t.getColor(), "000000");
+            assertEquals(t.getDescription(), "Deprecated");
+
+            // set() makes a single change
+            t3 = t.set().description("this is also a test");
+
+            // instances behave as immutable by default. Update returns a new updated instance.
+            assertThat(t, not(sameInstance(t3)));
+            assertThat(t, not(equalTo(t3)));
+
             assertEquals(t3.getColor(), "000000");
             assertEquals(t3.getDescription(), "this is also a test");
+
             t.delete();
+            try {
+                t = r.getLabel("test");
+                fail("Test label should be deleted.");
+            } catch (IOException ex) {
+                assertThat(ex, instanceOf(FileNotFoundException.class));
+            }
 
             t = r.createLabel("test2", "123457", "this is a different test");
             t2 = r.getLabel("test2");
+
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123457");
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getDescription(), "this is a different test");
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
+            t.delete();
+
+            // Allow null description
+            t = GHLabel.create(r).name("test2").color("123458").done();
+            assertThat(t.getName(), equalTo("test2"));
+            assertThat(t.getDescription(), is(nullValue()));
+
         } finally {
             cleanupLabel("test");
             cleanupLabel("test2");
@@ -819,7 +950,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
             try {
-                GHLabel t = gitHubBeforeAfter.getRepository("github-api-test-org/test-labels").getLabel("test");
+                GHLabel t = getGitHubBeforeAfter().getRepository("hub4j-test-org/test-labels").getLabel(name);
                 t.delete();
             } catch (IOException e) {
 
@@ -849,10 +980,27 @@ public class AppTest extends AbstractGitHubWireMockTest {
         for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
+                // both read and unread are included
+                assertThat(t.getTitle(), is("Create a Jenkinsfile for Librecores CI in mor1kx"));
+                assertThat(t.getLastReadAt(), notNullValue());
+                assertThat(t.isRead(), equalTo(true));
+
                 t.markAsRead(); // test this by calling it once on old notfication
             }
-            assertNotNull(t.getTitle());
-            assertNotNull(t.getReason());
+            assertThat(t.getReason(), oneOf("subscribed", "mention", "review_requested", "comment"));
+            assertThat(t.getTitle(), notNullValue());
+            assertThat(t.getLastCommentUrl(), notNullValue());
+            assertThat(t.getRepository(), notNullValue());
+            assertThat(t.getUpdatedAt(), notNullValue());
+            assertThat(t.getType(), oneOf("Issue", "PullRequest"));
+
+            // both thread an unread are included
+            // assertThat(t.getLastReadAt(), notNullValue());
+            // assertThat(t.isRead(), equalTo(true));
+
+            // Doesn't exist on threads but is part of GHObject. :(
+            assertThat(t.getCreatedAt(), nullValue());
+
         }
         assertTrue(found);
         gitHub.listNotifications().markAsRead();
@@ -871,17 +1019,62 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void reactions() throws Exception {
-        GHIssue i = gitHub.getRepository("github-api/github-api").getIssue(311);
+        GHIssue i = gitHub.getRepository("hub4j/github-api").getIssue(311);
 
+        List<GHReaction> l;
         // retrieval
-        GHReaction r = i.listReactions().iterator().next();
-        assertThat(r.getUser().getLogin(), is("kohsuke"));
-        assertThat(r.getContent(), is(ReactionContent.HEART));
+        l = i.listReactions().toList();
+        assertThat(l.size(), equalTo(1));
+
+        assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
+        assertThat(l.get(0).getContent(), is(ReactionContent.HEART));
 
         // CRUD
-        GHReaction a = i.createReaction(ReactionContent.HOORAY);
+        GHReaction a;
+        a = i.createReaction(ReactionContent.HOORAY);
         assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.HOORAY));
         a.delete();
+
+        l = i.listReactions().toList();
+        assertThat(l.size(), equalTo(1));
+
+        a = i.createReaction(ReactionContent.PLUS_ONE);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.PLUS_ONE));
+
+        a = i.createReaction(ReactionContent.CONFUSED);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.CONFUSED));
+
+        a = i.createReaction(ReactionContent.EYES);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.EYES));
+
+        a = i.createReaction(ReactionContent.ROCKET);
+        assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(a.getContent(), is(ReactionContent.ROCKET));
+
+        l = i.listReactions().toList();
+        assertThat(l.size(), equalTo(5));
+        assertThat(l.get(0).getUser().getLogin(), is("kohsuke"));
+        assertThat(l.get(0).getContent(), is(ReactionContent.HEART));
+        assertThat(l.get(1).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(1).getContent(), is(ReactionContent.PLUS_ONE));
+        assertThat(l.get(2).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(2).getContent(), is(ReactionContent.CONFUSED));
+        assertThat(l.get(3).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(3).getContent(), is(ReactionContent.EYES));
+        assertThat(l.get(4).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
+        assertThat(l.get(4).getContent(), is(ReactionContent.ROCKET));
+
+        l.get(1).delete();
+        l.get(2).delete();
+        l.get(3).delete();
+        l.get(4).delete();
+
+        l = i.listReactions().toList();
+        assertThat(l.size(), equalTo(1));
     }
 
     @Test
@@ -896,7 +1089,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void blob() throws Exception {
-        GHRepository r = gitHub.getRepository("github-api/github-api");
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
         String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
 
         assertBlobContent(r.readBlob(sha1));

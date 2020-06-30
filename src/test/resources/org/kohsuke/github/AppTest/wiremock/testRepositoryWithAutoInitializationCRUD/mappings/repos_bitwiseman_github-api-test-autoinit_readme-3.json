@@ -1,0 +1,46 @@
+{
+  "id": "f09f2de7-2d72-4b9e-82fb-a04f5b056f59",
+  "name": "repos_bitwiseman_github-api-test-autoinit_readme",
+  "request": {
+    "url": "/repos/bitwiseman/github-api-test-autoinit/readme",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_bitwiseman_github-api-test-autoinit_readme-3.json",
+    "headers": {
+      "Date": "Tue, 31 Mar 2020 21:48:46 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1585694557",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"51c071650b92e07b4b841a385f530d8d\"",
+      "Last-Modified": "Tue, 31 Mar 2020 21:48:42 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E49F:9AFE:17DC6:1CF29:5E83BABB"
+    }
+  },
+  "uuid": "f09f2de7-2d72-4b9e-82fb-a04f5b056f59",
+  "persistent": true,
+  "insertionIndex": 3
+}

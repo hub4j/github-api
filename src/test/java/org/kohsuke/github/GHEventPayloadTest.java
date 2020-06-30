@@ -3,14 +3,20 @@ package org.kohsuke.github;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.TimeZone;
 
-public class GHEventPayloadTest {
+import static org.hamcrest.Matchers.*;
+
+public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Rule
     public final PayloadRule payload = new PayloadRule(".json");
+
+    public GHEventPayloadTest() {
+        useDefaultGitHub = false;
+    }
 
     @Test
     public void commit_comment() throws Exception {
@@ -279,6 +285,70 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    @Test
+    @Payload("push.fork")
+    public void pushToFork() throws Exception {
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+        GHEventPayload.Push event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
+        assertThat(event.getRef(), is("refs/heads/changes"));
+        assertThat(event.getBefore(), is("85c44b352958bf6d81b74ab8b21920f1d313a287"));
+        assertThat(event.getHead(), is("1393706f1364742defbc28ba459082630ca979af"));
+        assertThat(event.isCreated(), is(false));
+        assertThat(event.isDeleted(), is(false));
+        assertThat(event.isForced(), is(false));
+        assertThat(event.getCommits().size(), is(1));
+        assertThat(event.getCommits().get(0).getSha(), is("1393706f1364742defbc28ba459082630ca979af"));
+        assertThat(event.getCommits().get(0).getAuthor().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getCommits().get(0).getCommitter().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getCommits().get(0).getAdded().size(), is(6));
+        assertThat(event.getCommits().get(0).getRemoved().size(), is(0));
+        assertThat(event.getCommits().get(0).getModified().size(), is(2));
+        assertThat(event.getCommits().get(0).getModified().get(0),
+                is("src/main/java/org/kohsuke/github/GHLicense.java"));
+        assertThat(event.getRepository().getName(), is("github-api"));
+        assertThat(event.getRepository().getOwnerName(), is("hub4j-test-org"));
+        assertThat(event.getRepository().getUrl().toExternalForm(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getPusher().getName(), is("bitwiseman"));
+        assertThat(event.getPusher().getEmail(), is("bitwiseman@gmail.com"));
+        assertThat(event.getSender().getLogin(), is("bitwiseman"));
+
+        assertThat(event.getRepository().isFork(), is(true));
+
+        // in offliine mode, we should not populate missing fields
+        assertThat(event.getRepository().getSource(), is(nullValue()));
+        assertThat(event.getRepository().getParent(), is(nullValue()));
+
+        assertThat(event.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl().toString(),
+                is("https://github.com/hub4j-test-org/github-api.git"));
+
+        // Test repository populate
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+
+        event.getRepository().populate();
+
+        // After populate the url is fixed to point to the correct API endpoint
+        assertThat(event.getRepository().getUrl().toString(),
+                is(mockGitHub.apiServer().baseUrl() + "/repos/hub4j-test-org/github-api"));
+        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+
+        // ensure that root has been bound after populate
+        event.getRepository().getSource().getRef("heads/master");
+        event.getRepository().getParent().getRef("heads/master");
+
+        // Source
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getSource().getFullName(), is("hub4j/github-api"));
+
+        // Parent
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
+        assertThat(event.getRepository().getParent().getFullName(), is("hub4j/github-api"));
+
+    }
+
     // TODO implement support classes and write test
     // @Test
     // public void release() throws Exception {}
@@ -294,9 +364,16 @@ public class GHEventPayloadTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
-    // TODO implement support classes and write test
-    // @Test
-    // public void status() throws Exception {}
+    @Test
+    public void status() throws Exception {
+        GHEventPayload.Status event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
+        assertThat(event.getContext(), is("default"));
+        assertThat(event.getDescription(), is("status description"));
+        assertThat(event.getState(), is(GHCommitState.SUCCESS));
+        assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+    }
 
     // TODO implement support classes and write test
     // @Test
@@ -312,8 +389,113 @@ public class GHEventPayloadTest {
         GHEventPayload.CheckRun event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.CheckRun.class);
         assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
-        assertThat(event.getCheckRun().getName(), is("Octocoders-linter"));
+
+        // Checks the deserialization of check_run
+        GHCheckRun checkRun = event.getCheckRun();
+        assertThat(checkRun.getName(), is("Octocoders-linter"));
+        assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkRun.getStatus(), is("completed"));
+        assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
+        assertThat(checkRun.getExternalId(), is(""));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
+        assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
+
+        assertThat(checkRun.getConclusion(), is("success"));
+        assertThat(checkRun.getUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
+        assertThat(checkRun.getHtmlUrl().toString(), is("https://github.com/Codertocat/Hello-World/runs/128620228"));
+        assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
+        assertThat(checkRun.getApp().getId(), is(29310L));
+        assertThat(checkRun.getCheckSuite().getId(), is(118578147L));
+        assertThat(checkRun.getOutput().getTitle(), is("check-run output"));
+        assertThat(checkRun.getOutput().getSummary(), nullValue());
+        assertThat(checkRun.getOutput().getText(), nullValue());
+        assertThat(checkRun.getOutput().getAnnotationsCount(), is(0));
+        assertThat(checkRun.getOutput().getAnnotationsUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
+
+        // Checks the deserialization of sender
+        assertThat(event.getSender().getId(), is(21031067L));
     }
 
+    @Test
+    @Payload("check-suite")
+    public void checkSuiteEvent() throws Exception {
+        GHEventPayload.CheckSuite event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.CheckSuite.class);
+
+        assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
+        assertThat(event.getAction(), is("completed"));
+        assertThat(event.getSender().getId(), is(21031067L));
+
+        // Checks the deserialization of check_suite
+        GHCheckSuite checkSuite = event.getCheckSuite();
+        assertThat(checkSuite.getNodeId(), is("MDEwOkNoZWNrU3VpdGUxMTg1NzgxNDc="));
+        assertThat(checkSuite.getHeadBranch(), is("changes"));
+        assertThat(checkSuite.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getStatus(), is("completed"));
+        assertThat(checkSuite.getConclusion(), is("success"));
+        assertThat(checkSuite.getBefore(), is("6113728f27ae82c7b1a177c8d03f9e96e0adf246"));
+        assertThat(checkSuite.getAfter(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getLatestCheckRunsCount(), is(1));
+        assertThat(checkSuite.getCheckRunsUrl().toString(),
+                is("https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147/check-runs"));
+        assertThat(checkSuite.getHeadCommit().getMessage(), is("Update README.md"));
+        assertThat(checkSuite.getHeadCommit().getId(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getHeadCommit().getTreeId(), is("31b122c26a97cf9af023e9ddab94a82c6e77b0ea"));
+        assertThat(checkSuite.getHeadCommit().getAuthor().getName(), is("Codertocat"));
+        assertThat(checkSuite.getHeadCommit().getCommitter().getName(), is("Codertocat"));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
+
+        assertThat(checkSuite.getApp().getId(), is(29310L));
+    }
+
+    @Test
+    @Payload("installation_repositories")
+    public void InstallationRepositoriesEvent() throws Exception {
+        GHEventPayload.InstallationRepositories event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.InstallationRepositories.class);
+
+        assertThat(event.getAction(), is("added"));
+        assertThat(event.getInstallation().getId(), is(957387L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("Codertocat"));
+        assertThat(event.getRepositorySelection(), is("selected"));
+
+        assertThat(event.getRepositoriesAdded().get(0).getId(), is(186853007L));
+        assertThat(event.getRepositoriesAdded().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
+        assertThat(event.getRepositoriesAdded().get(0).getName(), is("Space"));
+        assertThat(event.getRepositoriesAdded().get(0).getFullName(), is("Codertocat/Space"));
+        assertThat(event.getRepositoriesAdded().get(0).isPrivate(), is(false));
+
+        assertThat(event.getRepositoriesRemoved(), is(Collections.emptyList()));
+        assertThat(event.getSender().getLogin(), is("Codertocat"));
+    }
+
+    @Test
+    @Payload("installation")
+    public void InstallationEvent() throws Exception {
+        GHEventPayload.Installation event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
+
+        assertThat(event.getAction(), is("deleted"));
+        assertThat(event.getInstallation().getId(), is(2L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
+
+        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
+        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
+        assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
+        assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
+        assertThat(event.getRepositories().get(0).isPrivate(), is(false));
+
+        assertThat(event.getSender().getLogin(), is("octocat"));
+    }
 }

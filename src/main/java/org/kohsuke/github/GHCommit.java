@@ -39,6 +39,8 @@ public class GHCommit {
 
         private int comment_count;
 
+        private GHVerification verification;
+
         static class Tree {
             String sha;
         }
@@ -61,7 +63,7 @@ public class GHCommit {
          * @return the authored date
          */
         public Date getAuthoredDate() {
-            return GitHub.parseDate(author.date);
+            return GitHubClient.parseDate(author.date);
         }
 
         /**
@@ -80,7 +82,7 @@ public class GHCommit {
          * @return the commit date
          */
         public Date getCommitDate() {
-            return GitHub.parseDate(committer.date);
+            return GitHubClient.parseDate(committer.date);
         }
 
         /**
@@ -99,6 +101,15 @@ public class GHCommit {
          */
         public int getCommentCount() {
             return comment_count;
+        }
+
+        /**
+         * Gets Verification Status.
+         *
+         * @return the Verification status
+         */
+        public GHVerification getVerification() {
+            return verification;
         }
     }
 
@@ -201,7 +212,7 @@ public class GHCommit {
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-            return GitHub.parseURL(raw_url);
+            return GitHubClient.parseURL(raw_url);
         }
 
         /**
@@ -212,7 +223,7 @@ public class GHCommit {
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-            return GitHub.parseURL(blob_url);
+            return GitHubClient.parseURL(blob_url);
         }
 
         /**
@@ -326,7 +337,7 @@ public class GHCommit {
      *         "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -510,6 +521,19 @@ public class GHCommit {
      */
     public GHCommitStatus getLastStatus() throws IOException {
         return owner.getLastCommitStatus(sha);
+    }
+
+    /**
+     * Gets check-runs for given sha.
+     *
+     * @return check runs for given sha.
+     * @throws IOException
+     *             on error
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
+        return owner.getCheckRuns(sha);
     }
 
     /**

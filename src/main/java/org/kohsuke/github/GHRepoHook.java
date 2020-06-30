@@ -18,6 +18,6 @@ class GHRepoHook extends GHHook {
 
     @Override
     String getApiRoute() {
-        return String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), id);
+        return String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), getId());
     }
 }

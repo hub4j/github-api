@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
@@ -99,6 +102,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     @Override
     protected String getApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+
+        }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
     }
 
@@ -108,7 +117,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHub.parseURL(patch_url);
+        return GitHubClient.parseURL(patch_url);
     }
 
     /**
@@ -117,7 +126,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the issue url
      */
     public URL getIssueUrl() {
-        return GitHub.parseURL(issue_url);
+        return GitHubClient.parseURL(issue_url);
     }
 
     /**
@@ -156,7 +165,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHub.parseURL(diff_url);
+        return GitHubClient.parseURL(diff_url);
     }
 
     /**
@@ -165,7 +174,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the merged at
      */
     public Date getMergedAt() {
-        return GitHub.parseDate(merged_at);
+        return GitHubClient.parseDate(merged_at);
     }
 
     @Override
@@ -381,10 +390,14 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Repopulates this object.
      */
     public void refresh() throws IOException {
-        if (root.isOffline()) {
+        if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequest().withPreview(SHADOW_CAT).withUrlPath(url).fetchInto(this).wrapUp(owner);
+
+        URL url = getUrl();
+        if (url != null) {
+            root.createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);
+        }
     }
 
     /**
@@ -447,6 +460,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #createReview()}
      */
+    @Deprecated
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             GHPullRequestReviewComment... comments) throws IOException {
@@ -467,6 +481,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #createReview()}
      */
+    @Deprecated
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             List<GHPullRequestReviewComment> comments) throws IOException {

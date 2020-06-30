@@ -25,7 +25,7 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -82,11 +82,6 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
         if (organization != null)
             organization.wrapUp(root);
         return this;
-    }
-
-    static void wrap(GHMembership[] page, GitHub root) {
-        for (GHMembership m : page)
-            m.wrap(root);
     }
 
     /**

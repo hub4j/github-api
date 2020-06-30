@@ -2,13 +2,14 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 /**
@@ -20,13 +21,16 @@ public abstract class GHPerson extends GHObject {
     /* package almost final */ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatar_url, gravatar_id;
+    protected String login, avatar_url;
 
     // other fields (that only show up in full data)
-    protected String location, blog, email, name, company, type;
+    protected String location, blog, email, bio, name, company, type, twitter_username;
     protected String html_url;
     protected int followers, following, public_repos, public_gists;
-    protected boolean site_admin;
+    protected boolean site_admin, hireable;
+
+    // other fields (that only show up in full data) that require privileged scope
+    protected Integer total_private_repos;
 
     GHPerson wrapUp(GitHub root) {
         this.root = root;
@@ -42,13 +46,16 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        if (created_at != null) {
+        if (super.getCreatedAt() != null) {
             return; // already populated
         }
         if (root == null || root.isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        root.createRequest().withUrlPath(url).fetchInto(this);
+        URL url = getUrl();
+        if (url != null) {
+            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this);
+        }
     }
 
     /**
@@ -112,29 +119,27 @@ public abstract class GHPerson extends GHObject {
      */
     @Deprecated
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
-        return new Iterable<List<GHRepository>>() {
-            public Iterator<List<GHRepository>> iterator() {
-                final Iterator<GHRepository[]> pager = root.createRequest()
-                        .withUrlPath("users", login, "repos")
-                        .asIterator(GHRepository[].class, pageSize);
-
-                return new Iterator<List<GHRepository>>() {
-                    public boolean hasNext() {
-                        return pager.hasNext();
-                    }
-
-                    public List<GHRepository> next() {
-                        GHRepository[] batch = pager.next();
-                        for (GHRepository r : batch)
-                            r.root = root;
-                        return Arrays.asList(batch);
-                    }
-
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                };
+        return () -> {
+            final PagedIterator<GHRepository> pager;
+            try {
+                GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root.getClient(),
+                        GHRepository[].class,
+                        root.createRequest().withUrlPath("users", login, "repos").build(),
+                        pageSize);
+                pager = new PagedIterator<>(iterator, item -> item.wrap(root));
+            } catch (MalformedURLException e) {
+                throw new GHException("Unable to build GitHub API URL", e);
             }
+
+            return new Iterator<List<GHRepository>>() {
+                public boolean hasNext() {
+                    return pager.hasNext();
+                }
+
+                public List<GHRepository> next() {
+                    return pager.nextPage();
+                }
+            };
         };
     }
 
@@ -173,22 +178,18 @@ public abstract class GHPerson extends GHObject {
      * @return the gravatar id
      * @deprecated No longer available in the v3 API.
      */
+    @Deprecated
     public String getGravatarId() {
-        return gravatar_id;
+        return "";
     }
 
     /**
-     * Returns a string like 'https://secure.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105' that indicates the
-     * avatar image URL.
+     * Returns a string of the avatar image URL.
      *
      * @return the avatar url
      */
     public String getAvatarUrl() {
-        if (avatar_url != null)
-            return avatar_url;
-        if (gravatar_id != null)
-            return "https://secure.gravatar.com/avatar/" + gravatar_id;
-        return null;
+        return avatar_url;
     }
 
     /**
@@ -236,6 +237,18 @@ public abstract class GHPerson extends GHObject {
         return location;
     }
 
+    /**
+     * Gets the Twitter Username of this user, like "GitHub"
+     * 
+     * @return the Twitter username
+     * @throws IOException
+     *             the io exception
+     */
+    public String getTwitterUsername() throws IOException {
+        populate();
+        return twitter_username;
+    }
+
     public Date getCreatedAt() throws IOException {
         populate();
         return super.getCreatedAt();
@@ -260,7 +273,7 @@ public abstract class GHPerson extends GHObject {
 
     @Override
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -345,5 +358,17 @@ public abstract class GHPerson extends GHObject {
     public boolean isSiteAdmin() throws IOException {
         populate();
         return site_admin;
+    }
+
+    /**
+     * Gets total private repo count.
+     *
+     * @return the total private repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
+        populate();
+        return Optional.ofNullable(total_private_repos);
     }
 }

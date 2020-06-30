@@ -90,7 +90,7 @@ public class GHProjectColumn extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHub.parseURL(project_url);
+        return GitHubClient.parseURL(project_url);
     }
 
     /**
@@ -115,7 +115,7 @@ public class GHProjectColumn extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return String.format("/projects/columns/%d", id);
+        return String.format("/projects/columns/%d", getId());
     }
 
     /**
@@ -139,7 +139,7 @@ public class GHProjectColumn extends GHObject {
         final GHProjectColumn column = this;
         return root.createRequest()
                 .withPreview(INERTIA)
-                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .toIterable(GHProjectCard[].class, item -> item.wrap(column));
     }
 
@@ -157,7 +157,7 @@ public class GHProjectColumn extends GHObject {
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("note", note)
-                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)
                 .wrap(this);
     }
@@ -177,7 +177,7 @@ public class GHProjectColumn extends GHObject {
                 .withPreview(INERTIA)
                 .with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
                 .with("content_id", issue.getId())
-                .withUrlPath(String.format("/projects/columns/%d/cards", id))
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)
                 .wrap(this);
     }

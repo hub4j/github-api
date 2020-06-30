@@ -20,8 +20,9 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHMilestone milestone : getRepository(gitHubBeforeAfter).listMilestones(GHIssueState.ALL)) {
-            if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())) {
+        for (GHMilestone milestone : getRepository(getGitHubBeforeAfter()).listMilestones(GHIssueState.ALL)) {
+            if ("Original Title".equals(milestone.getTitle()) || "Updated Title".equals(milestone.getTitle())
+                    || "Unset Test Milestone".equals(milestone.getTitle())) {
                 milestone.delete();
             }
         }
@@ -34,8 +35,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         String NEW_TITLE = "Updated Title";
         String NEW_DESCRIPTION = "Updated Description";
-        Date NEW_DUE_DATE = GitHub.parseDate("2020-10-05T13:00:00Z");
-        Date OUTPUT_DUE_DATE = GitHub.parseDate("2020-10-05T07:00:00Z");
+        Date NEW_DUE_DATE = GitHubClient.parseDate("2020-10-05T13:00:00Z");
+        Date OUTPUT_DUE_DATE = GitHubClient.parseDate("2020-10-05T07:00:00Z");
 
         milestone.setTitle(NEW_TITLE);
         milestone.setDescription(NEW_DESCRIPTION);
@@ -52,11 +53,28 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         assertEquals(OUTPUT_DUE_DATE, milestone.getDueOn());
     }
 
+    @Test
+    public void testUnsetMilestone() throws IOException {
+        GHRepository repo = getRepository();
+        GHMilestone milestone = repo.createMilestone("Unset Test Milestone", "For testUnsetMilestone");
+        GHIssue issue = repo.createIssue("Issue for testUnsetMilestone").create();
+
+        // set the milestone
+        issue.setMilestone(milestone);
+        issue = repo.getIssue(issue.getNumber()); // force reload
+        assertEquals(milestone.getNumber(), issue.getMilestone().getNumber());
+
+        // remove the milestone
+        issue.setMilestone(null);
+        issue = repo.getIssue(issue.getNumber()); // force reload
+        assertEquals(null, issue.getMilestone());
+    }
+
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

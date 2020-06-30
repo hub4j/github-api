@@ -23,23 +23,12 @@
  */
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Base64;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
@@ -48,10 +37,6 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-import static java.util.logging.Level.FINE;
 import static org.kohsuke.github.Previews.INERTIA;
 import static org.kohsuke.github.Previews.MACHINE_MAN;
 
@@ -67,27 +52,15 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @author Kohsuke Kawaguchi
  */
 public class GitHub {
-    final String login;
 
-    /**
-     * Value of the authorization header to be sent with the request.
-     */
-    final String encodedAuthorization;
+    @Nonnull
+    private final GitHubClient client;
+
+    @CheckForNull
+    private GHMyself myself;
 
     private final ConcurrentMap<String, GHUser> users;
     private final ConcurrentMap<String, GHOrganization> orgs;
-    // Cache of myself object.
-    private GHMyself myself;
-    private final String apiUrl;
-
-    final RateLimitHandler rateLimitHandler;
-    final AbuseLimitHandler abuseLimitHandler;
-
-    private HttpConnector connector = HttpConnector.DEFAULT;
-
-    private final Object headerRateLimitLock = new Object();
-    private GHRateLimit headerRateLimit = null;
-    private volatile GHRateLimit rateLimit = null;
 
     /**
      * Creates a client API root object.
@@ -137,36 +110,20 @@ public class GitHub {
             String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler) throws IOException {
-        if (apiUrl.endsWith("/"))
-            apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
-        this.apiUrl = apiUrl;
-        if (null != connector)
-            this.connector = connector;
-
-        if (oauthAccessToken != null) {
-            encodedAuthorization = "token " + oauthAccessToken;
-        } else {
-            if (jwtToken != null) {
-                encodedAuthorization = "Bearer " + jwtToken;
-            } else if (password != null) {
-                String authorization = (login + ':' + password);
-                String charsetName = StandardCharsets.UTF_8.name();
-                encodedAuthorization = "Basic "
-                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-            } else {// anonymous access
-                encodedAuthorization = null;
-            }
-        }
-
-        users = new ConcurrentHashMap<String, GHUser>();
-        orgs = new ConcurrentHashMap<String, GHOrganization>();
-        this.rateLimitHandler = rateLimitHandler;
-        this.abuseLimitHandler = abuseLimitHandler;
-
-        if (login == null && encodedAuthorization != null && jwtToken == null)
-            login = getMyself().getLogin();
-        this.login = login;
+            AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitChecker rateLimitChecker) throws IOException {
+        this.client = new GitHubHttpUrlConnectionClient(apiUrl,
+                login,
+                oauthAccessToken,
+                jwtToken,
+                password,
+                connector,
+                rateLimitHandler,
+                abuseLimitHandler,
+                rateLimitChecker,
+                (myself) -> setMyself(myself));
+        users = new ConcurrentHashMap<>();
+        orgs = new ConcurrentHashMap<>();
     }
 
     /**
@@ -184,7 +141,10 @@ public class GitHub {
      * Version that connects to GitHub Enterprise.
      *
      * @param apiUrl
-     *            the api url
+     *            The URL of GitHub (or GitHub Enterprise) API endpoint, such as "https://api.github.com" or
+     *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
+     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
+     *            deprecated.
      * @param oauthAccessToken
      *            the oauth access token
      * @return the git hub
@@ -264,8 +224,7 @@ public class GitHub {
      * @return the git hub
      * @throws IOException
      *             the io exception
-     * @deprecated Either OAuth token or password is sufficient, so there's no point in passing both. Use
-     *             {@link #connectUsingPassword(String, String)} or {@link #connectUsingOAuth(String)}.
+     * @deprecated Use {@link #connectUsingOAuth(String)}.
      */
     @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
@@ -282,7 +241,12 @@ public class GitHub {
      * @return the git hub
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
+     * @see <a href=
+     *      "https://developer.github.com/changes/2020-02-14-deprecating-password-auth/#changes-to-make">Deprecating
+     *      password authentication and OAuth authorizations API</a>
      */
+    @Deprecated
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
         return new GitHubBuilder().withPassword(login, password).build();
     }
@@ -366,7 +330,7 @@ public class GitHub {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
+        return client.isAnonymous();
     }
 
     /**
@@ -375,7 +339,7 @@ public class GitHub {
      * @return {@code true} if this is an always offline "connection".
      */
     public boolean isOffline() {
-        return connector == HttpConnector.OFFLINE;
+        return client.isOffline();
     }
 
     /**
@@ -384,7 +348,19 @@ public class GitHub {
      * @return the connector
      */
     public HttpConnector getConnector() {
-        return connector;
+        return client.getConnector();
+    }
+
+    /**
+     * Sets the custom connector used to make requests to GitHub.
+     *
+     * @param connector
+     *            the connector
+     * @deprecated HttpConnector should not be changed. If you find yourself needing to do this, file an issue.
+     */
+    @Deprecated
+    public void setConnector(HttpConnector connector) {
+        client.setConnector(connector);
     }
 
     /**
@@ -393,39 +369,7 @@ public class GitHub {
      * @return the api url
      */
     public String getApiUrl() {
-        return apiUrl;
-    }
-
-    /**
-     * Sets the custom connector used to make requests to GitHub.
-     *
-     * @param connector
-     *            the connector
-     */
-    public void setConnector(HttpConnector connector) {
-        this.connector = connector;
-    }
-
-    void requireCredential() {
-        if (isAnonymous())
-            throw new IllegalStateException(
-                    "This operation requires a credential but none is given to the GitHub constructor");
-    }
-
-    URL getApiURL(String tailApiUrl) throws IOException {
-        if (tailApiUrl.startsWith("/")) {
-            if ("github.com".equals(apiUrl)) {// backward compatibility
-                return new URL(GITHUB_URL + tailApiUrl);
-            } else {
-                return new URL(apiUrl + tailApiUrl);
-            }
-        } else {
-            return new URL(tailApiUrl);
-        }
-    }
-
-    Requester createRequest() {
-        return new Requester(this);
+        return client.getApiUrl();
     }
 
     /**
@@ -436,64 +380,7 @@ public class GitHub {
      *             the io exception
      */
     public GHRateLimit getRateLimit() throws IOException {
-        GHRateLimit rateLimit;
-        try {
-            rateLimit = createRequest().withUrlPath("/rate_limit").fetch(JsonRateLimit.class).resources;
-        } catch (FileNotFoundException e) {
-            // GitHub Enterprise doesn't have the rate limit
-            // return a default rate limit that
-            rateLimit = GHRateLimit.Unknown();
-        }
-
-        return this.rateLimit = rateLimit;
-    }
-
-    /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server.
-     *
-     * @param observed
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     */
-    void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit == null || shouldReplace(observed, headerRateLimit.getCore())) {
-                headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
-                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
-            }
-        }
-    }
-
-    /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server. Header date is only accurate to
-     * the second, so we look at the information in the record itself.
-     *
-     * {@link GHRateLimit.UnknownLimitRecord}s are always replaced by regular {@link GHRateLimit.Record}s. Regular
-     * {@link GHRateLimit.Record}s are never replaced by {@link GHRateLimit.UnknownLimitRecord}s. Candidates with
-     * resetEpochSeconds later than current record are more recent. Candidates with the same reset and a lower remaining
-     * count are more recent. Candidates with an earlier reset are older.
-     *
-     * @param candidate
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     * @param current
-     *            the current {@link GHRateLimit.Record} record
-     */
-    static boolean shouldReplace(@Nonnull GHRateLimit.Record candidate, @Nonnull GHRateLimit.Record current) {
-        if (candidate instanceof GHRateLimit.UnknownLimitRecord
-                && !(current instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Unknown candidate never replaces a regular record
-            return false;
-        } else if (current instanceof GHRateLimit.UnknownLimitRecord
-                && !(candidate instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Any real record should replace an unknown Record.
-            return true;
-        } else {
-            // records of the same type compare to each other as normal.
-            return current.getResetEpochSeconds() < candidate.getResetEpochSeconds()
-                    || (current.getResetEpochSeconds() == candidate.getResetEpochSeconds()
-                            && current.getRemaining() > candidate.getRemaining());
-        }
+        return client.getRateLimit();
     }
 
     /**
@@ -504,9 +391,7 @@ public class GitHub {
      */
     @CheckForNull
     public GHRateLimit lastRateLimit() {
-        synchronized (headerRateLimitLock) {
-            return headerRateLimit;
-        }
+        return client.lastRateLimit();
     }
 
     /**
@@ -518,16 +403,7 @@ public class GitHub {
      */
     @Nonnull
     public GHRateLimit rateLimit() throws IOException {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
-                return headerRateLimit;
-            }
-        }
-        GHRateLimit rateLimit = this.rateLimit;
-        if (rateLimit == null || rateLimit.isExpired()) {
-            rateLimit = getRateLimit();
-        }
-        return rateLimit;
+        return client.rateLimit();
     }
 
     /**
@@ -537,18 +413,22 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(GHUser.class)
+    @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
-        requireCredential();
+        client.requireCredential();
         synchronized (this) {
-            if (this.myself != null)
-                return myself;
+            if (this.myself == null) {
+                GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
+                setMyself(u);
+            }
+            return myself;
+        }
+    }
 
-            GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
-
-            u.root = this;
-            this.myself = u;
-            return u;
+    private void setMyself(GHMyself myself) {
+        synchronized (this) {
+            myself.wrapUp(this);
+            this.myself = myself;
         }
     }
 
@@ -730,12 +610,9 @@ public class GitHub {
      *             the io exception
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
-        GHInvitation[] invitations = createRequest().withUrlPath("/user/repository_invitations")
-                .fetchArray(GHInvitation[].class);
-        for (GHInvitation i : invitations) {
-            i.wrapUp(this);
-        }
-        return Arrays.asList(invitations);
+        return createRequest().withUrlPath("/user/repository_invitations")
+                .toIterable(GHInvitation[].class, item -> item.wrapUp(this))
+                .toList();
     }
 
     /**
@@ -749,11 +626,13 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
-        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs").fetchArray(GHOrganization[].class);
-        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+        GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs")
+                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toArray();
+        Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
             // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(), o.wrapUp(this));
+            r.put(o.getLogin(), o);
         }
         return r;
     }
@@ -803,11 +682,12 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
         GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
-                .fetchArray(GHOrganization[].class);
-        Map<String, GHOrganization> r = new HashMap<String, GHOrganization>();
+                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toArray();
+        Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
-            // don't put 'o' into orgs because they are shallow
-            r.put(o.getLogin(), o.wrapUp(this));
+            // don't put 'o' into orgs cache because they are shallow records
+            r.put(o.getLogin(), o);
         }
         return r;
     }
@@ -823,13 +703,14 @@ public class GitHub {
      *             the io exception
      */
     public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
-        Map<String, Set<GHTeam>> allMyTeams = new HashMap<String, Set<GHTeam>>();
-        for (GHTeam team : createRequest().withUrlPath("/user/teams").fetchArray(GHTeam[].class)) {
-            team.wrapUp(this);
+        Map<String, Set<GHTeam>> allMyTeams = new HashMap<>();
+        for (GHTeam team : createRequest().withUrlPath("/user/teams")
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this))
+                .toArray()) {
             String orgLogin = team.getOrganization().getLogin();
             Set<GHTeam> teamsPerOrg = allMyTeams.get(orgLogin);
             if (teamsPerOrg == null) {
-                teamsPerOrg = new HashSet<GHTeam>();
+                teamsPerOrg = new HashSet<>();
             }
             teamsPerOrg.add(team);
             allMyTeams.put(orgLogin, teamsPerOrg);
@@ -845,7 +726,11 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
+     * 
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
+     * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
+    @Deprecated
     public GHTeam getTeam(int id) throws IOException {
         return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
     }
@@ -858,10 +743,9 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        GHEventInfo[] events = createRequest().withUrlPath("/events").fetchArray(GHEventInfo[].class);
-        for (GHEventInfo e : events)
-            e.wrapUp(this);
-        return Arrays.asList(events);
+        return createRequest().withUrlPath("/events")
+                .toIterable(GHEventInfo[].class, item -> item.wrapUp(this))
+                .toList();
     }
 
     /**
@@ -874,7 +758,7 @@ public class GitHub {
      *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class).wrapUp(this);
+        return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class);
     }
 
     /**
@@ -903,7 +787,7 @@ public class GitHub {
      *             the io exception
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
-        T t = MAPPER.readValue(r, type);
+        T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);
         t.wrapUp(this);
         return t;
     }
@@ -1126,16 +1010,7 @@ public class GitHub {
      * @return the boolean
      */
     public boolean isCredentialValid() {
-        try {
-            createRequest().withUrlPath("/user").fetch(GHUser.class);
-            return true;
-        } catch (IOException e) {
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Exception validating credentials on " + this.apiUrl + " with login '" + this.login + "' " + e,
-                        e);
-            return false;
-        }
+        return client.isCredentialValid();
     }
 
     /**
@@ -1149,20 +1024,6 @@ public class GitHub {
      */
     public GHMeta getMeta() throws IOException {
         return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
-    }
-
-    GHUser intern(GHUser user) throws IOException {
-        if (user == null)
-            return user;
-
-        // if we already have this user in our map, use it
-        GHUser u = users.get(user.getLogin());
-        if (u != null)
-            return u;
-
-        // if not, remember this new user
-        users.putIfAbsent(user.getLogin(), user);
-        return user;
     }
 
     /**
@@ -1210,18 +1071,6 @@ public class GitHub {
                 .wrap(this);
     }
 
-    private static class GHApiInfo {
-        private String rate_limit_url;
-
-        void check(String apiUrl) throws IOException {
-            if (rate_limit_url == null)
-                throw new IOException(apiUrl + " doesn't look like GitHub API URL");
-
-            // make sure that the URL is legitimate
-            new URL(rate_limit_url);
-        }
-    }
-
     /**
      * Tests the connection.
      *
@@ -1236,62 +1085,7 @@ public class GitHub {
      *             the io exception
      */
     public void checkApiUrlValidity() throws IOException {
-        try {
-            createRequest().withUrlPath("/").fetch(GHApiInfo.class).check(apiUrl);
-        } catch (IOException e) {
-            if (isPrivateModeEnabled()) {
-                throw (IOException) new IOException(
-                        "GitHub Enterprise server (" + apiUrl + ") with private mode enabled").initCause(e);
-            }
-            throw e;
-        }
-    }
-
-    /**
-     * Checks if a GitHub Enterprise server is configured in private mode.
-     *
-     * In private mode response looks like:
-     *
-     * <pre>
-     *  $ curl -i https://github.mycompany.com/api/v3/
-     *     HTTP/1.1 401 Unauthorized
-     *     Server: GitHub.com
-     *     Date: Sat, 05 Mar 2016 19:45:01 GMT
-     *     Content-Type: application/json; charset=utf-8
-     *     Content-Length: 130
-     *     Status: 401 Unauthorized
-     *     X-GitHub-Media-Type: github.v3
-     *     X-XSS-Protection: 1; mode=block
-     *     X-Frame-Options: deny
-     *     Content-Security-Policy: default-src 'none'
-     *     Access-Control-Allow-Credentials: true
-     *     Access-Control-Expose-Headers: ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-     *     Access-Control-Allow-Origin: *
-     *     X-GitHub-Request-Id: dbc70361-b11d-4131-9a7f-674b8edd0411
-     *     Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
-     *     X-Content-Type-Options: nosniff
-     * </pre>
-     *
-     * @return {@code true} if private mode is enabled. If it tries to use this method with GitHub, returns {@code
-     * false}.
-     */
-    private boolean isPrivateModeEnabled() {
-        try {
-            HttpURLConnection uc = getConnector().connect(getApiURL("/"));
-            try {
-                return uc.getResponseCode() == HTTP_UNAUTHORIZED && uc.getHeaderField("X-GitHub-Media-Type") != null;
-            } finally {
-                // ensure that the connection opened by getResponseCode gets closed
-                try {
-                    IOUtils.closeQuietly(uc.getInputStream());
-                } catch (IOException ignore) {
-                    // ignore
-                }
-                IOUtils.closeQuietly(uc.getErrorStream());
-            }
-        } catch (IOException e) {
-            return false;
-        }
+        client.checkApiUrlValidity();
     }
 
     /**
@@ -1398,49 +1192,55 @@ public class GitHub {
                 "UTF-8");
     }
 
-    static URL parseURL(String s) {
-        try {
-            return s == null ? null : new URL(s);
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Invalid URL: " + s);
-        }
+    /**
+     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     *
+     * @return an {@link ObjectWriter} instance that can be further configured.
+     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
+     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
+     */
+    @Deprecated
+    @Nonnull
+    public static ObjectWriter getMappingObjectWriter() {
+        return GitHubClient.getMappingObjectWriter();
     }
 
-    static Date parseDate(String timestamp) {
-        if (timestamp == null)
-            return null;
-        for (String f : TIME_FORMATS) {
-            try {
-                SimpleDateFormat df = new SimpleDateFormat(f);
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                return df.parse(timestamp);
-            } catch (ParseException e) {
-                // try next
-            }
-        }
-        throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
+    /**
+     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
+     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
+     */
+    @Deprecated
+    @Nonnull
+    public static ObjectReader getMappingObjectReader() {
+        return GitHubClient.getMappingObjectReader(GitHub.offline());
     }
 
-    static String printDate(Date dt) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(dt);
+    @Nonnull
+    GitHubClient getClient() {
+        return client;
     }
 
-    static final ObjectMapper MAPPER = new ObjectMapper();
-
-    private static final String[] TIME_FORMATS = { "yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
-    };
-
-    static {
-        MAPPER.setVisibility(new Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    @Nonnull
+    Requester createRequest() {
+        return new Requester(client).injectMappingValue(this);
     }
 
-    static final String GITHUB_URL = "https://api.github.com";
+    GHUser intern(GHUser user) throws IOException {
+        if (user == null)
+            return user;
+
+        // if we already have this user in our map, use it
+        GHUser u = users.get(user.getLogin());
+        if (u != null)
+            return u;
+
+        // if not, remember this new user
+        users.putIfAbsent(user.getLogin(), user);
+        return user;
+    }
 
     private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
 }

@@ -1,0 +1,47 @@
+{
+  "id": "0e0c4c56-198f-4d87-b13e-b146cad7ffdb",
+  "name": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/branches/master",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master-3.json",
+    "headers": {
+      "Date": "Tue, 19 Nov 2019 03:01:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4923",
+      "X-RateLimit-Reset": "1574135997",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"51ae00091b56c866a8b2b00d1a3e57ec\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C49E:6D70:39AA6:447F2:5DD35B15"
+    }
+  },
+  "uuid": "0e0c4c56-198f-4d87-b13e-b146cad7ffdb",
+  "persistent": true,
+  "insertionIndex": 3
+}

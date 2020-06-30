@@ -44,6 +44,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private String body;
     private GHUser user;
     private String path;
+    private String html_url;
     private int position = -1;
     private int original_position = -1;
     private long in_reply_to_id = -1L;
@@ -60,6 +61,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the gh pull request review comment
      * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
      */
+    @Deprecated
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
         result.body = body;
@@ -142,7 +144,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -151,7 +153,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + id;
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + getId();
     }
 
     /**

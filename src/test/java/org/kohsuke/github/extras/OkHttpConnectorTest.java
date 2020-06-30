@@ -1,7 +1,6 @@
 package org.kohsuke.github.extras;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
@@ -14,6 +13,7 @@ import org.kohsuke.github.*;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeFalse;
@@ -67,14 +67,13 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
     @Override
     protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            GHRepository repo = getRepository(gitHubBeforeAfter);
+            GHRepository repo = getRepository(getGitHubBeforeAfter());
             repo.setDescription("Resetting");
 
             // Let things settle a bit between tests when working against the live site
@@ -253,7 +252,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         // Get Tricky - make a change via a different client
         if (mockGitHub.isUseProxy()) {
-            GHRepository altRepo = getRepository(gitHubBeforeAfter);
+            GHRepository altRepo = getRepository(getGitHubBeforeAfter());
             altRepo.setDescription("Tricky");
         }
 
@@ -279,7 +278,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

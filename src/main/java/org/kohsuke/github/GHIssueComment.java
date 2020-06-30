@@ -87,7 +87,7 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     @Override
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -149,6 +149,6 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     private String getApiRoute() {
         return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
-                + "/issues/comments/" + id;
+                + "/issues/comments/" + getId();
     }
 }

@@ -2,15 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.104-SNAPSHOT</version>
+  <version>1.115-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
 
   <scm>
-    <connection>scm:git:git@github.com/github-api/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/github-api/${project.artifactId}.git</developerConnection>
-    <url>https://${project.artifactId}.kohsuke.org/</url>
+    <connection>scm:git:git@github.com/hub4j/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hub4j/${project.artifactId}.git</developerConnection>
+    <url>https://github.com/hub4j/github-api/</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -27,22 +27,22 @@
     </repository>
     <site>
       <id>github-pages</id>
-      <url>gitsite:git@github.com/github-api/${project.artifactId}.git</url>
+      <url>gitsite:git@github.com/hub4j/${project.artifactId}.git</url>
     </site>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
-    <spotbugs.version>3.1.12</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.0.4</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.0.6</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>4.3.1</okhttp3.version>
-    <okio.version>2.4.3</okio.version>
+    <okhttp3.version>4.4.1</okhttp3.version>
+    <okio.version>2.5.0</okio.version>
     <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
     <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
-    <jacoco.coverage.target.bundle.method>0.556</jacoco.coverage.target.bundle.method>
+    <jacoco.coverage.target.bundle.method>0.60</jacoco.coverage.target.bundle.method>
     <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
@@ -79,54 +79,6 @@
     </testResources>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.1</version>
-          <executions>
-            <execution>
-              <id>shaded-jar</id>
-              <phase>package</phase>
-              <goals>
-                <goal>shade</goal>
-              </goals>
-              <configuration>
-                <relocations>
-                  <relocation>
-                    <pattern>com.fasterxml.jackson</pattern>
-                    <shadedPattern>hidden.com.fasterxml.jackson</shadedPattern>
-                  </relocation>
-                  <relocation>
-                    <pattern>org.apache</pattern>
-                    <shadedPattern>hidden.org.apache</shadedPattern>
-                  </relocation>
-                </relocations>
-                <artifactSet>
-                  <excludes>
-                    <exclude>com.infradna.tool:bridge-method-annotation</exclude>
-                    <exclude>org.jenkins-ci:annotation-indexer</exclude>
-                    <exclude>com.squareup.*:*</exclude>
-                    <exclude>org.jetbrains*:*</exclude>
-                    <exclude>com.github.spotbugs:*</exclude>
-                    <exclude>com.google.code.findbugs:*</exclude>
-                  </excludes>
-                </artifactSet>
-                <shadedArtifactAttached>true</shadedArtifactAttached>
-                <filters>
-                  <filter>
-                    <artifact>*:*</artifact>
-                    <excludes>
-                      <exclude>module-info.class</exclude>
-                      <exclude>META-INF/*.SF</exclude>
-                      <exclude>META-INF/*.DSA</exclude>
-                      <exclude>META-INF/*.RSA</exclude>
-                    </excludes>
-                  </filter>
-                </filters>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
@@ -194,14 +146,17 @@
                       <exclude>org.kohsuke.github.example.*</exclude>
 
                       <!-- No methods -->
-                      <exclude>org.kohsuke.github.DeleteToken</exclude>
                       <exclude>org.kohsuke.github.Previews</exclude>
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                      <exclude>org.kohsuke.github.GHPerson.1.1</exclude>
+
+                      <!-- These fail coverage on windows because tests are disabled -->
+                      <exclude>org.kohsuke.github.GHAsset</exclude>
+                      <exclude>org.kohsuke.github.GHReleaseBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHRelease</exclude>
 
                       <!-- TODO: These still need test coverage -->
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
@@ -209,9 +164,6 @@
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
                       <exclude>org.kohsuke.github.GHCommitBuilder.UserInfo</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.CommitSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHCommitState</exclude>
                       <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
                       <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
@@ -229,9 +181,6 @@
                       <exclude>org.kohsuke.github.GHHook</exclude>
                       <exclude>org.kohsuke.github.GHHooks.OrgContext</exclude>
                       <exclude>org.kohsuke.github.GHInvitation</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.IssueSearchResult</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder.Sort</exclude>
-                      <exclude>org.kohsuke.github.GHIssueSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHMilestoneState</exclude>
                       <exclude>org.kohsuke.github.GHOrgHook</exclude>
                       <exclude>org.kohsuke.github.GHProject.ProjectStateFilter</exclude>
@@ -250,7 +199,6 @@
                       <exclude>org.kohsuke.github.GHTeam.Role</exclude>
                       <exclude>org.kohsuke.github.GHUserSearchBuilder.Sort</exclude>
                       <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
-                      <exclude>org.kohsuke.github.GitHubBuilder.1</exclude>
                     </excludes>
                   </rule>
                 </rules>
@@ -261,7 +209,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <source>8</source>
             <failOnWarnings>true</failOnWarnings>
@@ -285,7 +233,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.8.2</version>
+        <version>3.9.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -305,12 +253,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
-            <version>6.4.1</version>
+            <version>6.5.0</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -333,6 +281,10 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.2</version>
+        <configuration>
+          <!-- SUREFIRE-1226 workaround -->
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -385,7 +337,7 @@
       <plugin>
         <groupId>net.revelc.code</groupId>
         <artifactId>impsort-maven-plugin</artifactId>
-        <version>1.3.2</version>
+        <version>1.4.1</version>
         <configuration>
           <groups>*,java.,javax.</groups>
           <removeUnused>true</removeUnused>
@@ -467,7 +419,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.6</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>com.infradna.tool</groupId>
@@ -493,7 +445,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.258</version>
+      <version>1.260</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -505,7 +457,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.6.0.201912101111-r</version>
+      <version>5.7.0.202003110725-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -543,7 +495,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.2.4</version>
+      <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -555,7 +507,7 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.25.1</version>
+      <version>2.26.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -579,23 +531,32 @@
   </pluginRepositories>
   <profiles>
     <profile>
-      <id>ci</id>
+      <id>ci-non-windows</id>
+      <activation>
+        <property>
+          <name>enable-ci</name>
+        </property>
+        <os>
+          <family>!windows</family>
+        </os>
+      </activation>
+      <properties>
+        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
+        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+      </properties>
+    </profile>
+    <profile>
+      <id>ci-all</id>
       <activation>
         <property>
           <name>enable-ci</name>
         </property>
       </activation>
       <properties>
-        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
       </properties>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-          </plugin>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -612,8 +573,8 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -664,6 +625,18 @@
   </profiles>
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- select non-aggregate reports -->
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>

@@ -1,0 +1,54 @@
+{
+  "id": "9406e54b-fdf7-40d5-a51b-3c27d7b050d8",
+  "name": "repos_hub4j-test-org_github-api_pulls_258",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/258",
+    "method": "PATCH",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"state\":\"closed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_258-13.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:24:13 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4955",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"88adcbc08092f5a33384d5818f3a59b8\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF76:0A33:C550A8:E72856:5D74AC9C"
+    }
+  },
+  "uuid": "9406e54b-fdf7-40d5-a51b-3c27d7b050d8",
+  "persistent": true,
+  "insertionIndex": 13
+}

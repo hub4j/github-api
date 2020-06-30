@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -23,14 +24,29 @@ public abstract class GHObject {
     /**
      * Capture response HTTP headers on the state object.
      */
-    protected Map<String, List<String>> responseHeaderFields;
+    protected transient Map<String, List<String>> responseHeaderFields;
 
-    protected String url;
-    protected long id;
-    protected String created_at;
-    protected String updated_at;
+    private String url;
+
+    private long id;
+    private String nodeId;
+    private String createdAt;
+    private String updatedAt;
 
     GHObject() {
+    }
+
+    /**
+     * Called by Jackson
+     * 
+     * @param responseInfo
+     *            the {@link GitHubResponse.ResponseInfo} to get headers from.
+     */
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+        if (responseInfo != null) {
+            responseHeaderFields = responseInfo.headers();
+        }
     }
 
     /**
@@ -60,12 +76,12 @@ public abstract class GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
-        return GitHub.parseDate(created_at);
+        return GitHubClient.parseDate(createdAt);
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getCreatedAt")
     private Object createdAtStr(Date id, Class type) {
-        return created_at;
+        return createdAt;
     }
 
     /**
@@ -75,7 +91,7 @@ public abstract class GHObject {
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -96,7 +112,18 @@ public abstract class GHObject {
      *             on error
      */
     public Date getUpdatedAt() throws IOException {
-        return GitHub.parseDate(updated_at);
+        return GitHubClient.parseDate(updatedAt);
+    }
+
+    /**
+     * Get Global node_id from Github object.
+     *
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
+     *
+     * @return Global Node ID.
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**

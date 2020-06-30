@@ -1,0 +1,38 @@
+{
+  "id": "d5a2d9d0-7a88-46e7-983a-0028e6a3e07c",
+  "name": "gists_11a257b91982aafd6370089ef877a682",
+  "request": {
+    "url": "/gists/11a257b91982aafd6370089ef877a682",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Mon, 27 Apr 2020 17:24:10 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4970",
+      "X-RateLimit-Reset": "1588010945",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "FA20:78D7:86B0B:A58BD:5EA7153A"
+    }
+  },
+  "uuid": "d5a2d9d0-7a88-46e7-983a-0028e6a3e07c",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -1,0 +1,41 @@
+{
+  "id": "fb7ab87e-4ea2-4c1a-8b5e-a3116734964d",
+  "name": "repos_hub4j-test-org_empty_license",
+  "request": {
+    "url": "/repos/hub4j-test-org/empty/license",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/licenses/#get-the-contents-of-a-repositorys-license\"}",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:29:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4579",
+      "X-RateLimit-Reset": "1570212957",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C164:78ED:1CE7E25:2277611:5D97817F"
+    }
+  },
+  "uuid": "fb7ab87e-4ea2-4c1a-8b5e-a3116734964d",
+  "persistent": true,
+  "insertionIndex": 3
+}

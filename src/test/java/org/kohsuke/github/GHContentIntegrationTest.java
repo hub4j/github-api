@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -26,7 +28,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = gitHubBeforeAfter.getRepository("github-api-test-org/GHContentIntegrationTest");
+            repo = getGitHubBeforeAfter().getRepository("hub4j-test-org/GHContentIntegrationTest");
             try {
                 GHContent content = repo.getFileContent(createdFilename);
                 if (content != null) {
@@ -39,12 +41,12 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     @Before
     public void setUp() throws Exception {
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
+        repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
     }
 
     @Test
     public void testGetFileContent() throws Exception {
-        repo = gitHub.getRepository("github-api-test-org/GHContentIntegrationTest");
+        repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
         assertTrue(content.isFile());
@@ -122,7 +124,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
             fail("Delete didn't work!");
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(),
-                    equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
+                    endsWith(
+                            "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
         }
     }
 
@@ -156,5 +159,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 + "123456789012345678901234567890123456789012345678901234567890"
                 + "123456789012345678901234567890123456789012345678901234567890");
         ghContentBuilder.commit();
+    }
+
+    @Test
+    public void testGetFileContentWithNonAsciiPath() throws Exception {
+        final GHRepository repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
+        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-file-with-\u00F6");
+        assertThat(IOUtils.readLines(fileContent.read(), StandardCharsets.UTF_8), hasItems("test"));
+
+        final GHContent fileContent2 = repo.getFileContent(fileContent.getPath());
+        assertThat(IOUtils.readLines(fileContent2.read(), StandardCharsets.UTF_8), hasItems("test"));
     }
 }

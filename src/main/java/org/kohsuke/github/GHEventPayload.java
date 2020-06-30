@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public abstract class GHEventPayload {
     }
 
     // List of events that still need to be added:
-    // CheckRunEvent CheckSuiteEvent ContentReferenceEvent
+    // ContentReferenceEvent
     // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
     // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
     // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
@@ -132,6 +133,7 @@ public abstract class GHEventPayload {
          * @return the repository
          */
         public GHRepository getRepository() {
+            repository.root = root;
             return repository;
         }
 
@@ -146,6 +148,209 @@ public abstract class GHEventPayload {
                 checkRun.wrap(repository);
             } else {
                 checkRun.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * A check suite event has been requested, rerequested or completed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    public static class CheckSuite extends GHEventPayload {
+        private String action;
+        private GHCheckSuite checkSuite;
+        private GHRepository repository;
+
+        /**
+         * Gets action.
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets the Check Suite object
+         *
+         * @return the Check Suite object
+         */
+        public GHCheckSuite getCheckSuite() {
+            return checkSuite;
+        }
+
+        /**
+         * Gets repository.
+         *
+         * @return the repository
+         */
+        public GHRepository getRepository() {
+            repository.root = root;
+            return repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (checkSuite == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            if (repository != null) {
+                repository.wrap(root);
+                checkSuite.wrap(repository);
+            } else {
+                checkSuite.wrap(root);
+            }
+        }
+    }
+
+    /**
+     * An installation has been installed, uninstalled, or its permissions have been changed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class Installation extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private List<GHRepository> repositories;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets repositories
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositories() {
+            return repositories;
+        };
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.populate();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * A repository has been added or removed from an installation.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative
+     *      source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class InstallationRepositories extends GHEventPayload {
+        private String action;
+        private GHAppInstallation installation;
+        private String repositorySelection;
+        private List<GHRepository> repositoriesAdded;
+        private List<GHRepository> repositoriesRemoved;
+
+        /**
+         * Gets action
+         *
+         * @return the action
+         */
+        public String getAction() {
+            return action;
+        }
+
+        /**
+         * Gets installation
+         *
+         * @return the installation
+         */
+        public GHAppInstallation getInstallation() {
+            return installation;
+        }
+
+        /**
+         * Gets installation selection
+         *
+         * @return the installation selection
+         */
+        public String getRepositorySelection() {
+            return repositorySelection;
+        }
+
+        /**
+         * Gets repositories added
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesAdded() {
+            return repositoriesAdded;
+        }
+
+        /**
+         * Gets repositories removed
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesRemoved() {
+            return repositoriesRemoved;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (installation == null)
+                throw new IllegalStateException(
+                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            else
+                installation.wrapUp(root);
+
+            List<GHRepository> repositories;
+            if ("added".equals(action))
+                repositories = repositoriesAdded;
+            else // action == "removed"
+                repositories = repositoriesRemoved;
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.wrap(root);
+                        singleRepo.populate();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
             }
         }
     }
@@ -1428,6 +1633,107 @@ public abstract class GHEventPayload {
                 organization.wrapUp(root);
             }
         }
+    }
 
+    /**
+     * A git commit status was changed.
+     *
+     * @see <a href="https://developer.github.com/v3/activity/events/types/#statusevent">authoritative source</a>
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
+    public static class Status extends GHEventPayload {
+        private String context;
+        private String description;
+        private GHCommitState state;
+        private GHCommit commit;
+        private GHRepository repository;
+
+        /**
+         * Gets the status content.
+         * 
+         * @return status content
+         */
+        public String getContext() {
+            return context;
+        }
+
+        /**
+         * Gets the status description.
+         * 
+         * @return status description
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * Gets the status state.
+         * 
+         * @return status state
+         */
+        public GHCommitState getState() {
+            return state;
+        }
+
+        /**
+         * Sets the status stage.
+         * 
+         * @param state
+         *            status state
+         */
+        public void setState(GHCommitState state) {
+            this.state = state;
+        }
+
+        /**
+         * Gets the commit associated with the status event.
+         * 
+         * @return commit
+         */
+        public GHCommit getCommit() {
+            return commit;
+        }
+
+        /**
+         * Sets the commit associated with the status event.
+         * 
+         * @param commit
+         *            commit
+         */
+        public void setCommit(GHCommit commit) {
+            this.commit = commit;
+        }
+
+        /**
+         * Gets the repository associated with the status event.
+         * 
+         * @return repository
+         */
+        public GHRepository getRepository() {
+            return repository;
+        }
+
+        /**
+         * Sets the repository associated with the status event.
+         * 
+         * @param repository
+         *            repository
+         */
+        public void setRepository(GHRepository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (state == null) {
+                throw new IllegalStateException(
+                        "Expected status payload, but got something else. Maybe we've got another type of event?");
+            }
+            if (repository != null) {
+                repository.wrap(root);
+                commit.wrapUp(repository);
+            }
+        }
     }
 }

@@ -149,7 +149,7 @@ public class GHProjectCard extends GHObject {
      * @return the content url
      */
     public URL getContentUrl() {
-        return GitHub.parseURL(content_url);
+        return GitHubClient.parseURL(content_url);
     }
 
     /**
@@ -158,7 +158,7 @@ public class GHProjectCard extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHub.parseURL(project_url);
+        return GitHubClient.parseURL(project_url);
     }
 
     /**
@@ -167,7 +167,7 @@ public class GHProjectCard extends GHObject {
      * @return the column url
      */
     public URL getColumnUrl() {
-        return GitHub.parseURL(column_url);
+        return GitHubClient.parseURL(column_url);
     }
 
     /**
@@ -213,7 +213,7 @@ public class GHProjectCard extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return String.format("/projects/columns/cards/%d", id);
+        return String.format("/projects/columns/cards/%d", getId());
     }
 
     /**

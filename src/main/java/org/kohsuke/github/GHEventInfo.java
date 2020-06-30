@@ -78,7 +78,7 @@ public class GHEventInfo {
      * @return the created at
      */
     public Date getCreatedAt() {
-        return GitHub.parseDate(created_at);
+        return GitHubClient.parseDate(created_at);
     }
 
     /**
@@ -144,7 +144,7 @@ public class GHEventInfo {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHub.MAPPER.readValue(payload.traverse(), type);
+        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);
         v.wrapUp(root);
         return v;
     }

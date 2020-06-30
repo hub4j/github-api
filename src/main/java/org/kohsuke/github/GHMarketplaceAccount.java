@@ -37,7 +37,7 @@ public class GHMarketplaceAccount {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**

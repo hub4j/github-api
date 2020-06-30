@@ -1,0 +1,40 @@
+{
+  "id": "8c2a0866-3d67-4b80-a36a-a37714ca5af9",
+  "name": "repos_hub4j-test-org_temp-testsignedcommits_branches_master_protection_required_signatures",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testSignedCommits/branches/master/protection/required_signatures",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.zzzax-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Tue, 19 Nov 2019 03:01:59 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4891",
+      "X-RateLimit-Reset": "1574135997",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.zzzax-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "C4B1:6D6F:20655:25325:5DD35B27"
+    }
+  },
+  "uuid": "8c2a0866-3d67-4b80-a36a-a37714ca5af9",
+  "persistent": true,
+  "insertionIndex": 8
+}

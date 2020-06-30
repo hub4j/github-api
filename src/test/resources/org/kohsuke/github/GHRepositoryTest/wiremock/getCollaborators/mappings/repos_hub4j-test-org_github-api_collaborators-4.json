@@ -1,0 +1,47 @@
+{
+  "id": "2b8badfb-52b8-4304-a9a5-66b80274e93d",
+  "name": "repos_hub4j-test-org_github-api_collaborators",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/collaborators",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_collaborators-4.json",
+    "headers": {
+      "Date": "Wed, 04 Dec 2019 17:07:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4954",
+      "X-RateLimit-Reset": "1575482837",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"9f8dbc836966a9d2b4080c9442ef4339\"",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A585:3D530:D2A1BD1:FAB20AC:5DE7E7C7"
+    }
+  },
+  "uuid": "2b8badfb-52b8-4304-a9a5-66b80274e93d",
+  "persistent": true,
+  "insertionIndex": 4
+}

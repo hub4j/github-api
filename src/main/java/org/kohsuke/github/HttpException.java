@@ -12,7 +12,7 @@ import javax.annotation.CheckForNull;
  *
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
-public class HttpException extends IOException {
+public class HttpException extends GHIOException {
     static final long serialVersionUID = 1L;
 
     private final int responseCode;
@@ -58,8 +58,7 @@ public class HttpException extends IOException {
      * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url, Throwable cause) {
-        super(message);
-        initCause(cause);
+        super(message, cause);
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
         this.url = url;
@@ -82,8 +81,7 @@ public class HttpException extends IOException {
      */
     public HttpException(int responseCode, String responseMessage, String url, Throwable cause) {
         super("Server returned HTTP response code: " + responseCode + ", message: '" + responseMessage + "'"
-                + " for URL: " + url);
-        initCause(cause);
+                + " for URL: " + url, cause);
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
         this.url = url;

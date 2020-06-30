@@ -32,7 +32,7 @@ public class GHStargazer {
      * @return the date the stargazer was added
      */
     public Date getStarredAt() {
-        return GitHub.parseDate(starred_at);
+        return GitHubClient.parseDate(starred_at);
     }
 
     /**

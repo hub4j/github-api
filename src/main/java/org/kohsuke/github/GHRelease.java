@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -72,12 +71,13 @@ public class GHRelease extends GHObject {
      *             the io exception
      * @deprecated Use {@link #update()}
      */
+    @Deprecated
     public GHRelease setDraft(boolean draft) throws IOException {
         return update().draft(draft).update();
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -258,8 +258,9 @@ public class GHRelease extends GHObject {
     public List<GHAsset> getAssets() throws IOException {
         Requester builder = owner.root.createRequest();
 
-        GHAsset[] assets = builder.withUrlPath(getApiTailUrl("assets")).fetchArray(GHAsset[].class);
-        return Arrays.asList(GHAsset.wrap(assets, this));
+        return builder.withUrlPath(getApiTailUrl("assets"))
+                .toIterable(GHAsset[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -269,7 +270,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + id)).send();
+        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 
     /**
@@ -282,6 +283,6 @@ public class GHRelease extends GHObject {
     }
 
     private String getApiTailUrl(String end) {
-        return owner.getApiTailUrl(format("releases/%s/%s", id, end));
+        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
     }
 }

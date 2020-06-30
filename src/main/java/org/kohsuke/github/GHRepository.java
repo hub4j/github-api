@@ -24,7 +24,11 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,7 +41,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -46,6 +49,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
@@ -62,9 +66,9 @@ import static org.kohsuke.github.Previews.*;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHRepository extends GHObject {
-    /* package almost final */ GitHub root;
+    /* package almost final */ transient GitHub root;
 
-    private String description, homepage, name, full_name;
+    private String nodeId, description, homepage, name, full_name;
     private String html_url; // this is the UI
     /*
      * The license information makes use of the preview API.
@@ -75,11 +79,13 @@ public class GHRepository extends GHObject {
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
     private GHUser owner; // not fully populated. beware.
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
 
     private boolean allow_squash_merge;
     private boolean allow_merge_commit;
     private boolean allow_rebase_merge;
+
+    private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
     private boolean _private;
@@ -116,6 +122,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @deprecated Use {@code getDeployment(id).listStatuses()}
      */
+    @Deprecated
     public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) throws IOException {
         return getDeployment(id).listStatuses();
     }
@@ -171,6 +178,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @deprecated Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
      */
+    @Deprecated
     public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
             throws IOException {
         return getDeployment(deploymentId).createStatus(ghDeploymentState);
@@ -178,6 +186,15 @@ public class GHRepository extends GHObject {
 
     private static class GHRepoPermission {
         boolean pull, push, admin;
+    }
+
+    /**
+     * Gets node id
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**
@@ -222,6 +239,7 @@ public class GHRepository extends GHObject {
      * @return the string
      * @deprecated Typo of {@link #getHttpTransportUrl()}
      */
+    @Deprecated
     public String gitHttpTransportUrl() {
         return clone_url;
     }
@@ -255,7 +273,7 @@ public class GHRepository extends GHObject {
     }
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -358,7 +376,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-        return listIssues(state).asList();
+        return listIssues(state).toList();
     }
 
     /**
@@ -376,8 +394,9 @@ public class GHRepository extends GHObject {
         Requester requester = root.createRequest()
                 .with("state", state)
                 .with("milestone", milestone == null ? "none" : "" + milestone.getNumber());
-        return Arrays
-                .asList(GHIssue.wrap(requester.withUrlPath(getApiTailUrl("issues")).fetchArray(GHIssue[].class), this));
+        return requester.withUrlPath(getApiTailUrl("issues"))
+                .toIterable(GHIssue[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -436,7 +455,7 @@ public class GHRepository extends GHObject {
      * @deprecated use {@link #listReleases()}
      */
     public List<GHRelease> getReleases() throws IOException {
-        return listReleases().asList();
+        return listReleases().toList();
     }
 
     /**
@@ -552,6 +571,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Has projects boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasProjects() {
+        return has_projects;
+    }
+
+    /**
      * Has wiki boolean.
      *
      * @return the boolean
@@ -606,12 +634,33 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Automatically deleting head branches when pull requests are merged
+     *
+     * @return the boolean
+     */
+    public boolean isDeleteBranchOnMerge() {
+        return delete_branch_on_merge;
+    }
+
+    /**
+     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
+     * and so on.
+     *
+     * @return the forks
+     * @deprecated use {@link #getForksCount()} instead
+     */
+    @Deprecated
+    public int getForks() {
+        return getForksCount();
+    }
+
+    /**
      * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
      * and so on.
      *
      * @return the forks
      */
-    public int getForks() {
+    public int getForksCount() {
         return forks_count;
     }
 
@@ -655,8 +704,19 @@ public class GHRepository extends GHObject {
      * Gets watchers.
      *
      * @return the watchers
+     * @deprecated use {@link #getWatchersCount()} instead
      */
+    @Deprecated
     public int getWatchers() {
+        return getWatchersCount();
+    }
+
+    /**
+     * Gets the count of watchers.
+     *
+     * @return the watchers
+     */
+    public int getWatchersCount() {
         return watchers_count;
     }
 
@@ -667,16 +727,6 @@ public class GHRepository extends GHObject {
      */
     public int getOpenIssueCount() {
         return open_issues_count;
-    }
-
-    /**
-     * Gets network count.
-     *
-     * @return the network count
-     * @deprecated This no longer exists in the official API documentation. Use {@link #getForks()}
-     */
-    public int getNetworkCount() {
-        return forks_count;
     }
 
     /**
@@ -694,7 +744,7 @@ public class GHRepository extends GHObject {
      * @return null if the repository was never pushed at.
      */
     public Date getPushedAt() {
-        return GitHub.parseDate(pushed_at);
+        return GitHubClient.parseDate(pushed_at);
     }
 
     /**
@@ -712,6 +762,7 @@ public class GHRepository extends GHObject {
      * @return the master branch
      * @deprecated Renamed to {@link #getDefaultBranch()}
      */
+    @Deprecated
     public String getMasterBranch() {
         return default_branch;
     }
@@ -734,7 +785,7 @@ public class GHRepository extends GHObject {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(listCollaborators().asList());
+        return new GHPersonSet<GHUser>(listCollaborators().toList());
     }
 
     /**
@@ -784,11 +835,14 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<String> getCollaboratorNames() throws IOException {
-        Set<String> r = new HashSet<String>();
-        for (GHUser u : GHUser.wrap(
-                root.createRequest().withUrlPath(getApiTailUrl("collaborators")).fetchArray(GHUser[].class),
-                root))
+        Set<String> r = new HashSet<>();
+        // no initializer - we just want to the logins
+        PagedIterable<GHUser> users = root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null);
+        for (GHUser u : users.toArray()) {
             r.add(u.login);
+        }
         return r;
     }
 
@@ -813,7 +867,7 @@ public class GHRepository extends GHObject {
      * Obtain permission for a given user in this repository.
      *
      * @param u
-     *            the u
+     *            the user
      * @return the permission
      * @throws IOException
      *             the io exception
@@ -830,9 +884,25 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<GHTeam> getTeams() throws IOException {
-        return Collections.unmodifiableSet(new HashSet<GHTeam>(Arrays.asList(
-                GHTeam.wrapUp(root.createRequest().withUrlPath(getApiTailUrl("teams")).fetchArray(GHTeam[].class),
-                        root.getOrganization(getOwnerName())))));
+        GHOrganization org = root.getOrganization(getOwnerName());
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("teams"))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(org))
+                .toSet();
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+        addCollaborators(asList(users), permission);
     }
 
     /**
@@ -856,7 +926,21 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT");
+        modifyCollaborators(users, "PUT", null);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+        modifyCollaborators(users, "PUT", permission);
     }
 
     /**
@@ -880,12 +964,20 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE");
+        modifyCollaborators(users, "DELETE", null);
     }
 
-    private void modifyCollaborators(Collection<GHUser> users, String method) throws IOException {
+    private void modifyCollaborators(@NonNull Collection<GHUser> users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.Permission permission) throws IOException {
+        Requester requester = root.createRequest().method(method);
+
+        if (permission != null) {
+            requester = requester.with("permission", permission).inBody();
+        }
+
         for (GHUser user : users) {
-            root.createRequest().method(method).withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
 
@@ -926,6 +1018,18 @@ public class GHRepository extends GHObject {
      */
     public void enableIssueTracker(boolean v) throws IOException {
         edit("has_issues", String.valueOf(v));
+    }
+
+    /**
+     * Enables or disables projects for this repository.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableProjects(boolean v) throws IOException {
+        edit("has_projects", String.valueOf(v));
     }
 
     /**
@@ -1046,6 +1150,18 @@ public class GHRepository extends GHObject {
      */
     public void allowRebaseMerge(boolean value) throws IOException {
         edit("allow_rebase_merge", Boolean.toString(value));
+    }
+
+    /**
+     * After pull requests are merged, you can have head branches deleted automatically.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteBranchOnMerge(boolean value) throws IOException {
+        edit("delete_branch_on_merge", Boolean.toString(value));
     }
 
     /**
@@ -1202,7 +1318,7 @@ public class GHRepository extends GHObject {
      * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return queryPullRequests().state(state).list().asList();
+        return queryPullRequests().state(state).list().toList();
     }
 
     /**
@@ -1213,6 +1329,7 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      * @deprecated Use {@link #queryPullRequests()}
      */
+    @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
         return queryPullRequests().state(state).list();
     }
@@ -1413,9 +1530,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-        return GHRef.wrap(root.createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/git/refs", getOwnerName(), name))
-                .fetchArray(GHRef[].class), root);
+        return listRefs().toArray();
     }
 
     /**
@@ -1440,9 +1555,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-        return GHRef.wrap(root.createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType))
-                .fetchArray(GHRef[].class), root);
+        return listRefs(refType).toArray();
     }
 
     /**
@@ -1455,6 +1568,9 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable<GHRef> listRefs(String refType) throws IOException {
+        if (refType.startsWith("refs/")) {
+            refType = refType.replaceFirst("refs/", "");
+        }
         final String url = String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType);
         return root.createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> item.wrap(root));
     }
@@ -1469,10 +1585,34 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(String.format("git/refs/%s", refName)))
-                .fetch(GHRef.class)
-                .wrap(root);
+        // Also accept e.g. "refs/heads/branch" for consistency with createRef().
+        if (refName.startsWith("refs/")) {
+            refName = refName.replaceFirst("refs/", "");
+        }
+
+        // We would expect this to use `git/ref/%s` but some versions of GHE seem to not support it
+        // Instead use `git/refs/%s` and check the result actually matches the ref
+        GHRef result = null;
+        try {
+            result = root.createRequest()
+                    .withUrlPath(getApiTailUrl(String.format("git/refs/%s", refName)))
+                    .fetch(GHRef.class)
+                    .wrap(root);
+        } catch (IOException e) {
+            // If the parse exception is due to the above returning an array instead of a single ref
+            // that means the individual ref did not exist
+            if (!(e.getCause() instanceof JsonMappingException)) {
+                throw e;
+            }
+        }
+
+        // Verify that the ref returned is the one requested
+        if (result == null || !result.getRef().equals("refs/" + refName)) {
+            throw new GHFileNotFoundException(String.format("git/refs/%s", refName)
+                    + " {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}");
+        }
+        return result;
+
     }
 
     /**
@@ -1676,7 +1816,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * /** Lists all the commit statues attached to the given commit, newer ones first.
+     * /** Lists all the commit statuses attached to the given commit, newer ones first.
      *
      * @param sha1
      *            the sha 1
@@ -1700,8 +1840,29 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
-        List<GHCommitStatus> v = listCommitStatuses(sha1).asList();
+        List<GHCommitStatus> v = listCommitStatuses(sha1).toList();
         return v.isEmpty() ? null : v.get(0);
+    }
+
+    /**
+     * Gets check runs for given ref.
+     *
+     * @param ref
+     *            ref
+     * @return check runs for given ref
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     *      for a specific ref</a>
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
+        GitHubRequest request = root.createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
+                .withPreview(ANTIOPE)
+                .build();
+        return new GHCheckRunsIterable(root, request);
     }
 
     /**
@@ -1760,6 +1921,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Creates a check run for a commit.
+     *
+     * @param name
+     *            an identifier for the run
+     * @param headSHA
+     *            the commit hash
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview
+    @Deprecated
+    public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
+        return new GHCheckRunBuilder(this, name, headSHA);
+    }
+
+    /**
      * Lists repository events.
      *
      * @return the paged iterable
@@ -1782,9 +1958,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHLabel> listLabels() throws IOException {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl("labels"))
-                .toIterable(GHLabel[].class, item -> item.wrapUp(this));
+        return GHLabel.readAll(this);
     }
 
     /**
@@ -1797,7 +1971,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel getLabel(String name) throws IOException {
-        return root.createRequest().withUrlPath(getApiTailUrl("labels/" + name)).fetch(GHLabel.class).wrapUp(this);
+        return GHLabel.read(this, name);
     }
 
     /**
@@ -1812,7 +1986,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel createLabel(String name, String color) throws IOException {
-        return createLabel(name, color, "");
+        return GHLabel.create(this).name(name).color(color).description("").done();
     }
 
     /**
@@ -1829,14 +2003,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHLabel createLabel(String name, String color, String description) throws IOException {
-        return root.createRequest()
-                .method("POST")
-                .with("name", name)
-                .with("color", color)
-                .with("description", description)
-                .withUrlPath(getApiTailUrl("labels"))
-                .fetch(GHLabel.class)
-                .wrapUp(this);
+        return GHLabel.create(this).name(name).color(color).description(description).done();
     }
 
     /**
@@ -1939,14 +2106,6 @@ public class GHRepository extends GHObject {
         return createWebHook(url, null);
     }
 
-    // this is no different from getPullRequests(OPEN)
-    // /**
-    // * Retrieves all the pull requests.
-    // */
-    // public List<GHPullRequest> getPullRequests() throws IOException {
-    // return root.retrieveWithAuth("/pulls/"+owner+'/'+name,JsonPullRequests.class).wrap(root);
-    // }
-
     /**
      * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
      * reflected to GitHub.
@@ -1956,6 +2115,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
+    @Deprecated
     public Set<URL> getPostCommitHooks() {
         return postCommitHooks;
     }
@@ -1969,7 +2129,7 @@ public class GHRepository extends GHObject {
     private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
         private List<URL> getPostCommitHooks() {
             try {
-                List<URL> r = new ArrayList<URL>();
+                List<URL> r = new ArrayList<>();
                 for (GHHook h : getHooks()) {
                     if (h.getName().equals("web")) {
                         r.add(new URL(h.getConfig().get("url")));
@@ -2020,8 +2180,14 @@ public class GHRepository extends GHObject {
 
     GHRepository wrap(GitHub root) {
         this.root = root;
-        if (root.isOffline()) {
+        if (root.isOffline() && owner != null) {
             owner.wrapUp(root);
+        }
+        if (source != null) {
+            source.wrap(root);
+        }
+        if (parent != null) {
+            parent.wrap(root);
         }
         return this;
     }
@@ -2035,8 +2201,10 @@ public class GHRepository extends GHObject {
      */
     public Map<String, GHBranch> getBranches() throws IOException {
         Map<String, GHBranch> r = new TreeMap<String, GHBranch>();
-        for (GHBranch p : root.createRequest().withUrlPath(getApiTailUrl("branches")).fetchArray(GHBranch[].class)) {
-            p.wrap(this);
+        for (GHBranch p : root.createRequest()
+                .withUrlPath(getApiTailUrl("branches"))
+                .toIterable(GHBranch[].class, item -> item.wrap(this))
+                .toArray()) {
             r.put(p.getName(), p);
         }
         return r;
@@ -2167,11 +2335,10 @@ public class GHRepository extends GHObject {
         }
         String target = getApiTailUrl("contents/" + path);
 
-        GHContent[] files = requester.with("ref", ref).withUrlPath(target).fetchArray(GHContent[].class);
-
-        GHContent.wrap(files, this);
-
-        return Arrays.asList(files);
+        return requester.with("ref", ref)
+                .withUrlPath(target)
+                .toIterable(GHContent[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -2325,11 +2492,10 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHDeployKey> getDeployKeys() throws IOException {
-        List<GHDeployKey> list = new ArrayList<GHDeployKey>(
-                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHDeployKey[].class)));
-        for (GHDeployKey h : list)
-            h.wrap(this);
-        return list;
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("keys"))
+                .toIterable(GHDeployKey[].class, item -> item.wrap(this))
+                .toList();
     }
 
     /**
@@ -2342,10 +2508,13 @@ public class GHRepository extends GHObject {
      * @see #getParent() #getParent()
      */
     public GHRepository getSource() throws IOException {
-        if (source == null)
+        if (fork && source == null) {
+            populate();
+        }
+        if (source == null) {
             return null;
-        if (source.root == null)
-            source = root.getRepository(source.getFullName());
+        }
+
         return source;
     }
 
@@ -2360,10 +2529,13 @@ public class GHRepository extends GHObject {
      * @see #getSource() #getSource()
      */
     public GHRepository getParent() throws IOException {
-        if (parent == null)
+        if (fork && parent == null) {
+            populate();
+        }
+
+        if (parent == null) {
             return null;
-        if (parent.root == null)
-            parent = root.getRepository(parent.getFullName());
+        }
         return parent;
     }
 
@@ -2681,5 +2853,32 @@ public class GHRepository extends GHObject {
                 .withUrlPath(getApiTailUrl("git/tags"))
                 .fetch(GHTagObject.class)
                 .wrap(this);
+    }
+
+    /**
+     * Populate this object.
+     *
+     * @throws java.io.IOException
+     *             The IO exception
+     */
+    void populate() throws IOException {
+        if (root.isOffline())
+            return; // can't populate if the root is offline
+
+        final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+
+        try {
+            // IMPORTANT: the url for repository records is does not reliably point to the API url.
+            // There is bug in Push event payloads that returns the wrong url.
+            // All other occurrences of "url" take the form "https://api.github.com/...".
+            // For Push event repository records, they take the form "https://github.com/{fullName}".
+            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+        } catch (HttpException e) {
+            if (e.getCause() instanceof JsonParseException) {
+                root.createRequest().withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
+            } else {
+                throw e;
+            }
+        }
     }
 }

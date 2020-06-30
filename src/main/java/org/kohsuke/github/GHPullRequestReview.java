@@ -111,7 +111,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return owner.getApiRoute() + "/reviews/" + id;
+        return owner.getApiRoute() + "/reviews/" + getId();
     }
 
     /**
@@ -122,7 +122,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
-        return GitHub.parseDate(submitted_at);
+        return GitHubClient.parseDate(submitted_at);
     }
 
     /**
@@ -145,6 +145,7 @@ public class GHPullRequestReview extends GHObject {
      * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
      *             {@link #submit(String, GHPullRequestReviewEvent)}
      */
+    @Deprecated
     public void submit(String body, GHPullRequestReviewState state) throws IOException {
         submit(body, state.toEvent());
     }

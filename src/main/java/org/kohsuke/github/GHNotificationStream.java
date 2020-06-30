@@ -79,7 +79,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
      * @return the gh notification stream
      */
     public GHNotificationStream since(Date dt) {
-        since = GitHub.printDate(dt);
+        since = GitHubClient.printDate(dt);
         return this;
     }
 
@@ -180,7 +180,11 @@ public class GHNotificationStream implements Iterable<GHThread> {
 
                         req.setHeader("If-Modified-Since", lastModified);
 
-                        threads = req.withUrlPath(apiUrl).fetchArray(GHThread[].class);
+                        Requester requester = req.withUrlPath(apiUrl);
+                        GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
+                                .toIterable(GHThread[].class, null)).toResponse();
+                        threads = response.body();
+
                         if (threads == null) {
                             threads = EMPTY_ARRAY; // if unmodified, we get empty array
                         } else {
@@ -189,26 +193,20 @@ public class GHNotificationStream implements Iterable<GHThread> {
                         }
                         idx = threads.length - 1;
 
-                        nextCheckTime = calcNextCheckTime();
-                        lastModified = req.getResponseHeader("Last-Modified");
+                        nextCheckTime = calcNextCheckTime(response);
+                        lastModified = response.headerField("Last-Modified");
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            private long calcNextCheckTime() {
-                String v = req.getResponseHeader("X-Poll-Interval");
+            private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
+                String v = response.headerField("X-Poll-Interval");
                 if (v == null)
                     v = "60";
                 long seconds = Integer.parseInt(v);
                 return System.currentTimeMillis() + seconds * 1000;
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
             }
         };
     }
@@ -234,7 +232,7 @@ public class GHNotificationStream implements Iterable<GHThread> {
     public void markAsRead(long timestamp) throws IOException {
         final Requester req = root.createRequest();
         if (timestamp >= 0)
-            req.with("last_read_at", GitHub.printDate(new Date(timestamp)));
+            req.with("last_read_at", GitHubClient.printDate(new Date(timestamp)));
         req.withUrlPath(apiUrl).fetchHttpStatusCode();
     }
 

@@ -31,7 +31,7 @@ public class GHRef {
      * @return the url
      */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -90,13 +90,6 @@ public class GHRef {
         return this;
     }
 
-    static GHRef[] wrap(GHRef[] in, GitHub root) {
-        for (GHRef r : in) {
-            r.wrap(root);
-        }
-        return in;
-    }
-
     /**
      * The type GHObject.
      */
@@ -131,7 +124,7 @@ public class GHRef {
          * @return the url
          */
         public URL getUrl() {
-            return GitHub.parseURL(url);
+            return GitHubClient.parseURL(url);
         }
     }
 }

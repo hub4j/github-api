@@ -43,8 +43,7 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public List<GHKey> getKeys() throws IOException {
-        return Collections.unmodifiableList(
-                Arrays.asList(root.createRequest().withUrlPath(getApiTailUrl("keys")).fetchArray(GHKey[].class)));
+        return root.createRequest().withUrlPath(getApiTailUrl("keys")).toIterable(GHKey[].class, null).toList();
     }
 
     /**
@@ -76,7 +75,7 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
-        return new GHPersonSet<GHUser>(listFollows().asList());
+        return new GHPersonSet<GHUser>(listFollows().toList());
     }
 
     /**
@@ -97,7 +96,7 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollowers() throws IOException {
-        return new GHPersonSet<GHUser>(listFollowers().asList());
+        return new GHPersonSet<GHUser>(listFollowers().toList());
     }
 
     /**
@@ -174,6 +173,19 @@ public class GHUser extends GHPerson {
         return org.hasPublicMember(this);
     }
 
+    /**
+     * Returns true if this user is marked as hireable, false otherwise
+     *
+     * @return if the user is marked as hireable
+     */
+    public boolean isHireable() {
+        return hireable;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
     static GHUser[] wrap(GHUser[] users, GitHub root) {
         for (GHUser f : users)
             f.root = root;
@@ -193,7 +205,8 @@ public class GHUser extends GHPerson {
         Set<String> names = new HashSet<String>();
         for (GHOrganization o : root.createRequest()
                 .withUrlPath("/users/" + login + "/orgs")
-                .fetchArray(GHOrganization[].class)) {
+                .toIterable(GHOrganization[].class, null)
+                .toArray()) {
             if (names.add(o.getLogin())) // I've seen some duplicates in the data
                 orgs.add(root.getOrganization(o.getLogin()));
         }
@@ -219,7 +232,7 @@ public class GHUser extends GHPerson {
     public PagedIterable<GHGist> listGists() throws IOException {
         return root.createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
-                .toIterable(GHGist[].class, item -> item.wrapUp(this));
+                .toIterable(GHGist[].class, null);
     }
 
     @Override

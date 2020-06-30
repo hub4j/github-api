@@ -42,7 +42,6 @@ public class GHProject extends GHObject {
 
     private String owner_url;
     private String html_url;
-    private String node_id;
     private String name;
     private String body;
     private int number;
@@ -51,7 +50,7 @@ public class GHProject extends GHObject {
 
     @Override
     public URL getHtmlUrl() throws IOException {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -99,16 +98,18 @@ public class GHProject extends GHObject {
      * @return the owner url
      */
     public URL getOwnerUrl() {
-        return GitHub.parseURL(owner_url);
+        return GitHubClient.parseURL(owner_url);
     }
 
     /**
      * Gets node id.
      *
+     * @deprecated Use {@link GHObject#getNodeId()}
      * @return the node id
      */
+    @Deprecated
     public String getNode_id() {
-        return node_id;
+        return getNodeId();
     }
 
     /**
@@ -191,7 +192,7 @@ public class GHProject extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/projects/" + id;
+        return "/projects/" + getId();
     }
 
     /**
@@ -290,7 +291,7 @@ public class GHProject extends GHObject {
         final GHProject project = this;
         return root.createRequest()
                 .withPreview(INERTIA)
-                .withUrlPath(String.format("/projects/%d/columns", id))
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .toIterable(GHProjectColumn[].class, item -> item.wrap(project));
     }
 
@@ -308,7 +309,7 @@ public class GHProject extends GHObject {
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
-                .withUrlPath(String.format("/projects/%d/columns", id))
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .fetch(GHProjectColumn.class)
                 .wrap(this);
     }

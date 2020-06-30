@@ -42,7 +42,7 @@ public class GHAppInstallation extends GHObject {
     private String htmlUrl;
 
     public URL getHtmlUrl() {
-        return GitHub.parseURL(htmlUrl);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -59,7 +59,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param root
      *            the root
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRoot(GitHub root) {
         this.root = root;
     }
@@ -78,7 +80,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param account
      *            the account
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAccount(GHUser account) {
         this.account = account;
     }
@@ -97,7 +101,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param accessTokenUrl
      *            the access token url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAccessTokenUrl(String accessTokenUrl) {
         this.accessTokenUrl = accessTokenUrl;
     }
@@ -116,7 +122,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param repositoriesUrl
      *            the repositories url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositoriesUrl(String repositoriesUrl) {
         this.repositoriesUrl = repositoriesUrl;
     }
@@ -135,7 +143,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param appId
      *            the app id
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setAppId(long appId) {
         this.appId = appId;
     }
@@ -154,7 +164,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param targetId
      *            the target id
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setTargetId(long targetId) {
         this.targetId = targetId;
     }
@@ -173,7 +185,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param targetType
      *            the target type
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setTargetType(GHTargetType targetType) {
         this.targetType = targetType;
     }
@@ -192,7 +206,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param permissions
      *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setPermissions(Map<String, GHPermissionType> permissions) {
         this.permissions = permissions;
     }
@@ -211,7 +227,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param events
      *            the events
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setEvents(List<GHEvent> events) {
         this.events = events;
     }
@@ -230,7 +248,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param singleFileName
      *            the single file name
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setSingleFileName(String singleFileName) {
         this.singleFileName = singleFileName;
     }
@@ -249,7 +269,9 @@ public class GHAppInstallation extends GHObject {
      *
      * @param repositorySelection
      *            the repository selection
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
         this.repositorySelection = repositorySelection;
     }
@@ -274,7 +296,7 @@ public class GHAppInstallation extends GHObject {
         root.createRequest()
                 .method("DELETE")
                 .withPreview(GAMBIT)
-                .withUrlPath(String.format("/app/installations/%d", id))
+                .withUrlPath(String.format("/app/installations/%d", getId()))
                 .send();
     }
 
@@ -293,7 +315,9 @@ public class GHAppInstallation extends GHObject {
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
-        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id), permissions);
+        return new GHAppCreateTokenBuilder(root,
+                String.format("/app/installations/%d/access_tokens", getId()),
+                permissions);
     }
 
     /**
@@ -308,6 +332,6 @@ public class GHAppInstallation extends GHObject {
     @Preview
     @Deprecated
     public GHAppCreateTokenBuilder createToken() {
-        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", id));
+        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));
     }
 }

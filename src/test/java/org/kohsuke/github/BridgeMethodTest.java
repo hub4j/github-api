@@ -5,12 +5,15 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.equalTo;
+import javax.annotation.Nonnull;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -18,26 +21,50 @@ import static org.hamcrest.Matchers.equalTo;
 public class BridgeMethodTest extends Assert {
 
     @Test
-    public void lastStatus() throws IOException {
-        GHObject obj = new GHIssue();
+    public void testBridgeMethods() throws IOException {
 
-        List<Method> createdAtMethods = new ArrayList<>();
-        for (Method method : obj.getClass().getMethods()) {
-            if (method.getName().equalsIgnoreCase("getCreatedAt")) {
-                if (method.getReturnType() == Date.class) {
-                    createdAtMethods.add(0, method);
-                } else {
-                    createdAtMethods.add(method);
-                }
+        // Some would say this is redundant, given that bridge methods are so thin anyway
+        // In the interest of maintaining binary compatibility, we'll do this anyway for a sampling of methods
+
+        // Something odd here
+        // verifyBridgeMethods(new GHCommit(), "getAuthor", GHCommit.GHAuthor.class, GitUser.class);
+        // verifyBridgeMethods(new GHCommit(), "getCommitter", GHCommit.GHAuthor.class, GitUser.class);
+
+        verifyBridgeMethods(GHIssue.class, "getCreatedAt", Date.class, String.class);
+        verifyBridgeMethods(GHIssue.class, "getId", int.class, long.class, String.class);
+        verifyBridgeMethods(GHIssue.class, "getUrl", String.class, URL.class);
+
+        verifyBridgeMethods(GHOrganization.class, "getHtmlUrl", String.class, URL.class);
+        verifyBridgeMethods(GHOrganization.class, "getId", int.class, long.class, String.class);
+        verifyBridgeMethods(GHOrganization.class, "getUrl", String.class, URL.class);
+
+        verifyBridgeMethods(GHRepository.class, "getCollaborators", GHPersonSet.class, Set.class);
+        verifyBridgeMethods(GHRepository.class, "getHtmlUrl", String.class, URL.class);
+        verifyBridgeMethods(GHRepository.class, "getId", int.class, long.class, String.class);
+        verifyBridgeMethods(GHRepository.class, "getUrl", String.class, URL.class);
+
+        verifyBridgeMethods(GHUser.class, "getFollows", GHPersonSet.class, Set.class);
+        verifyBridgeMethods(GHUser.class, "getFollowers", GHPersonSet.class, Set.class);
+        verifyBridgeMethods(GHUser.class, "getOrganizations", GHPersonSet.class, Set.class);
+        verifyBridgeMethods(GHUser.class, "getId", int.class, long.class, String.class);
+
+        verifyBridgeMethods(GHTeam.class, "getId", int.class, long.class, String.class);
+
+        // verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
+
+    }
+
+    void verifyBridgeMethods(@Nonnull Class<?> targetClass, @Nonnull String methodName, Class<?>... returnTypes) {
+        List<Class<?>> foundMethods = new ArrayList<>();
+        Method[] methods = targetClass.getMethods();
+        for (Method method : methods) {
+            if (method.getName().equalsIgnoreCase(methodName)) {
+                // Bridge methods are only
+                assertThat(method.getParameterCount(), equalTo(0));
+                foundMethods.add(method.getReturnType());
             }
         }
 
-        assertThat(createdAtMethods.size(), equalTo(2));
-
-        assertThat(createdAtMethods.get(0).getParameterCount(), equalTo(0));
-        assertThat(createdAtMethods.get(1).getParameterCount(), equalTo(0));
-
-        assertThat(createdAtMethods.get(0).getReturnType(), is(Date.class));
-        assertThat(createdAtMethods.get(1).getReturnType(), is(String.class));
+        assertThat(foundMethods, containsInAnyOrder(returnTypes));
     }
 }

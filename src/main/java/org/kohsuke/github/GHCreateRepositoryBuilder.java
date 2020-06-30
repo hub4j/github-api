@@ -80,6 +80,18 @@ public class GHCreateRepositoryBuilder {
     }
 
     /**
+     * Enables projects
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder projects(boolean enabled) {
+        this.builder.with("has_projects", enabled);
+        return this;
+    }
+
+    /**
      * Enables wiki
      *
      * @param enabled

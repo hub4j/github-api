@@ -1,22 +1,35 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+
+import javax.annotation.Nonnull;
 
 /**
  * A team in GitHub organization.
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHTeam implements Refreshable {
-    private String name, permission, slug, description;
-    private int id;
+public class GHTeam extends GHObject implements Refreshable {
+    private String html_url;
+    private String name;
+    private String permission;
+    private String slug;
+    private String description;
+    private Privacy privacy;
+
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     protected /* final */ GitHub root;
+
+    public enum Privacy {
+        SECRET, // only visible to organization owners and members of this team.
+        CLOSED // visible to all members of this organization.
+    }
 
     /**
      * Member's role in a team
@@ -42,13 +55,6 @@ public class GHTeam implements Refreshable {
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
         this.organization.wrapUp(root);
         return wrapUp(organization);
-    }
-
-    static GHTeam[] wrapUp(GHTeam[] teams, GHOrganization owner) {
-        for (GHTeam t : teams) {
-            t.wrapUp(owner);
-        }
-        return teams;
     }
 
     static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
@@ -95,6 +101,15 @@ public class GHTeam implements Refreshable {
     }
 
     /**
+     * Gets the privacy state.
+     *
+     * @return the privacy state.
+     */
+    public Privacy getPrivacy() {
+        return privacy;
+    }
+
+    /**
      * Sets description.
      *
      * @param description
@@ -107,12 +122,45 @@ public class GHTeam implements Refreshable {
     }
 
     /**
-     * Gets id.
+     * Updates the team's privacy setting.
      *
-     * @return the id
+     * @param privacy
+     *            the privacy
+     * @throws IOException
+     *             the io exception
      */
-    public int getId() {
-        return id;
+    public void setPrivacy(Privacy privacy) throws IOException {
+        root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Retrieves the discussions.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    @Nonnull
+    public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
+        return GHDiscussion.readAll(this);
+    }
+
+    /**
+     * Gets a single discussion by ID.
+     *
+     * @param discussionNumber
+     *            id of the discussion that we want to query for
+     * @return the discussion
+     * @throws java.io.FileNotFoundException
+     *             if the discussion does not exist
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
+     */
+    @Nonnull
+    public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
+        return GHDiscussion.read(this, discussionNumber);
     }
 
     /**
@@ -134,7 +182,7 @@ public class GHTeam implements Refreshable {
      *             the io exception
      */
     public Set<GHUser> getMembers() throws IOException {
-        return Collections.unmodifiableSet(listMembers().asSet());
+        return listMembers().toSet();
     }
 
     /**
@@ -146,7 +194,7 @@ public class GHTeam implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.createRequest().withUrlPath("/teams/" + id + "/members/" + user.getLogin()).send();
+            root.createRequest().withUrlPath("/teams/" + getId() + "/members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -279,7 +327,22 @@ public class GHTeam implements Refreshable {
     }
 
     private String api(String tail) {
-        return "/teams/" + id + tail;
+        return "/teams/" + getId() + tail;
+    }
+
+    /**
+     * Begins the creation of a new instance.
+     *
+     * Consumer must call {@link GHDiscussion.Creator#done()} to commit changes.
+     *
+     * @param title
+     *            title of the discussion to be created
+     * @return a {@link GHDiscussion.Creator}
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDiscussion.Creator createDiscussion(String title) throws IOException {
+        return GHDiscussion.create(this).title(title);
     }
 
     /**
@@ -297,5 +360,29 @@ public class GHTeam implements Refreshable {
     @Override
     public void refresh() throws IOException {
         root.createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root);
+    }
+
+    @Override
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHTeam ghTeam = (GHTeam) o;
+        return Objects.equals(name, ghTeam.name) && Objects.equals(getUrl(), ghTeam.getUrl())
+                && Objects.equals(permission, ghTeam.permission) && Objects.equals(slug, ghTeam.slug)
+                && Objects.equals(description, ghTeam.description) && privacy == ghTeam.privacy;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, getUrl(), permission, slug, description, privacy);
     }
 }

@@ -1,7 +1,6 @@
 package org.kohsuke.github.extras.okhttp3;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -16,6 +15,7 @@ import org.kohsuke.github.GitHub;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -73,13 +73,13 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         return super.getWireMockOptions()
                 // Use the same data files as the 2.x test
                 .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(ResponseTemplateTransformer.builder().global(true).maxCacheEntries(0L).build());
+                .extensions(templating.newResponseTransformer());
     }
 
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            GHRepository repo = getRepository(gitHubBeforeAfter);
+            GHRepository repo = getRepository(getGitHubBeforeAfter());
             repo.setDescription("Resetting");
 
             // Let things settle a bit between tests when working against the live site
@@ -261,7 +261,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         // Get Tricky - make a change via a different client
         if (mockGitHub.isUseProxy()) {
-            GHRepository altRepo = getRepository(gitHubBeforeAfter);
+            GHRepository altRepo = getRepository(getGitHubBeforeAfter());
             altRepo.setDescription("Tricky");
         }
 
@@ -287,7 +287,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     }
 
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

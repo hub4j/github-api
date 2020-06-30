@@ -8,6 +8,12 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  */
 class Previews {
+    /**
+     * Check-runs and check-suites
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#check-runs-and-check-suites-api">GitHub API Previews</a>
+     */
+    static final String ANTIOPE = "application/vnd.github.antiope-preview+json";
 
     /**
      * Commit Search

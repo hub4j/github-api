@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://api.github.com/repos/jenkinsci/maven-plugin/issues/comments/277251072",
+    "html_url": "https://github.com/jenkinsci/maven-plugin/pull/86#issuecomment-277251072",
+    "issue_url": "https://api.github.com/repos/jenkinsci/maven-plugin/issues/86",
+    "id": 277251072,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDI3NzI1MTA3Mg==",
+    "user": {
+      "login": "oleg-nenashev",
+      "id": 3000480,
+      "node_id": "MDQ6VXNlcjMwMDA0ODA=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3000480?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/oleg-nenashev",
+      "html_url": "https://github.com/oleg-nenashev",
+      "followers_url": "https://api.github.com/users/oleg-nenashev/followers",
+      "following_url": "https://api.github.com/users/oleg-nenashev/following{/other_user}",
+      "gists_url": "https://api.github.com/users/oleg-nenashev/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/oleg-nenashev/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/oleg-nenashev/subscriptions",
+      "organizations_url": "https://api.github.com/users/oleg-nenashev/orgs",
+      "repos_url": "https://api.github.com/users/oleg-nenashev/repos",
+      "events_url": "https://api.github.com/users/oleg-nenashev/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/oleg-nenashev/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2017-02-03T13:51:55Z",
+    "updated_at": "2017-02-03T13:51:55Z",
+    "author_association": "MEMBER",
+    "body": "CC @kohsuke and @ikedam , maybe you could review it"
+  }
+]

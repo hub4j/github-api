@@ -1,11 +1,13 @@
 package org.kohsuke.github;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class GHUserTest extends AbstractGitHubWireMockTest {
     @Test
@@ -82,4 +84,30 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(i, equalTo(115));
     }
 
+    @Test
+    public void createAndCountPrivateRepos() throws IOException {
+        String login = gitHub.getMyself().getLogin();
+
+        GHRepository repository = gitHub.createRepository("github-user-test-private-repo")
+                .description("a test private repository used to test kohsuke's github-api")
+                .homepage("http://github-api.kohsuke.org/")
+                .private_(true)
+                .create();
+
+        try {
+            Assert.assertNotNull(repository);
+            GHUser ghUser = gitHub.getUser(login);
+            assertThat(ghUser.getTotalPrivateRepoCount().orElse(-1), greaterThan(0));
+        } finally {
+            repository.delete();
+        }
+    }
+
+    @Test
+    public void verifyBioAndHireable() throws IOException {
+        GHUser u = gitHub.getUser("Chew");
+        assertThat(u.getBio(), equalTo("I like to program things and I hope to program something cool one day :D"));
+        assertTrue(u.isHireable());
+        assertNotNull(u.getTwitterUsername());
+    }
 }

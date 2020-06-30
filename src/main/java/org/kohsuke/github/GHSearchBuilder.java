@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
+        req.withUrlPath(getApiUrl());
     }
 
     /**
@@ -42,16 +44,13 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
      */
     @Override
     public PagedSearchIterable<T> list() {
-        return new PagedSearchIterable<T>(root) {
-            public PagedIterator<T> _iterator(int pageSize) {
-                req.set("q", StringUtils.join(terms, " "));
-                return new PagedIterator<T>(adapt(req.withUrlPath(getApiUrl()).asIterator(receiverType, pageSize))) {
-                    protected void wrapUp(T[] page) {
-                        // SearchResult.getItems() should do it
-                    }
-                };
-            }
-        };
+
+        req.set("q", StringUtils.join(terms, " "));
+        try {
+            return new PagedSearchIterable<>(root, req.build(), receiverType);
+        } catch (MalformedURLException e) {
+            throw new GHException("", e);
+        }
     }
 
     /**

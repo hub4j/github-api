@@ -1,0 +1,41 @@
+{
+  "id": "0c8adeaf-a96e-48d1-b26e-9f574fd2c460",
+  "name": "repos_hub4j-test-org_github-api_git_refs_headz",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/git/refs/headz",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}",
+    "headers": {
+      "Date": "Thu, 11 Jun 2020 02:23:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4910",
+      "X-RateLimit-Reset": "1591843208",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "E7FA:3E37:A63FE:C9582:5EE19588"
+    }
+  },
+  "uuid": "0c8adeaf-a96e-48d1-b26e-9f574fd2c460",
+  "persistent": true,
+  "insertionIndex": 8
+}

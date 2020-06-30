@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "test file-to+create-#1.txt",
+    "path": "test+directory #50/test file-to+create-#1.txt",
+    "sha": "da2d3cc78776aec68881668775c46a53f0ee2288",
+    "size": 25,
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=master",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
+    "git_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/da2d3cc78776aec68881668775c46a53f0ee2288",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=master",
+      "git": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/da2d3cc78776aec68881668775c46a53f0ee2288",
+      "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt"
+    }
+  },
+  "commit": {
+    "sha": "00c7107a9d00cfd9116747ce61c91f2fd9a7acbc",
+    "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6MDBjNzEwN2E5ZDAwY2ZkOTExNjc0N2NlNjFjOTFmMmZkOWE3YWNiYw==",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/00c7107a9d00cfd9116747ce61c91f2fd9a7acbc",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/00c7107a9d00cfd9116747ce61c91f2fd9a7acbc",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-11-26T01:09:46Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-11-26T01:09:46Z"
+    },
+    "tree": {
+      "sha": "50e945108f168faeb2eaf15855904e65e70b9336",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/50e945108f168faeb2eaf15855904e65e70b9336"
+    },
+    "message": "Updated file for integration tests.",
+    "parents": [
+      {
+        "sha": "ce407cde9c6e4c970e33a955197512a2c1922ecf",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/ce407cde9c6e4c970e33a955197512a2c1922ecf",
+        "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/ce407cde9c6e4c970e33a955197512a2c1922ecf"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

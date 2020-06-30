@@ -29,6 +29,10 @@ public abstract class AbuseLimitHandler {
      * @throws IOException
      *             on failure
      * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">API documentation from GitHub</a>
+     * @see <a href=
+     *      "https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits">Dealing
+     *      with abuse rate limits</a>
+     *
      */
     public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 

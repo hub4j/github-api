@@ -1,0 +1,40 @@
+{
+  "id": "cf170df9-400c-4e8f-a5fb-29657271beea",
+  "name": "reactions_63220303",
+  "request": {
+    "url": "/reactions/63220303",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Sun, 23 Feb 2020 03:15:57 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4880",
+      "X-RateLimit-Reset": "1582428788",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C701:8993:A68EA9:C0D74A:5E51EE6D"
+    }
+  },
+  "uuid": "cf170df9-400c-4e8f-a5fb-29657271beea",
+  "persistent": true,
+  "insertionIndex": 13
+}

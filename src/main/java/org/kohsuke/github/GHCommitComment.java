@@ -41,7 +41,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * show this commit comment in a browser.
      */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -153,7 +153,7 @@ public class GHCommitComment extends GHObject implements Reactable {
     }
 
     private String getApiTail() {
-        return String.format("/repos/%s/%s/comments/%s", owner.getOwnerName(), owner.getName(), id);
+        return String.format("/repos/%s/%s/comments/%s", owner.getOwnerName(), owner.getName(), getId());
     }
 
     GHCommitComment wrap(GHRepository owner) {

@@ -24,7 +24,7 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         }
 
         try {
-            GHRef ref = getRepository(this.gitHubBeforeAfter).getRef("tags/create_tag_test");
+            GHRef ref = getRepository(this.getGitHubBeforeAfter()).getRef("tags/create_tag_test");
             if (ref != null) {
                 ref.delete();
             }
@@ -47,6 +47,8 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         assertEquals(tagName, tag.getTag());
         assertEquals(tagMessage, tag.getMessage());
         assertEquals(commitSha, tag.getObject().getSha());
+        assertFalse(tag.getVerification().isVerified());
+        assertEquals(tag.getVerification().getReason(), GHVerification.Reason.UNSIGNED);
 
         // Make a reference to the newly created tag.
         GHRef ref = repo.createRef("refs/tags/" + tagName, tag.getSha());
@@ -58,6 +60,6 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("github-api-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

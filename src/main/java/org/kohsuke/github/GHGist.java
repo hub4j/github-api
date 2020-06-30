@@ -1,12 +1,13 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,8 +21,9 @@ import java.util.Map.Entry;
  * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
 public class GHGist extends GHObject {
-    /* package almost final */ GHUser owner;
-    /* package almost final */ GitHub root;
+
+    final GHUser owner;
+    final GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
@@ -34,7 +36,43 @@ public class GHGist extends GHObject {
 
     private String comments_url;
 
-    private Map<String, GHGistFile> files = new HashMap<String, GHGistFile>();
+    private final Map<String, GHGistFile> files;
+
+    @JsonCreator
+    private GHGist(@JacksonInject GitHub root,
+            @JsonProperty("owner") GHUser owner,
+            @JsonProperty("files") Map<String, GHGistFile> files) {
+        this.root = root;
+        for (Entry<String, GHGistFile> e : files.entrySet()) {
+            e.getValue().fileName = e.getKey();
+        }
+        this.files = Collections.unmodifiableMap(files);
+        this.owner = root.getUser(owner);
+    }
+
+    /**
+     * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as "aa5a315d61ae9438b18d". If the id
+     * is numeric, this method will get it. If id is not numeric, this will throw a runtime
+     * {@link NumberFormatException}.
+     *
+     * @return id of the Gist.
+     * @deprecated Use {@link #getGistId()} instead.
+     */
+    @Deprecated
+    @Override
+    public long getId() {
+        return Long.parseLong(getGistId());
+    }
+
+    /**
+     * Gets the id for this Gist. Unlike most other GitHub objects, the id for Gists can be non-numeric, such as
+     * "aa5a315d61ae9438b18d". This should be used instead of {@link #getId()}.
+     *
+     * @return id of this Gist
+     */
+    public String getGistId() {
+        return this.id;
+    }
 
     /**
      * Gets owner.
@@ -44,7 +82,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHUser getOwner() throws IOException {
-        return root.intern(owner);
+        return owner;
     }
 
     /**
@@ -83,8 +121,13 @@ public class GHGist extends GHObject {
         return git_push_url;
     }
 
+    /**
+     * Get the html url.
+     * 
+     * @return the github html url
+     */
     public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -140,31 +183,7 @@ public class GHGist extends GHObject {
      * @return the files
      */
     public Map<String, GHGistFile> getFiles() {
-        return Collections.unmodifiableMap(files);
-    }
-
-    GHGist wrapUp(GHUser owner) {
-        this.owner = owner;
-        this.root = owner.root;
-        wrapUp();
-        return this;
-    }
-
-    /**
-     * Used when caller obtains {@link GHGist} without knowing its owner. A partially constructed owner object is
-     * interned.
-     */
-    GHGist wrapUp(GitHub root) {
-        this.owner = root.getUser(owner);
-        this.root = root;
-        wrapUp();
-        return this;
-    }
-
-    private void wrapUp() {
-        for (Entry<String, GHGistFile> e : files.entrySet()) {
-            e.getValue().fileName = e.getKey();
-        }
+        return files;
     }
 
     String getApiTailUrl(String tail) {
@@ -214,7 +233,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGist fork() throws IOException {
-        return root.createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class).wrapUp(root);
+        return root.createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
     }
 
     /**
@@ -223,9 +242,7 @@ public class GHGist extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHGist> listForks() {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl("forks"))
-                .toIterable(GHGist[].class, item -> item.wrapUp(root));
+        return root.createRequest().withUrlPath(getApiTailUrl("forks")).toIterable(GHGist[].class, null);
     }
 
     /**
@@ -263,11 +280,5 @@ public class GHGist extends GHObject {
     @Override
     public int hashCode() {
         return id.hashCode();
-    }
-
-    GHGist wrap(GHUser owner) {
-        this.owner = owner;
-        this.root = owner.root;
-        return this;
     }
 }

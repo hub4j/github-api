@@ -4,12 +4,16 @@ import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
+ *
  * <p>
  * The wiremock data for these tests should only be modified by hand - thus most are skipped when snapshotting.
  *
@@ -22,23 +26,21 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         requireProxy("Tests proper configuration when proxying.");
 
-        assertThat(
-                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_USER and GITHUB_PASSWORD environment variables",
-                gitHub.isAnonymous(),
-                is(false));
+        verifyAuthenticated(gitHub);
 
-        assertThat(gitHub.login, not(equalTo(STUBBED_USER_LOGIN)));
+        assertThat(gitHub.getClient().login, not(equalTo(STUBBED_USER_LOGIN)));
 
         // If this user query fails, either the proxying config has broken (unlikely)
-        // or your auth settings are not being retrieved from the environemnt.
+        // or your auth settings are not being retrieved from the environment.
         // Check your settings.
         GHUser user = gitHub.getMyself();
         assertThat(user.getLogin(), notNullValue());
 
-        // System.out.println();
-        // System.out.println("WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user
-        // login: " + user.getLogin());
-        // System.out.println();
+        System.out.println();
+        System.out.println(
+                "WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: "
+                        + user.getLogin());
+        System.out.println();
     }
 
     @Test
@@ -47,8 +49,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
-        assertThat(gitHub.isAnonymous(), is(false));
-        assertThat(gitHub.login, equalTo(STUBBED_USER_LOGIN));
+        verifyAuthenticated(gitHub);
+        assertThat(gitHub.getClient().login, equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();
         // NOTE: the stubbed user does not have to match the login provided from the github object
@@ -69,7 +71,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         GHRepository repo = null;
 
         // Valid repository, stubbed
-        repo = gitHub.getRepository("github-api/github-api");
+        repo = gitHub.getRepository("hub4j/github-api");
         assertThat(repo.getDescription(), equalTo("this is a stubbed description"));
 
         // Invalid repository, without stub - fails 404 when not proxying
@@ -105,7 +107,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         GHRepository repo = null;
 
         // Valid repository, stubbed
-        repo = gitHub.getRepository("github-api/github-api");
+        repo = gitHub.getRepository("hub4j/github-api");
         assertThat(repo.getDescription(), equalTo("this is a stubbed description"));
 
         // Valid repository, without stub - succeeds when proxying
@@ -122,7 +124,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(),
-                equalTo("{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
+                containsString(
+                        "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/#get\"}"));
     }
 
     @Test

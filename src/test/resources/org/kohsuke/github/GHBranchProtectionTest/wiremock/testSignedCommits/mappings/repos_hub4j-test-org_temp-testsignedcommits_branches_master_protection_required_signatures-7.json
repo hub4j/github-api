@@ -1,0 +1,50 @@
+{
+  "id": "fa5a0df8-3cdd-424a-a744-9b96a2455f68",
+  "name": "repos_hub4j-test-org_temp-testsignedcommits_branches_master_protection_required_signatures",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testSignedCommits/branches/master/protection/required_signatures",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.zzzax-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"url\":\"https://api.github.com/repos/hub4j-test-org/temp-testSignedCommits/branches/master/protection/required_signatures\",\"enabled\":true}",
+    "headers": {
+      "Date": "Tue, 19 Nov 2019 03:01:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4892",
+      "X-RateLimit-Reset": "1574135997",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"bca005912506b8129cdb5bb65d6b7c0a\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.zzzax-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C4B1:6D6F:20644:25307:5DD35B27"
+    }
+  },
+  "uuid": "fa5a0df8-3cdd-424a-a744-9b96a2455f68",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-testSignedCommits-branches-master-protection-required_signatures",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-temp-testSignedCommits-branches-master-protection-required_signatures-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-temp-testSignedCommits-branches-master-protection-required_signatures-3",
+  "insertionIndex": 7
+}

@@ -1,0 +1,31 @@
+Creating resources at the organization level
+
+  In order to create resources in GitHub for a given organization, you must first create an object of type <<<GHOrganization>>>.
+  As an example:
+
++-----+
+GHOrganization organizationClient(GitHub gitHub, String organizationName) throws IOException {
+        return gitHub.getOrganization(organizationName);
+    }
++-----+
+
+  Now you can easily work with the GHOrganization, and all methods that will create resources will create them
+  in the given organization.
+
+  One of the most common use cases is to create a repository in a given organization:
+
++-----+
+  void createRepository(GHOrganization organization) {
+  organization.createRepository("repository-name")
+              .private_(true)
+              .wiki(false)
+              .projects(false)
+              .description("Description")
+              .allowMergeCommit(true)
+              .allowSquashMerge(false)
+              .allowRebaseMerge(false)
+              .create()
+  }
++-----+
+
+

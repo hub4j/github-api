@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.hasProperty;
 
 /**
  * Integration test for {@link GHContent}.
@@ -169,5 +170,26 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         final GHContent fileContent2 = repo.getFileContent(fileContent.getPath());
         assertThat(IOUtils.readLines(fileContent2.read(), StandardCharsets.UTF_8), hasItems("test"));
+    }
+
+    @Test
+    public void testGetFileContentWithSymlink() throws Exception {
+        final GHRepository repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
+
+        final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-symlink-to-a-file");
+        // for whatever reason GH says this is a file :-o
+        assertThat(IOUtils.toString(fileContent.read(), StandardCharsets.UTF_8), is("thanks for reading me\n"));
+
+        final GHContent dirContent = repo.getFileContent("ghcontent-ro/a-symlink-to-a-dir");
+        // but symlinks to directories are symlinks!
+        assertThat(dirContent, allOf(hasProperty("target", is("a-dir-with-3-entries")),
+                                     hasProperty("type", is("symlink"))));
+        
+        // TODO somehow
+        /*
+        final GHContent fileContent2 = repo.getFileContent("ghcontent-ro/a-symlink-to-a-dir/entry-one");
+        // this needs special handling and will 404 from GitHub
+        assertThat(IOUtils.toString(fileContent.read(), StandardCharsets.UTF_8), is(""));
+        */
     }
 }

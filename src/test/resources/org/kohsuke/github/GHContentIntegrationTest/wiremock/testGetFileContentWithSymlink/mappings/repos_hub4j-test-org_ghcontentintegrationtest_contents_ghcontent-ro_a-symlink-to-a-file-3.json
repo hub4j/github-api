@@ -12,7 +12,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-symlink-to-a-file-ed777707-b13d-4d06-885f-529154318f3b.json",
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-symlink-to-a-file-3.json",
     "headers": {
       "server": "GitHub.com",
       "date": "Thu, 02 Jul 2020 16:17:31 GMT",

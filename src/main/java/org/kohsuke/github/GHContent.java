@@ -101,8 +101,8 @@ public class GHContent implements Refreshable {
     }
 
     /**
-     * Gets target of a symlink.
-     * This will only be set if {@code "symlink".equals(getType())}
+     * Gets target of a symlink. This will only be set if {@code "symlink".equals(getType())}
+     * 
      * @return the target
      */
     public String getTarget() {

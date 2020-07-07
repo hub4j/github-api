@@ -182,14 +182,13 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         final GHContent dirContent = repo.getFileContent("ghcontent-ro/a-symlink-to-a-dir");
         // but symlinks to directories are symlinks!
-        assertThat(dirContent, allOf(hasProperty("target", is("a-dir-with-3-entries")),
-                                     hasProperty("type", is("symlink"))));
-        
-        // TODO somehow
-        /*
-        final GHContent fileContent2 = repo.getFileContent("ghcontent-ro/a-symlink-to-a-dir/entry-one");
+        assertThat(dirContent,
+                allOf(hasProperty("target", is("a-dir-with-3-entries")), hasProperty("type", is("symlink"))));
+
+        // future somehow...
+
+        // final GHContent fileContent2 = repo.getFileContent("ghcontent-ro/a-symlink-to-a-dir/entry-one");
         // this needs special handling and will 404 from GitHub
-        assertThat(IOUtils.toString(fileContent.read(), StandardCharsets.UTF_8), is(""));
-        */
+        // assertThat(IOUtils.toString(fileContent.read(), StandardCharsets.UTF_8), is(""));
     }
 }

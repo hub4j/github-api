@@ -109,6 +109,10 @@ public class WireMockRuleConfiguration implements Options {
         return parent.browserProxyingEnabled();
     }
 
+    public BrowserProxySettings browserProxySettings() {
+        return parent.browserProxySettings();
+    }
+
     public ProxySettings proxyVia() {
         return parent.proxyVia();
     }
@@ -179,5 +183,9 @@ public class WireMockRuleConfiguration implements Options {
 
     public boolean getStubRequestLoggingDisabled() {
         return parent.getStubRequestLoggingDisabled();
+    }
+
+    public boolean getStubCorsEnabled() {
+        return parent.getStubCorsEnabled();
     }
 }

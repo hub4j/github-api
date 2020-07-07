@@ -30,6 +30,7 @@ public class GHContent implements Refreshable {
     private String sha;
     private String name;
     private String path;
+    private String target;
     private String content;
     private String url; // this is the API url
     private String git_url; // this is the Blob url
@@ -97,6 +98,15 @@ public class GHContent implements Refreshable {
      */
     public String getPath() {
         return path;
+    }
+
+    /**
+     * Gets target of a symlink. This will only be set if {@code "symlink".equals(getType())}
+     * 
+     * @return the target
+     */
+    public String getTarget() {
+        return target;
     }
 
     /**

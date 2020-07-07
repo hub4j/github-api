@@ -330,6 +330,7 @@
             </goals>
             <configuration>
               <configFile>src/main/resources/eclipse/formatter.xml</configFile>
+              <cachedir>${project.build.directory}/.cache</cachedir>
             </configuration>
           </execution>
         </executions>

@@ -1,0 +1,18 @@
+{
+  "name": "a-symlink-to-a-file",
+  "path": "ghcontent-ro/a-symlink-to-a-file",
+  "sha": "dbb84a81d2b1b5eb4077c9b72b7497eb16ed9bf6",
+  "size": 22,
+  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-symlink-to-a-file?ref=master",
+  "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-symlink-to-a-file",
+  "git_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/dbb84a81d2b1b5eb4077c9b72b7497eb16ed9bf6",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/master/ghcontent-ro/a-symlink-to-a-file",
+  "type": "file",
+  "content": "dGhhbmtzIGZvciByZWFkaW5nIG1lCg==\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-symlink-to-a-file?ref=master",
+    "git": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/dbb84a81d2b1b5eb4077c9b72b7497eb16ed9bf6",
+    "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/ghcontent-ro/a-symlink-to-a-file"
+  }
+}

@@ -1607,7 +1607,11 @@ public class GHRepository extends GHObject {
         }
 
         // Verify that the ref returned is the one requested
-        if (result == null || !result.getRef().equals("refs/" + refName)) {
+        // Used .endsWith(refName) instead of .equals("refs/" + refName) to workaround a GitBucket
+        // issue where the "ref" field omits the "refs/" prefix. "endsWith()" is functionally
+        // the same for this scenario - the server refs matching is prefix-based, so
+        // a ref that ends with the correct string will always be the correct one.
+        if (result == null || !result.getRef().endsWith(refName)) {
             throw new GHFileNotFoundException(String.format("git/refs/%s", refName)
                     + " {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}");
         }

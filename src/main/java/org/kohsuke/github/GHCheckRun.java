@@ -74,6 +74,9 @@ public class GHCheckRun extends GHObject {
         return conclusion;
     }
 
+    /**
+     * Final conclusion of the check.
+     */
     public static enum Conclusion {
         SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED
     }

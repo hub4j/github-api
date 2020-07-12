@@ -76,6 +76,9 @@ public class GHCheckRun extends GHObject {
 
     /**
      * Final conclusion of the check.
+     *
+     * From <a href="https://docs.github.com/en/rest/reference/checks#create-a-check-run--parameters">Check Run
+     * Parameters - <code>conclusion</code></a>.
      */
     public static enum Conclusion {
         SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED

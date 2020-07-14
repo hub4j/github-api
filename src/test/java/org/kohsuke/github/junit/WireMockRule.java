@@ -2,6 +2,7 @@ package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.admin.model.*;
+import com.github.tomakehurst.wiremock.client.CountMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.VerificationException;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -219,6 +220,10 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
 
     public void verify(int count, RequestPatternBuilder requestPatternBuilder) {
         wireMockServer.verify(count, requestPatternBuilder);
+    }
+
+    public void verify(CountMatchingStrategy countMatchingStrategy, RequestPatternBuilder requestPatternBuilder) {
+        wireMockServer.verify(countMatchingStrategy, requestPatternBuilder);
     }
 
     public List<LoggedRequest> findAll(RequestPatternBuilder requestPatternBuilder) {

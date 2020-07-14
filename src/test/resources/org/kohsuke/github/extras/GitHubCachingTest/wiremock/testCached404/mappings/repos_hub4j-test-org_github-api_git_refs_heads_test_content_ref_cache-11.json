@@ -2,7 +2,7 @@
   "id": "6e1f9524-6de8-4bb4-bad7-babdf5bb6015",
   "name": "repos_hub4j-test-org_github-api_git_refs_heads_test_content_ref_cache",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/git/ref/heads/test/content_ref_cache",
+    "url": "/repos/hub4j-test-org/github-api/git/refs/heads/test/content_ref_cache",
     "method": "GET",
     "headers": {
       "If-Modified-Since": {

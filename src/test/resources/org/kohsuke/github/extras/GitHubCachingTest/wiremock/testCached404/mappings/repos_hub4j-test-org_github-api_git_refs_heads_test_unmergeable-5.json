@@ -2,7 +2,7 @@
   "id": "d47b333a-351b-499c-866b-11122bd52803",
   "name": "repos_hub4j-test-org_github-api_git_refs_heads_test_unmergeable",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/git/ref/heads/test/unmergeable",
+    "url": "/repos/hub4j-test-org/github-api/git/refs/heads/test/unmergeable",
     "method": "GET",
     "headers": {
       "Cache-Control": {

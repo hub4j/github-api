@@ -1,8 +1,8 @@
 {
-  "id": "e38154ef-90ed-42ea-92ca-5ad59a314955",
-  "name": "repos_hub4j-test-org_github-api_git_ref_heads_gh-pages",
+  "id": "9404c76c-b91e-4e46-b493-b7f09feb7588",
+  "name": "user",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/git/ref/heads/gh-pages",
+    "url": "/user",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,26 +12,25 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_github-api_git_ref_heads_gh-pages-4.json",
+    "bodyFileName": "user-1.json",
     "headers": {
-      "Date": "Wed, 20 May 2020 23:48:56 GMT",
+      "Date": "Fri, 05 Jun 2020 23:08:34 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4950",
-      "X-RateLimit-Reset": "1590020148",
+      "X-RateLimit-Remaining": "4730",
+      "X-RateLimit-Reset": "1591398936",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"1ab7db857cfacd7c05c569c1a71ecc8c\"",
-      "Last-Modified": "Thu, 16 Jan 2020 21:22:56 GMT",
-      "X-Poll-Interval": "300",
+      "ETag": "W/\"7e41c6c634de27b9ab8f4e95a42d16db\"",
+      "Last-Modified": "Fri, 29 May 2020 18:24:44 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -39,13 +38,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "EFC6:5429:F775F:126ADA:5EC5C1E8"
+      "X-GitHub-Request-Id": "CFFB:979C:1DBF88:23C471:5EDAD071"
     }
   },
-  "uuid": "e38154ef-90ed-42ea-92ca-5ad59a314955",
+  "uuid": "9404c76c-b91e-4e46-b493-b7f09feb7588",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-git-ref-heads-gh-pages",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-git-ref-heads-gh-pages-2",
-  "insertionIndex": 4
+  "insertionIndex": 1
 }

@@ -2,7 +2,7 @@
   "id": "709410bf-7c2e-48fa-92a7-f493ffbe7262",
   "name": "repos_hub4j-test-org_github-api_git_refs_heads_test_content_ref_cache",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/git/ref/heads/test/content_ref_cache",
+    "url": "/repos/hub4j-test-org/github-api/git/refs/heads/test/content_ref_cache",
     "method": "GET",
     "headers": {
       "Cache-Control": {

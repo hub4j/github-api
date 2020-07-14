@@ -429,7 +429,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getMessage(),
                     containsString(
                             "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
         }
     }
 
@@ -474,7 +473,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getMessage(),
                     containsString(
                             "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
         }
     }
 
@@ -505,8 +503,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
             assertThat(e.getMessage(),
                     containsString(
-                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-single-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
+                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
         }
 
         // git/refs/headz
@@ -517,8 +514,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
             assertThat(e.getMessage(),
                     containsString(
-                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-single-reference\"}"));
-            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
+                            "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
         }
     }
 

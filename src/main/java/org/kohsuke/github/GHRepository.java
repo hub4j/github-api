@@ -1540,8 +1540,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable<GHRef> listRefs() throws IOException {
-        final String url = String.format("/repos/%s/%s/git/refs", getOwnerName(), name);
-        return root.createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> item.wrap(root));
+        return listRefs("");
     }
 
     /**
@@ -1567,11 +1566,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable<GHRef> listRefs(String refType) throws IOException {
-        if (refType.startsWith("refs/")) {
-            refType = refType.replaceFirst("refs/", "");
-        }
-        final String url = String.format("/repos/%s/%s/git/refs/%s", getOwnerName(), name, refType);
-        return root.createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> item.wrap(root));
+        return GHRef.readMatching(this, refType);
     }
 
     /**
@@ -1584,15 +1579,7 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-        // Also accept e.g. "refs/heads/branch" for consistency with createRef().
-        if (refName.startsWith("refs/")) {
-            refName = refName.replaceFirst("refs/", "");
-        }
-
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(String.format("git/ref/%s", refName)))
-                .fetch(GHRef.class)
-                .wrap(root);
+        return GHRef.read(this, refName);
     }
 
     /**

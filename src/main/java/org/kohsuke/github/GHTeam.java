@@ -3,8 +3,11 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+
+import javax.annotation.Nonnull;
 
 /**
  * A team in GitHub organization.
@@ -128,6 +131,36 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public void setPrivacy(Privacy privacy) throws IOException {
         root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Retrieves the discussions.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    @Nonnull
+    public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
+        return GHDiscussion.readAll(this);
+    }
+
+    /**
+     * Gets a single discussion by ID.
+     *
+     * @param discussionNumber
+     *            id of the discussion that we want to query for
+     * @return the discussion
+     * @throws java.io.FileNotFoundException
+     *             if the discussion does not exist
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
+     */
+    @Nonnull
+    public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
+        return GHDiscussion.read(this, discussionNumber);
     }
 
     /**
@@ -298,6 +331,21 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Begins the creation of a new instance.
+     *
+     * Consumer must call {@link GHDiscussion.Creator#done()} to commit changes.
+     *
+     * @param title
+     *            title of the discussion to be created
+     * @return a {@link GHDiscussion.Creator}
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDiscussion.Creator createDiscussion(String title) throws IOException {
+        return GHDiscussion.create(this).title(title);
+    }
+
+    /**
      * Gets organization.
      *
      * @return the organization
@@ -317,5 +365,24 @@ public class GHTeam extends GHObject implements Refreshable {
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHTeam ghTeam = (GHTeam) o;
+        return Objects.equals(name, ghTeam.name) && Objects.equals(getUrl(), ghTeam.getUrl())
+                && Objects.equals(permission, ghTeam.permission) && Objects.equals(slug, ghTeam.slug)
+                && Objects.equals(description, ghTeam.description) && privacy == ghTeam.privacy;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, getUrl(), permission, slug, description, privacy);
     }
 }

@@ -1,5 +1,5 @@
 name-template: 'v$NEXT_PATCH_VERSION 🌈'
-tag-template: 'v$NEXT_PATCH_VERSION'
+tag-template: 'github-api-$NEXT_MINOR_VERSION'
 categories:
   - title: '🚀 Features'
     labels:

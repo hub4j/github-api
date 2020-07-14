@@ -2,9 +2,13 @@ package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +24,7 @@ import java.net.URL;
 import java.security.Permission;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
@@ -57,7 +62,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     public void attachLogCapturer() {
         logCapturingStream = new ByteArrayOutputStream();
         customLogHandler = new StreamHandler(logCapturingStream, new SimpleFormatter());
-        log.addHandler(customLogHandler);
+        Logger.getLogger(GitHubClient.class.getName()).addHandler(customLogHandler);
+        Logger.getLogger(OkHttpClient.class.getName()).addHandler(customLogHandler);
     }
 
     public String getTestCapturedLog() throws IOException {
@@ -66,9 +72,38 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     }
 
     public void resetTestCapturedLog() throws IOException {
-        log.removeHandler(customLogHandler);
+        Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
+        Logger.getLogger(OkHttpClient.class.getName()).removeHandler(customLogHandler);
         customLogHandler.close();
         attachLogCapturer();
+    }
+
+    @Ignore("Used okhttp3 and this to verify connection closing. To variable for CI system.")
+    @Test
+    public void testGitHubIsApiUrlValid() throws Exception {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectionPool(new ConnectionPool(2, 100, TimeUnit.MILLISECONDS))
+                .build();
+
+        OkHttpConnector connector = new OkHttpConnector(client);
+
+        for (int x = 0; x < 100; x++) {
+
+            this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                    .withConnector(connector)
+                    .build();
+
+            try {
+                gitHub.checkApiUrlValidity();
+            } catch (IOException ioe) {
+                assertTrue(ioe.getMessage().contains("private mode enabled"));
+            }
+            Thread.sleep(100);
+        }
+
+        String capturedLog = getTestCapturedLog();
+        assertThat(capturedLog, not(containsString("leaked")));
     }
 
     // Issue #539

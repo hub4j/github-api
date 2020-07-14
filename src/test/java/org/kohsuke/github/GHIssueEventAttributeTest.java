@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -41,7 +40,6 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    @NotNull
     private List<GHIssueEvent> listEvents(final Type type) throws IOException {
         return StreamSupport
                 .stream(gitHub.getRepository("chids/project-milestone-test").getIssue(1).listEvents().spliterator(),

@@ -8,7 +8,7 @@
     "search": {
       "limit": 30,
       "remaining": 30,
-      "reset": {{testStartDate offset='1 hours' format='unix'}}
+      "reset": {{testStartDate offset='2 minutes' format='unix'}}
     },
     "graphql": {
       "limit": 5000,

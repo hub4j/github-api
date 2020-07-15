@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * A GitHub API Client for HttpUrlConnection
  * <p>
  * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link #rateLimit()}.
+ * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
  * </p>
  * <p>
  * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.

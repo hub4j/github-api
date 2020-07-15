@@ -359,6 +359,18 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * Adds a {@link RateLimitChecker} for the Core API for this {@link GitHubBuilder}.
+     *
+     * @param coreRateLimitChecker
+     *            the {@link RateLimitChecker} for core GitHub API requests
+     * @return the git hub builder
+     * @see #withRateLimitChecker(RateLimitChecker, RateLimitTarget)
+     */
+    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
+        return withRateLimitChecker(coreRateLimitChecker, RateLimitTarget.CORE);
+    }
+
+    /**
      * Adds a {@link RateLimitChecker} to this {@link GitHubBuilder}.
      * <p>
      * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
@@ -376,15 +388,15 @@ public class GitHubBuilder implements Cloneable {
      * request.
      * </p>
      *
-     * @param coreRateLimitChecker
-     *            the {@link RateLimitChecker} for core GitHub API requests
+     * @param rateLimitChecker
+     *            the {@link RateLimitChecker} for requests
+     * @param rateLimitTarget
+     *            the {@link RateLimitTarget} specifying which rate limit record to check
      * @return the git hub builder
      */
-    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
-        this.rateLimitChecker = new GitHubRateLimitChecker(coreRateLimitChecker,
-                RateLimitChecker.NONE,
-                RateLimitChecker.NONE,
-                RateLimitChecker.NONE);
+    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker rateLimitChecker,
+            @Nonnull RateLimitTarget rateLimitTarget) {
+        this.rateLimitChecker = this.rateLimitChecker.with(rateLimitChecker, rateLimitTarget);
         return this;
     }
 

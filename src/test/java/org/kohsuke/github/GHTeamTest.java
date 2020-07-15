@@ -63,10 +63,21 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHTeam team = org.getTeamBySlug(teamSlug);
-        Set<GHTeam> result = team.getChildTeams();
+        Set<GHTeam> result = team.listChildTeams().toSet();
 
         assertEquals(1, result.size());
         assertEquals("child-team-for-dummy", result.toArray(new GHTeam[]{})[0].getName());
+    }
+
+    @Test
+    public void testFetchEmptyChildTeams() throws IOException {
+        String teamSlug = "simple-team";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+        Set<GHTeam> result = team.listChildTeams().toSet();
+
+        assertEquals(0, result.size());
     }
 
 }

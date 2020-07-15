@@ -175,6 +175,19 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Retrieves the teams that are children of this team.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHTeam> listChildTeams() throws IOException {
+        return root.createRequest()
+                .withUrlPath(api("/teams"))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
+    }
+
+    /**
      * Gets members.
      *
      * @return the members

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -29,7 +30,7 @@ public class GHRateLimit {
     /**
      * Remaining calls that can be made.
      *
-     * @deprecated This value should never have been made public. Use {@link #getRemaining()}
+     * @deprecated This field should never have been made public. Use {@link #getRemaining()}
      */
     @Deprecated
     public int remaining;
@@ -37,7 +38,7 @@ public class GHRateLimit {
     /**
      * Allotted API call per hour.
      *
-     * @deprecated This value should never have been made public. Use {@link #getLimit()}
+     * @deprecated This field should never have been made public. Use {@link #getLimit()}
      */
     @Deprecated
     public int limit;
@@ -48,7 +49,7 @@ public class GHRateLimit {
      * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
      * multiplied by 1000.
      *
-     * @deprecated This value should never have been made public. Use {@link #getResetDate()}
+     * @deprecated This field should never have been made public. Use {@link #getResetDate()}
      */
     @Deprecated
     public Date reset;
@@ -65,17 +66,58 @@ public class GHRateLimit {
     @Nonnull
     private final Record integrationManifest;
 
+    /**
+     * The default GHRateLimit provided to new {@link GitHubClient}s.
+     *
+     * Contains all expired records that will cause {@link GitHubClient#rateLimit(RateLimitTarget)} to refresh with new
+     * data when called.
+     *
+     * Private, but made internal for testing.
+     */
     @Nonnull
-    static GHRateLimit Unknown() {
-        return new GHRateLimit(new UnknownLimitRecord(),
-                new UnknownLimitRecord(),
-                new UnknownLimitRecord(),
-                new UnknownLimitRecord());
-    }
+    static final GHRateLimit DEFAULT = new GHRateLimit(UnknownLimitRecord.DEFAULT,
+            UnknownLimitRecord.DEFAULT,
+            UnknownLimitRecord.DEFAULT,
+            UnknownLimitRecord.DEFAULT);
 
+    /**
+     * Creates a new {@link GHRateLimit} from a single record for the specified endpoint with place holders for other
+     * records.
+     *
+     * This is used to create {@link GHRateLimit} instances that can merged with other instances.
+     *
+     * @param record
+     *            the rate limit record. Can be a regular {@link Record} constructed from header information or an
+     *            {@link UnknownLimitRecord} placeholder.
+     * @param rateLimitTarget
+     *            which rate limit record to fill
+     * @return a new {@link GHRateLimit} instance containing the supplied record
+     */
     @Nonnull
-    static GHRateLimit fromHeaderRecord(Record header) {
-        return new GHRateLimit(header, new UnknownLimitRecord(), new UnknownLimitRecord(), new UnknownLimitRecord());
+    static GHRateLimit fromRecord(@Nonnull Record record, @Nonnull RateLimitTarget rateLimitTarget) {
+        if (rateLimitTarget == RateLimitTarget.CORE || rateLimitTarget == RateLimitTarget.NONE) {
+            return new GHRateLimit(record,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT);
+        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {
+            return new GHRateLimit(UnknownLimitRecord.DEFAULT,
+                    record,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT);
+        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {
+            return new GHRateLimit(UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT,
+                    record,
+                    UnknownLimitRecord.DEFAULT);
+        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {
+            return new GHRateLimit(UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT,
+                    UnknownLimitRecord.DEFAULT,
+                    record);
+        } else {
+            throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
+        }
     }
 
     @JsonCreator
@@ -142,7 +184,7 @@ public class GHRateLimit {
     }
 
     /**
-     * Whether the rate limit reset date for this instance has passed.
+     * Whether the reset date for the Core API rate limit has passed.
      *
      * @return true if the rate limit reset date has passed. Otherwise false.
      * @since 1.100
@@ -152,7 +194,7 @@ public class GHRateLimit {
     }
 
     /**
-     * The core object provides your rate limit status for all non-search-related resources in the REST API.
+     * The core object provides the rate limit status for all non-search-related resources in the REST API.
      *
      * @return a rate limit record
      * @since 1.100
@@ -163,42 +205,43 @@ public class GHRateLimit {
     }
 
     /**
-     * The search object provides your rate limit status for the Search API. TODO: integrate with header limit updating.
-     * Issue #605.
+     * The search record provides the rate limit status for the Search API.
      *
      * @return a rate limit record
+     * @since 1.115
      */
     @Nonnull
-    Record getSearch() {
+    public Record getSearch() {
         return search;
     }
 
     /**
-     * The graphql object provides your rate limit status for the GraphQL API. TODO: integrate with header limit
-     * updating. Issue #605.
+     * The graphql record provides the rate limit status for the GraphQL API.
      *
      * @return a rate limit record
+     * @since 1.115
      */
     @Nonnull
-    Record getGraphQL() {
+    public Record getGraphQL() {
         return graphql;
     }
 
     /**
-     * The integration_manifest object provides your rate limit status for the GitHub App Manifest code conversion
-     * endpoint. TODO: integrate with header limit updating. Issue #605.
+     * The integration manifest record provides the rate limit status for the GitHub App Manifest code conversion
+     * endpoint.
      *
      * @return a rate limit record
+     * @since 1.115
      */
     @Nonnull
-    Record getIntegrationManifest() {
+    public Record getIntegrationManifest() {
         return integrationManifest;
     }
 
     @Override
     public String toString() {
-        return "GHRateLimit {" + "core " + getCore().toString() + "search " + getSearch().toString() + "graphql "
-                + getGraphQL().toString() + "integrationManifest " + getIntegrationManifest().toString() + '}';
+        return "GHRateLimit {" + "core " + getCore().toString() + ", search " + getSearch().toString() + ", graphql "
+                + getGraphQL().toString() + ", integrationManifest " + getIntegrationManifest().toString() + "}";
     }
 
     @Override
@@ -221,44 +264,111 @@ public class GHRateLimit {
     }
 
     /**
-     * Gets the appropriate {@link Record} for a particular url path.
-     *
-     * @param urlPath
-     *            the url path of the request
-     * @return the {@link Record} for a url path.
+     * Merge a {@link GHRateLimit} with another one to create a new {@link GHRateLimit} keeping the latest
+     * {@link Record}s from each.
+     * 
+     * @param newLimit
+     *            {@link GHRateLimit} with potentially updated {@link Record}s.
+     * @return a merged {@link GHRateLimit} with the latest {@link Record}s from these two instances. If the merged
+     *         instance is equal to the current instance, the current instance is returned.
      */
     @Nonnull
-    Record getRecordForUrlPath(@Nonnull String urlPath) {
-        if (urlPath.equals("/rate_limit")) {
-            return new UnknownLimitRecord();
-        } else if (urlPath.startsWith("/search")) {
-            return getSearch();
-        } else if (urlPath.startsWith("/graphql")) {
-            return getGraphQL();
-        } else if (urlPath.startsWith("/app-manifests")) {
-            return getIntegrationManifest();
-        } else {
+    GHRateLimit getMergedRateLimit(@Nonnull GHRateLimit newLimit) {
+
+        GHRateLimit merged = new GHRateLimit(getCore().currentOrUpdated(newLimit.getCore()),
+                getSearch().currentOrUpdated(newLimit.getSearch()),
+                getGraphQL().currentOrUpdated(newLimit.getGraphQL()),
+                getIntegrationManifest().currentOrUpdated(newLimit.getIntegrationManifest()));
+
+        if (merged.equals(this)) {
+            merged = this;
+        }
+
+        return merged;
+    }
+
+    /**
+     * Gets the specified {@link Record}.
+     *
+     * {@link RateLimitTarget#NONE} will return {@link UnknownLimitRecord#DEFAULT} to prevent any clients from
+     * accidentally waiting on that record to reset before continuing.
+     *
+     * @param rateLimitTarget
+     *            the target rate limit record
+     * @return the target {@link Record} from this instance.
+     */
+    @Nonnull
+    Record getRecord(@Nonnull RateLimitTarget rateLimitTarget) {
+        if (rateLimitTarget == RateLimitTarget.CORE) {
             return getCore();
+        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {
+            return getSearch();
+        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {
+            return getGraphQL();
+        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {
+            return getIntegrationManifest();
+        } else if (rateLimitTarget == RateLimitTarget.NONE) {
+            return UnknownLimitRecord.DEFAULT;
+        } else {
+            throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
         }
     }
 
     /**
      * A limit record used as a placeholder when the the actual limit is not known.
-     * <p>
-     * Has a large limit and long duration so that it will doesn't expire too often.
      *
      * @since 1.100
      */
     public static class UnknownLimitRecord extends Record {
 
-        // One hour
-        private static final long unknownLimitResetSeconds = 60L * 60L;
+        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();
+
+        /**
+         * The number of seconds until a {@link UnknownLimitRecord} will expire.
+         *
+         * This is set to a somewhat short duration, rather than a long one. This avoids
+         * {@link {@link GitHubClient#rateLimit(RateLimitTarget)}} requesting rate limit updates continuously, but also
+         * avoids holding on to stale unknown records indefinitely.
+         *
+         * When merging {@link GHRateLimit} instances, {@link UnknownLimitRecord}s will be superseded by incoming
+         * regular {@link Record}s.
+         *
+         * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
+         */
+        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
 
         static final int unknownLimit = 1000000;
         static final int unknownRemaining = 999999;
 
-        private UnknownLimitRecord() {
-            super(unknownLimit, unknownRemaining, System.currentTimeMillis() / 1000L + unknownLimitResetSeconds);
+        // The default UnknownLimitRecord is an expired record.
+        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
+
+        // The starting current UnknownLimitRecord is an expired record.
+        private static UnknownLimitRecord current = DEFAULT;
+
+        /**
+         * Create a new unknown record that resets at the specified time.
+         *
+         * @param resetEpochSeconds
+         *            the epoch second time when this record will expire.
+         */
+        private UnknownLimitRecord(long resetEpochSeconds) {
+            super(unknownLimit, unknownRemaining, resetEpochSeconds);
+        }
+
+        static synchronized Record current() {
+            if (current.isExpired()) {
+                current = new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds);
+            }
+            return current;
+        }
+
+        /**
+         * Reset the current UnknownLimitRecord. For use during testing only.
+         */
+        static synchronized void reset() {
+            current = DEFAULT;
+            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
         }
     }
 
@@ -274,14 +384,12 @@ public class GHRateLimit {
         private final int remaining;
 
         /**
-         * Allotted API call per hour.
+         * Allotted API call per time period.
          */
         private final int limit;
 
         /**
          * The time at which the current rate limit window resets in UTC epoch seconds.
-         *
-         * This is the raw value returned by the server.
          */
         private final long resetEpochSeconds;
 
@@ -291,9 +399,11 @@ public class GHRateLimit {
         private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
-         * The time at which the rate limit will reset. This value is calculated based on
-         * {@link #getResetEpochSeconds()} by calling {@link #calculateResetDate}. If the clock on the local machine not
-         * synchronized with the server clock, this time value will be adjusted to match the local machine's clock.
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
+         *
+         * @see #calculateResetDate(String)
+         * @see #getResetDate()
          */
         @Nonnull
         private final Date resetDate;
@@ -342,11 +452,57 @@ public class GHRateLimit {
         }
 
         /**
+         * Determine if the current {@link Record} is outdated compared to another. Rate Limit dates are only accurate
+         * to the second, so we look at other information in the record as well.
+         *
+         * {@link Record}s with earlier {@link #getResetEpochSeconds()} are replaced by those with later.
+         * {@link Record}s with the same {@link #getResetEpochSeconds()} are replaced by those with less remaining
+         * count.
+         * 
+         * {@link UnknownLimitRecord}s compare with each other like regular {@link Record}s.
+         *
+         * {@link Record}s are replaced by {@link UnknownLimitRecord}s only when the current {@link Record} is expired
+         * and the {@link UnknownLimitRecord} is not. Otherwise Regular {@link Record}s are not replaced by
+         * {@link UnknownLimitRecord}s.
+         *
+         * Expiration is only considered after other checks, meaning expired records may sometimes be replaced by other
+         * expired records.
+         *
+         * @param other
+         *            the other {@link Record}
+         * @return the {@link Record} that is most current
+         */
+        Record currentOrUpdated(@Nonnull Record other) {
+            // This set of checks avoids most calls to isExpired()
+            // Depends on UnknownLimitRecord.current() to prevent continuous updating of GHRateLimit rateLimit()
+            if (getResetEpochSeconds() > other.getResetEpochSeconds()
+                    || (getResetEpochSeconds() == other.getResetEpochSeconds()
+                            && getRemaining() <= other.getRemaining())) {
+                // If the current record has a later reset
+                // or the current record has the same reset and fewer or same requests remaining
+                // Then it is most recent
+                return this;
+            } else if (!(other instanceof UnknownLimitRecord)) {
+                // If the above is not the case that means other has a later reset
+                // or the same resent and fewer requests remaining.
+                // If the other record is not an unknown record, the the other is more recent
+                return other;
+            } else if (this.isExpired() && !other.isExpired()) {
+                // The other is an unknown record.
+                // If the current record has expired and the other hasn't, return the other.
+                return other;
+            }
+
+            // If none of the above, the current record is most valid.
+            return this;
+        }
+
+        /**
          * Recalculates the {@link #resetDate} relative to the local machine clock.
          * <p>
          * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetDate()} to make decisions about
          * how long to wait for until for the rate limit to reset. That means that {@link #getResetDate()} needs to be
-         * accurate to the local machine.
+         * calculated based on the local machine clock.
          * </p>
          * <p>
          * When we say that the clock on two machines is "synchronized", we mean that the UTC time returned from
@@ -415,7 +571,7 @@ public class GHRateLimit {
          * {@link #getResetDate()} or implement a {@link RateLimitChecker} instead.
          *
          * @return a long representing the time in epoch seconds when the rate limit will reset
-         * @see #getResetDate() #getResetDate()
+         * @see #getResetDate()
          */
         public long getResetEpochSeconds() {
             return resetEpochSeconds;
@@ -424,6 +580,8 @@ public class GHRateLimit {
         /**
          * Whether the rate limit reset date indicated by this instance is expired
          *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
          * @return true if the rate limit reset date has passed. Otherwise false.
          */
         public boolean isExpired() {
@@ -431,8 +589,8 @@ public class GHRateLimit {
         }
 
         /**
-         * Returns the date at which the rate limit will reset, adjusted to local machine time if the local machine's
-         * clock not synchronized with to the same clock as the GitHub server.
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
          *
          * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
          *

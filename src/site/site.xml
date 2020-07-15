@@ -23,6 +23,7 @@
         <item name="JWT Authentication" href="/githubappjwtauth.html"/>
         <item name="App Installation Token " href="/githubappappinsttokenauth.html"/>
       </item>
+      <item name="Working with organizations" href="/createorglevelresources.html"/>
     </menu>
 
     <menu name="References">

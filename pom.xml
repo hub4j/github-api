@@ -80,6 +80,14 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M5</version>
+          <configuration>
+            <!-- SUREFIRE-1226 workaround -->
+            <trimStackTrace>false</trimStackTrace>
+          </configuration>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.2.1</version>
@@ -280,11 +288,40 @@
 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
-        <configuration>
-          <!-- SUREFIRE-1226 workaround -->
-          <trimStackTrace>false</trimStackTrace>
-        </configuration>
+        <executions>
+          <execution>
+            <id>default-test</id>
+            <configuration>
+              <excludes>
+                <exclude>**/extras/**</exclude>
+                <exclude>**/AbuseLimitHandlerTest</exclude>
+                <exclude>**/GHRateLimitTest</exclude>
+                <exclude>**/RequesterRetryTest</exclude>
+                <exclude>**/RateLimitCheckerTest</exclude>
+                <exclude>**/RateLimitHandlerTest</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>slow-or-flaky-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <rerunFailingTestsCount>2</rerunFailingTestsCount>
+              <!-- There are some tests that take longer or are a little flaky.  Run them here. -->
+              <includes>
+                <include>**/extras/**</include>
+                <include>**/AbuseLimitHandlerTest</include>
+                <include>**/GHRateLimitTest</include>
+                <include>**/RequesterRetryTest</include>
+                <include>**/RateLimitCheckerTest</include>
+                <include>**/RateLimitHandlerTest</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

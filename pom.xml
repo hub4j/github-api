@@ -292,14 +292,7 @@
           <execution>
             <id>default-test</id>
             <configuration>
-              <excludes>
-                <exclude>**/extras/**</exclude>
-                <exclude>**/AbuseLimitHandlerTest</exclude>
-                <exclude>**/GHRateLimitTest</exclude>
-                <exclude>**/RequesterRetryTest</exclude>
-                <exclude>**/RateLimitCheckerTest</exclude>
-                <exclude>**/RateLimitHandlerTest</exclude>
-              </excludes>
+              <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
             </configuration>
           </execution>
           <execution>
@@ -311,14 +304,7 @@
             <configuration>
               <rerunFailingTestsCount>2</rerunFailingTestsCount>
               <!-- There are some tests that take longer or are a little flaky.  Run them here. -->
-              <includes>
-                <include>**/extras/**</include>
-                <include>**/AbuseLimitHandlerTest</include>
-                <include>**/GHRateLimitTest</include>
-                <include>**/RequesterRetryTest</include>
-                <include>**/RateLimitCheckerTest</include>
-                <include>**/RateLimitHandlerTest</include>
-              </includes>
+              <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
             </configuration>
           </execution>
         </executions>

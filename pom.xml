@@ -297,7 +297,7 @@
           </execution>
           <execution>
             <id>slow-or-flaky-test</id>
-            <phase>integration-test</phase>
+            <phase>test</phase>
             <goals>
               <goal>test</goal>
             </goals>

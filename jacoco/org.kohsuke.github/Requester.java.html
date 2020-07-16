@@ -23,6 +23,9 @@
  */
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -39,10 +42,10 @@ import javax.annotation.Nonnull;
 class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
     /* private */ final GitHubClient client;
 
-<span class="fc" id="L42">    Requester(GitHubClient client) {</span>
-<span class="fc" id="L43">        this.client = client;</span>
-<span class="fc" id="L44">        this.withApiUrl(client.getApiUrl());</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L45">    Requester(GitHubClient client) {</span>
+<span class="fc" id="L46">        this.client = client;</span>
+<span class="fc" id="L47">        this.withApiUrl(client.getApiUrl());</span>
+<span class="fc" id="L48">    }</span>
 
     /**
      * Sends a request to the specified URL and checks that it is sucessful.
@@ -53,8 +56,8 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
     public void send() throws IOException {
         // Send expects there to be some body response, but doesn't care what it is.
         // If there isn't a body, this will throw.
-<span class="fc" id="L56">        client.sendRequest(this, (responseInfo) -&gt; responseInfo.getBodyAsString());</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L59">        client.sendRequest(this, (responseInfo) -&gt; responseInfo.getBodyAsString());</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * Sends a request and parses the response into the given type via databinding.
@@ -68,7 +71,7 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      *             if the server returns 4xx/5xx responses.
      */
     public &lt;T&gt; T fetch(@Nonnull Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L71">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, type)).body();</span>
+<span class="fc" id="L74">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, type)).body();</span>
     }
 
     /**
@@ -83,8 +86,8 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      *             the io exception
      */
     public &lt;T&gt; T fetchInto(@Nonnull T existingInstance) throws IOException {
-<span class="fc" id="L86">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, existingInstance))</span>
-<span class="fc" id="L87">                .body();</span>
+<span class="fc" id="L89">        return client.sendRequest(this, (responseInfo) -&gt; GitHubResponse.parseBody(responseInfo, existingInstance))</span>
+<span class="fc" id="L90">                .body();</span>
     }
 
     /**
@@ -96,7 +99,7 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      *             the io exception
      */
     public int fetchHttpStatusCode() throws IOException {
-<span class="fc" id="L99">        return client.sendRequest(build(), null).statusCode();</span>
+<span class="fc" id="L102">        return client.sendRequest(build(), null).statusCode();</span>
     }
 
     /**
@@ -108,7 +111,10 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      *             the io exception
      */
     public InputStream fetchStream() throws IOException {
-<span class="fc" id="L111">        return client.sendRequest(this, (responseInfo) -&gt; responseInfo.bodyStream()).body();</span>
+<span class="fc" id="L114">        return client</span>
+<span class="fc" id="L115">                .sendRequest(this,</span>
+<span class="fc" id="L116">                        (responseInfo) -&gt; new ByteArrayInputStream(IOUtils.toByteArray(responseInfo.bodyStream())))</span>
+<span class="fc" id="L117">                .body();</span>
     }
 
     /**
@@ -128,9 +134,9 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      */
     public &lt;R&gt; PagedIterable&lt;R&gt; toIterable(Class&lt;R[]&gt; type, Consumer&lt;R&gt; itemInitializer) {
         try {
-<span class="fc" id="L131">            return new GitHubPageContentsIterable&lt;&gt;(client, build(), type, itemInitializer);</span>
-<span class="nc" id="L132">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L133">            throw new GHException(e.getMessage(), e);</span>
+<span class="fc" id="L137">            return new GitHubPageContentsIterable&lt;&gt;(client, build(), type, itemInitializer);</span>
+<span class="nc" id="L138">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L139">            throw new GHException(e.getMessage(), e);</span>
         }
 
     }

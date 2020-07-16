@@ -359,6 +359,18 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * Adds a {@link RateLimitChecker} for the Core API for this {@link GitHubBuilder}.
+     *
+     * @param coreRateLimitChecker
+     *            the {@link RateLimitChecker} for core GitHub API requests
+     * @return the git hub builder
+     * @see #withRateLimitChecker(RateLimitChecker, RateLimitTarget)
+     */
+    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
+<span class="fc" id="L370">        return withRateLimitChecker(coreRateLimitChecker, RateLimitTarget.CORE);</span>
+    }
+
+    /**
      * Adds a {@link RateLimitChecker} to this {@link GitHubBuilder}.
      * &lt;p&gt;
      * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
@@ -376,16 +388,16 @@ public class GitHubBuilder implements Cloneable {
      * request.
      * &lt;/p&gt;
      *
-     * @param coreRateLimitChecker
-     *            the {@link RateLimitChecker} for core GitHub API requests
+     * @param rateLimitChecker
+     *            the {@link RateLimitChecker} for requests
+     * @param rateLimitTarget
+     *            the {@link RateLimitTarget} specifying which rate limit record to check
      * @return the git hub builder
      */
-    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
-<span class="fc" id="L384">        this.rateLimitChecker = new GitHubRateLimitChecker(coreRateLimitChecker,</span>
-                RateLimitChecker.NONE,
-                RateLimitChecker.NONE,
-                RateLimitChecker.NONE);
-<span class="fc" id="L388">        return this;</span>
+    public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker rateLimitChecker,
+            @Nonnull RateLimitTarget rateLimitTarget) {
+<span class="fc" id="L399">        this.rateLimitChecker = this.rateLimitChecker.with(rateLimitChecker, rateLimitTarget);</span>
+<span class="fc" id="L400">        return this;</span>
     }
 
     /**
@@ -397,7 +409,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withProxy(final Proxy p) {
-<span class="nc" id="L400">        return withConnector(new ImpatientHttpConnector(url -&gt; (HttpURLConnection) url.openConnection(p)));</span>
+<span class="nc" id="L412">        return withConnector(new ImpatientHttpConnector(url -&gt; (HttpURLConnection) url.openConnection(p)));</span>
     }
 
     /**
@@ -408,7 +420,7 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public GitHub build() throws IOException {
-<span class="fc" id="L411">        return new GitHub(endpoint,</span>
+<span class="fc" id="L423">        return new GitHub(endpoint,</span>
                 user,
                 oauthToken,
                 jwtToken,
@@ -422,9 +434,9 @@ public class GitHubBuilder implements Cloneable {
     @Override
     public GitHubBuilder clone() {
         try {
-<span class="fc" id="L425">            return (GitHubBuilder) super.clone();</span>
-<span class="nc" id="L426">        } catch (CloneNotSupportedException e) {</span>
-<span class="nc" id="L427">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
+<span class="fc" id="L437">            return (GitHubBuilder) super.clone();</span>
+<span class="nc" id="L438">        } catch (CloneNotSupportedException e) {</span>
+<span class="nc" id="L439">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
         }
     }
 }

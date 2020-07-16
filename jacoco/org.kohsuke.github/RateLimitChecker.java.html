@@ -5,26 +5,23 @@ import java.util.logging.Logger;
 
 /**
  * A GitHub API Rate Limit Checker called before each request
+ *
  * &lt;p&gt;
- * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
- * number of requests remaining is returned in the response header and can also be requested using
- * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the &quot;rate limit&quot;.
+ * GitHub allots a certain number of requests to each user or application per period of time. The number of requests
+ * remaining and the time when the number will be reset is returned in the response header and can also be requested
+ * using {@link GitHub#getRateLimit()}. The &quot;requests per interval&quot; is referred to as the &quot;rate limit&quot;.
  * &lt;/p&gt;
  * &lt;p&gt;
  * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
  * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
  * met.
  * &lt;/p&gt;
- * &lt;p&gt;
- * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each {@link GitHub}
- * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
- * &lt;/p&gt;
  */
-<span class="fc" id="L23">public abstract class RateLimitChecker {</span>
+<span class="fc" id="L20">public abstract class RateLimitChecker {</span>
 
-<span class="fc" id="L25">    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());</span>
+<span class="fc" id="L22">    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());</span>
 
-<span class="fc" id="L27">    public static final RateLimitChecker NONE = new RateLimitChecker() {</span>
+<span class="fc" id="L24">    public static final RateLimitChecker NONE = new RateLimitChecker() {</span>
     };
 
     /**
@@ -33,28 +30,21 @@ import java.util.logging.Logger;
      * free to choose whatever strategy they prefer for what is considered to exceed the budget and how long to sleep.
      *
      * &lt;p&gt;
-     * The caller of this method figures out which {@link GHRateLimit.Record} applies for the current request add
+     * The caller of this method figures out which {@link GHRateLimit.Record} applies for the current request and
      * provides it to this method.
      * &lt;/p&gt;
      * &lt;p&gt;
-     * It is important to remember that rate limit reset times are only accurate to the second. Trying to sleep to
-     * exactly the reset time would be likely to produce worse behavior rather than better. For this reason
-     * {@link GitHubRateLimitChecker} may choose to add more sleep times when a checker indicates the rate limit was
-     * exceeded.
+     * As long as this method returns {@code true} it is guaranteed that {@link GitHubRateLimitChecker} will retrieve
+     * updated rate limit information and call this method again with {@code count} incremented by one. When this
+     * checker returns {@code false}, the calling {@link GitHubRateLimitChecker} will let the request continue.
      * &lt;/p&gt;
      * &lt;p&gt;
-     * As long as this method returns {@code true} it is guaranteed that {@link GitHubRateLimitChecker} will get updated
-     * rate limit information and call this method again with {@code count} incremented by one. After this method
-     * returns {@code true} at least once, the calling {@link GitHubRateLimitChecker} may choose to wait some additional
-     * period of time between calls to this checker.
+     * Rate limit reset times are only accurate to the second. Trying to sleep to exactly the reset time could result in
+     * requests being sent before the new rate limit was available. For this reason, if this method returned
+     * {@code true} at least once for a particular request, {@link GitHubRateLimitChecker} may choose to sleep for some
+     * small additional between calls and before letting the request continue.
      * &lt;/p&gt;
-     * &lt;p&gt;
-     * After this checker returns {@code false}, the calling {@link GitHubRateLimitChecker} will let the request
-     * continue. If this method returned {@code true} at least once for a particular request, the calling
-     * {@link GitHubRateLimitChecker} may choose to wait some additional period of time before letting the request be
-     * sent.
-     * &lt;/p&gt;
-     *
+     * 
      * @param rateLimitRecord
      *            the current {@link GHRateLimit.Record} to check against.
      * @param count
@@ -65,25 +55,25 @@ import java.util.logging.Logger;
      *             if the thread is interrupted while sleeping
      */
     protected boolean checkRateLimit(GHRateLimit.Record rateLimitRecord, long count) throws InterruptedException {
-<span class="nc" id="L68">        return false;</span>
+<span class="nc" id="L58">        return false;</span>
     }
 
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
-<span class="fc" id="L73">        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (sleepMilliseconds &gt; 0) {</span>
-<span class="fc" id="L75">            String message = String.format(</span>
+<span class="fc" id="L63">        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (sleepMilliseconds &gt; 0) {</span>
+<span class="fc" id="L65">            String message = String.format(</span>
                     &quot;GitHub API - Current quota has %d remaining of %d. Waiting for quota to reset at %tT.&quot;,
-<span class="fc" id="L77">                    record.getRemaining(),</span>
-<span class="fc" id="L78">                    record.getLimit(),</span>
-<span class="fc" id="L79">                    record.getResetDate());</span>
+<span class="fc" id="L67">                    record.getRemaining(),</span>
+<span class="fc" id="L68">                    record.getLimit(),</span>
+<span class="fc" id="L69">                    record.getResetDate());</span>
 
-<span class="fc" id="L81">            LOGGER.log(Level.INFO, message);</span>
+<span class="fc" id="L71">            LOGGER.log(Level.INFO, message);</span>
 
-<span class="fc" id="L83">            Thread.sleep(sleepMilliseconds);</span>
-<span class="fc" id="L84">            return true;</span>
+<span class="fc" id="L73">            Thread.sleep(sleepMilliseconds);</span>
+<span class="fc" id="L74">            return true;</span>
         }
-<span class="nc" id="L86">        return false;</span>
+<span class="nc" id="L76">        return false;</span>
     }
 
     /**
@@ -92,19 +82,19 @@ import java.util.logging.Logger;
     public static class LiteralValue extends RateLimitChecker {
         private final int sleepAtOrBelow;
 
-<span class="fc" id="L95">        public LiteralValue(int sleepAtOrBelow) {</span>
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">            if (sleepAtOrBelow &lt; 0) {</span>
-<span class="nc" id="L97">                throw new IllegalArgumentException(&quot;sleepAtOrBelow must &gt;= 0&quot;);</span>
+<span class="fc" id="L85">        public LiteralValue(int sleepAtOrBelow) {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (sleepAtOrBelow &lt; 0) {</span>
+<span class="nc" id="L87">                throw new IllegalArgumentException(&quot;sleepAtOrBelow must &gt;= 0&quot;);</span>
             }
-<span class="fc" id="L99">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
-<span class="fc" id="L100">        }</span>
+<span class="fc" id="L89">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
+<span class="fc" id="L90">        }</span>
 
         @Override
         protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
-<span class="fc bfc" id="L104" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
-<span class="fc" id="L105">                return sleepUntilReset(record);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
+<span class="fc" id="L95">                return sleepUntilReset(record);</span>
             }
-<span class="fc" id="L107">            return false;</span>
+<span class="fc" id="L97">            return false;</span>
         }
 
     }

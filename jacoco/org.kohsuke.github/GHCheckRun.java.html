@@ -74,8 +74,14 @@ import java.util.Date;
 <span class="fc" id="L74">        return conclusion;</span>
     }
 
-<span class="fc" id="L77">    public static enum Conclusion {</span>
-<span class="fc" id="L78">        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED</span>
+    /**
+     * Final conclusion of the check.
+     *
+     * From &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#create-a-check-run--parameters&quot;&gt;Check Run
+     * Parameters - &lt;code&gt;conclusion&lt;/code&gt;&lt;/a&gt;.
+     */
+<span class="fc" id="L83">    public static enum Conclusion {</span>
+<span class="fc" id="L84">        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED</span>
     }
 
     /**
@@ -84,7 +90,7 @@ import java.util.Date;
      * @return Name of the check run
      */
     public String getName() {
-<span class="fc" id="L87">        return name;</span>
+<span class="fc" id="L93">        return name;</span>
     }
 
     /**
@@ -93,7 +99,7 @@ import java.util.Date;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L96">        return headSha;</span>
+<span class="fc" id="L102">        return headSha;</span>
     }
 
     /**
@@ -102,12 +108,12 @@ import java.util.Date;
      * @return Pull requests of this check run
      */
     GHPullRequest[] getPullRequests() throws IOException {
-<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">            for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="nc" id="L107">                singlePull.refresh();</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="nc" id="L113">                singlePull.refresh();</span>
             }
         }
-<span class="nc" id="L110">        return pullRequests;</span>
+<span class="nc" id="L116">        return pullRequests;</span>
     }
 
     /**
@@ -118,7 +124,7 @@ import java.util.Date;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L121">        return htmlUrl;</span>
+<span class="fc" id="L127">        return htmlUrl;</span>
     }
 
     /**
@@ -128,7 +134,7 @@ import java.util.Date;
      * @return Global node id
      */
     public String getNodeId() {
-<span class="fc" id="L131">        return nodeId;</span>
+<span class="fc" id="L137">        return nodeId;</span>
     }
 
     /**
@@ -137,7 +143,7 @@ import java.util.Date;
      * @return Reference id
      */
     public String getExternalId() {
-<span class="fc" id="L140">        return externalId;</span>
+<span class="fc" id="L146">        return externalId;</span>
     }
 
     /**
@@ -146,7 +152,7 @@ import java.util.Date;
      * @return Details URL
      */
     public URL getDetailsUrl() {
-<span class="fc" id="L149">        return detailsUrl;</span>
+<span class="fc" id="L155">        return detailsUrl;</span>
     }
 
     /**
@@ -155,7 +161,7 @@ import java.util.Date;
      * @return Timestamp of the start time
      */
     public Date getStartedAt() {
-<span class="fc" id="L158">        return GitHubClient.parseDate(startedAt);</span>
+<span class="fc" id="L164">        return GitHubClient.parseDate(startedAt);</span>
     }
 
     /**
@@ -164,7 +170,7 @@ import java.util.Date;
      * @return Timestamp of the completed time
      */
     public Date getCompletedAt() {
-<span class="fc" id="L167">        return GitHubClient.parseDate(completedAt);</span>
+<span class="fc" id="L173">        return GitHubClient.parseDate(completedAt);</span>
     }
 
     /**
@@ -173,7 +179,7 @@ import java.util.Date;
      * @return GitHub App
      */
     public GHApp getApp() {
-<span class="fc" id="L176">        return app;</span>
+<span class="fc" id="L182">        return app;</span>
     }
 
     /**
@@ -182,7 +188,7 @@ import java.util.Date;
      * @return Check suite
      */
     public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L185">        return checkSuite;</span>
+<span class="fc" id="L191">        return checkSuite;</span>
     }
 
     /**
@@ -191,7 +197,7 @@ import java.util.Date;
      * @return Output of a check run
      */
     public Output getOutput() {
-<span class="fc" id="L194">        return output;</span>
+<span class="fc" id="L200">        return output;</span>
     }
 
     /**
@@ -199,7 +205,7 @@ import java.util.Date;
      *
      * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
      */
-<span class="fc" id="L202">    public static class Output {</span>
+<span class="fc" id="L208">    public static class Output {</span>
         private String title;
         private String summary;
         private String text;
@@ -212,7 +218,7 @@ import java.util.Date;
          * @return title of check run
          */
         public String getTitle() {
-<span class="fc" id="L215">            return title;</span>
+<span class="fc" id="L221">            return title;</span>
         }
 
         /**
@@ -221,7 +227,7 @@ import java.util.Date;
          * @return summary of check run
          */
         public String getSummary() {
-<span class="fc" id="L224">            return summary;</span>
+<span class="fc" id="L230">            return summary;</span>
         }
 
         /**
@@ -230,7 +236,7 @@ import java.util.Date;
          * @return Details of the check run
          */
         public String getText() {
-<span class="fc" id="L233">            return text;</span>
+<span class="fc" id="L239">            return text;</span>
         }
 
         /**
@@ -239,7 +245,7 @@ import java.util.Date;
          * @return annotation count of a check run
          */
         public int getAnnotationsCount() {
-<span class="fc" id="L242">            return annotationsCount;</span>
+<span class="fc" id="L248">            return annotationsCount;</span>
         }
 
         /**
@@ -248,12 +254,12 @@ import java.util.Date;
          * @return URL of annotations
          */
         public URL getAnnotationsUrl() {
-<span class="fc" id="L251">            return annotationsUrl;</span>
+<span class="fc" id="L257">            return annotationsUrl;</span>
         }
     }
 
-<span class="fc" id="L255">    public static enum AnnotationLevel {</span>
-<span class="fc" id="L256">        NOTICE, WARNING, FAILURE</span>
+<span class="fc" id="L261">    public static enum AnnotationLevel {</span>
+<span class="fc" id="L262">        NOTICE, WARNING, FAILURE</span>
     }
 
 }

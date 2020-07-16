@@ -175,6 +175,19 @@ import javax.annotation.Nonnull;
     }
 
     /**
+     * Retrieves the teams that are children of this team.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHTeam&gt; listChildTeams() throws IOException {
+<span class="fc" id="L185">        return root.createRequest()</span>
+<span class="fc" id="L186">                .withUrlPath(api(&quot;/teams&quot;))</span>
+<span class="fc" id="L187">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
+    }
+
+    /**
      * Gets members.
      *
      * @return the members
@@ -182,7 +195,7 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public Set&lt;GHUser&gt; getMembers() throws IOException {
-<span class="nc" id="L185">        return listMembers().toSet();</span>
+<span class="nc" id="L198">        return listMembers().toSet();</span>
     }
 
     /**
@@ -194,10 +207,10 @@ import javax.annotation.Nonnull;
      */
     public boolean hasMember(GHUser user) {
         try {
-<span class="fc" id="L197">            root.createRequest().withUrlPath(&quot;/teams/&quot; + getId() + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L198">            return true;</span>
-<span class="nc" id="L199">        } catch (IOException ignore) {</span>
-<span class="nc" id="L200">            return false;</span>
+<span class="fc" id="L210">            root.createRequest().withUrlPath(&quot;/teams/&quot; + getId() + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L211">            return true;</span>
+<span class="nc" id="L212">        } catch (IOException ignore) {</span>
+<span class="nc" id="L213">            return false;</span>
         }
     }
 
@@ -209,11 +222,11 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
-<span class="fc" id="L212">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
-<span class="fc" id="L214">            m.put(r.getName(), r);</span>
-<span class="fc" id="L215">        }</span>
-<span class="fc" id="L216">        return m;</span>
+<span class="fc" id="L225">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
+<span class="fc" id="L227">            m.put(r.getName(), r);</span>
+<span class="fc" id="L228">        }</span>
+<span class="fc" id="L229">        return m;</span>
     }
 
     /**
@@ -222,9 +235,9 @@ import javax.annotation.Nonnull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L225">        return root.createRequest()</span>
-<span class="fc" id="L226">                .withUrlPath(api(&quot;/repos&quot;))</span>
-<span class="fc" id="L227">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+<span class="fc" id="L238">        return root.createRequest()</span>
+<span class="fc" id="L239">                .withUrlPath(api(&quot;/repos&quot;))</span>
+<span class="fc" id="L240">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
     }
 
     /**
@@ -239,8 +252,8 @@ import javax.annotation.Nonnull;
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-<span class="nc" id="L242">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L243">    }</span>
+<span class="nc" id="L255">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L256">    }</span>
 
     /**
      * Adds a member to the team
@@ -255,12 +268,12 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="nc" id="L258">        root.createRequest()</span>
-<span class="nc" id="L259">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L260">                .with(&quot;role&quot;, role)</span>
-<span class="nc" id="L261">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
-<span class="nc" id="L262">                .send();</span>
-<span class="nc" id="L263">    }</span>
+<span class="nc" id="L271">        root.createRequest()</span>
+<span class="nc" id="L272">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L273">                .with(&quot;role&quot;, role)</span>
+<span class="nc" id="L274">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
+<span class="nc" id="L275">                .send();</span>
+<span class="nc" id="L276">    }</span>
 
     /**
      * Removes a member to the team.
@@ -271,8 +284,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-<span class="nc" id="L274">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/members/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L275">    }</span>
+<span class="nc" id="L287">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/members/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L288">    }</span>
 
     /**
      * Add.
@@ -283,8 +296,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void add(GHRepository r) throws IOException {
-<span class="nc" id="L286">        add(r, null);</span>
-<span class="nc" id="L287">    }</span>
+<span class="nc" id="L299">        add(r, null);</span>
+<span class="nc" id="L300">    }</span>
 
     /**
      * Add.
@@ -297,12 +310,12 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-<span class="nc" id="L300">        root.createRequest()</span>
-<span class="nc" id="L301">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L302">                .with(&quot;permission&quot;, permission)</span>
-<span class="nc" id="L303">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="nc" id="L304">                .send();</span>
-<span class="nc" id="L305">    }</span>
+<span class="nc" id="L313">        root.createRequest()</span>
+<span class="nc" id="L314">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L315">                .with(&quot;permission&quot;, permission)</span>
+<span class="nc" id="L316">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="nc" id="L317">                .send();</span>
+<span class="nc" id="L318">    }</span>
 
     /**
      * Remove.
@@ -313,8 +326,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-<span class="nc" id="L316">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName())).send();</span>
-<span class="nc" id="L317">    }</span>
+<span class="nc" id="L329">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName())).send();</span>
+<span class="nc" id="L330">    }</span>
 
     /**
      * Deletes this team.
@@ -323,11 +336,11 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L326">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="nc" id="L327">    }</span>
+<span class="nc" id="L339">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="nc" id="L340">    }</span>
 
     private String api(String tail) {
-<span class="fc" id="L330">        return &quot;/teams/&quot; + getId() + tail;</span>
+<span class="fc" id="L343">        return &quot;/teams/&quot; + getId() + tail;</span>
     }
 
     /**
@@ -342,7 +355,7 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public GHDiscussion.Creator createDiscussion(String title) throws IOException {
-<span class="fc" id="L345">        return GHDiscussion.create(this).title(title);</span>
+<span class="fc" id="L358">        return GHDiscussion.create(this).title(title);</span>
     }
 
     /**
@@ -353,37 +366,37 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public GHOrganization getOrganization() throws IOException {
-<span class="fc" id="L356">        refresh(organization);</span>
-<span class="fc" id="L357">        return organization;</span>
+<span class="fc" id="L369">        refresh(organization);</span>
+<span class="fc" id="L370">        return organization;</span>
     }
 
     @Override
     public void refresh() throws IOException {
-<span class="fc" id="L362">        root.createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root);</span>
-<span class="fc" id="L363">    }</span>
+<span class="fc" id="L375">        root.createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root);</span>
+<span class="fc" id="L376">    }</span>
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L367">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L380">        return GitHubClient.parseURL(html_url);</span>
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (this == o) {</span>
-<span class="fc" id="L373">            return true;</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L386">            return true;</span>
         }
-<span class="pc bpc" id="L375" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L376">            return false;</span>
+<span class="pc bpc" id="L388" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L389">            return false;</span>
         }
-<span class="fc" id="L378">        GHTeam ghTeam = (GHTeam) o;</span>
-<span class="pc bpc" id="L379" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
-<span class="pc bpc" id="L380" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
-<span class="pc bpc" id="L381" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; privacy == ghTeam.privacy;</span>
+<span class="fc" id="L391">        GHTeam ghTeam = (GHTeam) o;</span>
+<span class="pc bpc" id="L392" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
+<span class="pc bpc" id="L393" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
+<span class="pc bpc" id="L394" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; privacy == ghTeam.privacy;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L386">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
+<span class="fc" id="L399">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

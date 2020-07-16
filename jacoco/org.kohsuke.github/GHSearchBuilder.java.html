@@ -25,7 +25,8 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
 <span class="fc" id="L25">        super(root);</span>
 <span class="fc" id="L26">        this.receiverType = receiverType;</span>
 <span class="fc" id="L27">        req.withUrlPath(getApiUrl());</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L28">        req.rateLimit(RateLimitTarget.SEARCH);</span>
+<span class="fc" id="L29">    }</span>
 
     /**
      * Search terms.
@@ -35,8 +36,8 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
      * @return the gh query builder
      */
     public GHQueryBuilder&lt;T&gt; q(String term) {
-<span class="fc" id="L38">        terms.add(term);</span>
-<span class="fc" id="L39">        return this;</span>
+<span class="fc" id="L39">        terms.add(term);</span>
+<span class="fc" id="L40">        return this;</span>
     }
 
     /**
@@ -45,11 +46,11 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
     @Override
     public PagedSearchIterable&lt;T&gt; list() {
 
-<span class="fc" id="L48">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
+<span class="fc" id="L49">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
         try {
-<span class="fc" id="L50">            return new PagedSearchIterable&lt;&gt;(root, req.build(), receiverType);</span>
-<span class="nc" id="L51">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L52">            throw new GHException(&quot;&quot;, e);</span>
+<span class="fc" id="L51">            return new PagedSearchIterable&lt;&gt;(root, req.build(), receiverType);</span>
+<span class="nc" id="L52">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L53">            throw new GHException(&quot;&quot;, e);</span>
         }
     }
 

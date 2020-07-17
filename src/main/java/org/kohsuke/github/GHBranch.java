@@ -101,7 +101,11 @@ public class GHBranch {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-        return root.createRequest().withPreview(Previews.LUKE_CAGE).setRawUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);
+        return root.createRequest()
+                .withPreview(Previews.LUKE_CAGE)
+                .setRawUrlPath(protection_url)
+                .fetch(GHBranchProtection.class)
+                .wrap(this);
     }
 
     /**

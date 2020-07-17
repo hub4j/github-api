@@ -10,6 +10,8 @@ import static org.kohsuke.github.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.
+ *
+ * @see <a href="https://docs.github.com/en/rest/reference/repos#get-branch-protection">GitHub Branch Protection</a>
  */
 @SuppressFBWarnings(
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",

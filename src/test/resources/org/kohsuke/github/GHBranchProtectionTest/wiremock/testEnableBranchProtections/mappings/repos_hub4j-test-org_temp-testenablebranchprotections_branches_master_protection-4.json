@@ -1,8 +1,8 @@
 {
-  "id": "816d7fb5-30e5-486c-8948-11c4e46d9dab",
-  "name": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master_protection",
+  "id": "3cdd44cf-a62c-43f6-abad-de7c8b65bfe3",
+  "name": "repos_hub4j-test-org_temp-testenablebranchprotections_branches_master_protection",
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection",
+    "url": "/repos/hub4j-test-org/temp-testEnableBranchProtections/branches/master/protection",
     "method": "PUT",
     "headers": {
       "Accept": {
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"required_pull_request_reviews\":{},\"required_status_checks\":null,\"restrictions\":null,\"enforce_admins\":false}",
+        "equalToJson": "{\"required_pull_request_reviews\":{\"required_approving_review_count\":2,\"require_code_owner_reviews\":true,\"dismiss_stale_reviews\":true},\"required_status_checks\":{\"contexts\":[\"test-status-check\"],\"strict\":true},\"restrictions\":null,\"enforce_admins\":true}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,21 +19,21 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master_protection-4.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testenablebranchprotections_branches_master_protection-4.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 17 Jul 2020 17:50:38 GMT",
+      "Date": "Fri, 17 Jul 2020 17:40:28 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4981",
-      "X-RateLimit-Reset": "1595011796",
+      "X-RateLimit-Remaining": "4965",
+      "X-RateLimit-Reset": "1595008101",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"f50071de6fc1a497405fe0ad6da7d674\"",
+      "ETag": "W/\"a725b1a9d17c9ae6f4c1397a379cbfe1\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.luke-cage-preview; format=json",
@@ -43,10 +43,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D206:1C0D:B36E9D:1A83850:5F11E4ED"
+      "X-GitHub-Request-Id": "CEEF:2B4C:15D087A:2472E7C:5F11E28C"
     }
   },
-  "uuid": "816d7fb5-30e5-486c-8948-11c4e46d9dab",
+  "uuid": "3cdd44cf-a62c-43f6-abad-de7c8b65bfe3",
   "persistent": true,
   "insertionIndex": 4
 }

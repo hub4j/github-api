@@ -17,5 +17,14 @@
   "enforce_admins": {
     "url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableBranchProtections/branches/master/protection/enforce_admins",
     "enabled": true
+  },
+  "required_linear_history": {
+    "enabled": false
+  },
+  "allow_force_pushes": {
+    "enabled": false
+  },
+  "allow_deletions": {
+    "enabled": false
   }
 }

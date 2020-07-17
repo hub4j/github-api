@@ -1,6 +1,6 @@
 {
-  "id": 222596057,
-  "node_id": "MDEwOlJlcG9zaXRvcnkyMjI1OTYwNTc=",
+  "id": 280490476,
+  "node_id": "MDEwOlJlcG9zaXRvcnkyODA0OTA0NzY=",
   "name": "temp-testEnableRequireReviewsOnly",
   "full_name": "hub4j-test-org/temp-testEnableRequireReviewsOnly",
   "private": false,
@@ -64,9 +64,9 @@
   "labels_url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/labels{/name}",
   "releases_url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/releases{/id}",
   "deployments_url": "https://api.github.com/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/deployments",
-  "created_at": "2019-11-19T03:01:34Z",
-  "updated_at": "2019-11-19T03:01:40Z",
-  "pushed_at": "2019-11-19T03:01:36Z",
+  "created_at": "2020-07-17T17:50:32Z",
+  "updated_at": "2020-07-17T17:50:36Z",
+  "pushed_at": "2020-07-17T17:50:34Z",
   "git_url": "git://github.com/hub4j-test-org/temp-testEnableRequireReviewsOnly.git",
   "ssh_url": "git@github.com:hub4j-test-org/temp-testEnableRequireReviewsOnly.git",
   "clone_url": "https://github.com/hub4j-test-org/temp-testEnableRequireReviewsOnly.git",
@@ -96,9 +96,11 @@
     "push": true,
     "pull": true
   },
+  "temp_clone_token": "",
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
+  "delete_branch_on_merge": false,
   "organization": {
     "login": "hub4j-test-org",
     "id": 7544739,
@@ -120,5 +122,5 @@
     "site_admin": false
   },
   "network_count": 0,
-  "subscribers_count": 4
+  "subscribers_count": 8
 }

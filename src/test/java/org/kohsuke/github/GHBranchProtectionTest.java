@@ -6,6 +6,8 @@ import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
+import static org.hamcrest.CoreMatchers.*;
+
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     private static final String BRANCH = "master";
     private static final String BRANCH_REF = "heads/" + BRANCH;
@@ -32,6 +34,14 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
                 .includeAdmins()
                 .enable();
 
+        verifyBranchProtection(protection);
+
+        // Get goes through a different code path. Make sure it also gets the correct data.
+        protection = branch.getProtection();
+        verifyBranchProtection(protection);
+    }
+
+    private void verifyBranchProtection(GHBranchProtection protection) {
         RequiredStatusChecks statusChecks = protection.getRequiredStatusChecks();
         assertNotNull(statusChecks);
         assertTrue(statusChecks.isRequiresBranchUpToDate());
@@ -66,7 +76,20 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     public void testEnableRequireReviewsOnly() throws Exception {
         GHBranchProtection protection = branch.enableProtection().requireReviews().enable();
 
+        RequiredReviews requiredReviews = protection.getRequiredReviews();
         assertNotNull(protection.getRequiredReviews());
+        assertFalse(requiredReviews.isDismissStaleReviews());
+        assertFalse(requiredReviews.isRequireCodeOwnerReviews());
+        assertThat(protection.getRequiredReviews().getRequiredReviewers(), equalTo(1));
+
+        // Get goes through a different code path. Make sure it also gets the correct data.
+        protection = branch.getProtection();
+        requiredReviews = protection.getRequiredReviews();
+
+        assertNotNull(protection.getRequiredReviews());
+        assertFalse(requiredReviews.isDismissStaleReviews());
+        assertFalse(requiredReviews.isRequireCodeOwnerReviews());
+        assertThat(protection.getRequiredReviews().getRequiredReviewers(), equalTo(1));
     }
 
     @Test

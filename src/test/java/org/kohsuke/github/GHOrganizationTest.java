@@ -12,6 +12,7 @@ import java.util.List;
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
+    public static final String GITHUB_API_TEMPLATE_TEST = "github-api-template-test";
     public static final String TEAM_NAME_CREATE = "create-team-test";
 
     @Before
@@ -52,6 +53,38 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .team(org.getTeamByName("Core Developers"))
                 .autoInit(true)
                 .create();
+        Assert.assertNotNull(repository);
+        Assert.assertNotNull(repository.getReadme());
+    }
+
+    @Test
+    public void testCreateRepositoryWithParametersIsTemplate() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEMPLATE_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repository = org.createRepositoryWithParametersIsTemplate(GITHUB_API_TEMPLATE_TEST, true)
+                .description("a test template repository used to test kohsuke's github-api")
+                .homepage("http://github-api.kohsuke.org/")
+                .team(org.getTeamByName("Core Developers"))
+                .autoInit(true)
+                .create();
+
+        Assert.assertNotNull(repository);
+        Assert.assertNotNull(repository.getReadme());
+    }
+
+    @Test
+    public void testCreateRepositoryWithTemplate() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repository = org
+                .createRepositoryWithTemplate(GITHUB_API_TEMPLATE_TEST,
+                        GITHUB_API_TEST_ORG,
+                        GITHUB_API_TEST,
+                        GITHUB_API_TEST_ORG)
+                .createWithTemplate();
+
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());
     }

@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.BAPTISE;
+
 /**
  * Creates a repository
  *
@@ -18,6 +20,22 @@ public class GHCreateRepositoryBuilder {
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
         this.builder.with("name", name);
+    }
+
+    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name, Boolean isTemplate) {
+        this.root = root;
+        this.apiUrlTail = apiUrlTail;
+        this.builder = root.createRequest();
+        this.builder.with("name", name);
+        this.builder.with("is_template", isTemplate);
+    }
+
+    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name, String owner) {
+        this.root = root;
+        this.apiUrlTail = apiUrlTail;
+        this.builder = root.createRequest();
+        this.builder.with("name", name);
+        this.builder.with("owner", owner);
     }
 
     /**
@@ -209,6 +227,17 @@ public class GHCreateRepositoryBuilder {
      */
     public GHRepository create() throws IOException {
         return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);
+    }
+
+    /**
+     * Creates a repository with all the parameters, and with Preview BAPTISE for template repo.
+     *
+     * @return the gh repository
+     * @throws IOException
+     *             if repsitory cannot be created
+     */
+    public GHRepository createWithTemplate() throws IOException {
+        return builder.method("POST").withPreview(BAPTISE).withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);
     }
 
 }

@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -979,13 +980,12 @@ public class GHRepository extends GHObject {
     private void modifyCollaborators(@NonNull Collection<GHUser> users,
             @NonNull String method,
             @CheckForNull GHOrganization.Permission permission) throws IOException {
-        Requester requester = root.createRequest().method(method);
-
-        if (permission != null) {
-            requester = requester.with("permission", permission).inBody();
-        }
-
-        for (GHUser user : users) {
+        // Make sure that the users collection doesn't have any duplicates
+        for (GHUser user : new LinkedHashSet<GHUser>(users)) {
+            Requester requester = root.createRequest().method(method);
+            if (permission != null) {
+                requester = requester.with("permission", permission).inBody();
+            }
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }

@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/stable\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"testUnsetMilestoneFromPullRequest\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/stable\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"testUnsetMilestoneFromPullRequest\",\"body\":\"## test pull request\",\"base\":\"master\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

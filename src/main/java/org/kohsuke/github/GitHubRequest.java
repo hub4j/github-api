@@ -671,13 +671,9 @@ class GitHubRequest {
                 tailUrlPath += "/" + String.join("/", urlPathItems);
             }
 
-            if (this.urlPath.endsWith("/")) {
-                tailUrlPath = StringUtils.stripStart(tailUrlPath, "/");
-            } else {
-                tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
-            }
+            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
 
-            this.urlPath += urlPathEncode(tailUrlPath);
+            this.urlPath = urlPathEncode(tailUrlPath);
             return (B) this;
         }
 

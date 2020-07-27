@@ -1,0 +1,54 @@
+{
+  "id": "375956e0-764e-4e6c-bfbe-aed30d86ee89",
+  "name": "repos_hub4j-test-org_github-api_milestones",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/milestones",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"For testUnsetMilestone\",\"title\":\"Unset Test Milestone\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_milestones-4.json",
+    "headers": {
+      "Date": "Mon, 27 Jul 2020 20:46:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4910",
+      "X-RateLimit-Reset": "1595885200",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"e78bfb2829de0438b07cf0deac4248ee\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/milestones/1",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C730:4712:B35F63:FFAB35:5F1F3D2B"
+    }
+  },
+  "uuid": "375956e0-764e-4e6c-bfbe-aed30d86ee89",
+  "persistent": true,
+  "insertionIndex": 4
+}

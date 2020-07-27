@@ -532,7 +532,7 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from 'user/reponame' string that GitHub calls as "repository name"
+     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name"
      *
      * @param name
      *            the name
@@ -543,6 +543,9 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
+        if (tokens.length < 2) {
+            throw new IllegalArgumentException("Repository name must be in format owner/repo");
+        }
         return createRequest().withUrlPath("/repos/" + tokens[0] + '/' + tokens[1])
                 .fetch(GHRepository.class)
                 .wrap(this);

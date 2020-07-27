@@ -70,6 +70,26 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         assertEquals(null, issue.getMilestone());
     }
 
+    @Test
+    public void testUnsetMilestoneFromPullRequest() throws IOException {
+        GHRepository repo = getRepository();
+        GHMilestone milestone = repo.createMilestone("Unset Test Milestone", "For testUnsetMilestone");
+        GHPullRequest p = repo.createPullRequest("testUnsetMilestoneFromPullRequest",
+                "test/stable",
+                "master",
+                "## test pull request");
+
+        // set the milestone
+        p.setMilestone(milestone);
+        p = repo.getPullRequest(p.getNumber()); // force reload
+        assertEquals(milestone.getNumber(), p.getMilestone().getNumber());
+
+        // remove the milestone
+        p.setMilestone(null);
+        p = repo.getPullRequest(p.getNumber()); // force reload
+        assertNull(p.getMilestone());
+    }
+
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

@@ -239,7 +239,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
+        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
 
     /**
@@ -296,9 +296,9 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
         if (milestone == null) {
-            editNullable("milestone", null);
+            editIssue("milestone", null);
         } else {
-            edit("milestone", milestone.getNumber());
+            editIssue("milestone", milestone.getNumber());
         }
     }
 

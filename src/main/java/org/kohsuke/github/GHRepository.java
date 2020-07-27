@@ -980,12 +980,13 @@ public class GHRepository extends GHObject {
     private void modifyCollaborators(@NonNull Collection<GHUser> users,
             @NonNull String method,
             @CheckForNull GHOrganization.Permission permission) throws IOException {
+        Requester requester = root.createRequest().method(method);
+        if (permission != null) {
+            requester = requester.with("permission", permission).inBody();
+        }
+
         // Make sure that the users collection doesn't have any duplicates
         for (GHUser user : new LinkedHashSet<GHUser>(users)) {
-            Requester requester = root.createRequest().method(method);
-            if (permission != null) {
-                requester = requester.with("permission", permission).inBody();
-            }
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }

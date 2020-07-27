@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -68,7 +69,9 @@ public class GHRepository extends GHObject {
     /* package almost final */ transient GitHub root;
 
     private String nodeId, description, homepage, name, full_name;
+
     private String html_url; // this is the UI
+
     /*
      * The license information makes use of the preview API.
      *
@@ -77,22 +80,30 @@ public class GHRepository extends GHObject {
     private GHLicense license;
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
+
     private GHUser owner; // not fully populated. beware.
+
     private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
 
     private boolean allow_squash_merge;
+
     private boolean allow_merge_commit;
+
     private boolean allow_rebase_merge;
 
     private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
     private boolean _private;
+
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
+
     private String pushed_at;
+
     private Map<Integer, GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
 
     private String default_branch, language;
+
     private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
 
     @SkipFromToString
@@ -970,12 +981,12 @@ public class GHRepository extends GHObject {
             @NonNull String method,
             @CheckForNull GHOrganization.Permission permission) throws IOException {
         Requester requester = root.createRequest().method(method);
-
         if (permission != null) {
             requester = requester.with("permission", permission).inBody();
         }
 
-        for (GHUser user : users) {
+        // Make sure that the users collection doesn't have any duplicates
+        for (GHUser user : new LinkedHashSet<GHUser>(users)) {
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
@@ -1002,8 +1013,9 @@ public class GHRepository extends GHObject {
 
     private void edit(String key, String value) throws IOException {
         Requester requester = root.createRequest();
-        if (!key.equals("name"))
+        if (!key.equals("name")) {
             requester.with("name", name); // even when we don't change the name, we need to send it in
+        }
         requester.with(key, value).method("PATCH").withUrlPath(getApiTailUrl("")).send();
     }
 
@@ -1248,8 +1260,9 @@ public class GHRepository extends GHObject {
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
             GHRepository r = root.getMyself().getRepository(name);
-            if (r != null)
+            if (r != null) {
                 return r;
+            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -1278,8 +1291,9 @@ public class GHRepository extends GHObject {
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
             GHRepository r = org.getRepository(name);
-            if (r != null)
+            if (r != null) {
                 return r;
+            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -2721,8 +2735,9 @@ public class GHRepository extends GHObject {
     }
 
     String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/"))
+        if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
+        }
         return "/repos/" + getOwnerName() + "/" + name + tail;
     }
 
@@ -2829,8 +2844,9 @@ public class GHRepository extends GHObject {
      *             The IO exception
      */
     void populate() throws IOException {
-        if (root.isOffline())
+        if (root.isOffline()) {
             return; // can't populate if the root is offline
+        }
 
         final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
 

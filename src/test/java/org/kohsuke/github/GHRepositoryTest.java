@@ -191,6 +191,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         List<GHUser> users = new ArrayList<GHUser>();
 
         users.add(user);
+        users.add(gitHub.getUser("jimmysombrero2"));
         repo.addCollaborators(users, GHOrganization.Permission.PUSH);
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();

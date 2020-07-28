@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Objects;
 
+import javax.annotation.CheckForNull;
+
 /**
  * A branch in a repository.
  *
@@ -166,28 +168,56 @@ public class GHBranch {
     }
 
     /**
-     * Merge branches.
+     * Merge a branch into this branch.
      *
      * @param headBranch
-     *            the branch whose head is being merged
+     *            the branch whose head will be merged
      *
      * @param commitMessage
      *            the commit message
      *
-     * @return GHCommit the merge commit created
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
      *
      * @throws IOException
      *             if merging fails
      */
+    @CheckForNull
     public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
-        return root.createRequest()
+        return merge(headBranch.getName(), commitMessage);
+    }
+
+    /**
+     * Merge a ref into this branch.
+     *
+     * @param head
+     *            the ref name that will be merged into this branch. Follows the usual ref naming rules, could be a
+     *            branch name, tag, or commit sha.
+     *
+     * @param commitMessage
+     *            the commit message
+     *
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    @CheckForNull
+    public GHCommit merge(String head, String commitMessage) throws IOException {
+        GHCommit result = root.createRequest()
                 .withUrlPath(owner.getApiTailUrl("merges"))
                 .method("POST")
                 .with("commit_message", commitMessage)
                 .with("base", this.name)
-                .with("head", headBranch.getName())
-                .fetch(GHCommit.class)
-                .wrapUp(owner);
+                .with("head", head)
+                .fetch(GHCommit.class);
+
+        if (result != null) {
+            result.wrapUp(owner);
+        }
+
+        return result;
     }
 
     String getApiRoute() {

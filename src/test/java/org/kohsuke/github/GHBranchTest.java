@@ -25,6 +25,18 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
         GHCommit mergeCommit = repository.getBranch(BRANCH_1).merge(otherBranch, commitMessage);
         assertThat(mergeCommit, notNullValue());
         assertThat(mergeCommit.getCommitShortInfo().getMessage(), equalTo(commitMessage));
+
+        // Merging commit sha should work
+        commitMessage = "merging from " + mergeCommit.getSHA1();
+        GHBranch master = repository.getBranch("master");
+        mergeCommit = master.merge(mergeCommit.getSHA1(), commitMessage);
+
+        assertThat(mergeCommit, notNullValue());
+        assertThat(mergeCommit.getCommitShortInfo().getMessage(), equalTo(commitMessage));
+
+        mergeCommit = master.merge(mergeCommit.getSHA1(), commitMessage);
+        // Should be null since all changes already merged
+        assertThat(mergeCommit, nullValue());
     }
 
     private void createRefAndPostContent(String branchName, String sha) throws IOException {

@@ -1,32 +1,25 @@
 {
-  "id": "d02ffee7-28b2-4cba-96f5-b6c57d48c903",
-  "name": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch1",
+  "id": "149b51b4-e911-42b7-b181-488bb6a2bf95",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_branches_master",
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testMergeBranch/contents/testBranch1",
-    "method": "PUT",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/branches/master",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"path\":\"testBranch1\",\"message\":\"testBranch1\",\"branch\":\"testBranch1\",\"content\":\"dGVzdEJyYW5jaDE=\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
-      }
-    ]
+    }
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch1-5.json",
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_branches_master-11.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 19:54:56 GMT",
+      "Date": "Tue, 28 Jul 2020 19:55:00 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4991",
+      "X-RateLimit-Remaining": "4985",
       "X-RateLimit-Reset": "1595969688",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
@@ -34,7 +27,7 @@
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "\"f4dbe8e0bd7a12c64e12252c4cc291f2\"",
+      "ETag": "W/\"c2772edda686a81b33fab1f45051da14\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
@@ -44,10 +37,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "EE13:3784:A64BD:D16FF:5F20828F"
+      "X-GitHub-Request-Id": "EE13:3784:A6552:D17AC:5F208293"
     }
   },
-  "uuid": "d02ffee7-28b2-4cba-96f5-b6c57d48c903",
+  "uuid": "149b51b4-e911-42b7-b181-488bb6a2bf95",
   "persistent": true,
-  "insertionIndex": 5
+  "insertionIndex": 11
 }

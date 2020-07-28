@@ -16,19 +16,19 @@
     }
   },
   "commit": {
-    "sha": "2294f9e512939576357baf7556ff3cb87d75c4bd",
-    "node_id": "MDY6Q29tbWl0MjgzMjkzMjIxOjIyOTRmOWU1MTI5Mzk1NzYzNTdiYWY3NTU2ZmYzY2I4N2Q3NWM0YmQ=",
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/2294f9e512939576357baf7556ff3cb87d75c4bd",
-    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/2294f9e512939576357baf7556ff3cb87d75c4bd",
+    "sha": "506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
+    "node_id": "MDY6Q29tbWl0MjgzMzEzNTkzOjUwNmNmYzViYjQ3YWMwODdiMjZjNmQ5NWQwYWQzMDVjNTkxN2M0YjI=",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
     "author": {
       "name": "Liam Newman",
       "email": "bitwiseman@gmail.com",
-      "date": "2020-07-28T18:18:53Z"
+      "date": "2020-07-28T19:54:57Z"
     },
     "committer": {
       "name": "Liam Newman",
       "email": "bitwiseman@gmail.com",
-      "date": "2020-07-28T18:18:53Z"
+      "date": "2020-07-28T19:54:57Z"
     },
     "tree": {
       "sha": "a183aaff617bc52ba1bdcea74faf24687194faf1",
@@ -37,9 +37,9 @@
     "message": "testBranch2",
     "parents": [
       {
-        "sha": "486418cfccc351dc18b68d0d8c699eefa504aec6",
-        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/486418cfccc351dc18b68d0d8c699eefa504aec6",
-        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/486418cfccc351dc18b68d0d8c699eefa504aec6"
+        "sha": "688a1c3f8bc67deb767f68560ed8c7350d70d50f",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/688a1c3f8bc67deb767f68560ed8c7350d70d50f",
+        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/688a1c3f8bc67deb767f68560ed8c7350d70d50f"
       }
     ],
     "verification": {

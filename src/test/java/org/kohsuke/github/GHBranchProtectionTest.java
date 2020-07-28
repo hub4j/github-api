@@ -112,4 +112,35 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertTrue(protectionTest instanceof GHBranchProtection);
         assertTrue(repo.getBranch(BRANCH).isProtected());
     }
+
+    @Test
+    public void testMergeBranch() throws Exception {
+        String name = "testMergeBranch";
+        String branchName = "test/" + name;
+
+        GHRepository repository = gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+        GHRef masterRef = repository.getRef("heads/master");
+        repository.createRef("refs/heads/" + branchName, masterRef.getObject().getSha());
+
+        GHContentUpdateResponse response = repository.createContent()
+                .content(name)
+                .message(name)
+                .path(name)
+                .branch(branchName)
+                .commit();
+
+        Thread.sleep(1000);
+
+        repository.createContent()
+                .content(name + name)
+                .path(name)
+                .branch(branchName)
+                .message(name)
+                .sha(response.getContent().getSha())
+                .commit();
+
+        GHBranch masterBranch = repository.getBranch("master");
+        GHCommit mergeCommit = repository.getBranch(branchName).merge(masterBranch, "merging master into testBranch");
+        assertNotNull(mergeCommit);
+    }
 }

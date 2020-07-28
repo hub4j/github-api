@@ -165,6 +165,31 @@ public class GHBranch {
         }
     }
 
+    /**
+     * Merge branches.
+     *
+     * @param headBranch
+     *            the branch whose head is being merged
+     *
+     * @param commit_message
+     *            the commit message
+     *
+     * @return GHCommit the merge commit created
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    public GHCommit merge(GHBranch headBranch, String commit_message) throws IOException {
+        return root.createRequest()
+                .withUrlPath(owner.getApiTailUrl("merges"))
+                .method("POST")
+                .with("commit_message", commit_message)
+                .with("base", this.name)
+                .with("head", headBranch.getName())
+                .fetch(GHCommit.class)
+                .wrapUp(owner);
+    }
+
     String getApiRoute() {
         return owner.getApiTailUrl("/branches/" + name);
     }

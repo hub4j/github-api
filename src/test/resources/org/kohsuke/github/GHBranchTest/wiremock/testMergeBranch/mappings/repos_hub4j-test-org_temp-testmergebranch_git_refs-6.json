@@ -1,9 +1,9 @@
 {
-  "id": "ee2d1ed0-0a88-4bdc-9986-3ee2ec1ca9ae",
-  "name": "repos_jkalash_github-api_contents_testbranch1",
+  "id": "ecce543d-da7c-49ac-b13d-09a2c925524b",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_git_refs",
   "request": {
-    "url": "/repos/JKalash/github-api/contents/testBranch1",
-    "method": "PUT",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/git/refs",
+    "method": "POST",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"path\":\"testBranch1\",\"message\":\"testBranch1\",\"branch\":\"testBranch1\",\"content\":\"dGVzdEJyYW5jaDE=\"}",
+        "equalToJson": "{\"ref\":\"refs/heads/testBranch2\",\"sha\":\"486418cfccc351dc18b68d0d8c699eefa504aec6\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,24 +19,25 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_jkalash_github-api_contents_testbranch1-14.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_git_refs-6.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:10 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:52 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4811",
-      "X-RateLimit-Reset": "1595945515",
+      "X-RateLimit-Remaining": "4974",
+      "X-RateLimit-Reset": "1595963741",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "\"6948edb3e89f8ce4e617ded176d58742\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
-      "X-Accepted-OAuth-Scopes": "",
+      "ETag": "\"e22d7994904ab29ab32a2c00756ed4c7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/refs/heads/testBranch2",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -44,10 +45,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8CF4DD:F5BBE69:5F202A05"
+      "X-GitHub-Request-Id": "E982:6301:AA1A8:D2071:5F206C0C"
     }
   },
-  "uuid": "ee2d1ed0-0a88-4bdc-9986-3ee2ec1ca9ae",
+  "uuid": "ecce543d-da7c-49ac-b13d-09a2c925524b",
   "persistent": true,
-  "insertionIndex": 14
+  "insertionIndex": 6
 }

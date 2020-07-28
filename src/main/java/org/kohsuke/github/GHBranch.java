@@ -171,7 +171,7 @@ public class GHBranch {
      * @param headBranch
      *            the branch whose head is being merged
      *
-     * @param commit_message
+     * @param commitMessage
      *            the commit message
      *
      * @return GHCommit the merge commit created
@@ -179,11 +179,11 @@ public class GHBranch {
      * @throws IOException
      *             if merging fails
      */
-    public GHCommit merge(GHBranch headBranch, String commit_message) throws IOException {
+    public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
         return root.createRequest()
                 .withUrlPath(owner.getApiTailUrl("merges"))
                 .method("POST")
-                .with("commit_message", commit_message)
+                .with("commit_message", commitMessage)
                 .with("base", this.name)
                 .with("head", headBranch.getName())
                 .fetch(GHCommit.class)

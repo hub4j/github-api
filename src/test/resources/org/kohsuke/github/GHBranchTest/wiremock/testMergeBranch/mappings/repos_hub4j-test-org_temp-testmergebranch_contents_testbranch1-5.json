@@ -1,8 +1,8 @@
 {
-  "id": "858e4c8f-24b8-4c37-9043-13720a8f491f",
-  "name": "repos_jkalash_github-api_contents_testbranch2",
+  "id": "c88aabbb-cd4a-412b-8cc8-f760a712f2c0",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch1",
   "request": {
-    "url": "/repos/JKalash/github-api/contents/testBranch2",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/contents/testBranch1",
     "method": "PUT",
     "headers": {
       "Accept": {
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"path\":\"testBranch2\",\"message\":\"testBranch2\",\"branch\":\"testBranch2\",\"content\":\"dGVzdEJyYW5jaDI=\"}",
+        "equalToJson": "{\"path\":\"testBranch1\",\"message\":\"testBranch1\",\"branch\":\"testBranch1\",\"content\":\"dGVzdEJyYW5jaDE=\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,23 +19,23 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_jkalash_github-api_contents_testbranch2-20.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch1-5.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:13 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:52 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4805",
-      "X-RateLimit-Reset": "1595945514",
+      "X-RateLimit-Remaining": "4975",
+      "X-RateLimit-Reset": "1595963742",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "\"08ae7f25fe0a70fd278e8ce093d05254\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "\"6ac8992b1f760b21e3f96d9757358151\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -44,10 +44,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8CFCFD:F5BC81F:5F202A08"
+      "X-GitHub-Request-Id": "E982:6301:AA157:D2000:5F206C0B"
     }
   },
-  "uuid": "858e4c8f-24b8-4c37-9043-13720a8f491f",
+  "uuid": "c88aabbb-cd4a-412b-8cc8-f760a712f2c0",
   "persistent": true,
-  "insertionIndex": 20
+  "insertionIndex": 5
 }

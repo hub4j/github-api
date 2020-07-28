@@ -1,5 +1,5 @@
 {
-  "id": "a3777b6a-f373-40ec-8f4f-1e9f541810b8",
+  "id": "e1aed38d-07ba-4d45-951e-b98cd43111be",
   "name": "user",
   "request": {
     "url": "/user",
@@ -14,22 +14,22 @@
     "status": 200,
     "bodyFileName": "user-1.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:03 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:43 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4825",
-      "X-RateLimit-Reset": "1595945515",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1595963741",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"e6155dfc67e897e2293faef7dab8f8a5\"",
-      "Last-Modified": "Tue, 28 Jul 2020 10:50:06 GMT",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "W/\"45741c9b5046d0be498127215d6c1db7\"",
+      "Last-Modified": "Mon, 27 Jul 2020 20:21:05 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -38,10 +38,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8CE2F5:F5BA92B:5F2029FF"
+      "X-GitHub-Request-Id": "E982:6301:A9F52:D1D88:5F206C03"
     }
   },
-  "uuid": "a3777b6a-f373-40ec-8f4f-1e9f541810b8",
+  "uuid": "e1aed38d-07ba-4d45-951e-b98cd43111be",
   "persistent": true,
   "insertionIndex": 1
 }

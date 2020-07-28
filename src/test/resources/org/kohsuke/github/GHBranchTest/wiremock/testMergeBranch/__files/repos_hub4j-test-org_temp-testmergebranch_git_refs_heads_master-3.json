@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/master",
+  "node_id": "MDM6UmVmMjgzMjkzMjIxOnJlZnMvaGVhZHMvbWFzdGVy",
+  "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/refs/heads/master",
+  "object": {
+    "sha": "486418cfccc351dc18b68d0d8c699eefa504aec6",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/486418cfccc351dc18b68d0d8c699eefa504aec6"
+  }
+}

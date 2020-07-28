@@ -1,8 +1,8 @@
 {
-  "id": "cb050ca6-bf5b-4e86-9853-26ba676a15eb",
-  "name": "repos_jkalash_github-api_branches_testbranch2",
+  "id": "77f61de8-e2a7-4a98-9504-96cd1eca9814",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_branches_testbranch2",
   "request": {
-    "url": "/repos/JKalash/github-api/branches/testBranch2",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/branches/testBranch2",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,23 +12,23 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_jkalash_github-api_branches_testbranch2-21.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_branches_testbranch2-8.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:14 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:54 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4804",
-      "X-RateLimit-Reset": "1595945515",
+      "X-RateLimit-Remaining": "4972",
+      "X-RateLimit-Reset": "1595963742",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"9c5e838f70c973f6493d12e36751ca35\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "W/\"643d430eeaecb29bcfc6ca6c2c8e4cac\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -37,10 +37,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8D0263:F5BCB9E:5F202A09"
+      "X-GitHub-Request-Id": "E982:6301:AA22A:D20FB:5F206C0D"
     }
   },
-  "uuid": "cb050ca6-bf5b-4e86-9853-26ba676a15eb",
+  "uuid": "77f61de8-e2a7-4a98-9504-96cd1eca9814",
   "persistent": true,
-  "insertionIndex": 21
+  "insertionIndex": 8
 }

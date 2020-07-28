@@ -1,8 +1,8 @@
 {
-  "id": "f23aca40-3070-4e8c-bee4-236dff451881",
-  "name": "repos_jkalash_github-api_merges",
+  "id": "c946e38f-79c8-4606-a544-116fed67ff28",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_merges",
   "request": {
-    "url": "/repos/JKalash/github-api/merges",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/merges",
     "method": "POST",
     "headers": {
       "Accept": {
@@ -19,25 +19,25 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_jkalash_github-api_merges-23.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_merges-10.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:15 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:55 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4802",
-      "X-RateLimit-Reset": "1595945515",
+      "X-RateLimit-Remaining": "4970",
+      "X-RateLimit-Reset": "1595963741",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "\"529089f37187d516ea2bf57ac9ed47f1\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "ETag": "\"990b10169f450d12eabb23a2c7616adf\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/JKalash/github-api/commits/069f4fc82ffc4f068e64e9339c87315de696bd8d",
+      "Location": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/4dd8b1013c99d4bb85766bf69427f39aae49a263",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -45,10 +45,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8D035F:F5BD02D:5F202A0A"
+      "X-GitHub-Request-Id": "E982:6301:AA24C:D213D:5F206C0E"
     }
   },
-  "uuid": "f23aca40-3070-4e8c-bee4-236dff451881",
+  "uuid": "c946e38f-79c8-4606-a544-116fed67ff28",
   "persistent": true,
-  "insertionIndex": 23
+  "insertionIndex": 10
 }

@@ -1,9 +1,9 @@
 {
-  "id": "aaa8c9d4-ff33-48f9-8a98-5ddcec825d8c",
-  "name": "repos_jkalash_github-api_git_refs",
+  "id": "d9cb5e0c-066a-4e74-9df9-b361f250edbc",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch2",
   "request": {
-    "url": "/repos/JKalash/github-api/git/refs",
-    "method": "POST",
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/contents/testBranch2",
+    "method": "PUT",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"ref\":\"refs/heads/testBranch1\",\"sha\":\"67dc6d2d23ad42d4d411592d0057905ee084ae4d\"}",
+        "equalToJson": "{\"path\":\"testBranch2\",\"message\":\"testBranch2\",\"branch\":\"testBranch2\",\"content\":\"dGVzdEJyYW5jaDI=\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,25 +19,24 @@
   },
   "response": {
     "status": 201,
-    "bodyFileName": "repos_jkalash_github-api_git_refs-13.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_contents_testbranch2-7.json",
     "headers": {
-      "Date": "Tue, 28 Jul 2020 13:37:09 GMT",
+      "Date": "Tue, 28 Jul 2020 18:18:53 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "201 Created",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4812",
-      "X-RateLimit-Reset": "1595945515",
+      "X-RateLimit-Remaining": "4973",
+      "X-RateLimit-Reset": "1595963741",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "\"8a06075747ed4af790d8b6ace0fe85a3\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
-      "X-Accepted-OAuth-Scopes": "repo",
-      "Location": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/testBranch1",
+      "ETag": "\"bd560f0693dce50493fb4c42b6ac6d0c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -45,10 +44,10 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C6F8:74C1:C8CF2B7:F5BBBD5:5F202A04"
+      "X-GitHub-Request-Id": "E982:6301:AA1E4:D20BA:5F206C0C"
     }
   },
-  "uuid": "aaa8c9d4-ff33-48f9-8a98-5ddcec825d8c",
+  "uuid": "d9cb5e0c-066a-4e74-9df9-b361f250edbc",
   "persistent": true,
-  "insertionIndex": 13
+  "insertionIndex": 7
 }

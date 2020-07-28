@@ -1,0 +1,302 @@
+[
+  {
+    "ref": "refs/heads/bitwiseman-patch-1",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvaGVhZHMvYml0d2lzZW1hbi1wYXRjaC0x",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/bitwiseman-patch-1",
+    "object": {
+      "sha": "0a6613e60d01ed7cab3b8de94bdc204ca0f37ee0",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/0a6613e60d01ed7cab3b8de94bdc204ca0f37ee0"
+    }
+  },
+  {
+    "ref": "refs/heads/gh-pages",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvaGVhZHMvZ2gtcGFnZXM=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/gh-pages",
+    "object": {
+      "sha": "89f7b6b9559b7488dc0c4deb8798e3b766740981",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/89f7b6b9559b7488dc0c4deb8798e3b766740981"
+    }
+  },
+  {
+    "ref": "refs/heads/jkalash/master",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvaGVhZHMvamthbGFzaC9tYXN0ZXI=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/jkalash/master",
+    "object": {
+      "sha": "fe8bdb755a8ed6778a2e34dc6f6d431b569dfc3b",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/fe8bdb755a8ed6778a2e34dc6f6d431b569dfc3b"
+    }
+  },
+  {
+    "ref": "refs/heads/master",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvaGVhZHMvbWFzdGVy",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/master",
+    "object": {
+      "sha": "67dc6d2d23ad42d4d411592d0057905ee084ae4d",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/67dc6d2d23ad42d4d411592d0057905ee084ae4d"
+    }
+  },
+  {
+    "ref": "refs/heads/testBranch1",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvaGVhZHMvdGVzdEJyYW5jaDE=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/heads/testBranch1",
+    "object": {
+      "sha": "d1f188ff080f0692f5bb550144c6b856e4261e9a",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/d1f188ff080f0692f5bb550144c6b856e4261e9a"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.0",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMA==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.0",
+    "object": {
+      "sha": "ac77a05981f57c79e422c8fe98d522119338d650",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/ac77a05981f57c79e422c8fe98d522119338d650"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.1",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMQ==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.1",
+    "object": {
+      "sha": "f58213cfb7137d41f54542f83fbd551a06717494",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/f58213cfb7137d41f54542f83fbd551a06717494"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.2",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMg==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.2",
+    "object": {
+      "sha": "6f6d5d83a15124e3d1e6782e36b901515510d59b",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/6f6d5d83a15124e3d1e6782e36b901515510d59b"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.3",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMw==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.3",
+    "object": {
+      "sha": "4b87010b99c04d88ac6216b49c8c29cb1e424721",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/4b87010b99c04d88ac6216b49c8c29cb1e424721"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.4",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuNA==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.4",
+    "object": {
+      "sha": "e6a8e7fdb739b8cbc9fc858154e3e67d7533a793",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/e6a8e7fdb739b8cbc9fc858154e3e67d7533a793"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.5",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuNQ==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.5",
+    "object": {
+      "sha": "c0dff74536f20c6a536fd09875ccf2b5e7b6fbb9",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/c0dff74536f20c6a536fd09875ccf2b5e7b6fbb9"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.6",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuNg==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.6",
+    "object": {
+      "sha": "275b55f674d11b38ebec8a95398c51616c9e0256",
+      "type": "commit",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/commits/275b55f674d11b38ebec8a95398c51616c9e0256"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.7",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuNw==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.7",
+    "object": {
+      "sha": "5bc67a2b15ccc2a71c50fce3a1efd0ed2b20b6ff",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/5bc67a2b15ccc2a71c50fce3a1efd0ed2b20b6ff"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.8",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuOA==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.8",
+    "object": {
+      "sha": "8fb92212ffd502ca15c7770f41a16f13d2a011fd",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/8fb92212ffd502ca15c7770f41a16f13d2a011fd"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.9",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuOQ==",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.9",
+    "object": {
+      "sha": "f01ff95029cb422607a944ecee48842a8e97e259",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/f01ff95029cb422607a944ecee48842a8e97e259"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.10",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTA=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.10",
+    "object": {
+      "sha": "69533371e248f18e16bf621f07dc09774ecf766a",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/69533371e248f18e16bf621f07dc09774ecf766a"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.11",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTE=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.11",
+    "object": {
+      "sha": "8159aa16f9df224b994840efabc2f6aa51e7bef2",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/8159aa16f9df224b994840efabc2f6aa51e7bef2"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.12",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTI=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.12",
+    "object": {
+      "sha": "ffc2823b003fcdf01fb097a542613279f7a93ce4",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/ffc2823b003fcdf01fb097a542613279f7a93ce4"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.13",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTM=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.13",
+    "object": {
+      "sha": "0018c5c4815e37345b6c3acf03d93b17802c4258",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/0018c5c4815e37345b6c3acf03d93b17802c4258"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.14",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTQ=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.14",
+    "object": {
+      "sha": "09373ff6191ee3f5c7814ae748963529167de96d",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/09373ff6191ee3f5c7814ae748963529167de96d"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.15",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTU=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.15",
+    "object": {
+      "sha": "24ffb700e7665a250948f7ab84fd9a293b66a6b3",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/24ffb700e7665a250948f7ab84fd9a293b66a6b3"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.16",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTY=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.16",
+    "object": {
+      "sha": "f20f29b4a5d56e73382191a67a74d779be44087b",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/f20f29b4a5d56e73382191a67a74d779be44087b"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.17",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTc=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.17",
+    "object": {
+      "sha": "fe28aa4325f8786dc75eeb7c2d48c2c31c99475d",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/fe28aa4325f8786dc75eeb7c2d48c2c31c99475d"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.18",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTg=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.18",
+    "object": {
+      "sha": "1002fb586b0cd677bfaba5969a5fe327df052454",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/1002fb586b0cd677bfaba5969a5fe327df052454"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.19",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMTk=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.19",
+    "object": {
+      "sha": "cb1b64cbc90a28c3aada479a29d3fbc793cecca4",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/cb1b64cbc90a28c3aada479a29d3fbc793cecca4"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.20",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMjA=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.20",
+    "object": {
+      "sha": "5c7a0ca52ee1b08892d6f972af254dec49af3fbd",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/5c7a0ca52ee1b08892d6f972af254dec49af3fbd"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.21",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMjE=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.21",
+    "object": {
+      "sha": "d570b1c678d6fdeffaf97937d308d17eda26f47d",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/d570b1c678d6fdeffaf97937d308d17eda26f47d"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.22",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMjI=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.22",
+    "object": {
+      "sha": "fede12e571d9edac82621e0fe9c6176c99f6423b",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/fede12e571d9edac82621e0fe9c6176c99f6423b"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.23",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMjM=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.23",
+    "object": {
+      "sha": "274e47e111de9286954088e2db613f9d665b66d6",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/274e47e111de9286954088e2db613f9d665b66d6"
+    }
+  },
+  {
+    "ref": "refs/tags/github-api-1.24",
+    "node_id": "MDM6UmVmMjgzMTcxOTkwOnJlZnMvdGFncy9naXRodWItYXBpLTEuMjQ=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/refs/tags/github-api-1.24",
+    "object": {
+      "sha": "ee4395560dd35c4efb5139cc434f7a2efb02e7e7",
+      "type": "tag",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/tags/ee4395560dd35c4efb5139cc434f7a2efb02e7e7"
+    }
+  }
+]

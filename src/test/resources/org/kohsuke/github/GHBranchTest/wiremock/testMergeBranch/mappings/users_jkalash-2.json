@@ -1,0 +1,47 @@
+{
+  "id": "a122908a-bcd1-4070-947c-a12b56cc2d8d",
+  "name": "users_jkalash",
+  "request": {
+    "url": "/users/jkalash",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_jkalash-2.json",
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 13:37:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4823",
+      "X-RateLimit-Reset": "1595945515",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"e6155dfc67e897e2293faef7dab8f8a5\"",
+      "Last-Modified": "Tue, 28 Jul 2020 10:50:06 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C6F8:74C1:C8CE5A0:F5BAA19:5F2029FF"
+    }
+  },
+  "uuid": "a122908a-bcd1-4070-947c-a12b56cc2d8d",
+  "persistent": true,
+  "insertionIndex": 2
+}

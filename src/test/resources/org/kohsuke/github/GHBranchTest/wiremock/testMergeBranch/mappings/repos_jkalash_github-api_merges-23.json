@@ -1,0 +1,54 @@
+{
+  "id": "f23aca40-3070-4e8c-bee4-236dff451881",
+  "name": "repos_jkalash_github-api_merges",
+  "request": {
+    "url": "/repos/JKalash/github-api/merges",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"testBranch2\",\"commit_message\":\"merging testBranch2\",\"base\":\"testBranch1\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_jkalash_github-api_merges-23.json",
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 13:37:15 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4802",
+      "X-RateLimit-Reset": "1595945515",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"529089f37187d516ea2bf57ac9ed47f1\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/JKalash/github-api/commits/069f4fc82ffc4f068e64e9339c87315de696bd8d",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C6F8:74C1:C8D035F:F5BD02D:5F202A0A"
+    }
+  },
+  "uuid": "f23aca40-3070-4e8c-bee4-236dff451881",
+  "persistent": true,
+  "insertionIndex": 23
+}

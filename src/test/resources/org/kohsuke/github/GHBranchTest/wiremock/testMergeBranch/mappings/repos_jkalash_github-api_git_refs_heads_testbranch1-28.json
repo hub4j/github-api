@@ -1,0 +1,41 @@
+{
+  "id": "d41ef91f-948f-4680-87df-1838891632d4",
+  "name": "repos_jkalash_github-api_git_refs_heads_testbranch1",
+  "request": {
+    "url": "/repos/JKalash/github-api/git/refs/heads/testBranch1",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 13:37:17 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4797",
+      "X-RateLimit-Reset": "1595945515",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "C6F8:74C1:C8D0980:F5BD7B5:5F202A0C"
+    }
+  },
+  "uuid": "d41ef91f-948f-4680-87df-1838891632d4",
+  "persistent": true,
+  "insertionIndex": 28
+}

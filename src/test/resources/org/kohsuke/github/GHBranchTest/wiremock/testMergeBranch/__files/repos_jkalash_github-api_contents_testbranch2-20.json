@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "testBranch2",
+    "path": "testBranch2",
+    "sha": "2a521d98876f51a95f38aaba58c9e81672f7dd4d",
+    "size": 11,
+    "url": "https://api.github.com/repos/JKalash/github-api/contents/testBranch2?ref=testBranch2",
+    "html_url": "https://github.com/JKalash/github-api/blob/testBranch2/testBranch2",
+    "git_url": "https://api.github.com/repos/JKalash/github-api/git/blobs/2a521d98876f51a95f38aaba58c9e81672f7dd4d",
+    "download_url": "https://raw.githubusercontent.com/JKalash/github-api/testBranch2/testBranch2",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/JKalash/github-api/contents/testBranch2?ref=testBranch2",
+      "git": "https://api.github.com/repos/JKalash/github-api/git/blobs/2a521d98876f51a95f38aaba58c9e81672f7dd4d",
+      "html": "https://github.com/JKalash/github-api/blob/testBranch2/testBranch2"
+    }
+  },
+  "commit": {
+    "sha": "287bd919f91f849e6d6a517d4f2830d55533b9e9",
+    "node_id": "MDY6Q29tbWl0MjgzMTcxOTkwOjI4N2JkOTE5ZjkxZjg0OWU2ZDZhNTE3ZDRmMjgzMGQ1NTUzM2I5ZTk=",
+    "url": "https://api.github.com/repos/JKalash/github-api/git/commits/287bd919f91f849e6d6a517d4f2830d55533b9e9",
+    "html_url": "https://github.com/JKalash/github-api/commit/287bd919f91f849e6d6a517d4f2830d55533b9e9",
+    "author": {
+      "name": "Joe Kalash",
+      "email": "9067991+JKalash@users.noreply.github.com",
+      "date": "2020-07-28T13:37:12Z"
+    },
+    "committer": {
+      "name": "Joe Kalash",
+      "email": "9067991+JKalash@users.noreply.github.com",
+      "date": "2020-07-28T13:37:12Z"
+    },
+    "tree": {
+      "sha": "d689732ab2c6da335c8f3365a5a213f96d18e082",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/trees/d689732ab2c6da335c8f3365a5a213f96d18e082"
+    },
+    "message": "testBranch2",
+    "parents": [
+      {
+        "sha": "67dc6d2d23ad42d4d411592d0057905ee084ae4d",
+        "url": "https://api.github.com/repos/JKalash/github-api/git/commits/67dc6d2d23ad42d4d411592d0057905ee084ae4d",
+        "html_url": "https://github.com/JKalash/github-api/commit/67dc6d2d23ad42d4d411592d0057905ee084ae4d"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

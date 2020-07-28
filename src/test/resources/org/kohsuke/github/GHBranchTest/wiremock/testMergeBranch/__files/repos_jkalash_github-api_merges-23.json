@@ -1,0 +1,84 @@
+{
+  "sha": "069f4fc82ffc4f068e64e9339c87315de696bd8d",
+  "node_id": "MDY6Q29tbWl0MjgzMTcxOTkwOjA2OWY0ZmM4MmZmYzRmMDY4ZTY0ZTkzMzljODczMTVkZTY5NmJkOGQ=",
+  "commit": {
+    "author": {
+      "name": "Joe Kalash",
+      "email": "9067991+JKalash@users.noreply.github.com",
+      "date": "2020-07-28T13:37:14Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2020-07-28T13:37:14Z"
+    },
+    "message": "merging testBranch2",
+    "tree": {
+      "sha": "20e4da7646cdea0243fccb5e19512c5f8365db9c",
+      "url": "https://api.github.com/repos/JKalash/github-api/git/trees/20e4da7646cdea0243fccb5e19512c5f8365db9c"
+    },
+    "url": "https://api.github.com/repos/JKalash/github-api/git/commits/069f4fc82ffc4f068e64e9339c87315de696bd8d",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJfICoKCRBK7hj4Ov3rIwAAdHIIABoyIZFc8DIgf68ESgRo9b3T\nx9gG1mIaWboTXk6vrnaHt1YWKwwIusiynYnKzGUaBkgJ+75hsUPp19YpgAPmql9y\nXZkiGEzwUpmGNstZyoEh+mMUggGIIY22lBJFptkS+mBtPQutKD0iQnsZ4dCcoZkv\nZ0SDUIyQkQkfxdNj7zoEe5BG7Xgkbu1PRTqgHjILRYPCwL+2wDnVNry551/IR8rt\nd/rXuhXDtRJvQhKHYxlKeSIuLCvX0aoJGc7URwV2TCzGMILfnPeuxzXbzbZhDLYl\n/Z5qntj8F/tf7n7uxmbw894Tq/7/m9jGUgTlCQiwhugXOE5k/hF0B3ECs5S2ksQ=\n=lAt3\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 20e4da7646cdea0243fccb5e19512c5f8365db9c\nparent d1f188ff080f0692f5bb550144c6b856e4261e9a\nparent 287bd919f91f849e6d6a517d4f2830d55533b9e9\nauthor Joe Kalash <9067991+JKalash@users.noreply.github.com> 1595943434 +0100\ncommitter GitHub <noreply@github.com> 1595943434 +0100\n\nmerging testBranch2\n"
+    }
+  },
+  "url": "https://api.github.com/repos/JKalash/github-api/commits/069f4fc82ffc4f068e64e9339c87315de696bd8d",
+  "html_url": "https://github.com/JKalash/github-api/commit/069f4fc82ffc4f068e64e9339c87315de696bd8d",
+  "comments_url": "https://api.github.com/repos/JKalash/github-api/commits/069f4fc82ffc4f068e64e9339c87315de696bd8d/comments",
+  "author": {
+    "login": "JKalash",
+    "id": 9067991,
+    "node_id": "MDQ6VXNlcjkwNjc5OTE=",
+    "avatar_url": "https://avatars2.githubusercontent.com/u/9067991?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/JKalash",
+    "html_url": "https://github.com/JKalash",
+    "followers_url": "https://api.github.com/users/JKalash/followers",
+    "following_url": "https://api.github.com/users/JKalash/following{/other_user}",
+    "gists_url": "https://api.github.com/users/JKalash/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/JKalash/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/JKalash/subscriptions",
+    "organizations_url": "https://api.github.com/users/JKalash/orgs",
+    "repos_url": "https://api.github.com/users/JKalash/repos",
+    "events_url": "https://api.github.com/users/JKalash/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/JKalash/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "d1f188ff080f0692f5bb550144c6b856e4261e9a",
+      "url": "https://api.github.com/repos/JKalash/github-api/commits/d1f188ff080f0692f5bb550144c6b856e4261e9a",
+      "html_url": "https://github.com/JKalash/github-api/commit/d1f188ff080f0692f5bb550144c6b856e4261e9a"
+    },
+    {
+      "sha": "287bd919f91f849e6d6a517d4f2830d55533b9e9",
+      "url": "https://api.github.com/repos/JKalash/github-api/commits/287bd919f91f849e6d6a517d4f2830d55533b9e9",
+      "html_url": "https://github.com/JKalash/github-api/commit/287bd919f91f849e6d6a517d4f2830d55533b9e9"
+    }
+  ]
+}

@@ -20,7 +20,7 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
 
     @After
     public void after() throws Exception {
-        // cleanupBranches();
+        cleanupBranches();
     }
 
     @Test
@@ -33,8 +33,7 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
 
         GHBranch otherBranch = repository.getBranch(BRANCH_2);
         String commitMessage = "merging " + BRANCH_2;
-        GHCommit mergeCommit = repository.getBranch(BRANCH_2).merge(otherBranch, commitMessage);
-        assertEquals(mergeCommit.getCommitShortInfo().getMessage(), mergeCommit);
+        assertNotNull(repository.getBranch(BRANCH_1).merge(otherBranch, commitMessage));
     }
 
     private void createRefAndPostContent(String branchName, String sha) throws IOException {

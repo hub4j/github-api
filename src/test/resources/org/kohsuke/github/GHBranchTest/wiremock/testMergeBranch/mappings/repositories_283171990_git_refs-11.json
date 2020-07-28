@@ -1,0 +1,52 @@
+{
+  "id": "dbbe4c22-b935-408b-959b-165c05ab88ec",
+  "name": "repositories_283171990_git_refs",
+  "request": {
+    "url": "/repositories/283171990/git/refs?page=3",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_283171990_git_refs-11.json",
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 13:37:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4814",
+      "X-RateLimit-Reset": "1595945515",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"df808d0715cbea37f848aefa8b53fb6c\"",
+      "Last-Modified": "Tue, 28 Jul 2020 09:56:58 GMT",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C6F8:74C1:C8CF176:F5BBA5F:5F202A04",
+      "Link": "<https://api.github.com/repositories/283171990/git/refs?page=2>; rel=\"prev\", <https://api.github.com/repositories/283171990/git/refs?page=4>; rel=\"next\", <https://api.github.com/repositories/283171990/git/refs?page=4>; rel=\"last\", <https://api.github.com/repositories/283171990/git/refs?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "dbbe4c22-b935-408b-959b-165c05ab88ec",
+  "persistent": true,
+  "scenarioName": "scenario-3-repositories-283171990-git-refs",
+  "requiredScenarioState": "scenario-3-repositories-283171990-git-refs-2",
+  "newScenarioState": "scenario-3-repositories-283171990-git-refs-3",
+  "insertionIndex": 11
+}

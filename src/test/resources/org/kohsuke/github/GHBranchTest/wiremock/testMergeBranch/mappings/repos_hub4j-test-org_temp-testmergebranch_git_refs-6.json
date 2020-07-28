@@ -1,0 +1,54 @@
+{
+  "id": "031e30e3-6faa-44c2-b70f-3d9ba5bec9d8",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_git_refs",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/git/refs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/testBranch2\",\"sha\":\"688a1c3f8bc67deb767f68560ed8c7350d70d50f\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_git_refs-6.json",
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 19:54:57 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1595969688",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"5da13192d2a1368f382c1593a66e9e6e\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "Location": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/refs/heads/testBranch2",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EE13:3784:A64DF:D171F:5F208290"
+    }
+  },
+  "uuid": "031e30e3-6faa-44c2-b70f-3d9ba5bec9d8",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -1,0 +1,47 @@
+{
+  "id": "a05c0e96-b289-4199-a555-c2bfd303a19b",
+  "name": "repos_hub4j-test-org_temp-testmergebranch",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch-2.json",
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 19:54:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4994",
+      "X-RateLimit-Reset": "1595969687",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"50d2a9acff5c7f08e2753ccafeeb04a6\"",
+      "Last-Modified": "Tue, 28 Jul 2020 19:54:53 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EE13:3784:A649D:D1586:5F208288"
+    }
+  },
+  "uuid": "a05c0e96-b289-4199-a555-c2bfd303a19b",
+  "persistent": true,
+  "insertionIndex": 2
+}

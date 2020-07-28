@@ -1,0 +1,95 @@
+{
+  "name": "testBranch1",
+  "commit": {
+    "sha": "beac07bbfdeb8a5d261739cd65c4caaaca48ac79",
+    "node_id": "MDY6Q29tbWl0MjgzMzEzNTkzOmJlYWMwN2JiZmRlYjhhNWQyNjE3MzljZDY1YzRjYWFhY2E0OGFjNzk=",
+    "commit": {
+      "author": {
+        "name": "Liam Newman",
+        "email": "bitwiseman@gmail.com",
+        "date": "2020-07-28T19:54:55Z"
+      },
+      "committer": {
+        "name": "Liam Newman",
+        "email": "bitwiseman@gmail.com",
+        "date": "2020-07-28T19:54:55Z"
+      },
+      "message": "testBranch1",
+      "tree": {
+        "sha": "540c4a3c093ad09a869163c60d44218774ff5474",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/trees/540c4a3c093ad09a869163c60d44218774ff5474"
+      },
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/beac07bbfdeb8a5d261739cd65c4caaaca48ac79",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/beac07bbfdeb8a5d261739cd65c4caaaca48ac79",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/beac07bbfdeb8a5d261739cd65c4caaaca48ac79",
+    "comments_url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/beac07bbfdeb8a5d261739cd65c4caaaca48ac79/comments",
+    "author": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "688a1c3f8bc67deb767f68560ed8c7350d70d50f",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/688a1c3f8bc67deb767f68560ed8c7350d70d50f",
+        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/688a1c3f8bc67deb767f68560ed8c7350d70d50f"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/branches/testBranch1",
+    "html": "https://github.com/hub4j-test-org/temp-testMergeBranch/tree/testBranch1"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/branches/testBranch1/protection"
+}

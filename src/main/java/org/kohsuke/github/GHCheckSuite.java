@@ -5,8 +5,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -160,14 +162,14 @@ public class GHCheckSuite extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public Iterator<GHPullRequest> getPullRequests() throws IOException {
+    public List<GHPullRequest> getPullRequests() throws IOException {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }
-            return Arrays.stream(pullRequests).iterator();
+            return Arrays.asList(pullRequests);
         }
-        return Stream.<GHPullRequest>empty().iterator();
+        return Collections.emptyList();
     }
 
     /**

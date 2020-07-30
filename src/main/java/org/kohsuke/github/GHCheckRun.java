@@ -107,7 +107,7 @@ public class GHCheckRun extends GHObject {
      *
      * @return Pull requests of this check run
      */
-    GHPullRequest[] getPullRequests() throws IOException {
+    public GHPullRequest[] getPullRequests() throws IOException {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();

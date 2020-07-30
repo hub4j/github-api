@@ -165,7 +165,7 @@ public class GHCheckSuite extends GHObject {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }
-            return Arrays.asList(pullRequests);
+            return Collections.unmodifiableList(Arrays.asList(pullRequests));
         }
         return Collections.emptyList();
     }

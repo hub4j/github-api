@@ -4,8 +4,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * Represents a check run.
@@ -30,7 +32,7 @@ public class GHCheckRun extends GHObject {
     private URL detailsUrl;
     private Output output;
     private GHApp app;
-    private List<GHPullRequest> pullRequests;
+    private GHPullRequest[] pullRequests;
     private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
@@ -47,7 +49,7 @@ public class GHCheckRun extends GHObject {
         return this;
     }
 
-    List<GHPullRequest> wrap() {
+    GHPullRequest[] wrap() {
         return pullRequests;
     }
 
@@ -107,14 +109,17 @@ public class GHCheckRun extends GHObject {
      * Gets the pull requests participated in this check run.
      *
      * @return Pull requests of this check run
+     * @throws IOException
+     *             the io exception
      */
-    public List<GHPullRequest> getPullRequests() throws IOException {
-        if (pullRequests != null && pullRequests.size() != 0) {
+    public  Iterator<GHPullRequest> getPullRequests() throws IOException {
+        if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }
+        return Arrays.stream(pullRequests).iterator();
         }
-        return pullRequests;
+        return Stream.<GHPullRequest>empty().iterator();
     }
 
     /**

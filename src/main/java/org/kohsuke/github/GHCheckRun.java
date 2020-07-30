@@ -112,12 +112,12 @@ public class GHCheckRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public  Iterator<GHPullRequest> getPullRequests() throws IOException {
+    public Iterator<GHPullRequest> getPullRequests() throws IOException {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }
-        return Arrays.stream(pullRequests).iterator();
+            return Arrays.stream(pullRequests).iterator();
         }
         return Stream.<GHPullRequest>empty().iterator();
     }

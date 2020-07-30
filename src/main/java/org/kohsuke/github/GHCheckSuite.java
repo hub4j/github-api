@@ -4,7 +4,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * Represents a check suite.
@@ -154,14 +157,17 @@ public class GHCheckSuite extends GHObject {
      * Gets the pull requests participated in this check suite.
      *
      * @return Pull requests
+     * @throws IOException
+     *             the io exception
      */
-    GHPullRequest[] getPullRequests() throws IOException {
+    public Iterator<GHPullRequest> getPullRequests() throws IOException {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }
+            return Arrays.stream(pullRequests).iterator();
         }
-        return pullRequests;
+        return Stream.<GHPullRequest>empty().iterator();
     }
 
     /**

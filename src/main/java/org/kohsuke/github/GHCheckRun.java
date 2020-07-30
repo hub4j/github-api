@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents a check run.
@@ -29,7 +30,7 @@ public class GHCheckRun extends GHObject {
     private URL detailsUrl;
     private Output output;
     private GHApp app;
-    private GHPullRequest[] pullRequests;
+    private List<GHPullRequest> pullRequests;
     private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
@@ -46,7 +47,7 @@ public class GHCheckRun extends GHObject {
         return this;
     }
 
-    GHPullRequest[] wrap() {
+    List<GHPullRequest> wrap() {
         return pullRequests;
     }
 
@@ -107,8 +108,8 @@ public class GHCheckRun extends GHObject {
      *
      * @return Pull requests of this check run
      */
-    public GHPullRequest[] getPullRequests() throws IOException {
-        if (pullRequests != null && pullRequests.length != 0) {
+    public List<GHPullRequest> getPullRequests() throws IOException {
+        if (pullRequests != null && pullRequests.size() != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.refresh();
             }

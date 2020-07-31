@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.List;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHCheckSuite extends GHObject {
+
+    @JsonProperty("repository")
     GHRepository owner;
     GitHub root;
 
@@ -35,7 +38,7 @@ public class GHCheckSuite extends GHObject {
 
     GHCheckSuite wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        this.wrap(owner.root);
         return this;
     }
 
@@ -43,6 +46,14 @@ public class GHCheckSuite extends GHObject {
         this.root = root;
         if (owner != null) {
             owner.wrap(root);
+            if (pullRequests != null && pullRequests.length != 0) {
+                for (GHPullRequest singlePull : pullRequests) {
+                    singlePull.wrap(owner);
+                }
+            }
+        }
+        if (app != null) {
+            app.wrapUp(root);
         }
         return this;
     }
@@ -156,14 +167,18 @@ public class GHCheckSuite extends GHObject {
     /**
      * Gets the pull requests participated in this check suite.
      *
-     * @return Pull requests
+     * Note this field is only populated for events. When getting a {@link GHCheckSuite} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this check suite. Only populated for events.
      * @throws IOException
      *             the io exception
      */
     public List<GHPullRequest> getPullRequests() throws IOException {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
-                singlePull.refresh();
+                // Only refresh if we haven't do so before
+                singlePull.refresh(singlePull.getTitle());
             }
             return Collections.unmodifiableList(Arrays.asList(pullRequests));
         }

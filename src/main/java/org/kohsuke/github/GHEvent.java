@@ -63,6 +63,7 @@ public enum GHEvent {
     TEAM_ADD,
     WATCH,
     WORKFLOW_DISPATCH,
+    WORKFLOW_RUN,
 
     /**
      * Special event type that means "every possible event"

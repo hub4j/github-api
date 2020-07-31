@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.TimeZone;
@@ -387,7 +388,25 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Payload("check-run")
     public void checkRunEvent() throws Exception {
         GHEventPayload.CheckRun event = GitHub.offline()
-                .parseEventPayload(payload.asReader(), GHEventPayload.CheckRun.class);
+                .parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckRun.class);
+        GHCheckRun checkRun = verifyBasicCheckRunEvent(event);
+        assertThat("pull body not populated offline", checkRun.getPullRequests().get(0).getBody(), nullValue());
+        assertThat("using offline github", mockGitHub.getRequestCount(), equalTo(0));
+
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckRun.class);
+        checkRun = verifyBasicCheckRunEvent(event);
+
+        int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
+        assertThat("pull body should be populated",
+                checkRun.getPullRequests().get(0).getBody(),
+                equalTo("This is a pretty simple change that we need to pull into master."));
+        assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
+                mockGitHub.getRequestCount(),
+                equalTo(expectedRequestCount));
+    }
+
+    private GHCheckRun verifyBasicCheckRunEvent(GHEventPayload.CheckRun event) throws IOException {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
@@ -406,9 +425,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
 
         assertThat(checkRun.getConclusion(), is("success"));
-        assertThat(checkRun.getUrl().toString(),
-                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228"));
-        assertThat(checkRun.getHtmlUrl().toString(), is("https://github.com/Codertocat/Hello-World/runs/128620228"));
+        assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
+        assertThat(checkRun.getHtmlUrl().toString(),
+                endsWith("https://github.com/Codertocat/Hello-World/runs/128620228"));
         assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
         assertThat(checkRun.getApp().getId(), is(29310L));
         assertThat(checkRun.getCheckSuite().getId(), is(118578147L));
@@ -417,18 +436,41 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(checkRun.getOutput().getText(), nullValue());
         assertThat(checkRun.getOutput().getAnnotationsCount(), is(0));
         assertThat(checkRun.getOutput().getAnnotationsUrl().toString(),
-                is("https://api.github.com/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
+                endsWith("/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
 
         // Checks the deserialization of sender
         assertThat(event.getSender().getId(), is(21031067L));
+
+        assertThat(checkRun.getPullRequests(), notNullValue());
+        assertThat(checkRun.getPullRequests().size(), equalTo(1));
+        assertThat(checkRun.getPullRequests().get(0).getNumber(), equalTo(2));
+        return checkRun;
     }
 
     @Test
     @Payload("check-suite")
     public void checkSuiteEvent() throws Exception {
         GHEventPayload.CheckSuite event = GitHub.offline()
-                .parseEventPayload(payload.asReader(), GHEventPayload.CheckSuite.class);
+                .parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckSuite.class);
+        GHCheckSuite checkSuite = verifyBasicCheckSuiteEvent(event);
+        assertThat("pull body not populated offline", checkSuite.getPullRequests().get(0).getBody(), nullValue());
+        assertThat("using offline github", mockGitHub.getRequestCount(), equalTo(0));
 
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+                GHEventPayload.CheckSuite.class);
+        checkSuite = verifyBasicCheckSuiteEvent(event);
+
+        int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
+        assertThat("pull body should be populated",
+                checkSuite.getPullRequests().get(0).getBody(),
+                equalTo("This is a pretty simple change that we need to pull into master."));
+        assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
+                mockGitHub.getRequestCount(),
+                lessThanOrEqualTo(expectedRequestCount));
+    }
+
+    private GHCheckSuite verifyBasicCheckSuiteEvent(GHEventPayload.CheckSuite event) throws IOException {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("completed"));
@@ -445,7 +487,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(checkSuite.getAfter(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
         assertThat(checkSuite.getLatestCheckRunsCount(), is(1));
         assertThat(checkSuite.getCheckRunsUrl().toString(),
-                is("https://api.github.com/repos/Codertocat/Hello-World/check-suites/118578147/check-runs"));
+                endsWith("/repos/Codertocat/Hello-World/check-suites/118578147/check-runs"));
         assertThat(checkSuite.getHeadCommit().getMessage(), is("Update README.md"));
         assertThat(checkSuite.getHeadCommit().getId(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
         assertThat(checkSuite.getHeadCommit().getTreeId(), is("31b122c26a97cf9af023e9ddab94a82c6e77b0ea"));
@@ -457,6 +499,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(formatter.format(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
 
         assertThat(checkSuite.getApp().getId(), is(29310L));
+
+        assertThat(checkSuite.getPullRequests(), notNullValue());
+        assertThat(checkSuite.getPullRequests().size(), equalTo(1));
+        assertThat(checkSuite.getPullRequests().get(0).getNumber(), equalTo(2));
+        return checkSuite;
     }
 
     @Test

@@ -1,0 +1,48 @@
+{
+  "id": "8536e5ba-39e7-4985-b6dd-08abee17696c",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_merges",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/merges",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"223608e290ccc2f8902385528a24b1f7aec92acf\",\"commit_message\":\"merging from 4cfa1cac01c59db507f550c8c870dac98859b353\",\"base\":\"master\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Tue, 28 Jul 2020 19:55:01 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1595969687",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "EE13:3784:A65C4:D182E:5F208295"
+    }
+  },
+  "uuid": "8536e5ba-39e7-4985-b6dd-08abee17696c",
+  "persistent": true,
+  "insertionIndex": 13
+}

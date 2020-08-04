@@ -465,7 +465,7 @@ public class GHOrganization extends GHPerson {
      * The enum Permission.
      */
     public enum Permission {
-        ADMIN, PUSH, PULL
+        ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
     }
 
     /**

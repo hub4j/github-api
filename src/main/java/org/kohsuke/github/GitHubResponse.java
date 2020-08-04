@@ -78,9 +78,14 @@ class GitHubResponse<T> {
     @CheckForNull
     static <T> T parseBody(ResponseInfo responseInfo, Class<T> type) throws IOException {
 
-        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT && type != null && type.isArray()) {
-            // no content
-            return type.cast(Array.newInstance(type.getComponentType(), 0));
+        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {
+            if (type != null && type.isArray()) {
+                // no content for array should be empty array
+                return type.cast(Array.newInstance(type.getComponentType(), 0));
+            } else {
+                // no content for object should be null
+                return null;
+            }
         }
 
         String data = responseInfo.getBodyAsString();

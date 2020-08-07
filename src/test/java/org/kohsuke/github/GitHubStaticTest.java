@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.TimeZone;
@@ -20,25 +21,38 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void timeRoundTrip() throws Exception {
-        Instant instantNow = Instant.now();
+        final long stableInstantEpochMilli = 1533721222255L;
+        Instant instantNow = Instant.ofEpochMilli(stableInstantEpochMilli);
 
         Date instantSeconds = Date.from(instantNow.truncatedTo(ChronoUnit.SECONDS));
         Date instantMillis = Date.from(instantNow.truncatedTo(ChronoUnit.MILLIS));
 
-        // if we happen to land exactly on zero milliseconds, add 1 milli
-        if (instantSeconds.equals(instantMillis)) {
-            instantMillis = Date.from(instantNow.plusMillis(1).truncatedTo(ChronoUnit.MILLIS));
-        }
+        String instantFormatSlash = formatZonedDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ", "PST");
+        assertThat(instantFormatSlash, equalTo("2018/08/08 02:40:22 -0700"));
 
-        // TODO: other formats
-        String instantFormatSlash = formatDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ");
         String instantFormatDash = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+        assertThat(instantFormatDash, equalTo("2018-08-08T09:40:22Z"));
+
         String instantFormatMillis = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        assertThat(instantFormatMillis, equalTo("2018-08-08T09:40:22.255Z"));
+
+        String instantFormatMillisZoned = formatZonedDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SXXX", "PST");
+        assertThat(instantFormatMillisZoned, equalTo("2018-08-08T02:40:22.255-07:00"));
+
         String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        assertThat(instantSecondsFormatMillis, equalTo("2018-08-08T09:40:22.0Z"));
+
+        String instantSecondsFormatMillisZoned = formatZonedDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", "PST");
+        assertThat(instantSecondsFormatMillisZoned, equalTo("2018-08-08T02:40:22.000-07:00"));
+
         String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
+        assertThat(instantBadFormat, equalTo("18-08-08T09:40Z"));
 
         assertThat(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds)),
                 equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis))));
+        assertThat(GitHubClient.printDate(instantSeconds), equalTo("2018-08-08T09:40:22Z"));
+        assertThat(GitHubClient.printDate(GitHubClient.parseDate(instantFormatMillisZoned)),
+                equalTo("2018-08-08T09:40:22Z"));
 
         assertThat(instantSeconds, equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds))));
 
@@ -51,14 +65,16 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         // This parser does not truncate to the nearest second, so it will be equal
         assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillis)));
+        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillisZoned)));
 
         assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillis)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillisZoned)));
 
         try {
             GitHubClient.parseDate(instantBadFormat);
             fail("Bad time format should throw.");
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage(), equalTo("Unable to parse the timestamp: " + instantBadFormat));
+        } catch (DateTimeParseException e) {
+            assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
         }
     }
 
@@ -226,8 +242,12 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     }
 
     static String formatDate(Date dt, String format) {
+        return formatZonedDate(dt, format, "GMT");
+    }
+
+    static String formatZonedDate(Date dt, String format, String timeZone) {
         SimpleDateFormat df = new SimpleDateFormat(format);
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        df.setTimeZone(TimeZone.getTimeZone(timeZone));
         return df.format(dt);
     }
 

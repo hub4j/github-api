@@ -19,15 +19,15 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TimeZone;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -80,9 +80,8 @@ abstract class GitHubClient {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     static final String GITHUB_URL = "https://api.github.com";
 
-    private static final String[] TIME_FORMATS = { "yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
-    };
+    private static final DateTimeFormatter DATE_TIME_PARSER_SLASHES = DateTimeFormatter
+            .ofPattern("yyyy/MM/dd HH:mm:ss Z");
 
     static {
         MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
@@ -652,22 +651,24 @@ abstract class GitHubClient {
     static Date parseDate(String timestamp) {
         if (timestamp == null)
             return null;
-        for (String f : TIME_FORMATS) {
-            try {
-                SimpleDateFormat df = new SimpleDateFormat(f);
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                return df.parse(timestamp);
-            } catch (ParseException e) {
-                // try next
-            }
+
+        return Date.from(parseInstant(timestamp));
+    }
+
+    static Instant parseInstant(String timestamp) {
+        if (timestamp == null)
+            return null;
+
+        if (timestamp.charAt(4) == '/') {
+            // Unsure where this is used, but retained for compatibility.
+            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));
+        } else {
+            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));
         }
-        throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
     }
 
     static String printDate(Date dt) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(dt);
+        return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

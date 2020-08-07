@@ -61,27 +61,29 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a simple string, otherwise use {@link #getPayloadObject()}.
+     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a simple string,
+     * otherwise use {@link #getPayloadObject()}.
      *
      * @return the payload
      */
     public String getPayload() {
         return (String) payload;
     }
-    
+
     /**
-     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a JSON object (Map), otherwise use {@link #getPayloadObject()}.
+     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a JSON object (Map),
+     * otherwise use {@link #getPayloadObject()}.
      *
      * @return the payload
      */
     public Map<String, Object> getPayloadMap() {
         return (Map<String, Object>) payload;
     }
-    
+
     /**
      * Gets payload without assuming its type. It could be a String or a Map.
      * 
-     * @return the payload 
+     * @return the payload
      */
     public Object getPayloadObject() {
         return payload;

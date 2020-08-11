@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.Previews.GROOT;
+
 /**
  * A commit in a repository.
  *
@@ -444,6 +446,39 @@ public class GHCommit {
         if (author == null || author.login == null)
             return null;
         return owner.root.getUser(author.login);
+    }
+
+    /**
+     * Retrieves a list of pull requests which contain this commit.
+     *
+     * @return {@link PagedIterable} with the pull requests which contain this commit
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHPullRequest> listPullRequests() {
+        return owner.root.createRequest()
+                .withPreview(GROOT)
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/pulls", owner.getOwnerName(), owner.getName(), sha))
+                .toIterable(GHPullRequest[].class, item -> item.wrapUp(owner));
+    }
+
+    /**
+     * Retrieves a list of branches where this commit is the head commit.
+     *
+     * @return {@link PagedIterable} with the branches where the commit is the head commit
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
+        return owner.root.createRequest()
+                .withPreview(GROOT)
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
+                        owner.getOwnerName(),
+                        owner.getName(),
+                        sha))
+                .toIterable(GHBranch[].class, item -> item.wrap(owner));
     }
 
     /**

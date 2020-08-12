@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.BAPTISE;
+
 /**
  * Creates a repository
  *
@@ -11,7 +13,7 @@ import java.net.URL;
 public class GHCreateRepositoryBuilder {
     private final GitHub root;
     protected final Requester builder;
-    private final String apiUrlTail;
+    private String apiUrlTail;
 
     GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.root = root;
@@ -197,6 +199,51 @@ public class GHCreateRepositoryBuilder {
     public GHCreateRepositoryBuilder team(GHTeam team) {
         if (team != null)
             this.builder.with("team_id", team.getId());
+        return this;
+    }
+
+    /**
+     * Specifies whether the repository is a template.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder templateRepository(boolean enabled) {
+        this.builder.withPreview(BAPTISE);
+        this.builder.with("is_template", enabled);
+        return this;
+    }
+
+    /**
+     * Specifies the ownership of the repository.
+     *
+     * @param owner
+     *            organization or personage
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder owner(String owner) {
+        this.builder.with("owner", owner);
+        return this;
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateOwner
+     *            template repository owner
+     * @param templateRepo
+     *            template repository
+     * @return a builder to continue with building
+     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
+        this.builder.withPreview(BAPTISE);
+        this.apiUrlTail = "/repos/" + templateOwner + "/" + templateRepo + "/generate";
         return this;
     }
 

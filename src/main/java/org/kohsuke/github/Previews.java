@@ -78,4 +78,12 @@ class Previews {
      * @see <a href="https://developer.github.com/v3/previews/#require-signed-commits">GitHub API Previews</a>
      */
     static final String ZZZAX = "application/vnd.github.zzzax-preview+json";
+
+    /**
+     * Create repository from template repository
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#create-and-use-repository-templates">GitHub API
+     *      Previews</a>
+     */
+    static final String BAPTISE = "application/vnd.github.baptiste-preview+json";
 }

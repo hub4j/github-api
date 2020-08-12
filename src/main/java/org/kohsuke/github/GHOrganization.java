@@ -101,50 +101,6 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Starts a builder that creates a new repository.
-     *
-     * <p>
-     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
-     * finally create a repository.
-     *
-     * @param name
-     *            the name
-     * @param isTemplate
-     *            the is_template
-     * @return the gh create repository builder
-     */
-    public GHCreateRepositoryBuilder createRepositoryWithParametersIsTemplate(String name, Boolean isTemplate) {
-        return new GHCreateRepositoryBuilder(root, "/orgs/" + login + "/repos", name, isTemplate);
-    }
-
-    /**
-     * Starts a builder that creates a new repository.
-     *
-     * <p>
-     * You use the returned builder to set various properties, then call
-     * {@link GHCreateRepositoryBuilder#createWithTemplate()} to finally create a repository.
-     *
-     * @param templateOwner
-     *            the owner of template repository
-     * @param templateRepo
-     *            the template repository
-     * @param name
-     *            the name of repository to be created
-     * @param owner
-     *            the organization of repository to be created
-     * @return the gh create repository builder
-     */
-    public GHCreateRepositoryBuilder createRepositoryWithTemplate(String templateRepo,
-            String templateOwner,
-            String name,
-            String owner) {
-        return new GHCreateRepositoryBuilder(root,
-                "/repos/" + templateOwner + "/" + templateRepo + "/generate",
-                name,
-                owner);
-    }
-
-    /**
      * Teams by their names.
      *
      * @return the teams

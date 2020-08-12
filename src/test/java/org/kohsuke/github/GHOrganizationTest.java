@@ -58,17 +58,17 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testCreateRepositoryWithParametersIsTemplate() throws IOException {
-        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEMPLATE_TEST);
+    public void testCreateRepositoryWithParameterIsTemplate() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHRepository repository = org.createRepositoryWithParametersIsTemplate(GITHUB_API_TEMPLATE_TEST, true)
+        GHRepository repository = org.createRepository(GITHUB_API_TEMPLATE_TEST)
                 .description("a test template repository used to test kohsuke's github-api")
                 .homepage("http://github-api.kohsuke.org/")
                 .team(org.getTeamByName("Core Developers"))
                 .autoInit(true)
+                .templateRepository(true)
                 .create();
-
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());
     }
@@ -78,12 +78,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHRepository repository = org
-                .createRepositoryWithTemplate(GITHUB_API_TEMPLATE_TEST,
-                        GITHUB_API_TEST_ORG,
-                        GITHUB_API_TEST,
-                        GITHUB_API_TEST_ORG)
-                .createWithTemplate();
+        GHRepository repository = org.createRepository(GITHUB_API_TEST)
+                .fromTemplateRepository(GITHUB_API_TEST_ORG, GITHUB_API_TEMPLATE_TEST)
+                .owner(GITHUB_API_TEST_ORG)
+                .create();
 
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());

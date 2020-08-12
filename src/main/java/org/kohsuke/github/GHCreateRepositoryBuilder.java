@@ -13,29 +13,13 @@ import static org.kohsuke.github.Previews.BAPTISE;
 public class GHCreateRepositoryBuilder {
     private final GitHub root;
     protected final Requester builder;
-    private final String apiUrlTail;
+    private String apiUrlTail;
 
     GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
         this.root = root;
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
         this.builder.with("name", name);
-    }
-
-    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name, Boolean isTemplate) {
-        this.root = root;
-        this.apiUrlTail = apiUrlTail;
-        this.builder = root.createRequest();
-        this.builder.with("name", name);
-        this.builder.with("is_template", isTemplate);
-    }
-
-    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name, String owner) {
-        this.root = root;
-        this.apiUrlTail = apiUrlTail;
-        this.builder = root.createRequest();
-        this.builder.with("name", name);
-        this.builder.with("owner", owner);
     }
 
     /**
@@ -219,6 +203,51 @@ public class GHCreateRepositoryBuilder {
     }
 
     /**
+     * Specifies whether the repository is a template.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder templateRepository(boolean enabled) {
+        this.builder.withPreview(BAPTISE);
+        this.builder.with("is_template", enabled);
+        return this;
+    }
+
+    /**
+     * Specifies the ownership of the repository.
+     *
+     * @param owner
+     *            organization or personage
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder owner(String owner) {
+        this.builder.with("owner", owner);
+        return this;
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateOwner
+     *            template repository owner
+     * @param templateRepo
+     *            template repository
+     * @return a builder to continue with building
+     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
+        this.builder.withPreview(BAPTISE);
+        this.apiUrlTail = "/repos/" + templateOwner + "/" + templateRepo + "/generate";
+        return this;
+    }
+
+    /**
      * Creates a repository with all the parameters.
      *
      * @return the gh repository
@@ -227,17 +256,6 @@ public class GHCreateRepositoryBuilder {
      */
     public GHRepository create() throws IOException {
         return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);
-    }
-
-    /**
-     * Creates a repository with all the parameters, and with Preview BAPTISE for template repo.
-     *
-     * @return the gh repository
-     * @throws IOException
-     *             if repsitory cannot be created
-     */
-    public GHRepository createWithTemplate() throws IOException {
-        return builder.method("POST").withPreview(BAPTISE).withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);
     }
 
 }

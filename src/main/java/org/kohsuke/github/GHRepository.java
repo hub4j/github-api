@@ -111,6 +111,10 @@ public class GHRepository extends GHObject {
 
     private GHRepository source, parent;
 
+    static GHRepository read(GitHub root, String owner, String name) throws IOException {
+        return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
+    }
+
     /**
      * Create deployment gh deployment builder.
      *

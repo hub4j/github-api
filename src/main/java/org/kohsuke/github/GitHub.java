@@ -546,9 +546,7 @@ public class GitHub {
         if (tokens.length < 2) {
             throw new IllegalArgumentException("Repository name must be in format owner/repo");
         }
-        return createRequest().withUrlPath("/repos/" + tokens[0] + '/' + tokens[1])
-                .fetch(GHRepository.class)
-                .wrap(this);
+        return GHRepository.read(this, tokens[0], tokens[1]);
     }
 
     /**

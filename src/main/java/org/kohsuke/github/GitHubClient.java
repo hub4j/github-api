@@ -405,7 +405,7 @@ abstract class GitHubClient {
                         // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                         // "If-Modified-Since" or "If-None-Match" values.
                         // This makes GitHub give us current data (not incorrectly cached data)
-                        request = request.toBuilder().withHeader("Cache-Control", "no-cache").build();
+                        request = request.toBuilder().setHeader("Cache-Control", "no-cache").build();
                         continue;
                     }
                     if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {

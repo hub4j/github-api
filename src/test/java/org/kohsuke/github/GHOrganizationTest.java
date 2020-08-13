@@ -9,6 +9,8 @@ import org.kohsuke.github.GHOrganization.Permission;
 import java.io.IOException;
 import java.util.List;
 
+import static org.hamcrest.Matchers.*;
+
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     public static final String GITHUB_API_TEST = "github-api-test";
@@ -59,18 +61,39 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreateRepositoryWithParameterIsTemplate() throws IOException {
-        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEMPLATE_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamByName("Core Developers");
+
+        int requestCount = mockGitHub.getRequestCount();
         GHRepository repository = org.createRepository(GITHUB_API_TEMPLATE_TEST)
                 .description("a test template repository used to test kohsuke's github-api")
                 .homepage("http://github-api.kohsuke.org/")
-                .team(org.getTeamByName("Core Developers"))
+                .team(team)
                 .autoInit(true)
                 .templateRepository(true)
                 .create();
         Assert.assertNotNull(repository);
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
+
         Assert.assertNotNull(repository.getReadme());
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
+
+        // isTemplate() does not call populate() from create
+        assertThat(repository.isTemplate(), equalTo(true));
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
+
+        repository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        // first isTemplate() calls populate()
+        assertThat(repository.isTemplate(), equalTo(true));
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 4));
+
+        // second isTemplate() does not call populate()
+        assertThat(repository.isTemplate(), equalTo(true));
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 4));
+
     }
 
     @Test
@@ -85,6 +108,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         Assert.assertNotNull(repository);
         Assert.assertNotNull(repository.getReadme());
+
     }
 
     @Test

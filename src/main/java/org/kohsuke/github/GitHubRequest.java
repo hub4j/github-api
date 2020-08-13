@@ -384,9 +384,11 @@ class GitHubRequest {
          *            the name
          * @param value
          *            the value
+         * @return the request builder
          */
-        public void setHeader(String name, String value) {
+        public B setHeader(String name, String value) {
             headers.put(name, value);
+            return (B) this;
         }
 
         /**
@@ -399,8 +401,11 @@ class GitHubRequest {
          * @return the request builder
          */
         public B withHeader(String name, String value) {
-            setHeader(name, value);
-            return (B) this;
+            String oldValue = headers.get(name);
+            if (!StringUtils.isBlank(oldValue)) {
+                value = oldValue + ", " + value;
+            }
+            return setHeader(name, value);
         }
 
         /**

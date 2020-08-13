@@ -154,10 +154,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.createRequest()
-                    .withUrlPath("/repos/" + login + '/' + name)
-                    .fetch(GHRepository.class)
-                    .wrap(root);
+            return GHRepository.read(root, login, name);
         } catch (FileNotFoundException e) {
             return null;
         }

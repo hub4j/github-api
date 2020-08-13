@@ -111,6 +111,12 @@ public class GHRepository extends GHObject {
 
     private GHRepository source, parent;
 
+    private Boolean isTemplate;
+
+    static GHRepository read(GitHub root, String owner, String name) throws IOException {
+        return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
+    }
+
     /**
      * Create deployment gh deployment builder.
      *
@@ -690,6 +696,28 @@ public class GHRepository extends GHObject {
      */
     public boolean isPrivate() {
         return _private;
+    }
+
+    /**
+     * Is template boolean.
+     *
+     * @return the boolean
+     */
+    @Deprecated
+    @Preview
+    public boolean isTemplate() {
+        // isTemplate is still in preview, we do not want to retrieve it unless needed.
+        if (isTemplate == null) {
+            try {
+                populate();
+            } catch (IOException e) {
+                // Convert this to a runtime exception to avoid messy method signature
+                throw new GHException("Could not populate the template setting of the repository", e);
+            }
+            // if this somehow is not populated, set it to false;
+            isTemplate = Boolean.TRUE.equals(isTemplate);
+        }
+        return isTemplate;
     }
 
     /**
@@ -2855,10 +2883,10 @@ public class GHRepository extends GHObject {
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest().withPreview(BAPTISE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
-                root.createRequest().withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
+                root.createRequest().withPreview(BAPTISE).withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
             } else {
                 throw e;
             }

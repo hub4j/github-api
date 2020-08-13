@@ -16,6 +16,14 @@ class Previews {
     static final String ANTIOPE = "application/vnd.github.antiope-preview+json";
 
     /**
+     * Create repository from template repository
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#create-and-use-repository-templates">GitHub API
+     *      Previews</a>
+     */
+    static final String BAPTISE = "application/vnd.github.baptiste-preview+json";
+
+    /**
      * Commit Search
      *
      * @see <a href="https://developer.github.com/v3/previews/#commit-search">GitHub API Previews</a>
@@ -59,6 +67,14 @@ class Previews {
     static final String MERCY = "application/vnd.github.mercy-preview+json";
 
     /**
+     * New visibility parameter for the Repositories API
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#new-visibility-parameter-for-the-repositories-api">GitHub
+     *      API Previews</a>
+     */
+    static final String NEBULA = "application/vnd.github.nebula-preview+json";
+
+    /**
      * Draft pull requests
      *
      * @see <a href="https://developer.github.com/v3/previews/#draft-pull-requests">GitHub API Previews</a>
@@ -79,11 +95,4 @@ class Previews {
      */
     static final String ZZZAX = "application/vnd.github.zzzax-preview+json";
 
-    /**
-     * Create repository from template repository
-     *
-     * @see <a href="https://developer.github.com/v3/previews/#create-and-use-repository-templates">GitHub API
-     *      Previews</a>
-     */
-    static final String BAPTISE = "application/vnd.github.baptiste-preview+json";
 }

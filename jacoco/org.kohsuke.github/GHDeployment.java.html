@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Represents a deployment
@@ -11,7 +12,7 @@ import java.net.URL;
  *      String, String)
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
-<span class="fc" id="L14">public class GHDeployment extends GHObject {</span>
+<span class="fc" id="L15">public class GHDeployment extends GHObject {</span>
     private GHRepository owner;
     private GitHub root;
     protected String sha;
@@ -25,11 +26,11 @@ import java.net.URL;
     protected GHUser creator;
 
     GHDeployment wrap(GHRepository owner) {
-<span class="fc" id="L28">        this.owner = owner;</span>
-<span class="fc" id="L29">        this.root = owner.root;</span>
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (creator != null)</span>
-<span class="fc" id="L31">            creator.wrapUp(root);</span>
-<span class="fc" id="L32">        return this;</span>
+<span class="fc" id="L29">        this.owner = owner;</span>
+<span class="fc" id="L30">        this.root = owner.root;</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (creator != null)</span>
+<span class="fc" id="L32">            creator.wrapUp(root);</span>
+<span class="fc" id="L33">        return this;</span>
     }
 
     /**
@@ -38,7 +39,7 @@ import java.net.URL;
      * @return the statuses url
      */
     public URL getStatusesUrl() {
-<span class="nc" id="L41">        return GitHubClient.parseURL(statuses_url);</span>
+<span class="nc" id="L42">        return GitHubClient.parseURL(statuses_url);</span>
     }
 
     /**
@@ -47,7 +48,7 @@ import java.net.URL;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="nc" id="L50">        return GitHubClient.parseURL(repository_url);</span>
+<span class="nc" id="L51">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -56,16 +57,36 @@ import java.net.URL;
      * @return the task
      */
     public String getTask() {
-<span class="nc" id="L59">        return task;</span>
+<span class="fc" id="L60">        return task;</span>
     }
 
     /**
-     * Gets payload.
+     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a simple string,
+     * otherwise use {@link #getPayloadObject()}.
      *
      * @return the payload
      */
     public String getPayload() {
-<span class="nc" id="L68">        return (String) payload;</span>
+<span class="fc" id="L70">        return (String) payload;</span>
+    }
+
+    /**
+     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a JSON object (Map),
+     * otherwise use {@link #getPayloadObject()}.
+     *
+     * @return the payload
+     */
+    public Map&lt;String, Object&gt; getPayloadMap() {
+<span class="fc" id="L80">        return (Map&lt;String, Object&gt;) payload;</span>
+    }
+
+    /**
+     * Gets payload without assuming its type. It could be a String or a Map.
+     * 
+     * @return the payload
+     */
+    public Object getPayloadObject() {
+<span class="fc" id="L89">        return payload;</span>
     }
 
     /**
@@ -74,7 +95,7 @@ import java.net.URL;
      * @return the environment
      */
     public String getEnvironment() {
-<span class="fc" id="L77">        return environment;</span>
+<span class="fc" id="L98">        return environment;</span>
     }
 
     /**
@@ -85,7 +106,7 @@ import java.net.URL;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L88">        return root.intern(creator);</span>
+<span class="fc" id="L109">        return root.intern(creator);</span>
     }
 
     /**
@@ -94,7 +115,7 @@ import java.net.URL;
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L97">        return ref;</span>
+<span class="fc" id="L118">        return ref;</span>
     }
 
     /**
@@ -103,7 +124,7 @@ import java.net.URL;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L106">        return sha;</span>
+<span class="fc" id="L127">        return sha;</span>
     }
 
     /**
@@ -111,7 +132,7 @@ import java.net.URL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L114">        return null;</span>
+<span class="nc" id="L135">        return null;</span>
     }
 
     /**
@@ -122,7 +143,7 @@ import java.net.URL;
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="nc" id="L125">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="nc" id="L146">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -131,9 +152,9 @@ import java.net.URL;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="nc" id="L134">        return root.createRequest()</span>
-<span class="nc" id="L135">                .withUrlPath(statuses_url)</span>
-<span class="nc" id="L136">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
+<span class="nc" id="L155">        return root.createRequest()</span>
+<span class="nc" id="L156">                .withUrlPath(statuses_url)</span>
+<span class="nc" id="L157">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
     }
 
 }

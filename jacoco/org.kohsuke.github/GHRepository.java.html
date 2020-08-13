@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,11 +65,13 @@ import static org.kohsuke.github.Previews.*;
 @SuppressWarnings({ &quot;UnusedDeclaration&quot; })
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L67">public class GHRepository extends GHObject {</span>
+<span class="fc" id="L68">public class GHRepository extends GHObject {</span>
     /* package almost final */ transient GitHub root;
 
     private String nodeId, description, homepage, name, full_name;
+
     private String html_url; // this is the UI
+
     /*
      * The license information makes use of the preview API.
      *
@@ -77,28 +80,42 @@ import static org.kohsuke.github.Previews.*;
     private GHLicense license;
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
+
     private GHUser owner; // not fully populated. beware.
+
     private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
 
     private boolean allow_squash_merge;
+
     private boolean allow_merge_commit;
+
     private boolean allow_rebase_merge;
 
     private boolean delete_branch_on_merge;
 
     @JsonProperty(&quot;private&quot;)
     private boolean _private;
+
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
+
     private String pushed_at;
-<span class="fc" id="L93">    private Map&lt;Integer, GHMilestone&gt; milestones = new WeakHashMap&lt;Integer, GHMilestone&gt;();</span>
+
+<span class="fc" id="L103">    private Map&lt;Integer, GHMilestone&gt; milestones = new WeakHashMap&lt;Integer, GHMilestone&gt;();</span>
 
     private String default_branch, language;
-<span class="fc" id="L96">    private Map&lt;String, GHCommit&gt; commits = new WeakHashMap&lt;String, GHCommit&gt;();</span>
+
+<span class="fc" id="L107">    private Map&lt;String, GHCommit&gt; commits = new WeakHashMap&lt;String, GHCommit&gt;();</span>
 
     @SkipFromToString
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
+
+    private Boolean isTemplate;
+
+    static GHRepository read(GitHub root, String owner, String name) throws IOException {
+<span class="fc" id="L117">        return root.createRequest().withUrlPath(&quot;/repos/&quot; + owner + '/' + name).fetch(GHRepository.class).wrap(root);</span>
+    }
 
     /**
      * Create deployment gh deployment builder.
@@ -108,7 +125,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder createDeployment(String ref) {
-<span class="fc" id="L111">        return new GHDeploymentBuilder(this, ref);</span>
+<span class="fc" id="L128">        return new GHDeploymentBuilder(this, ref);</span>
     }
 
     /**
@@ -123,7 +140,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public PagedIterable&lt;GHDeploymentStatus&gt; getDeploymentStatuses(final int id) throws IOException {
-<span class="nc" id="L126">        return getDeployment(id).listStatuses();</span>
+<span class="nc" id="L143">        return getDeployment(id).listStatuses();</span>
     }
 
     /**
@@ -140,13 +157,13 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeployment&gt; listDeployments(String sha, String ref, String task, String environment) {
-<span class="fc" id="L143">        return root.createRequest()</span>
-<span class="fc" id="L144">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L145">                .with(&quot;ref&quot;, ref)</span>
-<span class="fc" id="L146">                .with(&quot;task&quot;, task)</span>
-<span class="fc" id="L147">                .with(&quot;environment&quot;, environment)</span>
-<span class="fc" id="L148">                .withUrlPath(getApiTailUrl(&quot;deployments&quot;))</span>
-<span class="fc" id="L149">                .toIterable(GHDeployment[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L160">        return root.createRequest()</span>
+<span class="fc" id="L161">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L162">                .with(&quot;ref&quot;, ref)</span>
+<span class="fc" id="L163">                .with(&quot;task&quot;, task)</span>
+<span class="fc" id="L164">                .with(&quot;environment&quot;, environment)</span>
+<span class="fc" id="L165">                .withUrlPath(getApiTailUrl(&quot;deployments&quot;))</span>
+<span class="fc" id="L166">                .toIterable(GHDeployment[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -159,10 +176,10 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHDeployment getDeployment(long id) throws IOException {
-<span class="fc" id="L162">        return root.createRequest()</span>
-<span class="fc" id="L163">                .withUrlPath(getApiTailUrl(&quot;deployments/&quot; + id))</span>
-<span class="fc" id="L164">                .fetch(GHDeployment.class)</span>
-<span class="fc" id="L165">                .wrap(this);</span>
+<span class="fc" id="L179">        return root.createRequest()</span>
+<span class="fc" id="L180">                .withUrlPath(getApiTailUrl(&quot;deployments/&quot; + id))</span>
+<span class="fc" id="L181">                .fetch(GHDeployment.class)</span>
+<span class="fc" id="L182">                .wrap(this);</span>
     }
 
     /**
@@ -180,7 +197,7 @@ import static org.kohsuke.github.Previews.*;
     @Deprecated
     public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
             throws IOException {
-<span class="nc" id="L183">        return getDeployment(deploymentId).createStatus(ghDeploymentState);</span>
+<span class="nc" id="L200">        return getDeployment(deploymentId).createStatus(ghDeploymentState);</span>
     }
 
     private static class GHRepoPermission {
@@ -193,7 +210,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the node id
      */
     public String getNodeId() {
-<span class="fc" id="L196">        return nodeId;</span>
+<span class="fc" id="L213">        return nodeId;</span>
     }
 
     /**
@@ -202,7 +219,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L205">        return description;</span>
+<span class="fc" id="L222">        return description;</span>
     }
 
     /**
@@ -211,7 +228,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the homepage
      */
     public String getHomepage() {
-<span class="nc" id="L214">        return homepage;</span>
+<span class="nc" id="L231">        return homepage;</span>
     }
 
     /**
@@ -220,7 +237,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the git transport url
      */
     public String getGitTransportUrl() {
-<span class="nc" id="L223">        return git_url;</span>
+<span class="nc" id="L240">        return git_url;</span>
     }
 
     /**
@@ -229,7 +246,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the http transport url
      */
     public String getHttpTransportUrl() {
-<span class="fc" id="L232">        return clone_url;</span>
+<span class="fc" id="L249">        return clone_url;</span>
     }
 
     /**
@@ -240,7 +257,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public String gitHttpTransportUrl() {
-<span class="fc" id="L243">        return clone_url;</span>
+<span class="fc" id="L260">        return clone_url;</span>
     }
 
     /**
@@ -249,7 +266,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the svn url
      */
     public String getSvnUrl() {
-<span class="nc" id="L252">        return svn_url;</span>
+<span class="nc" id="L269">        return svn_url;</span>
     }
 
     /**
@@ -259,7 +276,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the mirror url
      */
     public String getMirrorUrl() {
-<span class="nc" id="L262">        return mirror_url;</span>
+<span class="nc" id="L279">        return mirror_url;</span>
     }
 
     /**
@@ -268,11 +285,11 @@ import static org.kohsuke.github.Previews.*;
      * @return the ssh url
      */
     public String getSshUrl() {
-<span class="nc" id="L271">        return ssh_url;</span>
+<span class="nc" id="L288">        return ssh_url;</span>
     }
 
     public URL getHtmlUrl() {
-<span class="nc" id="L275">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L292">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -281,7 +298,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L284">        return name;</span>
+<span class="fc" id="L301">        return name;</span>
     }
 
     /**
@@ -291,7 +308,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the full name
      */
     public String getFullName() {
-<span class="fc" id="L294">        return full_name;</span>
+<span class="fc" id="L311">        return full_name;</span>
     }
 
     /**
@@ -300,7 +317,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasPullAccess() {
-<span class="pc bpc" id="L303" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.pull;</span>
+<span class="pc bpc" id="L320" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.pull;</span>
     }
 
     /**
@@ -309,7 +326,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasPushAccess() {
-<span class="pc bpc" id="L312" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.push;</span>
+<span class="pc bpc" id="L329" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.push;</span>
     }
 
     /**
@@ -318,7 +335,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasAdminAccess() {
-<span class="pc bpc" id="L321" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.admin;</span>
+<span class="pc bpc" id="L338" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.admin;</span>
     }
 
     /**
@@ -327,7 +344,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the language
      */
     public String getLanguage() {
-<span class="fc" id="L330">        return language;</span>
+<span class="fc" id="L347">        return language;</span>
     }
 
     /**
@@ -338,7 +355,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHUser getOwner() throws IOException {
-<span class="fc bfc" id="L341" title="All 2 branches covered.">        return root.isOffline() ? owner : root.getUser(getOwnerName()); // because 'owner' isn't fully populated</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">        return root.isOffline() ? owner : root.getUser(getOwnerName()); // because 'owner' isn't fully populated</span>
     }
 
     /**
@@ -351,7 +368,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHIssue getIssue(int id) throws IOException {
-<span class="fc" id="L354">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;issues/&quot; + id)).fetch(GHIssue.class).wrap(this);</span>
+<span class="fc" id="L371">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;issues/&quot; + id)).fetch(GHIssue.class).wrap(this);</span>
     }
 
     /**
@@ -362,7 +379,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh issue builder
      */
     public GHIssueBuilder createIssue(String title) {
-<span class="fc" id="L365">        return new GHIssueBuilder(this, title);</span>
+<span class="fc" id="L382">        return new GHIssueBuilder(this, title);</span>
     }
 
     /**
@@ -375,7 +392,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHIssue&gt; getIssues(GHIssueState state) throws IOException {
-<span class="fc" id="L378">        return listIssues(state).toList();</span>
+<span class="fc" id="L395">        return listIssues(state).toList();</span>
     }
 
     /**
@@ -390,12 +407,12 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHIssue&gt; getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
-<span class="nc" id="L393">        Requester requester = root.createRequest()</span>
-<span class="nc" id="L394">                .with(&quot;state&quot;, state)</span>
-<span class="nc bnc" id="L395" title="All 2 branches missed.">                .with(&quot;milestone&quot;, milestone == null ? &quot;none&quot; : &quot;&quot; + milestone.getNumber());</span>
-<span class="nc" id="L396">        return requester.withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
-<span class="nc" id="L397">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this))</span>
-<span class="nc" id="L398">                .toList();</span>
+<span class="nc" id="L410">        Requester requester = root.createRequest()</span>
+<span class="nc" id="L411">                .with(&quot;state&quot;, state)</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">                .with(&quot;milestone&quot;, milestone == null ? &quot;none&quot; : &quot;&quot; + milestone.getNumber());</span>
+<span class="nc" id="L413">        return requester.withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
+<span class="nc" id="L414">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this))</span>
+<span class="nc" id="L415">                .toList();</span>
     }
 
     /**
@@ -406,10 +423,10 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHIssue&gt; listIssues(final GHIssueState state) {
-<span class="fc" id="L409">        return root.createRequest()</span>
-<span class="fc" id="L410">                .with(&quot;state&quot;, state)</span>
-<span class="fc" id="L411">                .withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
-<span class="fc" id="L412">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L426">        return root.createRequest()</span>
+<span class="fc" id="L427">                .with(&quot;state&quot;, state)</span>
+<span class="fc" id="L428">                .withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
+<span class="fc" id="L429">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -420,7 +437,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh release builder
      */
     public GHReleaseBuilder createRelease(String tag) {
-<span class="fc" id="L423">        return new GHReleaseBuilder(this, tag);</span>
+<span class="fc" id="L440">        return new GHReleaseBuilder(this, tag);</span>
     }
 
     /**
@@ -436,13 +453,13 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHRef createRef(String name, String sha) throws IOException {
-<span class="fc" id="L439">        return root.createRequest()</span>
-<span class="fc" id="L440">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L441">                .with(&quot;ref&quot;, name)</span>
-<span class="fc" id="L442">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L443">                .withUrlPath(getApiTailUrl(&quot;git/refs&quot;))</span>
-<span class="fc" id="L444">                .fetch(GHRef.class)</span>
-<span class="fc" id="L445">                .wrap(root);</span>
+<span class="fc" id="L456">        return root.createRequest()</span>
+<span class="fc" id="L457">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L458">                .with(&quot;ref&quot;, name)</span>
+<span class="fc" id="L459">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L460">                .withUrlPath(getApiTailUrl(&quot;git/refs&quot;))</span>
+<span class="fc" id="L461">                .fetch(GHRef.class)</span>
+<span class="fc" id="L462">                .wrap(root);</span>
     }
 
     /**
@@ -454,7 +471,7 @@ import static org.kohsuke.github.Previews.*;
      * @deprecated use {@link #listReleases()}
      */
     public List&lt;GHRelease&gt; getReleases() throws IOException {
-<span class="fc" id="L457">        return listReleases().toList();</span>
+<span class="fc" id="L474">        return listReleases().toList();</span>
     }
 
     /**
@@ -468,9 +485,9 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHRelease getRelease(long id) throws IOException {
         try {
-<span class="fc" id="L471">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/&quot; + id)).fetch(GHRelease.class).wrap(this);</span>
-<span class="fc" id="L472">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L473">            return null; // no release for this id</span>
+<span class="fc" id="L488">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/&quot; + id)).fetch(GHRelease.class).wrap(this);</span>
+<span class="fc" id="L489">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L490">            return null; // no release for this id</span>
         }
     }
 
@@ -485,12 +502,12 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHRelease getReleaseByTagName(String tag) throws IOException {
         try {
-<span class="fc" id="L488">            return root.createRequest()</span>
-<span class="fc" id="L489">                    .withUrlPath(getApiTailUrl(&quot;releases/tags/&quot; + tag))</span>
-<span class="fc" id="L490">                    .fetch(GHRelease.class)</span>
-<span class="fc" id="L491">                    .wrap(this);</span>
-<span class="fc" id="L492">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L493">            return null; // no release for this tag</span>
+<span class="fc" id="L505">            return root.createRequest()</span>
+<span class="fc" id="L506">                    .withUrlPath(getApiTailUrl(&quot;releases/tags/&quot; + tag))</span>
+<span class="fc" id="L507">                    .fetch(GHRelease.class)</span>
+<span class="fc" id="L508">                    .wrap(this);</span>
+<span class="fc" id="L509">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L510">            return null; // no release for this tag</span>
         }
     }
 
@@ -503,9 +520,9 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHRelease getLatestRelease() throws IOException {
         try {
-<span class="fc" id="L506">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/latest&quot;)).fetch(GHRelease.class).wrap(this);</span>
-<span class="fc" id="L507">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L508">            return null; // no latest release</span>
+<span class="fc" id="L523">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/latest&quot;)).fetch(GHRelease.class).wrap(this);</span>
+<span class="fc" id="L524">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L525">            return null; // no latest release</span>
         }
     }
 
@@ -517,9 +534,9 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHRelease&gt; listReleases() throws IOException {
-<span class="fc" id="L520">        return root.createRequest()</span>
-<span class="fc" id="L521">                .withUrlPath(getApiTailUrl(&quot;releases&quot;))</span>
-<span class="fc" id="L522">                .toIterable(GHRelease[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L537">        return root.createRequest()</span>
+<span class="fc" id="L538">                .withUrlPath(getApiTailUrl(&quot;releases&quot;))</span>
+<span class="fc" id="L539">                .toIterable(GHRelease[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -530,9 +547,9 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHTag&gt; listTags() throws IOException {
-<span class="fc" id="L533">        return root.createRequest()</span>
-<span class="fc" id="L534">                .withUrlPath(getApiTailUrl(&quot;tags&quot;))</span>
-<span class="fc" id="L535">                .toIterable(GHTag[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L550">        return root.createRequest()</span>
+<span class="fc" id="L551">                .withUrlPath(getApiTailUrl(&quot;tags&quot;))</span>
+<span class="fc" id="L552">                .toIterable(GHTag[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -544,7 +561,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public Map&lt;String, Long&gt; listLanguages() throws IOException {
-<span class="fc" id="L547">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;languages&quot;)).fetch(HashMap.class);</span>
+<span class="fc" id="L564">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;languages&quot;)).fetch(HashMap.class);</span>
     }
 
     /**
@@ -557,7 +574,7 @@ import static org.kohsuke.github.Previews.*;
         // a full GHUser while others populate only the owner and email. This later form is super helpful
         // in putting the login in owner.name not owner.login... thankfully we can easily identify this
         // second set because owner.login will be null
-<span class="fc bfc" id="L560" title="All 2 branches covered.">        return owner.login != null ? owner.login : owner.name;</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">        return owner.login != null ? owner.login : owner.name;</span>
     }
 
     /**
@@ -566,7 +583,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasIssues() {
-<span class="fc" id="L569">        return has_issues;</span>
+<span class="fc" id="L586">        return has_issues;</span>
     }
 
     /**
@@ -575,7 +592,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasProjects() {
-<span class="fc" id="L578">        return has_projects;</span>
+<span class="fc" id="L595">        return has_projects;</span>
     }
 
     /**
@@ -584,7 +601,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasWiki() {
-<span class="fc" id="L587">        return has_wiki;</span>
+<span class="fc" id="L604">        return has_wiki;</span>
     }
 
     /**
@@ -593,7 +610,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isFork() {
-<span class="fc" id="L596">        return fork;</span>
+<span class="fc" id="L613">        return fork;</span>
     }
 
     /**
@@ -602,7 +619,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isArchived() {
-<span class="fc" id="L605">        return archived;</span>
+<span class="fc" id="L622">        return archived;</span>
     }
 
     /**
@@ -611,7 +628,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isAllowSquashMerge() {
-<span class="fc" id="L614">        return allow_squash_merge;</span>
+<span class="fc" id="L631">        return allow_squash_merge;</span>
     }
 
     /**
@@ -620,7 +637,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isAllowMergeCommit() {
-<span class="fc" id="L623">        return allow_merge_commit;</span>
+<span class="fc" id="L640">        return allow_merge_commit;</span>
     }
 
     /**
@@ -629,7 +646,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isAllowRebaseMerge() {
-<span class="fc" id="L632">        return allow_rebase_merge;</span>
+<span class="fc" id="L649">        return allow_rebase_merge;</span>
     }
 
     /**
@@ -638,7 +655,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isDeleteBranchOnMerge() {
-<span class="fc" id="L641">        return delete_branch_on_merge;</span>
+<span class="fc" id="L658">        return delete_branch_on_merge;</span>
     }
 
     /**
@@ -650,7 +667,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public int getForks() {
-<span class="nc" id="L653">        return getForksCount();</span>
+<span class="nc" id="L670">        return getForksCount();</span>
     }
 
     /**
@@ -660,7 +677,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the forks
      */
     public int getForksCount() {
-<span class="nc" id="L663">        return forks_count;</span>
+<span class="nc" id="L680">        return forks_count;</span>
     }
 
     /**
@@ -669,7 +686,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the stargazers count
      */
     public int getStargazersCount() {
-<span class="fc" id="L672">        return stargazers_count;</span>
+<span class="fc" id="L689">        return stargazers_count;</span>
     }
 
     /**
@@ -678,7 +695,29 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean isPrivate() {
-<span class="fc" id="L681">        return _private;</span>
+<span class="fc" id="L698">        return _private;</span>
+    }
+
+    /**
+     * Is template boolean.
+     *
+     * @return the boolean
+     */
+    @Deprecated
+    @Preview
+    public boolean isTemplate() {
+        // isTemplate is still in preview, we do not want to retrieve it unless needed.
+<span class="fc bfc" id="L710" title="All 2 branches covered.">        if (isTemplate == null) {</span>
+            try {
+<span class="fc" id="L712">                populate();</span>
+<span class="nc" id="L713">            } catch (IOException e) {</span>
+                // Convert this to a runtime exception to avoid messy method signature
+<span class="nc" id="L715">                throw new GHException(&quot;Could not populate the template setting of the repository&quot;, e);</span>
+<span class="fc" id="L716">            }</span>
+            // if this somehow is not populated, set it to false;
+<span class="fc" id="L718">            isTemplate = Boolean.TRUE.equals(isTemplate);</span>
+        }
+<span class="fc" id="L720">        return isTemplate;</span>
     }
 
     /**
@@ -687,7 +726,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasDownloads() {
-<span class="fc" id="L690">        return has_downloads;</span>
+<span class="fc" id="L729">        return has_downloads;</span>
     }
 
     /**
@@ -696,7 +735,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the boolean
      */
     public boolean hasPages() {
-<span class="fc" id="L699">        return has_pages;</span>
+<span class="fc" id="L738">        return has_pages;</span>
     }
 
     /**
@@ -707,7 +746,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public int getWatchers() {
-<span class="nc" id="L710">        return getWatchersCount();</span>
+<span class="nc" id="L749">        return getWatchersCount();</span>
     }
 
     /**
@@ -716,7 +755,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the watchers
      */
     public int getWatchersCount() {
-<span class="fc" id="L719">        return watchers_count;</span>
+<span class="fc" id="L758">        return watchers_count;</span>
     }
 
     /**
@@ -725,7 +764,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the open issue count
      */
     public int getOpenIssueCount() {
-<span class="nc" id="L728">        return open_issues_count;</span>
+<span class="nc" id="L767">        return open_issues_count;</span>
     }
 
     /**
@@ -734,7 +773,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the subscribers count
      */
     public int getSubscribersCount() {
-<span class="nc" id="L737">        return subscribers_count;</span>
+<span class="nc" id="L776">        return subscribers_count;</span>
     }
 
     /**
@@ -743,7 +782,7 @@ import static org.kohsuke.github.Previews.*;
      * @return null if the repository was never pushed at.
      */
     public Date getPushedAt() {
-<span class="nc" id="L746">        return GitHubClient.parseDate(pushed_at);</span>
+<span class="nc" id="L785">        return GitHubClient.parseDate(pushed_at);</span>
     }
 
     /**
@@ -752,7 +791,7 @@ import static org.kohsuke.github.Previews.*;
      * @return This field is null until the user explicitly configures the master branch.
      */
     public String getDefaultBranch() {
-<span class="nc" id="L755">        return default_branch;</span>
+<span class="nc" id="L794">        return default_branch;</span>
     }
 
     /**
@@ -763,7 +802,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public String getMasterBranch() {
-<span class="nc" id="L766">        return default_branch;</span>
+<span class="nc" id="L805">        return default_branch;</span>
     }
 
     /**
@@ -772,7 +811,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the size
      */
     public int getSize() {
-<span class="nc" id="L775">        return size;</span>
+<span class="nc" id="L814">        return size;</span>
     }
 
     /**
@@ -784,7 +823,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHUser&gt; getCollaborators() throws IOException {
-<span class="fc" id="L787">        return new GHPersonSet&lt;GHUser&gt;(listCollaborators().toList());</span>
+<span class="fc" id="L826">        return new GHPersonSet&lt;GHUser&gt;(listCollaborators().toList());</span>
     }
 
     /**
@@ -795,7 +834,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listCollaborators() throws IOException {
-<span class="fc" id="L798">        return listUsers(&quot;collaborators&quot;);</span>
+<span class="fc" id="L837">        return listUsers(&quot;collaborators&quot;);</span>
     }
 
     /**
@@ -808,7 +847,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listAssignees() throws IOException {
-<span class="nc" id="L811">        return listUsers(&quot;assignees&quot;);</span>
+<span class="nc" id="L850">        return listUsers(&quot;assignees&quot;);</span>
     }
 
     /**
@@ -821,7 +860,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public boolean hasAssignee(GHUser u) throws IOException {
-<span class="nc bnc" id="L824" title="All 2 branches missed.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;assignees/&quot; + u.getLogin())).fetchHttpStatusCode()</span>
+<span class="nc bnc" id="L863" title="All 2 branches missed.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;assignees/&quot; + u.getLogin())).fetchHttpStatusCode()</span>
                 / 100 == 2;
     }
 
@@ -834,15 +873,15 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public Set&lt;String&gt; getCollaboratorNames() throws IOException {
-<span class="fc" id="L837">        Set&lt;String&gt; r = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L876">        Set&lt;String&gt; r = new HashSet&lt;&gt;();</span>
         // no initializer - we just want to the logins
-<span class="fc" id="L839">        PagedIterable&lt;GHUser&gt; users = root.createRequest()</span>
-<span class="fc" id="L840">                .withUrlPath(getApiTailUrl(&quot;collaborators&quot;))</span>
-<span class="fc" id="L841">                .toIterable(GHUser[].class, null);</span>
-<span class="fc bfc" id="L842" title="All 2 branches covered.">        for (GHUser u : users.toArray()) {</span>
-<span class="fc" id="L843">            r.add(u.login);</span>
+<span class="fc" id="L878">        PagedIterable&lt;GHUser&gt; users = root.createRequest()</span>
+<span class="fc" id="L879">                .withUrlPath(getApiTailUrl(&quot;collaborators&quot;))</span>
+<span class="fc" id="L880">                .toIterable(GHUser[].class, null);</span>
+<span class="fc bfc" id="L881" title="All 2 branches covered.">        for (GHUser u : users.toArray()) {</span>
+<span class="fc" id="L882">            r.add(u.login);</span>
         }
-<span class="fc" id="L845">        return r;</span>
+<span class="fc" id="L884">        return r;</span>
     }
 
     /**
@@ -855,11 +894,11 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHPermissionType getPermission(String user) throws IOException {
-<span class="fc" id="L858">        GHPermission perm = root.createRequest()</span>
-<span class="fc" id="L859">                .withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user + &quot;/permission&quot;))</span>
-<span class="fc" id="L860">                .fetch(GHPermission.class);</span>
-<span class="fc" id="L861">        perm.wrapUp(root);</span>
-<span class="fc" id="L862">        return perm.getPermissionType();</span>
+<span class="fc" id="L897">        GHPermission perm = root.createRequest()</span>
+<span class="fc" id="L898">                .withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user + &quot;/permission&quot;))</span>
+<span class="fc" id="L899">                .fetch(GHPermission.class);</span>
+<span class="fc" id="L900">        perm.wrapUp(root);</span>
+<span class="fc" id="L901">        return perm.getPermissionType();</span>
     }
 
     /**
@@ -872,7 +911,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHPermissionType getPermission(GHUser u) throws IOException {
-<span class="nc" id="L875">        return getPermission(u.getLogin());</span>
+<span class="nc" id="L914">        return getPermission(u.getLogin());</span>
     }
 
     /**
@@ -883,11 +922,11 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public Set&lt;GHTeam&gt; getTeams() throws IOException {
-<span class="fc" id="L886">        GHOrganization org = root.getOrganization(getOwnerName());</span>
-<span class="fc" id="L887">        return root.createRequest()</span>
-<span class="fc" id="L888">                .withUrlPath(getApiTailUrl(&quot;teams&quot;))</span>
-<span class="fc" id="L889">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(org))</span>
-<span class="fc" id="L890">                .toSet();</span>
+<span class="fc" id="L925">        GHOrganization org = root.getOrganization(getOwnerName());</span>
+<span class="fc" id="L926">        return root.createRequest()</span>
+<span class="fc" id="L927">                .withUrlPath(getApiTailUrl(&quot;teams&quot;))</span>
+<span class="fc" id="L928">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(org))</span>
+<span class="fc" id="L929">                .toSet();</span>
     }
 
     /**
@@ -901,8 +940,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
-<span class="nc" id="L904">        addCollaborators(asList(users), permission);</span>
-<span class="nc" id="L905">    }</span>
+<span class="nc" id="L943">        addCollaborators(asList(users), permission);</span>
+<span class="nc" id="L944">    }</span>
 
     /**
      * Add collaborators.
@@ -913,8 +952,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void addCollaborators(GHUser... users) throws IOException {
-<span class="nc" id="L916">        addCollaborators(asList(users));</span>
-<span class="nc" id="L917">    }</span>
+<span class="nc" id="L955">        addCollaborators(asList(users));</span>
+<span class="nc" id="L956">    }</span>
 
     /**
      * Add collaborators.
@@ -925,8 +964,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void addCollaborators(Collection&lt;GHUser&gt; users) throws IOException {
-<span class="nc" id="L928">        modifyCollaborators(users, &quot;PUT&quot;, null);</span>
-<span class="nc" id="L929">    }</span>
+<span class="nc" id="L967">        modifyCollaborators(users, &quot;PUT&quot;, null);</span>
+<span class="nc" id="L968">    }</span>
 
     /**
      * Add collaborators.
@@ -939,8 +978,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void addCollaborators(Collection&lt;GHUser&gt; users, GHOrganization.Permission permission) throws IOException {
-<span class="fc" id="L942">        modifyCollaborators(users, &quot;PUT&quot;, permission);</span>
-<span class="fc" id="L943">    }</span>
+<span class="fc" id="L981">        modifyCollaborators(users, &quot;PUT&quot;, permission);</span>
+<span class="fc" id="L982">    }</span>
 
     /**
      * Remove collaborators.
@@ -951,8 +990,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void removeCollaborators(GHUser... users) throws IOException {
-<span class="nc" id="L954">        removeCollaborators(asList(users));</span>
-<span class="nc" id="L955">    }</span>
+<span class="nc" id="L993">        removeCollaborators(asList(users));</span>
+<span class="nc" id="L994">    }</span>
 
     /**
      * Remove collaborators.
@@ -963,22 +1002,22 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void removeCollaborators(Collection&lt;GHUser&gt; users) throws IOException {
-<span class="nc" id="L966">        modifyCollaborators(users, &quot;DELETE&quot;, null);</span>
-<span class="nc" id="L967">    }</span>
+<span class="nc" id="L1005">        modifyCollaborators(users, &quot;DELETE&quot;, null);</span>
+<span class="nc" id="L1006">    }</span>
 
     private void modifyCollaborators(@NonNull Collection&lt;GHUser&gt; users,
             @NonNull String method,
             @CheckForNull GHOrganization.Permission permission) throws IOException {
-<span class="fc" id="L972">        Requester requester = root.createRequest().method(method);</span>
-
-<span class="pc bpc" id="L974" title="1 of 2 branches missed.">        if (permission != null) {</span>
-<span class="fc" id="L975">            requester = requester.with(&quot;permission&quot;, permission).inBody();</span>
+<span class="fc" id="L1011">        Requester requester = root.createRequest().method(method);</span>
+<span class="pc bpc" id="L1012" title="1 of 2 branches missed.">        if (permission != null) {</span>
+<span class="fc" id="L1013">            requester = requester.with(&quot;permission&quot;, permission).inBody();</span>
         }
 
-<span class="fc bfc" id="L978" title="All 2 branches covered.">        for (GHUser user : users) {</span>
-<span class="fc" id="L979">            requester.withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user.getLogin())).send();</span>
-<span class="fc" id="L980">        }</span>
-<span class="fc" id="L981">    }</span>
+        // Make sure that the users collection doesn't have any duplicates
+<span class="fc bfc" id="L1017" title="All 2 branches covered.">        for (GHUser user : new LinkedHashSet&lt;GHUser&gt;(users)) {</span>
+<span class="fc" id="L1018">            requester.withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user.getLogin())).send();</span>
+<span class="fc" id="L1019">        }</span>
+<span class="fc" id="L1020">    }</span>
 
     /**
      * Sets email service hook.
@@ -989,23 +1028,24 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setEmailServiceHook(String address) throws IOException {
-<span class="nc" id="L992">        Map&lt;String, String&gt; config = new HashMap&lt;String, String&gt;();</span>
-<span class="nc" id="L993">        config.put(&quot;address&quot;, address);</span>
-<span class="nc" id="L994">        root.createRequest()</span>
-<span class="nc" id="L995">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L996">                .with(&quot;name&quot;, &quot;email&quot;)</span>
-<span class="nc" id="L997">                .with(&quot;config&quot;, config)</span>
-<span class="nc" id="L998">                .with(&quot;active&quot;, true)</span>
-<span class="nc" id="L999">                .withUrlPath(getApiTailUrl(&quot;hooks&quot;))</span>
-<span class="nc" id="L1000">                .send();</span>
-<span class="nc" id="L1001">    }</span>
+<span class="nc" id="L1031">        Map&lt;String, String&gt; config = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L1032">        config.put(&quot;address&quot;, address);</span>
+<span class="nc" id="L1033">        root.createRequest()</span>
+<span class="nc" id="L1034">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L1035">                .with(&quot;name&quot;, &quot;email&quot;)</span>
+<span class="nc" id="L1036">                .with(&quot;config&quot;, config)</span>
+<span class="nc" id="L1037">                .with(&quot;active&quot;, true)</span>
+<span class="nc" id="L1038">                .withUrlPath(getApiTailUrl(&quot;hooks&quot;))</span>
+<span class="nc" id="L1039">                .send();</span>
+<span class="nc" id="L1040">    }</span>
 
     private void edit(String key, String value) throws IOException {
-<span class="fc" id="L1004">        Requester requester = root.createRequest();</span>
-<span class="fc bfc" id="L1005" title="All 2 branches covered.">        if (!key.equals(&quot;name&quot;))</span>
-<span class="fc" id="L1006">            requester.with(&quot;name&quot;, name); // even when we don't change the name, we need to send it in</span>
-<span class="fc" id="L1007">        requester.with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiTailUrl(&quot;&quot;)).send();</span>
-<span class="fc" id="L1008">    }</span>
+<span class="fc" id="L1043">        Requester requester = root.createRequest();</span>
+<span class="fc bfc" id="L1044" title="All 2 branches covered.">        if (!key.equals(&quot;name&quot;)) {</span>
+<span class="fc" id="L1045">            requester.with(&quot;name&quot;, name); // even when we don't change the name, we need to send it in</span>
+        }
+<span class="fc" id="L1047">        requester.with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiTailUrl(&quot;&quot;)).send();</span>
+<span class="fc" id="L1048">    }</span>
 
     /**
      * Enables or disables the issue tracker for this repository.
@@ -1016,8 +1056,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void enableIssueTracker(boolean v) throws IOException {
-<span class="fc" id="L1019">        edit(&quot;has_issues&quot;, String.valueOf(v));</span>
-<span class="fc" id="L1020">    }</span>
+<span class="fc" id="L1059">        edit(&quot;has_issues&quot;, String.valueOf(v));</span>
+<span class="fc" id="L1060">    }</span>
 
     /**
      * Enables or disables projects for this repository.
@@ -1028,8 +1068,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void enableProjects(boolean v) throws IOException {
-<span class="fc" id="L1031">        edit(&quot;has_projects&quot;, String.valueOf(v));</span>
-<span class="fc" id="L1032">    }</span>
+<span class="fc" id="L1071">        edit(&quot;has_projects&quot;, String.valueOf(v));</span>
+<span class="fc" id="L1072">    }</span>
 
     /**
      * Enables or disables Wiki for this repository.
@@ -1040,8 +1080,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void enableWiki(boolean v) throws IOException {
-<span class="fc" id="L1043">        edit(&quot;has_wiki&quot;, String.valueOf(v));</span>
-<span class="fc" id="L1044">    }</span>
+<span class="fc" id="L1083">        edit(&quot;has_wiki&quot;, String.valueOf(v));</span>
+<span class="fc" id="L1084">    }</span>
 
     /**
      * Enable downloads.
@@ -1052,8 +1092,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void enableDownloads(boolean v) throws IOException {
-<span class="fc" id="L1055">        edit(&quot;has_downloads&quot;, String.valueOf(v));</span>
-<span class="fc" id="L1056">    }</span>
+<span class="fc" id="L1095">        edit(&quot;has_downloads&quot;, String.valueOf(v));</span>
+<span class="fc" id="L1096">    }</span>
 
     /**
      * Rename this repository.
@@ -1064,8 +1104,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void renameTo(String name) throws IOException {
-<span class="fc" id="L1067">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L1068">    }</span>
+<span class="fc" id="L1107">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L1108">    }</span>
 
     /**
      * Sets description.
@@ -1076,8 +1116,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setDescription(String value) throws IOException {
-<span class="fc" id="L1079">        edit(&quot;description&quot;, value);</span>
-<span class="fc" id="L1080">    }</span>
+<span class="fc" id="L1119">        edit(&quot;description&quot;, value);</span>
+<span class="fc" id="L1120">    }</span>
 
     /**
      * Sets homepage.
@@ -1088,8 +1128,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setHomepage(String value) throws IOException {
-<span class="nc" id="L1091">        edit(&quot;homepage&quot;, value);</span>
-<span class="nc" id="L1092">    }</span>
+<span class="nc" id="L1131">        edit(&quot;homepage&quot;, value);</span>
+<span class="nc" id="L1132">    }</span>
 
     /**
      * Sets default branch.
@@ -1100,8 +1140,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setDefaultBranch(String value) throws IOException {
-<span class="nc" id="L1103">        edit(&quot;default_branch&quot;, value);</span>
-<span class="nc" id="L1104">    }</span>
+<span class="nc" id="L1143">        edit(&quot;default_branch&quot;, value);</span>
+<span class="nc" id="L1144">    }</span>
 
     /**
      * Sets private.
@@ -1112,8 +1152,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setPrivate(boolean value) throws IOException {
-<span class="fc" id="L1115">        edit(&quot;private&quot;, Boolean.toString(value));</span>
-<span class="fc" id="L1116">    }</span>
+<span class="fc" id="L1155">        edit(&quot;private&quot;, Boolean.toString(value));</span>
+<span class="fc" id="L1156">    }</span>
 
     /**
      * Allow squash merge.
@@ -1124,8 +1164,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void allowSquashMerge(boolean value) throws IOException {
-<span class="fc" id="L1127">        edit(&quot;allow_squash_merge&quot;, Boolean.toString(value));</span>
-<span class="fc" id="L1128">    }</span>
+<span class="fc" id="L1167">        edit(&quot;allow_squash_merge&quot;, Boolean.toString(value));</span>
+<span class="fc" id="L1168">    }</span>
 
     /**
      * Allow merge commit.
@@ -1136,8 +1176,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void allowMergeCommit(boolean value) throws IOException {
-<span class="fc" id="L1139">        edit(&quot;allow_merge_commit&quot;, Boolean.toString(value));</span>
-<span class="fc" id="L1140">    }</span>
+<span class="fc" id="L1179">        edit(&quot;allow_merge_commit&quot;, Boolean.toString(value));</span>
+<span class="fc" id="L1180">    }</span>
 
     /**
      * Allow rebase merge.
@@ -1148,8 +1188,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void allowRebaseMerge(boolean value) throws IOException {
-<span class="fc" id="L1151">        edit(&quot;allow_rebase_merge&quot;, Boolean.toString(value));</span>
-<span class="fc" id="L1152">    }</span>
+<span class="fc" id="L1191">        edit(&quot;allow_rebase_merge&quot;, Boolean.toString(value));</span>
+<span class="fc" id="L1192">    }</span>
 
     /**
      * After pull requests are merged, you can have head branches deleted automatically.
@@ -1160,8 +1200,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void deleteBranchOnMerge(boolean value) throws IOException {
-<span class="fc" id="L1163">        edit(&quot;delete_branch_on_merge&quot;, Boolean.toString(value));</span>
-<span class="fc" id="L1164">    }</span>
+<span class="fc" id="L1203">        edit(&quot;delete_branch_on_merge&quot;, Boolean.toString(value));</span>
+<span class="fc" id="L1204">    }</span>
 
     /**
      * Deletes this repository.
@@ -1171,13 +1211,13 @@ import static org.kohsuke.github.Previews.*;
      */
     public void delete() throws IOException {
         try {
-<span class="fc" id="L1174">            root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;&quot;)).send();</span>
-<span class="nc" id="L1175">        } catch (FileNotFoundException x) {</span>
-<span class="nc" id="L1176">            throw (FileNotFoundException) new FileNotFoundException(&quot;Failed to delete &quot; + getOwnerName() + &quot;/&quot; + name</span>
+<span class="fc" id="L1214">            root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;&quot;)).send();</span>
+<span class="nc" id="L1215">        } catch (FileNotFoundException x) {</span>
+<span class="nc" id="L1216">            throw (FileNotFoundException) new FileNotFoundException(&quot;Failed to delete &quot; + getOwnerName() + &quot;/&quot; + name</span>
                     + &quot;; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916&quot;)
-<span class="nc" id="L1178">                            .initCause(x);</span>
-<span class="fc" id="L1179">        }</span>
-<span class="fc" id="L1180">    }</span>
+<span class="nc" id="L1218">                            .initCause(x);</span>
+<span class="fc" id="L1219">        }</span>
+<span class="fc" id="L1220">    }</span>
 
     /**
      * Will archive and this repository as read-only. When a repository is archived, any operation that can change its
@@ -1197,17 +1237,17 @@ import static org.kohsuke.github.Previews.*;
      *             In case of any networking error or error from the server.
      */
     public void archive() throws IOException {
-<span class="fc" id="L1200">        edit(&quot;archived&quot;, &quot;true&quot;);</span>
+<span class="fc" id="L1240">        edit(&quot;archived&quot;, &quot;true&quot;);</span>
         // Generall would not update this record,
         // but do so here since this will result in any other update actions failing
-<span class="fc" id="L1203">        archived = true;</span>
-<span class="fc" id="L1204">    }</span>
+<span class="fc" id="L1243">        archived = true;</span>
+<span class="fc" id="L1244">    }</span>
 
     /**
      * Sort orders for listing forks
      */
-<span class="nc" id="L1209">    public enum ForkSort {</span>
-<span class="nc" id="L1210">        NEWEST, OLDEST, STARGAZERS</span>
+<span class="nc" id="L1249">    public enum ForkSort {</span>
+<span class="nc" id="L1250">        NEWEST, OLDEST, STARGAZERS</span>
     }
 
     /**
@@ -1217,7 +1257,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listForks() {
-<span class="nc" id="L1220">        return listForks(null);</span>
+<span class="nc" id="L1260">        return listForks(null);</span>
     }
 
     /**
@@ -1229,10 +1269,10 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listForks(final ForkSort sort) {
-<span class="nc" id="L1232">        return root.createRequest()</span>
-<span class="nc" id="L1233">                .with(&quot;sort&quot;, sort)</span>
-<span class="nc" id="L1234">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
-<span class="nc" id="L1235">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+<span class="nc" id="L1272">        return root.createRequest()</span>
+<span class="nc" id="L1273">                .with(&quot;sort&quot;, sort)</span>
+<span class="nc" id="L1274">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
+<span class="nc" id="L1275">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
     }
 
     /**
@@ -1243,20 +1283,21 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHRepository fork() throws IOException {
-<span class="nc" id="L1246">        root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).send();</span>
+<span class="nc" id="L1286">        root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).send();</span>
 
         // this API is asynchronous. we need to wait for a bit
-<span class="nc bnc" id="L1249" title="All 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
-<span class="nc" id="L1250">            GHRepository r = root.getMyself().getRepository(name);</span>
-<span class="nc bnc" id="L1251" title="All 2 branches missed.">            if (r != null)</span>
-<span class="nc" id="L1252">                return r;</span>
+<span class="nc bnc" id="L1289" title="All 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="nc" id="L1290">            GHRepository r = root.getMyself().getRepository(name);</span>
+<span class="nc bnc" id="L1291" title="All 2 branches missed.">            if (r != null) {</span>
+<span class="nc" id="L1292">                return r;</span>
+            }
             try {
-<span class="nc" id="L1254">                Thread.sleep(3000);</span>
-<span class="nc" id="L1255">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L1256">                throw (IOException) new InterruptedIOException().initCause(e);</span>
-<span class="nc" id="L1257">            }</span>
+<span class="nc" id="L1295">                Thread.sleep(3000);</span>
+<span class="nc" id="L1296">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L1297">                throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="nc" id="L1298">            }</span>
         }
-<span class="nc" id="L1259">        throw new IOException(this + &quot; was forked but can't find the new repository&quot;);</span>
+<span class="nc" id="L1300">        throw new IOException(this + &quot; was forked but can't find the new repository&quot;);</span>
     }
 
     /**
@@ -1269,24 +1310,25 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-<span class="fc" id="L1272">        root.createRequest()</span>
-<span class="fc" id="L1273">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L1274">                .with(&quot;organization&quot;, org.getLogin())</span>
-<span class="fc" id="L1275">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
-<span class="fc" id="L1276">                .send();</span>
+<span class="fc" id="L1313">        root.createRequest()</span>
+<span class="fc" id="L1314">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1315">                .with(&quot;organization&quot;, org.getLogin())</span>
+<span class="fc" id="L1316">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
+<span class="fc" id="L1317">                .send();</span>
 
         // this API is asynchronous. we need to wait for a bit
-<span class="pc bpc" id="L1279" title="1 of 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
-<span class="fc" id="L1280">            GHRepository r = org.getRepository(name);</span>
-<span class="pc bpc" id="L1281" title="1 of 2 branches missed.">            if (r != null)</span>
-<span class="fc" id="L1282">                return r;</span>
+<span class="pc bpc" id="L1320" title="1 of 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L1321">            GHRepository r = org.getRepository(name);</span>
+<span class="pc bpc" id="L1322" title="1 of 2 branches missed.">            if (r != null) {</span>
+<span class="fc" id="L1323">                return r;</span>
+            }
             try {
-<span class="nc" id="L1284">                Thread.sleep(3000);</span>
-<span class="nc" id="L1285">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L1286">                throw (IOException) new InterruptedIOException().initCause(e);</span>
-<span class="nc" id="L1287">            }</span>
+<span class="nc" id="L1326">                Thread.sleep(3000);</span>
+<span class="nc" id="L1327">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L1328">                throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="nc" id="L1329">            }</span>
         }
-<span class="nc" id="L1289">        throw new IOException(this + &quot; was forked into &quot; + org.getLogin() + &quot; but can't find the new repository&quot;);</span>
+<span class="nc" id="L1331">        throw new IOException(this + &quot; was forked into &quot; + org.getLogin() + &quot; but can't find the new repository&quot;);</span>
     }
 
     /**
@@ -1299,11 +1341,11 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-<span class="fc" id="L1302">        return root.createRequest()</span>
-<span class="fc" id="L1303">                .withPreview(SHADOW_CAT)</span>
-<span class="fc" id="L1304">                .withUrlPath(getApiTailUrl(&quot;pulls/&quot; + i))</span>
-<span class="fc" id="L1305">                .fetch(GHPullRequest.class)</span>
-<span class="fc" id="L1306">                .wrapUp(this);</span>
+<span class="fc" id="L1344">        return root.createRequest()</span>
+<span class="fc" id="L1345">                .withPreview(SHADOW_CAT)</span>
+<span class="fc" id="L1346">                .withUrlPath(getApiTailUrl(&quot;pulls/&quot; + i))</span>
+<span class="fc" id="L1347">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L1348">                .wrapUp(this);</span>
     }
 
     /**
@@ -1317,7 +1359,7 @@ import static org.kohsuke.github.Previews.*;
      * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
      */
     public List&lt;GHPullRequest&gt; getPullRequests(GHIssueState state) throws IOException {
-<span class="nc" id="L1320">        return queryPullRequests().state(state).list().toList();</span>
+<span class="nc" id="L1362">        return queryPullRequests().state(state).list().toList();</span>
     }
 
     /**
@@ -1330,7 +1372,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public PagedIterable&lt;GHPullRequest&gt; listPullRequests(GHIssueState state) {
-<span class="fc" id="L1333">        return queryPullRequests().state(state).list();</span>
+<span class="fc" id="L1375">        return queryPullRequests().state(state).list();</span>
     }
 
     /**
@@ -1339,7 +1381,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh pull request query builder
      */
     public GHPullRequestQueryBuilder queryPullRequests() {
-<span class="fc" id="L1342">        return new GHPullRequestQueryBuilder(this);</span>
+<span class="fc" id="L1384">        return new GHPullRequestQueryBuilder(this);</span>
     }
 
     /**
@@ -1360,7 +1402,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
-<span class="fc" id="L1363">        return createPullRequest(title, head, base, body, true);</span>
+<span class="fc" id="L1405">        return createPullRequest(title, head, base, body, true);</span>
     }
 
     /**
@@ -1387,7 +1429,7 @@ import static org.kohsuke.github.Previews.*;
             String base,
             String body,
             boolean maintainerCanModify) throws IOException {
-<span class="fc" id="L1390">        return createPullRequest(title, head, base, body, maintainerCanModify, false);</span>
+<span class="fc" id="L1432">        return createPullRequest(title, head, base, body, maintainerCanModify, false);</span>
     }
 
     /**
@@ -1417,18 +1459,18 @@ import static org.kohsuke.github.Previews.*;
             String body,
             boolean maintainerCanModify,
             boolean draft) throws IOException {
-<span class="fc" id="L1420">        return root.createRequest()</span>
-<span class="fc" id="L1421">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L1422">                .withPreview(SHADOW_CAT)</span>
-<span class="fc" id="L1423">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L1424">                .with(&quot;head&quot;, head)</span>
-<span class="fc" id="L1425">                .with(&quot;base&quot;, base)</span>
-<span class="fc" id="L1426">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L1427">                .with(&quot;maintainer_can_modify&quot;, maintainerCanModify)</span>
-<span class="fc" id="L1428">                .with(&quot;draft&quot;, draft)</span>
-<span class="fc" id="L1429">                .withUrlPath(getApiTailUrl(&quot;pulls&quot;))</span>
-<span class="fc" id="L1430">                .fetch(GHPullRequest.class)</span>
-<span class="fc" id="L1431">                .wrapUp(this);</span>
+<span class="fc" id="L1462">        return root.createRequest()</span>
+<span class="fc" id="L1463">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1464">                .withPreview(SHADOW_CAT)</span>
+<span class="fc" id="L1465">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L1466">                .with(&quot;head&quot;, head)</span>
+<span class="fc" id="L1467">                .with(&quot;base&quot;, base)</span>
+<span class="fc" id="L1468">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L1469">                .with(&quot;maintainer_can_modify&quot;, maintainerCanModify)</span>
+<span class="fc" id="L1470">                .with(&quot;draft&quot;, draft)</span>
+<span class="fc" id="L1471">                .withUrlPath(getApiTailUrl(&quot;pulls&quot;))</span>
+<span class="fc" id="L1472">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L1473">                .wrapUp(this);</span>
     }
 
     /**
@@ -1439,7 +1481,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHHook&gt; getHooks() throws IOException {
-<span class="fc" id="L1442">        return GHHooks.repoContext(this, owner).getHooks();</span>
+<span class="fc" id="L1484">        return GHHooks.repoContext(this, owner).getHooks();</span>
     }
 
     /**
@@ -1452,7 +1494,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHHook getHook(int id) throws IOException {
-<span class="nc" id="L1455">        return GHHooks.repoContext(this, owner).getHook(id);</span>
+<span class="nc" id="L1497">        return GHHooks.repoContext(this, owner).getHook(id);</span>
     }
 
     /**
@@ -1469,10 +1511,10 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-<span class="nc" id="L1472">        GHCompare compare = root.createRequest()</span>
-<span class="nc" id="L1473">                .withUrlPath(getApiTailUrl(String.format(&quot;compare/%s...%s&quot;, id1, id2)))</span>
-<span class="nc" id="L1474">                .fetch(GHCompare.class);</span>
-<span class="nc" id="L1475">        return compare.wrap(this);</span>
+<span class="nc" id="L1514">        GHCompare compare = root.createRequest()</span>
+<span class="nc" id="L1515">                .withUrlPath(getApiTailUrl(String.format(&quot;compare/%s...%s&quot;, id1, id2)))</span>
+<span class="nc" id="L1516">                .fetch(GHCompare.class);</span>
+<span class="nc" id="L1517">        return compare.wrap(this);</span>
     }
 
     /**
@@ -1487,7 +1529,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
-<span class="nc" id="L1490">        return getCompare(id1.getSHA1(), id2.getSHA1());</span>
+<span class="nc" id="L1532">        return getCompare(id1.getSHA1(), id2.getSHA1());</span>
     }
 
     /**
@@ -1503,21 +1545,21 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {
 
-<span class="nc" id="L1506">        GHRepository owner1 = id1.getOwner();</span>
-<span class="nc" id="L1507">        GHRepository owner2 = id2.getOwner();</span>
+<span class="nc" id="L1548">        GHRepository owner1 = id1.getOwner();</span>
+<span class="nc" id="L1549">        GHRepository owner2 = id2.getOwner();</span>
 
         // If the owner of the branches is different, we have a cross-fork compare.
-<span class="nc bnc" id="L1510" title="All 4 branches missed.">        if (owner1 != null &amp;&amp; owner2 != null) {</span>
-<span class="nc" id="L1511">            String ownerName1 = owner1.getOwnerName();</span>
-<span class="nc" id="L1512">            String ownerName2 = owner2.getOwnerName();</span>
-<span class="nc bnc" id="L1513" title="All 2 branches missed.">            if (!StringUtils.equals(ownerName1, ownerName2)) {</span>
-<span class="nc" id="L1514">                String qualifiedName1 = String.format(&quot;%s:%s&quot;, ownerName1, id1.getName());</span>
-<span class="nc" id="L1515">                String qualifiedName2 = String.format(&quot;%s:%s&quot;, ownerName2, id2.getName());</span>
-<span class="nc" id="L1516">                return getCompare(qualifiedName1, qualifiedName2);</span>
+<span class="nc bnc" id="L1552" title="All 4 branches missed.">        if (owner1 != null &amp;&amp; owner2 != null) {</span>
+<span class="nc" id="L1553">            String ownerName1 = owner1.getOwnerName();</span>
+<span class="nc" id="L1554">            String ownerName2 = owner2.getOwnerName();</span>
+<span class="nc bnc" id="L1555" title="All 2 branches missed.">            if (!StringUtils.equals(ownerName1, ownerName2)) {</span>
+<span class="nc" id="L1556">                String qualifiedName1 = String.format(&quot;%s:%s&quot;, ownerName1, id1.getName());</span>
+<span class="nc" id="L1557">                String qualifiedName2 = String.format(&quot;%s:%s&quot;, ownerName2, id2.getName());</span>
+<span class="nc" id="L1558">                return getCompare(qualifiedName1, qualifiedName2);</span>
             }
         }
 
-<span class="nc" id="L1520">        return getCompare(id1.getName(), id2.getName());</span>
+<span class="nc" id="L1562">        return getCompare(id1.getName(), id2.getName());</span>
 
     }
 
@@ -1529,7 +1571,7 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-<span class="fc" id="L1532">        return listRefs().toArray();</span>
+<span class="fc" id="L1574">        return listRefs().toArray();</span>
     }
 
     /**
@@ -1540,7 +1582,7 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable&lt;GHRef&gt; listRefs() throws IOException {
-<span class="fc" id="L1543">        return listRefs(&quot;&quot;);</span>
+<span class="fc" id="L1585">        return listRefs(&quot;&quot;);</span>
     }
 
     /**
@@ -1553,7 +1595,7 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-<span class="fc" id="L1556">        return listRefs(refType).toArray();</span>
+<span class="fc" id="L1598">        return listRefs(refType).toArray();</span>
     }
 
     /**
@@ -1566,7 +1608,7 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable&lt;GHRef&gt; listRefs(String refType) throws IOException {
-<span class="fc" id="L1569">        return GHRef.readMatching(this, refType);</span>
+<span class="fc" id="L1611">        return GHRef.readMatching(this, refType);</span>
     }
 
     /**
@@ -1579,7 +1621,7 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-<span class="fc" id="L1582">        return GHRef.read(this, refName);</span>
+<span class="fc" id="L1624">        return GHRef.read(this, refName);</span>
     }
 
     /**
@@ -1593,7 +1635,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHTagObject getTagObject(String sha) throws IOException {
-<span class="nc" id="L1596">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;git/tags/&quot; + sha)).fetch(GHTagObject.class).wrap(this);</span>
+<span class="nc" id="L1638">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;git/tags/&quot; + sha)).fetch(GHTagObject.class).wrap(this);</span>
     }
 
     /**
@@ -1606,8 +1648,8 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
      */
     public GHTree getTree(String sha) throws IOException {
-<span class="fc" id="L1609">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
-<span class="fc" id="L1610">        return root.createRequest().withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+<span class="fc" id="L1651">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L1652">        return root.createRequest().withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
     }
 
     /**
@@ -1616,7 +1658,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh tree builder
      */
     public GHTreeBuilder createTree() {
-<span class="fc" id="L1619">        return new GHTreeBuilder(this);</span>
+<span class="fc" id="L1661">        return new GHTreeBuilder(this);</span>
     }
 
     /**
@@ -1632,8 +1674,8 @@ import static org.kohsuke.github.Previews.*;
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
      */
     public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
-<span class="fc" id="L1635">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
-<span class="fc" id="L1636">        return root.createRequest().with(&quot;recursive&quot;, recursive).withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+<span class="fc" id="L1677">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L1678">        return root.createRequest().with(&quot;recursive&quot;, recursive).withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
     }
 
     /**
@@ -1651,8 +1693,8 @@ import static org.kohsuke.github.Previews.*;
      * @see #readBlob(String) #readBlob(String)
      */
     public GHBlob getBlob(String blobSha) throws IOException {
-<span class="fc" id="L1654">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
-<span class="fc" id="L1655">        return root.createRequest().withUrlPath(target).fetch(GHBlob.class);</span>
+<span class="fc" id="L1696">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+<span class="fc" id="L1697">        return root.createRequest().withUrlPath(target).fetch(GHBlob.class);</span>
     }
 
     /**
@@ -1661,7 +1703,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh blob builder
      */
     public GHBlobBuilder createBlob() {
-<span class="fc" id="L1664">        return new GHBlobBuilder(this);</span>
+<span class="fc" id="L1706">        return new GHBlobBuilder(this);</span>
     }
 
     /**
@@ -1676,13 +1718,13 @@ import static org.kohsuke.github.Previews.*;
      * @see #getBlob(String) #getBlob(String)
      */
     public InputStream readBlob(String blobSha) throws IOException {
-<span class="fc" id="L1679">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+<span class="fc" id="L1721">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
 
         // https://developer.github.com/v3/media/ describes this media type
-<span class="fc" id="L1682">        return root.createRequest()</span>
-<span class="fc" id="L1683">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3.raw&quot;)</span>
-<span class="fc" id="L1684">                .withUrlPath(target)</span>
-<span class="fc" id="L1685">                .fetchStream();</span>
+<span class="fc" id="L1724">        return root.createRequest()</span>
+<span class="fc" id="L1725">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3.raw&quot;)</span>
+<span class="fc" id="L1726">                .withUrlPath(target)</span>
+<span class="fc" id="L1727">                .fetchStream();</span>
     }
 
     /**
@@ -1695,15 +1737,15 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHCommit getCommit(String sha1) throws IOException {
-<span class="fc" id="L1698">        GHCommit c = commits.get(sha1);</span>
-<span class="pc bpc" id="L1699" title="1 of 2 branches missed.">        if (c == null) {</span>
-<span class="fc" id="L1700">            c = root.createRequest()</span>
-<span class="fc" id="L1701">                    .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s&quot;, getOwnerName(), name, sha1))</span>
-<span class="fc" id="L1702">                    .fetch(GHCommit.class)</span>
-<span class="fc" id="L1703">                    .wrapUp(this);</span>
-<span class="fc" id="L1704">            commits.put(sha1, c);</span>
+<span class="fc" id="L1740">        GHCommit c = commits.get(sha1);</span>
+<span class="pc bpc" id="L1741" title="1 of 2 branches missed.">        if (c == null) {</span>
+<span class="fc" id="L1742">            c = root.createRequest()</span>
+<span class="fc" id="L1743">                    .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L1744">                    .fetch(GHCommit.class)</span>
+<span class="fc" id="L1745">                    .wrapUp(this);</span>
+<span class="fc" id="L1746">            commits.put(sha1, c);</span>
         }
-<span class="fc" id="L1706">        return c;</span>
+<span class="fc" id="L1748">        return c;</span>
     }
 
     /**
@@ -1712,7 +1754,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh commit builder
      */
     public GHCommitBuilder createCommit() {
-<span class="nc" id="L1715">        return new GHCommitBuilder(this);</span>
+<span class="nc" id="L1757">        return new GHCommitBuilder(this);</span>
     }
 
     /**
@@ -1721,9 +1763,9 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommit&gt; listCommits() {
-<span class="fc" id="L1724">        return root.createRequest()</span>
-<span class="fc" id="L1725">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits&quot;, getOwnerName(), name))</span>
-<span class="fc" id="L1726">                .toIterable(GHCommit[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L1766">        return root.createRequest()</span>
+<span class="fc" id="L1767">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L1768">                .toIterable(GHCommit[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -1732,7 +1774,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder queryCommits() {
-<span class="fc" id="L1735">        return new GHCommitQueryBuilder(this);</span>
+<span class="fc" id="L1777">        return new GHCommitQueryBuilder(this);</span>
     }
 
     /**
@@ -1741,9 +1783,9 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommitComment&gt; listCommitComments() {
-<span class="fc" id="L1744">        return root.createRequest()</span>
-<span class="fc" id="L1745">                .withUrlPath(String.format(&quot;/repos/%s/%s/comments&quot;, getOwnerName(), name))</span>
-<span class="fc" id="L1746">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L1786">        return root.createRequest()</span>
+<span class="fc" id="L1787">                .withUrlPath(String.format(&quot;/repos/%s/%s/comments&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L1788">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -1755,8 +1797,8 @@ import static org.kohsuke.github.Previews.*;
      *             as usual but also if you don't use the preview connector
      */
     public GHLicense getLicense() throws IOException {
-<span class="fc" id="L1758">        GHContentWithLicense lic = getLicenseContent_();</span>
-<span class="fc bfc" id="L1759" title="All 2 branches covered.">        return lic != null ? lic.license : null;</span>
+<span class="fc" id="L1800">        GHContentWithLicense lic = getLicenseContent_();</span>
+<span class="fc bfc" id="L1801" title="All 2 branches covered.">        return lic != null ? lic.license : null;</span>
     }
 
     /**
@@ -1768,17 +1810,17 @@ import static org.kohsuke.github.Previews.*;
      *             as usual but also if you don't use the preview connector
      */
     public GHContent getLicenseContent() throws IOException {
-<span class="fc" id="L1771">        return getLicenseContent_();</span>
+<span class="fc" id="L1813">        return getLicenseContent_();</span>
     }
 
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
-<span class="fc" id="L1776">            return root.createRequest()</span>
-<span class="fc" id="L1777">                    .withUrlPath(getApiTailUrl(&quot;license&quot;))</span>
-<span class="fc" id="L1778">                    .fetch(GHContentWithLicense.class)</span>
-<span class="fc" id="L1779">                    .wrap(this);</span>
-<span class="fc" id="L1780">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L1781">            return null;</span>
+<span class="fc" id="L1818">            return root.createRequest()</span>
+<span class="fc" id="L1819">                    .withUrlPath(getApiTailUrl(&quot;license&quot;))</span>
+<span class="fc" id="L1820">                    .fetch(GHContentWithLicense.class)</span>
+<span class="fc" id="L1821">                    .wrap(this);</span>
+<span class="fc" id="L1822">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L1823">            return null;</span>
         }
     }
 
@@ -1792,9 +1834,9 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHCommitStatus&gt; listCommitStatuses(final String sha1) throws IOException {
-<span class="fc" id="L1795">        return root.createRequest()</span>
-<span class="fc" id="L1796">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), name, sha1))</span>
-<span class="fc" id="L1797">                .toIterable(GHCommitStatus[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L1837">        return root.createRequest()</span>
+<span class="fc" id="L1838">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L1839">                .toIterable(GHCommitStatus[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -1807,8 +1849,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
-<span class="fc" id="L1810">        List&lt;GHCommitStatus&gt; v = listCommitStatuses(sha1).toList();</span>
-<span class="pc bpc" id="L1811" title="1 of 2 branches missed.">        return v.isEmpty() ? null : v.get(0);</span>
+<span class="fc" id="L1852">        List&lt;GHCommitStatus&gt; v = listCommitStatuses(sha1).toList();</span>
+<span class="pc bpc" id="L1853" title="1 of 2 branches missed.">        return v.isEmpty() ? null : v.get(0);</span>
     }
 
     /**
@@ -1825,11 +1867,11 @@ import static org.kohsuke.github.Previews.*;
     @Preview
     @Deprecated
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns(String ref) throws IOException {
-<span class="fc" id="L1828">        GitHubRequest request = root.createRequest()</span>
-<span class="fc" id="L1829">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
-<span class="fc" id="L1830">                .withPreview(ANTIOPE)</span>
-<span class="fc" id="L1831">                .build();</span>
-<span class="fc" id="L1832">        return new GHCheckRunsIterable(root, request);</span>
+<span class="fc" id="L1870">        GitHubRequest request = root.createRequest()</span>
+<span class="fc" id="L1871">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
+<span class="fc" id="L1872">                .withPreview(ANTIOPE)</span>
+<span class="fc" id="L1873">                .build();</span>
+<span class="fc" id="L1874">        return new GHCheckRunsIterable(root, request);</span>
     }
 
     /**
@@ -1854,15 +1896,15 @@ import static org.kohsuke.github.Previews.*;
             String targetUrl,
             String description,
             String context) throws IOException {
-<span class="nc" id="L1857">        return root.createRequest()</span>
-<span class="nc" id="L1858">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L1859">                .with(&quot;state&quot;, state)</span>
-<span class="nc" id="L1860">                .with(&quot;target_url&quot;, targetUrl)</span>
-<span class="nc" id="L1861">                .with(&quot;description&quot;, description)</span>
-<span class="nc" id="L1862">                .with(&quot;context&quot;, context)</span>
-<span class="nc" id="L1863">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), this.name, sha1))</span>
-<span class="nc" id="L1864">                .fetch(GHCommitStatus.class)</span>
-<span class="nc" id="L1865">                .wrapUp(root);</span>
+<span class="nc" id="L1899">        return root.createRequest()</span>
+<span class="nc" id="L1900">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L1901">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L1902">                .with(&quot;target_url&quot;, targetUrl)</span>
+<span class="nc" id="L1903">                .with(&quot;description&quot;, description)</span>
+<span class="nc" id="L1904">                .with(&quot;context&quot;, context)</span>
+<span class="nc" id="L1905">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), this.name, sha1))</span>
+<span class="nc" id="L1906">                .fetch(GHCommitStatus.class)</span>
+<span class="nc" id="L1907">                .wrapUp(root);</span>
     }
 
     /**
@@ -1884,7 +1926,7 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description)
             throws IOException {
-<span class="nc" id="L1887">        return createCommitStatus(sha1, state, targetUrl, description, null);</span>
+<span class="nc" id="L1929">        return createCommitStatus(sha1, state, targetUrl, description, null);</span>
     }
 
     /**
@@ -1899,7 +1941,7 @@ import static org.kohsuke.github.Previews.*;
     @Preview
     @Deprecated
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
-<span class="fc" id="L1902">        return new GHCheckRunBuilder(this, name, headSHA);</span>
+<span class="fc" id="L1944">        return new GHCheckRunBuilder(this, name, headSHA);</span>
     }
 
     /**
@@ -1910,9 +1952,9 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L1913">        return root.createRequest()</span>
-<span class="nc" id="L1914">                .withUrlPath(String.format(&quot;/repos/%s/%s/events&quot;, getOwnerName(), name))</span>
-<span class="nc" id="L1915">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
+<span class="nc" id="L1955">        return root.createRequest()</span>
+<span class="nc" id="L1956">                .withUrlPath(String.format(&quot;/repos/%s/%s/events&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L1957">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -1925,7 +1967,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHLabel&gt; listLabels() throws IOException {
-<span class="fc" id="L1928">        return GHLabel.readAll(this);</span>
+<span class="fc" id="L1970">        return GHLabel.readAll(this);</span>
     }
 
     /**
@@ -1938,7 +1980,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHLabel getLabel(String name) throws IOException {
-<span class="fc" id="L1941">        return GHLabel.read(this, name);</span>
+<span class="fc" id="L1983">        return GHLabel.read(this, name);</span>
     }
 
     /**
@@ -1953,7 +1995,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHLabel createLabel(String name, String color) throws IOException {
-<span class="fc" id="L1956">        return GHLabel.create(this).name(name).color(color).description(&quot;&quot;).done();</span>
+<span class="fc" id="L1998">        return GHLabel.create(this).name(name).color(color).description(&quot;&quot;).done();</span>
     }
 
     /**
@@ -1970,7 +2012,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHLabel createLabel(String name, String color, String description) throws IOException {
-<span class="fc" id="L1973">        return GHLabel.create(this).name(name).color(color).description(description).done();</span>
+<span class="fc" id="L2015">        return GHLabel.create(this).name(name).color(color).description(description).done();</span>
     }
 
     /**
@@ -1979,9 +2021,9 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHInvitation&gt; listInvitations() {
-<span class="nc" id="L1982">        return root.createRequest()</span>
-<span class="nc" id="L1983">                .withUrlPath(String.format(&quot;/repos/%s/%s/invitations&quot;, getOwnerName(), name))</span>
-<span class="nc" id="L1984">                .toIterable(GHInvitation[].class, item -&gt; item.wrapUp(root));</span>
+<span class="nc" id="L2024">        return root.createRequest()</span>
+<span class="nc" id="L2025">                .withUrlPath(String.format(&quot;/repos/%s/%s/invitations&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L2026">                .toIterable(GHInvitation[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -1992,7 +2034,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listSubscribers() {
-<span class="fc" id="L1995">        return listUsers(&quot;subscribers&quot;);</span>
+<span class="fc" id="L2037">        return listUsers(&quot;subscribers&quot;);</span>
     }
 
     /**
@@ -2002,7 +2044,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listStargazers() {
-<span class="nc" id="L2005">        return listUsers(&quot;stargazers&quot;);</span>
+<span class="nc" id="L2047">        return listUsers(&quot;stargazers&quot;);</span>
     }
 
     /**
@@ -2012,16 +2054,16 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHStargazer&gt; listStargazers2() {
-<span class="nc" id="L2015">        return root.createRequest()</span>
-<span class="nc" id="L2016">                .withPreview(&quot;application/vnd.github.v3.star+json&quot;)</span>
-<span class="nc" id="L2017">                .withUrlPath(getApiTailUrl(&quot;stargazers&quot;))</span>
-<span class="nc" id="L2018">                .toIterable(GHStargazer[].class, item -&gt; item.wrapUp(this));</span>
+<span class="nc" id="L2057">        return root.createRequest()</span>
+<span class="nc" id="L2058">                .withPreview(&quot;application/vnd.github.v3.star+json&quot;)</span>
+<span class="nc" id="L2059">                .withUrlPath(getApiTailUrl(&quot;stargazers&quot;))</span>
+<span class="nc" id="L2060">                .toIterable(GHStargazer[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listUsers(final String suffix) {
-<span class="fc" id="L2022">        return root.createRequest()</span>
-<span class="fc" id="L2023">                .withUrlPath(getApiTailUrl(suffix))</span>
-<span class="fc" id="L2024">                .toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L2064">        return root.createRequest()</span>
+<span class="fc" id="L2065">                .withUrlPath(getApiTailUrl(suffix))</span>
+<span class="fc" id="L2066">                .toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -2042,7 +2084,7 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
             throws IOException {
-<span class="fc" id="L2045">        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);</span>
+<span class="fc" id="L2087">        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);</span>
     }
 
     /**
@@ -2057,7 +2099,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
-<span class="fc" id="L2060">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+<span class="fc" id="L2102">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
     }
 
     /**
@@ -2070,7 +2112,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHHook createWebHook(URL url) throws IOException {
-<span class="fc" id="L2073">        return createWebHook(url, null);</span>
+<span class="fc" id="L2115">        return createWebHook(url, null);</span>
     }
 
     /**
@@ -2084,79 +2126,79 @@ import static org.kohsuke.github.Previews.*;
             justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
     @Deprecated
     public Set&lt;URL&gt; getPostCommitHooks() {
-<span class="fc" id="L2087">        return postCommitHooks;</span>
+<span class="fc" id="L2129">        return postCommitHooks;</span>
     }
 
     /**
      * Live set view of the post-commit hook.
      */
-<span class="fc" id="L2093">    @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,</span>
+<span class="fc" id="L2135">    @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,</span>
             justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
     @SkipFromToString
-<span class="fc" id="L2096">    private final Set&lt;URL&gt; postCommitHooks = new AbstractSet&lt;URL&gt;() {</span>
+<span class="fc" id="L2138">    private final Set&lt;URL&gt; postCommitHooks = new AbstractSet&lt;URL&gt;() {</span>
         private List&lt;URL&gt; getPostCommitHooks() {
             try {
-<span class="fc" id="L2099">                List&lt;URL&gt; r = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L2100" title="1 of 2 branches missed.">                for (GHHook h : getHooks()) {</span>
-<span class="nc bnc" id="L2101" title="All 2 branches missed.">                    if (h.getName().equals(&quot;web&quot;)) {</span>
-<span class="nc" id="L2102">                        r.add(new URL(h.getConfig().get(&quot;url&quot;)));</span>
+<span class="fc" id="L2141">                List&lt;URL&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L2142" title="1 of 2 branches missed.">                for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2143" title="All 2 branches missed.">                    if (h.getName().equals(&quot;web&quot;)) {</span>
+<span class="nc" id="L2144">                        r.add(new URL(h.getConfig().get(&quot;url&quot;)));</span>
                     }
-<span class="nc" id="L2104">                }</span>
-<span class="fc" id="L2105">                return r;</span>
-<span class="nc" id="L2106">            } catch (IOException e) {</span>
-<span class="nc" id="L2107">                throw new GHException(&quot;Failed to retrieve post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2146">                }</span>
+<span class="fc" id="L2147">                return r;</span>
+<span class="nc" id="L2148">            } catch (IOException e) {</span>
+<span class="nc" id="L2149">                throw new GHException(&quot;Failed to retrieve post-commit hooks&quot;, e);</span>
             }
         }
 
         @Override
         public Iterator&lt;URL&gt; iterator() {
-<span class="fc" id="L2113">            return getPostCommitHooks().iterator();</span>
+<span class="fc" id="L2155">            return getPostCommitHooks().iterator();</span>
         }
 
         @Override
         public int size() {
-<span class="fc" id="L2118">            return getPostCommitHooks().size();</span>
+<span class="fc" id="L2160">            return getPostCommitHooks().size();</span>
         }
 
         @Override
         public boolean add(URL url) {
             try {
-<span class="nc" id="L2124">                createWebHook(url);</span>
-<span class="nc" id="L2125">                return true;</span>
-<span class="nc" id="L2126">            } catch (IOException e) {</span>
-<span class="nc" id="L2127">                throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2166">                createWebHook(url);</span>
+<span class="nc" id="L2167">                return true;</span>
+<span class="nc" id="L2168">            } catch (IOException e) {</span>
+<span class="nc" id="L2169">                throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
             }
         }
 
         @Override
         public boolean remove(Object url) {
             try {
-<span class="nc" id="L2134">                String _url = ((URL) url).toExternalForm();</span>
-<span class="nc bnc" id="L2135" title="All 2 branches missed.">                for (GHHook h : getHooks()) {</span>
-<span class="nc bnc" id="L2136" title="All 4 branches missed.">                    if (h.getName().equals(&quot;web&quot;) &amp;&amp; h.getConfig().get(&quot;url&quot;).equals(_url)) {</span>
-<span class="nc" id="L2137">                        h.delete();</span>
-<span class="nc" id="L2138">                        return true;</span>
+<span class="nc" id="L2176">                String _url = ((URL) url).toExternalForm();</span>
+<span class="nc bnc" id="L2177" title="All 2 branches missed.">                for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2178" title="All 4 branches missed.">                    if (h.getName().equals(&quot;web&quot;) &amp;&amp; h.getConfig().get(&quot;url&quot;).equals(_url)) {</span>
+<span class="nc" id="L2179">                        h.delete();</span>
+<span class="nc" id="L2180">                        return true;</span>
                     }
-<span class="nc" id="L2140">                }</span>
-<span class="nc" id="L2141">                return false;</span>
-<span class="nc" id="L2142">            } catch (IOException e) {</span>
-<span class="nc" id="L2143">                throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2182">                }</span>
+<span class="nc" id="L2183">                return false;</span>
+<span class="nc" id="L2184">            } catch (IOException e) {</span>
+<span class="nc" id="L2185">                throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
             }
         }
     };
 
     GHRepository wrap(GitHub root) {
-<span class="fc" id="L2149">        this.root = root;</span>
-<span class="fc bfc" id="L2150" title="All 4 branches covered.">        if (root.isOffline() &amp;&amp; owner != null) {</span>
-<span class="fc" id="L2151">            owner.wrapUp(root);</span>
+<span class="fc" id="L2191">        this.root = root;</span>
+<span class="fc bfc" id="L2192" title="All 4 branches covered.">        if (root.isOffline() &amp;&amp; owner != null) {</span>
+<span class="fc" id="L2193">            owner.wrapUp(root);</span>
         }
-<span class="fc bfc" id="L2153" title="All 2 branches covered.">        if (source != null) {</span>
-<span class="fc" id="L2154">            source.wrap(root);</span>
+<span class="fc bfc" id="L2195" title="All 2 branches covered.">        if (source != null) {</span>
+<span class="fc" id="L2196">            source.wrap(root);</span>
         }
-<span class="fc bfc" id="L2156" title="All 2 branches covered.">        if (parent != null) {</span>
-<span class="fc" id="L2157">            parent.wrap(root);</span>
+<span class="fc bfc" id="L2198" title="All 2 branches covered.">        if (parent != null) {</span>
+<span class="fc" id="L2199">            parent.wrap(root);</span>
         }
-<span class="fc" id="L2159">        return this;</span>
+<span class="fc" id="L2201">        return this;</span>
     }
 
     /**
@@ -2167,14 +2209,14 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public Map&lt;String, GHBranch&gt; getBranches() throws IOException {
-<span class="nc" id="L2170">        Map&lt;String, GHBranch&gt; r = new TreeMap&lt;String, GHBranch&gt;();</span>
-<span class="nc" id="L2171">        for (GHBranch p : root.createRequest()</span>
-<span class="nc" id="L2172">                .withUrlPath(getApiTailUrl(&quot;branches&quot;))</span>
-<span class="nc" id="L2173">                .toIterable(GHBranch[].class, item -&gt; item.wrap(this))</span>
-<span class="nc bnc" id="L2174" title="All 2 branches missed.">                .toArray()) {</span>
-<span class="nc" id="L2175">            r.put(p.getName(), p);</span>
+<span class="nc" id="L2212">        Map&lt;String, GHBranch&gt; r = new TreeMap&lt;String, GHBranch&gt;();</span>
+<span class="nc" id="L2213">        for (GHBranch p : root.createRequest()</span>
+<span class="nc" id="L2214">                .withUrlPath(getApiTailUrl(&quot;branches&quot;))</span>
+<span class="nc" id="L2215">                .toIterable(GHBranch[].class, item -&gt; item.wrap(this))</span>
+<span class="nc bnc" id="L2216" title="All 2 branches missed.">                .toArray()) {</span>
+<span class="nc" id="L2217">            r.put(p.getName(), p);</span>
         }
-<span class="nc" id="L2177">        return r;</span>
+<span class="nc" id="L2219">        return r;</span>
     }
 
     /**
@@ -2187,7 +2229,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHBranch getBranch(String name) throws IOException {
-<span class="fc" id="L2190">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;branches/&quot; + name)).fetch(GHBranch.class).wrap(this);</span>
+<span class="fc" id="L2232">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;branches/&quot; + name)).fetch(GHBranch.class).wrap(this);</span>
     }
 
     /**
@@ -2199,11 +2241,11 @@ import static org.kohsuke.github.Previews.*;
      * @deprecated Use {@link #listMilestones(GHIssueState)}
      */
     public Map&lt;Integer, GHMilestone&gt; getMilestones() throws IOException {
-<span class="nc" id="L2202">        Map&lt;Integer, GHMilestone&gt; milestones = new TreeMap&lt;Integer, GHMilestone&gt;();</span>
-<span class="nc bnc" id="L2203" title="All 2 branches missed.">        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {</span>
-<span class="nc" id="L2204">            milestones.put(m.getNumber(), m);</span>
-<span class="nc" id="L2205">        }</span>
-<span class="nc" id="L2206">        return milestones;</span>
+<span class="nc" id="L2244">        Map&lt;Integer, GHMilestone&gt; milestones = new TreeMap&lt;Integer, GHMilestone&gt;();</span>
+<span class="nc bnc" id="L2245" title="All 2 branches missed.">        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {</span>
+<span class="nc" id="L2246">            milestones.put(m.getNumber(), m);</span>
+<span class="nc" id="L2247">        }</span>
+<span class="nc" id="L2248">        return milestones;</span>
     }
 
     /**
@@ -2214,10 +2256,10 @@ import static org.kohsuke.github.Previews.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMilestone&gt; listMilestones(final GHIssueState state) {
-<span class="nc" id="L2217">        return root.createRequest()</span>
-<span class="nc" id="L2218">                .with(&quot;state&quot;, state)</span>
-<span class="nc" id="L2219">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
-<span class="nc" id="L2220">                .toIterable(GHMilestone[].class, item -&gt; item.wrap(this));</span>
+<span class="nc" id="L2259">        return root.createRequest()</span>
+<span class="nc" id="L2260">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L2261">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="nc" id="L2262">                .toIterable(GHMilestone[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -2230,14 +2272,14 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHMilestone getMilestone(int number) throws IOException {
-<span class="fc" id="L2233">        GHMilestone m = milestones.get(number);</span>
-<span class="pc bpc" id="L2234" title="1 of 2 branches missed.">        if (m == null) {</span>
-<span class="fc" id="L2235">            m = root.createRequest().withUrlPath(getApiTailUrl(&quot;milestones/&quot; + number)).fetch(GHMilestone.class);</span>
-<span class="fc" id="L2236">            m.owner = this;</span>
-<span class="fc" id="L2237">            m.root = root;</span>
-<span class="fc" id="L2238">            milestones.put(m.getNumber(), m);</span>
+<span class="fc" id="L2275">        GHMilestone m = milestones.get(number);</span>
+<span class="pc bpc" id="L2276" title="1 of 2 branches missed.">        if (m == null) {</span>
+<span class="fc" id="L2277">            m = root.createRequest().withUrlPath(getApiTailUrl(&quot;milestones/&quot; + number)).fetch(GHMilestone.class);</span>
+<span class="fc" id="L2278">            m.owner = this;</span>
+<span class="fc" id="L2279">            m.root = root;</span>
+<span class="fc" id="L2280">            milestones.put(m.getNumber(), m);</span>
         }
-<span class="fc" id="L2240">        return m;</span>
+<span class="fc" id="L2282">        return m;</span>
     }
 
     /**
@@ -2250,7 +2292,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHContent getFileContent(String path) throws IOException {
-<span class="fc" id="L2253">        return getFileContent(path, null);</span>
+<span class="fc" id="L2295">        return getFileContent(path, null);</span>
     }
 
     /**
@@ -2265,10 +2307,10 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHContent getFileContent(String path, String ref) throws IOException {
-<span class="fc" id="L2268">        Requester requester = root.createRequest();</span>
-<span class="fc" id="L2269">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+<span class="fc" id="L2310">        Requester requester = root.createRequest();</span>
+<span class="fc" id="L2311">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
 
-<span class="fc" id="L2271">        return requester.with(&quot;ref&quot;, ref).withUrlPath(target).fetch(GHContent.class).wrap(this);</span>
+<span class="fc" id="L2313">        return requester.with(&quot;ref&quot;, ref).withUrlPath(target).fetch(GHContent.class).wrap(this);</span>
     }
 
     /**
@@ -2281,7 +2323,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHContent&gt; getDirectoryContent(String path) throws IOException {
-<span class="fc" id="L2284">        return getDirectoryContent(path, null);</span>
+<span class="fc" id="L2326">        return getDirectoryContent(path, null);</span>
     }
 
     /**
@@ -2296,16 +2338,16 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHContent&gt; getDirectoryContent(String path, String ref) throws IOException {
-<span class="fc" id="L2299">        Requester requester = root.createRequest();</span>
-<span class="fc bfc" id="L2300" title="All 2 branches covered.">        while (path.endsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L2301">            path = path.substring(0, path.length() - 1);</span>
+<span class="fc" id="L2341">        Requester requester = root.createRequest();</span>
+<span class="fc bfc" id="L2342" title="All 2 branches covered.">        while (path.endsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L2343">            path = path.substring(0, path.length() - 1);</span>
         }
-<span class="fc" id="L2303">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+<span class="fc" id="L2345">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
 
-<span class="fc" id="L2305">        return requester.with(&quot;ref&quot;, ref)</span>
-<span class="fc" id="L2306">                .withUrlPath(target)</span>
-<span class="fc" id="L2307">                .toIterable(GHContent[].class, item -&gt; item.wrap(this))</span>
-<span class="fc" id="L2308">                .toList();</span>
+<span class="fc" id="L2347">        return requester.with(&quot;ref&quot;, ref)</span>
+<span class="fc" id="L2348">                .withUrlPath(target)</span>
+<span class="fc" id="L2349">                .toIterable(GHContent[].class, item -&gt; item.wrap(this))</span>
+<span class="fc" id="L2350">                .toList();</span>
     }
 
     /**
@@ -2316,8 +2358,8 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHContent getReadme() throws IOException {
-<span class="fc" id="L2319">        Requester requester = root.createRequest();</span>
-<span class="fc" id="L2320">        return requester.withUrlPath(getApiTailUrl(&quot;readme&quot;)).fetch(GHContent.class).wrap(this);</span>
+<span class="fc" id="L2361">        Requester requester = root.createRequest();</span>
+<span class="fc" id="L2362">        return requester.withUrlPath(getApiTailUrl(&quot;readme&quot;)).fetch(GHContent.class).wrap(this);</span>
     }
 
     /**
@@ -2326,7 +2368,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh content builder
      */
     public GHContentBuilder createContent() {
-<span class="fc" id="L2329">        return new GHContentBuilder(this);</span>
+<span class="fc" id="L2371">        return new GHContentBuilder(this);</span>
     }
 
     /**
@@ -2344,7 +2386,7 @@ import static org.kohsuke.github.Previews.*;
      */
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-<span class="fc" id="L2347">        return createContent().content(content).message(commitMessage).path(path).commit();</span>
+<span class="fc" id="L2389">        return createContent().content(content).message(commitMessage).path(path).commit();</span>
     }
 
     /**
@@ -2365,7 +2407,7 @@ import static org.kohsuke.github.Previews.*;
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch)
             throws IOException {
-<span class="fc" id="L2368">        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();</span>
+<span class="fc" id="L2410">        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();</span>
     }
 
     /**
@@ -2384,7 +2426,7 @@ import static org.kohsuke.github.Previews.*;
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path)
             throws IOException {
-<span class="nc" id="L2387">        return createContent().content(contentBytes).message(commitMessage).path(path).commit();</span>
+<span class="nc" id="L2429">        return createContent().content(contentBytes).message(commitMessage).path(path).commit();</span>
     }
 
     /**
@@ -2405,7 +2447,7 @@ import static org.kohsuke.github.Previews.*;
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch)
             throws IOException {
-<span class="nc" id="L2408">        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();</span>
+<span class="nc" id="L2450">        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();</span>
     }
 
     /**
@@ -2420,13 +2462,13 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHMilestone createMilestone(String title, String description) throws IOException {
-<span class="fc" id="L2423">        return root.createRequest()</span>
-<span class="fc" id="L2424">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L2425">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L2426">                .with(&quot;description&quot;, description)</span>
-<span class="fc" id="L2427">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
-<span class="fc" id="L2428">                .fetch(GHMilestone.class)</span>
-<span class="fc" id="L2429">                .wrap(this);</span>
+<span class="fc" id="L2465">        return root.createRequest()</span>
+<span class="fc" id="L2466">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2467">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L2468">                .with(&quot;description&quot;, description)</span>
+<span class="fc" id="L2469">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="fc" id="L2470">                .fetch(GHMilestone.class)</span>
+<span class="fc" id="L2471">                .wrap(this);</span>
     }
 
     /**
@@ -2441,13 +2483,13 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
-<span class="nc" id="L2444">        return root.createRequest()</span>
-<span class="nc" id="L2445">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L2446">                .with(&quot;title&quot;, title)</span>
-<span class="nc" id="L2447">                .with(&quot;key&quot;, key)</span>
-<span class="nc" id="L2448">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
-<span class="nc" id="L2449">                .fetch(GHDeployKey.class)</span>
-<span class="nc" id="L2450">                .wrap(this);</span>
+<span class="nc" id="L2486">        return root.createRequest()</span>
+<span class="nc" id="L2487">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L2488">                .with(&quot;title&quot;, title)</span>
+<span class="nc" id="L2489">                .with(&quot;key&quot;, key)</span>
+<span class="nc" id="L2490">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="nc" id="L2491">                .fetch(GHDeployKey.class)</span>
+<span class="nc" id="L2492">                .wrap(this);</span>
 
     }
 
@@ -2459,10 +2501,10 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;GHDeployKey&gt; getDeployKeys() throws IOException {
-<span class="nc" id="L2462">        return root.createRequest()</span>
-<span class="nc" id="L2463">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
-<span class="nc" id="L2464">                .toIterable(GHDeployKey[].class, item -&gt; item.wrap(this))</span>
-<span class="nc" id="L2465">                .toList();</span>
+<span class="nc" id="L2504">        return root.createRequest()</span>
+<span class="nc" id="L2505">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="nc" id="L2506">                .toIterable(GHDeployKey[].class, item -&gt; item.wrap(this))</span>
+<span class="nc" id="L2507">                .toList();</span>
     }
 
     /**
@@ -2475,14 +2517,14 @@ import static org.kohsuke.github.Previews.*;
      * @see #getParent() #getParent()
      */
     public GHRepository getSource() throws IOException {
-<span class="pc bpc" id="L2478" title="1 of 4 branches missed.">        if (fork &amp;&amp; source == null) {</span>
-<span class="fc" id="L2479">            populate();</span>
+<span class="pc bpc" id="L2520" title="1 of 4 branches missed.">        if (fork &amp;&amp; source == null) {</span>
+<span class="fc" id="L2521">            populate();</span>
         }
-<span class="fc bfc" id="L2481" title="All 2 branches covered.">        if (source == null) {</span>
-<span class="fc" id="L2482">            return null;</span>
+<span class="fc bfc" id="L2523" title="All 2 branches covered.">        if (source == null) {</span>
+<span class="fc" id="L2524">            return null;</span>
         }
 
-<span class="fc" id="L2485">        return source;</span>
+<span class="fc" id="L2527">        return source;</span>
     }
 
     /**
@@ -2496,14 +2538,14 @@ import static org.kohsuke.github.Previews.*;
      * @see #getSource() #getSource()
      */
     public GHRepository getParent() throws IOException {
-<span class="pc bpc" id="L2499" title="1 of 4 branches missed.">        if (fork &amp;&amp; parent == null) {</span>
-<span class="fc" id="L2500">            populate();</span>
+<span class="pc bpc" id="L2541" title="1 of 4 branches missed.">        if (fork &amp;&amp; parent == null) {</span>
+<span class="fc" id="L2542">            populate();</span>
         }
 
-<span class="fc bfc" id="L2503" title="All 2 branches covered.">        if (parent == null) {</span>
-<span class="fc" id="L2504">            return null;</span>
+<span class="fc bfc" id="L2545" title="All 2 branches covered.">        if (parent == null) {</span>
+<span class="fc" id="L2546">            return null;</span>
         }
-<span class="fc" id="L2506">        return parent;</span>
+<span class="fc" id="L2548">        return parent;</span>
     }
 
     /**
@@ -2518,13 +2560,13 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-<span class="fc" id="L2521">        return root.createRequest()</span>
-<span class="fc" id="L2522">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L2523">                .with(&quot;subscribed&quot;, subscribed)</span>
-<span class="fc" id="L2524">                .with(&quot;ignored&quot;, ignored)</span>
-<span class="fc" id="L2525">                .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
-<span class="fc" id="L2526">                .fetch(GHSubscription.class)</span>
-<span class="fc" id="L2527">                .wrapUp(this);</span>
+<span class="fc" id="L2563">        return root.createRequest()</span>
+<span class="fc" id="L2564">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L2565">                .with(&quot;subscribed&quot;, subscribed)</span>
+<span class="fc" id="L2566">                .with(&quot;ignored&quot;, ignored)</span>
+<span class="fc" id="L2567">                .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="fc" id="L2568">                .fetch(GHSubscription.class)</span>
+<span class="fc" id="L2569">                .wrapUp(this);</span>
     }
 
     /**
@@ -2536,12 +2578,12 @@ import static org.kohsuke.github.Previews.*;
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-<span class="pc" id="L2539">            return root.createRequest()</span>
-<span class="fc" id="L2540">                    .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
-<span class="nc" id="L2541">                    .fetch(GHSubscription.class)</span>
-<span class="nc" id="L2542">                    .wrapUp(this);</span>
-<span class="fc" id="L2543">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L2544">            return null;</span>
+<span class="pc" id="L2581">            return root.createRequest()</span>
+<span class="fc" id="L2582">                    .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="nc" id="L2583">                    .fetch(GHSubscription.class)</span>
+<span class="nc" id="L2584">                    .wrapUp(this);</span>
+<span class="fc" id="L2585">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L2586">            return null;</span>
         }
     }
 
@@ -2553,15 +2595,15 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;Contributor&gt; listContributors() throws IOException {
-<span class="fc" id="L2556">        return root.createRequest()</span>
-<span class="fc" id="L2557">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
-<span class="fc" id="L2558">                .toIterable(Contributor[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L2598">        return root.createRequest()</span>
+<span class="fc" id="L2599">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
+<span class="fc" id="L2600">                .toIterable(Contributor[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
      * The type Contributor.
      */
-<span class="fc" id="L2564">    public static class Contributor extends GHUser {</span>
+<span class="fc" id="L2606">    public static class Contributor extends GHUser {</span>
         private int contributions;
 
         /**
@@ -2570,19 +2612,19 @@ import static org.kohsuke.github.Previews.*;
          * @return the contributions
          */
         public int getContributions() {
-<span class="fc" id="L2573">            return contributions;</span>
+<span class="fc" id="L2615">            return contributions;</span>
         }
 
         @Override
         public int hashCode() {
             // We ignore contributions in the calculation
-<span class="nc" id="L2579">            return super.hashCode();</span>
+<span class="nc" id="L2621">            return super.hashCode();</span>
         }
 
         @Override
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
-<span class="nc" id="L2585">            return super.equals(obj);</span>
+<span class="nc" id="L2627">            return super.equals(obj);</span>
         }
     }
 
@@ -2594,7 +2636,7 @@ import static org.kohsuke.github.Previews.*;
     public GHRepositoryStatistics getStatistics() {
         // TODO: Use static object and introduce refresh() method,
         // instead of returning new object each time.
-<span class="fc" id="L2597">        return new GHRepositoryStatistics(this);</span>
+<span class="fc" id="L2639">        return new GHRepositoryStatistics(this);</span>
     }
 
     /**
@@ -2609,14 +2651,14 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-<span class="nc" id="L2612">        return root.createRequest()</span>
-<span class="nc" id="L2613">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L2614">                .withPreview(INERTIA)</span>
-<span class="nc" id="L2615">                .with(&quot;name&quot;, name)</span>
-<span class="nc" id="L2616">                .with(&quot;body&quot;, body)</span>
-<span class="nc" id="L2617">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
-<span class="nc" id="L2618">                .fetch(GHProject.class)</span>
-<span class="nc" id="L2619">                .wrap(this);</span>
+<span class="nc" id="L2654">        return root.createRequest()</span>
+<span class="nc" id="L2655">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L2656">                .withPreview(INERTIA)</span>
+<span class="nc" id="L2657">                .with(&quot;name&quot;, name)</span>
+<span class="nc" id="L2658">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L2659">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L2660">                .fetch(GHProject.class)</span>
+<span class="nc" id="L2661">                .wrap(this);</span>
     }
 
     /**
@@ -2629,11 +2671,11 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-<span class="nc" id="L2632">        return root.createRequest()</span>
-<span class="nc" id="L2633">                .withPreview(INERTIA)</span>
-<span class="nc" id="L2634">                .with(&quot;state&quot;, status)</span>
-<span class="nc" id="L2635">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
-<span class="nc" id="L2636">                .toIterable(GHProject[].class, item -&gt; item.wrap(this));</span>
+<span class="nc" id="L2674">        return root.createRequest()</span>
+<span class="nc" id="L2675">                .withPreview(INERTIA)</span>
+<span class="nc" id="L2676">                .with(&quot;state&quot;, status)</span>
+<span class="nc" id="L2677">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L2678">                .toIterable(GHProject[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -2644,7 +2686,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects() throws IOException {
-<span class="nc" id="L2647">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
+<span class="nc" id="L2689">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
     }
 
     /**
@@ -2662,14 +2704,14 @@ import static org.kohsuke.github.Previews.*;
      * @see GitHub#renderMarkdown(String) GitHub#renderMarkdown(String)
      */
     public Reader renderMarkdown(String text, MarkdownMode mode) throws IOException {
-<span class="fc" id="L2665">        return new InputStreamReader(</span>
-<span class="fc" id="L2666">                root.createRequest()</span>
-<span class="fc" id="L2667">                        .method(&quot;POST&quot;)</span>
-<span class="fc" id="L2668">                        .with(&quot;text&quot;, text)</span>
-<span class="pc bpc" id="L2669" title="1 of 2 branches missed.">                        .with(&quot;mode&quot;, mode == null ? null : mode.toString())</span>
-<span class="fc" id="L2670">                        .with(&quot;context&quot;, getFullName())</span>
-<span class="fc" id="L2671">                        .withUrlPath(&quot;/markdown&quot;)</span>
-<span class="fc" id="L2672">                        .fetchStream(),</span>
+<span class="fc" id="L2707">        return new InputStreamReader(</span>
+<span class="fc" id="L2708">                root.createRequest()</span>
+<span class="fc" id="L2709">                        .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2710">                        .with(&quot;text&quot;, text)</span>
+<span class="pc bpc" id="L2711" title="1 of 2 branches missed.">                        .with(&quot;mode&quot;, mode == null ? null : mode.toString())</span>
+<span class="fc" id="L2712">                        .with(&quot;context&quot;, getFullName())</span>
+<span class="fc" id="L2713">                        .withUrlPath(&quot;/markdown&quot;)</span>
+<span class="fc" id="L2714">                        .fetchStream(),</span>
                 &quot;UTF-8&quot;);
     }
 
@@ -2679,7 +2721,7 @@ import static org.kohsuke.github.Previews.*;
      * @return the gh notification stream
      */
     public GHNotificationStream listNotifications() {
-<span class="nc" id="L2682">        return new GHNotificationStream(root, getApiTailUrl(&quot;/notifications&quot;));</span>
+<span class="nc" id="L2724">        return new GHNotificationStream(root, getApiTailUrl(&quot;/notifications&quot;));</span>
     }
 
     /**
@@ -2691,7 +2733,7 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHRepositoryViewTraffic getViewTraffic() throws IOException {
-<span class="fc" id="L2694">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/views&quot;)).fetch(GHRepositoryViewTraffic.class);</span>
+<span class="fc" id="L2736">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/views&quot;)).fetch(GHRepositoryViewTraffic.class);</span>
     }
 
     /**
@@ -2703,27 +2745,28 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHRepositoryCloneTraffic getCloneTraffic() throws IOException {
-<span class="fc" id="L2706">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/clones&quot;)).fetch(GHRepositoryCloneTraffic.class);</span>
+<span class="fc" id="L2748">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/clones&quot;)).fetch(GHRepositoryCloneTraffic.class);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L2711">        return (&quot;Repository:&quot; + getOwnerName() + &quot;:&quot; + name).hashCode();</span>
+<span class="nc" id="L2753">        return (&quot;Repository:&quot; + getOwnerName() + &quot;:&quot; + name).hashCode();</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L2716" title="1 of 2 branches missed.">        if (obj instanceof GHRepository) {</span>
-<span class="fc" id="L2717">            GHRepository that = (GHRepository) obj;</span>
-<span class="pc bpc" id="L2718" title="1 of 4 branches missed.">            return this.getOwnerName().equals(that.getOwnerName()) &amp;&amp; this.name.equals(that.name);</span>
+<span class="pc bpc" id="L2758" title="1 of 2 branches missed.">        if (obj instanceof GHRepository) {</span>
+<span class="fc" id="L2759">            GHRepository that = (GHRepository) obj;</span>
+<span class="pc bpc" id="L2760" title="1 of 4 branches missed.">            return this.getOwnerName().equals(that.getOwnerName()) &amp;&amp; this.name.equals(that.name);</span>
         }
-<span class="nc" id="L2720">        return false;</span>
+<span class="nc" id="L2762">        return false;</span>
     }
 
     String getApiTailUrl(String tail) {
-<span class="fc bfc" id="L2724" title="All 4 branches covered.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L2725">            tail = '/' + tail;</span>
-<span class="fc" id="L2726">        return &quot;/repos/&quot; + getOwnerName() + &quot;/&quot; + name + tail;</span>
+<span class="fc bfc" id="L2766" title="All 4 branches covered.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L2767">            tail = '/' + tail;</span>
+        }
+<span class="fc" id="L2769">        return &quot;/repos/&quot; + getOwnerName() + &quot;/&quot; + name + tail;</span>
     }
 
     /**
@@ -2735,9 +2778,9 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public PagedIterable&lt;GHIssueEvent&gt; listIssueEvents() throws IOException {
-<span class="fc" id="L2738">        return root.createRequest()</span>
-<span class="fc" id="L2739">                .withUrlPath(getApiTailUrl(&quot;issues/events&quot;))</span>
-<span class="fc" id="L2740">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L2781">        return root.createRequest()</span>
+<span class="fc" id="L2782">                .withUrlPath(getApiTailUrl(&quot;issues/events&quot;))</span>
+<span class="fc" id="L2783">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -2750,10 +2793,10 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public GHIssueEvent getIssueEvent(long id) throws IOException {
-<span class="fc" id="L2753">        return root.createRequest()</span>
-<span class="fc" id="L2754">                .withUrlPath(getApiTailUrl(&quot;issues/events/&quot; + id))</span>
-<span class="fc" id="L2755">                .fetch(GHIssueEvent.class)</span>
-<span class="fc" id="L2756">                .wrapUp(root);</span>
+<span class="fc" id="L2796">        return root.createRequest()</span>
+<span class="fc" id="L2797">                .withUrlPath(getApiTailUrl(&quot;issues/events/&quot; + id))</span>
+<span class="fc" id="L2798">                .fetch(GHIssueEvent.class)</span>
+<span class="fc" id="L2799">                .wrapUp(root);</span>
     }
 
     // Only used within listTopics().
@@ -2770,11 +2813,11 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public List&lt;String&gt; listTopics() throws IOException {
-<span class="fc" id="L2773">        Topics topics = root.createRequest()</span>
-<span class="fc" id="L2774">                .withPreview(MERCY)</span>
-<span class="fc" id="L2775">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
-<span class="fc" id="L2776">                .fetch(Topics.class);</span>
-<span class="fc" id="L2777">        return topics.names;</span>
+<span class="fc" id="L2816">        Topics topics = root.createRequest()</span>
+<span class="fc" id="L2817">                .withPreview(MERCY)</span>
+<span class="fc" id="L2818">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
+<span class="fc" id="L2819">                .fetch(Topics.class);</span>
+<span class="fc" id="L2820">        return topics.names;</span>
     }
 
     /**
@@ -2787,13 +2830,13 @@ import static org.kohsuke.github.Previews.*;
      *             the io exception
      */
     public void setTopics(List&lt;String&gt; topics) throws IOException {
-<span class="fc" id="L2790">        root.createRequest()</span>
-<span class="fc" id="L2791">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L2792">                .with(&quot;names&quot;, topics)</span>
-<span class="fc" id="L2793">                .withPreview(MERCY)</span>
-<span class="fc" id="L2794">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
-<span class="fc" id="L2795">                .send();</span>
-<span class="fc" id="L2796">    }</span>
+<span class="fc" id="L2833">        root.createRequest()</span>
+<span class="fc" id="L2834">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L2835">                .with(&quot;names&quot;, topics)</span>
+<span class="fc" id="L2836">                .withPreview(MERCY)</span>
+<span class="fc" id="L2837">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
+<span class="fc" id="L2838">                .send();</span>
+<span class="fc" id="L2839">    }</span>
 
     /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
@@ -2811,15 +2854,15 @@ import static org.kohsuke.github.Previews.*;
      *             The IO exception.
      */
     public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
-<span class="fc" id="L2814">        return root.createRequest()</span>
-<span class="fc" id="L2815">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L2816">                .with(&quot;tag&quot;, tag)</span>
-<span class="fc" id="L2817">                .with(&quot;message&quot;, message)</span>
-<span class="fc" id="L2818">                .with(&quot;object&quot;, object)</span>
-<span class="fc" id="L2819">                .with(&quot;type&quot;, type)</span>
-<span class="fc" id="L2820">                .withUrlPath(getApiTailUrl(&quot;git/tags&quot;))</span>
-<span class="fc" id="L2821">                .fetch(GHTagObject.class)</span>
-<span class="fc" id="L2822">                .wrap(this);</span>
+<span class="fc" id="L2857">        return root.createRequest()</span>
+<span class="fc" id="L2858">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2859">                .with(&quot;tag&quot;, tag)</span>
+<span class="fc" id="L2860">                .with(&quot;message&quot;, message)</span>
+<span class="fc" id="L2861">                .with(&quot;object&quot;, object)</span>
+<span class="fc" id="L2862">                .with(&quot;type&quot;, type)</span>
+<span class="fc" id="L2863">                .withUrlPath(getApiTailUrl(&quot;git/tags&quot;))</span>
+<span class="fc" id="L2864">                .fetch(GHTagObject.class)</span>
+<span class="fc" id="L2865">                .wrap(this);</span>
     }
 
     /**
@@ -2829,24 +2872,25 @@ import static org.kohsuke.github.Previews.*;
      *             The IO exception
      */
     void populate() throws IOException {
-<span class="fc bfc" id="L2832" title="All 2 branches covered.">        if (root.isOffline())</span>
-<span class="fc" id="L2833">            return; // can't populate if the root is offline</span>
+<span class="fc bfc" id="L2875" title="All 2 branches covered.">        if (root.isOffline()) {</span>
+<span class="fc" id="L2876">            return; // can't populate if the root is offline</span>
+        }
 
-<span class="fc" id="L2835">        final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L2879">        final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
 
         try {
             // IMPORTANT: the url for repository records is does not reliably point to the API url.
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of &quot;url&quot; take the form &quot;https://api.github.com/...&quot;.
             // For Push event repository records, they take the form &quot;https://github.com/{fullName}&quot;.
-<span class="nc" id="L2842">            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this).wrap(root);</span>
-<span class="fc" id="L2843">        } catch (HttpException e) {</span>
-<span class="pc bpc" id="L2844" title="1 of 2 branches missed.">            if (e.getCause() instanceof JsonParseException) {</span>
-<span class="fc" id="L2845">                root.createRequest().withUrlPath(&quot;/repos/&quot; + full_name).fetchInto(this).wrap(root);</span>
+<span class="fc" id="L2886">            root.createRequest().withPreview(BAPTISE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);</span>
+<span class="fc" id="L2887">        } catch (HttpException e) {</span>
+<span class="pc bpc" id="L2888" title="1 of 2 branches missed.">            if (e.getCause() instanceof JsonParseException) {</span>
+<span class="fc" id="L2889">                root.createRequest().withPreview(BAPTISE).withUrlPath(&quot;/repos/&quot; + full_name).fetchInto(this).wrap(root);</span>
             } else {
-<span class="nc" id="L2847">                throw e;</span>
+<span class="nc" id="L2891">                throw e;</span>
             }
-<span class="nc" id="L2849">        }</span>
-<span class="fc" id="L2850">    }</span>
+<span class="fc" id="L2893">        }</span>
+<span class="fc" id="L2894">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

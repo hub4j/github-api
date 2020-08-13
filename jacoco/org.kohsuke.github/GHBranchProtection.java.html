@@ -10,12 +10,14 @@ import static org.kohsuke.github.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.
+ *
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#get-branch-protection&quot;&gt;GitHub Branch Protection&lt;/a&gt;
  */
 @SuppressFBWarnings(
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L18">public class GHBranchProtection {</span>
+<span class="fc" id="L20">public class GHBranchProtection {</span>
     private static final String REQUIRE_SIGNATURES_URI = &quot;/required_signatures&quot;;
 
     @JsonProperty
@@ -44,8 +46,8 @@ import static org.kohsuke.github.Previews.ZZZAX;
     @Preview
     @Deprecated
     public void enabledSignedCommits() throws IOException {
-<span class="fc" id="L47">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L49">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * Disable signed commits.
@@ -56,8 +58,8 @@ import static org.kohsuke.github.Previews.ZZZAX;
     @Preview
     @Deprecated
     public void disableSignedCommits() throws IOException {
-<span class="fc" id="L59">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L61">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
+<span class="fc" id="L62">    }</span>
 
     /**
      * Gets enforce admins.
@@ -65,7 +67,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
      * @return the enforce admins
      */
     public EnforceAdmins getEnforceAdmins() {
-<span class="fc" id="L68">        return enforceAdmins;</span>
+<span class="fc" id="L70">        return enforceAdmins;</span>
     }
 
     /**
@@ -74,7 +76,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
      * @return the required reviews
      */
     public RequiredReviews getRequiredReviews() {
-<span class="fc" id="L77">        return requiredReviews;</span>
+<span class="fc" id="L79">        return requiredReviews;</span>
     }
 
     /**
@@ -87,7 +89,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
     @Preview
     @Deprecated
     public boolean getRequiredSignatures() throws IOException {
-<span class="fc" id="L90">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
+<span class="fc" id="L92">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
     }
 
     /**
@@ -96,7 +98,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
      * @return the required status checks
      */
     public RequiredStatusChecks getRequiredStatusChecks() {
-<span class="fc" id="L99">        return requiredStatusChecks;</span>
+<span class="fc" id="L101">        return requiredStatusChecks;</span>
     }
 
     /**
@@ -105,7 +107,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
      * @return the restrictions
      */
     public Restrictions getRestrictions() {
-<span class="nc" id="L108">        return restrictions;</span>
+<span class="nc" id="L110">        return restrictions;</span>
     }
 
     /**
@@ -114,22 +116,22 @@ import static org.kohsuke.github.Previews.ZZZAX;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L117">        return url;</span>
+<span class="nc" id="L119">        return url;</span>
     }
 
     GHBranchProtection wrap(GHBranch branch) {
-<span class="fc" id="L121">        this.root = branch.getRoot();</span>
-<span class="fc" id="L122">        return this;</span>
+<span class="fc" id="L123">        this.root = branch.getRoot();</span>
+<span class="fc" id="L124">        return this;</span>
     }
 
     private Requester requester() {
-<span class="fc" id="L126">        return root.createRequest().withPreview(ZZZAX);</span>
+<span class="fc" id="L128">        return root.createRequest().withPreview(ZZZAX);</span>
     }
 
     /**
      * The type EnforceAdmins.
      */
-<span class="fc" id="L132">    public static class EnforceAdmins {</span>
+<span class="fc" id="L134">    public static class EnforceAdmins {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -142,7 +144,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L145">            return url;</span>
+<span class="nc" id="L147">            return url;</span>
         }
 
         /**
@@ -151,14 +153,14 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L154">            return enabled;</span>
+<span class="fc" id="L156">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredReviews.
      */
-<span class="fc" id="L161">    public static class RequiredReviews {</span>
+<span class="fc" id="L163">    public static class RequiredReviews {</span>
         @JsonProperty(&quot;dismissal_restrictions&quot;)
         private Restrictions dismissalRestriction;
 
@@ -178,7 +180,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the dismissal restrictions
          */
         public Restrictions getDismissalRestrictions() {
-<span class="nc" id="L181">            return dismissalRestriction;</span>
+<span class="nc" id="L183">            return dismissalRestriction;</span>
         }
 
         /**
@@ -187,7 +189,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L190">            return url;</span>
+<span class="nc" id="L192">            return url;</span>
         }
 
         /**
@@ -196,7 +198,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the boolean
          */
         public boolean isDismissStaleReviews() {
-<span class="fc" id="L199">            return dismissStaleReviews;</span>
+<span class="fc" id="L201">            return dismissStaleReviews;</span>
         }
 
         /**
@@ -205,7 +207,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the boolean
          */
         public boolean isRequireCodeOwnerReviews() {
-<span class="fc" id="L208">            return requireCodeOwnerReviews;</span>
+<span class="fc" id="L210">            return requireCodeOwnerReviews;</span>
         }
 
         /**
@@ -214,7 +216,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the required reviewers
          */
         public int getRequiredReviewers() {
-<span class="fc" id="L217">            return requiredReviewers;</span>
+<span class="fc" id="L219">            return requiredReviewers;</span>
         }
     }
 
@@ -231,7 +233,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L234">            return url;</span>
+<span class="nc" id="L236">            return url;</span>
         }
 
         /**
@@ -240,14 +242,14 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="nc" id="L243">            return enabled;</span>
+<span class="nc" id="L245">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredStatusChecks.
      */
-<span class="fc" id="L250">    public static class RequiredStatusChecks {</span>
+<span class="fc" id="L252">    public static class RequiredStatusChecks {</span>
         @JsonProperty
         private Collection&lt;String&gt; contexts;
 
@@ -263,7 +265,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the contexts
          */
         public Collection&lt;String&gt; getContexts() {
-<span class="fc" id="L266">            return contexts;</span>
+<span class="fc" id="L268">            return contexts;</span>
         }
 
         /**
@@ -272,7 +274,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L275">            return url;</span>
+<span class="nc" id="L277">            return url;</span>
         }
 
         /**
@@ -281,14 +283,14 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the boolean
          */
         public boolean isRequiresBranchUpToDate() {
-<span class="fc" id="L284">            return strict;</span>
+<span class="fc" id="L286">            return strict;</span>
         }
     }
 
     /**
      * The type Restrictions.
      */
-<span class="nc" id="L291">    public static class Restrictions {</span>
+<span class="nc" id="L293">    public static class Restrictions {</span>
         @JsonProperty
         private Collection&lt;GHTeam&gt; teams;
 
@@ -308,7 +310,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the teams
          */
         public Collection&lt;GHTeam&gt; getTeams() {
-<span class="nc" id="L311">            return teams;</span>
+<span class="nc" id="L313">            return teams;</span>
         }
 
         /**
@@ -317,7 +319,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the teams url
          */
         public String getTeamsUrl() {
-<span class="nc" id="L320">            return teamsUrl;</span>
+<span class="nc" id="L322">            return teamsUrl;</span>
         }
 
         /**
@@ -326,7 +328,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L329">            return url;</span>
+<span class="nc" id="L331">            return url;</span>
         }
 
         /**
@@ -335,7 +337,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the users
          */
         public Collection&lt;GHUser&gt; getUsers() {
-<span class="nc" id="L338">            return users;</span>
+<span class="nc" id="L340">            return users;</span>
         }
 
         /**
@@ -344,7 +346,7 @@ import static org.kohsuke.github.Previews.ZZZAX;
          * @return the users url
          */
         public String getUsersUrl() {
-<span class="nc" id="L347">            return usersUrl;</span>
+<span class="nc" id="L349">            return usersUrl;</span>
         }
     }
 }

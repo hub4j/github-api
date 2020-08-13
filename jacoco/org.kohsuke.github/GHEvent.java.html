@@ -63,19 +63,20 @@ import java.util.Locale;
 <span class="fc" id="L63">    TEAM_ADD,</span>
 <span class="fc" id="L64">    WATCH,</span>
 <span class="fc" id="L65">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L66">    WORKFLOW_RUN,</span>
 
     /**
      * Special event type that means &quot;every possible event&quot;
      */
-<span class="fc" id="L70">    ALL;</span>
+<span class="fc" id="L71">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
      */
     String symbol() {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (this == ALL)</span>
-<span class="nc" id="L77">            return &quot;*&quot;;</span>
-<span class="nc" id="L78">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (this == ALL)</span>
+<span class="nc" id="L78">            return &quot;*&quot;;</span>
+<span class="nc" id="L79">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

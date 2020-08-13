@@ -86,7 +86,7 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 <span class="fc" id="L86">            assignee.wrapUp(root);</span>
 <span class="fc bfc" id="L87" title="All 2 branches covered.">        if (assignees != null)</span>
 <span class="fc" id="L88">            GHUser.wrap(assignees, root);</span>
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (user != null)</span>
 <span class="fc" id="L90">            user.wrapUp(root);</span>
 <span class="fc bfc" id="L91" title="All 2 branches covered.">        if (closed_by != null)</span>
 <span class="fc" id="L92">            closed_by.wrapUp(root);</span>
@@ -235,11 +235,11 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
      * Identical to edit(), but allows null for the value.
      */
     private void editNullable(String key, Object value) throws IOException {
-<span class="fc" id="L238">        root.createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L239">    }</span>
+<span class="nc" id="L238">        root.createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L239">    }</span>
 
     private void editIssue(String key, Object value) throws IOException {
-<span class="fc" id="L242">        root.createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getIssuesApiRoute()).send();</span>
+<span class="fc" id="L242">        root.createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getIssuesApiRoute()).send();</span>
 <span class="fc" id="L243">    }</span>
 
     /**
@@ -296,9 +296,9 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
 <span class="fc bfc" id="L298" title="All 2 branches covered.">        if (milestone == null) {</span>
-<span class="fc" id="L299">            editNullable(&quot;milestone&quot;, null);</span>
+<span class="fc" id="L299">            editIssue(&quot;milestone&quot;, null);</span>
         } else {
-<span class="fc" id="L301">            edit(&quot;milestone&quot;, milestone.getNumber());</span>
+<span class="fc" id="L301">            editIssue(&quot;milestone&quot;, milestone.getNumber());</span>
         }
 <span class="fc" id="L303">    }</span>
 

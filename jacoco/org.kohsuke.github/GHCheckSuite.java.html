@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckSuite.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckSuite.java</span></div><h1>GHCheckSuite.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents a check suite.
@@ -13,7 +17,9 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L16">public class GHCheckSuite extends GHObject {</span>
+<span class="fc" id="L20">public class GHCheckSuite extends GHObject {</span>
+
+    @JsonProperty(&quot;repository&quot;)
     GHRepository owner;
     GitHub root;
 
@@ -31,21 +37,29 @@ import java.util.Date;
     private GHPullRequest[] pullRequests;
 
     GHCheckSuite wrap(GHRepository owner) {
-<span class="fc" id="L34">        this.owner = owner;</span>
-<span class="fc" id="L35">        this.root = owner.root;</span>
-<span class="fc" id="L36">        return this;</span>
+<span class="fc" id="L40">        this.owner = owner;</span>
+<span class="fc" id="L41">        this.wrap(owner.root);</span>
+<span class="fc" id="L42">        return this;</span>
     }
 
     GHCheckSuite wrap(GitHub root) {
-<span class="nc" id="L40">        this.root = root;</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (owner != null) {</span>
-<span class="nc" id="L42">            owner.wrap(root);</span>
+<span class="fc" id="L46">        this.root = root;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (owner != null) {</span>
+<span class="fc" id="L48">            owner.wrap(root);</span>
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L51">                    singlePull.wrap(owner);</span>
+                }
+            }
         }
-<span class="nc" id="L44">        return this;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (app != null) {</span>
+<span class="fc" id="L56">            app.wrapUp(root);</span>
+        }
+<span class="fc" id="L58">        return this;</span>
     }
 
     GHPullRequest[] wrap() {
-<span class="nc" id="L48">        return pullRequests;</span>
+<span class="nc" id="L62">        return pullRequests;</span>
     }
 
     /**
@@ -55,7 +69,7 @@ import java.util.Date;
      * @return global node id
      */
     public String getNodeId() {
-<span class="fc" id="L58">        return nodeId;</span>
+<span class="fc" id="L72">        return nodeId;</span>
     }
 
     /**
@@ -64,7 +78,7 @@ import java.util.Date;
      * @return head branch name
      */
     public String getHeadBranch() {
-<span class="fc" id="L67">        return headBranch;</span>
+<span class="fc" id="L81">        return headBranch;</span>
     }
 
     /**
@@ -73,7 +87,7 @@ import java.util.Date;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L76">        return headSha;</span>
+<span class="fc" id="L90">        return headSha;</span>
     }
 
     /**
@@ -82,7 +96,7 @@ import java.util.Date;
      * @return status of the check suite
      */
     public String getStatus() {
-<span class="fc" id="L85">        return status;</span>
+<span class="fc" id="L99">        return status;</span>
     }
 
     /**
@@ -93,7 +107,7 @@ import java.util.Date;
      * @return conclusion of the check suite
      */
     public String getConclusion() {
-<span class="fc" id="L96">        return conclusion;</span>
+<span class="fc" id="L110">        return conclusion;</span>
     }
 
     /**
@@ -102,7 +116,7 @@ import java.util.Date;
      * @return sha of a commit
      */
     public String getBefore() {
-<span class="fc" id="L105">        return before;</span>
+<span class="fc" id="L119">        return before;</span>
     }
 
     /**
@@ -111,7 +125,7 @@ import java.util.Date;
      * @return sha of a commit
      */
     public String getAfter() {
-<span class="fc" id="L114">        return after;</span>
+<span class="fc" id="L128">        return after;</span>
     }
 
     /**
@@ -120,7 +134,7 @@ import java.util.Date;
      * @return sha of the most recent commit
      */
     public int getLatestCheckRunsCount() {
-<span class="fc" id="L123">        return latestCheckRunsCount;</span>
+<span class="fc" id="L137">        return latestCheckRunsCount;</span>
     }
 
     /**
@@ -129,7 +143,7 @@ import java.util.Date;
      * @return url containing all check runs
      */
     public URL getCheckRunsUrl() {
-<span class="fc" id="L132">        return checkRunsUrl;</span>
+<span class="fc" id="L146">        return checkRunsUrl;</span>
     }
 
     /**
@@ -138,7 +152,7 @@ import java.util.Date;
      * @return head commit
      */
     public HeadCommit getHeadCommit() {
-<span class="fc" id="L141">        return headCommit;</span>
+<span class="fc" id="L155">        return headCommit;</span>
     }
 
     /**
@@ -147,21 +161,28 @@ import java.util.Date;
      * @return GitHub App
      */
     public GHApp getApp() {
-<span class="fc" id="L150">        return app;</span>
+<span class="fc" id="L164">        return app;</span>
     }
 
     /**
      * Gets the pull requests participated in this check suite.
      *
-     * @return Pull requests
+     * Note this field is only populated for events. When getting a {@link GHCheckSuite} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this check suite. Only populated for events.
+     * @throws IOException
+     *             the io exception
      */
-    GHPullRequest[] getPullRequests() throws IOException {
-<span class="nc bnc" id="L159" title="All 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="nc bnc" id="L160" title="All 2 branches missed.">            for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="nc" id="L161">                singlePull.refresh();</span>
+    public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
+<span class="pc bpc" id="L178" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+                // Only refresh if we haven't do so before
+<span class="fc" id="L181">                singlePull.refresh(singlePull.getTitle());</span>
             }
+<span class="fc" id="L183">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L164">        return pullRequests;</span>
+<span class="nc" id="L185">        return Collections.emptyList();</span>
     }
 
     /**
@@ -171,10 +192,10 @@ import java.util.Date;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L174">        return null;</span>
+<span class="nc" id="L195">        return null;</span>
     }
 
-<span class="fc" id="L177">    public static class HeadCommit {</span>
+<span class="fc" id="L198">    public static class HeadCommit {</span>
         private String id;
         private String treeId;
         private String message;
@@ -188,7 +209,7 @@ import java.util.Date;
          * @return id of the commit
          */
         public String getId() {
-<span class="fc" id="L191">            return id;</span>
+<span class="fc" id="L212">            return id;</span>
         }
 
         /**
@@ -197,7 +218,7 @@ import java.util.Date;
          * @return id of the tree
          */
         public String getTreeId() {
-<span class="fc" id="L200">            return treeId;</span>
+<span class="fc" id="L221">            return treeId;</span>
         }
 
         /**
@@ -206,7 +227,7 @@ import java.util.Date;
          * @return commit message.
          */
         public String getMessage() {
-<span class="fc" id="L209">            return message;</span>
+<span class="fc" id="L230">            return message;</span>
         }
 
         /**
@@ -215,7 +236,7 @@ import java.util.Date;
          * @return timestamp of the commit
          */
         public Date getTimestamp() {
-<span class="fc" id="L218">            return GitHubClient.parseDate(timestamp);</span>
+<span class="fc" id="L239">            return GitHubClient.parseDate(timestamp);</span>
         }
 
         /**
@@ -224,7 +245,7 @@ import java.util.Date;
          * @return the author
          */
         public GitUser getAuthor() {
-<span class="fc" id="L227">            return author;</span>
+<span class="fc" id="L248">            return author;</span>
         }
 
         /**
@@ -233,7 +254,7 @@ import java.util.Date;
          * @return the committer
          */
         public GitUser getCommitter() {
-<span class="fc" id="L236">            return committer;</span>
+<span class="fc" id="L257">            return committer;</span>
         }
     }
 }

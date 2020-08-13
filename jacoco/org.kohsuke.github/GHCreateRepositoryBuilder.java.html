@@ -3,6 +3,8 @@
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.BAPTISE;
+
 /**
  * Creates a repository
  *
@@ -11,14 +13,14 @@ import java.net.URL;
 public class GHCreateRepositoryBuilder {
     private final GitHub root;
     protected final Requester builder;
-    private final String apiUrlTail;
+    private String apiUrlTail;
 
-<span class="fc" id="L16">    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {</span>
-<span class="fc" id="L17">        this.root = root;</span>
-<span class="fc" id="L18">        this.apiUrlTail = apiUrlTail;</span>
-<span class="fc" id="L19">        this.builder = root.createRequest();</span>
-<span class="fc" id="L20">        this.builder.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L18">    GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {</span>
+<span class="fc" id="L19">        this.root = root;</span>
+<span class="fc" id="L20">        this.apiUrlTail = apiUrlTail;</span>
+<span class="fc" id="L21">        this.builder = root.createRequest();</span>
+<span class="fc" id="L22">        this.builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L23">    }</span>
 
     /**
      * Description for repository
@@ -28,8 +30,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder description(String description) {
-<span class="fc" id="L31">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L32">        return this;</span>
+<span class="fc" id="L33">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L34">        return this;</span>
     }
 
     /**
@@ -40,7 +42,7 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder homepage(URL homepage) {
-<span class="nc" id="L43">        return homepage(homepage.toExternalForm());</span>
+<span class="nc" id="L45">        return homepage(homepage.toExternalForm());</span>
     }
 
     /**
@@ -51,8 +53,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder homepage(String homepage) {
-<span class="fc" id="L54">        this.builder.with(&quot;homepage&quot;, homepage);</span>
-<span class="fc" id="L55">        return this;</span>
+<span class="fc" id="L56">        this.builder.with(&quot;homepage&quot;, homepage);</span>
+<span class="fc" id="L57">        return this;</span>
     }
 
     /**
@@ -63,8 +65,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder private_(boolean enabled) {
-<span class="fc" id="L66">        this.builder.with(&quot;private&quot;, enabled);</span>
-<span class="fc" id="L67">        return this;</span>
+<span class="fc" id="L68">        this.builder.with(&quot;private&quot;, enabled);</span>
+<span class="fc" id="L69">        return this;</span>
     }
 
     /**
@@ -75,8 +77,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder issues(boolean enabled) {
-<span class="nc" id="L78">        this.builder.with(&quot;has_issues&quot;, enabled);</span>
-<span class="nc" id="L79">        return this;</span>
+<span class="nc" id="L80">        this.builder.with(&quot;has_issues&quot;, enabled);</span>
+<span class="nc" id="L81">        return this;</span>
     }
 
     /**
@@ -87,8 +89,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder projects(boolean enabled) {
-<span class="nc" id="L90">        this.builder.with(&quot;has_projects&quot;, enabled);</span>
-<span class="nc" id="L91">        return this;</span>
+<span class="nc" id="L92">        this.builder.with(&quot;has_projects&quot;, enabled);</span>
+<span class="nc" id="L93">        return this;</span>
     }
 
     /**
@@ -99,8 +101,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder wiki(boolean enabled) {
-<span class="nc" id="L102">        this.builder.with(&quot;has_wiki&quot;, enabled);</span>
-<span class="nc" id="L103">        return this;</span>
+<span class="nc" id="L104">        this.builder.with(&quot;has_wiki&quot;, enabled);</span>
+<span class="nc" id="L105">        return this;</span>
     }
 
     /**
@@ -111,8 +113,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder downloads(boolean enabled) {
-<span class="nc" id="L114">        this.builder.with(&quot;has_downloads&quot;, enabled);</span>
-<span class="nc" id="L115">        return this;</span>
+<span class="nc" id="L116">        this.builder.with(&quot;has_downloads&quot;, enabled);</span>
+<span class="nc" id="L117">        return this;</span>
     }
 
     /**
@@ -123,8 +125,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder autoInit(boolean enabled) {
-<span class="fc" id="L126">        this.builder.with(&quot;auto_init&quot;, enabled);</span>
-<span class="fc" id="L127">        return this;</span>
+<span class="fc" id="L128">        this.builder.with(&quot;auto_init&quot;, enabled);</span>
+<span class="fc" id="L129">        return this;</span>
     }
 
     /**
@@ -135,8 +137,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder allowSquashMerge(boolean enabled) {
-<span class="nc" id="L138">        this.builder.with(&quot;allow_squash_merge&quot;, enabled);</span>
-<span class="nc" id="L139">        return this;</span>
+<span class="nc" id="L140">        this.builder.with(&quot;allow_squash_merge&quot;, enabled);</span>
+<span class="nc" id="L141">        return this;</span>
     }
 
     /**
@@ -147,8 +149,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder allowMergeCommit(boolean enabled) {
-<span class="nc" id="L150">        this.builder.with(&quot;allow_merge_commit&quot;, enabled);</span>
-<span class="nc" id="L151">        return this;</span>
+<span class="nc" id="L152">        this.builder.with(&quot;allow_merge_commit&quot;, enabled);</span>
+<span class="nc" id="L153">        return this;</span>
     }
 
     /**
@@ -159,8 +161,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder allowRebaseMerge(boolean enabled) {
-<span class="nc" id="L162">        this.builder.with(&quot;allow_rebase_merge&quot;, enabled);</span>
-<span class="nc" id="L163">        return this;</span>
+<span class="nc" id="L164">        this.builder.with(&quot;allow_rebase_merge&quot;, enabled);</span>
+<span class="nc" id="L165">        return this;</span>
     }
 
     /**
@@ -171,8 +173,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
      */
     public GHCreateRepositoryBuilder gitignoreTemplate(String language) {
-<span class="nc" id="L174">        this.builder.with(&quot;gitignore_template&quot;, language);</span>
-<span class="nc" id="L175">        return this;</span>
+<span class="nc" id="L176">        this.builder.with(&quot;gitignore_template&quot;, language);</span>
+<span class="nc" id="L177">        return this;</span>
     }
 
     /**
@@ -183,8 +185,8 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) {
-<span class="nc" id="L186">        this.builder.with(&quot;license_template&quot;, license);</span>
-<span class="nc" id="L187">        return this;</span>
+<span class="nc" id="L188">        this.builder.with(&quot;license_template&quot;, license);</span>
+<span class="nc" id="L189">        return this;</span>
     }
 
     /**
@@ -195,9 +197,54 @@ public class GHCreateRepositoryBuilder {
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder team(GHTeam team) {
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (team != null)</span>
-<span class="fc" id="L199">            this.builder.with(&quot;team_id&quot;, team.getId());</span>
-<span class="fc" id="L200">        return this;</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (team != null)</span>
+<span class="fc" id="L201">            this.builder.with(&quot;team_id&quot;, team.getId());</span>
+<span class="fc" id="L202">        return this;</span>
+    }
+
+    /**
+     * Specifies whether the repository is a template.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder templateRepository(boolean enabled) {
+<span class="fc" id="L215">        this.builder.withPreview(BAPTISE);</span>
+<span class="fc" id="L216">        this.builder.with(&quot;is_template&quot;, enabled);</span>
+<span class="fc" id="L217">        return this;</span>
+    }
+
+    /**
+     * Specifies the ownership of the repository.
+     *
+     * @param owner
+     *            organization or personage
+     * @return a builder to continue with building
+     */
+    public GHCreateRepositoryBuilder owner(String owner) {
+<span class="fc" id="L228">        this.builder.with(&quot;owner&quot;, owner);</span>
+<span class="fc" id="L229">        return this;</span>
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateOwner
+     *            template repository owner
+     * @param templateRepo
+     *            template repository
+     * @return a builder to continue with building
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    @Preview
+    @Deprecated
+    public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
+<span class="fc" id="L245">        this.builder.withPreview(BAPTISE);</span>
+<span class="fc" id="L246">        this.apiUrlTail = &quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;;</span>
+<span class="fc" id="L247">        return this;</span>
     }
 
     /**
@@ -208,7 +255,7 @@ public class GHCreateRepositoryBuilder {
      *             if repsitory cannot be created
      */
     public GHRepository create() throws IOException {
-<span class="fc" id="L211">        return builder.method(&quot;POST&quot;).withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);</span>
+<span class="fc" id="L258">        return builder.method(&quot;POST&quot;).withUrlPath(apiUrlTail).fetch(GHRepository.class).wrap(root);</span>
     }
 
 }

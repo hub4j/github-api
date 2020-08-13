@@ -78,21 +78,26 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(ResponseInfo responseInfo, Class&lt;T&gt; type) throws IOException {
 
-<span class="pc bpc" id="L81" title="2 of 6 branches missed.">        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT &amp;&amp; type != null &amp;&amp; type.isArray()) {</span>
-            // no content
-<span class="fc" id="L83">            return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">            if (type != null &amp;&amp; type.isArray()) {</span>
+                // no content for array should be empty array
+<span class="fc" id="L84">                return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
+            } else {
+                // no content for object should be null
+<span class="fc" id="L87">                return null;</span>
+            }
         }
 
-<span class="fc" id="L86">        String data = responseInfo.getBodyAsString();</span>
+<span class="fc" id="L91">        String data = responseInfo.getBodyAsString();</span>
         try {
-<span class="fc" id="L88">            InjectableValues.Std inject = new InjectableValues.Std();</span>
-<span class="fc" id="L89">            inject.addValue(ResponseInfo.class, responseInfo);</span>
+<span class="fc" id="L93">            InjectableValues.Std inject = new InjectableValues.Std();</span>
+<span class="fc" id="L94">            inject.addValue(ResponseInfo.class, responseInfo);</span>
 
-<span class="fc" id="L91">            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);</span>
-<span class="fc" id="L92">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="fc" id="L93">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="fc" id="L94">            LOGGER.log(Level.FINE, message);</span>
-<span class="fc" id="L95">            throw e;</span>
+<span class="fc" id="L96">            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);</span>
+<span class="fc" id="L97">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="fc" id="L98">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="fc" id="L99">            LOGGER.log(Level.FINE, message);</span>
+<span class="fc" id="L100">            throw e;</span>
         }
     }
 
@@ -112,13 +117,13 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(ResponseInfo responseInfo, T instance) throws IOException {
 
-<span class="fc" id="L115">        String data = responseInfo.getBodyAsString();</span>
+<span class="fc" id="L120">        String data = responseInfo.getBodyAsString();</span>
         try {
-<span class="fc" id="L117">            return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);</span>
-<span class="fc" id="L118">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="fc" id="L119">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="fc" id="L120">            LOGGER.log(Level.FINE, message);</span>
-<span class="fc" id="L121">            throw e;</span>
+<span class="fc" id="L122">            return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);</span>
+<span class="fc" id="L123">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="fc" id="L124">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="fc" id="L125">            LOGGER.log(Level.FINE, message);</span>
+<span class="fc" id="L126">            throw e;</span>
         }
     }
 
@@ -129,7 +134,7 @@ class GitHubResponse&lt;T&gt; {
      */
     @Nonnull
     public URL url() {
-<span class="nc" id="L132">        return request.url();</span>
+<span class="nc" id="L137">        return request.url();</span>
     }
 
     /**
@@ -139,7 +144,7 @@ class GitHubResponse&lt;T&gt; {
      */
     @Nonnull
     public GitHubRequest request() {
-<span class="fc" id="L142">        return request;</span>
+<span class="fc" id="L147">        return request;</span>
     }
 
     /**
@@ -148,7 +153,7 @@ class GitHubResponse&lt;T&gt; {
      * @return the status code for this response.
      */
     public int statusCode() {
-<span class="fc" id="L151">        return statusCode;</span>
+<span class="fc" id="L156">        return statusCode;</span>
     }
 
     /**
@@ -158,7 +163,7 @@ class GitHubResponse&lt;T&gt; {
      */
     @Nonnull
     public Map&lt;String, List&lt;String&gt;&gt; headers() {
-<span class="fc" id="L161">        return headers;</span>
+<span class="fc" id="L166">        return headers;</span>
     }
 
     /**
@@ -170,11 +175,11 @@ class GitHubResponse&lt;T&gt; {
      */
     @CheckForNull
     public String headerField(String name) {
-<span class="fc" id="L173">        String result = null;</span>
-<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
-<span class="fc" id="L175">            result = headers.get(name).get(0);</span>
+<span class="fc" id="L178">        String result = null;</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
+<span class="fc" id="L180">            result = headers.get(name).get(0);</span>
         }
-<span class="fc" id="L177">        return result;</span>
+<span class="fc" id="L182">        return result;</span>
     }
 
     /**
@@ -183,7 +188,7 @@ class GitHubResponse&lt;T&gt; {
      * @return body of the response
      */
     public T body() {
-<span class="fc" id="L186">        return body;</span>
+<span class="fc" id="L191">        return body;</span>
     }
 
     /**
@@ -215,8 +220,8 @@ class GitHubResponse&lt;T&gt; {
      */
     static abstract class ResponseInfo implements Closeable {
 
-<span class="fc" id="L218">        private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
-<span class="fc" id="L219">                .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
+<span class="fc" id="L223">        private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
+<span class="fc" id="L224">                .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
 
         private final int statusCode;
         @Nonnull
@@ -226,16 +231,16 @@ class GitHubResponse&lt;T&gt; {
 
         protected ResponseInfo(@Nonnull GitHubRequest request,
                 int statusCode,
-<span class="fc" id="L229">                @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
-<span class="fc" id="L230">            this.request = request;</span>
-<span class="fc" id="L231">            this.statusCode = statusCode;</span>
+<span class="fc" id="L234">                @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
+<span class="fc" id="L235">            this.request = request;</span>
+<span class="fc" id="L236">            this.statusCode = statusCode;</span>
 
             // Response header field names must be case-insensitive.
-<span class="fc" id="L234">            TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
-<span class="fc" id="L235">            caseInsensitiveMap.putAll(headers);</span>
+<span class="fc" id="L239">            TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc" id="L240">            caseInsensitiveMap.putAll(headers);</span>
 
-<span class="fc" id="L237">            this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
-<span class="fc" id="L238">        }</span>
+<span class="fc" id="L242">            this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
+<span class="fc" id="L243">        }</span>
 
         /**
          * Gets the value of a header field for this response.
@@ -246,11 +251,11 @@ class GitHubResponse&lt;T&gt; {
          */
         @CheckForNull
         public String headerField(String name) {
-<span class="fc" id="L249">            String result = null;</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            if (headers.containsKey(name)) {</span>
-<span class="fc" id="L251">                result = headers.get(name).get(0);</span>
+<span class="fc" id="L254">            String result = null;</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (headers.containsKey(name)) {</span>
+<span class="fc" id="L256">                result = headers.get(name).get(0);</span>
             }
-<span class="fc" id="L253">            return result;</span>
+<span class="fc" id="L258">            return result;</span>
         }
 
         /**
@@ -276,7 +281,7 @@ class GitHubResponse&lt;T&gt; {
          */
         @Nonnull
         public URL url() {
-<span class="fc" id="L279">            return request.url();</span>
+<span class="fc" id="L284">            return request.url();</span>
         }
 
         /**
@@ -286,7 +291,7 @@ class GitHubResponse&lt;T&gt; {
          */
         @Nonnull
         public GitHubRequest request() {
-<span class="fc" id="L289">            return request;</span>
+<span class="fc" id="L294">            return request;</span>
         }
 
         /**
@@ -295,7 +300,7 @@ class GitHubResponse&lt;T&gt; {
          * @return the status code for this response.
          */
         public int statusCode() {
-<span class="fc" id="L298">            return statusCode;</span>
+<span class="fc" id="L303">            return statusCode;</span>
         }
 
         /**
@@ -305,7 +310,7 @@ class GitHubResponse&lt;T&gt; {
          */
         @Nonnull
         public Map&lt;String, List&lt;String&gt;&gt; headers() {
-<span class="fc" id="L308">            return headers;</span>
+<span class="fc" id="L313">            return headers;</span>
         }
 
         /**
@@ -317,9 +322,9 @@ class GitHubResponse&lt;T&gt; {
          */
         @Nonnull
         String getBodyAsString() throws IOException {
-<span class="fc" id="L320">            InputStreamReader r = null;</span>
-<span class="fc" id="L321">            r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);</span>
-<span class="fc" id="L322">            return IOUtils.toString(r);</span>
+<span class="fc" id="L325">            InputStreamReader r = null;</span>
+<span class="fc" id="L326">            r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L327">            return IOUtils.toString(r);</span>
         }
     }
 

@@ -154,12 +154,9 @@ import java.util.TreeMap;
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-<span class="fc" id="L157">            return root.createRequest()</span>
-<span class="fc" id="L158">                    .withUrlPath(&quot;/repos/&quot; + login + '/' + name)</span>
-<span class="fc" id="L159">                    .fetch(GHRepository.class)</span>
-<span class="fc" id="L160">                    .wrap(root);</span>
-<span class="nc" id="L161">        } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L162">            return null;</span>
+<span class="fc" id="L157">            return GHRepository.read(root, login, name);</span>
+<span class="nc" id="L158">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L159">            return null;</span>
         }
     }
 
@@ -180,7 +177,7 @@ import java.util.TreeMap;
      */
     @Deprecated
     public String getGravatarId() {
-<span class="nc" id="L183">        return &quot;&quot;;</span>
+<span class="nc" id="L180">        return &quot;&quot;;</span>
     }
 
     /**
@@ -189,7 +186,7 @@ import java.util.TreeMap;
      * @return the avatar url
      */
     public String getAvatarUrl() {
-<span class="nc" id="L192">        return avatar_url;</span>
+<span class="nc" id="L189">        return avatar_url;</span>
     }
 
     /**
@@ -198,7 +195,7 @@ import java.util.TreeMap;
      * @return the login
      */
     public String getLogin() {
-<span class="fc" id="L201">        return login;</span>
+<span class="fc" id="L198">        return login;</span>
     }
 
     /**
@@ -209,8 +206,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getName() throws IOException {
-<span class="fc" id="L212">        populate();</span>
-<span class="fc" id="L213">        return name;</span>
+<span class="fc" id="L209">        populate();</span>
+<span class="fc" id="L210">        return name;</span>
     }
 
     /**
@@ -221,8 +218,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getCompany() throws IOException {
-<span class="nc" id="L224">        populate();</span>
-<span class="nc" id="L225">        return company;</span>
+<span class="nc" id="L221">        populate();</span>
+<span class="nc" id="L222">        return company;</span>
     }
 
     /**
@@ -233,8 +230,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getLocation() throws IOException {
-<span class="nc" id="L236">        populate();</span>
-<span class="nc" id="L237">        return location;</span>
+<span class="nc" id="L233">        populate();</span>
+<span class="nc" id="L234">        return location;</span>
     }
 
     /**
@@ -245,18 +242,18 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getTwitterUsername() throws IOException {
-<span class="fc" id="L248">        populate();</span>
-<span class="fc" id="L249">        return twitter_username;</span>
+<span class="fc" id="L245">        populate();</span>
+<span class="fc" id="L246">        return twitter_username;</span>
     }
 
     public Date getCreatedAt() throws IOException {
-<span class="nc" id="L253">        populate();</span>
-<span class="nc" id="L254">        return super.getCreatedAt();</span>
+<span class="nc" id="L250">        populate();</span>
+<span class="nc" id="L251">        return super.getCreatedAt();</span>
     }
 
     public Date getUpdatedAt() throws IOException {
-<span class="nc" id="L258">        populate();</span>
-<span class="nc" id="L259">        return super.getUpdatedAt();</span>
+<span class="nc" id="L255">        populate();</span>
+<span class="nc" id="L256">        return super.getUpdatedAt();</span>
     }
 
     /**
@@ -267,13 +264,13 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getBlog() throws IOException {
-<span class="nc" id="L270">        populate();</span>
-<span class="nc" id="L271">        return blog;</span>
+<span class="nc" id="L267">        populate();</span>
+<span class="nc" id="L268">        return blog;</span>
     }
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L276">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L273">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -284,8 +281,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getEmail() throws IOException {
-<span class="nc" id="L287">        populate();</span>
-<span class="nc" id="L288">        return email;</span>
+<span class="nc" id="L284">        populate();</span>
+<span class="nc" id="L285">        return email;</span>
     }
 
     /**
@@ -296,8 +293,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public int getPublicGistCount() throws IOException {
-<span class="nc" id="L299">        populate();</span>
-<span class="nc" id="L300">        return public_gists;</span>
+<span class="nc" id="L296">        populate();</span>
+<span class="nc" id="L297">        return public_gists;</span>
     }
 
     /**
@@ -308,8 +305,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public int getPublicRepoCount() throws IOException {
-<span class="nc" id="L311">        populate();</span>
-<span class="nc" id="L312">        return public_repos;</span>
+<span class="nc" id="L308">        populate();</span>
+<span class="nc" id="L309">        return public_repos;</span>
     }
 
     /**
@@ -320,8 +317,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public int getFollowingCount() throws IOException {
-<span class="nc" id="L323">        populate();</span>
-<span class="nc" id="L324">        return following;</span>
+<span class="nc" id="L320">        populate();</span>
+<span class="nc" id="L321">        return following;</span>
     }
 
     /**
@@ -332,8 +329,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public int getFollowersCount() throws IOException {
-<span class="nc" id="L335">        populate();</span>
-<span class="nc" id="L336">        return followers;</span>
+<span class="nc" id="L332">        populate();</span>
+<span class="nc" id="L333">        return followers;</span>
     }
 
     /**
@@ -344,8 +341,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public String getType() throws IOException {
-<span class="fc" id="L347">        populate();</span>
-<span class="fc" id="L348">        return type;</span>
+<span class="fc" id="L344">        populate();</span>
+<span class="fc" id="L345">        return type;</span>
     }
 
     /**
@@ -356,8 +353,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public boolean isSiteAdmin() throws IOException {
-<span class="fc" id="L359">        populate();</span>
-<span class="fc" id="L360">        return site_admin;</span>
+<span class="fc" id="L356">        populate();</span>
+<span class="fc" id="L357">        return site_admin;</span>
     }
 
     /**
@@ -368,8 +365,8 @@ import java.util.TreeMap;
      *             the io exception
      */
     public Optional&lt;Integer&gt; getTotalPrivateRepoCount() throws IOException {
-<span class="fc" id="L371">        populate();</span>
-<span class="fc" id="L372">        return Optional.ofNullable(total_private_repos);</span>
+<span class="fc" id="L368">        populate();</span>
+<span class="fc" id="L369">        return Optional.ofNullable(total_private_repos);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

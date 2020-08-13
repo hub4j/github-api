@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckRun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckRun.java</span></div><h1>GHCheckRun.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents a check run.
@@ -13,7 +17,9 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L16">public class GHCheckRun extends GHObject {</span>
+<span class="fc" id="L20">public class GHCheckRun extends GHObject {</span>
+
+    @JsonProperty(&quot;repository&quot;)
     GHRepository owner;
     GitHub root;
 
@@ -33,21 +39,38 @@ import java.util.Date;
     private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
-<span class="fc" id="L36">        this.owner = owner;</span>
-<span class="fc" id="L37">        this.root = owner.root;</span>
-<span class="fc" id="L38">        return this;</span>
+<span class="fc" id="L42">        this.owner = owner;</span>
+<span class="fc" id="L43">        wrap(owner.root);</span>
+<span class="fc" id="L44">        return this;</span>
     }
 
     GHCheckRun wrap(GitHub root) {
-<span class="fc" id="L42">        this.root = root;</span>
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="nc" id="L44">            owner.wrap(root);</span>
+<span class="fc" id="L48">        this.root = root;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (owner != null) {</span>
+<span class="fc" id="L50">            owner.wrap(root);</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L53">                    singlePull.wrap(owner);</span>
+                }
+            }
+
         }
-<span class="fc" id="L46">        return this;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (checkSuite != null) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (owner != null) {</span>
+<span class="fc" id="L60">                checkSuite.wrap(owner);</span>
+            } else {
+<span class="fc" id="L62">                checkSuite.wrap(root);</span>
+            }
+        }
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (app != null) {</span>
+<span class="fc" id="L66">            app.wrapUp(root);</span>
+        }
+
+<span class="fc" id="L69">        return this;</span>
     }
 
     GHPullRequest[] wrap() {
-<span class="nc" id="L50">        return pullRequests;</span>
+<span class="nc" id="L73">        return pullRequests;</span>
     }
 
     /**
@@ -57,11 +80,11 @@ import java.util.Date;
      * @see Status
      */
     public String getStatus() {
-<span class="fc" id="L60">        return status;</span>
+<span class="fc" id="L83">        return status;</span>
     }
 
-<span class="fc" id="L63">    public static enum Status {</span>
-<span class="fc" id="L64">        QUEUED, IN_PROGRESS, COMPLETED</span>
+<span class="fc" id="L86">    public static enum Status {</span>
+<span class="fc" id="L87">        QUEUED, IN_PROGRESS, COMPLETED</span>
     }
 
     /**
@@ -71,7 +94,7 @@ import java.util.Date;
      * @see Conclusion
      */
     public String getConclusion() {
-<span class="fc" id="L74">        return conclusion;</span>
+<span class="fc" id="L97">        return conclusion;</span>
     }
 
     /**
@@ -80,8 +103,8 @@ import java.util.Date;
      * From &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#create-a-check-run--parameters&quot;&gt;Check Run
      * Parameters - &lt;code&gt;conclusion&lt;/code&gt;&lt;/a&gt;.
      */
-<span class="fc" id="L83">    public static enum Conclusion {</span>
-<span class="fc" id="L84">        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED</span>
+<span class="fc" id="L106">    public static enum Conclusion {</span>
+<span class="fc" id="L107">        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED</span>
     }
 
     /**
@@ -90,7 +113,7 @@ import java.util.Date;
      * @return Name of the check run
      */
     public String getName() {
-<span class="fc" id="L93">        return name;</span>
+<span class="fc" id="L116">        return name;</span>
     }
 
     /**
@@ -99,21 +122,28 @@ import java.util.Date;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L102">        return headSha;</span>
+<span class="fc" id="L125">        return headSha;</span>
     }
 
     /**
      * Gets the pull requests participated in this check run.
      *
-     * @return Pull requests of this check run
+     * Note this field is only populated for events. When getting a {@link GHCheckRun} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this check run. Only populated for events.
+     * @throws IOException
+     *             the io exception
      */
-    GHPullRequest[] getPullRequests() throws IOException {
-<span class="nc bnc" id="L111" title="All 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">            for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="nc" id="L113">                singlePull.refresh();</span>
+    public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
+<span class="pc bpc" id="L139" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+                // Only refresh if we haven't do so before
+<span class="fc" id="L142">                singlePull.refresh(singlePull.getTitle());</span>
             }
+<span class="fc" id="L144">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L116">        return pullRequests;</span>
+<span class="nc" id="L146">        return Collections.emptyList();</span>
     }
 
     /**
@@ -124,7 +154,7 @@ import java.util.Date;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L127">        return htmlUrl;</span>
+<span class="fc" id="L157">        return htmlUrl;</span>
     }
 
     /**
@@ -134,7 +164,7 @@ import java.util.Date;
      * @return Global node id
      */
     public String getNodeId() {
-<span class="fc" id="L137">        return nodeId;</span>
+<span class="fc" id="L167">        return nodeId;</span>
     }
 
     /**
@@ -143,7 +173,7 @@ import java.util.Date;
      * @return Reference id
      */
     public String getExternalId() {
-<span class="fc" id="L146">        return externalId;</span>
+<span class="fc" id="L176">        return externalId;</span>
     }
 
     /**
@@ -152,7 +182,7 @@ import java.util.Date;
      * @return Details URL
      */
     public URL getDetailsUrl() {
-<span class="fc" id="L155">        return detailsUrl;</span>
+<span class="fc" id="L185">        return detailsUrl;</span>
     }
 
     /**
@@ -161,7 +191,7 @@ import java.util.Date;
      * @return Timestamp of the start time
      */
     public Date getStartedAt() {
-<span class="fc" id="L164">        return GitHubClient.parseDate(startedAt);</span>
+<span class="fc" id="L194">        return GitHubClient.parseDate(startedAt);</span>
     }
 
     /**
@@ -170,7 +200,7 @@ import java.util.Date;
      * @return Timestamp of the completed time
      */
     public Date getCompletedAt() {
-<span class="fc" id="L173">        return GitHubClient.parseDate(completedAt);</span>
+<span class="fc" id="L203">        return GitHubClient.parseDate(completedAt);</span>
     }
 
     /**
@@ -179,7 +209,7 @@ import java.util.Date;
      * @return GitHub App
      */
     public GHApp getApp() {
-<span class="fc" id="L182">        return app;</span>
+<span class="fc" id="L212">        return app;</span>
     }
 
     /**
@@ -188,7 +218,7 @@ import java.util.Date;
      * @return Check suite
      */
     public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L191">        return checkSuite;</span>
+<span class="fc" id="L221">        return checkSuite;</span>
     }
 
     /**
@@ -197,7 +227,7 @@ import java.util.Date;
      * @return Output of a check run
      */
     public Output getOutput() {
-<span class="fc" id="L200">        return output;</span>
+<span class="fc" id="L230">        return output;</span>
     }
 
     /**
@@ -205,7 +235,7 @@ import java.util.Date;
      *
      * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
      */
-<span class="fc" id="L208">    public static class Output {</span>
+<span class="fc" id="L238">    public static class Output {</span>
         private String title;
         private String summary;
         private String text;
@@ -218,7 +248,7 @@ import java.util.Date;
          * @return title of check run
          */
         public String getTitle() {
-<span class="fc" id="L221">            return title;</span>
+<span class="fc" id="L251">            return title;</span>
         }
 
         /**
@@ -227,7 +257,7 @@ import java.util.Date;
          * @return summary of check run
          */
         public String getSummary() {
-<span class="fc" id="L230">            return summary;</span>
+<span class="fc" id="L260">            return summary;</span>
         }
 
         /**
@@ -236,7 +266,7 @@ import java.util.Date;
          * @return Details of the check run
          */
         public String getText() {
-<span class="fc" id="L239">            return text;</span>
+<span class="fc" id="L269">            return text;</span>
         }
 
         /**
@@ -245,7 +275,7 @@ import java.util.Date;
          * @return annotation count of a check run
          */
         public int getAnnotationsCount() {
-<span class="fc" id="L248">            return annotationsCount;</span>
+<span class="fc" id="L278">            return annotationsCount;</span>
         }
 
         /**
@@ -254,12 +284,12 @@ import java.util.Date;
          * @return URL of annotations
          */
         public URL getAnnotationsUrl() {
-<span class="fc" id="L257">            return annotationsUrl;</span>
+<span class="fc" id="L287">            return annotationsUrl;</span>
         }
     }
 
-<span class="fc" id="L261">    public static enum AnnotationLevel {</span>
-<span class="fc" id="L262">        NOTICE, WARNING, FAILURE</span>
+<span class="fc" id="L291">    public static enum AnnotationLevel {</span>
+<span class="fc" id="L292">        NOTICE, WARNING, FAILURE</span>
     }
 
 }

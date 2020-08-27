@@ -1,5 +1,7 @@
 # Changelog
 
+For changes after v1.101 see the [GitHub Releases page](https://github.com/hub4j/github-api/releases) for the project. 
+
 ## [github-api-1.101](https://github.com/hub4j/github-api/tree/github-api-1.101) (2019-11-27)
 
 [Full Changelog](https://github.com/hub4j/github-api/compare/github-api-1.100...github-api-1.101)

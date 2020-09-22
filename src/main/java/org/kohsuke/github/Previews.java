@@ -45,6 +45,13 @@ class Previews {
     static final String INERTIA = "application/vnd.github.inertia-preview+json";
 
     /**
+     * Update a pull request branch
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#update-a-pull-request-branch">GitHub API Previews</a>
+     */
+    static final String LYDIAN = "application/vnd.github.lydian-preview+json";
+
+    /**
      * Require multiple approving reviews
      *
      * @see <a href="https://developer.github.com/v3/previews/#require-multiple-approving-reviews">GitHub API

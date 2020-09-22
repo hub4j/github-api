@@ -38,6 +38,14 @@ class Previews {
     static final String GAMBIT = "application/vnd.github.gambit-preview+json";
 
     /**
+     * List branches or pull requests for a commit
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#list-branches-or-pull-requests-for-a-commit">GitHub API
+     *      Previews</a>
+     */
+    static final String GROOT = "application/vnd.github.groot-preview+json";
+
+    /**
      * Manage projects
      *
      * @see <a href="https://developer.github.com/v3/previews/#projects">GitHub API Previews</a>

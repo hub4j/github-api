@@ -1,0 +1,18 @@
+[
+  {
+    "name": "master",
+    "commit": {
+      "sha": "ab92e13c0fc844fd51a379a48a3ad0b18231215c",
+      "url": "https://api.github.com/repos/hub4j-test-org/listPrsListHeads/commits/ab92e13c0fc844fd51a379a48a3ad0b18231215c"
+    },
+    "protected": false
+  },
+  {
+    "name": "secondHead",
+    "commit": {
+      "sha": "ab92e13c0fc844fd51a379a48a3ad0b18231215c",
+      "url": "https://api.github.com/repos/hub4j-test-org/listPrsListHeads/commits/ab92e13c0fc844fd51a379a48a3ad0b18231215c"
+    },
+    "protected": false
+  }
+]

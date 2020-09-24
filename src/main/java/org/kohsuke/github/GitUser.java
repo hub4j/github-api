@@ -15,10 +15,10 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GitUser {
-    private String name, email, date;
+    private String name, email, date, username;
 
     /**
-     * Gets name.
+     * Gets name (e.g. from git commit).
      *
      * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
      */
@@ -27,12 +27,21 @@ public class GitUser {
     }
 
     /**
-     * Gets email.
+     * Gets email (e.g. from git commit).
      *
-     * @return E -mail address, such as "foo@example.com"
+     * @return E-mail address, such as "foo@example.com"
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Gets username.
+     *
+     * @return GitHub username
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**

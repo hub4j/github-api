@@ -18,7 +18,7 @@ public class GitUser {
     private String name, email, date, username;
 
     /**
-     * Gets name (e.g. from git commit).
+     * Gets the git user name for an author or committer on a git commit.
      *
      * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
      */
@@ -27,7 +27,7 @@ public class GitUser {
     }
 
     /**
-     * Gets email (e.g. from git commit).
+     * Gets the git email for an author or committer on a git commit.
      *
      * @return E-mail address, such as "foo@example.com"
      */

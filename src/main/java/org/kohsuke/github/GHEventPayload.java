@@ -12,6 +12,8 @@ import java.util.List;
  *
  * @see GitHub#parseEventPayload(Reader, Class) GitHub#parseEventPayload(Reader, Class)
  * @see GHEventInfo#getPayload(Class) GHEventInfo#getPayload(Class)
+ * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads">Webhook events
+ *      and payloads</a>
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class GHEventPayload {
@@ -59,7 +61,9 @@ public abstract class GHEventPayload {
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#check_run">
+     *      check_run event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/checks#check-runs">Check Runs</a>
      */
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
@@ -155,7 +159,9 @@ public abstract class GHEventPayload {
     /**
      * A check suite event has been requested, rerequested or completed.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#checkrunevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#check_suite">
+     *      check_suite event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/checks#check-suites">Check Suites</a>
      */
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
@@ -211,7 +217,10 @@ public abstract class GHEventPayload {
     /**
      * An installation has been installed, uninstalled, or its permissions have been changed.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationevent">authoritative source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation">
+     *      installation event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class Installation extends GHEventPayload {
@@ -271,8 +280,10 @@ public abstract class GHEventPayload {
     /**
      * A repository has been added or removed from an installation.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent">authoritative
-     *      source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation_repositories">
+     *      installation_repositories event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App installation</a>
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class InstallationRepositories extends GHEventPayload {
@@ -358,7 +369,10 @@ public abstract class GHEventPayload {
     /**
      * A pull request status has changed.
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#pullrequestevent">authoritative source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request">
+     *      pull_request event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls">Pull Requests</a>
      */
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
@@ -424,8 +438,10 @@ public abstract class GHEventPayload {
     /**
      * A review was added to a pull request
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent">authoritative
-     *      source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review">
+     *      pull_request_review event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#reviews">Pull Request Reviews</a>
      */
     public static class PullRequestReview extends GHEventPayload {
         private String action;
@@ -490,8 +506,10 @@ public abstract class GHEventPayload {
     /**
      * A review comment was added to a pull request
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent">authoritative
-     *      source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review_comment">
+     *      pull_request_review_comment event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#review-comments">Pull Request Review Comments</a>
      */
     public static class PullRequestReviewComment extends GHEventPayload {
         private String action;
@@ -557,7 +575,9 @@ public abstract class GHEventPayload {
      * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or
      * reopened.
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#issueevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issues">
+     *      issues events</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issues Comments</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -629,7 +649,10 @@ public abstract class GHEventPayload {
     /**
      * A comment was added to an issue
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#issuecommentevent">authoritative source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issue_comment">
+     *      issue_comment event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issue Comments</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -722,7 +745,10 @@ public abstract class GHEventPayload {
     /**
      * A comment was added to a commit
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#commitcommentevent">authoritative source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#commit_comment">
+     *      commit comment</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#comments">Comments</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -792,7 +818,9 @@ public abstract class GHEventPayload {
     /**
      * A repository, branch, or tag was created
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#createevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#create">
+     *      create event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -874,7 +902,9 @@ public abstract class GHEventPayload {
     /**
      * A branch, or tag was deleted
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#deleteevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#delete">
+     *      delete event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -934,7 +964,9 @@ public abstract class GHEventPayload {
     /**
      * A deployment
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#deployment">
+     *      deployment event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -991,10 +1023,12 @@ public abstract class GHEventPayload {
     }
 
     /**
-     * A deployment
+     * A deployment status
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#deploymentstatusevent">authoritative
-     *      source</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#deployment_status">
+     *      deployment_status event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -1074,7 +1108,9 @@ public abstract class GHEventPayload {
     /**
      * A user forked a repository
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#forkevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#fork"> fork
+     *      event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#forks">Forks</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -1132,6 +1168,9 @@ public abstract class GHEventPayload {
 
     /**
      * A ping.
+     *
+     * <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#ping"> ping
+     * event</a>
      */
     public static class Ping extends GHEventPayload {
         private GHRepository repository;
@@ -1190,7 +1229,8 @@ public abstract class GHEventPayload {
     /**
      * A repository was made public.
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#publicevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#public">
+     *      public event</a>
      */
     public static class Public extends GHEventPayload {
         private GHRepository repository;
@@ -1226,7 +1266,8 @@ public abstract class GHEventPayload {
     /**
      * A commit was pushed.
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#pushevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#push"> push
+     *      event</a>
      */
     @SuppressFBWarnings(
             value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD" },
@@ -1499,7 +1540,9 @@ public abstract class GHEventPayload {
     /**
      * A release was added to the repo
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#releaseevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#release">
+     *      release event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#releases">Releases</a>
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
@@ -1568,7 +1611,9 @@ public abstract class GHEventPayload {
     /**
      * A repository was created, deleted, made public, or made private.
      *
-     * @see <a href="http://developer.github.com/v3/activity/events/types/#repositoryevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#repository">
+     *      repository event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
     @SuppressFBWarnings(
             value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" },
@@ -1638,7 +1683,9 @@ public abstract class GHEventPayload {
     /**
      * A git commit status was changed.
      *
-     * @see <a href="https://developer.github.com/v3/activity/events/types/#statusevent">authoritative source</a>
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#status">
+     *      status event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/repos#statuses">Repository Statuses</a>
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Status extends GHEventPayload {

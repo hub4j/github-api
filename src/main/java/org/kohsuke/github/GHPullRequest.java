@@ -37,6 +37,7 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
+import static org.kohsuke.github.Previews.LYDIAN;
 import static org.kohsuke.github.Previews.SHADOW_CAT;
 
 /**
@@ -562,6 +563,41 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .method("POST")
                 .with("team_reviewers", teamReviewers)
                 .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)
+                .send();
+    }
+
+    /**
+     * Set the base branch on the pull request
+     *
+     * @param newBaseBranch
+     *            the name of the new base branch
+     * @throws IOException
+     *             the io exception
+     * @return the updated pull request
+     */
+    public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
+        return root.createRequest()
+                .method("PATCH")
+                .with("base", newBaseBranch)
+                .withUrlPath(getApiRoute())
+                .fetch(GHPullRequest.class)
+                .wrapUp(root);
+    }
+
+    /**
+     * Updates the branch. The same as pressing the button in the web GUI.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview
+    @Deprecated
+    public void updateBranch() throws IOException {
+        root.createRequest()
+                .withPreview(LYDIAN)
+                .method("PUT")
+                .with("expected_head_sha", head.getSha())
+                .withUrlPath(getApiRoute() + "/update-branch")
                 .send();
     }
 

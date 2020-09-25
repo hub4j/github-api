@@ -1,0 +1,46 @@
+{
+  "id": "1d311b29-700c-4687-892b-f610e8bcbaa4",
+  "name": "repos_hub4j-test-org_updateoutdatedbranches_pulls_9_update-branch",
+  "request": {
+    "url": "/repos/hub4j-test-org/updateOutdatedBranches/pulls/9/update-branch",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.lydian-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"expected_head_sha\":\"6440189369f9f33b2366556a94dbc26f2cfdd969\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 422,
+    "body": "{\"message\":\"expected head sha didn’t match current head ref.\",\"documentation_url\":\"https://docs.github.com/rest/reference/pulls#update-a-pull-request-branch\"}",
+    "headers": {
+      "Date": "Thu, 03 Sep 2020 19:05:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "422 Unprocessable Entity",
+      "X-GitHub-Media-Type": "github.lydian-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4657",
+      "X-RateLimit-Reset": "1599161295",
+      "X-RateLimit-Used": "343",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C86E:BABF:113995C:14CE0A8:5F513E86"
+    }
+  },
+  "uuid": "1d311b29-700c-4687-892b-f610e8bcbaa4",
+  "persistent": true,
+  "insertionIndex": 8
+}

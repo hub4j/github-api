@@ -4,6 +4,8 @@ import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -23,6 +25,83 @@ public class CommitTest extends AbstractGitHubWireMockTest {
             GHCommit expected = repo.getCommit(commit.getSHA1());
             assertEquals(expected.getFiles().size(), commit.getFiles().size());
         }
+    }
+
+    @Test
+    public void listPullRequestsOfNotIncludedCommit() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+
+        GHCommit commit = repo.getCommit("f66f7ca691ace6f4a9230292efb932b49214d72c");
+
+        assertThat("The commit is supposed to be not part of any pull request",
+                commit.listPullRequests().toList().isEmpty());
+    }
+
+    @Test
+    public void listPullRequests() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+        Integer prNumber = 2;
+
+        GHCommit commit = repo.getCommit("6b9956fe8c3d030dbc49c9d4c4166b0ceb4198fc");
+
+        List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
+
+        assertEquals(listedPrs.size(), 1);
+
+        assertThat("Pull request " + prNumber + " not found by searching from commit.",
+                listedPrs.stream().findFirst().filter(it -> it.getNumber() == prNumber).isPresent());
+    }
+
+    @Test
+    public void listPullRequestsOfCommitWith2PullRequests() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+        Integer[] expectedPrs = new Integer[]{ 1, 2 };
+
+        GHCommit commit = repo.getCommit("442aa213f924a5984856f16e52a18153aaf41ad3");
+
+        List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
+
+        assertEquals(listedPrs.size(), 2);
+
+        listedPrs.stream()
+                .forEach(pr -> assertThat("PR#" + pr.getNumber() + " not expected to be matched.",
+                        Arrays.stream(expectedPrs).anyMatch(prNumber -> prNumber.equals(pr.getNumber()))));
+    }
+
+    @Test
+    public void listBranchesWhereHead() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+
+        GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
+
+        assertThat("Commit which was supposed to be HEAD in the \"master\" branch was not found.",
+                commit.listBranchesWhereHead()
+                        .toList()
+                        .stream()
+                        .findFirst()
+                        .filter(it -> it.getName().equals("master"))
+                        .isPresent());
+    }
+
+    @Test
+    public void listBranchesWhereHead2Heads() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+
+        GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
+
+        assertEquals("Commit which was supposed to be HEAD in 2 branches was not found as such.",
+                2,
+                commit.listBranchesWhereHead().toList().size());
+    }
+
+    @Test
+    public void listBranchesWhereHeadOfCommitWithHeadNowhere() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+
+        GHCommit commit = repo.getCommit("7460916bfb8e9966d6b9d3e8ae378c82c6b8e43e");
+
+        assertThat("Commit which was not supposed to be HEAD in any branch was found as HEAD.",
+                commit.listBranchesWhereHead().toList().isEmpty());
     }
 
     @Test // issue 737

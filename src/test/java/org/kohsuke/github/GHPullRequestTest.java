@@ -212,6 +212,106 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void setBaseBranch() throws Exception {
+        String prName = "testSetBaseBranch";
+        String originalBaseBranch = "master";
+        String newBaseBranch = "gh-pages";
+
+        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "master", "## test");
+
+        assertEquals("Pull request base branch is supposed to be " + originalBaseBranch,
+                originalBaseBranch,
+                pullRequest.getBase().getRef());
+
+        GHPullRequest responsePullRequest = pullRequest.setBaseBranch(newBaseBranch);
+
+        assertEquals("Pull request base branch is supposed to be " + newBaseBranch,
+                newBaseBranch,
+                responsePullRequest.getBase().getRef());
+    }
+
+    @Test
+    public void setBaseBranchNonExisting() throws Exception {
+        String prName = "testSetBaseBranchNonExisting";
+        String originalBaseBranch = "master";
+        String newBaseBranch = "non-existing";
+
+        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "master", "## test");
+
+        assertEquals("Pull request base branch is supposed to be " + originalBaseBranch,
+                originalBaseBranch,
+                pullRequest.getBase().getRef());
+
+        try {
+            pullRequest.setBaseBranch(newBaseBranch);
+        } catch (HttpException e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.toString(), containsString("Proposed base branch 'non-existing' was not found"));
+        }
+
+        pullRequest.close();
+    }
+
+    @Test
+    public void updateOutdatedBranchesUnexpectedHead() throws Exception {
+        String prName = "testUpdateOutdatedBranches";
+        String outdatedRefName = "refs/heads/outdated";
+        GHRepository repository = gitHub.getOrganization("hub4j-test-org").getRepository("updateOutdatedBranches");
+
+        GHRef outdatedRef = repository.getRef(outdatedRefName);
+        outdatedRef.updateTo("6440189369f9f33b2366556a94dbc26f2cfdd969", true);
+
+        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "master", "## test");
+
+        do {
+            Thread.sleep(5000);
+            outdatedPullRequest.refresh();
+        } while (outdatedPullRequest.getMergeableState().equalsIgnoreCase("unknown"));
+
+        assertEquals("Pull request is supposed to be not up to date",
+                "behind",
+                outdatedPullRequest.getMergeableState());
+
+        outdatedRef.updateTo("f567328eb81270487864963b7d7446953353f2b5", true);
+
+        try {
+            outdatedPullRequest.updateBranch();
+        } catch (HttpException e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.toString(), containsString("expected head sha didn’t match current head ref."));
+        }
+
+        outdatedPullRequest.close();
+    }
+
+    @Test
+    public void updateOutdatedBranches() throws Exception {
+        String prName = "testUpdateOutdatedBranches";
+        String outdatedRefName = "refs/heads/outdated";
+        GHRepository repository = gitHub.getOrganization("hub4j-test-org").getRepository("updateOutdatedBranches");
+
+        repository.getRef(outdatedRefName).updateTo("6440189369f9f33b2366556a94dbc26f2cfdd969", true);
+
+        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "master", "## test");
+
+        do {
+            Thread.sleep(5000);
+            outdatedPullRequest.refresh();
+        } while (outdatedPullRequest.getMergeableState().equalsIgnoreCase("unknown"));
+
+        assertEquals("Pull request is supposed to be not up to date",
+                "behind",
+                outdatedPullRequest.getMergeableState());
+
+        outdatedPullRequest.updateBranch();
+        outdatedPullRequest.refresh();
+
+        assertNotEquals("Pull request is supposed to be up to date", "behind", outdatedPullRequest.getMergeableState());
+
+        outdatedPullRequest.close();
+    }
+
+    @Test
     public void squashMerge() throws Exception {
         String name = "squashMerge";
         String branchName = "test/" + name;

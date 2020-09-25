@@ -114,8 +114,9 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
 
             // if the authentication is needed but no credential is given, try it anyway (so that some calls
             // that do work with anonymous access in the reduced form should still work.)
-            if (client.encodedAuthorization != null)
-                connection.setRequestProperty("Authorization", client.encodedAuthorization);
+            if (client.credentialProvider.getEncodedAuthorization() != null) {
+                connection.setRequestProperty("Authorization", client.credentialProvider.getEncodedAuthorization());
+            }
 
             setRequestMethod(request.method(), connection);
             buildRequest(request, connection);

@@ -56,17 +56,13 @@ abstract class GitHubClient {
     static final int retryTimeoutMillis = 100;
     /* private */ final String login;
 
-    /**
-     * Value of the authorization header to be sent with the request.
-     */
-    /* private */ final String encodedAuthorization;
-
     // Cache of myself object.
     private final String apiUrl;
 
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
+    final CredentialProvider credentialProvider;
 
     private HttpConnector connector;
 
@@ -112,17 +108,18 @@ abstract class GitHubClient {
         this.connector = connector;
 
         if (oauthAccessToken != null) {
-            encodedAuthorization = "token " + oauthAccessToken;
+            this.credentialProvider = new ImmutableCredentialProvider(String.format("token %s", oauthAccessToken));
         } else {
             if (jwtToken != null) {
-                encodedAuthorization = "Bearer " + jwtToken;
+                this.credentialProvider = new ImmutableCredentialProvider(String.format("Bearer %s", jwtToken));
             } else if (password != null) {
                 String authorization = (login + ':' + password);
                 String charsetName = StandardCharsets.UTF_8.name();
-                encodedAuthorization = "Basic "
+                String encodedAuthorization = "Basic "
                         + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
+                this.credentialProvider = new ImmutableCredentialProvider(encodedAuthorization);
             } else {// anonymous access
-                encodedAuthorization = null;
+                this.credentialProvider = new ImmutableCredentialProvider(null);
             }
         }
 
@@ -130,7 +127,7 @@ abstract class GitHubClient {
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
 
-        if (login == null && encodedAuthorization != null && jwtToken == null) {
+        if (login == null && credentialProvider.getEncodedAuthorization() != null && jwtToken == null) {
             GHMyself myself = fetch(GHMyself.class, "/user");
             login = myself.getLogin();
             if (myselfConsumer != null) {
@@ -202,7 +199,7 @@ abstract class GitHubClient {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
+        return login == null && this.credentialProvider.getEncodedAuthorization() == null;
     }
 
     /**

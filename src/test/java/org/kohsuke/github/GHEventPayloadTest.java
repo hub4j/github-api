@@ -216,6 +216,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getNumber(), is(8));
         assertThat(event.getPullRequest().getTitle(), is("Add a README description"));
         assertThat(event.getPullRequest().getBody(), is("Just a few more details"));
+        assertThat(event.getReview().getHtmlUrl(),
+                hasToString("https://github.com/baxterthehacker/public-repo/pull/8#pullrequestreview-2626884"));
         assertThat(event.getPullRequest().getUser().getLogin(), is("skalnik"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("skalnik"));
         assertThat(event.getPullRequest().getHead().getRef(), is("patch-2"));

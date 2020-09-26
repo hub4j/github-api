@@ -4,6 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Represents a user in Git who authors/commits a commit.
  * <p>
@@ -36,10 +38,13 @@ public class GitUser {
     }
 
     /**
-     * Gets username.
+     * Gets username. Note: it presents only in events.
      *
      * @return GitHub username
      */
+    @Preview
+    @Deprecated
+    @CheckForNull
     public String getUsername() {
         return username;
     }

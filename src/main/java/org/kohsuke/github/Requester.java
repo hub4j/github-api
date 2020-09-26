@@ -133,8 +133,29 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @return the {@link PagedIterable} for this builder.
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
+        return toIterable(type, itemInitializer, "");
+    }
+
+    /**
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}.
+     * <p>
+     * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
+     * or {@link Iterator#hasNext()} are called.
+     * </p>
+     *
+     * @param type
+     *            the type of the pages to retrieve.
+     * @param itemInitializer
+     *            the consumer to execute on each paged item retrieved.
+     * @param <R>
+     *            the element type for the pages returned from
+     * @param nestedFieldKey
+     *            the name of the field containing the items in the response
+     * @return the {@link PagedIterable} for this builder.
+     */
+    public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer, String nestedFieldKey) {
         try {
-            return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
+            return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer, nestedFieldKey);
         } catch (MalformedURLException e) {
             throw new GHException(e.getMessage(), e);
         }

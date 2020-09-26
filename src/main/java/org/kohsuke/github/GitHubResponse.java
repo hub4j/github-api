@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectReader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.Closeable;
@@ -77,6 +78,27 @@ class GitHubResponse<T> {
      */
     @CheckForNull
     static <T> T parseBody(ResponseInfo responseInfo, Class<T> type) throws IOException {
+        return parseBody(responseInfo, type, "");
+    }
+
+    /**
+     * Parses a {@link ResponseInfo} body into a new instance of {@link T}.
+     *
+     * @param responseInfo
+     *            response info to parse.
+     * @param type
+     *            the type to be constructed.
+     * @param <T>
+     *            the type
+     * @param nestedFieldKey
+     *            the name of the field containing the items in the response
+     *
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
+    @CheckForNull
+    static <T> T parseBody(ResponseInfo responseInfo, Class<T> type, String nestedFieldKey) throws IOException {
 
         if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {
             if (type != null && type.isArray()) {
@@ -93,7 +115,13 @@ class GitHubResponse<T> {
             InjectableValues.Std inject = new InjectableValues.Std();
             inject.addValue(ResponseInfo.class, responseInfo);
 
-            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);
+            ObjectReader reader = GitHubClient.getMappingObjectReader(responseInfo).forType(type);
+
+            if (!nestedFieldKey.isEmpty()) {
+                return reader.readValue(reader.readTree(data).get(nestedFieldKey));
+            }
+
+            return reader.readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);

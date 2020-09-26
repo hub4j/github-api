@@ -44,12 +44,17 @@ class GitHubPageIterator<T> implements Iterator<T> {
     private GitHubRequest nextRequest;
 
     /**
+     * The name of the field which contains a list of items
+     */
+    private String nestedFieldKey;
+
+    /**
      * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
      * response that was retrieved.
      */
     private GitHubResponse<T> finalResponse = null;
 
-    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
+    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request, String nestedFieldKey) {
         if (!"GET".equals(request.method())) {
             throw new IllegalStateException("Request method \"GET\" is required for page iterator.");
         }
@@ -57,6 +62,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
         this.client = client;
         this.type = type;
         this.nextRequest = request;
+        this.nestedFieldKey = nestedFieldKey;
     }
 
     /**
@@ -71,6 +77,28 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * @return iterator
      */
     static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
+        return create(client, type, request, pageSize, "");
+    }
+
+    /**
+     * Loads paginated resources.
+     *
+     * @param client
+     *            the {@link GitHubClient} from which to request responses
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param <T>
+     *            type of each page (not the items in the page).
+     * @param nestedFieldKey
+     *            the name of the field containing the items in the response
+     *
+     * @return iterator
+     */
+    static <T> GitHubPageIterator<T> create(GitHubClient client,
+            Class<T> type,
+            GitHubRequest request,
+            int pageSize,
+            String nestedFieldKey) {
 
         try {
             if (pageSize > 0) {
@@ -78,7 +106,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
                 request = builder.build();
             }
 
-            return new GitHubPageIterator<>(client, type, request);
+            return new GitHubPageIterator<>(client, type, request, nestedFieldKey);
         } catch (MalformedURLException e) {
             throw new GHException("Unable to build GitHub API URL", e);
         }
@@ -142,7 +170,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
         URL url = nextRequest.url();
         try {
             GitHubResponse<T> nextResponse = client.sendRequest(nextRequest,
-                    (responseInfo) -> GitHubResponse.parseBody(responseInfo, type));
+                    (responseInfo) -> GitHubResponse.parseBody(responseInfo, type, nestedFieldKey));
             assert nextResponse.body() != null;
             next = nextResponse.body();
             nextRequest = findNextURL(nextResponse);

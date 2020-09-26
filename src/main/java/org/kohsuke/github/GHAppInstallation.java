@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.kohsuke.github.Previews.GAMBIT;
+import static org.kohsuke.github.Previews.MACHINE_MAN;
 
 /**
  * A Github App Installation.
@@ -279,6 +280,20 @@ public class GHAppInstallation extends GHObject {
     GHAppInstallation wrapUp(GitHub root) {
         this.root = root;
         return this;
+    }
+
+    /**
+     * List repositories that this app installation can access.
+     *
+     * @return the paged iterable
+     */
+    @Preview
+    @Deprecated
+    public PagedIterable<GHRepository> listRepositories() {
+        return root.createRequest()
+                .withPreview(MACHINE_MAN)
+                .withUrlPath("/installation/repositories")
+                .toIterable(GHRepository[].class, item -> item.wrap(root), "repositories");
     }
 
     /**

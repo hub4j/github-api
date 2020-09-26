@@ -21,15 +21,18 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     private final GitHubRequest request;
     private final Class<T[]> receiverType;
     private final Consumer<T> itemInitializer;
+    private final String nestedFieldKey;
 
     GitHubPageContentsIterable(GitHubClient client,
             GitHubRequest request,
             Class<T[]> receiverType,
-            Consumer<T> itemInitializer) {
+            Consumer<T> itemInitializer,
+            String nestedFieldKey) {
         this.client = client;
         this.request = request;
         this.receiverType = receiverType;
         this.itemInitializer = itemInitializer;
+        this.nestedFieldKey = nestedFieldKey;
     }
 
     /**
@@ -38,7 +41,8 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     @Override
     @Nonnull
     public PagedIterator<T> _iterator(int pageSize) {
-        final GitHubPageIterator<T[]> iterator = GitHubPageIterator.create(client, receiverType, request, pageSize);
+        final GitHubPageIterator<T[]> iterator = GitHubPageIterator
+                .create(client, receiverType, request, pageSize, nestedFieldKey);
         return new GitHubPageContentsIterator(iterator, itemInitializer);
     }
 

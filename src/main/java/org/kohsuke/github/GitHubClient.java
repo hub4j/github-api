@@ -199,7 +199,13 @@ abstract class GitHubClient {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && this.credentialProvider.getEncodedAuthorization() == null;
+        try {
+            return login == null && this.credentialProvider.getEncodedAuthorization() == null;
+        } catch (IOException e) {
+            // An exception here means that the provider failed to provide authorization parameters,
+            // basically meaning the same as "no auth"
+            return false;
+        }
     }
 
     /**

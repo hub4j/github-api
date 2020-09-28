@@ -32,7 +32,7 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
 
     @Override
     public String getEncodedAuthorization() throws IOException {
-        if (latestToken == null || validUntil == null || new Date().compareTo(this.validUntil) > 0) {
+        if (latestToken == null || validUntil == null || new Date().after(this.validUntil)) {
             refreshToken();
         }
         return String.format("token %s", latestToken);

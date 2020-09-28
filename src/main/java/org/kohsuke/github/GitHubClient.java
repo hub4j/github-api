@@ -1,33 +1,18 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -95,7 +80,8 @@ abstract class GitHubClient {
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
+            Consumer<GHMyself> myselfConsumer,
+            CredentialProvider credentialProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -107,15 +93,20 @@ abstract class GitHubClient {
         this.apiUrl = apiUrl;
         this.connector = connector;
 
-        if (oauthAccessToken != null) {
-            this.credentialProvider =ImmutableCredentialProvider.fromOauthToken(oauthAccessToken);
+        // Prefer credential configuration via provider
+        if (credentialProvider != null) {
+            this.credentialProvider = credentialProvider;
         } else {
-            if (jwtToken != null) {
-                this.credentialProvider =ImmutableCredentialProvider.fromJwtToken(jwtToken);
-            } else if (password != null) {
-                this.credentialProvider = ImmutableCredentialProvider.fromLoginAndPassword(login,password);
-            } else {// anonymous access
-                this.credentialProvider = ImmutableCredentialProvider.ANONYMOUS;
+            if (oauthAccessToken != null) {
+                this.credentialProvider = ImmutableCredentialProvider.fromOauthToken(oauthAccessToken);
+            } else {
+                if (jwtToken != null) {
+                    this.credentialProvider = ImmutableCredentialProvider.fromJwtToken(jwtToken);
+                } else if (password != null) {
+                    this.credentialProvider = ImmutableCredentialProvider.fromLoginAndPassword(login, password);
+                } else {// anonymous access
+                    this.credentialProvider = CredentialProvider.ANONYMOUS;
+                }
             }
         }
 
@@ -123,14 +114,24 @@ abstract class GitHubClient {
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
 
-        if (login == null && credentialProvider.getEncodedAuthorization() != null && jwtToken == null) {
-            GHMyself myself = fetch(GHMyself.class, "/user");
-            login = myself.getLogin();
-            if (myselfConsumer != null) {
-                myselfConsumer.accept(myself);
+        this.login = getCurrentUser(login, jwtToken, myselfConsumer);
+    }
+
+    @Nullable
+    private String getCurrentUser(String login, String jwtToken, Consumer<GHMyself> myselfConsumer) throws IOException {
+        if (login == null && this.credentialProvider.getEncodedAuthorization() != null && jwtToken == null) {
+            try {
+                GHMyself myself = fetch(GHMyself.class, "/user");
+                if (myselfConsumer != null) {
+                    myselfConsumer.accept(myself);
+                }
+                return myself.getLogin();
+            } catch (IOException e) {
+                return null;
             }
+
         }
-        this.login = login;
+        return login;
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {

@@ -41,7 +41,8 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
+            Consumer<GHMyself> myselfConsumer,
+            CredentialProvider credentialProvider) throws IOException {
         super(apiUrl,
                 login,
                 oauthAccessToken,
@@ -51,7 +52,8 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                myselfConsumer);
+                myselfConsumer,
+                credentialProvider);
     }
 
     @Nonnull

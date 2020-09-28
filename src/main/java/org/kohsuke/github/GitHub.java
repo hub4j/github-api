@@ -87,7 +87,7 @@ public class GitHub {
      * header. Please note that only operations in which permissions have been previously configured and accepted during
      * the GitHub App will be executed successfully.
      * </dl>
-     *
+     * 
      * @param apiUrl
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
@@ -101,7 +101,7 @@ public class GitHub {
      * @param password
      *            User's password. Always used in conjunction with the {@code login} parameter
      * @param connector
-     *            HttpConnector to use. Pass null to use default connector.
+     * @param credentialProvider a credential provider, takes preference over all other auth-related parameters if it'ts not null
      */
     GitHub(String apiUrl,
             String login,
@@ -111,7 +111,8 @@ public class GitHub {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
-            GitHubRateLimitChecker rateLimitChecker) throws IOException {
+            GitHubRateLimitChecker rateLimitChecker,
+            CredentialProvider credentialProvider) throws IOException {
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 login,
                 oauthAccessToken,
@@ -121,7 +122,8 @@ public class GitHub {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                (myself) -> setMyself(myself));
+                (myself) -> setMyself(myself),
+                credentialProvider);
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
     }

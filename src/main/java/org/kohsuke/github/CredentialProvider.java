@@ -26,6 +26,7 @@ public interface CredentialProvider {
      * </pre>
      *
      * @return encoded authorization string, can be null
+     * @throws IOException on any error that prevents the provider from getting a valid authorization
      */
     String getEncodedAuthorization() throws IOException;
 

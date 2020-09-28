@@ -19,9 +19,11 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
      * Provides a CredentialProvider that performs automatic token refresh based on a {@link JWTTokenProvider} that
      * always returns a valid and up-to-date JWT Token.
      *
-     * @param organizationName The name of the organization where the application is installed
-     * @param jwtTokenProvider A {@link JWTTokenProvider} that always returns valid and up-to-date JWT Tokens for the given
-     *                         application.
+     * @param organizationName
+     *            The name of the organization where the application is installed
+     * @param jwtTokenProvider
+     *            A {@link JWTTokenProvider} that always returns valid and up-to-date JWT Tokens for the given
+     *            application.
      */
     public OrgInstallationCredentialProvider(String organizationName, JWTTokenProvider jwtTokenProvider) {
         this.organizationName = organizationName;

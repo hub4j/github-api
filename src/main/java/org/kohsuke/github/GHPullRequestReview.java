@@ -46,6 +46,7 @@ public class GHPullRequestReview extends GHObject {
     private String commit_id;
     private GHPullRequestReviewState state;
     private String submitted_at;
+    private String html_url;
 
     GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
@@ -102,7 +103,7 @@ public class GHPullRequestReview extends GHObject {
 
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

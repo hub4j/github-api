@@ -18,7 +18,7 @@ public class ImmutableCredentialProvider implements CredentialProvider {
     /**
      * Builds and returns a {@link CredentialProvider} from a given oauthAccessToken
      *
-     * @param oauthAccessToken
+     * @param oauthAccessToken The token
      * @return a correctly configured {@link CredentialProvider} that will always return the same provided
      *         oauthAccessToken
      */

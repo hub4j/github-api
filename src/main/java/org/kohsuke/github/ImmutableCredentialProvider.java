@@ -32,10 +32,6 @@ public class ImmutableCredentialProvider implements CredentialProvider {
      * @param jwtToken
      *            The JWT token
      * @return a correctly configured {@link CredentialProvider} that will always return the same provided jwtToken
-     * @see <a href="https://jwt.io/introduction/">jwt.io/introduction</a>
-     * @see <a href=
-     *      "https://docs.github.com/en/free-pro-team@latest/developers/apps/authenticating-with-github-apps#authenticating-as-a-github-app">Authenticating
-     *      as a GitHub App</a>
      */
     public static CredentialProvider fromJwtToken(String jwtToken) {
         return new ImmutableCredentialProvider(String.format("Bearer %s", jwtToken));

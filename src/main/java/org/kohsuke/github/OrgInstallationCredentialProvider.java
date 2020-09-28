@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Provides a CredentialProvider that performs automatic token refresh based on a {@link JWTTokenProvider} that
- * always returns a valid and up-to-date JWT Token.
+ * Provides a CredentialProvider that performs automatic token refresh based on a {@link JWTTokenProvider} that always
+ * returns a valid and up-to-date JWT Token.
  */
 public class OrgInstallationCredentialProvider implements CredentialProvider {
-
 
     private final String organizationName;
     private final JWTTokenProvider jwtTokenProvider;
@@ -21,8 +20,8 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
      * always returns a valid and up-to-date JWT Token.
      *
      * @param organizationName The name of the organization where the application is installed
-     * @param jwtTokenProvider A {@link JWTTokenProvider} that always returns valid and up-to-date JWT Tokens
-     *                         for the given application.
+     * @param jwtTokenProvider A {@link JWTTokenProvider} that always returns valid and up-to-date JWT Tokens for the given
+     *                         application.
      */
     public OrgInstallationCredentialProvider(String organizationName, JWTTokenProvider jwtTokenProvider) {
         this.organizationName = organizationName;

@@ -101,7 +101,8 @@ public class GitHub {
      * @param password
      *            User's password. Always used in conjunction with the {@code login} parameter
      * @param connector
-     * @param credentialProvider a credential provider, takes preference over all other auth-related parameters if it's not null
+     * @param credentialProvider
+     *            a credential provider, takes preference over all other auth-related parameters if it's not null
      */
     GitHub(String apiUrl,
             String login,

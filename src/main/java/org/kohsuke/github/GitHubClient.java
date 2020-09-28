@@ -108,18 +108,14 @@ abstract class GitHubClient {
         this.connector = connector;
 
         if (oauthAccessToken != null) {
-            this.credentialProvider = new ImmutableCredentialProvider(String.format("token %s", oauthAccessToken));
+            this.credentialProvider =ImmutableCredentialProvider.fromOauthToken(oauthAccessToken);
         } else {
             if (jwtToken != null) {
-                this.credentialProvider = new ImmutableCredentialProvider(String.format("Bearer %s", jwtToken));
+                this.credentialProvider =ImmutableCredentialProvider.fromJwtToken(jwtToken);
             } else if (password != null) {
-                String authorization = (login + ':' + password);
-                String charsetName = StandardCharsets.UTF_8.name();
-                String encodedAuthorization = "Basic "
-                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-                this.credentialProvider = new ImmutableCredentialProvider(encodedAuthorization);
+                this.credentialProvider = ImmutableCredentialProvider.fromLoginAndPassword(login,password);
             } else {// anonymous access
-                this.credentialProvider = new ImmutableCredentialProvider(null);
+                this.credentialProvider = ImmutableCredentialProvider.ANONYMOUS;
             }
         }
 

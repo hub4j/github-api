@@ -279,7 +279,7 @@ public class GitHubBuilder implements Cloneable {
         return this;
     }
 
-    GitHubBuilder withCredentialProvider(final CredentialProvider credentialProvider) {
+    public GitHubBuilder withCredentialProvider(final CredentialProvider credentialProvider) {
         this.credentialProvider = credentialProvider;
         return this;
     }

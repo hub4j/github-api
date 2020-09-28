@@ -35,7 +35,7 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
         if (latestToken == null || validUntil == null || new Date().compareTo(this.validUntil) > 0) {
             refreshToken();
         }
-        return latestToken;
+        return String.format("token %s", latestToken);
     }
 
     private void refreshToken() throws IOException {

@@ -1,0 +1,39 @@
+{
+  "id": 79253,
+  "slug": "hub4j-test-application",
+  "node_id": "MDM6QXBwNzkyNTM=",
+  "owner": {
+    "login": "hub4j-test-org",
+    "id": 70590530,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjcwNTkwNTMw",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/70590530?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/hub4j-test-org",
+    "html_url": "https://github.com/hub4j-test-org",
+    "followers_url": "https://api.github.com/users/hub4j-test-org/followers",
+    "following_url": "https://api.github.com/users/hub4j-test-org/following{/other_user}",
+    "gists_url": "https://api.github.com/users/hub4j-test-org/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/hub4j-test-org/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/hub4j-test-org/subscriptions",
+    "organizations_url": "https://api.github.com/users/hub4j-test-org/orgs",
+    "repos_url": "https://api.github.com/users/hub4j-test-org/repos",
+    "events_url": "https://api.github.com/users/hub4j-test-org/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/hub4j-test-org/received_events",
+    "type": "Organization",
+    "site_admin": false
+  },
+  "name": "hub4j-test-application",
+  "description": "",
+  "external_url": "https://example.com",
+  "html_url": "https://github.com/apps/hub4j-test-application",
+  "created_at": "2020-09-01T14:56:16Z",
+  "updated_at": "2020-09-01T14:56:16Z",
+  "permissions": {
+    "metadata": "read",
+    "pull_requests": "write"
+  },
+  "events": [
+    "pull_request"
+  ],
+  "installations_count": 1
+}

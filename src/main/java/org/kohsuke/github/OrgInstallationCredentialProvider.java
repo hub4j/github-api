@@ -9,8 +9,9 @@ import java.util.Date;
  */
 public class OrgInstallationCredentialProvider implements CredentialProvider {
 
+    private final GitHub gitHub;
+
     private final String organizationName;
-    private final JWTTokenProvider jwtTokenProvider;
 
     private String latestToken;
     private Date validUntil;
@@ -21,13 +22,12 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
      *
      * @param organizationName
      *            The name of the organization where the application is installed
-     * @param jwtTokenProvider
-     *            A {@link JWTTokenProvider} that always returns valid and up-to-date JWT Tokens for the given
-     *            application.
+     * @param gitHub
+     *            A GitHub client that must be configured with a valid JWT token
      */
-    public OrgInstallationCredentialProvider(String organizationName, JWTTokenProvider jwtTokenProvider) {
+    public OrgInstallationCredentialProvider(String organizationName, GitHub gitHub) {
         this.organizationName = organizationName;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.gitHub = gitHub;
     }
 
     @Override
@@ -39,8 +39,8 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
     }
 
     private void refreshToken() throws IOException {
-        GitHub gh = new GitHubBuilder().withJwtToken(jwtTokenProvider.token()).build();
-        GHAppInstallation installationByOrganization = gh.getApp().getInstallationByOrganization(this.organizationName);
+        GHAppInstallation installationByOrganization = gitHub.getApp()
+                .getInstallationByOrganization(this.organizationName);
         GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();
         this.validUntil = ghAppInstallationToken.getExpiresAt();
         this.latestToken = ghAppInstallationToken.getToken();

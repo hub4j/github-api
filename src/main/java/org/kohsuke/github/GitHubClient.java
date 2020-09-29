@@ -47,7 +47,7 @@ abstract class GitHubClient {
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
-    final CredentialProvider credentialProvider;
+    CredentialProvider credentialProvider;
 
     private HttpConnector connector;
 

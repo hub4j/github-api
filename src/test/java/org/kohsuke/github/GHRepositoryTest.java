@@ -251,6 +251,26 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertTrue(r.listLanguages().containsKey(mainLanguage));
     }
 
+    @Test
+    public void listCommitCommentsNoComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("c413fc1e3057332b93850ea48202627d29a37de5")
+                .toList();
+
+        assertThat("Commit has no comments", commitComments.isEmpty());
+    }
+
+    @Test
+    public void listCommitCommentsSomeComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("499d91f9f846b0087b2a20cf3648b49dc9c2eeef")
+                .toList();
+
+        assertThat("Two comments present", commitComments.size() == 2);
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 1")));
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 2")));
+    }
+
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
         for (GHRepository.Contributor c : gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors()) {

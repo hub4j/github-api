@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.kohsuke.github.GHTeam.Privacy;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -32,6 +33,31 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
         assertEquals(description, team.getDescription());
+    }
+
+    @Test
+    public void testlistMembersAdmin() throws IOException {
+        String teamSlug = "dummy-team";
+
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+
+        List<GHUser> admins = team.listMembers("admin").asList();
+
+        assertNotNull(admins);
+        assertThat("One admin in dummy team", admins.size() == 1);
+        assertThat("Specific user in admin team",
+                admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
+    }
+
+    @Test
+    public void testlistMembersNoMatch() throws IOException {
+        String teamSlug = "dummy-team";
+
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+
+        List<GHUser> justMembers = team.listMembers("member").asList();
+
+        assertThat("No regular members in team", justMembers.isEmpty());
     }
 
     @Test

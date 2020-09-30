@@ -16,8 +16,8 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
     private Date validUntil;
 
     /**
-     * Provides a CredentialProvider that performs automatic token refresh, based on an previously
-     * authenticated github client.
+     * Provides a CredentialProvider that performs automatic token refresh, based on an previously authenticated github
+     * client.
      *
      * @param organizationName
      *            The name of the organization where the application is installed

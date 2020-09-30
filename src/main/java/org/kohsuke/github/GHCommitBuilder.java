@@ -90,6 +90,19 @@ public class GHCommitBuilder {
     }
 
     /**
+     * Configures the PGP signature of this commit.
+     *
+     * @param signature
+     *            the signature calculated from the commit
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder withSignature(String signature) {
+        req.with("signature", signature);
+        return this;
+    }
+
+    /**
      * Configures the committer of this commit.
      *
      * @param name

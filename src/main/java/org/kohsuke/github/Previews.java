@@ -31,6 +31,13 @@ class Previews {
     static final String CLOAK = "application/vnd.github.cloak-preview+json";
 
     /**
+     * New deployment statuses and support for updating deployment status environment
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#deployment-statuses">GitHub API Previews</a>
+     */
+    static final String FLASH = "application/vnd.github.flash-preview+json";
+    
+    /**
      * Owners of GitHub Apps can now uninstall an app using the Apps API
      *
      * @see <a href="https://developer.github.com/v3/previews/#uninstall-a-github-app">GitHub API Previews</a>

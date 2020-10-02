@@ -23,6 +23,7 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @param owner
      *            the owner
+     *
      * @return the gh deployment status
      */
     public GHDeploymentStatus wrap(GHRepository owner) {
@@ -37,6 +38,7 @@ public class GHDeploymentStatus extends GHObject {
      * Gets target url.
      *
      * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
+     *
      * @return the target url
      */
     @Deprecated

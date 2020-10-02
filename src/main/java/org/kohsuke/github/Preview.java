@@ -16,14 +16,14 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 public @interface Preview {
 
-  /**
-   * An optional field defining what API media types must be set inorder to support the
-   * usage of this annotations target.
-   * <p>
-   * This value should be set using the existing constants defined in {@link Previews}
-   *
-   * @return The API preview media type.
-   */
-  public String[] value() default {};
+    /**
+     * An optional field defining what API media types must be set inorder to support the usage of this annotations
+     * target.
+     * <p>
+     * This value should be set using the existing constants defined in {@link Previews}
+     *
+     * @return The API preview media type.
+     */
+    public String[] value() default {};
 
 }

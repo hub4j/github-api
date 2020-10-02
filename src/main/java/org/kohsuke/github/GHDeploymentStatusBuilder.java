@@ -21,6 +21,7 @@ public class GHDeploymentStatusBuilder {
      *            the deployment id
      * @param state
      *            the state
+     *
      * @deprecated Use {@link GHDeployment#createStatus(GHDeploymentState)}
      */
     @Deprecated
@@ -31,22 +32,22 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root.createRequest()
-            .withPreview(Previews.ANT_MAN)
-            .withPreview(Previews.FLASH)
-            .method("POST");
+        this.builder = repo.root.createRequest().withPreview(Previews.ANT_MAN).withPreview(Previews.FLASH)
+                .method("POST");
 
         this.builder.with("state", state);
     }
 
     /**
-     * Add an inactive status to all prior non-transient, non-production environment deployments
-     * with the same repository and environment name as the created status's deployment.
+     * Add an inactive status to all prior non-transient, non-production environment deployments with the same
+     * repository and environment name as the created status's deployment.
      *
-     * @param autoInactive Add inactive status flag
+     * @param autoInactive
+     *            Add inactive status flag
+     *
      * @return the gh deployment status builder
      */
-    @Preview({Previews.ANT_MAN,Previews.FLASH})
+    @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
         return this;
@@ -57,6 +58,7 @@ public class GHDeploymentStatusBuilder {
      *
      * @param description
      *            the description
+     *
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder description(String description) {
@@ -65,11 +67,11 @@ public class GHDeploymentStatusBuilder {
     }
 
     /**
-     * Name for the target deployment environment, which can be
-     * changed when setting a deploy status.
+     * Name for the target deployment environment, which can be changed when setting a deploy status.
      *
      * @param environment
      *            the environment name
+     *
      * @return the gh deployment status builder
      */
     @Preview(Previews.FLASH)
@@ -83,6 +85,7 @@ public class GHDeploymentStatusBuilder {
      *
      * @param environmentUrl
      *            the environment url
+     *
      * @return the gh deployment status builder
      */
     @Preview(Previews.ANT_MAN)
@@ -98,6 +101,7 @@ public class GHDeploymentStatusBuilder {
      *
      * @param logUrl
      *            the deployment output url
+     *
      * @return the gh deployment status builder
      */
     @Preview(Previews.ANT_MAN)
@@ -110,8 +114,10 @@ public class GHDeploymentStatusBuilder {
      * Target url gh deployment status builder.
      *
      * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
+     *
      * @param targetUrl
      *            the target url
+     *
      * @return the gh deployment status builder
      */
     @Deprecated
@@ -124,12 +130,12 @@ public class GHDeploymentStatusBuilder {
      * Create gh deployment status.
      *
      * @return the gh deployment status
+     *
      * @throws IOException
      *             the io exception
      */
     public GHDeploymentStatus create() throws IOException {
         return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
-                .fetch(GHDeploymentStatus.class)
-                .wrap(repo);
+                .fetch(GHDeploymentStatus.class).wrap(repo);
     }
 }

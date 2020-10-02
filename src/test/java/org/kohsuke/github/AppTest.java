@@ -175,9 +175,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .create();
         assertNotNull(deployment.getCreator());
         assertNotNull(deployment.getId());
-        List<GHDeployment> deployments = repository
-            .listDeployments(null, "master", null, "unittest")
-            .toList();
+        List<GHDeployment> deployments = repository.listDeployments(null, "master", null, "unittest").toList();
         assertNotNull(deployments);
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
@@ -211,9 +209,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertEquals(ghDeploymentStatus.getState(), actualStatus.getState());
         assertEquals(ghDeploymentStatus.getLogUrl(), actualStatus.getLogUrl());
         // Target url was deprecated and replaced with log url. The gh api will
-        // prefer the log url value and return it in target field
+        // prefer the log url value and return it in place of target url.
         assertEquals(ghDeploymentStatus.getTargetUrl(), actualStatus.getLogUrl());
-
     }
 
     @Test

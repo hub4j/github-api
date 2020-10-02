@@ -24,6 +24,9 @@ public class GHDeployment extends GHObject {
     protected String statuses_url;
     protected String repository_url;
     protected GHUser creator;
+    protected String original_environment;
+    protected boolean transient_environment;
+    protected boolean production_environment;
 
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
@@ -90,12 +93,43 @@ public class GHDeployment extends GHObject {
     }
 
     /**
+     * The environment defined when the deployment was first created.
+     *
+     * @return the original deployment environment
+     */
+    @Preview(Previews.FLASH)
+    public String getOriginalEnvironment() {
+        return original_environment;
+    }
+
+    /**
      * Gets environment.
      *
      * @return the environment
      */
     public String getEnvironment() {
         return environment;
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment
+     * and will no longer exist at some point in the future.
+     *
+     * @return the environment is transient
+     */
+    @Preview(Previews.ANT_MAN)
+    public boolean isTransientEnvironment() {
+        return transient_environment;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @return the environment is used by end-users directly
+     */
+    @Preview(Previews.ANT_MAN)
+    public boolean isProductionEnvironment() {
+        return production_environment;
     }
 
     /**
@@ -154,6 +188,8 @@ public class GHDeployment extends GHObject {
     public PagedIterable<GHDeploymentStatus> listStatuses() {
         return root.createRequest()
                 .withUrlPath(statuses_url)
+                .withPreview(Previews.ANT_MAN)
+                .withPreview(Previews.FLASH)
                 .toIterable(GHDeploymentStatus[].class, item -> item.wrap(owner));
     }
 

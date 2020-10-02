@@ -19,7 +19,10 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.root.createRequest().method("POST");
+        this.builder = repo.root.createRequest()
+            .withPreview(Previews.ANT_MAN)
+            .withPreview(Previews.FLASH)
+            .method("POST");
     }
 
     /**
@@ -104,6 +107,33 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder environment(String environment) {
         builder.with("environment", environment);
+        return this;
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment
+     * and will no longer exist at some point in the future.
+     *
+     * @param transientEnvironment
+     *            the environment is transient
+     * @return the gh deployment builder
+     */
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
+        builder.with("transient_environment", transientEnvironment);
+        return this;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @param productionEnvironment
+     *            the environment is used by end-users directly
+     * @return the gh deployment builder
+     */
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
+        builder.with("production_environment", productionEnvironment);
         return this;
     }
 

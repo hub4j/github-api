@@ -31,8 +31,25 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root.createRequest().method("POST");
+        this.builder = repo.root.createRequest()
+            .withPreview(Previews.ANT_MAN)
+            .withPreview(Previews.FLASH)
+            .method("POST");
+
         this.builder.with("state", state);
+    }
+
+    /**
+     * Add an inactive status to all prior non-transient, non-production environment deployments
+     * with the same repository and environment name as the created status's deployment.
+     *
+     * @param autoInactive Add inactive status flag
+     * @return the gh deployment status builder
+     */
+    @Preview({Previews.ANT_MAN,Previews.FLASH})
+    public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
+        this.builder.with("auto_inactive", autoInactive);
+        return this;
     }
 
     /**
@@ -48,12 +65,56 @@ public class GHDeploymentStatusBuilder {
     }
 
     /**
+     * Name for the target deployment environment, which can be
+     * changed when setting a deploy status.
+     *
+     * @param environment
+     *            the environment name
+     * @return the gh deployment status builder
+     */
+    @Preview(Previews.FLASH)
+    public GHDeploymentStatusBuilder environment(String environment) {
+        this.builder.with("environment", environment);
+        return this;
+    }
+
+    /**
+     * The URL for accessing the environment
+     *
+     * @param environmentUrl
+     *            the environment url
+     * @return the gh deployment status builder
+     */
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
+        this.builder.with("environment_url", environmentUrl);
+        return this;
+    }
+
+    /**
+     * The full URL of the deployment's output.
+     * <p>
+     * This method replaces {@link #targetUrl(String) targetUrl}.
+     *
+     * @param logUrl
+     *            the deployment output url
+     * @return the gh deployment status builder
+     */
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentStatusBuilder logUrl(String logUrl) {
+        this.builder.with("log_url", logUrl);
+        return this;
+    }
+
+    /**
      * Target url gh deployment status builder.
      *
+     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
      * @param targetUrl
      *            the target url
      * @return the gh deployment status builder
      */
+    @Deprecated
     public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
         this.builder.with("target_url", targetUrl);
         return this;

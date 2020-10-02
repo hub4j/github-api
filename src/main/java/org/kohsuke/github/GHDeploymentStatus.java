@@ -13,8 +13,10 @@ public class GHDeploymentStatus extends GHObject {
     protected String state;
     protected String description;
     protected String target_url;
+    protected String log_url;
     protected String deployment_url;
     protected String repository_url;
+    protected String environment_url;
 
     /**
      * Wrap gh deployment status.
@@ -34,9 +36,22 @@ public class GHDeploymentStatus extends GHObject {
     /**
      * Gets target url.
      *
+     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
      * @return the target url
      */
+    @Deprecated
     public URL getTargetUrl() {
+        return GitHubClient.parseURL(target_url);
+    }
+
+    /**
+     * Gets target url.
+     * <p>
+     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
+     *
+     * @return the target url
+     */
+    public URL getLogUrl() {
         return GitHubClient.parseURL(target_url);
     }
 
@@ -47,6 +62,15 @@ public class GHDeploymentStatus extends GHObject {
      */
     public URL getDeploymentUrl() {
         return GitHubClient.parseURL(deployment_url);
+    }
+
+    /**
+     * Gets deployment environment url.
+     *
+     * @return the deployment environment url
+     */
+    public URL getEnvironmentUrl() {
+        return GitHubClient.parseURL(environment_url);
     }
 
     /**

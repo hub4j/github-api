@@ -32,7 +32,9 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root.createRequest().withPreview(Previews.ANT_MAN).withPreview(Previews.FLASH)
+        this.builder = repo.root.createRequest()
+                .withPreview(Previews.ANT_MAN)
+                .withPreview(Previews.FLASH)
                 .method("POST");
 
         this.builder.with("state", state);
@@ -136,6 +138,7 @@ public class GHDeploymentStatusBuilder {
      */
     public GHDeploymentStatus create() throws IOException {
         return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
-                .fetch(GHDeploymentStatus.class).wrap(repo);
+                .fetch(GHDeploymentStatus.class)
+                .wrap(repo);
     }
 }

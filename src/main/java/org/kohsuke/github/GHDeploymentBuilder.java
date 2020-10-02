@@ -19,7 +19,9 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.root.createRequest().withPreview(Previews.ANT_MAN).withPreview(Previews.FLASH)
+        this.builder = repo.root.createRequest()
+                .withPreview(Previews.ANT_MAN)
+                .withPreview(Previews.FLASH)
                 .method("POST");
     }
 

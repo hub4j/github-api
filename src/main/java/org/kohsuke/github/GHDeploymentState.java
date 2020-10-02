@@ -4,7 +4,10 @@ package org.kohsuke.github;
  * Represents the state of deployment
  */
 public enum GHDeploymentState {
-    PENDING, SUCCESS, ERROR, FAILURE,
+    PENDING,
+    SUCCESS,
+    ERROR,
+    FAILURE,
 
     @Preview(Previews.FLASH)
     IN_PROGRESS,

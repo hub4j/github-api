@@ -112,8 +112,8 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * Specifies if the given environment is specific to the deployment
-     * and will no longer exist at some point in the future.
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
      *
      * @return the environment is transient
      */

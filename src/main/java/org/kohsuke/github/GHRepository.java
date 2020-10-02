@@ -163,6 +163,8 @@ public class GHRepository extends GHObject {
                 .with("task", task)
                 .with("environment", environment)
                 .withUrlPath(getApiTailUrl("deployments"))
+                .withPreview(ANT_MAN)
+                .withPreview(FLASH)
                 .toIterable(GHDeployment[].class, item -> item.wrap(this));
     }
 
@@ -178,6 +180,8 @@ public class GHRepository extends GHObject {
     public GHDeployment getDeployment(long id) throws IOException {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("deployments/" + id))
+                .withPreview(ANT_MAN)
+                .withPreview(FLASH)
                 .fetch(GHDeployment.class)
                 .wrap(this);
     }

@@ -38,8 +38,8 @@ public class JWTTokenProvider implements CredentialProvider {
         this.applicationId = applicationId;
     }
 
-    /**add dependencies for a jwt suite
-     * You can generate a key to load with this method with:
+    /**
+     * add dependencies for a jwt suite You can generate a key to load with this method with:
      *
      * <pre>
      * openssl pkcs8 -topk8 -inform PEM -outform DER -in ~/github-api-app.private-key.pem -out ~/github-api-app.private-key.der -nocrypt

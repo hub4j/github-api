@@ -150,6 +150,7 @@
                       <!-- Code implemented externally -->
                       <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
                       <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+                      <exclude>org.kohsuke.github.extras.auth.*</exclude>
 
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>

@@ -158,10 +158,8 @@ public class GHIssue extends GHObject implements Reactable {
      * Gets labels.
      *
      * @return the labels
-     * @throws IOException
-     *             the io exception
      */
-    public Collection<GHLabel> getLabels() throws IOException {
+    public Collection<GHLabel> getLabels() {
         if (labels == null) {
             return Collections.emptyList();
         }

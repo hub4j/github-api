@@ -49,12 +49,13 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import static java.util.Arrays.*;
+import static java.util.Objects.requireNonNull;
 import static org.kohsuke.github.Previews.*;
 
 /**
@@ -2866,6 +2867,56 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
+     *
+     * @param sink
+     *            The {@link StreamConsumer} that will consume the stream
+     * @param ref
+     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     * @throws IOException
+     *             The IO exception.
+     */
+    public void zipball(StreamConsumer sink, String ref) throws IOException {
+        downloadArchive("zip", Optional.ofNullable(ref), sink);
+    }
+
+    /**
+     * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
+     *
+     * @param sink
+     *            The {@link StreamConsumer} that will consume the stream
+     * @param ref
+     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     * @throws IOException
+     *             The IO exception.
+     */
+    public void tarball(StreamConsumer sink, String ref) throws IOException {
+        downloadArchive("tar", Optional.ofNullable(ref), sink);
+    }
+
+    /**
+     * A functional interface, equivalent to {@link java.util.function.Consumer} but that allows throwing
+     * {@link IOException}
+     */
+    @FunctionalInterface
+    public interface StreamConsumer {
+        void accept(InputStream stream) throws IOException;
+    }
+
+    private void downloadArchive(String type, Optional<String> ref, StreamConsumer sink) throws IOException {
+        requireNonNull(sink, "Sink must not be null");
+        final String base = getApiTailUrl(requireNonNull(type, "Type must not be null") + "ball");
+        final String url = ref.map(base::concat).orElse(base);
+        final Requester builder = root.createRequest().method("GET").withUrlPath(url);
+        builder.client.sendRequest(builder.build(), response -> {
+            try (final InputStream body = response.bodyStream()) {
+                sink.accept(body);
+            }
+            return null;
+        });
+    }
+
+    /**
      * Populate this object.
      *
      * @throws java.io.IOException
@@ -2876,7 +2927,7 @@ public class GHRepository extends GHObject {
             return; // can't populate if the root is offline
         }
 
-        final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+        final URL url = requireNonNull(getUrl(), "Missing instance URL!");
 
         try {
             // IMPORTANT: the url for repository records is does not reliably point to the API url.

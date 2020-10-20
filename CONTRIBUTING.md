@@ -17,13 +17,14 @@ This the default behavior.
 
 ### Setting up credential
 
-1. Create an OAuth token on github.com
-2. Set the GITHUB_OAUTH environment variable to the value of that token
-3. Set the system property `test.github.useProxy` (usually like "-Dtest.github.useProxy" as a Java VM option)
+1. Create [a personal access token](https://github.com/settings/tokens) on github.com
+2. Set the `GITHUB_OAUTH` environment variable to the value of that token
+3. Set the `GITHUB_LOGIN` environment variable to your Github.com username
+4. Set the system property `test.github.useProxy` (usually like "-Dtest.github.useProxy" as a Java VM option)
 
     `mvn install -Dtest.github.useProxy -Dtest=WireMockStatusReporterTest`
 
-4. The above should report no test failures and include the following console output:
+5. The above should report no test failures and include the following console output:
 
     `WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: <your login>`
 

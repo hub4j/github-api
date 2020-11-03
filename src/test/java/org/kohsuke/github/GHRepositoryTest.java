@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.kohsuke.github.GHVerification.Reason.*;
 
 /**
  * @author Liam Newman
@@ -73,6 +74,40 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    @Test
+    public void createSignedCommitVerifyError() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("-----BEGIN PGP SIGNATURE-----\ninvalid\n-----END PGP SIGNATURE-----")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(GPGVERIFY_ERROR, verification.getReason());
+    }
+
+    @Test
+    public void createSignedCommitUnknownSignatureType() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("unknown")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(UNKNOWN_SIGNATURE_TYPE, verification.getReason());
     }
 
     // Issue #607

@@ -4,6 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Represents a user in Git who authors/commits a commit.
  * <p>
@@ -15,10 +17,10 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GitUser {
-    private String name, email, date;
+    private String name, email, date, username;
 
     /**
-     * Gets name.
+     * Gets the git user name for an author or committer on a git commit.
      *
      * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
      */
@@ -27,12 +29,24 @@ public class GitUser {
     }
 
     /**
-     * Gets email.
+     * Gets the git email for an author or committer on a git commit.
      *
-     * @return E -mail address, such as "foo@example.com"
+     * @return E-mail address, such as "foo@example.com"
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Gets username. Note: it presents only in events.
+     *
+     * @return GitHub username
+     */
+    @Preview
+    @Deprecated
+    @CheckForNull
+    public String getUsername() {
+        return username;
     }
 
     /**

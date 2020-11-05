@@ -382,6 +382,7 @@ public abstract class GHEventPayload {
         private int number;
         private GHPullRequest pull_request;
         private GHRepository repository;
+        private GHLabel label;
 
         /**
          * Gets action.
@@ -418,6 +419,15 @@ public abstract class GHEventPayload {
          */
         public GHRepository getRepository() {
             return repository;
+        }
+
+        /**
+         * Gets label.
+         *
+         * @return the label
+         */
+        public GHLabel getLabel() {
+            return label;
         }
 
         @Override
@@ -1280,6 +1290,7 @@ public abstract class GHEventPayload {
         private List<PushCommit> commits;
         private GHRepository repository;
         private Pusher pusher;
+        private String compare;
 
         /**
          * The SHA of the HEAD commit on the repository
@@ -1387,6 +1398,15 @@ public abstract class GHEventPayload {
             this.pusher = pusher;
         }
 
+        /**
+         * Gets compare.
+         *
+         * @return compare
+         */
+        public String getCompare() {
+            return compare;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
@@ -1440,7 +1460,7 @@ public abstract class GHEventPayload {
         }
 
         /**
-         * Commit in a push
+         * Commit in a push. Note: sha is an alias for id.
          */
         public static class PushCommit {
             private GitUser author;
@@ -1477,7 +1497,7 @@ public abstract class GHEventPayload {
             }
 
             /**
-             * Gets sha.
+             * Gets sha (id).
              *
              * @return the sha
              */

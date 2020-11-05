@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.kohsuke.github.GHVerification.Reason.*;
 
 /**
  * @author Liam Newman
@@ -73,6 +74,40 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    @Test
+    public void createSignedCommitVerifyError() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("-----BEGIN PGP SIGNATURE-----\ninvalid\n-----END PGP SIGNATURE-----")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(GPGVERIFY_ERROR, verification.getReason());
+    }
+
+    @Test
+    public void createSignedCommitUnknownSignatureType() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("unknown")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(UNKNOWN_SIGNATURE_TYPE, verification.getReason());
     }
 
     // Issue #607
@@ -249,6 +284,26 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
         String mainLanguage = r.getLanguage();
         assertTrue(r.listLanguages().containsKey(mainLanguage));
+    }
+
+    @Test
+    public void listCommitCommentsNoComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("c413fc1e3057332b93850ea48202627d29a37de5")
+                .toList();
+
+        assertThat("Commit has no comments", commitComments.isEmpty());
+    }
+
+    @Test
+    public void listCommitCommentsSomeComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("499d91f9f846b0087b2a20cf3648b49dc9c2eeef")
+                .toList();
+
+        assertThat("Two comments present", commitComments.size() == 2);
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 1")));
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 2")));
     }
 
     @Test // Issue #261

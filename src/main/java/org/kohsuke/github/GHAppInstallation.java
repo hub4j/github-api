@@ -3,11 +3,13 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
 import static org.kohsuke.github.Previews.GAMBIT;
+import static org.kohsuke.github.Previews.MACHINE_MAN;
 
 /**
  * A Github App Installation.
@@ -115,6 +117,36 @@ public class GHAppInstallation extends GHObject {
      */
     public String getRepositoriesUrl() {
         return repositoriesUrl;
+    }
+
+    /**
+     * List repositories that this app installation can access.
+     *
+     * @return the paged iterable
+     */
+    @Preview
+    @Deprecated
+    public PagedSearchIterable<GHRepository> listRepositories() {
+        GitHubRequest request;
+
+        try {
+            request = root.createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
+        } catch (MalformedURLException e) {
+            throw new GHException("", e);
+        }
+
+        return new PagedSearchIterable<>(root, request, GHAppInstallationRepositoryResult.class);
+    }
+
+    private static class GHAppInstallationRepositoryResult extends SearchResult<GHRepository> {
+        private GHRepository[] repositories;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+            for (GHRepository item : repositories)
+                item.wrap(root);
+            return repositories;
+        }
     }
 
     /**

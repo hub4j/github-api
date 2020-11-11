@@ -260,6 +260,20 @@ public class GHRelease extends GHObject {
     }
 
     /**
+     * Re-fetch the assets of this release.
+     * 
+     * @return the assets
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHAsset> fetchAssets() throws IOException {
+        Requester builder = owner.root.createRequest();
+        return builder.withUrlPath(getApiTailUrl("assets"))
+                .toIterable(GHAsset[].class, item -> item.wrap(this))
+                .toList();
+    }
+
+    /**
      * Deletes this release.
      *
      * @throws IOException

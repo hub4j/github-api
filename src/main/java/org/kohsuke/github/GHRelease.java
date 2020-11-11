@@ -15,6 +15,7 @@ import static java.lang.String.*;
  * Release in a github repository.
  *
  * @see GHRepository#getReleases() GHRepository#getReleases()
+ * @see GHRepository#listReleases() () GHRepository#listReleases()
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
@@ -23,6 +24,7 @@ public class GHRelease extends GHObject {
 
     private String html_url;
     private String assets_url;
+    private List<GHAsset> assets;
     private String upload_url;
     private String tag_name;
     private String target_commitish;
@@ -252,15 +254,9 @@ public class GHRelease extends GHObject {
      * Gets assets.
      *
      * @return the assets
-     * @throws IOException
-     *             the io exception
      */
-    public List<GHAsset> getAssets() throws IOException {
-        Requester builder = owner.root.createRequest();
-
-        return builder.withUrlPath(getApiTailUrl("assets"))
-                .toIterable(GHAsset[].class, item -> item.wrap(this))
-                .toList();
+    public List<GHAsset> getAssets() {
+        return assets;
     }
 
     /**

@@ -24,15 +24,16 @@ public class GHEventPayload {
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;
     private GHUser sender;
-    GHRepository repository;
+    private GHRepository repository;
     private GHOrganization organization;
-    GHAppInstallation installation;
+    private GHAppInstallation installation;
 
     GHEventPayload() {
     }
 
     /**
-     * Most webhook payloads contain an action property that contains the specific activity that triggered the event.
+     * Gets the action for the triggered event. Most but not all webhook payloads contain an action property that
+     * contains the specific activity that triggered the event.
      *
      * @return event action
      */
@@ -112,10 +113,13 @@ public class GHEventPayload {
             sender.wrapUp(root);
         }
         if (repository != null) {
-            repository.root = root;
+            repository.wrap(root);
         }
         if (organization != null) {
             organization.wrapUp(root);
+        }
+        if (installation != null) {
+            installation.wrapUp(root);
         }
     }
 
@@ -192,8 +196,8 @@ public class GHEventPayload {
             if (checkRun == null)
                 throw new IllegalStateException(
                         "Expected check_run payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 checkRun.wrap(repository);
             } else {
                 checkRun.wrap(root);
@@ -226,8 +230,8 @@ public class GHEventPayload {
             if (checkSuite == null)
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 checkSuite.wrap(repository);
             } else {
                 checkSuite.wrap(root);
@@ -258,11 +262,10 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (installation == null)
+            if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
-            else
-                installation.wrapUp(root);
+            }
 
             if (repositories != null && !repositories.isEmpty()) {
                 try {
@@ -320,11 +323,10 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (installation == null)
+            if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
-            else
-                installation.wrapUp(root);
+            }
 
             List<GHRepository> repositories;
             if ("added".equals(getAction()))
@@ -393,8 +395,8 @@ public class GHEventPayload {
             if (pullRequest == null)
                 throw new IllegalStateException(
                         "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 pullRequest.wrapUp(repository);
             } else {
                 pullRequest.wrapUp(root);
@@ -441,8 +443,8 @@ public class GHEventPayload {
 
             review.wrapUp(pullRequest);
 
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 pullRequest.wrapUp(repository);
             } else {
                 pullRequest.wrapUp(root);
@@ -489,8 +491,8 @@ public class GHEventPayload {
 
             comment.wrapUp(pullRequest);
 
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 pullRequest.wrapUp(repository);
             } else {
                 pullRequest.wrapUp(root);
@@ -531,8 +533,8 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 issue.wrap(repository);
             } else {
                 issue.wrap(root);
@@ -593,8 +595,8 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 issue.wrap(repository);
             } else {
                 issue.wrap(root);
@@ -636,8 +638,8 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 comment.wrap(repository);
             }
         }
@@ -695,14 +697,6 @@ public class GHEventPayload {
         public String getDescription() {
             return description;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -734,14 +728,6 @@ public class GHEventPayload {
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getRefType() {
             return refType;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
         }
     }
 
@@ -777,8 +763,8 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 deployment.wrap(repository);
             }
         }
@@ -837,8 +823,8 @@ public class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 deployment.wrap(repository);
                 deploymentStatus.wrap(repository);
             }
@@ -878,9 +864,6 @@ public class GHEventPayload {
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             forkee.wrap(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
         }
     }
 
@@ -891,12 +874,6 @@ public class GHEventPayload {
      * event</a>
      */
     public static class Ping extends GHEventPayload {
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
-        }
 
     }
 
@@ -907,13 +884,6 @@ public class GHEventPayload {
      *      public event</a>
      */
     public static class Public extends GHEventPayload {
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
-        }
 
     }
 
@@ -1036,13 +1006,6 @@ public class GHEventPayload {
          */
         public String getCompare() {
             return compare;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
         }
 
         /**
@@ -1218,14 +1181,6 @@ public class GHEventPayload {
         public void setRelease(GHRelease release) {
             this.release = release;
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -1236,11 +1191,7 @@ public class GHEventPayload {
      * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
     public static class Repository extends GHEventPayload {
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            repository.wrap(root);
-        }
+
     }
 
     /**
@@ -1319,8 +1270,8 @@ public class GHEventPayload {
                 throw new IllegalStateException(
                         "Expected status payload, but got something else. Maybe we've got another type of event?");
             }
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 commit.wrapUp(repository);
             }
         }

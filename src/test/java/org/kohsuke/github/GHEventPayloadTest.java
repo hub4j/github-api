@@ -413,7 +413,13 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 .parseEventPayload(payload.asReader(), GHEventPayload.Release.class);
 
         assertThat(event.getAction(), is("published"));
+        assertThat(event.getSender().getLogin(), is("seregamorph"));
         assertThat(event.getRepository().getName(), is("company-rest-api-framework"));
+        assertThat(event.getOrganization().getLogin(), is("company-group"));
+        assertThat(event.getInstallation(), nullValue());
+        assertThat(event.getRelease().getName(), is("4.2"));
+        assertThat(event.getRelease().getTagName(), is("rest-api-framework-4.2"));
+        assertThat(event.getRelease().getBody(), is("REST-269 - unique test executions (#86) Sergey Chernov"));
     }
 
     @Test

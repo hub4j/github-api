@@ -251,17 +251,38 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Gets assets.
+     * Get the cached assets.
      *
      * @return the assets
+     *
+     * @deprecated This should be the default behavior of {@link #getAssets()} in a future release. This method is
+     *             introduced in addition to enable a transition to using cached asset information while keeping the
+     *             existing logic in place for backwards compatibility.
      */
-    public List<GHAsset> getAssets() {
+    @Deprecated
+    @Preview
+    public List<GHAsset> getCachedAssets() {
         return assets;
     }
 
     /**
      * Re-fetch the assets of this release.
-     * 
+     *
+     * @return the assets
+     * @throws IOException
+     *             the io exception
+     * @deprecated The behavior of this method will change in a future release. It will then provide cached assets as
+     *             provided by {@link #getCachedAssets()}. Use {@link #fetchAssets()} instead to fetch up-to-date
+     *             information of assets.
+     */
+    @Deprecated
+    public List<GHAsset> getAssets() throws IOException {
+        return fetchAssets();
+    }
+
+    /**
+     * Re-fetch the assets of this release.
+     *
      * @return the assets
      * @throws IOException
      *             the io exception

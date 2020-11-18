@@ -50,13 +50,13 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertEquals(0, release.getCachedAssets().size());
+        assertEquals(0, release.assets().size());
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
         assertNotNull(asset);
-        List<GHAsset> cachedAssets = release.getCachedAssets();
+        List<GHAsset> cachedAssets = release.assets();
         assertEquals(0, cachedAssets.size());
         List<GHAsset> assets = release.getAssets();
         assertEquals(1, assets.size());

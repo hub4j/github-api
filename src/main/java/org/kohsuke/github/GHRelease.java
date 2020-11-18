@@ -261,7 +261,7 @@ public class GHRelease extends GHObject {
      */
     @Deprecated
     @Preview
-    public List<GHAsset> getCachedAssets() {
+    public List<GHAsset> assets() {
         return assets;
     }
 
@@ -272,7 +272,7 @@ public class GHRelease extends GHObject {
      * @throws IOException
      *             the io exception
      * @deprecated The behavior of this method will change in a future release. It will then provide cached assets as
-     *             provided by {@link #getCachedAssets()}. Use {@link #listAssets()} instead to fetch up-to-date
+     *             provided by {@link #assets()}. Use {@link #listAssets()} instead to fetch up-to-date
      *             information of assets.
      */
     @Deprecated

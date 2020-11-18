@@ -240,7 +240,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getBase(), nullValue());
         assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
         assertThat(event.getChanges().getBody(), nullValue());
-        assertThat(event.getChanges(). getChanges(), nullValue());
+        assertThat(event.getChanges().getTitle(), nullValue());
     }
 
     @Test

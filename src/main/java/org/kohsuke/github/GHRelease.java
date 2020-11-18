@@ -272,8 +272,8 @@ public class GHRelease extends GHObject {
      * @throws IOException
      *             the io exception
      * @deprecated The behavior of this method will change in a future release. It will then provide cached assets as
-     *             provided by {@link #assets()}. Use {@link #listAssets()} instead to fetch up-to-date
-     *             information of assets.
+     *             provided by {@link #assets()}. Use {@link #listAssets()} instead to fetch up-to-date information of
+     *             assets.
      */
     @Deprecated
     public List<GHAsset> getAssets() throws IOException {
@@ -289,8 +289,7 @@ public class GHRelease extends GHObject {
      */
     public PagedIterable<GHAsset> listAssets() throws IOException {
         Requester builder = owner.root.createRequest();
-        return builder.withUrlPath(getApiTailUrl("assets"))
-                .toIterable(GHAsset[].class, item -> item.wrap(this));
+        return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
     }
 
     /**

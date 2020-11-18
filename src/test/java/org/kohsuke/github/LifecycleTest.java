@@ -50,7 +50,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertEquals(0, release.assets().size());
+        assertEquals(0, release.getAssets().size());
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {

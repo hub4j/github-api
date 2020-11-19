@@ -2102,6 +2102,29 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
+     * binding
+     *
+     * @param id
+     *            the ID of the hook to be updated
+     * @param name
+     *            Type of the hook. See https://api.github.com/hooks for possible names.
+     * @param config
+     *            The configuration hash.
+     * @param events
+     *            Can be null. Types of events to hook into.
+     * @param active
+     *            the active
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook updateHook(long id, String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
+        throws IOException {
+        return GHHooks.repoContext(this, owner).updateHook(id, name, config, events, active);
+    }
+
+    /**
      * Create web hook gh hook.
      *
      * @param url
@@ -2117,6 +2140,23 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Update web hook gh hook.
+     *
+     * @param id
+     *            the ID of the hook to be updated
+     * @param url
+     *            the url
+     * @param events
+     *            the events
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook updateWebHook(long id, URL url, Collection<GHEvent> events) throws IOException {
+        return updateHook(id, "web", Collections.singletonMap("url", url.toExternalForm()), events, true);
+    }
+
+    /**
      * Create web hook gh hook.
      *
      * @param url
@@ -2127,6 +2167,21 @@ public class GHRepository extends GHObject {
      */
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
+    }
+
+    /**
+     * Update web hook gh hook.
+     *
+     * @param id
+     *            the ID of the hook to be updated
+     * @param url
+     *            the url
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook updateWebHook(long id, URL url) throws IOException {
+        return updateWebHook(id, url, null);
     }
 
     /**

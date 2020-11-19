@@ -77,13 +77,51 @@ class GHHooks {
             }
 
             GHHook hook = root.createRequest()
-                    .method("POST")
+                    .method("PATCH")
                     .with("name", name)
                     .with("active", active)
                     .with("config", config)
                     .with("events", ea)
                     .withUrlPath(collection())
                     .fetch(clazz());
+
+            return wrap(hook);
+        }
+
+        /**
+         * Update hook gh hook.
+         *
+         * @param id
+         *            the ID
+         * @param name
+         *            the name
+         * @param config
+         *            the config
+         * @param events
+         *            the events
+         * @param active
+         *            the active
+         * @return the gh hook
+         * @throws IOException
+         *             the io exception
+         */
+        public GHHook updateHook(long id, String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
+            throws IOException {
+            List<String> ea = null;
+            if (events != null) {
+                ea = new ArrayList<String>();
+                for (GHEvent e : events)
+                    ea.add(e.symbol());
+            }
+
+            GHHook hook = root.createRequest()
+                .method("POST")
+                .with("name", name)
+                .with("active", active)
+                .with("config", config)
+                .with("events", ea)
+                .withUrlPath(collection() + "/" + id)
+                .fetch(clazz());
 
             return wrap(hook);
         }

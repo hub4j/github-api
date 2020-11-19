@@ -558,7 +558,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHRepository getRepositoryById(String id) throws IOException {
+    public GHRepository getRepositoryById(long id) throws IOException {
         return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
     }
 

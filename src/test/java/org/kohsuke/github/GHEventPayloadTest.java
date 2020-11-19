@@ -224,9 +224,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random"));
         assertThat(event.getChanges().getBase().getRef().getFrom(), is("develop"));
         assertThat(event.getChanges().getBase().getSha().getFrom(), is("4b0f3b9fd582b071652ccfccd10bfc8c143cff96"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
         assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
         assertThat(event.getChanges().getBody(), nullValue());
-        assertThat(event.getChanges().getTitle(), nullValue());
     }
 
     @Test
@@ -238,6 +238,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getTitle().getFrom(), is("REST-276 - easy-random"));
         assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random 4.3.0"));
         assertThat(event.getChanges().getBase(), nullValue());
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
         assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
         assertThat(event.getChanges().getBody(), nullValue());
     }

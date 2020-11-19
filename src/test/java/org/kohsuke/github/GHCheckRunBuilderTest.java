@@ -114,4 +114,26 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void updateCheckRun() throws Exception {
+        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
+                .createCheckRun("foo", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+                .withStatus(GHCheckRun.Status.IN_PROGRESS)
+                .withStartedAt(new Date(999_999_000))
+                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")
+                        .add(new GHCheckRunBuilder.Annotation("stuff.txt",
+                                1,
+                                GHCheckRun.AnnotationLevel.NOTICE,
+                                "hello to you too").withTitle("Look here")))
+                .create();
+        GHCheckRun updated = checkRun.update()
+                .withStatus(GHCheckRun.Status.COMPLETED)
+                .withConclusion(GHCheckRun.Conclusion.SUCCESS)
+                .withCompletedAt(new Date(999_999_999))
+                .create();
+        assertEquals(updated.getStartedAt(), new Date(999_999_000));
+        assertEquals(updated.getName(), "foo");
+        assertEquals(1, checkRun.getOutput().getAnnotationsCount());
+    }
+
 }

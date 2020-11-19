@@ -75,7 +75,7 @@ class GitHubRequest {
 
     /**
      * Create a new {@link Builder}.
-     * 
+     *
      * @return a new {@link Builder}.
      */
     public static Builder<?> newBuilder() {
@@ -165,7 +165,7 @@ class GitHubRequest {
 
     /**
      * The base GitHub API URL for this request represented as a {@link String}
-     * 
+     *
      * @return the url string
      */
     @Nonnull
@@ -176,7 +176,7 @@ class GitHubRequest {
     /**
      * The url path to be added to the {@link #apiUrl()} for this request. If this does not start with a "/", it instead
      * represents the full url string for this request.
-     * 
+     *
      * @return a url path or full url string
      */
     @Nonnull
@@ -186,7 +186,7 @@ class GitHubRequest {
 
     /**
      * The content type to to be sent by this request.
-     * 
+     *
      * @return the content type.
      */
     @Nonnull
@@ -196,7 +196,7 @@ class GitHubRequest {
 
     /**
      * The {@link InputStream} to be sent as the body of this request.
-     * 
+     *
      * @return the {@link InputStream}.
      */
     @CheckForNull
@@ -206,7 +206,7 @@ class GitHubRequest {
 
     /**
      * The {@link URL} for this request. This is the actual URL the {@link GitHubClient} will send this request to.
-     * 
+     *
      * @return the request {@link URL}
      */
     @Nonnull
@@ -216,7 +216,7 @@ class GitHubRequest {
 
     /**
      * Whether arguments for this request should be included in the URL or in the body of the request.
-     * 
+     *
      * @return true if the arguements should be sent in the body of the request.
      */
     public boolean inBody() {
@@ -226,7 +226,7 @@ class GitHubRequest {
     /**
      * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
      * {@link GitHubRequest}.
-     * 
+     *
      * @return a {@link Builder} based on this request.
      */
     public Builder<?> toBuilder() {
@@ -346,7 +346,7 @@ class GitHubRequest {
 
         /**
          * Builds a {@link GitHubRequest} from this builder.
-         * 
+         *
          * @return a {@link GitHubRequest}
          * @throws MalformedURLException
          *             if the GitHub API URL cannot be constructed
@@ -435,6 +435,21 @@ class GitHubRequest {
 
         public B withPreview(String name) {
             return withHeader("Accept", name);
+        }
+
+        /**
+         * With requester.
+         *
+         * @param Map
+         *            map of key value pairs to add
+         * @return the request builder
+         */
+        public B with(Map<String, Object> map) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                with(entry.getKey(), entry.getValue());
+            }
+
+            return (B) this;
         }
 
         /**

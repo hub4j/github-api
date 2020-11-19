@@ -2,7 +2,7 @@
   "id": "bce97482-6a11-44e5-a112-29230b142636",
   "name": "repos_hub4j-test-org_jenkins_collaborators",
   "request": {
-    "url": "/repos/hub4j-test-org/jenkins/collaborators",
+    "url": "/repos/hub4j-test-org/jenkins/collaborators?affiliation=all",
     "method": "GET",
     "headers": {
       "Accept": {

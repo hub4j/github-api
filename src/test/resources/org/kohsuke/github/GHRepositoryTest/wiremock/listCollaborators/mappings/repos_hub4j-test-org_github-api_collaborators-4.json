@@ -2,7 +2,7 @@
   "id": "b0680d17-cd3b-4ec0-a857-d352c7167e94",
   "name": "repos_hub4j-test-org_github-api_collaborators",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/collaborators",
+    "url": "/repos/hub4j-test-org/github-api/collaborators?affiliation=all",
     "method": "GET",
     "headers": {
       "Accept": {

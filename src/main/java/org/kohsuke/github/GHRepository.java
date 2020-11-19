@@ -2119,8 +2119,11 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHHook updateHook(long id, String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
-        throws IOException {
+    public GHHook updateHook(long id,
+            String name,
+            Map<String, String> config,
+            Collection<GHEvent> events,
+            boolean active) throws IOException {
         return GHHooks.repoContext(this, owner).updateHook(id, name, config, events, active);
     }
 

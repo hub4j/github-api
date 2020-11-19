@@ -632,7 +632,6 @@ public class GHOrganization extends GHPerson {
         return GHHooks.orgContext(this).createHook(name, config, events, active);
     }
 
-
     /**
      * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
      * binding
@@ -651,8 +650,11 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public GHHook updateHook(long id, String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
-        throws IOException {
+    public GHHook updateHook(long id,
+            String name,
+            Map<String, String> config,
+            Collection<GHEvent> events,
+            boolean active) throws IOException {
         return GHHooks.orgContext(this).updateHook(id, name, config, events, active);
     }
 

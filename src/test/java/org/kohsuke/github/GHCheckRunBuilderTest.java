@@ -26,17 +26,22 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.containsString;
 
 @SuppressWarnings("deprecation") // preview
-public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
+public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
+
+    protected GitHub getInstallationGithub() throws IOException {
+        return getAppInstallationWithTokenApp3().getRoot();
+    }
 
     @Test
     public void createCheckRun() throws Exception {
-        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
-                .createCheckRun("foo", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("foo", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withStatus(GHCheckRun.Status.COMPLETED)
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withDetailsURL("http://nowhere.net/stuff")
@@ -55,7 +60,7 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
                 .create();
         assertEquals("completed", checkRun.getStatus());
         assertEquals(1, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(546384586, checkRun.getId());
+        assertEquals(1424883286, checkRun.getId());
     }
 
     @Test
@@ -65,8 +70,8 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
             output.add(
                     new GHCheckRunBuilder.Annotation("stuff.txt", 1, GHCheckRun.AnnotationLevel.NOTICE, "hello #" + i));
         }
-        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
-                .createCheckRun("big", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("big", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .add(output)
                 .create();
@@ -74,37 +79,37 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
         assertEquals("Big Run", checkRun.getOutput().getTitle());
         assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(546384622, checkRun.getId());
+        assertEquals(1424883599, checkRun.getId());
     }
 
     @Test
     public void createCheckRunNoAnnotations() throws Exception {
-        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
-                .createCheckRun("quick", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("quick", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withConclusion(GHCheckRun.Conclusion.NEUTRAL)
                 .add(new GHCheckRunBuilder.Output("Quick note", "nothing more to see here"))
                 .create();
         assertEquals("completed", checkRun.getStatus());
         assertEquals(0, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(546384705, checkRun.getId());
+        assertEquals(1424883957, checkRun.getId());
     }
 
     @Test
     public void createPendingCheckRun() throws Exception {
-        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
-                .createCheckRun("outstanding", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withStatus(GHCheckRun.Status.IN_PROGRESS)
                 .create();
         assertEquals("in_progress", checkRun.getStatus());
         assertNull(checkRun.getConclusion());
-        assertEquals(546469053, checkRun.getId());
+        assertEquals(1424883451, checkRun.getId());
     }
 
     @Test
     public void createCheckRunErrMissingConclusion() throws Exception {
         try {
-            gitHub.getRepository("jglick/github-api-test")
-                    .createCheckRun("outstanding", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+            getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                    .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                     .withStatus(GHCheckRun.Status.COMPLETED)
                     .create();
             fail("should have been rejected");
@@ -116,8 +121,8 @@ public class GHCheckRunBuilderTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void updateCheckRun() throws Exception {
-        GHCheckRun checkRun = gitHub.getRepository("jglick/github-api-test")
-                .createCheckRun("foo", "4a929d464a2fae7ee899ce603250f7dab304bc4b")
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("foo", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withStatus(GHCheckRun.Status.IN_PROGRESS)
                 .withStartedAt(new Date(999_999_000))
                 .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")

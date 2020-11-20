@@ -510,7 +510,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .with("body", body)
                 .with("commit_id", sha)
                 .with("path", path)
-                .with("position", position)
+                .with("line", position)
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(this);

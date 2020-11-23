@@ -55,6 +55,7 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the target url
      */
+    @Deprecated
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
         return GitHubClient.parseURL(log_url);

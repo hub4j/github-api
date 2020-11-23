@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -72,13 +71,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     // pull request reviewers
     private GHUser[] requested_reviewers;
     private GHTeam[] requested_teams;
-
-    /**
-     * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API route as
-     * opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route on this
-     * object to fill in those missing details
-     */
-    private transient boolean fetchedIssueDetails;
 
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
@@ -176,12 +168,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public Date getMergedAt() {
         return GitHubClient.parseDate(merged_at);
-    }
-
-    @Override
-    public Collection<GHLabel> getLabels() throws IOException {
-        fetchIssue();
-        return super.getLabels();
     }
 
     @Override
@@ -662,10 +648,4 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         MERGE, SQUASH, REBASE
     }
 
-    private void fetchIssue() throws IOException {
-        if (!fetchedIssueDetails) {
-            root.createRequest().withUrlPath(getIssuesApiRoute()).fetchInto(this);
-            fetchedIssueDetails = true;
-        }
-    }
 }

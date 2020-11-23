@@ -1793,6 +1793,20 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists all comments on a specific commit.
+     *
+     * @param commitSha
+     *            the hash of the commit
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCommitComment> listCommitComments(String commitSha) {
+        return root.createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/comments", getOwnerName(), name, commitSha))
+                .toIterable(GHCommitComment[].class, item -> item.wrap(this));
+    }
+
+    /**
      * Gets the basic license details for the repository.
      * <p>
      *

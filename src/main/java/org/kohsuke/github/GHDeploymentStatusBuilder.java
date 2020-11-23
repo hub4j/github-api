@@ -44,11 +44,14 @@ public class GHDeploymentStatusBuilder {
      * Add an inactive status to all prior non-transient, non-production environment deployments with the same
      * repository and environment name as the created status's deployment.
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @param autoInactive
      *            Add inactive status flag
      *
      * @return the gh deployment status builder
      */
+    @Deprecated
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
@@ -71,11 +74,14 @@ public class GHDeploymentStatusBuilder {
     /**
      * Name for the target deployment environment, which can be changed when setting a deploy status.
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @param environment
      *            the environment name
      *
      * @return the gh deployment status builder
      */
+    @Deprecated
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
         this.builder.with("environment", environment);
@@ -85,11 +91,14 @@ public class GHDeploymentStatusBuilder {
     /**
      * The URL for accessing the environment
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @param environmentUrl
      *            the environment url
      *
      * @return the gh deployment status builder
      */
+    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
         this.builder.with("environment_url", environmentUrl);
@@ -101,11 +110,14 @@ public class GHDeploymentStatusBuilder {
      * <p>
      * This method replaces {@link #targetUrl(String) targetUrl}.
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @param logUrl
      *            the deployment output url
      *
      * @return the gh deployment status builder
      */
+    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);

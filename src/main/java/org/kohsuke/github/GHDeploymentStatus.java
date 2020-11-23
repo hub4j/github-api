@@ -51,10 +51,13 @@ public class GHDeploymentStatus extends GHObject {
      * <p>
      * This method replaces {@link #getTargetUrl() getTargetUrl}}.
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @return the target url
      */
+    @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
-        return GitHubClient.parseURL(target_url);
+        return GitHubClient.parseURL(log_url);
     }
 
     /**
@@ -69,8 +72,12 @@ public class GHDeploymentStatus extends GHObject {
     /**
      * Gets deployment environment url.
      *
+     * @deprecated until preview feature has graduated to stable
+     *
      * @return the deployment environment url
      */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
         return GitHubClient.parseURL(environment_url);
     }

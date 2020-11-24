@@ -1,0 +1,46 @@
+{
+  "id": "a9b45df4-a52a-4ad4-916e-e199f8b0a56e",
+  "name": "repos_hub4j-test-org_test-checks_check-runs",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-checks/check-runs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"outstanding\",\"head_sha\":\"89a9ae301e35e667756034fdc933b1fc94f63fc1\",\"status\":\"completed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 422,
+    "body": "{\"message\":\"Invalid request.\\n\\nNo subschema in \\\"anyOf\\\" matched.\\n\\\"conclusion\\\" wasn't supplied.\\ncompleted is not a member of [\\\"queued\\\", \\\"in_progress\\\"].\",\"documentation_url\":\"https://docs.github.com/rest/reference/checks#create-a-check-run\"}",
+    "headers": {
+      "Date": "Thu, 19 Nov 2020 15:00:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "422 Unprocessable Entity",
+      "X-GitHub-Media-Type": "github.v3; param=antiope-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4832",
+      "X-RateLimit-Reset": "1605800044",
+      "X-RateLimit-Used": "168",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "FFDE:DF5C:3DF6B:4CFDC:5FB68889"
+    }
+  },
+  "uuid": "a9b45df4-a52a-4ad4-916e-e199f8b0a56e",
+  "persistent": true,
+  "insertionIndex": 5
+}

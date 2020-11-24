@@ -1959,6 +1959,19 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Updates an existing check run.
+     *
+     * @param checkId
+     *            the existing checkId
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview
+    @Deprecated
+    public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
+        return new GHCheckRunBuilder(this, checkId);
+    }
+
+    /**
      * Lists repository events.
      *
      * @return the paged iterable

@@ -360,6 +360,7 @@ public class GHEventPayload {
         private int number;
         private GHPullRequest pullRequest;
         private GHLabel label;
+        private GHPullRequestChanges changes;
 
         /**
          * Gets number.
@@ -387,6 +388,15 @@ public class GHEventPayload {
          */
         public GHLabel getLabel() {
             return label;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHPullRequestChanges getChanges() {
+            return changes;
         }
 
         @Override

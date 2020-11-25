@@ -32,5 +32,7 @@
   "created_at": "2019-10-30T00:03:34Z",
   "updated_at": "2019-10-30T00:03:34Z",
   "statuses_url": "https://api.github.com/repos/hub4j-test-org/github-api/deployments/178653229/statuses",
-  "repository_url": "https://api.github.com/repos/hub4j-test-org/github-api"
+  "repository_url": "https://api.github.com/repos/hub4j-test-org/github-api",
+  "transient_environment": true,
+  "production_environment": false
 }

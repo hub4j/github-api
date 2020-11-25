@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+        "equalTo": "application/vnd.github.ant-man-preview+json, application/vnd.github.flash-preview+json"
       }
     }
   },

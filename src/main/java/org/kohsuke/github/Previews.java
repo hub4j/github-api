@@ -16,6 +16,13 @@ class Previews {
     static final String ANTIOPE = "application/vnd.github.antiope-preview+json";
 
     /**
+     * Enhanced Deployments
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#enhanced-deployments">GitHub API Previews</a>
+     */
+    static final String ANT_MAN = "application/vnd.github.ant-man-preview+json";
+
+    /**
      * Create repository from template repository
      *
      * @see <a href="https://developer.github.com/v3/previews/#create-and-use-repository-templates">GitHub API
@@ -29,6 +36,13 @@ class Previews {
      * @see <a href="https://developer.github.com/v3/previews/#commit-search">GitHub API Previews</a>
      */
     static final String CLOAK = "application/vnd.github.cloak-preview+json";
+
+    /**
+     * New deployment statuses and support for updating deployment status environment
+     *
+     * @see <a href="https://developer.github.com/v3/previews/#deployment-statuses">GitHub API Previews</a>
+     */
+    static final String FLASH = "application/vnd.github.flash-preview+json";
 
     /**
      * Owners of GitHub Apps can now uninstall an app using the Apps API

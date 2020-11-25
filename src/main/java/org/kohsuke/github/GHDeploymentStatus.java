@@ -13,14 +13,17 @@ public class GHDeploymentStatus extends GHObject {
     protected String state;
     protected String description;
     protected String target_url;
+    protected String log_url;
     protected String deployment_url;
     protected String repository_url;
+    protected String environment_url;
 
     /**
      * Wrap gh deployment status.
      *
      * @param owner
      *            the owner
+     *
      * @return the gh deployment status
      */
     public GHDeploymentStatus wrap(GHRepository owner) {
@@ -34,10 +37,28 @@ public class GHDeploymentStatus extends GHObject {
     /**
      * Gets target url.
      *
+     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
+     *
      * @return the target url
      */
+    @Deprecated
     public URL getTargetUrl() {
         return GitHubClient.parseURL(target_url);
+    }
+
+    /**
+     * Gets target url.
+     * <p>
+     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return the target url
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public URL getLogUrl() {
+        return GitHubClient.parseURL(log_url);
     }
 
     /**
@@ -47,6 +68,19 @@ public class GHDeploymentStatus extends GHObject {
      */
     public URL getDeploymentUrl() {
         return GitHubClient.parseURL(deployment_url);
+    }
+
+    /**
+     * Gets deployment environment url.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return the deployment environment url
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public URL getEnvironmentUrl() {
+        return GitHubClient.parseURL(environment_url);
     }
 
     /**

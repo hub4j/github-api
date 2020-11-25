@@ -23,6 +23,9 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertEquals("master", deployment.getRef());
         assertEquals("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353", deployment.getSha());
         assertEquals("deploy", deployment.getTask());
+        assertEquals("production", deployment.getOriginalEnvironment());
+        assertEquals(false, deployment.isProductionEnvironment());
+        assertEquals(true, deployment.isTransientEnvironment());
     }
 
     @Test
@@ -41,6 +44,9 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertEquals("two", payload.get("custom2"));
         assertEquals(Arrays.asList("3", 3, "three"), payload.get("custom3"));
         assertNull(payload.get("custom4"));
+        assertEquals("production", deployment.getOriginalEnvironment());
+        assertEquals(false, deployment.isProductionEnvironment());
+        assertEquals(true, deployment.isTransientEnvironment());
     }
 
     protected GHRepository getRepository() throws IOException {

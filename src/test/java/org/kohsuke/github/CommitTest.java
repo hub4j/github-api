@@ -120,4 +120,13 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                     commit.getCommitShortInfo().getVerification().getPayload());
         }
     }
+
+    @Test // issue 883
+    public void commitDateNotNull() throws Exception {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = repo.getCommit("ed4f9c8176866977677c99ac9668a8ce10231bc8");
+
+        assertNotNull(commit.getCommitShortInfo().getAuthoredDate());
+        assertNotNull(commit.getCommitShortInfo().getAuthor().getDate());
+    }
 }

@@ -1,0 +1,48 @@
+{
+  "id": "58ab9e92-a0cc-465f-9c04-61b15729cd30",
+  "name": "repos_hub4j_github-api_commits_ed4f9c8176866977677c99ac9668a8ce10231bc8",
+  "request": {
+    "url": "/repos/hub4j/github-api/commits/ed4f9c8176866977677c99ac9668a8ce10231bc8",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j_github-api_commits_ed4f9c8176866977677c99ac9668a8ce10231bc8-4.json",
+    "headers": {
+      "Date": "Sat, 28 Nov 2020 06:57:53 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"4fbc6c7518df46925561f8fa37edf044e9482be4b916416e82991493110d6001\"",
+      "Last-Modified": "Wed, 25 Nov 2020 14:37:36 GMT",
+      "X-OAuth-Scopes": "repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4943",
+      "X-RateLimit-Reset": "1606547736",
+      "X-RateLimit-Used": "57",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CF73:2B8A:A8D9A:E0943:5FC1F4F1"
+    }
+  },
+  "uuid": "58ab9e92-a0cc-465f-9c04-61b15729cd30",
+  "persistent": true,
+  "insertionIndex": 4
+}

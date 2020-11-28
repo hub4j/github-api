@@ -52,7 +52,7 @@ public class GitUser {
     /**
      * Gets date.
      *
-     * @return This field doesn't appear to be consistently available in all the situations where this class is used.
+     * @return Commit Date.
      */
     public Date getDate() {
         return GitHubClient.parseDate(date);

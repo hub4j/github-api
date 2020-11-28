@@ -101,16 +101,18 @@ public class GHRepository extends GHObject {
 
     private String pushed_at;
 
-    private Map<Integer, GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
+    private Map<Integer, GHMilestone> milestones = new WeakHashMap<>();
 
     private String default_branch, language;
 
-    private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
+    private Map<String, GHCommit> commits = new WeakHashMap<>();
 
     @SkipFromToString
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
+
+    private Enum<GHVisibility> visibility;
 
     private Boolean isTemplate;
 
@@ -2846,6 +2848,24 @@ public class GHRepository extends GHObject {
         return root.createRequest().withUrlPath(getApiTailUrl("/traffic/clones")).fetch(GHRepositoryCloneTraffic.class);
     }
 
+    @Deprecated
+    @Preview(NEBULA)
+    public GHVisibility getVisibility() {
+        if (visibility == null) {
+            try {
+                populate();
+            } catch (IOException e) {
+                // Convert this to a runtime exception to avoid messy method signature
+                throw new GHException("Could not populate the visibility setting of the repository", e);
+            }
+
+            // if this somehow is not populated, set it to a default
+            visibility = GHVisibility.PUBLIC;
+        }
+
+        return (GHVisibility) visibility;
+    }
+
     @Override
     public int hashCode() {
         return ("Repository:" + getOwnerName() + ":" + name).hashCode();
@@ -2982,10 +3002,17 @@ public class GHRepository extends GHObject {
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
             root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest()
+                    .withPreview(BAPTISTE)
+                    .withPreview(NEBULA)
+                    .setRawUrlPath(url.toString())
+                    .fetchInto(this)
+                    .wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
                 root.createRequest()
                         .withPreview(BAPTISTE)
+                        .withPreview(NEBULA)
                         .withUrlPath("/repos/" + full_name)
                         .fetchInto(this)
                         .wrap(root);

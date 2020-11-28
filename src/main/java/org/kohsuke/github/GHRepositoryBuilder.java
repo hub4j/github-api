@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import static org.kohsuke.github.Previews.BAPTISTE;
+import static org.kohsuke.github.Previews.NEBULA;
 
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
@@ -218,6 +219,25 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     public S isTemplate(boolean enabled) throws IOException {
         requester.withPreview(BAPTISTE);
         return with("is_template", enabled);
+    }
+
+    /**
+     * Specify Repository's Visibility
+     *
+     * @param visibility
+     *            org.kohsuke.github.GHVisibility PUBLIC, PRIVATE, INTERNAL
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    @Deprecated
+    @Preview(NEBULA)
+    public S visibility(GHVisibility visibility) throws IOException {
+        requester.withPreview(NEBULA);
+        return with("visibility", visibility);
     }
 
     @Override

@@ -469,7 +469,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.260</version>
+      <version>1.261</version>
       <scope>test</scope>
     </dependency>
     <dependency>

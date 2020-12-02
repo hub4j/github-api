@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -647,13 +646,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore("Data not cached")
     public void listCollaboratorsFiltered() throws Exception {
         GHRepository repo = getRepository();
         List<GHUser> allCollaborators = repo.listCollaborators().toList();
         List<GHUser> filteredCollaborators = repo.listCollaborators(GHRepository.CollaboratorAffiliation.OUTSIDE)
                 .toList();
-        assertThat(allCollaborators.size(), greaterThan(filteredCollaborators.size()));
+        assertThat(filteredCollaborators.size(), lessThan(allCollaborators.size()));
     }
 
     @Test

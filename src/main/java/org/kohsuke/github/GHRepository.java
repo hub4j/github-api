@@ -834,7 +834,7 @@ public class GHRepository extends GHObject {
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
-        return new GHPersonSet<GHUser>(listCollaborators(CollaboratorAffiliation.ALL).toList());
+        return new GHPersonSet<GHUser>(listCollaborators().toList());
     }
 
     /**
@@ -845,7 +845,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
-        return listCollaborators(CollaboratorAffiliation.ALL);
+        return listUsers("collaborators");
     }
 
     /**
@@ -899,7 +899,15 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Set<String> getCollaboratorNames() throws IOException {
-        return getCollaboratorNames(CollaboratorAffiliation.ALL);
+        Set<String> r = new HashSet<>();
+        // no initializer - we just want to the logins
+        PagedIterable<GHUser> users = root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null);
+        for (GHUser u : users.toArray()) {
+            r.add(u.login);
+        }
+        return r;
     }
 
     /**
@@ -2129,15 +2137,15 @@ public class GHRepository extends GHObject {
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
-        Map<String, Object> defaultArgs = Collections.EMPTY_MAP;
-        return listUsers(suffix, defaultArgs);
+        return listUsers(root.createRequest(), suffix);
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix, Map<String, Object> args) {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(suffix))
-                .with(args)
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+        return listUsers(root.createRequest().with(args), suffix);
+    }
+
+    private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
+        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**

@@ -858,9 +858,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHUser> listCollaborators(CollaboratorAffiliation affiliation) throws IOException {
-        Map<String, Object> args = new HashMap<>();
-        args.put("affiliation", affiliation.toString().toLowerCase());
-        return listUsers("collaborators", args);
+        return listUsers(root.createRequest().with("affiliation", affiliation), "collaborators");
     }
 
     /**
@@ -925,7 +923,7 @@ public class GHRepository extends GHObject {
         // no initializer - we just want to the logins
         PagedIterable<GHUser> users = root.createRequest()
                 .withUrlPath(getApiTailUrl("collaborators"))
-                .with("affiliation", affiliation.toString().toLowerCase())
+                .with("affiliation", affiliation)
                 .toIterable(GHUser[].class, null);
         for (GHUser u : users.toArray()) {
             r.add(u.login);
@@ -2138,10 +2136,6 @@ public class GHRepository extends GHObject {
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
         return listUsers(root.createRequest(), suffix);
-    }
-
-    private PagedIterable<GHUser> listUsers(final String suffix, Map<String, Object> args) {
-        return listUsers(root.createRequest().with(args), suffix);
     }
 
     private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {

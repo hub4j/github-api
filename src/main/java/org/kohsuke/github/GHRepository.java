@@ -819,6 +819,13 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Affiliation of a repository collaborator
+     */
+    public enum CollaboratorAffiliation {
+        ALL, DIRECT, OUTSIDE
+    }
+
+    /**
      * Gets the collaborators on this repository. This set always appear to include the owner.
      *
      * @return the collaborators
@@ -839,6 +846,19 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
         return listUsers("collaborators");
+    }
+
+    /**
+     * Lists up the collaborators on this repository.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return Users paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listCollaborators(CollaboratorAffiliation affiliation) throws IOException {
+        return listUsers(root.createRequest().with("affiliation", affiliation), "collaborators");
     }
 
     /**
@@ -881,6 +901,29 @@ public class GHRepository extends GHObject {
         // no initializer - we just want to the logins
         PagedIterable<GHUser> users = root.createRequest()
                 .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null);
+        for (GHUser u : users.toArray()) {
+            r.add(u.login);
+        }
+        return r;
+    }
+
+    /**
+     * Gets the names of the collaborators on this repository. This method deviates from the principle of this library
+     * but it works a lot faster than {@link #getCollaborators()}.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return the collaborator names
+     * @throws IOException
+     *             the io exception
+     */
+    public Set<String> getCollaboratorNames(CollaboratorAffiliation affiliation) throws IOException {
+        Set<String> r = new HashSet<>();
+        // no initializer - we just want to the logins
+        PagedIterable<GHUser> users = root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .with("affiliation", affiliation)
                 .toIterable(GHUser[].class, null);
         for (GHUser u : users.toArray()) {
             r.add(u.login);
@@ -2092,9 +2135,11 @@ public class GHRepository extends GHObject {
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(suffix))
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+        return listUsers(root.createRequest(), suffix);
+    }
+
+    private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
+        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**

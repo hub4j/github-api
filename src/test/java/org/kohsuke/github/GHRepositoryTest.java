@@ -646,6 +646,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void listCollaboratorsFiltered() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHUser> allCollaborators = repo.listCollaborators().toList();
+        List<GHUser> filteredCollaborators = repo.listCollaborators(GHRepository.CollaboratorAffiliation.OUTSIDE)
+                .toList();
+        assertThat(filteredCollaborators.size(), lessThan(allCollaborators.size()));
+    }
+
+    @Test
     public void getCheckRuns() throws Exception {
         final int expectedCount = 8;
         // Use github-api repository as it has checks set up

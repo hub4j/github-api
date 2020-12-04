@@ -14,6 +14,10 @@ Example:
 
 This the default behavior.
 
+Example for a single test case:
+
+`mvn install -Dtest=WireMockStatusReporterTest#user_whenProxying_AuthCorrectlyConfigured`
+
 
 ### Setting up credential
 

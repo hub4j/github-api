@@ -162,6 +162,53 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testUpdateRepository() throws Exception {
+        String homepage = "https://github-api.kohsuke.org/apidocs/index.html";
+        String description = "A test repository for update testing via the github-api project";
+
+        GHRepository repo = getTempRepository();
+        GHRepository.Updater builder = repo.updateRepository();
+
+        // one merge option is always required
+        GHRepository updated = builder.allowRebaseMerge(false)
+                .allowSquashMerge(false)
+                .deleteBranchOnMerge(true)
+                .description(description)
+                .downloads(false)
+                .downloads(false)
+                .homepage(homepage)
+                .issues(false)
+                .private_(true)
+                .projects(false)
+                .wiki(false)
+                .done();
+
+        assertTrue(updated.isAllowMergeCommit());
+        assertFalse(updated.isAllowRebaseMerge());
+        assertFalse(updated.isAllowSquashMerge());
+        assertTrue(updated.isDeleteBranchOnMerge());
+        assertTrue(updated.isPrivate());
+        assertFalse(updated.hasDownloads());
+        assertFalse(updated.hasIssues());
+        assertFalse(updated.hasProjects());
+        assertFalse(updated.hasWiki());
+
+        assertEquals(homepage, updated.getHomepage());
+        assertEquals(description, updated.getDescription());
+
+        // test the other merge option and making the repo public again
+        GHRepository redux = updated.updateRepository()
+                .allowMergeCommit(false)
+                .allowRebaseMerge(true)
+                .private_(false)
+                .done();
+
+        assertFalse(redux.isAllowMergeCommit());
+        assertTrue(redux.isAllowRebaseMerge());
+        assertFalse(redux.isPrivate());
+    }
+
+    @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("hub4j").getRepository("github-api");
         int i = 0;

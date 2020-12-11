@@ -1,0 +1,53 @@
+{
+  "id": "9e2ac66d-1299-4ca0-aac3-28cc6d0d9218",
+  "name": "repos_jgangemi_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/jgangemi/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"has_projects\":false,\"allow_squash_merge\":false,\"private\":true,\"has_downloads\":false,\"has_wiki\":false,\"name\":\"temp-testUpdateRepository\",\"description\":\"A test repository for update testing via the github-api project\",\"delete_branch_on_merge\":true,\"allow_rebase_merge\":false,\"has_issues\":false,\"homepage\":\"https://github-api.kohsuke.org/apidocs/index.html\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_jgangemi_temp-testupdaterepository-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 08 Sep 2020 21:33:13 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"21a7d0185465ab055b99b12716d6f532\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4969",
+      "X-RateLimit-Reset": "1599602533",
+      "X-RateLimit-Used": "31",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D468:44C1:2169EDC:49A187D:5F57F898"
+    }
+  },
+  "uuid": "9e2ac66d-1299-4ca0-aac3-28cc6d0d9218",
+  "persistent": true,
+  "insertionIndex": 3
+}

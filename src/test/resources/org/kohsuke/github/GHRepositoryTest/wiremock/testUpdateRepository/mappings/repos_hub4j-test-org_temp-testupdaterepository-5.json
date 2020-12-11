@@ -1,0 +1,47 @@
+{
+  "id": "4e493dd1-561c-4712-a5df-bb94c66d1bd0",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Dec 2020 15:58:16 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"555ff498caefeffe418a91a6bdce77b8d258e2b9611b61d781f7cf09d55e6ef0\"",
+      "Last-Modified": "Fri, 11 Dec 2020 15:58:15 GMT",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4957",
+      "X-RateLimit-Reset": "1607705854",
+      "X-RateLimit-Used": "43",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DE14:0E9A:25E1B:54443:5FD39718"
+    }
+  },
+  "uuid": "4e493dd1-561c-4712-a5df-bb94c66d1bd0",
+  "persistent": true,
+  "insertionIndex": 5
+}

@@ -1,0 +1,53 @@
+{
+  "id": "eaae6715-f563-4ef2-ae65-ed37ffa99a01",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"has_projects\":false,\"allow_squash_merge\":false,\"private\":true,\"has_downloads\":false,\"has_wiki\":false,\"description\":\"A test repository for update testing via the github-api project\",\"delete_branch_on_merge\":true,\"allow_rebase_merge\":false,\"has_issues\":false,\"homepage\":\"https://github-api.kohsuke.org/apidocs/index.html\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-6.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Dec 2020 15:58:17 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"1597604183fb9f89ca861ee6dd048456b9fd231c7a63468c3ba2b3816eefbb02\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4956",
+      "X-RateLimit-Reset": "1607705854",
+      "X-RateLimit-Used": "44",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DE14:0E9A:25E2B:5445A:5FD39718"
+    }
+  },
+  "uuid": "eaae6715-f563-4ef2-ae65-ed37ffa99a01",
+  "persistent": true,
+  "insertionIndex": 6
+}

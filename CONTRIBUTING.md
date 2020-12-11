@@ -37,12 +37,16 @@ Whenever you run tests with `-Dtest.github.useProxy`, they will try to get data 
 ### Writing a new test
 
 Once you have credentials setup, you add new test classes and test methods as you would normally.
-Keep `useProxy` enabled and iterate on your tests as needed. Remember, while proxying your tests are interacting with GitHub - you will need to clean up your state between runs.
 
-When you are ready to create a snapshot of your test data,
-run your test with `test.github.takeSnapshot` ("-Dtest.github.takeSnapshot" as a Java VM option).  For example:
+Keep `useProxy` enabled and iterate on your tests as needed. Remember, while proxying your tests are interacting with GitHub - you will need
+to clean up your state between runs. The following additional system property to enable testing using your personal github account.
 
-    `mvn install -Dtest.github.takeSnapshot -Dtest=YourTestClassName`
+    `mvn install -Dtest.github.org=false -Dtest=YourTestClassName`
+
+When you are ready to create a snapshot of your test data, run your test with `test.github.takeSnapshot`  ("-Dtest.github.takeSnapshot" as 
+a Java VM option). For example:
+
+    `mvn install -Dtest.github.takeSnapshot -Dtest.github.org=false -Dtest=YourTestClassName`
 
 The above command would create snapshot WireMock data files under the path `src/test/resources/org/kohsuhke/github/YourTestClassName/wiremock`.
 Each method would get a separate director that would hold the data files for that test method.

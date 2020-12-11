@@ -51,6 +51,9 @@ abstract class AbstractBuilder<R, S> {
     @Nonnull
     protected final Requester requester;
 
+    @Nonnull
+    protected final GitHub root;
+
     // TODO: Not sure how update-in-place behavior should be controlled
     // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of
     // some
@@ -75,6 +78,7 @@ abstract class AbstractBuilder<R, S> {
             @Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
+        this.root = root;
         this.requester = root.createRequest();
         this.returnType = finalReturnType;
         this.commitChangesImmediately = returnType.equals(intermediateReturnType);

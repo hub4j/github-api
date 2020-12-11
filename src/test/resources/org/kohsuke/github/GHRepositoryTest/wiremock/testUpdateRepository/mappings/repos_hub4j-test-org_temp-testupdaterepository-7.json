@@ -1,0 +1,53 @@
+{
+  "id": "ff129618-2aad-41bb-8ac6-285401903b38",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"allow_merge_commit\":false,\"allow_rebase_merge\":true}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Dec 2020 15:58:17 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"5f771e7de1a2dff0c4baba3e61457b26130b5081807ce1006e6545991cad20e6\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4955",
+      "X-RateLimit-Reset": "1607705854",
+      "X-RateLimit-Used": "45",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DE14:0E9A:25E65:544E3:5FD39719"
+    }
+  },
+  "uuid": "ff129618-2aad-41bb-8ac6-285401903b38",
+  "persistent": true,
+  "insertionIndex": 7
+}

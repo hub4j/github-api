@@ -54,6 +54,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
+import javax.annotation.Nonnull;
+
 import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
 
@@ -1288,6 +1290,15 @@ public class GHRepository extends GHObject {
         // Generall would not update this record,
         // but do so here since this will result in any other update actions failing
         archived = true;
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     * 
+     * @return the repository updater
+     */
+    public Updater updateRepository() {
+        return new Updater(this);
     }
 
     /**
@@ -2966,6 +2977,25 @@ public class GHRepository extends GHObject {
             } else {
                 throw e;
             }
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @Preview
+    @Deprecated
+    public static class Updater extends GHRepositoryBuilder<Updater> {
+        protected Updater(@Nonnull GHRepository repository) {
+            super(Updater.class, repository.root, null);
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
+        }
+
+        @Override
+        public GHRepository done() throws IOException {
+            return super.done().wrap(this.root);
         }
     }
 }

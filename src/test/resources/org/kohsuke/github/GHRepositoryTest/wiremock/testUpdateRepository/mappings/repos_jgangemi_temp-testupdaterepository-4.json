@@ -1,0 +1,53 @@
+{
+  "id": "79c6a9fb-236d-4ebc-b8e8-71ae4d5ded63",
+  "name": "repos_jgangemi_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/jgangemi/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"allow_merge_commit\":false,\"name\":\"temp-testUpdateRepository\",\"allow_rebase_merge\":true}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_jgangemi_temp-testupdaterepository-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 08 Sep 2020 21:33:14 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"aa218ddb60df43d54fc89e9f88db8381\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4968",
+      "X-RateLimit-Reset": "1599602533",
+      "X-RateLimit-Used": "32",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D468:44C1:2169F5B:49A195A:5F57F899"
+    }
+  },
+  "uuid": "79c6a9fb-236d-4ebc-b8e8-71ae4d5ded63",
+  "persistent": true,
+  "insertionIndex": 4
+}

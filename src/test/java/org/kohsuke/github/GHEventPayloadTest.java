@@ -471,6 +471,14 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getState(), is(GHCommitState.SUCCESS));
         assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        assertNull(event.getTargetUrl());
+    }
+
+    @Test
+    public void status2() throws Exception {
+        GHEventPayload.Status event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
+        assertThat(event.getTargetUrl(), is("https://www.wikipedia.org/"));
     }
 
     // TODO implement support classes and write test

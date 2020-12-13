@@ -1216,6 +1216,7 @@ public class GHEventPayload {
         private String description;
         private GHCommitState state;
         private GHCommit commit;
+        private String targetUrl;
 
         /**
          * Gets the status content.
@@ -1224,6 +1225,15 @@ public class GHEventPayload {
          */
         public String getContext() {
             return context;
+        }
+
+        /**
+         * The optional link added to the status.
+         *
+         * @return a url
+         */
+        public String getTargetUrl() {
+            return targetUrl;
         }
 
         /**

@@ -1013,7 +1013,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHApp getApp() throws IOException {
         return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
@@ -1108,7 +1108,7 @@ public class GitHub {
      *
      * @return the gh commit search builder
      */
-    @Preview
+    @Preview(Previews.CLOAK)
     @Deprecated
     public GHCommitSearchBuilder searchCommits() {
         return new GHCommitSearchBuilder(this);

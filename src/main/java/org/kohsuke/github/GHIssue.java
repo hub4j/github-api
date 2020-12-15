@@ -448,7 +448,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root.createRequest()
@@ -460,7 +460,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .wrap(root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return root.createRequest()

@@ -437,6 +437,10 @@ class GitHubRequest {
             return withHeader("Accept", name);
         }
 
+        public B withPreview(Previews preview) {
+            return withPreview(preview.mediaType());
+        }
+
         /**
          * With requester.
          *

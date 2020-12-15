@@ -130,7 +130,7 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Updater}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Updater update() {
         return new GHDiscussion.Updater(this);
@@ -141,7 +141,7 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Setter}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Setter set() {
         return new GHDiscussion.Setter(this);

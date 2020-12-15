@@ -124,7 +124,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return the paged iterable
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
@@ -322,7 +322,7 @@ public class GHAppInstallation extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
-    @Preview
+    @Preview(GAMBIT)
     @Deprecated
     public void deleteInstallation() throws IOException {
         root.createRequest()

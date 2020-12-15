@@ -89,7 +89,7 @@ public class GHBranch {
      *
      * @return API URL that deals with the protection of this branch.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public URL getProtectionUrl() {
         return GitHubClient.parseURL(protection_url);
@@ -102,6 +102,8 @@ public class GHBranch {
      * @throws IOException
      *             the io exception
      */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
     public GHBranchProtection getProtection() throws IOException {
         return root.createRequest()
                 .withPreview(Previews.LUKE_CAGE)
@@ -135,7 +137,7 @@ public class GHBranch {
      * @return GHBranchProtectionBuilder for enabling protection
      * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);

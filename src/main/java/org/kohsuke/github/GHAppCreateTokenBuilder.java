@@ -78,7 +78,7 @@ public class GHAppCreateTokenBuilder {
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST")

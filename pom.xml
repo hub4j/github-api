@@ -34,7 +34,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.0.4</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.1.2</spotbugs.version>
+    <spotbugs.version>4.1.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.4.1</okhttp3.version>
@@ -261,7 +261,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.bcel</groupId>
@@ -543,7 +543,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.6.0</version>
+      <version>3.6.28</version>
       <scope>test</scope>
     </dependency>
     <dependency>

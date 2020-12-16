@@ -708,7 +708,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     @Deprecated
-    @Preview
+    @Preview(BAPTISTE)
     public boolean isTemplate() {
         // isTemplate is still in preview, we do not want to retrieve it unless needed.
         if (isTemplate == null) {
@@ -1925,7 +1925,7 @@ public class GHRepository extends GHObject {
      * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
         GitHubRequest request = root.createRequest()
@@ -1999,7 +1999,7 @@ public class GHRepository extends GHObject {
      *            the commit hash
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
         return new GHCheckRunBuilder(this, name, headSHA);
@@ -2012,7 +2012,7 @@ public class GHRepository extends GHObject {
      *            the existing checkId
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview
+    @Preview(BAPTISTE)
     @Deprecated
     public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
         return new GHCheckRunBuilder(this, checkId);
@@ -2959,10 +2959,14 @@ public class GHRepository extends GHObject {
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root.createRequest().withPreview(BAPTISE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
-                root.createRequest().withPreview(BAPTISE).withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
+                root.createRequest()
+                        .withPreview(BAPTISTE)
+                        .withUrlPath("/repos/" + full_name)
+                        .fetchInto(this)
+                        .wrap(root);
             } else {
                 throw e;
             }

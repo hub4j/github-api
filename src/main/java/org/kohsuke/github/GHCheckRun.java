@@ -298,7 +298,7 @@ public class GHCheckRun extends GHObject {
      * 
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview
+    @Preview(Previews.ANTIOPE)
     @Deprecated
     public @NonNull GHCheckRunBuilder update() {
         return new GHCheckRunBuilder(owner, getId());

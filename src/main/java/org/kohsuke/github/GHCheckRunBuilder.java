@@ -46,7 +46,7 @@ import java.util.Locale;
  * @see <a href="https://developer.github.com/v3/checks/runs/#update-a-check-run">documentation</a>
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
-@Preview
+@Preview(Previews.ANTIOPE)
 @Deprecated
 public final class GHCheckRunBuilder {
 

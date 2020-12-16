@@ -60,7 +60,7 @@ public class GHRepositoryStatistics {
      * @throws InterruptedException
      *             the interrupted exception
      */
-    @Preview
+    @BetaApi
     @Deprecated
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = { "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" }, justification = "JSON API")

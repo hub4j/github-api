@@ -78,7 +78,7 @@ public class GHBranch {
      *
      * @return true if the push to this branch is restricted via branch protection.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public boolean isProtected() {
         return protection;

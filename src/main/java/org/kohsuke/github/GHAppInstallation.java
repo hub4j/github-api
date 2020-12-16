@@ -344,7 +344,7 @@ public class GHAppInstallation extends GHObject {
      * @return a GHAppCreateTokenBuilder instance
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
         return new GHAppCreateTokenBuilder(root,
@@ -361,7 +361,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return a GHAppCreateTokenBuilder instance
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));

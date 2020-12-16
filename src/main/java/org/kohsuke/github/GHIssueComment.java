@@ -126,7 +126,7 @@ public class GHIssueComment extends GHObject implements Reactable {
         owner.root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root.createRequest()
@@ -138,7 +138,7 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .wrap(owner.root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()

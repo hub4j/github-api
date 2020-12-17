@@ -22,7 +22,6 @@ public class GHCheckRun extends GHObject {
 
     @JsonProperty("repository")
     GHRepository owner;
-    GitHub root;
 
     private String status;
     private String conclusion;

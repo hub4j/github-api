@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     protected String sha;
     protected String ref;
     protected String task;

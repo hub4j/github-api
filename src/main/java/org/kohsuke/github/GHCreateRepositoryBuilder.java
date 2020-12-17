@@ -10,8 +10,7 @@ import static org.kohsuke.github.Previews.BAPTISTE;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCreateRepositoryBuilder {
-    private final GitHub root;
+public class GHCreateRepositoryBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private String apiUrlTail;
 

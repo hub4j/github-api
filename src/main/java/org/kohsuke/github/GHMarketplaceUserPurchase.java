@@ -10,8 +10,7 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  */
-public class GHMarketplaceUserPurchase {
-    protected GitHub root;
+public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     private String billingCycle;
     private String nextBillingDate;
     private boolean onFreeTrial;

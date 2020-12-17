@@ -20,16 +20,13 @@ import javax.annotation.Nonnull;
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */
-public class GHLabel {
+public class GHLabel extends GitHubInteractiveObject {
 
     @Nonnull
     private String url, name, color;
 
     @CheckForNull
     private String description;
-
-    @Nonnull
-    private final GitHub root;
 
     @JsonCreator
     private GHLabel(@JacksonInject @Nonnull GitHub root) {

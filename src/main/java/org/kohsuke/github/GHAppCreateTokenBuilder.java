@@ -14,8 +14,7 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-public class GHAppCreateTokenBuilder {
-    private final GitHub root;
+public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String apiUrlTail;
 

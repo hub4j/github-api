@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ import javax.annotation.Nonnull;
  */
 public class GHDiscussion extends GHObject {
 
-    @JacksonInject
-    private GitHub root;
     private GHTeam team;
     private long number;
     private String body, title, htmlUrl;

@@ -8,7 +8,6 @@ import java.net.URL;
         justification = "JSON API")
 public class GHRequestedAction extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     private String identifier;
     private String label;
     private String description;

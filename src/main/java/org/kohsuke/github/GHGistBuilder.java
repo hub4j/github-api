@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
  * @see GitHub#createGist() GitHub#createGist()
  */
 public class GHGistBuilder {
-    private final GitHub root;
     private final Requester req;
     private final LinkedHashMap<String, Object> files = new LinkedHashMap<String, Object>();
 
@@ -24,7 +23,6 @@ public class GHGistBuilder {
      *            the root
      */
     public GHGistBuilder(GitHub root) {
-        this.root = root;
         req = root.createRequest().method("POST");
     }
 

@@ -42,8 +42,6 @@ public class GitUser {
      *
      * @return GitHub username
      */
-    @Preview
-    @Deprecated
     @CheckForNull
     public String getUsername() {
         return username;

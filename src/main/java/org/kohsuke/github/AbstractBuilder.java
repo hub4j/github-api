@@ -101,7 +101,7 @@ abstract class AbstractBuilder<R, S> {
      *             if there is an I/O Exception
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public R done() throws IOException {
         R result;
@@ -131,7 +131,7 @@ abstract class AbstractBuilder<R, S> {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
@@ -152,7 +152,7 @@ abstract class AbstractBuilder<R, S> {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and

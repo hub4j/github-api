@@ -25,6 +25,6 @@ public @interface Preview {
      *
      * @return The API preview media type.
      */
-    public Previews[] value() default {};
+    public Previews[] value();
 
 }

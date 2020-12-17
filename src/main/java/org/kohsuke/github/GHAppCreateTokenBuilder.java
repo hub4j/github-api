@@ -19,7 +19,7 @@ public class GHAppCreateTokenBuilder {
     protected final Requester builder;
     private final String apiUrlTail;
 
-    @Preview
+    @BetaApi
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
         this.root = root;
@@ -27,7 +27,7 @@ public class GHAppCreateTokenBuilder {
         this.builder = root.createRequest();
     }
 
-    @Preview
+    @BetaApi
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this(root, apiUrlTail);
@@ -43,7 +43,7 @@ public class GHAppCreateTokenBuilder {
      *            Array containing the repositories Ids
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids", repositoryIds);
@@ -58,7 +58,7 @@ public class GHAppCreateTokenBuilder {
      *            Map containing the permission names and types.
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
         Map<String, String> retMap = new HashMap<>();

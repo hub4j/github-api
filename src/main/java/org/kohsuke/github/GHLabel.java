@@ -132,7 +132,7 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @BetaApi
     @Deprecated
     static Creator create(GHRepository repository) throws IOException {
         return new Creator(repository);
@@ -179,7 +179,7 @@ public class GHLabel {
      *
      * @return a {@link Updater}
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public Updater update() {
         return new Updater(this);
@@ -190,7 +190,7 @@ public class GHLabel {
      * 
      * @return a {@link Setter}
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public Setter set() {
         return new Setter(this);
@@ -227,7 +227,7 @@ public class GHLabel {
      *
      * {@link #done()} is called automatically after the property is set.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
@@ -241,7 +241,7 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to commit changes.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
@@ -255,7 +255,7 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to create the new instance.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {

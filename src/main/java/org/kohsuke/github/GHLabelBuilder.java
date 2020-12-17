@@ -38,21 +38,21 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
     }
 
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public S name(String value) throws IOException {
         return with("name", value);
     }
 
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public S color(String value) throws IOException {
         return with("color", value);
     }
 
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public S description(String value) throws IOException {
         return with("description", value);

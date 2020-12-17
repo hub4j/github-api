@@ -260,7 +260,6 @@ public class GHRelease extends GHObject {
      *             existing logic in place for backwards compatibility.
      */
     @Deprecated
-    @Preview
     public List<GHAsset> assets() {
         return assets;
     }

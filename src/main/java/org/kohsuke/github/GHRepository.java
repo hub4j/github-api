@@ -2989,7 +2989,7 @@ public class GHRepository extends GHObject {
      *
      * Consumer must call {@link #done()} to commit changes.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Updater extends GHRepositoryBuilder<Updater> {
         protected Updater(@Nonnull GHRepository repository) {

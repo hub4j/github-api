@@ -364,6 +364,10 @@
               <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
             </importOrder>
             <removeUnusedImports />
+
+            <trimTrailingWhitespace />
+            <endWithNewline />
+
           </java>
         </configuration>
       </plugin>

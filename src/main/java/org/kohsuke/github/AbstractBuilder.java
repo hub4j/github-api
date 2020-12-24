@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
  * <p>
  * Batching looks like this:
  * </p>
- * 
+ *
  * <pre>
  * update().someName(value).otherName(value).done()
  * </pre>
  * <p>
  * Single changes look like this:
  * </p>
- * 
+ *
  * <pre>
  * set().someName(value);
  * set().otherName(value);

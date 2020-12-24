@@ -187,7 +187,7 @@ public class GHLabel {
 
     /**
      * Begins a single property update.
-     * 
+     *
      * @return a {@link Setter}
      */
     @BetaApi

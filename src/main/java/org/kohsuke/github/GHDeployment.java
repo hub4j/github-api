@@ -85,7 +85,7 @@ public class GHDeployment extends GHObject {
 
     /**
      * Gets payload without assuming its type. It could be a String or a Map.
-     * 
+     *
      * @return the payload
      */
     public Object getPayloadObject() {

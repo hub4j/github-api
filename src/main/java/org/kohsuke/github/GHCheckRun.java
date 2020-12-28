@@ -295,7 +295,7 @@ public class GHCheckRun extends GHObject {
 
     /**
      * Updates this check run.
-     * 
+     *
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     @Preview(Previews.ANTIOPE)

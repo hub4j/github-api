@@ -574,7 +574,7 @@ public class GHCommit {
 
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
-     * 
+     *
      * @throws IOException
      *             on error
      */

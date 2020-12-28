@@ -181,7 +181,7 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
-     * 
+     *
      * @param slug
      *            the slug
      * @return the team by slug

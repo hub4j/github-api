@@ -38,7 +38,7 @@ public abstract class GHObject {
 
     /**
      * Called by Jackson
-     * 
+     *
      * @param responseInfo
      *            the {@link GitHubResponse.ResponseInfo} to get headers from.
      */

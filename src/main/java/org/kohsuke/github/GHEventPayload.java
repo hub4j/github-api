@@ -1220,7 +1220,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status content.
-         * 
+         *
          * @return status content
          */
         public String getContext() {
@@ -1238,7 +1238,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status description.
-         * 
+         *
          * @return status description
          */
         public String getDescription() {
@@ -1247,7 +1247,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status state.
-         * 
+         *
          * @return status state
          */
         public GHCommitState getState() {
@@ -1256,7 +1256,7 @@ public class GHEventPayload {
 
         /**
          * Sets the status stage.
-         * 
+         *
          * @param state
          *            status state
          */
@@ -1266,7 +1266,7 @@ public class GHEventPayload {
 
         /**
          * Gets the commit associated with the status event.
-         * 
+         *
          * @return commit
          */
         public GHCommit getCommit() {
@@ -1275,7 +1275,7 @@ public class GHEventPayload {
 
         /**
          * Sets the commit associated with the status event.
-         * 
+         *
          * @param commit
          *            commit
          */

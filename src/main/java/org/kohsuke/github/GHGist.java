@@ -123,7 +123,7 @@ public class GHGist extends GHObject {
 
     /**
      * Get the html url.
-     * 
+     *
      * @return the github html url
      */
     public URL getHtmlUrl() {

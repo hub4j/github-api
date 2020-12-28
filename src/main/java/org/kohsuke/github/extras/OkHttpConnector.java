@@ -49,7 +49,7 @@ public class OkHttpConnector implements HttpConnector {
 
     /**
      * package private for tests to be able to change max-age for cache.
-     * 
+     *
      * @param urlFactory
      * @param cacheMaxAge
      */

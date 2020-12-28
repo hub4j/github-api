@@ -35,14 +35,14 @@ public class PagedIterator<T> implements Iterator<T> {
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
      * the last item of the array is returned, when {@link #next()} is called again, a new page of items will be fetched
      * and iterating will continue from the first item in the new page.
-     * 
+     *
      * @see #fetch() {@link #fetch()} for details on how this field is used.
      */
     private T[] currentPage;
 
     /**
      * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
-     * 
+     *
      * @see #fetch() {@link #fetch()} for details on how this field is used.
      */
     private int nextItemIndex;

@@ -28,7 +28,7 @@ import java.util.Locale;
 
 /**
  * Permission for a user in a repository.
- * 
+ *
  * @see <a href="https://developer.github.com/v3/repos/collaborators/#review-a-users-permission-level">API</a>
  */
 class GHPermission {

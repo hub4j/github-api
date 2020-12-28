@@ -1211,7 +1211,7 @@ public class GitHub {
      * Gets an {@link ObjectWriter} that can be used to convert data objects in this library to JSON.
      *
      * If you must convert data object in this library to JSON, the {@link ObjectWriter} returned by this method is the
-     * only support way of doing so. This {@link ObjectWriter} can be used to convert any library data object to JSON
+     * only supported way of doing so. This {@link ObjectWriter} can be used to convert any library data object to JSON
      * without throwing an exception.
      *
      * WARNING: While the JSON generated is generally expected to be stable, it is not part of the API of this library

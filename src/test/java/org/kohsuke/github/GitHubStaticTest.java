@@ -240,6 +240,12 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat(readRepo.root, nullValue());
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
+        readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);
+
+        // This should never happen if the internal method isn't used
+        assertThat(readRepo.root.getConnector(), equalTo(HttpConnector.OFFLINE));
+        assertThat(readRepo.getResponseHeaderFields(), nullValue());
+
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(readRepo);
         assertThat(readRepoString, equalTo(repoString));
 

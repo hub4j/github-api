@@ -31,25 +31,37 @@ Example for a single test case:
 
     `WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: <your login>`
 
-Whenever you run tests with `-Dtest.github.useProxy`, they will try to get data from local files but will fallback to proxying to github if not found.
-
+Whenever you run tests with `-Dtest.github.useProxy`, they will try to get data from local files but will fallback to proxying to GitHub if not found.
 
 ### Writing a new test
 
 Once you have credentials setup, you add new test classes and test methods as you would normally.
 
-Keep `useProxy` enabled and iterate on your tests as needed. Remember, while proxying your tests are interacting with GitHub - you will need
-to clean up your state between runs. The following additional system property to enable testing using your personal github account.
+#### Running tests using GitHub test proxy
+
+Keep `useProxy` enabled and iterate on your tests as needed. With `useProxy` enabled your tests will interact with 
+GitHub - you will need to clean up your server-state between runs. This can be done manually to start with.
+Once your test code is somewhat stable, use `getGitHubBeforeAfter()` to get a `GitHub` instance for test setup and cleanup.
+Interactions with that `GitHub` instance will not be recorded as part of the test, keeping the test data files to a minimum. 
+
+#### Running tests against your personal GitHub user account
+
+By default, test helper methods such as `getTempRepository()` target the `hub4j-test-org` GitHub organization.
+Please request access to this org to record your tests before submitting a PR.  This helps keep the project stable and nimble.
+Until you have access (or if you don't want access), you can set the following additional system property to target 
+your personal github account.
 
     `mvn install -Dtest.github.org=false -Dtest=YourTestClassName`
+
+#### Taking a snapshot 
 
 When you are ready to create a snapshot of your test data, run your test with `test.github.takeSnapshot`  ("-Dtest.github.takeSnapshot" as 
 a Java VM option). For example:
 
     `mvn install -Dtest.github.takeSnapshot -Dtest.github.org=false -Dtest=YourTestClassName`
 
-The above command would create snapshot WireMock data files under the path `src/test/resources/org/kohsuhke/github/YourTestClassName/wiremock`.
-Each method would get a separate director that would hold the data files for that test method.
+The above command will create snapshot WireMock data files under the path `src/test/resources/org/kohsuhke/github/YourTestClassName/wiremock`.
+Each method will get a separate directory that will hold the data files for that test method.
 
 Add all files including the generated data to your commit and submit a PR.
 

@@ -184,7 +184,7 @@ public class GHLabel extends GitHubInteractiveObject {
 
     /**
      * Begins a single property update.
-     * 
+     *
      * @return a {@link Setter}
      */
     @BetaApi

@@ -235,7 +235,7 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the Twitter Username of this user, like "GitHub"
-     * 
+     *
      * @return the Twitter username
      * @throws IOException
      *             the io exception

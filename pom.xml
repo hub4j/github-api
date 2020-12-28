@@ -39,8 +39,7 @@
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.4.1</okhttp3.version>
     <okio.version>2.5.0</okio.version>
-    <formatter-maven-plugin.goal>format</formatter-maven-plugin.goal>
-    <impsort-maven-plugin.goal>sort</impsort-maven-plugin.goal>
+    <spotless-maven-plugin.goal>apply</spotless-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
     <jacoco.coverage.target.bundle.method>0.60</jacoco.coverage.target.bundle.method>
     <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
@@ -343,37 +342,34 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
-        <version>2.12.1</version>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.6.1</version>
         <executions>
           <execution>
+            <id>spotless-check</id>
+            <phase>process-sources</phase>
             <goals>
-              <goal>${formatter-maven-plugin.goal}</goal>
+              <goal>${spotless-maven-plugin.goal}</goal>
             </goals>
-            <configuration>
-              <configFile>src/main/resources/eclipse/formatter.xml</configFile>
-              <cachedir>${project.build.directory}/.cache</cachedir>
-            </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>net.revelc.code</groupId>
-        <artifactId>impsort-maven-plugin</artifactId>
-        <version>1.4.1</version>
         <configuration>
-          <groups>*,java.,javax.</groups>
-          <removeUnused>true</removeUnused>
-          <staticAfter>true</staticAfter>
+          <java>
+            <eclipse>
+              <file>${basedir}/src/build/eclipse/formatter.xml</file>
+            </eclipse>
+
+            <importOrder>
+              <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
+            </importOrder>
+            <removeUnusedImports />
+
+            <trimTrailingWhitespace />
+            <endWithNewline />
+
+          </java>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>${impsort-maven-plugin.goal}</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
@@ -595,8 +591,7 @@
         </os>
       </activation>
       <properties>
-        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+        <spotless-maven-plugin.goal>check</spotless-maven-plugin.goal>
       </properties>
     </profile>
     <profile>
@@ -621,8 +616,7 @@
     <profile>
       <id>release</id>
       <properties>
-        <formatter-maven-plugin.goal>validate</formatter-maven-plugin.goal>
-        <impsort-maven-plugin.goal>check</impsort-maven-plugin.goal>
+        <spotless-maven-plugin.goal>check</spotless-maven-plugin.goal>
       </properties>
       <build>
         <plugins>

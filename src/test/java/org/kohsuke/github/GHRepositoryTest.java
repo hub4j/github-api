@@ -55,10 +55,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void archive() throws Exception {
+        // Archive is a one-way action in the API.
+        // After taking snapshot, manual state reset is required.
         snapshotNotAllowed();
 
-        // Archive is a one-way action in the API.
-        // We do thi this one
         GHRepository repo = getRepository();
 
         assertThat(repo.isArchived(), is(false));
@@ -159,6 +159,54 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         } finally {
             repo.delete();
         }
+    }
+
+    @Test
+    public void testUpdateRepository() throws Exception {
+        String homepage = "https://github-api.kohsuke.org/apidocs/index.html";
+        String description = "A test repository for update testing via the github-api project";
+
+        GHRepository repo = getTempRepository();
+        GHRepository.Updater builder = repo.update();
+
+        // one merge option is always required
+        GHRepository updated = builder.allowRebaseMerge(false)
+                .allowSquashMerge(false)
+                .deleteBranchOnMerge(true)
+                .description(description)
+                .downloads(false)
+                .downloads(false)
+                .homepage(homepage)
+                .issues(false)
+                .private_(true)
+                .projects(false)
+                .wiki(false)
+                .done();
+
+        assertTrue(updated.isAllowMergeCommit());
+        assertFalse(updated.isAllowRebaseMerge());
+        assertFalse(updated.isAllowSquashMerge());
+        assertTrue(updated.isDeleteBranchOnMerge());
+        assertTrue(updated.isPrivate());
+        assertFalse(updated.hasDownloads());
+        assertFalse(updated.hasIssues());
+        assertFalse(updated.hasProjects());
+        assertFalse(updated.hasWiki());
+
+        assertEquals(homepage, updated.getHomepage());
+        assertEquals(description, updated.getDescription());
+
+        // test the other merge option and making the repo public again
+        GHRepository redux = updated.update().allowMergeCommit(false).allowRebaseMerge(true).private_(false).done();
+
+        assertFalse(redux.isAllowMergeCommit());
+        assertTrue(redux.isAllowRebaseMerge());
+        assertFalse(redux.isPrivate());
+
+        String updatedDescription = "updated using set()";
+        redux = redux.set().description(updatedDescription);
+
+        assertThat(redux.getDescription(), equalTo(updatedDescription));
     }
 
     @Test

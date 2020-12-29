@@ -97,7 +97,7 @@ public class GHOrganization extends GHPerson {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-        return new GHCreateRepositoryBuilder(root, "/orgs/" + login + "/repos", name);
+        return new GHCreateRepositoryBuilder(name, root, "/orgs/" + login + "/repos");
     }
 
     /**

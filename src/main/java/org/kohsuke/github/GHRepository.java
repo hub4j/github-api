@@ -54,6 +54,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
+import javax.annotation.Nonnull;
+
 import static java.util.Arrays.*;
 import static org.kohsuke.github.Previews.*;
 
@@ -1085,14 +1087,6 @@ public class GHRepository extends GHObject {
                 .send();
     }
 
-    private void edit(String key, String value) throws IOException {
-        Requester requester = root.createRequest();
-        if (!key.equals("name")) {
-            requester.with("name", name); // even when we don't change the name, we need to send it in
-        }
-        requester.with(key, value).method("PATCH").withUrlPath(getApiTailUrl("")).send();
-    }
-
     /**
      * Enables or disables the issue tracker for this repository.
      *
@@ -1102,7 +1096,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableIssueTracker(boolean v) throws IOException {
-        edit("has_issues", String.valueOf(v));
+        set().issues(v);
     }
 
     /**
@@ -1114,7 +1108,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableProjects(boolean v) throws IOException {
-        edit("has_projects", String.valueOf(v));
+        set().projects(v);
     }
 
     /**
@@ -1126,7 +1120,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableWiki(boolean v) throws IOException {
-        edit("has_wiki", String.valueOf(v));
+        set().wiki(v);
     }
 
     /**
@@ -1138,7 +1132,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableDownloads(boolean v) throws IOException {
-        edit("has_downloads", String.valueOf(v));
+        set().downloads(v);
     }
 
     /**
@@ -1150,7 +1144,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void renameTo(String name) throws IOException {
-        edit("name", name);
+        set().name(name);
     }
 
     /**
@@ -1162,7 +1156,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setDescription(String value) throws IOException {
-        edit("description", value);
+        set().description(value);
     }
 
     /**
@@ -1174,7 +1168,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setHomepage(String value) throws IOException {
-        edit("homepage", value);
+        set().homepage(value);
     }
 
     /**
@@ -1186,7 +1180,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setDefaultBranch(String value) throws IOException {
-        edit("default_branch", value);
+        set().defaultBranch(value);
     }
 
     /**
@@ -1198,7 +1192,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setPrivate(boolean value) throws IOException {
-        edit("private", Boolean.toString(value));
+        set().private_(value);
     }
 
     /**
@@ -1210,7 +1204,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowSquashMerge(boolean value) throws IOException {
-        edit("allow_squash_merge", Boolean.toString(value));
+        set().allowSquashMerge(value);
     }
 
     /**
@@ -1222,7 +1216,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowMergeCommit(boolean value) throws IOException {
-        edit("allow_merge_commit", Boolean.toString(value));
+        set().allowMergeCommit(value);
     }
 
     /**
@@ -1234,7 +1228,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowRebaseMerge(boolean value) throws IOException {
-        edit("allow_rebase_merge", Boolean.toString(value));
+        set().allowRebaseMerge(value);
     }
 
     /**
@@ -1246,7 +1240,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void deleteBranchOnMerge(boolean value) throws IOException {
-        edit("delete_branch_on_merge", Boolean.toString(value));
+        set().deleteBranchOnMerge(value);
     }
 
     /**
@@ -1283,10 +1277,28 @@ public class GHRepository extends GHObject {
      *             In case of any networking error or error from the server.
      */
     public void archive() throws IOException {
-        edit("archived", "true");
-        // Generall would not update this record,
-        // but do so here since this will result in any other update actions failing
+        set().archive();
+        // Generally would not update this record,
+        // but doing so here since this will result in any other update actions failing
         archived = true;
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Updater update() {
+        return new Updater(this);
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Setter set() {
+        return new Setter(this);
     }
 
     /**
@@ -2965,7 +2977,7 @@ public class GHRepository extends GHObject {
         final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
 
         try {
-            // IMPORTANT: the url for repository records is does not reliably point to the API url.
+            // IMPORTANT: the url for repository records does not reliably point to the API url.
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
@@ -2980,6 +2992,42 @@ public class GHRepository extends GHObject {
             } else {
                 throw e;
             }
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Updater extends GHRepositoryBuilder<Updater> {
+        protected Updater(@Nonnull GHRepository repository) {
+            super(Updater.class, repository.root, null);
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+            requester.with("name", repository.name);
+
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Setter extends GHRepositoryBuilder<GHRepository> {
+        protected Setter(@Nonnull GHRepository repository) {
+            super(GHRepository.class, repository.root, null);
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+            requester.with("name", repository.name);
+
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
     }
 }

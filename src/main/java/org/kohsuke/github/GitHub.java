@@ -845,7 +845,7 @@ public class GitHub {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-        return new GHCreateRepositoryBuilder(this, "/user/repos", name);
+        return new GHCreateRepositoryBuilder(name, this, "/user/repos");
     }
 
     /**

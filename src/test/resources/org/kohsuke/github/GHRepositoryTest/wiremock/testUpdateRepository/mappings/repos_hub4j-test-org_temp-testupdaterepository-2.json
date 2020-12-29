@@ -1,27 +1,20 @@
 {
-  "id": "e6db9030-3c2a-4417-8eb1-d1adf96e23f3",
-  "name": "repos_bitwiseman_github-api-test-rename",
+  "id": "6d758950-6c1e-477b-91f3-13c08df69806",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
   "request": {
-    "url": "/repos/bitwiseman/github-api-test-rename",
-    "method": "PATCH",
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"has_downloads\":false,\"name\":\"github-api-test-rename\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
-      }
-    ]
+    }
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_bitwiseman_github-api-test-rename-4.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-2.json",
     "headers": {
-      "Date": "Tue, 29 Dec 2020 02:01:49 GMT",
+      "Date": "Tue, 29 Dec 2020 00:55:31 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
@@ -31,24 +24,25 @@
         "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"e2e852a0e8c370af5757e17975f27e4aaa1bb672c1f78cfea19ba9839f0aa522\"",
+      "ETag": "W/\"94ef3acba45f9b45fbbe10e354266379fefe700c77292bf036f3e6d2280f22cb\"",
+      "Last-Modified": "Tue, 29 Dec 2020 00:55:29 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
-      "X-Accepted-OAuth-Scopes": "",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4979",
-      "X-RateLimit-Reset": "1609210718",
-      "X-RateLimit-Used": "21",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1609206867",
+      "X-RateLimit-Used": "17",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D20D:05F9:1179BE0:154F650:5FEA8E0C"
+      "X-GitHub-Request-Id": "FD00:1C7F:1FC6EE4:26FAA43:5FEA7E7C"
     }
   },
-  "uuid": "e6db9030-3c2a-4417-8eb1-d1adf96e23f3",
+  "uuid": "6d758950-6c1e-477b-91f3-13c08df69806",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 2
 }

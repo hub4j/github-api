@@ -19,7 +19,6 @@ import static java.lang.String.*;
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
-    GitHub root;
     GHRepository owner;
 
     private String html_url;
@@ -260,7 +259,6 @@ public class GHRelease extends GHObject {
      *             existing logic in place for backwards compatibility.
      */
     @Deprecated
-    @Preview
     public List<GHAsset> assets() {
         return assets;
     }

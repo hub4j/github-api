@@ -22,7 +22,6 @@ public class GHCheckRun extends GHObject {
 
     @JsonProperty("repository")
     GHRepository owner;
-    GitHub root;
 
     private String status;
     private String conclusion;
@@ -295,10 +294,10 @@ public class GHCheckRun extends GHObject {
 
     /**
      * Updates this check run.
-     * 
+     *
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview
+    @Preview(Previews.ANTIOPE)
     @Deprecated
     public @NonNull GHCheckRunBuilder update() {
         return new GHCheckRunBuilder(owner, getId());

@@ -69,10 +69,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(r.hasDownloads(), is(false));
         assertThat(r.getName(), equalTo(targetName));
 
-        // ISSUE: #765
-        // From what I can tell this is a bug in GithHub.
-        // updating `has_projects` doesn't seem to do anything
-        assertThat(r.hasProjects(), is(true));
+        assertThat(r.hasProjects(), is(false));
 
         r.delete();
     }
@@ -220,6 +217,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
         assertTrue(closedIssues.size() > 150);
+        String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
     private GHRepository getTestRepository() throws IOException {

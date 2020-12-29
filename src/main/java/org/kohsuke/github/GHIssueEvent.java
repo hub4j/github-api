@@ -9,9 +9,7 @@ import java.util.Date;
  *
  * @author Martin van Zijl
  */
-public class GHIssueEvent {
-    private GitHub root;
-
+public class GHIssueEvent extends GitHubInteractiveObject {
     private long id;
     private String node_id;
     private String url;

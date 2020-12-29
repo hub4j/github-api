@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     protected String sha;
     protected String ref;
     protected String task;
@@ -85,7 +84,7 @@ public class GHDeployment extends GHObject {
 
     /**
      * Gets payload without assuming its type. It could be a String or a Map.
-     * 
+     *
      * @return the payload
      */
     public Object getPayloadObject() {

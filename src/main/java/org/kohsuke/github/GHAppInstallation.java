@@ -22,7 +22,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
 public class GHAppInstallation extends GHObject {
-    private GitHub root;
     private GHUser account;
 
     @JsonProperty("access_tokens_url")
@@ -124,7 +123,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return the paged iterable
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
@@ -322,7 +321,7 @@ public class GHAppInstallation extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
-    @Preview
+    @Preview(GAMBIT)
     @Deprecated
     public void deleteInstallation() throws IOException {
         root.createRequest()
@@ -344,7 +343,7 @@ public class GHAppInstallation extends GHObject {
      * @return a GHAppCreateTokenBuilder instance
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
         return new GHAppCreateTokenBuilder(root,
@@ -361,7 +360,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return a GHAppCreateTokenBuilder instance
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));

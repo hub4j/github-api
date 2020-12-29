@@ -266,7 +266,7 @@ public class GHRateLimit {
     /**
      * Merge a {@link GHRateLimit} with another one to create a new {@link GHRateLimit} keeping the latest
      * {@link Record}s from each.
-     * 
+     *
      * @param newLimit
      *            {@link GHRateLimit} with potentially updated {@link Record}s.
      * @return a merged {@link GHRateLimit} with the latest {@link Record}s from these two instances. If the merged
@@ -458,7 +458,7 @@ public class GHRateLimit {
          * {@link Record}s with earlier {@link #getResetEpochSeconds()} are replaced by those with later.
          * {@link Record}s with the same {@link #getResetEpochSeconds()} are replaced by those with less remaining
          * count.
-         * 
+         *
          * {@link UnknownLimitRecord}s compare with each other like regular {@link Record}s.
          *
          * {@link Record}s are replaced by {@link UnknownLimitRecord}s only when the current {@link Record} is expired

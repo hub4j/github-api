@@ -44,7 +44,7 @@ public abstract class RateLimitChecker {
      * {@code true} at least once for a particular request, {@link GitHubRateLimitChecker} may choose to sleep for some
      * small additional between calls and before letting the request continue.
      * </p>
-     * 
+     *
      * @param rateLimitRecord
      *            the current {@link GHRateLimit.Record} to check against.
      * @param count

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.Previews.ANTIOPE;
 import static org.kohsuke.github.Previews.GROOT;
 
 /**
@@ -452,7 +453,7 @@ public class GHCommit {
      *
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
-    @Preview
+    @Preview(GROOT)
     @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests() {
         return owner.root.createRequest()
@@ -468,7 +469,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @Preview(GROOT)
     @Deprecated
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
         return owner.root.createRequest()
@@ -564,7 +565,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
@@ -572,7 +573,7 @@ public class GHCommit {
 
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
-     * 
+     *
      * @throws IOException
      *             on error
      */

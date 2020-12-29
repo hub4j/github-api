@@ -14,12 +14,11 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-public class GHAppCreateTokenBuilder {
-    private final GitHub root;
+public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String apiUrlTail;
 
-    @Preview
+    @BetaApi
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
         this.root = root;
@@ -27,7 +26,7 @@ public class GHAppCreateTokenBuilder {
         this.builder = root.createRequest();
     }
 
-    @Preview
+    @BetaApi
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this(root, apiUrlTail);
@@ -43,7 +42,7 @@ public class GHAppCreateTokenBuilder {
      *            Array containing the repositories Ids
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids", repositoryIds);
@@ -58,7 +57,7 @@ public class GHAppCreateTokenBuilder {
      *            Map containing the permission names and types.
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
         Map<String, String> retMap = new HashMap<>();
@@ -78,7 +77,7 @@ public class GHAppCreateTokenBuilder {
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST")

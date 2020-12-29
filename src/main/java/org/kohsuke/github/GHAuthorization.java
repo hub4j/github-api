@@ -33,7 +33,6 @@ public class GHAuthorization extends GHObject {
     public static final String WRITE_KEY = "write:public_key";
     public static final String ADMIN_KEY = "admin:public_key";
 
-    private GitHub root;
     private List<String> scopes;
     private String token;
     private String token_last_eight;

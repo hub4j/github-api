@@ -53,7 +53,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 public class GHIssue extends GHObject implements Reactable {
     private static final String ASSIGNEES = "assignees";
 
-    GitHub root;
     GHRepository owner;
 
     // API v3
@@ -448,7 +447,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root.createRequest()
@@ -460,7 +459,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .wrap(root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return root.createRequest()

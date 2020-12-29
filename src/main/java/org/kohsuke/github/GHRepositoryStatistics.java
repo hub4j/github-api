@@ -16,10 +16,9 @@ import java.util.NoSuchElementException;
  *
  * @author Martin van Zijl
  */
-public class GHRepositoryStatistics {
+public class GHRepositoryStatistics extends GitHubInteractiveObject {
 
     private final GHRepository repo;
-    private final GitHub root;
 
     private static final int MAX_WAIT_ITERATIONS = 3;
     private static final int WAIT_SLEEP_INTERVAL = 5000;
@@ -60,7 +59,7 @@ public class GHRepositoryStatistics {
      * @throws InterruptedException
      *             the interrupted exception
      */
-    @Preview
+    @BetaApi
     @Deprecated
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = { "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" }, justification = "JSON API")
@@ -99,7 +98,6 @@ public class GHRepositoryStatistics {
                     "URF_UNREAD_FIELD" },
             justification = "JSON API")
     public static class ContributorStats extends GHObject {
-        /* package almost final */ private GitHub root;
         private GHUser author;
         private int total;
         private List<Week> weeks;
@@ -255,7 +253,6 @@ public class GHRepositoryStatistics {
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
     public static class CommitActivity extends GHObject {
-        /* package almost final */ private GitHub root;
         private List<Integer> days;
         private int total;
         private long week;
@@ -398,7 +395,6 @@ public class GHRepositoryStatistics {
      * The type Participation.
      */
     public static class Participation extends GHObject {
-        /* package almost final */ private GitHub root;
         private List<Integer> all;
         private List<Integer> owner;
 

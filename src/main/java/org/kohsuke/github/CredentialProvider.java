@@ -15,7 +15,7 @@ public interface CredentialProvider {
     /**
      * Returns the credentials to be used with a given request. As an example, a credential provider for a bearer token
      * will return something like:
-     * 
+     *
      * <pre>
      * {@code
      *  &#64;Override

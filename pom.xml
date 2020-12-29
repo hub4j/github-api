@@ -45,7 +45,7 @@
     <jacoco.coverage.target.class.method>0.25</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.11.1</jjwt.suite.version>
+    <jjwt.suite.version>0.11.2</jjwt.suite.version>
   </properties>
 
   <build>
@@ -491,20 +491,20 @@
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
-      <version>0.11.2</version>
-      <scope>test</scope>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-impl</artifactId>
-      <version>0.11.2</version>
-      <scope>test</scope>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId>
-      <version>0.11.2</version>
-      <scope>test</scope>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.squareup.okio</groupId>
@@ -562,26 +562,6 @@
       <version>2.8.6</version>
       <scope>test</scope>
     </dependency>
-    <!-- JWT Dependencies -->
-    <dependency>
-      <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt-api</artifactId>
-      <version>${jjwt.suite.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt-impl</artifactId>
-      <version>${jjwt.suite.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt-jackson</artifactId>
-      <version>${jjwt.suite.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- end JWT Dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>

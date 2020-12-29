@@ -87,7 +87,7 @@ public class GitHub {
      * header. Please note that only operations in which permissions have been previously configured and accepted during
      * the GitHub App will be executed successfully.
      * </dl>
-     * 
+     *
      * @param apiUrl
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For

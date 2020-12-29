@@ -29,11 +29,11 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
     /**
      * Obtains a new OAuth2 token, using the configured client to request it. The configured client <b>must</b> be able
      * to request the token, this usually means that it needs to have JWT authentication
-     * 
+     *
      * @throws IOException
      *             for any problem obtaining the token
      */
-    @Preview
+    @BetaApi
     @Override
     @Deprecated
     public String getEncodedAuthorization() throws IOException {
@@ -44,8 +44,6 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
         return String.format("token %s", this.latestToken);
     }
 
-    @Preview
-    @Deprecated
     private void refreshToken() throws IOException {
         GHAppInstallation installationByOrganization = this.gitHub.getApp()
                 .getInstallationByOrganization(this.organizationName);

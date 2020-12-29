@@ -66,7 +66,7 @@ public class GHCommit {
          * @return the authored date
          */
         public Date getAuthoredDate() {
-            return GitHubClient.parseDate(author.date);
+            return author.getDate();
         }
 
         /**
@@ -85,7 +85,7 @@ public class GHCommit {
          * @return the commit date
          */
         public Date getCommitDate() {
-            return GitHubClient.parseDate(committer.date);
+            return committer.getDate();
         }
 
         /**
@@ -122,7 +122,6 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
-        private String date;
     }
 
     /**

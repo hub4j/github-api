@@ -69,10 +69,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(r.hasDownloads(), is(false));
         assertThat(r.getName(), equalTo(targetName));
 
-        // ISSUE: #765
-        // From what I can tell this is a bug in GithHub.
-        // updating `has_projects` doesn't seem to do anything
-        assertThat(r.hasProjects(), is(true));
+        assertThat(r.hasProjects(), is(false));
 
         r.delete();
     }

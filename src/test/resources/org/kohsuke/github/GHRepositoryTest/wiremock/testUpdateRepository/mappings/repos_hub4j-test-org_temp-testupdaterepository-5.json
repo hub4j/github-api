@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"description\":\"updated using set()\"}",
+        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"description\":\"updated using set()\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

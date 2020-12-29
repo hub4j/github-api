@@ -6,7 +6,7 @@
     "method": "PATCH",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"private\":\"false\",\"name\":\"test-repo-public\"}",
+        "equalToJson": "{\"private\":false,\"name\":\"test-repo-public\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

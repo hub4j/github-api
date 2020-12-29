@@ -208,7 +208,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     S archive() throws IOException {
-        return with("archived", "true");
+        return with("archived", true);
     }
 
     S name(String name) throws IOException {

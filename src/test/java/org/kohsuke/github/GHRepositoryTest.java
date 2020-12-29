@@ -55,10 +55,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void archive() throws Exception {
+        // Archive is a one-way action in the API.
+        // After taking snapshot, manual state reset is required.
         snapshotNotAllowed();
 
-        // Archive is a one-way action in the API.
-        // We do thi this one
         GHRepository repo = getRepository();
 
         assertThat(repo.isArchived(), is(false));
@@ -197,11 +197,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertEquals(description, updated.getDescription());
 
         // test the other merge option and making the repo public again
-        GHRepository redux = updated.update()
-                .allowMergeCommit(false)
-                .allowRebaseMerge(true)
-                .private_(false)
-                .done();
+        GHRepository redux = updated.update().allowMergeCommit(false).allowRebaseMerge(true).private_(false).done();
 
         assertFalse(redux.isAllowMergeCommit());
         assertTrue(redux.isAllowRebaseMerge());

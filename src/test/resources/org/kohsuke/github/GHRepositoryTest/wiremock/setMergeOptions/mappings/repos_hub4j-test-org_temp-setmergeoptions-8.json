@@ -6,7 +6,7 @@
     "method": "PATCH",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"name\":\"temp-setMergeOptions\",\"allow_rebase_merge\":\"true\"}",
+        "equalToJson": "{\"name\":\"temp-setMergeOptions\",\"allow_rebase_merge\":true}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

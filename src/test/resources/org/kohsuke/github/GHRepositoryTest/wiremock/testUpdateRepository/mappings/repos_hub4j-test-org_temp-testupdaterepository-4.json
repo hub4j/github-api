@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"allow_merge_commit\":false,\"private\":false,\"allow_rebase_merge\":true}",
+        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"allow_merge_commit\":false,\"private\":false,\"allow_rebase_merge\":true}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

@@ -6,7 +6,7 @@
     "method": "PATCH",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"allow_squash_merge\":\"true\",\"name\":\"temp-setMergeOptions\"}",
+        "equalToJson": "{\"allow_squash_merge\":true,\"name\":\"temp-setMergeOptions\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

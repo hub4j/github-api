@@ -14,9 +14,9 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
-     * 
+     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -29,9 +29,9 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
-     * 
+     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -44,7 +44,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -59,7 +59,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -74,7 +74,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param branch
      *            branch name
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -89,7 +89,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param description
      *            description of repository
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -104,7 +104,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param homepage
      *            homepage of repository
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -119,7 +119,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param homepage
      *            homepage of repository
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -134,7 +134,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            private if true
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -149,7 +149,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -164,7 +164,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException
@@ -192,7 +192,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param enabled
      *            true if enabled
-     * 
+     *
      * @return a builder to continue with building
      *
      * @throws IOException

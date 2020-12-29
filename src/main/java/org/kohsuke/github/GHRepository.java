@@ -1293,7 +1293,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Creates a builder that can be used to bulk update repository settings.
-     * 
+     *
      * @return the repository updater
      */
     public Updater updateRepository() {

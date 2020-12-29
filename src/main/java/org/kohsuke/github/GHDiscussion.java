@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ import javax.annotation.Nonnull;
  */
 public class GHDiscussion extends GHObject {
 
-    @JacksonInject
-    private GitHub root;
     private GHTeam team;
     private long number;
     private String body, title, htmlUrl;
@@ -130,7 +127,7 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Updater}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Updater update() {
         return new GHDiscussion.Updater(this);
@@ -141,7 +138,7 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Setter}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Setter set() {
         return new GHDiscussion.Setter(this);

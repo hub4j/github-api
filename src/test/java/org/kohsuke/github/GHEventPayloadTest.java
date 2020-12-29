@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.TimeZone;
 
+import static java.lang.Boolean.TRUE;
 import static org.hamcrest.Matchers.*;
 
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
@@ -161,6 +162,16 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     // public void page_build() throws Exception {}
 
     @Test
+    public void ping() throws Exception {
+        GHEventPayload.Ping event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Ping.class);
+
+        assertThat(event.getAction(), nullValue());
+        assertThat(event.getSender().getLogin(), is("seregamorph"));
+        assertThat(event.getRepository().getName(), is("acme-project-project"));
+        assertThat(event.getOrganization(), nullValue());
+    }
+
+    @Test
     @Payload("public")
     public void public_() throws Exception {
         GHEventPayload.Public event = GitHub.offline()
@@ -201,6 +212,75 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+    }
+
+    @Test
+    public void pull_request_edited_base() throws Exception {
+        GHEventPayload.PullRequest event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getChanges().getTitle(), nullValue());
+        assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random"));
+        assertThat(event.getChanges().getBase().getRef().getFrom(), is("develop"));
+        assertThat(event.getChanges().getBase().getSha().getFrom(), is("4b0f3b9fd582b071652ccfccd10bfc8c143cff96"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
+        assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
+        assertThat(event.getChanges().getBody(), nullValue());
+    }
+
+    @Test
+    public void pull_request_edited_title() throws Exception {
+        GHEventPayload.PullRequest event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getChanges().getTitle().getFrom(), is("REST-276 - easy-random"));
+        assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random 4.3.0"));
+        assertThat(event.getChanges().getBase(), nullValue());
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
+        assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
+        assertThat(event.getChanges().getBody(), nullValue());
+    }
+
+    @Test
+    public void pull_request_labeled() throws Exception {
+        GHEventPayload.PullRequest event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+        assertThat(event.getAction(), is("labeled"));
+        assertThat(event.getNumber(), is(79));
+        assertThat(event.getPullRequest().getNumber(), is(79));
+        assertThat(event.getPullRequest().getTitle(), is("Base POJO test enhancement"));
+        assertThat(event.getPullRequest().getBody(),
+                is("This is a pretty simple change that we need to pull into develop."));
+        assertThat(event.getPullRequest().getUser().getLogin(), is("seregamorph"));
+        assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("trilogy-group"));
+        assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
+        assertThat(event.getPullRequest().getHead().getLabel(), is("trilogy-group:changes"));
+        assertThat(event.getPullRequest().getHead().getSha(), is("4b91e3a970fb967fb7be4d52e0969f8e3fb063d0"));
+        assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("trilogy-group"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("3.10"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("trilogy-group:3.10"));
+        assertThat(event.getPullRequest().getBase().getSha(), is("7a735f17d686c6a1fc7df5b9d395e5863868f364"));
+        assertThat(event.getPullRequest().isMerged(), is(false));
+        assertThat(event.getPullRequest().getMergeable(), is(TRUE));
+        assertThat(event.getPullRequest().getMergeableState(), is("draft"));
+        assertThat(event.getPullRequest().getMergedBy(), nullValue());
+        assertThat(event.getPullRequest().getCommentsCount(), is(1));
+        assertThat(event.getPullRequest().getReviewComments(), is(14));
+        assertThat(event.getPullRequest().getAdditions(), is(137));
+        assertThat(event.getPullRequest().getDeletions(), is(81));
+        assertThat(event.getPullRequest().getChangedFiles(), is(22));
+        assertThat(event.getPullRequest().getLabels().iterator().next().getName(), is("Ready for Review"));
+        assertThat(event.getRepository().getName(), is("trilogy-rest-api-framework"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("trilogy-group"));
+        assertThat(event.getSender().getLogin(), is("schernov-xo"));
+        assertThat(event.getLabel().getUrl(),
+                is("https://api.github.com/repos/trilogy-group/trilogy-rest-api-framework/labels/rest%20api"));
+        assertThat(event.getLabel().getName(), is("rest api"));
+        assertThat(event.getLabel().getColor(), is("fef2c0"));
+        assertThat(event.getLabel().getDescription(), is("REST API pull request"));
+        assertThat(event.getOrganization().getLogin(), is("trilogy-group"));
     }
 
     @Test
@@ -274,7 +354,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getCommits().size(), is(1));
         assertThat(event.getCommits().get(0).getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
         assertThat(event.getCommits().get(0).getAuthor().getEmail(), is("baxterthehacker@users.noreply.github.com"));
+        assertThat(event.getCommits().get(0).getAuthor().getUsername(), is("baxterthehacker"));
         assertThat(event.getCommits().get(0).getCommitter().getEmail(), is("baxterthehacker@users.noreply.github.com"));
+        assertThat(event.getCommits().get(0).getCommitter().getUsername(), is("baxterthehacker"));
         assertThat(event.getCommits().get(0).getAdded().size(), is(0));
         assertThat(event.getCommits().get(0).getRemoved().size(), is(0));
         assertThat(event.getCommits().get(0).getModified().size(), is(1));
@@ -286,6 +368,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPusher().getName(), is("baxterthehacker"));
         assertThat(event.getPusher().getEmail(), is("baxterthehacker@users.noreply.github.com"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+        assertThat(event.getCompare(),
+                is("https://github.com/baxterthehacker/public-repo/compare/9049f1265b7d...0d1a26e67d8f"));
     }
 
     @Test
@@ -352,9 +436,20 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     }
 
-    // TODO implement support classes and write test
-    // @Test
-    // public void release() throws Exception {}
+    @Test
+    public void release_published() throws Exception {
+        GHEventPayload.Release event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Release.class);
+
+        assertThat(event.getAction(), is("published"));
+        assertThat(event.getSender().getLogin(), is("seregamorph"));
+        assertThat(event.getRepository().getName(), is("company-rest-api-framework"));
+        assertThat(event.getOrganization().getLogin(), is("company-group"));
+        assertThat(event.getInstallation(), nullValue());
+        assertThat(event.getRelease().getName(), is("4.2"));
+        assertThat(event.getRelease().getTagName(), is("rest-api-framework-4.2"));
+        assertThat(event.getRelease().getBody(), is("REST-269 - unique test executions (#86) Sergey Chernov"));
+    }
 
     @Test
     public void repository() throws Exception {
@@ -376,6 +471,14 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getState(), is(GHCommitState.SUCCESS));
         assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        assertNull(event.getTargetUrl());
+    }
+
+    @Test
+    public void status2() throws Exception {
+        GHEventPayload.Status event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
+        assertThat(event.getTargetUrl(), is("https://www.wikipedia.org/"));
     }
 
     // TODO implement support classes and write test

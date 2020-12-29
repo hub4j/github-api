@@ -9,9 +9,7 @@ import java.net.URL;
  * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplaceAccount {
-
-    protected GitHub root;
+public class GHMarketplaceAccount extends GitHubInteractiveObject {
     private String url;
     private long id;
     private String login;

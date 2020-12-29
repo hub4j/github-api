@@ -1,0 +1,53 @@
+{
+  "id": "f3d95d49-1dcc-4236-a546-a2594afceeb8",
+  "name": "repos_hub4j-test-org_github-api_git_trees",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/git/trees",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"tree\":[{\"path\":\"a\",\"mode\":\"100644\",\"type\":\"blob\",\"content\":\"\"}]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_git_trees-3.json",
+    "headers": {
+      "Date": "Wed, 30 Sep 2020 22:23:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"c8502795da5880935eedfafda7dfc7974b605a4b0161b57b0c87f05668bb7e5d\"",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/496d6428b9cf92981dc9495211e6e1120fb6f2ba",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4939",
+      "X-RateLimit-Reset": "1601504639",
+      "X-RateLimit-Used": "61",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EDA2:11A07:1BDDC747:212F8E50:5F750576"
+    }
+  },
+  "uuid": "f3d95d49-1dcc-4236-a546-a2594afceeb8",
+  "persistent": true,
+  "insertionIndex": 3
+}

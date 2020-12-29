@@ -10,9 +10,8 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest() GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplacePurchase {
+public class GHMarketplacePurchase extends GitHubInteractiveObject {
 
-    private GitHub root;
     private String billingCycle;
     private String nextBillingDate;
     private boolean onFreeTrial;

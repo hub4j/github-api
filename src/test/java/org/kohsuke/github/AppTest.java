@@ -69,10 +69,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(r.hasDownloads(), is(false));
         assertThat(r.getName(), equalTo(targetName));
 
-        // ISSUE: #765
-        // From what I can tell this is a bug in GithHub.
-        // updating `has_projects` doesn't seem to do anything
-        assertThat(r.hasProjects(), is(true));
+        assertThat(r.hasProjects(), is(false));
 
         r.delete();
     }
@@ -180,6 +177,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertFalse(Iterables.isEmpty(deployments));
         GHDeployment unitTestDeployment = deployments.get(0);
         assertEquals("unittest", unitTestDeployment.getEnvironment());
+        assertEquals("unittest", unitTestDeployment.getOriginalEnvironment());
+        assertEquals(false, unitTestDeployment.isProductionEnvironment());
+        assertEquals(true, unitTestDeployment.isTransientEnvironment());
         assertEquals("master", unitTestDeployment.getRef());
     }
 
@@ -191,14 +191,23 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .description("question")
                 .payload("{\"user\":\"atmos\",\"room_id\":123456}")
                 .create();
-        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.SUCCESS)
+        GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.QUEUED)
                 .description("success")
                 .targetUrl("http://www.github.com")
+                .logUrl("http://www.github.com/logurl")
+                .environmentUrl("http://www.github.com/envurl")
+                .environment("new-ci-env")
                 .create();
         Iterable<GHDeploymentStatus> deploymentStatuses = deployment.listStatuses();
         assertNotNull(deploymentStatuses);
         assertEquals(1, Iterables.size(deploymentStatuses));
-        assertEquals(ghDeploymentStatus.getId(), Iterables.get(deploymentStatuses, 0).getId());
+        GHDeploymentStatus actualStatus = Iterables.get(deploymentStatuses, 0);
+        assertEquals(ghDeploymentStatus.getId(), actualStatus.getId());
+        assertEquals(ghDeploymentStatus.getState(), actualStatus.getState());
+        assertEquals(ghDeploymentStatus.getLogUrl(), actualStatus.getLogUrl());
+        // Target url was deprecated and replaced with log url. The gh api will
+        // prefer the log url value and return it in place of target url.
+        assertEquals(ghDeploymentStatus.getTargetUrl(), actualStatus.getLogUrl());
     }
 
     @Test
@@ -208,6 +217,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
         assertTrue(closedIssues.size() > 150);
+        String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
     private GHRepository getTestRepository() throws IOException {
@@ -662,6 +672,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertEquals(commit.getCommitShortInfo().getMessage(), "doc");
         assertFalse(commit.getCommitShortInfo().getVerification().isVerified());
         assertEquals(commit.getCommitShortInfo().getVerification().getReason(), GHVerification.Reason.UNSIGNED);
+        assertThat(commit.getCommitShortInfo().getAuthor().getDate().toInstant().getEpochSecond(),
+                equalTo(1271650361L));
+        assertThat(commit.getCommitShortInfo().getCommitter().getDate().toInstant().getEpochSecond(),
+                equalTo(1271650361L));
     }
 
     @Ignore("Needs mocking check")

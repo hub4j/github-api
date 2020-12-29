@@ -11,9 +11,7 @@ import java.util.List;
  * @author Paulo Miguel Almeida
  * @see GitHub#listMarketplacePlans()
  */
-public class GHMarketplacePlan {
-
-    private GitHub root;
+public class GHMarketplacePlan extends GitHubInteractiveObject {
     private String url;
     private String accountsUrl;
     private long id;

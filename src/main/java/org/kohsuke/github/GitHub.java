@@ -744,7 +744,7 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
-     * 
+     *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
@@ -848,7 +848,7 @@ public class GitHub {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-        return new GHCreateRepositoryBuilder(this, "/user/repos", name);
+        return new GHCreateRepositoryBuilder(name, this, "/user/repos");
     }
 
     /**
@@ -1016,7 +1016,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHApp getApp() throws IOException {
         return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
@@ -1111,7 +1111,7 @@ public class GitHub {
      *
      * @return the gh commit search builder
      */
-    @Preview
+    @Preview(Previews.CLOAK)
     @Deprecated
     public GHCommitSearchBuilder searchCommits() {
         return new GHCommitSearchBuilder(this);
@@ -1211,26 +1211,34 @@ public class GitHub {
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectWriter} that can be used to convert data objects in this library to JSON.
+     *
+     * If you must convert data object in this library to JSON, the {@link ObjectWriter} returned by this method is the
+     * only supported way of doing so. This {@link ObjectWriter} can be used to convert any library data object to JSON
+     * without throwing an exception.
+     *
+     * WARNING: While the JSON generated is generally expected to be stable, it is not part of the API of this library
+     * and may change without warning. Use with extreme caution.
      *
      * @return an {@link ObjectWriter} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectWriter getMappingObjectWriter() {
         return GitHubClient.getMappingObjectWriter();
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectReader} that can be used to convert JSON into library data objects.
+     *
+     * If you must manually create library data objects from JSON, the {@link ObjectReader} returned by this method is
+     * the only supported way of doing so.
+     *
+     * WARNING: Objects generated from this method have limited functionality. They will not throw when being crated
+     * from valid JSON matching the expected object, but they are not guaranteed to be usable beyond that. Use with
+     * extreme caution.
      *
      * @return an {@link ObjectReader} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectReader getMappingObjectReader() {
         return GitHubClient.getMappingObjectReader(GitHub.offline());

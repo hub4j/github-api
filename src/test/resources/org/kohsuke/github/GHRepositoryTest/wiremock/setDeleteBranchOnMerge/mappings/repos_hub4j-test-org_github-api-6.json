@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"name\":\"github-api\",\"delete_branch_on_merge\":\"false\"}",
+        "equalToJson": "{\"name\":\"github-api\",\"delete_branch_on_merge\":false}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

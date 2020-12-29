@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -21,7 +22,6 @@ public class GHCheckRun extends GHObject {
 
     @JsonProperty("repository")
     GHRepository owner;
-    GitHub root;
 
     private String status;
     private String conclusion;
@@ -290,6 +290,17 @@ public class GHCheckRun extends GHObject {
 
     public static enum AnnotationLevel {
         NOTICE, WARNING, FAILURE
+    }
+
+    /**
+     * Updates this check run.
+     *
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview(Previews.ANTIOPE)
+    @Deprecated
+    public @NonNull GHCheckRunBuilder update() {
+        return new GHCheckRunBuilder(owner, getId());
     }
 
 }

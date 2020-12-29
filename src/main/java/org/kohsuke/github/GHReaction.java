@@ -11,10 +11,9 @@ import static org.kohsuke.github.Previews.*;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-@Preview
+@Preview(SQUIRREL_GIRL)
 @Deprecated
 public class GHReaction extends GHObject {
-    private GitHub root;
 
     private GHUser user;
     private ReactionContent content;

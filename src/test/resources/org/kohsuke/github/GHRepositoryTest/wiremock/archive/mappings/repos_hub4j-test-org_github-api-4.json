@@ -6,9 +6,9 @@
     "method": "PATCH",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"archived\":\"true\",\"name\":\"github-api\"}",
+        "equalToJson": "{\"archived\":true,\"name\":\"github-api\"}",
         "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
+        "ignoreExtraElements": false
       }
     ],
     "headers": {

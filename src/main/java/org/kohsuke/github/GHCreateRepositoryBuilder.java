@@ -32,8 +32,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
-        with("gitignore_template", language);
-        return this;
+        return with("gitignore_template", language);
     }
 
     /**
@@ -46,8 +45,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
-        with("license_template", license);
-        return this;
+        return with("license_template", license);
     }
 
     /**
@@ -60,8 +58,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder autoInit(boolean enabled) throws IOException {
-        with("auto_init", enabled);
-        return this;
+        return with("auto_init", enabled);
     }
 
     /**
@@ -87,13 +84,11 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @return a builder to continue with building
      * @throws IOException
      *             In case of any networking error or error from the server.
+     * @deprecated Use {@link #isTemplate(boolean)} method instead
      */
-    @Preview(BAPTISTE)
     @Deprecated
     public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
-        requester.withPreview(BAPTISTE);
-        with("is_template", enabled);
-        return this;
+        return isTemplate(enabled);
     }
 
     /**
@@ -106,8 +101,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder owner(String owner) throws IOException {
-        with("owner", owner);
-        return this;
+        return with("owner", owner);
     }
 
     /**

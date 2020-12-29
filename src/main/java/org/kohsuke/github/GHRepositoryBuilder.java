@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.kohsuke.github.Previews.BAPTISTE;
+
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
     protected GHRepositoryBuilder(Class<S> intermediateReturnType, GitHub root, GHRepository baseInstance) {
@@ -200,6 +202,22 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      */
     public S downloads(boolean enabled) throws IOException {
         return with("has_downloads", enabled);
+    }
+
+    /**
+     * Specifies whether the repository is a template.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    @Preview(BAPTISTE)
+    @Deprecated
+    public S isTemplate(boolean enabled) throws IOException {
+        requester.withPreview(BAPTISTE);
+        return with("is_template", enabled);
     }
 
     @Override

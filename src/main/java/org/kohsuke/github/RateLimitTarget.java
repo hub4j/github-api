@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 /**
  * Specifies the rate limit record of an operation.
- * 
+ *
  * @see GitHubBuilder#withRateLimitChecker(RateLimitChecker, RateLimitTarget)
  */
 public enum RateLimitTarget {

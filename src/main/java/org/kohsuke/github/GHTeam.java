@@ -24,8 +24,6 @@ public class GHTeam extends GHObject implements Refreshable {
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
-    protected /* final */ GitHub root;
-
     public enum Privacy {
         SECRET, // only visible to organization owners and members of this team.
         CLOSED // visible to all members of this organization.

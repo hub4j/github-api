@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
  * <p>
  * Batching looks like this:
  * </p>
- * 
+ *
  * <pre>
  * update().someName(value).otherName(value).done()
  * </pre>
  * <p>
  * Single changes look like this:
  * </p>
- * 
+ *
  * <pre>
  * set().someName(value);
  * set().otherName(value);
@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
-abstract class AbstractBuilder<R, S> {
+abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 
     @Nonnull
     private final Class<R> returnType;
@@ -50,9 +50,6 @@ abstract class AbstractBuilder<R, S> {
 
     @Nonnull
     protected final Requester requester;
-
-    @Nonnull
-    protected final GitHub root;
 
     // TODO: Not sure how update-in-place behavior should be controlled
     // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of
@@ -78,7 +75,7 @@ abstract class AbstractBuilder<R, S> {
             @Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
-        this.root = root;
+        super(root);
         this.requester = root.createRequest();
         this.returnType = finalReturnType;
         this.commitChangesImmediately = returnType.equals(intermediateReturnType);

@@ -17,9 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
-public class GHEventPayload {
-    protected GitHub root;
-
+public class GHEventPayload extends GitHubInteractiveObject {
     // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;
@@ -1220,7 +1218,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status content.
-         * 
+         *
          * @return status content
          */
         public String getContext() {
@@ -1238,7 +1236,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status description.
-         * 
+         *
          * @return status description
          */
         public String getDescription() {
@@ -1247,7 +1245,7 @@ public class GHEventPayload {
 
         /**
          * Gets the status state.
-         * 
+         *
          * @return status state
          */
         public GHCommitState getState() {
@@ -1256,7 +1254,7 @@ public class GHEventPayload {
 
         /**
          * Sets the status stage.
-         * 
+         *
          * @param state
          *            status state
          */
@@ -1266,7 +1264,7 @@ public class GHEventPayload {
 
         /**
          * Gets the commit associated with the status event.
-         * 
+         *
          * @return commit
          */
         public GHCommit getCommit() {
@@ -1275,7 +1273,7 @@ public class GHEventPayload {
 
         /**
          * Sets the commit associated with the status event.
-         * 
+         *
          * @param commit
          *            commit
          */

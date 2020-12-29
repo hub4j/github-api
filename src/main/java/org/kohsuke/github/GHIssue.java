@@ -53,7 +53,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 public class GHIssue extends GHObject implements Reactable {
     private static final String ASSIGNEES = "assignees";
 
-    GitHub root;
     GHRepository owner;
 
     // API v3

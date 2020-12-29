@@ -68,7 +68,6 @@ import static org.kohsuke.github.Previews.*;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHRepository extends GHObject {
-    /* package almost final */ transient GitHub root;
 
     private String nodeId, description, homepage, name, full_name;
 
@@ -2213,7 +2212,12 @@ public class GHRepository extends GHObject {
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @Deprecated
     public Set<URL> getPostCommitHooks() {
-        return postCommitHooks;
+        synchronized (this) {
+            if (postCommitHooks == null) {
+                postCommitHooks = setupPostCommitHooks();
+            }
+            return postCommitHooks;
+        }
     }
 
     /**
@@ -2222,57 +2226,63 @@ public class GHRepository extends GHObject {
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @SkipFromToString
-    private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
-        private List<URL> getPostCommitHooks() {
-            try {
-                List<URL> r = new ArrayList<>();
-                for (GHHook h : getHooks()) {
-                    if (h.getName().equals("web")) {
-                        r.add(new URL(h.getConfig().get("url")));
+    private /* final */ transient Set<URL> postCommitHooks;
+
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
+    private Set<URL> setupPostCommitHooks() {
+        return new AbstractSet<URL>() {
+            private List<URL> getPostCommitHooks() {
+                try {
+                    List<URL> r = new ArrayList<>();
+                    for (GHHook h : getHooks()) {
+                        if (h.getName().equals("web")) {
+                            r.add(new URL(h.getConfig().get("url")));
+                        }
                     }
+                    return r;
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve post-commit hooks", e);
                 }
-                return r;
-            } catch (IOException e) {
-                throw new GHException("Failed to retrieve post-commit hooks", e);
             }
-        }
 
-        @Override
-        public Iterator<URL> iterator() {
-            return getPostCommitHooks().iterator();
-        }
-
-        @Override
-        public int size() {
-            return getPostCommitHooks().size();
-        }
-
-        @Override
-        public boolean add(URL url) {
-            try {
-                createWebHook(url);
-                return true;
-            } catch (IOException e) {
-                throw new GHException("Failed to update post-commit hooks", e);
+            @Override
+            public Iterator<URL> iterator() {
+                return getPostCommitHooks().iterator();
             }
-        }
 
-        @Override
-        public boolean remove(Object url) {
-            try {
-                String _url = ((URL) url).toExternalForm();
-                for (GHHook h : getHooks()) {
-                    if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
-                        h.delete();
-                        return true;
+            @Override
+            public int size() {
+                return getPostCommitHooks().size();
+            }
+
+            @Override
+            public boolean add(URL url) {
+                try {
+                    createWebHook(url);
+                    return true;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+                    String _url = ((URL) url).toExternalForm();
+                    for (GHHook h : getHooks()) {
+                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                            h.delete();
+                            return true;
+                        }
                     }
+                    return false;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
                 }
-                return false;
-            } catch (IOException e) {
-                throw new GHException("Failed to update post-commit hooks", e);
             }
-        }
-    };
+        };
+    }
 
     GHRepository wrap(GitHub root) {
         this.root = root;

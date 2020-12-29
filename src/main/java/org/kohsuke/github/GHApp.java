@@ -15,7 +15,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  */
 public class GHApp extends GHObject {
 
-    private GitHub root;
     private GHUser owner;
     private String name;
     private String description;

@@ -11,9 +11,7 @@ import java.net.URL;
  *
  * @author Michael Clarke
  */
-public class GHRef {
-    /* package almost final */ GitHub root;
-
+public class GHRef extends GitHubInteractiveObject {
     private String ref, url;
     private GHObject object;
 

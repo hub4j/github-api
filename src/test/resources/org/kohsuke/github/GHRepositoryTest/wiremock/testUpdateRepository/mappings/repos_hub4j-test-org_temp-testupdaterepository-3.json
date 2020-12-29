@@ -1,5 +1,5 @@
 {
-  "id": "ff129618-2aad-41bb-8ac6-285401903b38",
+  "id": "d0036ebb-64a8-4c4c-bed3-697870892d5f",
   "name": "repos_hub4j-test-org_temp-testupdaterepository",
   "request": {
     "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"allow_merge_commit\":false,\"allow_rebase_merge\":true}",
+        "equalToJson": "{\"has_projects\":false,\"allow_squash_merge\":false,\"private\":true,\"has_downloads\":false,\"has_wiki\":false,\"description\":\"A test repository for update testing via the github-api project\",\"delete_branch_on_merge\":true,\"allow_rebase_merge\":false,\"has_issues\":false,\"homepage\":\"https://github-api.kohsuke.org/apidocs/index.html\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,35 +19,36 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-7.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-3.json",
     "headers": {
-      "Server": "GitHub.com",
-      "Date": "Fri, 11 Dec 2020 15:58:17 GMT",
+      "Date": "Tue, 29 Dec 2020 00:55:31 GMT",
       "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
       "Status": "200 OK",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
       ],
-      "ETag": "W/\"5f771e7de1a2dff0c4baba3e61457b26130b5081807ce1006e6545991cad20e6\"",
-      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "ETag": "W/\"07d81468f31a53b32f3a3778303dea04863d3e095bb74182cf49845cd962d81f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4955",
-      "X-RateLimit-Reset": "1607705854",
-      "X-RateLimit-Used": "45",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1609206867",
+      "X-RateLimit-Used": "18",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "DE14:0E9A:25E65:544E3:5FD39719"
+      "X-GitHub-Request-Id": "FD00:1C7F:1FC6EE9:26FAB0D:5FEA7E83"
     }
   },
-  "uuid": "ff129618-2aad-41bb-8ac6-285401903b38",
+  "uuid": "d0036ebb-64a8-4c4c-bed3-697870892d5f",
   "persistent": true,
-  "insertionIndex": 7
+  "insertionIndex": 3
 }

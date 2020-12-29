@@ -167,7 +167,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String description = "A test repository for update testing via the github-api project";
 
         GHRepository repo = getTempRepository();
-        GHRepository.Updater builder = repo.updateRepository();
+        GHRepository.Updater builder = repo.update();
 
         // one merge option is always required
         GHRepository updated = builder.allowRebaseMerge(false)
@@ -197,7 +197,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertEquals(description, updated.getDescription());
 
         // test the other merge option and making the repo public again
-        GHRepository redux = updated.updateRepository()
+        GHRepository redux = updated.update()
                 .allowMergeCommit(false)
                 .allowRebaseMerge(true)
                 .private_(false)
@@ -206,6 +206,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertFalse(redux.isAllowMergeCommit());
         assertTrue(redux.isAllowRebaseMerge());
         assertFalse(redux.isPrivate());
+
+        String updatedDescription = "updated using set()";
+        redux = redux.set().description(updatedDescription);
+
+        assertThat(redux.getDescription(), equalTo(updatedDescription));
     }
 
     @Test

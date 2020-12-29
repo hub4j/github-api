@@ -1,8 +1,8 @@
 {
-  "id": "4933bd1c-62ac-4ad8-96c1-8403e7e0caf1",
-  "name": "repos_jgangemi_temp-testupdaterepository",
+  "id": "6d758950-6c1e-477b-91f3-13c08df69806",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
   "request": {
-    "url": "/repos/jgangemi/temp-testUpdateRepository",
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,36 +12,37 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_jgangemi_temp-testupdaterepository-2.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testupdaterepository-2.json",
     "headers": {
-      "Server": "GitHub.com",
-      "Date": "Tue, 08 Sep 2020 21:33:12 GMT",
+      "Date": "Tue, 29 Dec 2020 00:55:31 GMT",
       "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
       "Status": "200 OK",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
       ],
-      "ETag": "W/\"fac1eef1086f6a04dfc2d15592c897e9\"",
-      "Last-Modified": "Tue, 08 Sep 2020 21:33:11 GMT",
-      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user",
+      "ETag": "W/\"94ef3acba45f9b45fbbe10e354266379fefe700c77292bf036f3e6d2280f22cb\"",
+      "Last-Modified": "Tue, 29 Dec 2020 00:55:29 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4970",
-      "X-RateLimit-Reset": "1599602533",
-      "X-RateLimit-Used": "30",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1609206867",
+      "X-RateLimit-Used": "17",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D468:44C1:2169ECB:49A1201:5F57F891"
+      "X-GitHub-Request-Id": "FD00:1C7F:1FC6EE4:26FAA43:5FEA7E7C"
     }
   },
-  "uuid": "4933bd1c-62ac-4ad8-96c1-8403e7e0caf1",
+  "uuid": "6d758950-6c1e-477b-91f3-13c08df69806",
   "persistent": true,
   "insertionIndex": 2
 }

@@ -1296,8 +1296,17 @@ public class GHRepository extends GHObject {
      *
      * @return the repository updater
      */
-    public Updater updateRepository() {
+    public Updater update() {
         return new Updater(this);
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Setter set() {
+        return new Setter(this);
     }
 
     /**
@@ -2976,7 +2985,7 @@ public class GHRepository extends GHObject {
         final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
 
         try {
-            // IMPORTANT: the url for repository records is does not reliably point to the API url.
+            // IMPORTANT: the url for repository records does not reliably point to the API url.
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
@@ -3006,10 +3015,19 @@ public class GHRepository extends GHObject {
             super(Updater.class, repository.root, null);
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
+    }
 
-        @Override
-        public GHRepository done() throws IOException {
-            return super.done().wrap(this.root);
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Setter extends GHRepositoryBuilder<GHRepository> {
+        protected Setter(@Nonnull GHRepository repository) {
+            super(GHRepository.class, repository.root, null);
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
     }
 }

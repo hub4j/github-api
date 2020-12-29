@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
+
 /**
  * @author Kohsuke Kawaguchi
  */
@@ -124,9 +126,13 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 883
     public void commitDateNotNull() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j/github-api");
-        GHCommit commit = repo.getCommit("ed4f9c8176866977677c99ac9668a8ce10231bc8");
+        GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
 
-        assertNotNull(commit.getCommitShortInfo().getAuthoredDate());
-        assertNotNull(commit.getCommitShortInfo().getAuthor().getDate());
+        assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
+        assertThat(commit.getCommitShortInfo().getAuthoredDate(),
+                equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
+        assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
+        assertThat(commit.getCommitShortInfo().getCommitDate(),
+                equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
     }
 }

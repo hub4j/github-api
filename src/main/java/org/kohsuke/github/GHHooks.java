@@ -12,8 +12,7 @@ import java.util.Map;
  * functionality
  */
 class GHHooks {
-    static abstract class Context {
-        private final GitHub root;
+    static abstract class Context extends GitHubInteractiveObject {
 
         private Context(GitHub root) {
             this.root = root;

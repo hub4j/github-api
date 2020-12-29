@@ -10,9 +10,7 @@ import java.util.Locale;
  * @author Kohsuke Kawaguchi
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
-public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {
-    GitHub root;
-
+public class GHMembership extends GitHubInteractiveObject {
     String url;
     String state;
     String role;

@@ -9,9 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHKey {
-    /* package almost final */ GitHub root;
-
+public class GHKey extends GitHubInteractiveObject {
     protected String url, key, title;
     protected boolean verified;
     protected int id;

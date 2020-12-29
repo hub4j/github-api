@@ -23,9 +23,7 @@ import java.util.NoSuchElementException;
  * @see GitHub#listNotifications() GitHub#listNotifications()
  * @see GHRepository#listNotifications() GHRepository#listNotifications()
  */
-public class GHNotificationStream implements Iterable<GHThread> {
-    private final GitHub root;
-
+public class GHNotificationStream extends GitHubInteractiveObject implements Iterable<GHThread> {
     private Boolean all, participating;
     private String since;
     private String apiUrl;

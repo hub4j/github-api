@@ -17,7 +17,6 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHThread extends GHObject {
-    private GitHub root;
     private GHRepository repository;
     private Subject subject;
     private String reason;

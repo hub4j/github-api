@@ -17,9 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
-public class GHEventPayload {
-    protected GitHub root;
-
+public class GHEventPayload extends GitHubInteractiveObject {
     // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;

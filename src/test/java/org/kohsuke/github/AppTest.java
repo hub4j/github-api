@@ -220,6 +220,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
         assertTrue(closedIssues.size() > 150);
+        String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
     private GHRepository getTestRepository() throws IOException {

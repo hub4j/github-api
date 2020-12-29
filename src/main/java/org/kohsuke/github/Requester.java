@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  */
 class Requester extends GitHubRequest.Builder<Requester> {
-    /* private */ final GitHubClient client;
+    /* private */ final transient GitHubClient client;
 
     Requester(GitHubClient client) {
         this.client = client;

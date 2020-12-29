@@ -7,9 +7,7 @@ import java.io.IOException;
  *
  * https://developer.github.com/v3/teams/#create-team
  */
-public class GHTeamBuilder {
-
-    private final GitHub root;
+public class GHTeamBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String orgName;
 

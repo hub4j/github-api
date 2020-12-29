@@ -20,7 +20,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public abstract class GHObject {
+public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * Capture response HTTP headers on the state object.
      */

@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
-abstract class AbstractBuilder<R, S> {
+abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 
     @Nonnull
     private final Class<R> returnType;
@@ -75,6 +75,7 @@ abstract class AbstractBuilder<R, S> {
             @Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
+        super(root);
         this.requester = root.createRequest();
         this.returnType = finalReturnType;
         this.commitChangesImmediately = returnType.equals(intermediateReturnType);

@@ -20,8 +20,7 @@ import javax.annotation.CheckForNull;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHBranch {
-    private GitHub root;
+public class GHBranch extends GitHubInteractiveObject {
     private GHRepository owner;
 
     private String name;

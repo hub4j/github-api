@@ -14,7 +14,6 @@ import static org.kohsuke.github.Previews.*;
 @Preview(SQUIRREL_GIRL)
 @Deprecated
 public class GHReaction extends GHObject {
-    private GitHub root;
 
     private GHUser user;
     private ReactionContent content;

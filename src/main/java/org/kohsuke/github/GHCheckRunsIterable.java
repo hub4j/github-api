@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  * Iterable for check-runs listing.
  */
 class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
-    private GitHub root;
+    private final transient GitHub root;
     private final GitHubRequest request;
 
     private GHCheckRunsPage result;

@@ -21,7 +21,6 @@ public class GHCheckSuite extends GHObject {
 
     @JsonProperty("repository")
     GHRepository owner;
-    GitHub root;
 
     private String nodeId;
     private String headBranch;

@@ -22,7 +22,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
 public class GHAppInstallation extends GHObject {
-    private GitHub root;
     private GHUser account;
 
     @JsonProperty("access_tokens_url")

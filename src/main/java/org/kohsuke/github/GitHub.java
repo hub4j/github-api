@@ -130,7 +130,7 @@ public class GitHub {
 
     static class CredentialRefreshGitHubWrapper extends GitHub {
 
-        CredentialProvider credentialProvider;
+        private final CredentialProvider credentialProvider;
 
         CredentialRefreshGitHubWrapper(GitHub github, CredentialProvider credentialProvider) {
             super(github.client);

@@ -30,7 +30,7 @@ public class GitHubBuilder implements Cloneable {
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
-    private CredentialProvider credentialProvider = CredentialProvider.ANONYMOUS;
+    /* private */ CredentialProvider credentialProvider = CredentialProvider.ANONYMOUS;
 
     /**
      * Instantiates a new Git hub builder.
@@ -212,9 +212,20 @@ public class GitHubBuilder implements Cloneable {
      */
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
-        self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
-        self.withJwtToken(props.getProperty("jwt"));
-        self.withPassword(props.getProperty("login"), props.getProperty("password"));
+        String oauth = props.getProperty("oauth");
+        String jwt = props.getProperty("jwt");
+        String login = props.getProperty("login");
+        String password = props.getProperty("password");
+
+        if (oauth != null) {
+            self.withOAuthToken(oauth, login);
+        }
+        if (jwt != null) {
+            self.withJwtToken(jwt);
+        }
+        if (password != null) {
+            self.withPassword(login, password);
+        }
         self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
         return self;
     }
@@ -271,6 +282,16 @@ public class GitHubBuilder implements Cloneable {
         return withCredentialProvider(ImmutableCredentialProvider.fromOauthToken(oauthToken, user));
     }
 
+    /**
+     * Configures a {@link CredentialProvider} for this builder
+     *
+     * There can be only one credential provider per client instance.
+     *
+     * @param credentialProvider
+     *            the credential provider
+     * @return the git hub builder
+     *
+     */
     public GitHubBuilder withCredentialProvider(final CredentialProvider credentialProvider) {
         this.credentialProvider = credentialProvider;
         return this;

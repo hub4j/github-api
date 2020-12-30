@@ -46,7 +46,7 @@ abstract class GitHubClient {
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
-    CredentialProvider credentialProvider;
+    private final CredentialProvider credentialProvider;
 
     private HttpConnector connector;
 
@@ -210,6 +210,11 @@ abstract class GitHubClient {
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
         return getRateLimit(RateLimitTarget.NONE);
+    }
+
+    @CheckForNull
+    protected String getEncodedAuthorization() throws IOException {
+        return credentialProvider.getEncodedAuthorization();
     }
 
     @Nonnull

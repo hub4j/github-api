@@ -1,19 +1,27 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 /**
  * Provides a CredentialProvider that performs automatic token refresh.
  */
 public class OrgInstallationCredentialProvider implements CredentialProvider {
 
-    private final GitHub gitHub;
+    private GitHub baseGitHub;
+    private GitHub gitHub;
 
+    private final CredentialProvider refreshProvider;
     private final String organizationName;
 
     private String latestToken;
-    private Date validUntil;
+
+    @Nonnull
+    private Instant validUntil = Instant.MIN;
 
     /**
      * Provides a CredentialProvider that performs automatic token refresh, based on an previously authenticated github
@@ -21,27 +29,38 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
      *
      * @param organizationName
      *            The name of the organization where the application is installed
-     * @param gitHub
-     *            A GitHub client that must be configured with a valid JWT token
      */
-    public OrgInstallationCredentialProvider(String organizationName, GitHub gitHub) {
+    @BetaApi
+    @Deprecated
+    public OrgInstallationCredentialProvider(String organizationName, CredentialProvider credentialProvider) {
         this.organizationName = organizationName;
-        this.gitHub = gitHub;
+        this.refreshProvider = credentialProvider;
+    }
+
+    @Override
+    public void bind(GitHub github) {
+        this.baseGitHub = github;
     }
 
     @Override
     public String getEncodedAuthorization() throws IOException {
-        if (latestToken == null || validUntil == null || new Date().after(this.validUntil)) {
-            refreshToken();
+        synchronized (this) {
+            if (latestToken == null || Instant.now().isAfter(this.validUntil)) {
+                refreshToken();
+            }
+            return String.format("token %s", latestToken);
         }
-        return String.format("token %s", latestToken);
     }
 
     private void refreshToken() throws IOException {
+        if (gitHub == null) {
+            gitHub = new GitHub.CredentialRefreshGitHubWrapper(this.baseGitHub, refreshProvider);
+        }
+
         GHAppInstallation installationByOrganization = gitHub.getApp()
                 .getInstallationByOrganization(this.organizationName);
         GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();
-        this.validUntil = ghAppInstallationToken.getExpiresAt();
-        this.latestToken = ghAppInstallationToken.getToken();
+        this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));
+        this.latestToken = Objects.requireNonNull(ghAppInstallationToken.getToken());
     }
 }

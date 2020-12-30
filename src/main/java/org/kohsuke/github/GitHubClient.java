@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -72,10 +71,6 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
@@ -94,42 +89,35 @@ abstract class GitHubClient {
         this.connector = connector;
 
         // Prefer credential configuration via provider
-        if (credentialProvider != null) {
-            this.credentialProvider = credentialProvider;
-        } else {
-            if (oauthAccessToken != null) {
-                this.credentialProvider = ImmutableCredentialProvider.fromOauthToken(oauthAccessToken);
-            } else {
-                if (jwtToken != null) {
-                    this.credentialProvider = ImmutableCredentialProvider.fromJwtToken(jwtToken);
-                } else if (password != null) {
-                    this.credentialProvider = ImmutableCredentialProvider.fromLoginAndPassword(login, password);
-                } else {// anonymous access
-                    this.credentialProvider = CredentialProvider.ANONYMOUS;
-                }
-            }
-        }
+        this.credentialProvider = credentialProvider;
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
 
-        this.login = getCurrentUser(login, jwtToken, myselfConsumer);
+        this.login = getCurrentUser(myselfConsumer);
     }
 
-    @Nullable
-    private String getCurrentUser(String login, String jwtToken, Consumer<GHMyself> myselfConsumer) throws IOException {
-        if (login == null && this.credentialProvider.getEncodedAuthorization() != null && jwtToken == null) {
-            try {
-                GHMyself myself = fetch(GHMyself.class, "/user");
-                if (myselfConsumer != null) {
-                    myselfConsumer.accept(myself);
-                }
-                return myself.getLogin();
-            } catch (IOException e) {
-                return null;
-            }
+    private String getCurrentUser(Consumer<GHMyself> myselfConsumer) throws IOException {
+        String login = null;
+        if (this.credentialProvider instanceof ImmutableCredentialProvider.UserCredentialProvider
+                && this.credentialProvider.getEncodedAuthorization() != null) {
 
+            ImmutableCredentialProvider.UserCredentialProvider userCredentialProvider = (ImmutableCredentialProvider.UserCredentialProvider) this.credentialProvider;
+
+            login = userCredentialProvider.getLogin();
+
+            if (login == null) {
+                try {
+                    GHMyself myself = fetch(GHMyself.class, "/user");
+                    if (myselfConsumer != null) {
+                        myselfConsumer.accept(myself);
+                    }
+                    login = myself.getLogin();
+                } catch (IOException e) {
+                    return null;
+                }
+            }
         }
         return login;
     }
@@ -394,7 +382,6 @@ abstract class GitHubClient {
                                 "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
                                         + request.method() + " " + request.url().toString());
                     }
-
                     rateLimitChecker.checkRateLimit(this, request);
 
                     responseInfo = getResponseInfo(request);

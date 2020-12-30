@@ -93,32 +93,25 @@ public class GitHub {
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
-     * @param login
-     *            The user ID on GitHub that you are logging in as. Can be omitted if the OAuth token is provided or if
-     *            logging in anonymously. Specifying this would save one API call.
-     * @param oauthAccessToken
-     *            Secret OAuth token.
-     * @param password
-     *            User's password. Always used in conjunction with the {@code login} parameter
      * @param connector
+     *            a connector
+     * @param rateLimitHandler
+     *            rateLimitHandler
+     * @param abuseLimitHandler
+     *            abuseLimitHandler
+     * @param rateLimitChecker
+     *            rateLimitChecker
      * @param credentialProvider
-     *            a credential provider, takes preference over all other auth-related parameters if it's not null
+     *            a credential provider
      */
     GitHub(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             CredentialProvider credentialProvider) throws IOException {
+        credentialProvider.bind(this);
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
-                login,
-                oauthAccessToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
@@ -127,6 +120,35 @@ public class GitHub {
                 credentialProvider);
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
+    }
+
+    private GitHub(GitHubClient client) {
+        this.client = client;
+        users = new ConcurrentHashMap<>();
+        orgs = new ConcurrentHashMap<>();
+    }
+
+    static class CredentialRefreshGitHubWrapper extends GitHub {
+
+        CredentialProvider credentialProvider;
+
+        CredentialRefreshGitHubWrapper(GitHub github, CredentialProvider credentialProvider) {
+            super(github.client);
+            this.credentialProvider = credentialProvider;
+            this.credentialProvider.bind(this);
+        }
+
+        @Nonnull
+        @Override
+        Requester createRequest() {
+            try {
+                // Override
+                return super.createRequest().setHeader("Authorization", credentialProvider.getEncodedAuthorization())
+                        .rateLimit(RateLimitTarget.NONE);
+            } catch (IOException e) {
+                throw new GHException("Failed to create requester to refresh credentials", e);
+            }
+        }
     }
 
     /**

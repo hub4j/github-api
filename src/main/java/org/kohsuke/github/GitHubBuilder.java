@@ -24,17 +24,13 @@ public class GitHubBuilder implements Cloneable {
 
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHubClient.GITHUB_URL;
-    /* private */ String user;
-    /* private */ String password;
-    /* private */ String oauthToken;
-    /* private */ String jwtToken;
 
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
-    private CredentialProvider credentialProvider = null;
+    private CredentialProvider credentialProvider = CredentialProvider.ANONYMOUS;
 
     /**
      * Instantiates a new Git hub builder.
@@ -62,13 +58,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
+        if (builder.credentialProvider != null)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
+            if (builder.credentialProvider != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -248,9 +244,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withPassword(String user, String password) {
-        this.user = user;
-        this.password = password;
-        return this;
+        return withCredentialProvider(ImmutableCredentialProvider.fromLoginAndPassword(user, password));
     }
 
     /**
@@ -261,7 +255,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken) {
-        return withOAuthToken(oauthToken, null);
+        return withCredentialProvider(ImmutableCredentialProvider.fromOauthToken(oauthToken));
     }
 
     /**
@@ -274,9 +268,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
-        this.oauthToken = oauthToken;
-        this.user = user;
-        return this;
+        return withCredentialProvider(ImmutableCredentialProvider.fromOauthToken(oauthToken, user));
     }
 
     public GitHubBuilder withCredentialProvider(final CredentialProvider credentialProvider) {
@@ -293,7 +285,7 @@ public class GitHubBuilder implements Cloneable {
      * @see GHAppInstallation#createToken(java.util.Map) GHAppInstallation#createToken(java.util.Map)
      */
     public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-        return withOAuthToken(appInstallationToken, "");
+        return withCredentialProvider(ImmutableCredentialProvider.fromAppInstallationToken(appInstallationToken));
     }
 
     /**
@@ -304,8 +296,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withJwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
-        return this;
+        return withCredentialProvider(ImmutableCredentialProvider.fromJwtToken(jwtToken));
     }
 
     /**
@@ -427,10 +418,6 @@ public class GitHubBuilder implements Cloneable {
      */
     public GitHub build() throws IOException {
         return new GitHub(endpoint,
-                user,
-                oauthToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,

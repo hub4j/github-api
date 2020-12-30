@@ -32,6 +32,14 @@ public interface CredentialProvider {
     String getEncodedAuthorization() throws IOException;
 
     /**
+     * Binds this credential provider to a github instance.
+     *
+     * @param github
+     */
+    default void bind(GitHub github) {
+    }
+
+    /**
      * A {@link CredentialProvider} that ensures that no credentials are returned
      */
     class AnonymousCredentialProvider implements CredentialProvider {

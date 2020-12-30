@@ -33,10 +33,6 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 class GitHubHttpUrlConnectionClient extends GitHubClient {
 
     GitHubHttpUrlConnectionClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
@@ -44,10 +40,6 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
             Consumer<GHMyself> myselfConsumer,
             CredentialProvider credentialProvider) throws IOException {
         super(apiUrl,
-                login,
-                oauthAccessToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
@@ -116,8 +108,11 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
 
             // if the authentication is needed but no credential is given, try it anyway (so that some calls
             // that do work with anonymous access in the reduced form should still work.)
-            if (client.credentialProvider.getEncodedAuthorization() != null) {
-                connection.setRequestProperty("Authorization", client.credentialProvider.getEncodedAuthorization());
+            if (!request.headers().containsKey("Authorization")) {
+                String authorization = client.credentialProvider.getEncodedAuthorization();
+                if (authorization != null) {
+                    connection.setRequestProperty("Authorization", client.credentialProvider.getEncodedAuthorization());
+                }
             }
 
             setRequestMethod(request.method(), connection);

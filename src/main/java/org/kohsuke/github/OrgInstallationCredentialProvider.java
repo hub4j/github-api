@@ -29,6 +29,9 @@ public class OrgInstallationCredentialProvider implements CredentialProvider {
      *
      * @param organizationName
      *            The name of the organization where the application is installed
+     * @param credentialProvider
+     *            A credential provider that returns a JWT token that can be used to refresh the App Installation token
+     *            from GitHub.
      */
     @BetaApi
     @Deprecated

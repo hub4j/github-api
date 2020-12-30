@@ -34,7 +34,10 @@ public interface CredentialProvider {
     /**
      * Binds this credential provider to a github instance.
      *
+     * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
+     *
      * @param github
+     *            The github instance to be used for refreshing dynamic credentials
      */
     default void bind(GitHub github) {
     }

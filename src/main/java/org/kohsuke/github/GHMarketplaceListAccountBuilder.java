@@ -8,8 +8,7 @@ import java.io.IOException;
  * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan#listAccounts()
  */
-public class GHMarketplaceListAccountBuilder {
-    private final GitHub root;
+public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     private final Requester builder;
     private final long planId;
 

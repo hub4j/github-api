@@ -1,25 +1,5 @@
 package org.kohsuke.github.extras.okhttp3;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Dispatcher;
-import okhttp3.Handshake;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.Okio;
-import okio.Pipe;
-import okio.Timeout;
-
 /*
  * Copyright (C) 2014 Square, Inc.
  *
@@ -35,6 +15,28 @@ import okio.Timeout;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Dispatcher;
+import okhttp3.Handshake;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Pipe;
+import okio.Timeout;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,7 +181,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * <p>
      * This code configures OkHttp to handle all HTTP and HTTPS connections created with
      * {@link java.net.URL#openConnection()}:
-     * 
+     *
      * <pre>
      * {
      *     &#64;code
@@ -404,7 +406,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             try {
                 Response response = getResponse(true);
                 if (hasBody(response) && response.code() >= HTTP_BAD_REQUEST) {
-                    return response.body().byteStream();
+                    return new ResponseBodyInputStream(response.body());
                 }
                 return null;
             } catch (IOException e) {
@@ -486,7 +488,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             Response response = getResponse(false);
             if (response.code() >= HTTP_BAD_REQUEST)
                 throw new FileNotFoundException(url.toString());
-            return response.body().byteStream();
+            return new ResponseBodyInputStream(response.body());
         }
 
         @Override
@@ -957,6 +959,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
             initOutputStream(Okio.buffer(pipe.sink()), expectedContentLength);
         }
 
+        @Override
         public boolean isOneShot() {
             return true;
         }
@@ -1365,6 +1368,71 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
         UnexpectedException(Throwable cause) {
             super(cause);
+        }
+    }
+
+    /**
+     * Make sure both the ResponseBody and the InputStream are closed when the InputStream coming from the ResponseBody
+     * is closed.
+     */
+    private static final class ResponseBodyInputStream extends InputStream {
+
+        private final ResponseBody responseBody;
+
+        private final InputStream inputStream;
+
+        private ResponseBodyInputStream(ResponseBody responseBody) {
+            this.responseBody = responseBody;
+            this.inputStream = responseBody.byteStream();
+        }
+
+        @Override
+        public int read() throws IOException {
+            return inputStream.read();
+        }
+
+        @Override
+        public int read(byte b[]) throws IOException {
+            return inputStream.read(b);
+        }
+
+        @Override
+        public int read(byte b[], int off, int len) throws IOException {
+            return inputStream.read(b, off, len);
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            return inputStream.skip(n);
+        }
+
+        @Override
+        public int available() throws IOException {
+            return inputStream.available();
+        }
+
+        @Override
+        public synchronized void mark(int readlimit) {
+            inputStream.mark(readlimit);
+        }
+
+        @Override
+        public synchronized void reset() throws IOException {
+            inputStream.reset();
+        }
+
+        @Override
+        public boolean markSupported() {
+            return inputStream.markSupported();
+        }
+
+        @Override
+        public void close() throws IOException {
+            try {
+                inputStream.close();
+            } finally {
+                responseBody.close();
+            }
         }
     }
 }

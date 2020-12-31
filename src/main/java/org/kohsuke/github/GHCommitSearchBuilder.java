@@ -10,7 +10,7 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
-@Preview
+@Preview(Previews.CLOAK)
 @Deprecated
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     GHCommitSearchBuilder(GitHub root) {

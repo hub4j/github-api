@@ -19,7 +19,10 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.root.createRequest().method("POST");
+        this.builder = repo.root.createRequest()
+                .withPreview(Previews.ANT_MAN)
+                .withPreview(Previews.FLASH)
+                .method("POST");
     }
 
     /**
@@ -40,6 +43,7 @@ public class GHDeploymentBuilder {
      *
      * @param branch
      *            the branch
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder ref(String branch) {
@@ -52,6 +56,7 @@ public class GHDeploymentBuilder {
      *
      * @param task
      *            the task
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder task(String task) {
@@ -64,6 +69,7 @@ public class GHDeploymentBuilder {
      *
      * @param autoMerge
      *            the auto merge
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder autoMerge(boolean autoMerge) {
@@ -76,6 +82,7 @@ public class GHDeploymentBuilder {
      *
      * @param requiredContexts
      *            the required contexts
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder requiredContexts(List<String> requiredContexts) {
@@ -88,6 +95,7 @@ public class GHDeploymentBuilder {
      *
      * @param payload
      *            the payload
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder payload(String payload) {
@@ -100,6 +108,7 @@ public class GHDeploymentBuilder {
      *
      * @param environment
      *            the environment
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder environment(String environment) {
@@ -108,10 +117,46 @@ public class GHDeploymentBuilder {
     }
 
     /**
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @param transientEnvironment
+     *            the environment is transient
+     *
+     * @return the gh deployment builder
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
+        builder.with("transient_environment", transientEnvironment);
+        return this;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @param productionEnvironment
+     *            the environment is used by end-users directly
+     *
+     * @return the gh deployment builder
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
+        builder.with("production_environment", productionEnvironment);
+        return this;
+    }
+
+    /**
      * Description gh deployment builder.
      *
      * @param description
      *            the description
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder description(String description) {
@@ -123,6 +168,7 @@ public class GHDeploymentBuilder {
      * Create gh deployment.
      *
      * @return the gh deployment
+     *
      * @throws IOException
      *             the io exception
      */

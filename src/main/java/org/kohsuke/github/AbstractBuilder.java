@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
  * <p>
  * Batching looks like this:
  * </p>
- * 
+ *
  * <pre>
  * update().someName(value).otherName(value).done()
  * </pre>
  * <p>
  * Single changes look like this:
  * </p>
- * 
+ *
  * <pre>
  * set().someName(value);
  * set().otherName(value);
@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
-abstract class AbstractBuilder<R, S> {
+abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 
     @Nonnull
     private final Class<R> returnType;
@@ -75,6 +75,7 @@ abstract class AbstractBuilder<R, S> {
             @Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
+        super(root);
         this.requester = root.createRequest();
         this.returnType = finalReturnType;
         this.commitChangesImmediately = returnType.equals(intermediateReturnType);
@@ -97,7 +98,7 @@ abstract class AbstractBuilder<R, S> {
      *             if there is an I/O Exception
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public R done() throws IOException {
         R result;
@@ -127,7 +128,7 @@ abstract class AbstractBuilder<R, S> {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
@@ -148,7 +149,7 @@ abstract class AbstractBuilder<R, S> {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and

@@ -121,7 +121,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         this.body = body;
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root.createRequest()
@@ -133,7 +133,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .wrap(owner.root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()

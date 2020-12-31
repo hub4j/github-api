@@ -20,8 +20,7 @@ import javax.annotation.CheckForNull;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHBranch {
-    private GitHub root;
+public class GHBranch extends GitHubInteractiveObject {
     private GHRepository owner;
 
     private String name;
@@ -78,7 +77,7 @@ public class GHBranch {
      *
      * @return true if the push to this branch is restricted via branch protection.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public boolean isProtected() {
         return protection;
@@ -89,7 +88,7 @@ public class GHBranch {
      *
      * @return API URL that deals with the protection of this branch.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public URL getProtectionUrl() {
         return GitHubClient.parseURL(protection_url);
@@ -102,6 +101,8 @@ public class GHBranch {
      * @throws IOException
      *             the io exception
      */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
     public GHBranchProtection getProtection() throws IOException {
         return root.createRequest()
                 .withPreview(Previews.LUKE_CAGE)
@@ -135,7 +136,7 @@ public class GHBranch {
      * @return GHBranchProtectionBuilder for enabling protection
      * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);

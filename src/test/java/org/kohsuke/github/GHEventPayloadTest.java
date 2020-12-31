@@ -162,6 +162,16 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     // public void page_build() throws Exception {}
 
     @Test
+    public void ping() throws Exception {
+        GHEventPayload.Ping event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Ping.class);
+
+        assertThat(event.getAction(), nullValue());
+        assertThat(event.getSender().getLogin(), is("seregamorph"));
+        assertThat(event.getRepository().getName(), is("acme-project-project"));
+        assertThat(event.getOrganization(), nullValue());
+    }
+
+    @Test
     @Payload("public")
     public void public_() throws Exception {
         GHEventPayload.Public event = GitHub.offline()
@@ -205,6 +215,35 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void pull_request_edited_base() throws Exception {
+        GHEventPayload.PullRequest event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getChanges().getTitle(), nullValue());
+        assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random"));
+        assertThat(event.getChanges().getBase().getRef().getFrom(), is("develop"));
+        assertThat(event.getChanges().getBase().getSha().getFrom(), is("4b0f3b9fd582b071652ccfccd10bfc8c143cff96"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
+        assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
+        assertThat(event.getChanges().getBody(), nullValue());
+    }
+
+    @Test
+    public void pull_request_edited_title() throws Exception {
+        GHEventPayload.PullRequest event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
+
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getChanges().getTitle().getFrom(), is("REST-276 - easy-random"));
+        assertThat(event.getPullRequest().getTitle(), is("REST-276 - easy-random 4.3.0"));
+        assertThat(event.getChanges().getBase(), nullValue());
+        assertThat(event.getPullRequest().getBase().getRef(), is("4.3"));
+        assertThat(event.getPullRequest().getBody(), startsWith("**JIRA Ticket URL:**"));
+        assertThat(event.getChanges().getBody(), nullValue());
+    }
+
+    @Test
     public void pull_request_labeled() throws Exception {
         GHEventPayload.PullRequest event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
@@ -232,6 +271,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getAdditions(), is(137));
         assertThat(event.getPullRequest().getDeletions(), is(81));
         assertThat(event.getPullRequest().getChangedFiles(), is(22));
+        assertThat(event.getPullRequest().getLabels().iterator().next().getName(), is("Ready for Review"));
         assertThat(event.getRepository().getName(), is("trilogy-rest-api-framework"));
         assertThat(event.getRepository().getOwner().getLogin(), is("trilogy-group"));
         assertThat(event.getSender().getLogin(), is("schernov-xo"));
@@ -240,6 +280,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getLabel().getName(), is("rest api"));
         assertThat(event.getLabel().getColor(), is("fef2c0"));
         assertThat(event.getLabel().getDescription(), is("REST API pull request"));
+        assertThat(event.getOrganization().getLogin(), is("trilogy-group"));
     }
 
     @Test
@@ -395,9 +436,20 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     }
 
-    // TODO implement support classes and write test
-    // @Test
-    // public void release() throws Exception {}
+    @Test
+    public void release_published() throws Exception {
+        GHEventPayload.Release event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Release.class);
+
+        assertThat(event.getAction(), is("published"));
+        assertThat(event.getSender().getLogin(), is("seregamorph"));
+        assertThat(event.getRepository().getName(), is("company-rest-api-framework"));
+        assertThat(event.getOrganization().getLogin(), is("company-group"));
+        assertThat(event.getInstallation(), nullValue());
+        assertThat(event.getRelease().getName(), is("4.2"));
+        assertThat(event.getRelease().getTagName(), is("rest-api-framework-4.2"));
+        assertThat(event.getRelease().getBody(), is("REST-269 - unique test executions (#86) Sergey Chernov"));
+    }
 
     @Test
     public void repository() throws Exception {
@@ -419,6 +471,14 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getState(), is(GHCommitState.SUCCESS));
         assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
+        assertNull(event.getTargetUrl());
+    }
+
+    @Test
+    public void status2() throws Exception {
+        GHEventPayload.Status event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
+        assertThat(event.getTargetUrl(), is("https://www.wikipedia.org/"));
     }
 
     // TODO implement support classes and write test

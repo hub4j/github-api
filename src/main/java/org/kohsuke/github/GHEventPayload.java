@@ -16,12 +16,27 @@ import java.util.List;
  *      and payloads</a>
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class GHEventPayload {
-    protected GitHub root;
-
+@SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
+public class GHEventPayload extends GitHubInteractiveObject {
+    // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
+    // Webhook payload object common properties: action, sender, repository, organization, installation
+    private String action;
     private GHUser sender;
+    private GHRepository repository;
+    private GHOrganization organization;
+    private GHAppInstallation installation;
 
     GHEventPayload() {
+    }
+
+    /**
+     * Gets the action for the triggered event. Most but not all webhook payloads contain an action property that
+     * contains the specific activity that triggered the event.
+     *
+     * @return event action
+     */
+    public String getAction() {
+        return action;
     }
 
     /**
@@ -43,10 +58,66 @@ public abstract class GHEventPayload {
         this.sender = sender;
     }
 
+    /**
+     * Gets repository.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+        return repository;
+    }
+
+    /**
+     * Sets repository.
+     *
+     * @param repository
+     *            the repository
+     */
+    public void setRepository(GHRepository repository) {
+        this.repository = repository;
+    }
+
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
+    public GHOrganization getOrganization() {
+        return organization;
+    }
+
+    /**
+     * Sets organization.
+     *
+     * @param organization
+     *            the organization
+     */
+    public void setOrganization(GHOrganization organization) {
+        this.organization = organization;
+    }
+
+    /**
+     * Gets installation
+     *
+     * @return the installation
+     */
+    public GHAppInstallation getInstallation() {
+        return installation;
+    }
+
     void wrapUp(GitHub root) {
         this.root = root;
         if (sender != null) {
             sender.wrapUp(root);
+        }
+        if (repository != null) {
+            repository.wrap(root);
+        }
+        if (organization != null) {
+            organization.wrapUp(root);
+        }
+        if (installation != null) {
+            installation.wrapUp(root);
         }
     }
 
@@ -65,24 +136,10 @@ public abstract class GHEventPayload {
      *      check_run event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/checks#check-runs">Check Runs</a>
      */
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
     public static class CheckRun extends GHEventPayload {
-        private String action;
         private int number;
         private GHCheckRun checkRun;
         private GHRequestedAction requestedAction;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets number.
@@ -131,24 +188,14 @@ public abstract class GHEventPayload {
             return requestedAction;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            repository.root = root;
-            return repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             if (checkRun == null)
                 throw new IllegalStateException(
                         "Expected check_run payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 checkRun.wrap(repository);
             } else {
                 checkRun.wrap(root);
@@ -163,22 +210,8 @@ public abstract class GHEventPayload {
      *      check_suite event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/checks#check-suites">Check Suites</a>
      */
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
     public static class CheckSuite extends GHEventPayload {
-        private String action;
         private GHCheckSuite checkSuite;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets the Check Suite object
@@ -189,24 +222,14 @@ public abstract class GHEventPayload {
             return checkSuite;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            repository.root = root;
-            return repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             if (checkSuite == null)
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 checkSuite.wrap(repository);
             } else {
                 checkSuite.wrap(root);
@@ -222,29 +245,8 @@ public abstract class GHEventPayload {
      *      installation event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class Installation extends GHEventPayload {
-        private String action;
-        private GHAppInstallation installation;
         private List<GHRepository> repositories;
-
-        /**
-         * Gets action
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
-
-        /**
-         * Gets installation
-         *
-         * @return the installation
-         */
-        public GHAppInstallation getInstallation() {
-            return installation;
-        }
 
         /**
          * Gets repositories
@@ -258,11 +260,10 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (installation == null)
+            if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
-            else
-                installation.wrapUp(root);
+            }
 
             if (repositories != null && !repositories.isEmpty()) {
                 try {
@@ -285,31 +286,10 @@ public abstract class GHEventPayload {
      *      installation_repositories event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App installation</a>
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class InstallationRepositories extends GHEventPayload {
-        private String action;
-        private GHAppInstallation installation;
         private String repositorySelection;
         private List<GHRepository> repositoriesAdded;
         private List<GHRepository> repositoriesRemoved;
-
-        /**
-         * Gets action
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
-
-        /**
-         * Gets installation
-         *
-         * @return the installation
-         */
-        public GHAppInstallation getInstallation() {
-            return installation;
-        }
 
         /**
          * Gets installation selection
@@ -341,14 +321,13 @@ public abstract class GHEventPayload {
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (installation == null)
+            if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
-            else
-                installation.wrapUp(root);
+            }
 
             List<GHRepository> repositories;
-            if ("added".equals(action))
+            if ("added".equals(getAction()))
                 repositories = repositoriesAdded;
             else // action == "removed"
                 repositories = repositoriesRemoved;
@@ -374,24 +353,12 @@ public abstract class GHEventPayload {
      *      pull_request event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/pulls">Pull Requests</a>
      */
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
+    @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
-        private String action;
         private int number;
-        private GHPullRequest pull_request;
-        private GHRepository repository;
+        private GHPullRequest pullRequest;
         private GHLabel label;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
+        private GHPullRequestChanges changes;
 
         /**
          * Gets number.
@@ -408,17 +375,8 @@ public abstract class GHEventPayload {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-            pull_request.root = root;
-            return pull_request;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
+            pullRequest.root = root;
+            return pullRequest;
         }
 
         /**
@@ -430,17 +388,26 @@ public abstract class GHEventPayload {
             return label;
         }
 
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHPullRequestChanges getChanges() {
+            return changes;
+        }
+
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
-            if (pull_request == null)
+            if (pullRequest == null)
                 throw new IllegalStateException(
                         "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
+                pullRequest.wrapUp(repository);
             } else {
-                pull_request.wrapUp(root);
+                pullRequest.wrapUp(root);
             }
         }
     }
@@ -454,19 +421,8 @@ public abstract class GHEventPayload {
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#reviews">Pull Request Reviews</a>
      */
     public static class PullRequestReview extends GHEventPayload {
-        private String action;
         private GHPullRequestReview review;
-        private GHPullRequest pull_request;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
+        private GHPullRequest pullRequest;
 
         /**
          * Gets review.
@@ -483,16 +439,7 @@ public abstract class GHEventPayload {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-            return pull_request;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
+            return pullRequest;
         }
 
         @Override
@@ -502,13 +449,13 @@ public abstract class GHEventPayload {
                 throw new IllegalStateException(
                         "Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
 
-            review.wrapUp(pull_request);
+            review.wrapUp(pullRequest);
 
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
+                pullRequest.wrapUp(repository);
             } else {
-                pull_request.wrapUp(root);
+                pullRequest.wrapUp(root);
             }
         }
     }
@@ -522,19 +469,8 @@ public abstract class GHEventPayload {
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#review-comments">Pull Request Review Comments</a>
      */
     public static class PullRequestReviewComment extends GHEventPayload {
-        private String action;
         private GHPullRequestReviewComment comment;
-        private GHPullRequest pull_request;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
+        private GHPullRequest pullRequest;
 
         /**
          * Gets comment.
@@ -551,16 +487,7 @@ public abstract class GHEventPayload {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-            return pull_request;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
+            return pullRequest;
         }
 
         @Override
@@ -570,13 +497,13 @@ public abstract class GHEventPayload {
                 throw new IllegalStateException(
                         "Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
 
-            comment.wrapUp(pull_request);
+            comment.wrapUp(pullRequest);
 
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
-                pull_request.wrapUp(repository);
+                pullRequest.wrapUp(repository);
             } else {
-                pull_request.wrapUp(root);
+                pullRequest.wrapUp(root);
             }
         }
     }
@@ -589,22 +516,8 @@ public abstract class GHEventPayload {
      *      issues events</a>
      * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issues Comments</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Issue extends GHEventPayload {
-        private String action;
         private GHIssue issue;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets issue.
@@ -625,30 +538,11 @@ public abstract class GHEventPayload {
             this.issue = issue;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 issue.wrap(repository);
             } else {
                 issue.wrap(root);
@@ -664,23 +558,9 @@ public abstract class GHEventPayload {
      *      issue_comment event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issue Comments</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class IssueComment extends GHEventPayload {
-        private String action;
         private GHIssueComment comment;
         private GHIssue issue;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets comment.
@@ -720,30 +600,11 @@ public abstract class GHEventPayload {
             this.issue = issue;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 issue.wrap(repository);
             } else {
                 issue.wrap(root);
@@ -760,22 +621,8 @@ public abstract class GHEventPayload {
      *      commit comment</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos#comments">Comments</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class CommitComment extends GHEventPayload {
-        private String action;
         private GHCommitComment comment;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets comment.
@@ -796,30 +643,11 @@ public abstract class GHEventPayload {
             this.comment = comment;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 comment.wrap(repository);
             }
         }
@@ -832,14 +660,11 @@ public abstract class GHEventPayload {
      *      create event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Create extends GHEventPayload {
         private String ref;
         private String refType;
         private String masterBranch;
         private String description;
-        private GHRepository repository;
 
         /**
          * Gets ref.
@@ -880,33 +705,6 @@ public abstract class GHEventPayload {
         public String getDescription() {
             return description;
         }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -916,12 +714,9 @@ public abstract class GHEventPayload {
      *      delete event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Delete extends GHEventPayload {
         private String ref;
         private String refType;
-        private GHRepository repository;
 
         /**
          * Gets ref.
@@ -942,33 +737,6 @@ public abstract class GHEventPayload {
         public String getRefType() {
             return refType;
         }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -978,11 +746,8 @@ public abstract class GHEventPayload {
      *      deployment event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Deployment extends GHEventPayload {
         private GHDeployment deployment;
-        private GHRepository repository;
 
         /**
          * Gets deployment.
@@ -1003,30 +768,11 @@ public abstract class GHEventPayload {
             this.deployment = deployment;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 deployment.wrap(repository);
             }
         }
@@ -1040,12 +786,9 @@ public abstract class GHEventPayload {
      *      deployment_status event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class DeploymentStatus extends GHEventPayload {
         private GHDeploymentStatus deploymentStatus;
         private GHDeployment deployment;
-        private GHRepository repository;
 
         /**
          * Gets deployment status.
@@ -1085,30 +828,11 @@ public abstract class GHEventPayload {
             this.deployment = deployment;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 deployment.wrap(repository);
                 deploymentStatus.wrap(repository);
             }
@@ -1122,11 +846,8 @@ public abstract class GHEventPayload {
      *      event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos#forks">Forks</a>
      */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Fork extends GHEventPayload {
         private GHRepository forkee;
-        private GHRepository repository;
 
         /**
          * Gets forkee.
@@ -1147,32 +868,10 @@ public abstract class GHEventPayload {
             this.forkee = forkee;
         }
 
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
         @Override
         void wrapUp(GitHub root) {
             super.wrapUp(root);
             forkee.wrap(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
         }
     }
 
@@ -1183,56 +882,6 @@ public abstract class GHEventPayload {
      * event</a>
      */
     public static class Ping extends GHEventPayload {
-        private GHRepository repository;
-        private GHOrganization organization;
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Gets organization.
-         *
-         * @return the organization
-         */
-        public GHOrganization getOrganization() {
-            return organization;
-        }
-
-        /**
-         * Sets organization.
-         *
-         * @param organization
-         *            the organization
-         */
-        public void setOrganization(GHOrganization organization) {
-            this.organization = organization;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
-            if (organization != null) {
-                organization.wrapUp(root);
-            }
-        }
 
     }
 
@@ -1243,33 +892,6 @@ public abstract class GHEventPayload {
      *      public event</a>
      */
     public static class Public extends GHEventPayload {
-        private GHRepository repository;
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
-        }
 
     }
 
@@ -1279,16 +901,12 @@ public abstract class GHEventPayload {
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#push"> push
      *      event</a>
      */
-    @SuppressFBWarnings(
-            value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UUF_UNUSED_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Push extends GHEventPayload {
         private String head, before;
         private boolean created, deleted, forced;
         private String ref;
         private int size;
         private List<PushCommit> commits;
-        private GHRepository repository;
         private Pusher pusher;
         private String compare;
 
@@ -1371,15 +989,6 @@ public abstract class GHEventPayload {
         }
 
         /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
          * Gets pusher.
          *
          * @return the pusher
@@ -1405,13 +1014,6 @@ public abstract class GHEventPayload {
          */
         public String getCompare() {
             return compare;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null)
-                repository.wrap(root);
         }
 
         /**
@@ -1567,19 +1169,7 @@ public abstract class GHEventPayload {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
     public static class Release extends GHEventPayload {
-        private String action;
         private GHRelease release;
-        private GHRepository repository;
-
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
-        public String getAction() {
-            return action;
-        }
 
         /**
          * Gets release.
@@ -1599,33 +1189,6 @@ public abstract class GHEventPayload {
         public void setRelease(GHRelease release) {
             this.release = release;
         }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            if (repository != null) {
-                repository.wrap(root);
-            }
-        }
     }
 
     /**
@@ -1635,69 +1198,8 @@ public abstract class GHEventPayload {
      *      repository event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
-    @SuppressFBWarnings(
-            value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" },
-            justification = "Constructed by JSON deserialization")
     public static class Repository extends GHEventPayload {
-        private String action;
-        private GHRepository repository;
-        private GHOrganization organization;
 
-        /**
-         * Gets action.
-         *
-         * @return the action
-         */
-        public String getAction() {
-            return action;
-        }
-
-        /**
-         * Sets repository.
-         *
-         * @param repository
-         *            the repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
-        }
-
-        /**
-         * Gets repository.
-         *
-         * @return the repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Gets organization.
-         *
-         * @return the organization
-         */
-        public GHOrganization getOrganization() {
-            return organization;
-        }
-
-        /**
-         * Sets organization.
-         *
-         * @param organization
-         *            the organization
-         */
-        public void setOrganization(GHOrganization organization) {
-            this.organization = organization;
-        }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            repository.wrap(root);
-            if (organization != null) {
-                organization.wrapUp(root);
-            }
-        }
     }
 
     /**
@@ -1707,17 +1209,16 @@ public abstract class GHEventPayload {
      *      status event</a>
      * @see <a href="https://docs.github.com/en/rest/reference/repos#statuses">Repository Statuses</a>
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "Constructed by JSON deserialization")
     public static class Status extends GHEventPayload {
         private String context;
         private String description;
         private GHCommitState state;
         private GHCommit commit;
-        private GHRepository repository;
+        private String targetUrl;
 
         /**
          * Gets the status content.
-         * 
+         *
          * @return status content
          */
         public String getContext() {
@@ -1725,8 +1226,17 @@ public abstract class GHEventPayload {
         }
 
         /**
+         * The optional link added to the status.
+         *
+         * @return a url
+         */
+        public String getTargetUrl() {
+            return targetUrl;
+        }
+
+        /**
          * Gets the status description.
-         * 
+         *
          * @return status description
          */
         public String getDescription() {
@@ -1735,7 +1245,7 @@ public abstract class GHEventPayload {
 
         /**
          * Gets the status state.
-         * 
+         *
          * @return status state
          */
         public GHCommitState getState() {
@@ -1744,7 +1254,7 @@ public abstract class GHEventPayload {
 
         /**
          * Sets the status stage.
-         * 
+         *
          * @param state
          *            status state
          */
@@ -1754,7 +1264,7 @@ public abstract class GHEventPayload {
 
         /**
          * Gets the commit associated with the status event.
-         * 
+         *
          * @return commit
          */
         public GHCommit getCommit() {
@@ -1763,31 +1273,12 @@ public abstract class GHEventPayload {
 
         /**
          * Sets the commit associated with the status event.
-         * 
+         *
          * @param commit
          *            commit
          */
         public void setCommit(GHCommit commit) {
             this.commit = commit;
-        }
-
-        /**
-         * Gets the repository associated with the status event.
-         * 
-         * @return repository
-         */
-        public GHRepository getRepository() {
-            return repository;
-        }
-
-        /**
-         * Sets the repository associated with the status event.
-         * 
-         * @param repository
-         *            repository
-         */
-        public void setRepository(GHRepository repository) {
-            this.repository = repository;
         }
 
         @Override
@@ -1797,8 +1288,8 @@ public abstract class GHEventPayload {
                 throw new IllegalStateException(
                         "Expected status payload, but got something else. Maybe we've got another type of event?");
             }
+            GHRepository repository = getRepository();
             if (repository != null) {
-                repository.wrap(root);
                 commit.wrapUp(repository);
             }
         }

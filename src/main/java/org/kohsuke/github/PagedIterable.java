@@ -164,7 +164,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
 
     /**
      * Concatenates a list of arrays into a single array.
-     * 
+     *
      * @param type
      *            the type of array to be returned.
      * @param pages

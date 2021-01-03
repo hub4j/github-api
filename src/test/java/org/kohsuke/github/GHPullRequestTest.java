@@ -151,7 +151,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         // Assert htmlUrl is not null
         assertNotNull(comment.getHtmlUrl());
         assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
-                comment.getHtmlUrl());
+            comment.getHtmlUrl());
 
         comment.update("Updated review comment");
         comments = p.listReviewComments().toList();

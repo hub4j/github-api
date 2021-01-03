@@ -109,7 +109,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void pullRequestReviewCommentsOnPosition() throws Exception {
+    public void pullRequestReviewComments() throws Exception {
         String name = "pullRequestReviewComments";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
         // System.out.println(p.getUrl());
@@ -124,34 +124,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertNotNull(comment.getHtmlUrl());
         assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
                 comment.getHtmlUrl());
-
-        comment.update("Updated review comment");
-        comments = p.listReviewComments().toList();
-        assertEquals(1, comments.size());
-        comment = comments.get(0);
-        assertEquals("Updated review comment", comment.getBody());
-
-        comment.delete();
-        comments = p.listReviewComments().toList();
-        assertTrue(comments.isEmpty());
-    }
-
-    @Test
-    public void pullRequestReviewCommentsOnLine() throws Exception {
-        String name = "pullRequestReviewComments";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        // System.out.println(p.getUrl());
-        assertTrue(p.listReviewComments().toList().isEmpty());
-        p.createReviewCommentOnLine("Sample review comment", p.getHead().getSha(), "README.md", 1);
-        List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
-        assertEquals(1, comments.size());
-        GHPullRequestReviewComment comment = comments.get(0);
-        assertEquals("Sample review comment", comment.getBody());
-
-        // Assert htmlUrl is not null
-        assertNotNull(comment.getHtmlUrl());
-        assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
-            comment.getHtmlUrl());
 
         comment.update("Updated review comment");
         comments = p.listReviewComments().toList();

@@ -502,8 +502,30 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the gh pull request review comment
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createReviewCommentOnPosition(String, String, String, int)} instead
      */
+    @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
+            throws IOException {
+        return createReviewCommentOnPosition(body, sha, path, position);
+    }
+
+    /**
+     * Create review comment gh pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @param sha
+     *            the sha
+     * @param path
+     *            the path
+     * @param position
+     *            the position
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment createReviewCommentOnPosition(String body, String sha, String path, int position)
             throws IOException {
         return root.createRequest()
                 .method("POST")
@@ -511,6 +533,34 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .with("commit_id", sha)
                 .with("path", path)
                 .with("position", position)
+                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
+                .fetch(GHPullRequestReviewComment.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Create review comment gh pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @param sha
+     *            the sha
+     * @param path
+     *            the path
+     * @param line
+     *            the line
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment createReviewCommentOnLine(String body, String sha, String path, int line)
+            throws IOException {
+        return root.createRequest()
+                .method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                .with("path", path)
+                .with("line", line)
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(this);

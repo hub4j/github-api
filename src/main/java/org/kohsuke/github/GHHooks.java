@@ -105,10 +105,10 @@ class GHHooks {
          *             the io exception
          */
         public GHHook updateHook(long id,
-                                 String name,
-                                 Map<String, String> config,
-                                 Collection<GHEvent> events,
-                                 boolean active) throws IOException {
+                String name,
+                Map<String, String> config,
+                Collection<GHEvent> events,
+                boolean active) throws IOException {
             List<String> ea = null;
             if (events != null) {
                 ea = new ArrayList<String>();
@@ -117,13 +117,13 @@ class GHHooks {
             }
 
             GHHook hook = root.createRequest()
-                .method("PATCH")
-                .with("name", name)
-                .with("active", active)
-                .with("config", config)
-                .with("events", ea)
-                .withUrlPath(collection() + "/" + id)
-                .fetch(clazz());
+                    .method("PATCH")
+                    .with("name", name)
+                    .with("active", active)
+                    .with("config", config)
+                    .with("events", ea)
+                    .withUrlPath(collection() + "/" + id)
+                    .fetch(clazz());
 
             return wrap(hook);
         }

@@ -679,10 +679,10 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHHook updateHook(long id,
-                             String name,
-                             Map<String, String> config,
-                             Collection<GHEvent> events,
-                             boolean active) throws IOException {
+            String name,
+            Map<String, String> config,
+            Collection<GHEvent> events,
+            boolean active) throws IOException {
         return GHHooks.orgContext(this).updateHook(id, name, config, events, active);
     }
 

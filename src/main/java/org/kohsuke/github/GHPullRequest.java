@@ -506,7 +506,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
-        throws IOException {
+            throws IOException {
         return createReviewCommentOnPosition(body, sha, path, position);
     }
 
@@ -526,16 +526,16 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public GHPullRequestReviewComment createReviewCommentOnPosition(String body, String sha, String path, int position)
-        throws IOException {
+            throws IOException {
         return root.createRequest()
-            .method("POST")
-            .with("body", body)
-            .with("commit_id", sha)
-            .with("path", path)
-            .with("position", position)
-            .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-            .fetch(GHPullRequestReviewComment.class)
-            .wrapUp(this);
+                .method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                .with("path", path)
+                .with("position", position)
+                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
+                .fetch(GHPullRequestReviewComment.class)
+                .wrapUp(this);
     }
 
     /**
@@ -554,16 +554,16 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public GHPullRequestReviewComment createReviewCommentOnLine(String body, String sha, String path, int line)
-        throws IOException {
+            throws IOException {
         return root.createRequest()
-            .method("POST")
-            .with("body", body)
-            .with("commit_id", sha)
-            .with("path", path)
-            .with("line", line)
-            .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-            .fetch(GHPullRequestReviewComment.class)
-            .wrapUp(this);
+                .method("POST")
+                .with("body", body)
+                .with("commit_id", sha)
+                .with("path", path)
+                .with("line", line)
+                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
+                .fetch(GHPullRequestReviewComment.class)
+                .wrapUp(this);
     }
 
     /**

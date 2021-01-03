@@ -558,8 +558,8 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      *
-     * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter.
-     * Use the alternative getRepositoryById method with long type parameter instead
+     * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter. Use the
+     *             alternative getRepositoryById method with long type parameter instead
      */
     @Deprecated
     public GHRepository getRepositoryById(String id) throws IOException {

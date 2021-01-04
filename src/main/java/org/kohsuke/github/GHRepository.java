@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamConsumer;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,7 +50,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
@@ -2968,50 +2968,39 @@ public class GHRepository extends GHObject {
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
      * @param sink
-     *            The {@link StreamConsumer} that will consume the stream
+     *            The {@link InputStreamConsumer} that will consume the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
      */
-    public void zipball(StreamConsumer sink, String ref) throws IOException {
-        downloadArchive("zip", Optional.ofNullable(ref), sink);
+    public void readZip(InputStreamConsumer sink, String ref) throws IOException {
+        downloadArchive("zip", ref, sink);
     }
 
     /**
      * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
      *
      * @param sink
-     *            The {@link StreamConsumer} that will consume the stream
+     *            The {@link InputStreamConsumer} that will consume the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
      */
-    public void tarball(StreamConsumer sink, String ref) throws IOException {
-        downloadArchive("tar", Optional.ofNullable(ref), sink);
+    public void readTar(InputStreamConsumer sink, String ref) throws IOException {
+        downloadArchive("tar", ref, sink);
     }
 
-    /**
-     * A functional interface, equivalent to {@link java.util.function.Consumer} but that allows throwing
-     * {@link IOException}
-     */
-    @FunctionalInterface
-    public interface StreamConsumer {
-        void accept(InputStream stream) throws IOException;
-    }
-
-    private void downloadArchive(String type, Optional<String> ref, StreamConsumer sink) throws IOException {
+    private void downloadArchive(@Nonnull String type, @CheckForNull String ref, @Nonnull InputStreamConsumer sink)
+            throws IOException {
         requireNonNull(sink, "Sink must not be null");
-        final String base = getApiTailUrl(requireNonNull(type, "Type must not be null") + "ball");
-        final String url = ref.map(base::concat).orElse(base);
-        final Requester builder = root.createRequest().method("GET").withUrlPath(url);
-        builder.client.sendRequest(builder.build(), response -> {
-            try (final InputStream body = response.bodyStream()) {
-                sink.accept(body);
-            }
-            return null;
-        });
+        String tailUrl = getApiTailUrl(type + "ball");
+        if (ref != null) {
+            tailUrl += "/" + ref;
+        }
+        final Requester builder = root.createRequest().method("GET").withUrlPath(tailUrl);
+        builder.fetchStream(sink);
     }
 
     /**

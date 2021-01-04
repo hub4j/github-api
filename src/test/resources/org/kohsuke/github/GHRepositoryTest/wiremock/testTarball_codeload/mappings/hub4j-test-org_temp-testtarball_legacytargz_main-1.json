@@ -1,0 +1,39 @@
+{
+  "id": "05058fd3-c66f-4d07-b588-000cc532a926",
+  "name": "hub4j-test-org_temp-testtarball_legacytargz_main",
+  "request": {
+    "url": "/hub4j-test-org/temp-testTarball/legacy.tar.gz/main",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "hub4j-test-org_temp-testtarball_legacytargz_main-1.txt",
+    "headers": {
+      "Content-Disposition": "attachment; filename=hub4j-test-org-temp-testTarball-a74e312.tar.gz",
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Content-Type": "application/x-gzip",
+      "ETag": "W/\"ca816dd3dc5e53614cac301940876a71113f01b4584f05ffe6942a9e1927f965\"",
+      "Strict-Transport-Security": "max-age=31536000",
+      "Vary": "Authorization,Accept-Encoding",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "Date": "Mon, 04 Jan 2021 09:05:18 GMT",
+      "X-Varnish": "290984704",
+      "Age": "0",
+      "Via": "1.1 varnish (Varnish/6.0)",
+      "X-Cache": "MISS",
+      "X-Cache-Hits": "0",
+      "Accept-Ranges": "bytes",
+      "X-GitHub-Request-Id": "E374:78B6:17DCE5:4AD2E5:5FF2DA4E"
+    }
+  },
+  "uuid": "05058fd3-c66f-4d07-b588-000cc532a926",
+  "persistent": true,
+  "insertionIndex": 1
+}

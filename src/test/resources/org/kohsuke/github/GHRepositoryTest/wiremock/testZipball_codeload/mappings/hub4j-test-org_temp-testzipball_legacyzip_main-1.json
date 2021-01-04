@@ -1,0 +1,39 @@
+{
+  "id": "51e04476-36b5-4649-896c-a5246b65dd82",
+  "name": "hub4j-test-org_temp-testzipball_legacyzip_main",
+  "request": {
+    "url": "/hub4j-test-org/temp-testZipball/legacy.zip/main",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "hub4j-test-org_temp-testzipball_legacyzip_main-1.txt",
+    "headers": {
+      "Content-Disposition": "attachment; filename=hub4j-test-org-temp-testZipball-12b27ab.zip",
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Content-Type": "application/zip",
+      "ETag": "W/\"f4e07ea59dbed7a35c54e3a8ce438769d12f814ae805bc39482dd897b93e86c0\"",
+      "Strict-Transport-Security": "max-age=31536000",
+      "Vary": "Authorization,Accept-Encoding",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "Date": "Mon, 04 Jan 2021 09:13:03 GMT",
+      "X-Varnish": "289418734",
+      "Age": "0",
+      "Via": "1.1 varnish (Varnish/6.0)",
+      "X-Cache": "HFM",
+      "X-Cache-Hits": "0",
+      "Accept-Ranges": "bytes",
+      "X-GitHub-Request-Id": "E3B7:6D29:177099:4A38D9:5FF2DC1F"
+    }
+  },
+  "uuid": "51e04476-36b5-4649-896c-a5246b65dd82",
+  "persistent": true,
+  "insertionIndex": 1
+}

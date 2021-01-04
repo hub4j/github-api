@@ -1,0 +1,43 @@
+{
+  "id": "28a8f5bf-a72d-40cc-86a1-df9c1489c3ee",
+  "name": "repos_hub4j-test-org_temp-testtarball_tarball",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testTarball/tarball",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Date": "Mon, 04 Jan 2021 08:53:56 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "302 Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4956",
+      "X-RateLimit-Reset": "1609753350",
+      "X-RateLimit-Used": "44",
+      "Cache-Control": "public, must-revalidate, max-age=0",
+      "Expires": "Mon, 04 Jan 2021 08:53:56 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "E328:327C:74BB34:94FCF3:5FF2D7A4",
+      "Location": "https://codeload.github.com/hub4j-test-org/temp-testTarball/legacy.tar.gz/main"
+    }
+  },
+  "uuid": "28a8f5bf-a72d-40cc-86a1-df9c1489c3ee",
+  "persistent": true,
+  "insertionIndex": 3
+}

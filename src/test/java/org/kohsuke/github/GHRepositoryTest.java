@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    @Test
+    public void testZipball() throws IOException {
+        getTempRepository().readZip((InputStream inputstream) -> {
+            InputStream i = new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
+        }, null);
+    }
+
+    @Test
+    public void testTarball() throws IOException {
+        getTempRepository().readTar((InputStream inputstream) -> {
+            InputStream i = new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
+        }, null);
     }
 
     @Test

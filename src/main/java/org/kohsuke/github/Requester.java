@@ -23,7 +23,10 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.function.InputStreamConsumer;
+import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -106,15 +109,45 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
      * {@link #fetch(Class)} where possible.
      *
-     * @return the input stream
      * @throws IOException
      *             the io exception
      */
-    public InputStream fetchStream() throws IOException {
-        return client
-                .sendRequest(this,
-                        (responseInfo) -> new ByteArrayInputStream(IOUtils.toByteArray(responseInfo.bodyStream())))
-                .body();
+    public void fetchStream(@Nonnull InputStreamConsumer consumer) throws IOException {
+        fetchStream((inputStream) -> {
+            consumer.accept(inputStream);
+            return null;
+        });
+    }
+
+    /**
+     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
+     * {@link #fetch(Class)} where possible.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public <T> T fetchStream(@Nonnull InputStreamFunction<T> handler) throws IOException {
+        return client.sendRequest(this, (responseInfo) -> handler.apply(responseInfo.bodyStream())).body();
+    }
+
+    /**
+     * Helper function to make it easy to pull streams.
+     *
+     * Copies an input stream to an in-memory input stream. The performance on this is not great but
+     * {@link GitHubResponse.ResponseInfo#bodyStream()} is closed at the end of every call to
+     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubResponse.BodyHandler)}, so any reads to the original input
+     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
+     * This method keeps all of them using the same code path.
+     *
+     * @param inputStream
+     *            the input stream to be copied
+     * @return an in-memory copy of the passed input stream
+     * @throws IOException
+     *             if an error occurs while copying the stream
+     */
+    @NonNull
+    public static InputStream copyInputStream(InputStream inputStream) throws IOException {
+        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
     }
 
     /**

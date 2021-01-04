@@ -1203,7 +1203,7 @@ public class GitHub {
                         .with(new ByteArrayInputStream(text.getBytes("UTF-8")))
                         .contentType("text/plain;charset=UTF-8")
                         .withUrlPath("/markdown/raw")
-                        .fetchStream(),
+                        .fetchStream(Requester::copyInputStream),
                 "UTF-8");
     }
 

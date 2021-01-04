@@ -1783,7 +1783,7 @@ public class GHRepository extends GHObject {
         return root.createRequest()
                 .withHeader("Accept", "application/vnd.github.v3.raw")
                 .withUrlPath(target)
-                .fetchStream();
+                .fetchStream(Requester::copyInputStream);
     }
 
     /**
@@ -2810,7 +2810,7 @@ public class GHRepository extends GHObject {
                         .with("mode", mode == null ? null : mode.toString())
                         .with("context", getFullName())
                         .withUrlPath("/markdown")
-                        .fetchStream(),
+                        .fetchStream(Requester::copyInputStream),
                 "UTF-8");
     }
 

@@ -7,7 +7,7 @@ package org.kohsuke.github;
  *
  * @author Kohsuke Kawaguchi
  */
-enum Previews {
+public enum Previews {
 
     /**
      * Check-runs and check-suites

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Represents an issue on GitHub.

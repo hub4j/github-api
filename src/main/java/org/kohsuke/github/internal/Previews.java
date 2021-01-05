@@ -1,4 +1,4 @@
-package org.kohsuke.github;
+package org.kohsuke.github.internal;
 
 /**
  * Provides the media type strings for GitHub API previews

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 

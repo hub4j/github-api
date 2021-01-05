@@ -57,7 +57,13 @@ import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 
 import static java.util.Arrays.*;
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.ANT_MAN;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.FLASH;
+import static org.kohsuke.github.internal.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.MERCY;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A repository on GitHub.

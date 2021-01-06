@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHProjectCard.

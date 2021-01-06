@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
-import static org.kohsuke.github.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
 /**
  * Creates a repository

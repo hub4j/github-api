@@ -1,4 +1,4 @@
-package org.kohsuke.github;
+package org.kohsuke.github.internal;
 
 /**
  * Provides the media type strings for GitHub API previews
@@ -7,7 +7,7 @@ package org.kohsuke.github;
  *
  * @author Kohsuke Kawaguchi
  */
-enum Previews {
+public enum Previews {
 
     /**
      * Check-runs and check-suites

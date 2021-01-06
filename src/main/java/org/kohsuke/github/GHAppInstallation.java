@@ -8,8 +8,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.Previews.GAMBIT;
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.GAMBIT;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * A Github App Installation.

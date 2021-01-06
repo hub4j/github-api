@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * A GitHub project.

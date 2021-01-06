@@ -153,7 +153,7 @@
                       <exclude>org.kohsuke.github.example.*</exclude>
 
                       <!-- No methods -->
-                      <exclude>org.kohsuke.github.Previews</exclude>
+                      <exclude>org.kohsuke.github.internal.Previews</exclude>
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>

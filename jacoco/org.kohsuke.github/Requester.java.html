@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  */
 class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
-    /* private */ final GitHubClient client;
+    /* private */ final transient GitHubClient client;
 
 <span class="fc" id="L45">    Requester(GitHubClient client) {</span>
 <span class="fc" id="L46">        this.client = client;</span>
@@ -141,4 +141,4 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
 
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * Creates a access token for a GitHub App Installation
@@ -14,25 +14,24 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-public class GHAppCreateTokenBuilder {
-    private final GitHub root;
+public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String apiUrlTail;
 
-    @Preview
+    @BetaApi
     @Deprecated
-<span class="fc" id="L24">    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {</span>
-<span class="fc" id="L25">        this.root = root;</span>
-<span class="fc" id="L26">        this.apiUrlTail = apiUrlTail;</span>
-<span class="fc" id="L27">        this.builder = root.createRequest();</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L23">    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {</span>
+<span class="fc" id="L24">        this.root = root;</span>
+<span class="fc" id="L25">        this.apiUrlTail = apiUrlTail;</span>
+<span class="fc" id="L26">        this.builder = root.createRequest();</span>
+<span class="fc" id="L27">    }</span>
 
-    @Preview
+    @BetaApi
     @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L33">        this(root, apiUrlTail);</span>
-<span class="fc" id="L34">        permissions(permissions);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L32">        this(root, apiUrlTail);</span>
+<span class="fc" id="L33">        permissions(permissions);</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * By default the installation token has access to all repositories that the installation can access. To restrict
@@ -43,11 +42,11 @@ public class GHAppCreateTokenBuilder {
      *            Array containing the repositories Ids
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List&lt;Long&gt; repositoryIds) {
-<span class="fc" id="L49">        this.builder.with(&quot;repository_ids&quot;, repositoryIds);</span>
-<span class="fc" id="L50">        return this;</span>
+<span class="fc" id="L48">        this.builder.with(&quot;repository_ids&quot;, repositoryIds);</span>
+<span class="fc" id="L49">        return this;</span>
     }
 
     /**
@@ -58,15 +57,15 @@ public class GHAppCreateTokenBuilder {
      *            Map containing the permission names and types.
      * @return a GHAppCreateTokenBuilder
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder permissions(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L64">        Map&lt;String, String&gt; retMap = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (Map.Entry&lt;String, GHPermissionType&gt; entry : permissions.entrySet()) {</span>
-<span class="fc" id="L66">            retMap.put(entry.getKey(), GitHubRequest.transformEnum(entry.getValue()));</span>
-<span class="fc" id="L67">        }</span>
-<span class="fc" id="L68">        builder.with(&quot;permissions&quot;, retMap);</span>
-<span class="fc" id="L69">        return this;</span>
+<span class="fc" id="L63">        Map&lt;String, String&gt; retMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Map.Entry&lt;String, GHPermissionType&gt; entry : permissions.entrySet()) {</span>
+<span class="fc" id="L65">            retMap.put(entry.getKey(), GitHubRequest.transformEnum(entry.getValue()));</span>
+<span class="fc" id="L66">        }</span>
+<span class="fc" id="L67">        builder.with(&quot;permissions&quot;, retMap);</span>
+<span class="fc" id="L68">        return this;</span>
     }
 
     /**
@@ -78,15 +77,15 @@ public class GHAppCreateTokenBuilder {
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallationToken create() throws IOException {
-<span class="fc" id="L84">        return builder.method(&quot;POST&quot;)</span>
-<span class="fc" id="L85">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L86">                .withUrlPath(apiUrlTail)</span>
-<span class="fc" id="L87">                .fetch(GHAppInstallationToken.class)</span>
-<span class="fc" id="L88">                .wrapUp(root);</span>
+<span class="fc" id="L83">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L84">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L85">                .withUrlPath(apiUrlTail)</span>
+<span class="fc" id="L86">                .fetch(GHAppInstallationToken.class)</span>
+<span class="fc" id="L87">                .wrapUp(root);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

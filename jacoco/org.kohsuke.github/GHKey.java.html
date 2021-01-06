@@ -9,9 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
-<span class="fc" id="L12">public class GHKey {</span>
-    /* package almost final */ GitHub root;
-
+<span class="fc" id="L12">public class GHKey extends GitHubInteractiveObject {</span>
     protected String url, key, title;
     protected boolean verified;
     protected int id;
@@ -22,7 +20,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the id
      */
     public int getId() {
-<span class="fc" id="L25">        return id;</span>
+<span class="fc" id="L23">        return id;</span>
     }
 
     /**
@@ -31,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the key
      */
     public String getKey() {
-<span class="fc" id="L34">        return key;</span>
+<span class="fc" id="L32">        return key;</span>
     }
 
     /**
@@ -40,7 +38,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the title
      */
     public String getTitle() {
-<span class="nc" id="L43">        return title;</span>
+<span class="nc" id="L41">        return title;</span>
     }
 
     /**
@@ -49,7 +47,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L52">        return url;</span>
+<span class="nc" id="L50">        return url;</span>
     }
 
     /**
@@ -58,7 +56,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L61">        return root;</span>
+<span class="nc" id="L59">        return root;</span>
     }
 
     /**
@@ -67,16 +65,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="nc" id="L70">        return verified;</span>
+<span class="nc" id="L68">        return verified;</span>
     }
 
     GHKey wrap(GitHub root) {
-<span class="nc" id="L74">        this.root = root;</span>
-<span class="nc" id="L75">        return this;</span>
+<span class="nc" id="L72">        this.root = root;</span>
+<span class="nc" id="L73">        return this;</span>
     }
 
     public String toString() {
-<span class="nc" id="L79">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
+<span class="nc" id="L77">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

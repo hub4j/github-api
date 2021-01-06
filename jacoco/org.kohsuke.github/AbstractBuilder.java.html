@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
  * &lt;p&gt;
  * Batching looks like this:
  * &lt;/p&gt;
- * 
+ *
  * &lt;pre&gt;
  * update().someName(value).otherName(value).done()
  * &lt;/pre&gt;
  * &lt;p&gt;
  * Single changes look like this:
  * &lt;/p&gt;
- * 
+ *
  * &lt;pre&gt;
  * set().someName(value);
  * set().otherName(value);
@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
-abstract class AbstractBuilder&lt;R, S&gt; {
+abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
 
     @Nonnull
     private final Class&lt;R&gt; returnType;
@@ -74,18 +74,19 @@ abstract class AbstractBuilder&lt;R, S&gt; {
     protected AbstractBuilder(@Nonnull Class&lt;R&gt; finalReturnType,
             @Nonnull Class&lt;S&gt; intermediateReturnType,
             @Nonnull GitHub root,
-<span class="fc" id="L77">            @CheckForNull R baseInstance) {</span>
-<span class="fc" id="L78">        this.requester = root.createRequest();</span>
-<span class="fc" id="L79">        this.returnType = finalReturnType;</span>
-<span class="fc" id="L80">        this.commitChangesImmediately = returnType.equals(intermediateReturnType);</span>
-<span class="pc bpc" id="L81" title="1 of 4 branches missed.">        if (!commitChangesImmediately &amp;&amp; !intermediateReturnType.isInstance(this)) {</span>
-<span class="nc" id="L82">            throw new IllegalArgumentException(</span>
+            @CheckForNull R baseInstance) {
+<span class="fc" id="L78">        super(root);</span>
+<span class="fc" id="L79">        this.requester = root.createRequest();</span>
+<span class="fc" id="L80">        this.returnType = finalReturnType;</span>
+<span class="fc" id="L81">        this.commitChangesImmediately = returnType.equals(intermediateReturnType);</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">        if (!commitChangesImmediately &amp;&amp; !intermediateReturnType.isInstance(this)) {</span>
+<span class="nc" id="L83">            throw new IllegalArgumentException(</span>
                     &quot;Argument \&quot;intermediateReturnType\&quot;: This instance must be castable to intermediateReturnType or finalReturnType must be equal to intermediateReturnType.&quot;);
         }
 
-<span class="fc" id="L86">        this.baseInstance = baseInstance;</span>
-<span class="fc" id="L87">        this.updateInPlace = false;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L87">        this.baseInstance = baseInstance;</span>
+<span class="fc" id="L88">        this.updateInPlace = false;</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Finishes an update, committing changes.
@@ -97,16 +98,16 @@ abstract class AbstractBuilder&lt;R, S&gt; {
      *             if there is an I/O Exception
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     public R done() throws IOException {
         R result;
-<span class="pc bpc" id="L104" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
-<span class="nc" id="L105">            result = requester.fetchInto(baseInstance);</span>
+<span class="pc bpc" id="L105" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
+<span class="nc" id="L106">            result = requester.fetchInto(baseInstance);</span>
         } else {
-<span class="fc" id="L107">            result = requester.fetch(returnType);</span>
+<span class="fc" id="L108">            result = requester.fetch(returnType);</span>
         }
-<span class="fc" id="L109">        return result;</span>
+<span class="fc" id="L110">        return result;</span>
     }
 
     /**
@@ -127,11 +128,11 @@ abstract class AbstractBuilder&lt;R, S&gt; {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
-<span class="fc" id="L133">        requester.with(name, value);</span>
-<span class="fc" id="L134">        return continueOrDone();</span>
+<span class="fc" id="L134">        requester.with(name, value);</span>
+<span class="fc" id="L135">        return continueOrDone();</span>
     }
 
     /**
@@ -148,19 +149,19 @@ abstract class AbstractBuilder&lt;R, S&gt; {
      *             if an I/O error occurs
      */
     @Nonnull
-    @Preview
+    @BetaApi
     @Deprecated
     protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
         // well.
-<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
             // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
             // being based on the previous comparison of class instances passed to the constructor.
-<span class="fc" id="L160">            return (S) done();</span>
+<span class="fc" id="L161">            return (S) done();</span>
         } else {
-<span class="fc" id="L162">            return (S) this;</span>
+<span class="fc" id="L163">            return (S) this;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

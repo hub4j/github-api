@@ -11,9 +11,7 @@ import java.util.List;
  * @author Paulo Miguel Almeida
  * @see GitHub#listMarketplacePlans()
  */
-<span class="fc" id="L14">public class GHMarketplacePlan {</span>
-
-    private GitHub root;
+<span class="fc" id="L14">public class GHMarketplacePlan extends GitHubInteractiveObject {</span>
     private String url;
     private String accountsUrl;
     private long id;
@@ -37,8 +35,8 @@ import java.util.List;
      * @return an instance of the GHMarketplacePlan class
      */
     GHMarketplacePlan wrapUp(GitHub root) {
-<span class="fc" id="L40">        this.root = root;</span>
-<span class="fc" id="L41">        return this;</span>
+<span class="fc" id="L38">        this.root = root;</span>
+<span class="fc" id="L39">        return this;</span>
     }
 
     /**
@@ -47,7 +45,7 @@ import java.util.List;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L50">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L48">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -56,7 +54,7 @@ import java.util.List;
      * @return the accounts url
      */
     public String getAccountsUrl() {
-<span class="fc" id="L59">        return accountsUrl;</span>
+<span class="fc" id="L57">        return accountsUrl;</span>
     }
 
     /**
@@ -65,7 +63,7 @@ import java.util.List;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L68">        return id;</span>
+<span class="fc" id="L66">        return id;</span>
     }
 
     /**
@@ -74,7 +72,7 @@ import java.util.List;
      * @return the number
      */
     public long getNumber() {
-<span class="fc" id="L77">        return number;</span>
+<span class="fc" id="L75">        return number;</span>
     }
 
     /**
@@ -83,7 +81,7 @@ import java.util.List;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L86">        return name;</span>
+<span class="fc" id="L84">        return name;</span>
     }
 
     /**
@@ -92,7 +90,7 @@ import java.util.List;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L95">        return description;</span>
+<span class="fc" id="L93">        return description;</span>
     }
 
     /**
@@ -101,7 +99,7 @@ import java.util.List;
      * @return the monthly price in cents
      */
     public long getMonthlyPriceInCents() {
-<span class="fc" id="L104">        return monthlyPriceInCents;</span>
+<span class="fc" id="L102">        return monthlyPriceInCents;</span>
     }
 
     /**
@@ -110,7 +108,7 @@ import java.util.List;
      * @return the yearly price in cents
      */
     public long getYearlyPriceInCents() {
-<span class="nc" id="L113">        return yearlyPriceInCents;</span>
+<span class="nc" id="L111">        return yearlyPriceInCents;</span>
     }
 
     /**
@@ -119,7 +117,7 @@ import java.util.List;
      * @return the price model
      */
     public GHMarketplacePriceModel getPriceModel() {
-<span class="fc" id="L122">        return priceModel;</span>
+<span class="fc" id="L120">        return priceModel;</span>
     }
 
     /**
@@ -128,7 +126,7 @@ import java.util.List;
      * @return the boolean
      */
     public boolean isFreeTrial() {
-<span class="nc" id="L131">        return freeTrial;</span>
+<span class="nc" id="L129">        return freeTrial;</span>
     }
 
     /**
@@ -137,7 +135,7 @@ import java.util.List;
      * @return the unit name
      */
     public String getUnitName() {
-<span class="nc" id="L140">        return unitName;</span>
+<span class="nc" id="L138">        return unitName;</span>
     }
 
     /**
@@ -146,7 +144,7 @@ import java.util.List;
      * @return the state
      */
     public String getState() {
-<span class="fc" id="L149">        return state;</span>
+<span class="fc" id="L147">        return state;</span>
     }
 
     /**
@@ -155,7 +153,7 @@ import java.util.List;
      * @return the bullets
      */
     public List&lt;String&gt; getBullets() {
-<span class="fc" id="L158">        return bullets;</span>
+<span class="fc" id="L156">        return bullets;</span>
     }
 
     /**
@@ -179,7 +177,7 @@ import java.util.List;
      *      all GitHub accounts (user or organization) on a specific plan&lt;/a&gt;
      */
     public GHMarketplaceListAccountBuilder listAccounts() {
-<span class="fc" id="L182">        return new GHMarketplaceListAccountBuilder(root, this.id);</span>
+<span class="fc" id="L180">        return new GHMarketplaceListAccountBuilder(root, this.id);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -8,16 +8,15 @@ import java.io.IOException;
  * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan#listAccounts()
  */
-public class GHMarketplaceListAccountBuilder {
-    private final GitHub root;
+public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     private final Requester builder;
     private final long planId;
 
-<span class="fc" id="L16">    GHMarketplaceListAccountBuilder(GitHub root, long planId) {</span>
-<span class="fc" id="L17">        this.root = root;</span>
-<span class="fc" id="L18">        this.builder = root.createRequest();</span>
-<span class="fc" id="L19">        this.planId = planId;</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L15">    GHMarketplaceListAccountBuilder(GitHub root, long planId) {</span>
+<span class="fc" id="L16">        this.root = root;</span>
+<span class="fc" id="L17">        this.builder = root.createRequest();</span>
+<span class="fc" id="L18">        this.planId = planId;</span>
+<span class="fc" id="L19">    }</span>
 
     /**
      * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
@@ -29,8 +28,8 @@ public class GHMarketplaceListAccountBuilder {
      * @return a GHMarketplaceListAccountBuilder
      */
     public GHMarketplaceListAccountBuilder sort(Sort sort) {
-<span class="fc" id="L32">        this.builder.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L33">        return this;</span>
+<span class="fc" id="L31">        this.builder.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L32">        return this;</span>
     }
 
     /**
@@ -41,15 +40,15 @@ public class GHMarketplaceListAccountBuilder {
      * @return a GHMarketplaceListAccountBuilder
      */
     public GHMarketplaceListAccountBuilder direction(GHDirection direction) {
-<span class="fc" id="L44">        this.builder.with(&quot;direction&quot;, direction);</span>
-<span class="fc" id="L45">        return this;</span>
+<span class="fc" id="L43">        this.builder.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L44">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L51">    public enum Sort {</span>
-<span class="fc" id="L52">        CREATED, UPDATED</span>
+<span class="fc" id="L50">    public enum Sort {</span>
+<span class="fc" id="L51">        CREATED, UPDATED</span>
     }
 
     /**
@@ -64,9 +63,9 @@ public class GHMarketplaceListAccountBuilder {
      *             on error
      */
     public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() throws IOException {
-<span class="fc" id="L67">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
-<span class="fc" id="L68">                .toIterable(GHMarketplaceAccountPlan[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L66">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
+<span class="fc" id="L67">                .toIterable(GHMarketplaceAccountPlan[].class, item -&gt; item.wrapUp(root));</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

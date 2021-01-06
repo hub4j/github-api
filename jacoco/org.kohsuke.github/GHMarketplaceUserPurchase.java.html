@@ -10,8 +10,7 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  */
-<span class="fc" id="L13">public class GHMarketplaceUserPurchase {</span>
-    protected GitHub root;
+<span class="fc" id="L13">public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {</span>
     private String billingCycle;
     private String nextBillingDate;
     private boolean onFreeTrial;
@@ -31,12 +30,12 @@ import java.util.Date;
      * @return an instance of the GHMarketplaceUserPurchase class
      */
     GHMarketplaceUserPurchase wrapUp(GitHub root) {
-<span class="fc" id="L34">        this.root = root;</span>
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (this.account != null)</span>
-<span class="fc" id="L36">            this.account.wrapUp(this.root);</span>
-<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (this.plan != null)</span>
-<span class="fc" id="L38">            this.plan.wrapUp(this.root);</span>
-<span class="fc" id="L39">        return this;</span>
+<span class="fc" id="L33">        this.root = root;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (this.account != null)</span>
+<span class="fc" id="L35">            this.account.wrapUp(this.root);</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (this.plan != null)</span>
+<span class="fc" id="L37">            this.plan.wrapUp(this.root);</span>
+<span class="fc" id="L38">        return this;</span>
     }
 
     /**
@@ -45,7 +44,7 @@ import java.util.Date;
      * @return the billing cycle
      */
     public String getBillingCycle() {
-<span class="fc" id="L48">        return billingCycle;</span>
+<span class="fc" id="L47">        return billingCycle;</span>
     }
 
     /**
@@ -54,7 +53,7 @@ import java.util.Date;
      * @return the next billing date
      */
     public Date getNextBillingDate() {
-<span class="nc" id="L57">        return GitHubClient.parseDate(nextBillingDate);</span>
+<span class="nc" id="L56">        return GitHubClient.parseDate(nextBillingDate);</span>
     }
 
     /**
@@ -63,7 +62,7 @@ import java.util.Date;
      * @return the boolean
      */
     public boolean isOnFreeTrial() {
-<span class="fc" id="L66">        return onFreeTrial;</span>
+<span class="fc" id="L65">        return onFreeTrial;</span>
     }
 
     /**
@@ -72,7 +71,7 @@ import java.util.Date;
      * @return the free trial ends on
      */
     public Date getFreeTrialEndsOn() {
-<span class="fc" id="L75">        return GitHubClient.parseDate(freeTrialEndsOn);</span>
+<span class="fc" id="L74">        return GitHubClient.parseDate(freeTrialEndsOn);</span>
     }
 
     /**
@@ -81,7 +80,7 @@ import java.util.Date;
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="nc" id="L84">        return unitCount;</span>
+<span class="nc" id="L83">        return unitCount;</span>
     }
 
     /**
@@ -90,7 +89,7 @@ import java.util.Date;
      * @return the updated at
      */
     public Date getUpdatedAt() {
-<span class="nc" id="L93">        return GitHubClient.parseDate(updatedAt);</span>
+<span class="nc" id="L92">        return GitHubClient.parseDate(updatedAt);</span>
     }
 
     /**
@@ -99,7 +98,7 @@ import java.util.Date;
      * @return the account
      */
     public GHMarketplaceAccount getAccount() {
-<span class="fc" id="L102">        return account;</span>
+<span class="fc" id="L101">        return account;</span>
     }
 
     /**
@@ -108,7 +107,7 @@ import java.util.Date;
      * @return the plan
      */
     public GHMarketplacePlan getPlan() {
-<span class="fc" id="L111">        return plan;</span>
+<span class="fc" id="L110">        return plan;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

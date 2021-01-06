@@ -9,7 +9,6 @@ import java.net.URL;
  * @see GHRelease#getAssets() GHRelease#getAssets()
  */
 <span class="fc" id="L11">public class GHAsset extends GHObject {</span>
-    GitHub root;
     GHRepository owner;
     private String name;
     private String label;
@@ -25,7 +24,7 @@ import java.net.URL;
      * @return the content type
      */
     public String getContentType() {
-<span class="nc" id="L28">        return content_type;</span>
+<span class="nc" id="L27">        return content_type;</span>
     }
 
     /**
@@ -37,9 +36,9 @@ import java.net.URL;
      *             the io exception
      */
     public void setContentType(String contentType) throws IOException {
-<span class="nc" id="L40">        edit(&quot;content_type&quot;, contentType);</span>
-<span class="nc" id="L41">        this.content_type = contentType;</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L39">        edit(&quot;content_type&quot;, contentType);</span>
+<span class="nc" id="L40">        this.content_type = contentType;</span>
+<span class="nc" id="L41">    }</span>
 
     /**
      * Gets download count.
@@ -47,7 +46,7 @@ import java.net.URL;
      * @return the download count
      */
     public long getDownloadCount() {
-<span class="nc" id="L50">        return download_count;</span>
+<span class="nc" id="L49">        return download_count;</span>
     }
 
     /**
@@ -56,7 +55,7 @@ import java.net.URL;
      * @return the label
      */
     public String getLabel() {
-<span class="fc" id="L59">        return label;</span>
+<span class="fc" id="L58">        return label;</span>
     }
 
     /**
@@ -68,9 +67,9 @@ import java.net.URL;
      *             the io exception
      */
     public void setLabel(String label) throws IOException {
-<span class="fc" id="L71">        edit(&quot;label&quot;, label);</span>
-<span class="fc" id="L72">        this.label = label;</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L70">        edit(&quot;label&quot;, label);</span>
+<span class="fc" id="L71">        this.label = label;</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Gets name.
@@ -78,7 +77,7 @@ import java.net.URL;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L81">        return name;</span>
+<span class="fc" id="L80">        return name;</span>
     }
 
     /**
@@ -87,7 +86,7 @@ import java.net.URL;
      * @return the owner
      */
     public GHRepository getOwner() {
-<span class="nc" id="L90">        return owner;</span>
+<span class="nc" id="L89">        return owner;</span>
     }
 
     /**
@@ -96,7 +95,7 @@ import java.net.URL;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L99">        return root;</span>
+<span class="nc" id="L98">        return root;</span>
     }
 
     /**
@@ -105,7 +104,7 @@ import java.net.URL;
      * @return the size
      */
     public long getSize() {
-<span class="nc" id="L108">        return size;</span>
+<span class="nc" id="L107">        return size;</span>
     }
 
     /**
@@ -114,7 +113,7 @@ import java.net.URL;
      * @return the state
      */
     public String getState() {
-<span class="nc" id="L117">        return state;</span>
+<span class="nc" id="L116">        return state;</span>
     }
 
     /**
@@ -122,7 +121,7 @@ import java.net.URL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L125">        return null;</span>
+<span class="nc" id="L124">        return null;</span>
     }
 
     /**
@@ -131,12 +130,12 @@ import java.net.URL;
      * @return the browser download url
      */
     public String getBrowserDownloadUrl() {
-<span class="nc" id="L134">        return browser_download_url;</span>
+<span class="nc" id="L133">        return browser_download_url;</span>
     }
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L138">        root.createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L137">        root.createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Delete.
@@ -145,17 +144,17 @@ import java.net.URL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L148">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L147">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L148">    }</span>
 
     private String getApiRoute() {
-<span class="fc" id="L152">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + getId();</span>
+<span class="fc" id="L151">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + getId();</span>
     }
 
     GHAsset wrap(GHRelease release) {
-<span class="fc" id="L156">        this.owner = release.getOwner();</span>
-<span class="fc" id="L157">        this.root = owner.root;</span>
-<span class="fc" id="L158">        return this;</span>
+<span class="fc" id="L155">        this.owner = release.getOwner();</span>
+<span class="fc" id="L156">        this.root = owner.root;</span>
+<span class="fc" id="L157">        return this;</span>
     }
 
     /**
@@ -168,10 +167,10 @@ import java.net.URL;
      * @return the gh asset [ ]
      */
     public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        for (GHAsset aTo : assets) {</span>
-<span class="nc" id="L172">            aTo.wrap(release);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (GHAsset aTo : assets) {</span>
+<span class="nc" id="L171">            aTo.wrap(release);</span>
         }
-<span class="nc" id="L174">        return assets;</span>
+<span class="nc" id="L173">        return assets;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

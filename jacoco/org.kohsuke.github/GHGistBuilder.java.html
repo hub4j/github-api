@@ -13,9 +13,8 @@ import javax.annotation.Nonnull;
  * @see GitHub#createGist() GitHub#createGist()
  */
 public class GHGistBuilder {
-    private final GitHub root;
     private final Requester req;
-<span class="fc" id="L18">    private final LinkedHashMap&lt;String, Object&gt; files = new LinkedHashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L17">    private final LinkedHashMap&lt;String, Object&gt; files = new LinkedHashMap&lt;String, Object&gt;();</span>
 
     /**
      * Instantiates a new Gh gist builder.
@@ -23,10 +22,9 @@ public class GHGistBuilder {
      * @param root
      *            the root
      */
-<span class="fc" id="L26">    public GHGistBuilder(GitHub root) {</span>
-<span class="fc" id="L27">        this.root = root;</span>
-<span class="fc" id="L28">        req = root.createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L25">    public GHGistBuilder(GitHub root) {</span>
+<span class="fc" id="L26">        req = root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L27">    }</span>
 
     /**
      * Description gh gist builder.
@@ -36,8 +34,8 @@ public class GHGistBuilder {
      * @return the gh gist builder
      */
     public GHGistBuilder description(String desc) {
-<span class="fc" id="L39">        req.with(&quot;description&quot;, desc);</span>
-<span class="fc" id="L40">        return this;</span>
+<span class="fc" id="L37">        req.with(&quot;description&quot;, desc);</span>
+<span class="fc" id="L38">        return this;</span>
     }
 
     /**
@@ -48,8 +46,8 @@ public class GHGistBuilder {
      * @return the gh gist builder
      */
     public GHGistBuilder public_(boolean v) {
-<span class="fc" id="L51">        req.with(&quot;public&quot;, v);</span>
-<span class="fc" id="L52">        return this;</span>
+<span class="fc" id="L49">        req.with(&quot;public&quot;, v);</span>
+<span class="fc" id="L50">        return this;</span>
     }
 
     /**
@@ -62,8 +60,8 @@ public class GHGistBuilder {
      * @return Adds a new file.
      */
     public GHGistBuilder file(@Nonnull String fileName, @Nonnull String content) {
-<span class="fc" id="L65">        files.put(fileName, Collections.singletonMap(&quot;content&quot;, content));</span>
-<span class="fc" id="L66">        return this;</span>
+<span class="fc" id="L63">        files.put(fileName, Collections.singletonMap(&quot;content&quot;, content));</span>
+<span class="fc" id="L64">        return this;</span>
     }
 
     /**
@@ -74,8 +72,8 @@ public class GHGistBuilder {
      *             if Gist cannot be created.
      */
     public GHGist create() throws IOException {
-<span class="fc" id="L77">        req.with(&quot;files&quot;, files);</span>
-<span class="fc" id="L78">        return req.withUrlPath(&quot;/gists&quot;).fetch(GHGist.class);</span>
+<span class="fc" id="L75">        req.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L76">        return req.withUrlPath(&quot;/gists&quot;).fetch(GHGist.class);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

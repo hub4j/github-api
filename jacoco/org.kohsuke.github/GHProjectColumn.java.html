@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHProjectColumn.
@@ -12,7 +12,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Gunnar Skjold
  */
 <span class="fc" id="L14">public class GHProjectColumn extends GHObject {</span>
-    protected GitHub root;
     protected GHProject project;
 
     private String name;
@@ -20,7 +19,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 
     @Override
     public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L23">        return null;</span>
+<span class="nc" id="L22">        return null;</span>
     }
 
     /**
@@ -31,8 +30,8 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the gh project column
      */
     public GHProjectColumn wrap(GitHub root) {
-<span class="fc" id="L34">        this.root = root;</span>
-<span class="fc" id="L35">        return this;</span>
+<span class="fc" id="L33">        this.root = root;</span>
+<span class="fc" id="L34">        return this;</span>
     }
 
     /**
@@ -43,9 +42,9 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the gh project column
      */
     public GHProjectColumn wrap(GHProject project) {
-<span class="fc" id="L46">        this.project = project;</span>
-<span class="fc" id="L47">        this.root = project.root;</span>
-<span class="fc" id="L48">        return this;</span>
+<span class="fc" id="L45">        this.project = project;</span>
+<span class="fc" id="L46">        this.root = project.root;</span>
+<span class="fc" id="L47">        return this;</span>
     }
 
     /**
@@ -54,7 +53,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L57">        return root;</span>
+<span class="nc" id="L56">        return root;</span>
     }
 
     /**
@@ -65,14 +64,14 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public GHProject getProject() throws IOException {
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (project == null) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (project == null) {</span>
             try {
-<span class="nc" id="L70">                project = root.createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class).wrap(root);</span>
-<span class="nc" id="L71">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L72">                return null;</span>
-<span class="nc" id="L73">            }</span>
+<span class="nc" id="L69">                project = root.createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class).wrap(root);</span>
+<span class="nc" id="L70">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L71">                return null;</span>
+<span class="nc" id="L72">            }</span>
         }
-<span class="nc" id="L75">        return project;</span>
+<span class="nc" id="L74">        return project;</span>
     }
 
     /**
@@ -81,7 +80,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L84">        return name;</span>
+<span class="fc" id="L83">        return name;</span>
     }
 
     /**
@@ -90,7 +89,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the project url
      */
     public URL getProjectUrl() {
-<span class="nc" id="L93">        return GitHubClient.parseURL(project_url);</span>
+<span class="nc" id="L92">        return GitHubClient.parseURL(project_url);</span>
     }
 
     /**
@@ -102,12 +101,12 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public void setName(String name) throws IOException {
-<span class="fc" id="L105">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L104">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L105">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L109">        root.createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L108">        root.createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L109">    }</span>
 
     /**
      * Gets api route.
@@ -115,7 +114,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L118">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
+<span class="fc" id="L117">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
     }
 
     /**
@@ -125,8 +124,8 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L128">        root.createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L129">    }</span>
+<span class="fc" id="L127">        root.createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L128">    }</span>
 
     /**
      * List cards paged iterable.
@@ -136,11 +135,11 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHProjectCard&gt; listCards() throws IOException {
-<span class="nc" id="L139">        final GHProjectColumn column = this;</span>
-<span class="nc" id="L140">        return root.createRequest()</span>
-<span class="nc" id="L141">                .withPreview(INERTIA)</span>
-<span class="nc" id="L142">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="nc" id="L143">                .toIterable(GHProjectCard[].class, item -&gt; item.wrap(column));</span>
+<span class="nc" id="L138">        final GHProjectColumn column = this;</span>
+<span class="nc" id="L139">        return root.createRequest()</span>
+<span class="nc" id="L140">                .withPreview(INERTIA)</span>
+<span class="nc" id="L141">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="nc" id="L142">                .toIterable(GHProjectCard[].class, item -&gt; item.wrap(column));</span>
     }
 
     /**
@@ -153,13 +152,13 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-<span class="fc" id="L156">        return root.createRequest()</span>
-<span class="fc" id="L157">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L158">                .withPreview(INERTIA)</span>
-<span class="fc" id="L159">                .with(&quot;note&quot;, note)</span>
-<span class="fc" id="L160">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L161">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L162">                .wrap(this);</span>
+<span class="fc" id="L155">        return root.createRequest()</span>
+<span class="fc" id="L156">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L157">                .withPreview(INERTIA)</span>
+<span class="fc" id="L158">                .with(&quot;note&quot;, note)</span>
+<span class="fc" id="L159">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L160">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L161">                .wrap(this);</span>
     }
 
     /**
@@ -172,14 +171,14 @@ import static org.kohsuke.github.Previews.INERTIA;
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-<span class="fc" id="L175">        return root.createRequest()</span>
-<span class="fc" id="L176">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L177">                .withPreview(INERTIA)</span>
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">                .with(&quot;content_type&quot;, issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;)</span>
-<span class="fc" id="L179">                .with(&quot;content_id&quot;, issue.getId())</span>
-<span class="fc" id="L180">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L181">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L182">                .wrap(this);</span>
+<span class="fc" id="L174">        return root.createRequest()</span>
+<span class="fc" id="L175">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L176">                .withPreview(INERTIA)</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">                .with(&quot;content_type&quot;, issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;)</span>
+<span class="fc" id="L178">                .with(&quot;content_id&quot;, issue.getId())</span>
+<span class="fc" id="L179">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L180">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L181">                .wrap(this);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

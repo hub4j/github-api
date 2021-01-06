@@ -114,10 +114,10 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
-<span class="nc bnc" id="L117" title="All 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="nc" id="L118">        entry.content = content;</span>
-<span class="nc" id="L119">        treeEntries.add(entry);</span>
-<span class="nc" id="L120">        return this;</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L118">        entry.content = content;</span>
+<span class="fc" id="L119">        treeEntries.add(entry);</span>
+<span class="fc" id="L120">        return this;</span>
     }
 
     /**
@@ -171,4 +171,4 @@ public class GHTreeBuilder {
 <span class="fc" id="L171">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

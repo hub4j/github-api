@@ -4,6 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Represents a user in Git who authors/commits a commit.
  * &lt;p&gt;
@@ -14,34 +16,44 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L17">public class GitUser {</span>
-    private String name, email, date;
+<span class="fc" id="L19">public class GitUser {</span>
+    private String name, email, date, username;
 
     /**
-     * Gets name.
+     * Gets the git user name for an author or committer on a git commit.
      *
      * @return Human readable name of the user, such as &quot;Kohsuke Kawaguchi&quot;
      */
     public String getName() {
-<span class="fc" id="L26">        return name;</span>
+<span class="fc" id="L28">        return name;</span>
     }
 
     /**
-     * Gets email.
+     * Gets the git email for an author or committer on a git commit.
      *
-     * @return E -mail address, such as &quot;foo@example.com&quot;
+     * @return E-mail address, such as &quot;foo@example.com&quot;
      */
     public String getEmail() {
-<span class="fc" id="L35">        return email;</span>
+<span class="fc" id="L37">        return email;</span>
+    }
+
+    /**
+     * Gets username. Note: it presents only in events.
+     *
+     * @return GitHub username
+     */
+    @CheckForNull
+    public String getUsername() {
+<span class="fc" id="L47">        return username;</span>
     }
 
     /**
      * Gets date.
      *
-     * @return This field doesn't appear to be consistently available in all the situations where this class is used.
+     * @return Commit Date.
      */
     public Date getDate() {
-<span class="nc" id="L44">        return GitHubClient.parseDate(date);</span>
+<span class="fc" id="L56">        return GitHubClient.parseDate(date);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

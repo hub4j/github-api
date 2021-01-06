@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDeploymentState.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDeploymentState.java</span></div><h1>GHDeploymentState.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 /**
  * Represents the state of deployment
  */
-<span class="fc" id="L6">public enum GHDeploymentState {</span>
-<span class="fc" id="L7">    PENDING, SUCCESS, ERROR, FAILURE</span>
+<span class="fc" id="L8">public enum GHDeploymentState {</span>
+<span class="fc" id="L9">    PENDING,</span>
+<span class="fc" id="L10">    SUCCESS,</span>
+<span class="fc" id="L11">    ERROR,</span>
+<span class="fc" id="L12">    FAILURE,</span>
+
+    /**
+     * The state of the deployment currently reflects it's in progress.
+     *
+     * @deprecated until preview feature has graduated to stable
+     */
+<span class="fc" id="L19">    @Deprecated</span>
+    @Preview(Previews.FLASH)
+    IN_PROGRESS,
+
+    /**
+     * The state of the deployment currently reflects it's queued up for processing.
+     *
+     * @deprecated until preview feature has graduated to stable
+     */
+<span class="fc" id="L28">    @Deprecated</span>
+    @Preview(Previews.FLASH)
+    QUEUED,
+
+    /**
+     * The state of the deployment currently reflects it's no longer active.
+     *
+     * @deprecated until preview feature has graduated to stable
+     */
+<span class="fc" id="L37">    @Deprecated</span>
+    @Preview(Previews.ANT_MAN)
+    INACTIVE
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

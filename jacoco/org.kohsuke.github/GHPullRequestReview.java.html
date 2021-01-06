@@ -46,10 +46,11 @@ import javax.annotation.CheckForNull;
     private String commit_id;
     private GHPullRequestReviewState state;
     private String submitted_at;
+    private String html_url;
 
     GHPullRequestReview wrapUp(GHPullRequest owner) {
-<span class="fc" id="L51">        this.owner = owner;</span>
-<span class="fc" id="L52">        return this;</span>
+<span class="fc" id="L52">        this.owner = owner;</span>
+<span class="fc" id="L53">        return this;</span>
     }
 
     /**
@@ -58,7 +59,7 @@ import javax.annotation.CheckForNull;
      * @return the parent
      */
     public GHPullRequest getParent() {
-<span class="nc" id="L61">        return owner;</span>
+<span class="nc" id="L62">        return owner;</span>
     }
 
     /**
@@ -67,7 +68,7 @@ import javax.annotation.CheckForNull;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L70">        return body;</span>
+<span class="fc" id="L71">        return body;</span>
     }
 
     /**
@@ -78,7 +79,7 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="nc" id="L81">        return owner.root.getUser(user.getLogin());</span>
+<span class="nc" id="L82">        return owner.root.getUser(user.getLogin());</span>
     }
 
     /**
@@ -87,7 +88,7 @@ import javax.annotation.CheckForNull;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="fc" id="L90">        return commit_id;</span>
+<span class="fc" id="L91">        return commit_id;</span>
     }
 
     /**
@@ -97,12 +98,12 @@ import javax.annotation.CheckForNull;
      */
     @CheckForNull
     public GHPullRequestReviewState getState() {
-<span class="fc" id="L100">        return state;</span>
+<span class="fc" id="L101">        return state;</span>
     }
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L105">        return null;</span>
+<span class="fc" id="L106">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -111,7 +112,7 @@ import javax.annotation.CheckForNull;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L114">        return owner.getApiRoute() + &quot;/reviews/&quot; + getId();</span>
+<span class="fc" id="L115">        return owner.getApiRoute() + &quot;/reviews/&quot; + getId();</span>
     }
 
     /**
@@ -122,7 +123,7 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
-<span class="nc" id="L125">        return GitHubClient.parseDate(submitted_at);</span>
+<span class="nc" id="L126">        return GitHubClient.parseDate(submitted_at);</span>
     }
 
     /**
@@ -130,7 +131,7 @@ import javax.annotation.CheckForNull;
      */
     @Override
     public Date getCreatedAt() throws IOException {
-<span class="nc" id="L133">        return getSubmittedAt();</span>
+<span class="nc" id="L134">        return getSubmittedAt();</span>
     }
 
     /**
@@ -147,8 +148,8 @@ import javax.annotation.CheckForNull;
      */
     @Deprecated
     public void submit(String body, GHPullRequestReviewState state) throws IOException {
-<span class="nc" id="L150">        submit(body, state.toEvent());</span>
-<span class="nc" id="L151">    }</span>
+<span class="nc" id="L151">        submit(body, state.toEvent());</span>
+<span class="nc" id="L152">    }</span>
 
     /**
      * Updates the comment.
@@ -161,15 +162,15 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-<span class="fc" id="L164">        owner.root.createRequest()</span>
-<span class="fc" id="L165">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L166">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L167">                .with(&quot;event&quot;, event.action())</span>
-<span class="fc" id="L168">                .withUrlPath(getApiRoute() + &quot;/events&quot;)</span>
-<span class="fc" id="L169">                .fetchInto(this);</span>
-<span class="fc" id="L170">        this.body = body;</span>
-<span class="fc" id="L171">        this.state = event.toState();</span>
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L165">        owner.root.createRequest()</span>
+<span class="fc" id="L166">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L167">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L168">                .with(&quot;event&quot;, event.action())</span>
+<span class="fc" id="L169">                .withUrlPath(getApiRoute() + &quot;/events&quot;)</span>
+<span class="fc" id="L170">                .fetchInto(this);</span>
+<span class="fc" id="L171">        this.body = body;</span>
+<span class="fc" id="L172">        this.state = event.toState();</span>
+<span class="fc" id="L173">    }</span>
 
     /**
      * Deletes this review.
@@ -178,8 +179,8 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L181">        owner.root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L182">        owner.root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L183">    }</span>
 
     /**
      * Dismisses this review.
@@ -190,13 +191,13 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public void dismiss(String message) throws IOException {
-<span class="nc" id="L193">        owner.root.createRequest()</span>
-<span class="nc" id="L194">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L195">                .with(&quot;message&quot;, message)</span>
-<span class="nc" id="L196">                .withUrlPath(getApiRoute() + &quot;/dismissals&quot;)</span>
-<span class="nc" id="L197">                .send();</span>
-<span class="nc" id="L198">        state = GHPullRequestReviewState.DISMISSED;</span>
-<span class="nc" id="L199">    }</span>
+<span class="nc" id="L194">        owner.root.createRequest()</span>
+<span class="nc" id="L195">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L196">                .with(&quot;message&quot;, message)</span>
+<span class="nc" id="L197">                .withUrlPath(getApiRoute() + &quot;/dismissals&quot;)</span>
+<span class="nc" id="L198">                .send();</span>
+<span class="nc" id="L199">        state = GHPullRequestReviewState.DISMISSED;</span>
+<span class="nc" id="L200">    }</span>
 
     /**
      * Obtains all the review comments associated with this pull request review.
@@ -206,9 +207,9 @@ import javax.annotation.CheckForNull;
      *             the io exception
      */
     public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() throws IOException {
-<span class="fc" id="L209">        return owner.root.createRequest()</span>
-<span class="fc" id="L210">                .withUrlPath(getApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L211">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(owner));</span>
+<span class="fc" id="L210">        return owner.root.createRequest()</span>
+<span class="fc" id="L211">                .withUrlPath(getApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L212">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(owner));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -12,9 +12,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
-<span class="fc" id="L15">public class GHEventInfo {</span>
-    private GitHub root;
-
+<span class="fc" id="L15">public class GHEventInfo extends GitHubInteractiveObject {</span>
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 
@@ -34,7 +32,7 @@ import java.util.Date;
             value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;,
                     &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L37">    public static class GHEventRepository {</span>
+<span class="fc" id="L35">    public static class GHEventRepository {</span>
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         private long id;
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
@@ -48,19 +46,19 @@ import java.util.Date;
      * @return the type
      */
     public GHEvent getType() {
-<span class="fc" id="L51">        String t = type;</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (t.endsWith(&quot;Event&quot;))</span>
-<span class="fc" id="L53">            t = t.substring(0, t.length() - 5);</span>
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        for (GHEvent e : GHEvent.values()) {</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (e.name().replace(&quot;_&quot;, &quot;&quot;).equalsIgnoreCase(t))</span>
-<span class="fc" id="L56">                return e;</span>
+<span class="fc" id="L49">        String t = type;</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (t.endsWith(&quot;Event&quot;))</span>
+<span class="fc" id="L51">            t = t.substring(0, t.length() - 5);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        for (GHEvent e : GHEvent.values()) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (e.name().replace(&quot;_&quot;, &quot;&quot;).equalsIgnoreCase(t))</span>
+<span class="fc" id="L54">                return e;</span>
         }
-<span class="nc" id="L58">        return null; // unknown event type</span>
+<span class="nc" id="L56">        return null; // unknown event type</span>
     }
 
     GHEventInfo wrapUp(GitHub root) {
-<span class="fc" id="L62">        this.root = root;</span>
-<span class="fc" id="L63">        return this;</span>
+<span class="fc" id="L60">        this.root = root;</span>
+<span class="fc" id="L61">        return this;</span>
     }
 
     /**
@@ -69,7 +67,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="nc" id="L72">        return id;</span>
+<span class="nc" id="L70">        return id;</span>
     }
 
     /**
@@ -78,7 +76,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="nc" id="L81">        return GitHubClient.parseDate(created_at);</span>
+<span class="nc" id="L79">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -91,7 +89,7 @@ import java.util.Date;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHRepository getRepository() throws IOException {
-<span class="nc" id="L94">        return root.getRepository(repo.name);</span>
+<span class="nc" id="L92">        return root.getRepository(repo.name);</span>
     }
 
     /**
@@ -104,7 +102,7 @@ import java.util.Date;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHUser getActor() throws IOException {
-<span class="nc" id="L107">        return root.getUser(actor.getLogin());</span>
+<span class="nc" id="L105">        return root.getUser(actor.getLogin());</span>
     }
 
     /**
@@ -115,7 +113,7 @@ import java.util.Date;
      *             on error
      */
     public String getActorLogin() throws IOException {
-<span class="nc" id="L118">        return actor.getLogin();</span>
+<span class="nc" id="L116">        return actor.getLogin();</span>
     }
 
     /**
@@ -128,7 +126,7 @@ import java.util.Date;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="nc bnc" id="L131" title="All 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());</span>
+<span class="nc bnc" id="L129" title="All 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());</span>
     }
 
     /**
@@ -144,9 +142,9 @@ import java.util.Date;
      *             if payload cannot be parsed
      */
     public &lt;T extends GHEventPayload&gt; T getPayload(Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L147">        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);</span>
-<span class="fc" id="L148">        v.wrapUp(root);</span>
-<span class="fc" id="L149">        return v;</span>
+<span class="fc" id="L145">        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);</span>
+<span class="fc" id="L146">        v.wrapUp(root);</span>
+<span class="fc" id="L147">        return v;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

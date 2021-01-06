@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
                 &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
         justification = &quot;Constructed by JSON API&quot;)
 public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
-    private final GitHub root;
+    private final transient GitHub root;
 
     private final GitHubRequest request;
 
@@ -95,4 +95,4 @@ public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

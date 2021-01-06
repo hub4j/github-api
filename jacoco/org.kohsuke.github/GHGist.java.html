@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 public class GHGist extends GHObject {
 
     final GHUser owner;
-    final GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
@@ -41,14 +40,14 @@ public class GHGist extends GHObject {
     @JsonCreator
     private GHGist(@JacksonInject GitHub root,
             @JsonProperty(&quot;owner&quot;) GHUser owner,
-<span class="fc" id="L44">            @JsonProperty(&quot;files&quot;) Map&lt;String, GHGistFile&gt; files) {</span>
-<span class="fc" id="L45">        this.root = root;</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (Entry&lt;String, GHGistFile&gt; e : files.entrySet()) {</span>
-<span class="fc" id="L47">            e.getValue().fileName = e.getKey();</span>
-<span class="fc" id="L48">        }</span>
-<span class="fc" id="L49">        this.files = Collections.unmodifiableMap(files);</span>
-<span class="fc" id="L50">        this.owner = root.getUser(owner);</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L43">            @JsonProperty(&quot;files&quot;) Map&lt;String, GHGistFile&gt; files) {</span>
+<span class="fc" id="L44">        this.root = root;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Entry&lt;String, GHGistFile&gt; e : files.entrySet()) {</span>
+<span class="fc" id="L46">            e.getValue().fileName = e.getKey();</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        this.files = Collections.unmodifiableMap(files);</span>
+<span class="fc" id="L49">        this.owner = root.getUser(owner);</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as &quot;aa5a315d61ae9438b18d&quot;. If the id
@@ -61,7 +60,7 @@ public class GHGist extends GHObject {
     @Deprecated
     @Override
     public long getId() {
-<span class="fc" id="L64">        return Long.parseLong(getGistId());</span>
+<span class="fc" id="L63">        return Long.parseLong(getGistId());</span>
     }
 
     /**
@@ -71,7 +70,7 @@ public class GHGist extends GHObject {
      * @return id of this Gist
      */
     public String getGistId() {
-<span class="fc" id="L74">        return this.id;</span>
+<span class="fc" id="L73">        return this.id;</span>
     }
 
     /**
@@ -82,7 +81,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHUser getOwner() throws IOException {
-<span class="fc" id="L85">        return owner;</span>
+<span class="fc" id="L84">        return owner;</span>
     }
 
     /**
@@ -91,7 +90,7 @@ public class GHGist extends GHObject {
      * @return the forks url
      */
     public String getForksUrl() {
-<span class="nc" id="L94">        return forks_url;</span>
+<span class="nc" id="L93">        return forks_url;</span>
     }
 
     /**
@@ -100,7 +99,7 @@ public class GHGist extends GHObject {
      * @return the commits url
      */
     public String getCommitsUrl() {
-<span class="fc" id="L103">        return commits_url;</span>
+<span class="fc" id="L102">        return commits_url;</span>
     }
 
     /**
@@ -109,7 +108,7 @@ public class GHGist extends GHObject {
      * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
-<span class="fc" id="L112">        return git_pull_url;</span>
+<span class="fc" id="L111">        return git_pull_url;</span>
     }
 
     /**
@@ -118,16 +117,16 @@ public class GHGist extends GHObject {
      * @return the git push url
      */
     public String getGitPushUrl() {
-<span class="fc" id="L121">        return git_push_url;</span>
+<span class="fc" id="L120">        return git_push_url;</span>
     }
 
     /**
      * Get the html url.
-     * 
+     *
      * @return the github html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L130">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L129">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -136,7 +135,7 @@ public class GHGist extends GHObject {
      * @return the boolean
      */
     public boolean isPublic() {
-<span class="fc" id="L139">        return _public;</span>
+<span class="fc" id="L138">        return _public;</span>
     }
 
     /**
@@ -145,7 +144,7 @@ public class GHGist extends GHObject {
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L148">        return description;</span>
+<span class="fc" id="L147">        return description;</span>
     }
 
     /**
@@ -154,7 +153,7 @@ public class GHGist extends GHObject {
      * @return the comment count
      */
     public int getCommentCount() {
-<span class="nc" id="L157">        return comments;</span>
+<span class="nc" id="L156">        return comments;</span>
     }
 
     /**
@@ -163,7 +162,7 @@ public class GHGist extends GHObject {
      * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
-<span class="fc" id="L166">        return comments_url;</span>
+<span class="fc" id="L165">        return comments_url;</span>
     }
 
     /**
@@ -174,7 +173,7 @@ public class GHGist extends GHObject {
      * @return the file
      */
     public GHGistFile getFile(String name) {
-<span class="fc" id="L177">        return files.get(name);</span>
+<span class="fc" id="L176">        return files.get(name);</span>
     }
 
     /**
@@ -183,15 +182,15 @@ public class GHGist extends GHObject {
      * @return the files
      */
     public Map&lt;String, GHGistFile&gt; getFiles() {
-<span class="fc" id="L186">        return files;</span>
+<span class="fc" id="L185">        return files;</span>
     }
 
     String getApiTailUrl(String tail) {
-<span class="fc" id="L190">        String result = &quot;/gists/&quot; + id;</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (!StringUtils.isBlank(tail)) {</span>
-<span class="fc" id="L192">            result += StringUtils.prependIfMissing(tail, &quot;/&quot;);</span>
+<span class="fc" id="L189">        String result = &quot;/gists/&quot; + id;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (!StringUtils.isBlank(tail)) {</span>
+<span class="fc" id="L191">            result += StringUtils.prependIfMissing(tail, &quot;/&quot;);</span>
         }
-<span class="fc" id="L194">        return result;</span>
+<span class="fc" id="L193">        return result;</span>
     }
 
     /**
@@ -201,8 +200,8 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-<span class="fc" id="L204">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L203">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
+<span class="fc" id="L204">    }</span>
 
     /**
      * Unstar.
@@ -211,8 +210,8 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-<span class="fc" id="L214">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
-<span class="fc" id="L215">    }</span>
+<span class="fc" id="L213">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
+<span class="fc" id="L214">    }</span>
 
     /**
      * Is starred boolean.
@@ -222,7 +221,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public boolean isStarred() throws IOException {
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;star&quot;)).fetchHttpStatusCode() / 100 == 2;</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;star&quot;)).fetchHttpStatusCode() / 100 == 2;</span>
     }
 
     /**
@@ -233,7 +232,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGist fork() throws IOException {
-<span class="fc" id="L236">        return root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).fetch(GHGist.class);</span>
+<span class="fc" id="L235">        return root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).fetch(GHGist.class);</span>
     }
 
     /**
@@ -242,7 +241,7 @@ public class GHGist extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHGist&gt; listForks() {
-<span class="fc" id="L245">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;forks&quot;)).toIterable(GHGist[].class, null);</span>
+<span class="fc" id="L244">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;forks&quot;)).toIterable(GHGist[].class, null);</span>
     }
 
     /**
@@ -252,8 +251,8 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L255">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/gists/&quot; + id).send();</span>
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L254">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/gists/&quot; + id).send();</span>
+<span class="fc" id="L255">    }</span>
 
     /**
      * Updates this gist via a builder.
@@ -263,23 +262,23 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGistUpdater update() throws IOException {
-<span class="fc" id="L266">        return new GHGistUpdater(this);</span>
+<span class="fc" id="L265">        return new GHGistUpdater(this);</span>
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L272">            return true;</span>
-<span class="pc bpc" id="L273" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
-<span class="nc" id="L274">            return false;</span>
-<span class="fc" id="L275">        GHGist ghGist = (GHGist) o;</span>
-<span class="fc" id="L276">        return id.equals(ghGist.id);</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L271">            return true;</span>
+<span class="pc bpc" id="L272" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
+<span class="nc" id="L273">            return false;</span>
+<span class="fc" id="L274">        GHGist ghGist = (GHGist) o;</span>
+<span class="fc" id="L275">        return id.equals(ghGist.id);</span>
 
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L282">        return id.hashCode();</span>
+<span class="nc" id="L281">        return id.hashCode();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -18,13 +18,11 @@ import java.net.URL;
     String context;
     GHUser creator;
 
-    private GitHub root;
-
     GHCommitStatus wrapUp(GitHub root) {
-<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (creator != null)</span>
-<span class="fc" id="L25">            creator.wrapUp(root);</span>
-<span class="fc" id="L26">        this.root = root;</span>
-<span class="fc" id="L27">        return this;</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        if (creator != null)</span>
+<span class="fc" id="L23">            creator.wrapUp(root);</span>
+<span class="fc" id="L24">        this.root = root;</span>
+<span class="fc" id="L25">        return this;</span>
     }
 
     /**
@@ -33,11 +31,11 @@ import java.net.URL;
      * @return the state
      */
     public GHCommitState getState() {
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
-<span class="fc" id="L38">                return s;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
+<span class="fc" id="L36">                return s;</span>
         }
-<span class="nc" id="L40">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
+<span class="nc" id="L38">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
     }
 
     /**
@@ -48,7 +46,7 @@ import java.net.URL;
      * @return the target url
      */
     public String getTargetUrl() {
-<span class="fc" id="L51">        return target_url;</span>
+<span class="fc" id="L49">        return target_url;</span>
     }
 
     /**
@@ -57,7 +55,7 @@ import java.net.URL;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L60">        return description;</span>
+<span class="fc" id="L58">        return description;</span>
     }
 
     /**
@@ -68,7 +66,7 @@ import java.net.URL;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="nc" id="L71">        return root.intern(creator);</span>
+<span class="nc" id="L69">        return root.intern(creator);</span>
     }
 
     /**
@@ -77,7 +75,7 @@ import java.net.URL;
      * @return the context
      */
     public String getContext() {
-<span class="fc" id="L80">        return context;</span>
+<span class="fc" id="L78">        return context;</span>
     }
 
     /**
@@ -85,7 +83,7 @@ import java.net.URL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L88">        return null;</span>
+<span class="nc" id="L86">        return null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

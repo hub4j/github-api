@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
 import java.util.*;
@@ -37,8 +38,8 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static org.kohsuke.github.Previews.INERTIA;
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * Root of the GitHub API.
@@ -111,8 +112,8 @@ public class GitHub {
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
-<span class="fc" id="L114">            GitHubRateLimitChecker rateLimitChecker) throws IOException {</span>
-<span class="fc" id="L115">        this.client = new GitHubHttpUrlConnectionClient(apiUrl,</span>
+<span class="fc" id="L115">            GitHubRateLimitChecker rateLimitChecker) throws IOException {</span>
+<span class="fc" id="L116">        this.client = new GitHubHttpUrlConnectionClient(apiUrl,</span>
                 login,
                 oauthAccessToken,
                 jwtToken,
@@ -121,10 +122,10 @@ public class GitHub {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-<span class="nc" id="L124">                (myself) -&gt; setMyself(myself));</span>
-<span class="fc" id="L125">        users = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="fc" id="L126">        orgs = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="fc" id="L127">    }</span>
+<span class="nc" id="L125">                (myself) -&gt; setMyself(myself));</span>
+<span class="fc" id="L126">        users = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L127">        orgs = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc" id="L128">    }</span>
 
     /**
      * Obtains the credential from &quot;~/.github&quot; or from the System Environment Properties.
@@ -134,7 +135,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connect() throws IOException {
-<span class="nc" id="L137">        return GitHubBuilder.fromCredentials().build();</span>
+<span class="nc" id="L138">        return GitHubBuilder.fromCredentials().build();</span>
     }
 
     /**
@@ -154,7 +155,7 @@ public class GitHub {
      */
     @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-<span class="nc" id="L157">        return connectToEnterpriseWithOAuth(apiUrl, null, oauthAccessToken);</span>
+<span class="nc" id="L158">        return connectToEnterpriseWithOAuth(apiUrl, null, oauthAccessToken);</span>
     }
 
     /**
@@ -175,7 +176,7 @@ public class GitHub {
      */
     public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken)
             throws IOException {
-<span class="nc" id="L178">        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();</span>
+<span class="nc" id="L179">        return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();</span>
     }
 
     /**
@@ -194,7 +195,7 @@ public class GitHub {
      */
     @Deprecated
     public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
-<span class="fc" id="L197">        return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();</span>
+<span class="fc" id="L198">        return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();</span>
     }
 
     /**
@@ -209,7 +210,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connect(String login, String oauthAccessToken) throws IOException {
-<span class="nc" id="L212">        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).build();</span>
+<span class="nc" id="L213">        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).build();</span>
     }
 
     /**
@@ -228,7 +229,7 @@ public class GitHub {
      */
     @Deprecated
     public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
-<span class="nc" id="L231">        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();</span>
+<span class="nc" id="L232">        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();</span>
     }
 
     /**
@@ -248,7 +249,7 @@ public class GitHub {
      */
     @Deprecated
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
-<span class="fc" id="L251">        return new GitHubBuilder().withPassword(login, password).build();</span>
+<span class="fc" id="L252">        return new GitHubBuilder().withPassword(login, password).build();</span>
     }
 
     /**
@@ -261,7 +262,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connectUsingOAuth(String oauthAccessToken) throws IOException {
-<span class="nc" id="L264">        return new GitHubBuilder().withOAuthToken(oauthAccessToken).build();</span>
+<span class="nc" id="L265">        return new GitHubBuilder().withOAuthToken(oauthAccessToken).build();</span>
     }
 
     /**
@@ -276,7 +277,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connectUsingOAuth(String githubServer, String oauthAccessToken) throws IOException {
-<span class="nc" id="L279">        return new GitHubBuilder().withEndpoint(githubServer).withOAuthToken(oauthAccessToken).build();</span>
+<span class="nc" id="L280">        return new GitHubBuilder().withEndpoint(githubServer).withOAuthToken(oauthAccessToken).build();</span>
     }
 
     /**
@@ -289,7 +290,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connectAnonymously() throws IOException {
-<span class="nc" id="L292">        return new GitHubBuilder().build();</span>
+<span class="nc" id="L293">        return new GitHubBuilder().build();</span>
     }
 
     /**
@@ -304,7 +305,7 @@ public class GitHub {
      *             the io exception
      */
     public static GitHub connectToEnterpriseAnonymously(String apiUrl) throws IOException {
-<span class="fc" id="L307">        return new GitHubBuilder().withEndpoint(apiUrl).build();</span>
+<span class="fc" id="L308">        return new GitHubBuilder().withEndpoint(apiUrl).build();</span>
     }
 
     /**
@@ -316,11 +317,11 @@ public class GitHub {
      */
     public static GitHub offline() {
         try {
-<span class="fc" id="L319">            return new GitHubBuilder().withEndpoint(&quot;https://api.github.invalid&quot;)</span>
-<span class="fc" id="L320">                    .withConnector(HttpConnector.OFFLINE)</span>
-<span class="fc" id="L321">                    .build();</span>
-<span class="nc" id="L322">        } catch (IOException e) {</span>
-<span class="nc" id="L323">            throw new IllegalStateException(&quot;The offline implementation constructor should not connect&quot;, e);</span>
+<span class="fc" id="L320">            return new GitHubBuilder().withEndpoint(&quot;https://api.github.invalid&quot;)</span>
+<span class="fc" id="L321">                    .withConnector(HttpConnector.OFFLINE)</span>
+<span class="fc" id="L322">                    .build();</span>
+<span class="nc" id="L323">        } catch (IOException e) {</span>
+<span class="nc" id="L324">            throw new IllegalStateException(&quot;The offline implementation constructor should not connect&quot;, e);</span>
         }
     }
 
@@ -330,7 +331,7 @@ public class GitHub {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-<span class="fc" id="L333">        return client.isAnonymous();</span>
+<span class="fc" id="L334">        return client.isAnonymous();</span>
     }
 
     /**
@@ -339,7 +340,7 @@ public class GitHub {
      * @return {@code true} if this is an always offline &quot;connection&quot;.
      */
     public boolean isOffline() {
-<span class="fc" id="L342">        return client.isOffline();</span>
+<span class="fc" id="L343">        return client.isOffline();</span>
     }
 
     /**
@@ -348,7 +349,7 @@ public class GitHub {
      * @return the connector
      */
     public HttpConnector getConnector() {
-<span class="nc" id="L351">        return client.getConnector();</span>
+<span class="fc" id="L352">        return client.getConnector();</span>
     }
 
     /**
@@ -360,8 +361,8 @@ public class GitHub {
      */
     @Deprecated
     public void setConnector(HttpConnector connector) {
-<span class="nc" id="L363">        client.setConnector(connector);</span>
-<span class="nc" id="L364">    }</span>
+<span class="nc" id="L364">        client.setConnector(connector);</span>
+<span class="nc" id="L365">    }</span>
 
     /**
      * Gets api url.
@@ -369,7 +370,7 @@ public class GitHub {
      * @return the api url
      */
     public String getApiUrl() {
-<span class="fc" id="L372">        return client.getApiUrl();</span>
+<span class="fc" id="L373">        return client.getApiUrl();</span>
     }
 
     /**
@@ -388,7 +389,7 @@ public class GitHub {
      */
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
-<span class="fc" id="L391">        return client.getRateLimit();</span>
+<span class="fc" id="L392">        return client.getRateLimit();</span>
     }
 
     /**
@@ -402,7 +403,7 @@ public class GitHub {
     @Nonnull
     @Deprecated
     public GHRateLimit lastRateLimit() {
-<span class="fc" id="L405">        return client.lastRateLimit();</span>
+<span class="fc" id="L406">        return client.lastRateLimit();</span>
     }
 
     /**
@@ -417,7 +418,7 @@ public class GitHub {
     @Nonnull
     @Deprecated
     public GHRateLimit rateLimit() throws IOException {
-<span class="fc" id="L420">        return client.rateLimit(RateLimitTarget.CORE);</span>
+<span class="fc" id="L421">        return client.rateLimit(RateLimitTarget.CORE);</span>
     }
 
     /**
@@ -429,22 +430,22 @@ public class GitHub {
      */
     @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
-<span class="fc" id="L432">        client.requireCredential();</span>
-<span class="fc" id="L433">        synchronized (this) {</span>
-<span class="fc bfc" id="L434" title="All 2 branches covered.">            if (this.myself == null) {</span>
-<span class="fc" id="L435">                GHMyself u = createRequest().withUrlPath(&quot;/user&quot;).fetch(GHMyself.class);</span>
-<span class="fc" id="L436">                setMyself(u);</span>
+<span class="fc" id="L433">        client.requireCredential();</span>
+<span class="fc" id="L434">        synchronized (this) {</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">            if (this.myself == null) {</span>
+<span class="fc" id="L436">                GHMyself u = createRequest().withUrlPath(&quot;/user&quot;).fetch(GHMyself.class);</span>
+<span class="fc" id="L437">                setMyself(u);</span>
             }
-<span class="fc" id="L438">            return myself;</span>
+<span class="fc" id="L439">            return myself;</span>
         }
     }
 
     private void setMyself(GHMyself myself) {
-<span class="fc" id="L443">        synchronized (this) {</span>
-<span class="fc" id="L444">            myself.wrapUp(this);</span>
-<span class="fc" id="L445">            this.myself = myself;</span>
-<span class="fc" id="L446">        }</span>
-<span class="fc" id="L447">    }</span>
+<span class="fc" id="L444">        synchronized (this) {</span>
+<span class="fc" id="L445">            myself.wrapUp(this);</span>
+<span class="fc" id="L446">            this.myself = myself;</span>
+<span class="fc" id="L447">        }</span>
+<span class="fc" id="L448">    }</span>
 
     /**
      * Obtains the object that represents the named user.
@@ -456,22 +457,22 @@ public class GitHub {
      *             the io exception
      */
     public GHUser getUser(String login) throws IOException {
-<span class="fc" id="L459">        GHUser u = users.get(login);</span>
-<span class="pc bpc" id="L460" title="1 of 2 branches missed.">        if (u == null) {</span>
-<span class="fc" id="L461">            u = createRequest().withUrlPath(&quot;/users/&quot; + login).fetch(GHUser.class);</span>
-<span class="fc" id="L462">            u.root = this;</span>
-<span class="fc" id="L463">            users.put(u.getLogin(), u);</span>
+<span class="fc" id="L460">        GHUser u = users.get(login);</span>
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">        if (u == null) {</span>
+<span class="fc" id="L462">            u = createRequest().withUrlPath(&quot;/users/&quot; + login).fetch(GHUser.class);</span>
+<span class="fc" id="L463">            u.root = this;</span>
+<span class="fc" id="L464">            users.put(u.getLogin(), u);</span>
         }
-<span class="fc" id="L465">        return u;</span>
+<span class="fc" id="L466">        return u;</span>
     }
 
     /**
      * clears all cached data in order for external changes (modifications and del) to be reflected
      */
     public void refreshCache() {
-<span class="nc" id="L472">        users.clear();</span>
-<span class="nc" id="L473">        orgs.clear();</span>
-<span class="nc" id="L474">    }</span>
+<span class="nc" id="L473">        users.clear();</span>
+<span class="nc" id="L474">        orgs.clear();</span>
+<span class="nc" id="L475">    }</span>
 
     /**
      * Interns the given {@link GHUser}.
@@ -481,13 +482,13 @@ public class GitHub {
      * @return the user
      */
     protected GHUser getUser(GHUser orig) {
-<span class="fc" id="L484">        GHUser u = users.get(orig.getLogin());</span>
-<span class="fc bfc" id="L485" title="All 2 branches covered.">        if (u == null) {</span>
-<span class="fc" id="L486">            orig.root = this;</span>
-<span class="fc" id="L487">            users.put(orig.getLogin(), orig);</span>
-<span class="fc" id="L488">            return orig;</span>
+<span class="fc" id="L485">        GHUser u = users.get(orig.getLogin());</span>
+<span class="fc bfc" id="L486" title="All 2 branches covered.">        if (u == null) {</span>
+<span class="fc" id="L487">            orig.root = this;</span>
+<span class="fc" id="L488">            users.put(orig.getLogin(), orig);</span>
+<span class="fc" id="L489">            return orig;</span>
         }
-<span class="fc" id="L490">        return u;</span>
+<span class="fc" id="L491">        return u;</span>
     }
 
     /**
@@ -500,12 +501,12 @@ public class GitHub {
      *             the io exception
      */
     public GHOrganization getOrganization(String name) throws IOException {
-<span class="fc" id="L503">        GHOrganization o = orgs.get(name);</span>
-<span class="fc bfc" id="L504" title="All 2 branches covered.">        if (o == null) {</span>
-<span class="fc" id="L505">            o = createRequest().withUrlPath(&quot;/orgs/&quot; + name).fetch(GHOrganization.class).wrapUp(this);</span>
-<span class="fc" id="L506">            orgs.put(name, o);</span>
+<span class="fc" id="L504">        GHOrganization o = orgs.get(name);</span>
+<span class="fc bfc" id="L505" title="All 2 branches covered.">        if (o == null) {</span>
+<span class="fc" id="L506">            o = createRequest().withUrlPath(&quot;/orgs/&quot; + name).fetch(GHOrganization.class).wrapUp(this);</span>
+<span class="fc" id="L507">            orgs.put(name, o);</span>
         }
-<span class="fc" id="L508">        return o;</span>
+<span class="fc" id="L509">        return o;</span>
     }
 
     /**
@@ -514,7 +515,7 @@ public class GitHub {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHOrganization&gt; listOrganizations() {
-<span class="fc" id="L517">        return listOrganizations(null);</span>
+<span class="fc" id="L518">        return listOrganizations(null);</span>
     }
 
     /**
@@ -526,9 +527,9 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/orgs/#parameters&quot;&gt;List All Orgs - Parameters&lt;/a&gt;
      */
     public PagedIterable&lt;GHOrganization&gt; listOrganizations(final String since) {
-<span class="fc" id="L529">        return createRequest().with(&quot;since&quot;, since)</span>
-<span class="fc" id="L530">                .withUrlPath(&quot;/organizations&quot;)</span>
-<span class="fc" id="L531">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L530">        return createRequest().with(&quot;since&quot;, since)</span>
+<span class="fc" id="L531">                .withUrlPath(&quot;/organizations&quot;)</span>
+<span class="fc" id="L532">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -542,11 +543,11 @@ public class GitHub {
      * @see GHRepository#getName() GHRepository#getName()
      */
     public GHRepository getRepository(String name) throws IOException {
-<span class="fc" id="L545">        String[] tokens = name.split(&quot;/&quot;);</span>
-<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (tokens.length &lt; 2) {</span>
-<span class="nc" id="L547">            throw new IllegalArgumentException(&quot;Repository name must be in format owner/repo&quot;);</span>
+<span class="fc" id="L546">        String[] tokens = name.split(&quot;/&quot;);</span>
+<span class="pc bpc" id="L547" title="1 of 2 branches missed.">        if (tokens.length &lt; 2) {</span>
+<span class="nc" id="L548">            throw new IllegalArgumentException(&quot;Repository name must be in format owner/repo&quot;);</span>
         }
-<span class="fc" id="L549">        return GHRepository.read(this, tokens[0], tokens[1]);</span>
+<span class="fc" id="L550">        return GHRepository.read(this, tokens[0], tokens[1]);</span>
     }
 
     /**
@@ -559,7 +560,7 @@ public class GitHub {
      *             the io exception
      */
     public GHRepository getRepositoryById(String id) throws IOException {
-<span class="nc" id="L562">        return createRequest().withUrlPath(&quot;/repositories/&quot; + id).fetch(GHRepository.class).wrap(this);</span>
+<span class="nc" id="L563">        return createRequest().withUrlPath(&quot;/repositories/&quot; + id).fetch(GHRepository.class).wrap(this);</span>
     }
 
     /**
@@ -571,7 +572,7 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/licenses/&quot;&gt;GitHub API - Licenses&lt;/a&gt;
      */
     public PagedIterable&lt;GHLicense&gt; listLicenses() throws IOException {
-<span class="fc" id="L574">        return createRequest().withUrlPath(&quot;/licenses&quot;).toIterable(GHLicense[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L575">        return createRequest().withUrlPath(&quot;/licenses&quot;).toIterable(GHLicense[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -582,7 +583,7 @@ public class GitHub {
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listUsers() throws IOException {
-<span class="fc" id="L585">        return createRequest().withUrlPath(&quot;/users&quot;).toIterable(GHUser[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L586">        return createRequest().withUrlPath(&quot;/users&quot;).toIterable(GHUser[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -596,7 +597,7 @@ public class GitHub {
      * @see GHLicense#getKey() GHLicense#getKey()
      */
     public GHLicense getLicense(String key) throws IOException {
-<span class="fc" id="L599">        return createRequest().withUrlPath(&quot;/licenses/&quot; + key).fetch(GHLicense.class);</span>
+<span class="fc" id="L600">        return createRequest().withUrlPath(&quot;/licenses/&quot; + key).fetch(GHLicense.class);</span>
     }
 
     /**
@@ -613,8 +614,8 @@ public class GitHub {
      *      Plans&lt;/a&gt;
      */
     public PagedIterable&lt;GHMarketplacePlan&gt; listMarketplacePlans() throws IOException {
-<span class="fc" id="L616">        return createRequest().withUrlPath(&quot;/marketplace_listing/plans&quot;)</span>
-<span class="fc" id="L617">                .toIterable(GHMarketplacePlan[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L617">        return createRequest().withUrlPath(&quot;/marketplace_listing/plans&quot;)</span>
+<span class="fc" id="L618">                .toIterable(GHMarketplacePlan[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -625,9 +626,9 @@ public class GitHub {
      *             the io exception
      */
     public List&lt;GHInvitation&gt; getMyInvitations() throws IOException {
-<span class="nc" id="L628">        return createRequest().withUrlPath(&quot;/user/repository_invitations&quot;)</span>
-<span class="nc" id="L629">                .toIterable(GHInvitation[].class, item -&gt; item.wrapUp(this))</span>
-<span class="nc" id="L630">                .toList();</span>
+<span class="nc" id="L629">        return createRequest().withUrlPath(&quot;/user/repository_invitations&quot;)</span>
+<span class="nc" id="L630">                .toIterable(GHInvitation[].class, item -&gt; item.wrapUp(this))</span>
+<span class="nc" id="L631">                .toList();</span>
     }
 
     /**
@@ -641,15 +642,15 @@ public class GitHub {
      *             the io exception
      */
     public Map&lt;String, GHOrganization&gt; getMyOrganizations() throws IOException {
-<span class="fc" id="L644">        GHOrganization[] orgs = createRequest().withUrlPath(&quot;/user/orgs&quot;)</span>
-<span class="fc" id="L645">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this))</span>
-<span class="fc" id="L646">                .toArray();</span>
-<span class="fc" id="L647">        Map&lt;String, GHOrganization&gt; r = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L648" title="All 2 branches covered.">        for (GHOrganization o : orgs) {</span>
+<span class="fc" id="L645">        GHOrganization[] orgs = createRequest().withUrlPath(&quot;/user/orgs&quot;)</span>
+<span class="fc" id="L646">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this))</span>
+<span class="fc" id="L647">                .toArray();</span>
+<span class="fc" id="L648">        Map&lt;String, GHOrganization&gt; r = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L649" title="All 2 branches covered.">        for (GHOrganization o : orgs) {</span>
             // don't put 'o' into orgs because they are shallow
-<span class="fc" id="L650">            r.put(o.getLogin(), o);</span>
+<span class="fc" id="L651">            r.put(o.getLogin(), o);</span>
         }
-<span class="fc" id="L652">        return r;</span>
+<span class="fc" id="L653">        return r;</span>
     }
 
     /**
@@ -667,8 +668,8 @@ public class GitHub {
      *      Marketplace purchases&lt;/a&gt;
      */
     public PagedIterable&lt;GHMarketplaceUserPurchase&gt; getMyMarketplacePurchases() throws IOException {
-<span class="fc" id="L670">        return createRequest().withUrlPath(&quot;/user/marketplace_purchases&quot;)</span>
-<span class="fc" id="L671">                .toIterable(GHMarketplaceUserPurchase[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L671">        return createRequest().withUrlPath(&quot;/user/marketplace_purchases&quot;)</span>
+<span class="fc" id="L672">                .toIterable(GHMarketplaceUserPurchase[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -681,7 +682,7 @@ public class GitHub {
      *             the io exception
      */
     public Map&lt;String, GHOrganization&gt; getUserPublicOrganizations(GHUser user) throws IOException {
-<span class="fc" id="L684">        return getUserPublicOrganizations(user.getLogin());</span>
+<span class="fc" id="L685">        return getUserPublicOrganizations(user.getLogin());</span>
     }
 
     /**
@@ -696,15 +697,15 @@ public class GitHub {
      *             the io exception
      */
     public Map&lt;String, GHOrganization&gt; getUserPublicOrganizations(String login) throws IOException {
-<span class="fc" id="L699">        GHOrganization[] orgs = createRequest().withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
-<span class="fc" id="L700">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this))</span>
-<span class="fc" id="L701">                .toArray();</span>
-<span class="fc" id="L702">        Map&lt;String, GHOrganization&gt; r = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L703" title="All 2 branches covered.">        for (GHOrganization o : orgs) {</span>
+<span class="fc" id="L700">        GHOrganization[] orgs = createRequest().withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L701">                .toIterable(GHOrganization[].class, item -&gt; item.wrapUp(this))</span>
+<span class="fc" id="L702">                .toArray();</span>
+<span class="fc" id="L703">        Map&lt;String, GHOrganization&gt; r = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L704" title="All 2 branches covered.">        for (GHOrganization o : orgs) {</span>
             // don't put 'o' into orgs cache because they are shallow records
-<span class="fc" id="L705">            r.put(o.getLogin(), o);</span>
+<span class="fc" id="L706">            r.put(o.getLogin(), o);</span>
         }
-<span class="fc" id="L707">        return r;</span>
+<span class="fc" id="L708">        return r;</span>
     }
 
     /**
@@ -718,19 +719,19 @@ public class GitHub {
      *             the io exception
      */
     public Map&lt;String, Set&lt;GHTeam&gt;&gt; getMyTeams() throws IOException {
-<span class="fc" id="L721">        Map&lt;String, Set&lt;GHTeam&gt;&gt; allMyTeams = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L722">        for (GHTeam team : createRequest().withUrlPath(&quot;/user/teams&quot;)</span>
-<span class="fc" id="L723">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this))</span>
-<span class="fc bfc" id="L724" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="fc" id="L725">            String orgLogin = team.getOrganization().getLogin();</span>
-<span class="fc" id="L726">            Set&lt;GHTeam&gt; teamsPerOrg = allMyTeams.get(orgLogin);</span>
-<span class="fc bfc" id="L727" title="All 2 branches covered.">            if (teamsPerOrg == null) {</span>
-<span class="fc" id="L728">                teamsPerOrg = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L722">        Map&lt;String, Set&lt;GHTeam&gt;&gt; allMyTeams = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L723">        for (GHTeam team : createRequest().withUrlPath(&quot;/user/teams&quot;)</span>
+<span class="fc" id="L724">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this))</span>
+<span class="fc bfc" id="L725" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="fc" id="L726">            String orgLogin = team.getOrganization().getLogin();</span>
+<span class="fc" id="L727">            Set&lt;GHTeam&gt; teamsPerOrg = allMyTeams.get(orgLogin);</span>
+<span class="fc bfc" id="L728" title="All 2 branches covered.">            if (teamsPerOrg == null) {</span>
+<span class="fc" id="L729">                teamsPerOrg = new HashSet&lt;&gt;();</span>
             }
-<span class="fc" id="L730">            teamsPerOrg.add(team);</span>
-<span class="fc" id="L731">            allMyTeams.put(orgLogin, teamsPerOrg);</span>
+<span class="fc" id="L731">            teamsPerOrg.add(team);</span>
+<span class="fc" id="L732">            allMyTeams.put(orgLogin, teamsPerOrg);</span>
         }
-<span class="fc" id="L733">        return allMyTeams;</span>
+<span class="fc" id="L734">        return allMyTeams;</span>
     }
 
     /**
@@ -741,13 +742,13 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
-     * 
+     *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-legacy&quot;&gt;deprecation notice&lt;/a&gt;
      */
     @Deprecated
     public GHTeam getTeam(int id) throws IOException {
-<span class="fc" id="L750">        return createRequest().withUrlPath(&quot;/teams/&quot; + id).fetch(GHTeam.class).wrapUp(this);</span>
+<span class="fc" id="L751">        return createRequest().withUrlPath(&quot;/teams/&quot; + id).fetch(GHTeam.class).wrapUp(this);</span>
     }
 
     /**
@@ -758,9 +759,9 @@ public class GitHub {
      *             the io exception
      */
     public List&lt;GHEventInfo&gt; getEvents() throws IOException {
-<span class="fc" id="L761">        return createRequest().withUrlPath(&quot;/events&quot;)</span>
-<span class="fc" id="L762">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(this))</span>
-<span class="fc" id="L763">                .toList();</span>
+<span class="fc" id="L762">        return createRequest().withUrlPath(&quot;/events&quot;)</span>
+<span class="fc" id="L763">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(this))</span>
+<span class="fc" id="L764">                .toList();</span>
     }
 
     /**
@@ -773,7 +774,7 @@ public class GitHub {
      *             the io exception
      */
     public GHGist getGist(String id) throws IOException {
-<span class="fc" id="L776">        return createRequest().withUrlPath(&quot;/gists/&quot; + id).fetch(GHGist.class);</span>
+<span class="fc" id="L777">        return createRequest().withUrlPath(&quot;/gists/&quot; + id).fetch(GHGist.class);</span>
     }
 
     /**
@@ -782,7 +783,7 @@ public class GitHub {
      * @return the gh gist builder
      */
     public GHGistBuilder createGist() {
-<span class="fc" id="L785">        return new GHGistBuilder(this);</span>
+<span class="fc" id="L786">        return new GHGistBuilder(this);</span>
     }
 
     /**
@@ -802,9 +803,9 @@ public class GitHub {
      *             the io exception
      */
     public &lt;T extends GHEventPayload&gt; T parseEventPayload(Reader r, Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L805">        T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);</span>
-<span class="fc" id="L806">        t.wrapUp(this);</span>
-<span class="fc" id="L807">        return t;</span>
+<span class="fc" id="L806">        T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);</span>
+<span class="fc" id="L807">        t.wrapUp(this);</span>
+<span class="fc" id="L808">        return t;</span>
     }
 
     /**
@@ -826,7 +827,7 @@ public class GitHub {
     @Deprecated
     public GHRepository createRepository(String name, String description, String homepage, boolean isPublic)
             throws IOException {
-<span class="pc bpc" id="L829" title="1 of 2 branches missed.">        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();</span>
+<span class="pc bpc" id="L830" title="1 of 2 branches missed.">        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();</span>
     }
 
     /**
@@ -845,7 +846,7 @@ public class GitHub {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-<span class="fc" id="L848">        return new GHCreateRepositoryBuilder(this, &quot;/user/repos&quot;, name);</span>
+<span class="fc" id="L849">        return new GHCreateRepositoryBuilder(name, this, &quot;/user/repos&quot;);</span>
     }
 
     /**
@@ -865,9 +866,9 @@ public class GitHub {
      * @see &lt;a href=&quot;http://developer.github.com/v3/oauth/#create-a-new-authorization&quot;&gt;Documentation&lt;/a&gt;
      */
     public GHAuthorization createToken(Collection&lt;String&gt; scope, String note, String noteUrl) throws IOException {
-<span class="fc" id="L868">        Requester requester = createRequest().with(&quot;scopes&quot;, scope).with(&quot;note&quot;, note).with(&quot;note_url&quot;, noteUrl);</span>
+<span class="fc" id="L869">        Requester requester = createRequest().with(&quot;scopes&quot;, scope).with(&quot;note&quot;, note).with(&quot;note_url&quot;, noteUrl);</span>
 
-<span class="nc" id="L870">        return requester.method(&quot;POST&quot;).withUrlPath(&quot;/authorizations&quot;).fetch(GHAuthorization.class).wrap(this);</span>
+<span class="nc" id="L871">        return requester.method(&quot;POST&quot;).withUrlPath(&quot;/authorizations&quot;).fetch(GHAuthorization.class).wrap(this);</span>
     }
 
     /**
@@ -895,13 +896,13 @@ public class GitHub {
     public GHAuthorization createToken(Collection&lt;String&gt; scope, String note, String noteUrl, Supplier&lt;String&gt; OTP)
             throws IOException {
         try {
-<span class="nc" id="L898">            return createToken(scope, note, noteUrl);</span>
-<span class="fc" id="L899">        } catch (GHOTPRequiredException ex) {</span>
-<span class="fc" id="L900">            String OTPstring = OTP.get();</span>
-<span class="fc" id="L901">            Requester requester = createRequest().with(&quot;scopes&quot;, scope).with(&quot;note&quot;, note).with(&quot;note_url&quot;, noteUrl);</span>
+<span class="nc" id="L899">            return createToken(scope, note, noteUrl);</span>
+<span class="fc" id="L900">        } catch (GHOTPRequiredException ex) {</span>
+<span class="fc" id="L901">            String OTPstring = OTP.get();</span>
+<span class="fc" id="L902">            Requester requester = createRequest().with(&quot;scopes&quot;, scope).with(&quot;note&quot;, note).with(&quot;note_url&quot;, noteUrl);</span>
             // Add the OTP from the user
-<span class="fc" id="L903">            requester.setHeader(&quot;x-github-otp&quot;, OTPstring);</span>
-<span class="fc" id="L904">            return requester.method(&quot;POST&quot;).withUrlPath(&quot;/authorizations&quot;).fetch(GHAuthorization.class).wrap(this);</span>
+<span class="fc" id="L904">            requester.setHeader(&quot;x-github-otp&quot;, OTPstring);</span>
+<span class="fc" id="L905">            return requester.method(&quot;POST&quot;).withUrlPath(&quot;/authorizations&quot;).fetch(GHAuthorization.class).wrap(this);</span>
         }
     }
 
@@ -929,12 +930,12 @@ public class GitHub {
             List&lt;String&gt; scopes,
             String note,
             String note_url) throws IOException {
-<span class="nc" id="L932">        Requester requester = createRequest().with(&quot;client_secret&quot;, clientSecret)</span>
-<span class="nc" id="L933">                .with(&quot;scopes&quot;, scopes)</span>
-<span class="nc" id="L934">                .with(&quot;note&quot;, note)</span>
-<span class="nc" id="L935">                .with(&quot;note_url&quot;, note_url);</span>
+<span class="nc" id="L933">        Requester requester = createRequest().with(&quot;client_secret&quot;, clientSecret)</span>
+<span class="nc" id="L934">                .with(&quot;scopes&quot;, scopes)</span>
+<span class="nc" id="L935">                .with(&quot;note&quot;, note)</span>
+<span class="nc" id="L936">                .with(&quot;note_url&quot;, note_url);</span>
 
-<span class="nc" id="L937">        return requester.method(&quot;PUT&quot;).withUrlPath(&quot;/authorizations/clients/&quot; + clientId).fetch(GHAuthorization.class);</span>
+<span class="nc" id="L938">        return requester.method(&quot;PUT&quot;).withUrlPath(&quot;/authorizations/clients/&quot; + clientId).fetch(GHAuthorization.class);</span>
     }
 
     /**
@@ -948,8 +949,8 @@ public class GitHub {
      *      authorization&lt;/a&gt;
      */
     public void deleteAuth(long id) throws IOException {
-<span class="nc" id="L951">        createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/authorizations/&quot; + id).send();</span>
-<span class="nc" id="L952">    }</span>
+<span class="nc" id="L952">        createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/authorizations/&quot; + id).send();</span>
+<span class="nc" id="L953">    }</span>
 
     /**
      * Check auth gh authorization.
@@ -965,8 +966,8 @@ public class GitHub {
      *      authorization&lt;/a&gt;
      */
     public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-<span class="nc" id="L968">        return createRequest().withUrlPath(&quot;/applications/&quot; + clientId + &quot;/tokens/&quot; + accessToken)</span>
-<span class="nc" id="L969">                .fetch(GHAuthorization.class);</span>
+<span class="nc" id="L969">        return createRequest().withUrlPath(&quot;/applications/&quot; + clientId + &quot;/tokens/&quot; + accessToken)</span>
+<span class="nc" id="L970">                .fetch(GHAuthorization.class);</span>
     }
 
     /**
@@ -983,9 +984,9 @@ public class GitHub {
      *      authorization&lt;/a&gt;
      */
     public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
-<span class="nc" id="L986">        return createRequest().method(&quot;POST&quot;)</span>
-<span class="nc" id="L987">                .withUrlPath(&quot;/applications/&quot; + clientId + &quot;/tokens/&quot; + accessToken)</span>
-<span class="nc" id="L988">                .fetch(GHAuthorization.class);</span>
+<span class="nc" id="L987">        return createRequest().method(&quot;POST&quot;)</span>
+<span class="nc" id="L988">                .withUrlPath(&quot;/applications/&quot; + clientId + &quot;/tokens/&quot; + accessToken)</span>
+<span class="nc" id="L989">                .fetch(GHAuthorization.class);</span>
     }
 
     /**
@@ -998,8 +999,8 @@ public class GitHub {
      *      authorizations&lt;/a&gt;
      */
     public PagedIterable&lt;GHAuthorization&gt; listMyAuthorizations() throws IOException {
-<span class="fc" id="L1001">        return createRequest().withUrlPath(&quot;/authorizations&quot;)</span>
-<span class="fc" id="L1002">                .toIterable(GHAuthorization[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L1002">        return createRequest().withUrlPath(&quot;/authorizations&quot;)</span>
+<span class="fc" id="L1003">                .toIterable(GHAuthorization[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -1013,10 +1014,10 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#get-the-authenticated-github-app&quot;&gt;Get the authenticated
      *      GitHub App&lt;/a&gt;
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHApp getApp() throws IOException {
-<span class="fc" id="L1019">        return createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/app&quot;).fetch(GHApp.class).wrapUp(this);</span>
+<span class="fc" id="L1020">        return createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/app&quot;).fetch(GHApp.class).wrapUp(this);</span>
     }
 
     /**
@@ -1025,7 +1026,7 @@ public class GitHub {
      * @return the boolean
      */
     public boolean isCredentialValid() {
-<span class="fc" id="L1028">        return client.isCredentialValid();</span>
+<span class="fc" id="L1029">        return client.isCredentialValid();</span>
     }
 
     /**
@@ -1038,7 +1039,7 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/meta/#meta&quot;&gt;Get Meta&lt;/a&gt;
      */
     public GHMeta getMeta() throws IOException {
-<span class="fc" id="L1041">        return createRequest().withUrlPath(&quot;/meta&quot;).fetch(GHMeta.class);</span>
+<span class="fc" id="L1042">        return createRequest().withUrlPath(&quot;/meta&quot;).fetch(GHMeta.class);</span>
     }
 
     /**
@@ -1051,7 +1052,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProject getProject(long id) throws IOException {
-<span class="fc" id="L1054">        return createRequest().withPreview(INERTIA).withUrlPath(&quot;/projects/&quot; + id).fetch(GHProject.class).wrap(this);</span>
+<span class="fc" id="L1055">        return createRequest().withPreview(INERTIA).withUrlPath(&quot;/projects/&quot; + id).fetch(GHProject.class).wrap(this);</span>
     }
 
     /**
@@ -1064,10 +1065,10 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-<span class="fc" id="L1067">        return createRequest().withPreview(INERTIA)</span>
-<span class="fc" id="L1068">                .withUrlPath(&quot;/projects/columns/&quot; + id)</span>
-<span class="fc" id="L1069">                .fetch(GHProjectColumn.class)</span>
-<span class="fc" id="L1070">                .wrap(this);</span>
+<span class="fc" id="L1068">        return createRequest().withPreview(INERTIA)</span>
+<span class="fc" id="L1069">                .withUrlPath(&quot;/projects/columns/&quot; + id)</span>
+<span class="fc" id="L1070">                .fetch(GHProjectColumn.class)</span>
+<span class="fc" id="L1071">                .wrap(this);</span>
     }
 
     /**
@@ -1080,10 +1081,10 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectCard getProjectCard(long id) throws IOException {
-<span class="fc" id="L1083">        return createRequest().withPreview(INERTIA)</span>
-<span class="fc" id="L1084">                .withUrlPath(&quot;/projects/columns/cards/&quot; + id)</span>
-<span class="fc" id="L1085">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L1086">                .wrap(this);</span>
+<span class="fc" id="L1084">        return createRequest().withPreview(INERTIA)</span>
+<span class="fc" id="L1085">                .withUrlPath(&quot;/projects/columns/cards/&quot; + id)</span>
+<span class="fc" id="L1086">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L1087">                .wrap(this);</span>
     }
 
     /**
@@ -1100,18 +1101,18 @@ public class GitHub {
      *             the io exception
      */
     public void checkApiUrlValidity() throws IOException {
-<span class="fc" id="L1103">        client.checkApiUrlValidity();</span>
-<span class="fc" id="L1104">    }</span>
+<span class="fc" id="L1104">        client.checkApiUrlValidity();</span>
+<span class="fc" id="L1105">    }</span>
 
     /**
      * Search commits.
      *
      * @return the gh commit search builder
      */
-    @Preview
+    @Preview(Previews.CLOAK)
     @Deprecated
     public GHCommitSearchBuilder searchCommits() {
-<span class="fc" id="L1114">        return new GHCommitSearchBuilder(this);</span>
+<span class="fc" id="L1115">        return new GHCommitSearchBuilder(this);</span>
     }
 
     /**
@@ -1120,7 +1121,7 @@ public class GitHub {
      * @return the gh issue search builder
      */
     public GHIssueSearchBuilder searchIssues() {
-<span class="fc" id="L1123">        return new GHIssueSearchBuilder(this);</span>
+<span class="fc" id="L1124">        return new GHIssueSearchBuilder(this);</span>
     }
 
     /**
@@ -1129,7 +1130,7 @@ public class GitHub {
      * @return the gh user search builder
      */
     public GHUserSearchBuilder searchUsers() {
-<span class="fc" id="L1132">        return new GHUserSearchBuilder(this);</span>
+<span class="fc" id="L1133">        return new GHUserSearchBuilder(this);</span>
     }
 
     /**
@@ -1138,7 +1139,7 @@ public class GitHub {
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder searchRepositories() {
-<span class="fc" id="L1141">        return new GHRepositorySearchBuilder(this);</span>
+<span class="fc" id="L1142">        return new GHRepositorySearchBuilder(this);</span>
     }
 
     /**
@@ -1147,7 +1148,7 @@ public class GitHub {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder searchContent() {
-<span class="fc" id="L1150">        return new GHContentSearchBuilder(this);</span>
+<span class="fc" id="L1151">        return new GHContentSearchBuilder(this);</span>
     }
 
     /**
@@ -1156,7 +1157,7 @@ public class GitHub {
      * @return the gh notification stream
      */
     public GHNotificationStream listNotifications() {
-<span class="fc" id="L1159">        return new GHNotificationStream(this, &quot;/notifications&quot;);</span>
+<span class="fc" id="L1160">        return new GHNotificationStream(this, &quot;/notifications&quot;);</span>
     }
 
     /**
@@ -1166,7 +1167,7 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/repos/#list-all-public-repositories&quot;&gt;documentation&lt;/a&gt;
      */
     public PagedIterable&lt;GHRepository&gt; listAllPublicRepositories() {
-<span class="fc" id="L1169">        return listAllPublicRepositories(null);</span>
+<span class="fc" id="L1170">        return listAllPublicRepositories(null);</span>
     }
 
     /**
@@ -1178,9 +1179,9 @@ public class GitHub {
      * @see &lt;a href=&quot;https://developer.github.com/v3/repos/#list-all-public-repositories&quot;&gt;documentation&lt;/a&gt;
      */
     public PagedIterable&lt;GHRepository&gt; listAllPublicRepositories(final String since) {
-<span class="fc" id="L1181">        return createRequest().with(&quot;since&quot;, since)</span>
-<span class="fc" id="L1182">                .withUrlPath(&quot;/repositories&quot;)</span>
-<span class="fc" id="L1183">                .toIterable(GHRepository[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L1182">        return createRequest().with(&quot;since&quot;, since)</span>
+<span class="fc" id="L1183">                .withUrlPath(&quot;/repositories&quot;)</span>
+<span class="fc" id="L1184">                .toIterable(GHRepository[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -1198,65 +1199,73 @@ public class GitHub {
      * @see GHRepository#renderMarkdown(String, MarkdownMode) GHRepository#renderMarkdown(String, MarkdownMode)
      */
     public Reader renderMarkdown(String text) throws IOException {
-<span class="fc" id="L1201">        return new InputStreamReader(</span>
-<span class="fc" id="L1202">                createRequest().method(&quot;POST&quot;)</span>
-<span class="fc" id="L1203">                        .with(new ByteArrayInputStream(text.getBytes(&quot;UTF-8&quot;)))</span>
-<span class="fc" id="L1204">                        .contentType(&quot;text/plain;charset=UTF-8&quot;)</span>
-<span class="fc" id="L1205">                        .withUrlPath(&quot;/markdown/raw&quot;)</span>
-<span class="fc" id="L1206">                        .fetchStream(),</span>
+<span class="fc" id="L1202">        return new InputStreamReader(</span>
+<span class="fc" id="L1203">                createRequest().method(&quot;POST&quot;)</span>
+<span class="fc" id="L1204">                        .with(new ByteArrayInputStream(text.getBytes(&quot;UTF-8&quot;)))</span>
+<span class="fc" id="L1205">                        .contentType(&quot;text/plain;charset=UTF-8&quot;)</span>
+<span class="fc" id="L1206">                        .withUrlPath(&quot;/markdown/raw&quot;)</span>
+<span class="fc" id="L1207">                        .fetchStream(),</span>
                 &quot;UTF-8&quot;);
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectWriter} that can be used to convert data objects in this library to JSON.
+     *
+     * If you must convert data object in this library to JSON, the {@link ObjectWriter} returned by this method is the
+     * only supported way of doing so. This {@link ObjectWriter} can be used to convert any library data object to JSON
+     * without throwing an exception.
+     *
+     * WARNING: While the JSON generated is generally expected to be stable, it is not part of the API of this library
+     * and may change without warning. Use with extreme caution.
      *
      * @return an {@link ObjectWriter} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectWriter getMappingObjectWriter() {
-<span class="fc" id="L1220">        return GitHubClient.getMappingObjectWriter();</span>
+<span class="fc" id="L1225">        return GitHubClient.getMappingObjectWriter();</span>
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectReader} that can be used to convert JSON into library data objects.
+     *
+     * If you must manually create library data objects from JSON, the {@link ObjectReader} returned by this method is
+     * the only supported way of doing so.
+     *
+     * WARNING: Objects generated from this method have limited functionality. They will not throw when being crated
+     * from valid JSON matching the expected object, but they are not guaranteed to be usable beyond that. Use with
+     * extreme caution.
      *
      * @return an {@link ObjectReader} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectReader getMappingObjectReader() {
-<span class="fc" id="L1233">        return GitHubClient.getMappingObjectReader(GitHub.offline());</span>
+<span class="fc" id="L1242">        return GitHubClient.getMappingObjectReader(GitHub.offline());</span>
     }
 
     @Nonnull
     GitHubClient getClient() {
-<span class="fc" id="L1238">        return client;</span>
+<span class="fc" id="L1247">        return client;</span>
     }
 
     @Nonnull
     Requester createRequest() {
-<span class="fc" id="L1243">        return new Requester(client).injectMappingValue(this);</span>
+<span class="fc" id="L1252">        return new Requester(client).injectMappingValue(this);</span>
     }
 
     GHUser intern(GHUser user) throws IOException {
-<span class="pc bpc" id="L1247" title="1 of 2 branches missed.">        if (user == null)</span>
-<span class="nc" id="L1248">            return user;</span>
+<span class="pc bpc" id="L1256" title="1 of 2 branches missed.">        if (user == null)</span>
+<span class="nc" id="L1257">            return user;</span>
 
         // if we already have this user in our map, use it
-<span class="fc" id="L1251">        GHUser u = users.get(user.getLogin());</span>
-<span class="fc bfc" id="L1252" title="All 2 branches covered.">        if (u != null)</span>
-<span class="fc" id="L1253">            return u;</span>
+<span class="fc" id="L1260">        GHUser u = users.get(user.getLogin());</span>
+<span class="fc bfc" id="L1261" title="All 2 branches covered.">        if (u != null)</span>
+<span class="fc" id="L1262">            return u;</span>
 
         // if not, remember this new user
-<span class="fc" id="L1256">        users.putIfAbsent(user.getLogin(), user);</span>
-<span class="fc" id="L1257">        return user;</span>
+<span class="fc" id="L1265">        users.putIfAbsent(user.getLogin(), user);</span>
+<span class="fc" id="L1266">        return user;</span>
     }
 
-<span class="fc" id="L1260">    private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());</span>
+<span class="fc" id="L1269">    private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

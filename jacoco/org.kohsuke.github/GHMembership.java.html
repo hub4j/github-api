@@ -10,9 +10,7 @@ import java.util.Locale;
  * @author Kohsuke Kawaguchi
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
-<span class="fc" id="L13">public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {</span>
-    GitHub root;
-
+<span class="fc" id="L13">public class GHMembership extends GitHubInteractiveObject {</span>
     String url;
     String state;
     String role;
@@ -25,7 +23,7 @@ import java.util.Locale;
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L28">        return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L26">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -34,7 +32,7 @@ import java.util.Locale;
      * @return the state
      */
     public State getState() {
-<span class="fc" id="L37">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L35">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -43,7 +41,7 @@ import java.util.Locale;
      * @return the role
      */
     public Role getRole() {
-<span class="fc" id="L46">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L44">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -52,7 +50,7 @@ import java.util.Locale;
      * @return the user
      */
     public GHUser getUser() {
-<span class="fc" id="L55">        return user;</span>
+<span class="fc" id="L53">        return user;</span>
     }
 
     /**
@@ -61,7 +59,7 @@ import java.util.Locale;
      * @return the organization
      */
     public GHOrganization getOrganization() {
-<span class="nc" id="L64">        return organization;</span>
+<span class="nc" id="L62">        return organization;</span>
     }
 
     /**
@@ -72,37 +70,37 @@ import java.util.Locale;
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-<span class="nc" id="L75">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L73">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L74">    }</span>
 
     GHMembership wrap(GitHub root) {
-<span class="fc" id="L79">        this.root = root;</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L81">            user = root.getUser(user.wrapUp(root));</span>
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (organization != null)</span>
-<span class="fc" id="L83">            organization.wrapUp(root);</span>
-<span class="fc" id="L84">        return this;</span>
+<span class="fc" id="L77">        this.root = root;</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L79">            user = root.getUser(user.wrapUp(root));</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (organization != null)</span>
+<span class="fc" id="L81">            organization.wrapUp(root);</span>
+<span class="fc" id="L82">        return this;</span>
     }
 
     /**
      * Role of a user in an organization.
      */
-<span class="fc" id="L90">    public enum Role {</span>
+<span class="fc" id="L88">    public enum Role {</span>
         /**
          * Organization owner.
          */
-<span class="fc" id="L94">        ADMIN,</span>
+<span class="fc" id="L92">        ADMIN,</span>
         /**
          * Non-owner organization member.
          */
-<span class="fc" id="L98">        MEMBER;</span>
+<span class="fc" id="L96">        MEMBER;</span>
     }
 
     /**
      * Whether a role is currently active or waiting for acceptance (pending)
      */
-<span class="fc" id="L104">    public enum State {</span>
-<span class="fc" id="L105">        ACTIVE, PENDING;</span>
+<span class="fc" id="L102">    public enum State {</span>
+<span class="fc" id="L103">        ACTIVE, PENDING;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

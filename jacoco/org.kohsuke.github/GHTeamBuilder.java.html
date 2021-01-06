@@ -7,18 +7,16 @@ import java.io.IOException;
  *
  * https://developer.github.com/v3/teams/#create-team
  */
-public class GHTeamBuilder {
-
-    private final GitHub root;
+public class GHTeamBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String orgName;
 
-<span class="fc" id="L16">    public GHTeamBuilder(GitHub root, String orgName, String name) {</span>
-<span class="fc" id="L17">        this.root = root;</span>
-<span class="fc" id="L18">        this.orgName = orgName;</span>
-<span class="fc" id="L19">        this.builder = root.createRequest();</span>
-<span class="fc" id="L20">        this.builder.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L14">    public GHTeamBuilder(GitHub root, String orgName, String name) {</span>
+<span class="fc" id="L15">        this.root = root;</span>
+<span class="fc" id="L16">        this.orgName = orgName;</span>
+<span class="fc" id="L17">        this.builder = root.createRequest();</span>
+<span class="fc" id="L18">        this.builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L19">    }</span>
 
     /**
      * Description for this team.
@@ -28,8 +26,8 @@ public class GHTeamBuilder {
      * @return a builder to continue with building
      */
     public GHTeamBuilder description(String description) {
-<span class="fc" id="L31">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L32">        return this;</span>
+<span class="fc" id="L29">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L30">        return this;</span>
     }
 
     /**
@@ -40,8 +38,8 @@ public class GHTeamBuilder {
      * @return a builder to continue with building
      */
     public GHTeamBuilder maintainers(String... maintainers) {
-<span class="fc" id="L43">        this.builder.with(&quot;maintainers&quot;, maintainers);</span>
-<span class="fc" id="L44">        return this;</span>
+<span class="fc" id="L41">        this.builder.with(&quot;maintainers&quot;, maintainers);</span>
+<span class="fc" id="L42">        return this;</span>
     }
 
     /**
@@ -52,8 +50,8 @@ public class GHTeamBuilder {
      * @return a builder to continue with building
      */
     public GHTeamBuilder repositories(String... repoNames) {
-<span class="fc" id="L55">        this.builder.with(&quot;repo_names&quot;, repoNames);</span>
-<span class="fc" id="L56">        return this;</span>
+<span class="fc" id="L53">        this.builder.with(&quot;repo_names&quot;, repoNames);</span>
+<span class="fc" id="L54">        return this;</span>
     }
 
     /**
@@ -64,8 +62,8 @@ public class GHTeamBuilder {
      * @return a builder to continue with building
      */
     public GHTeamBuilder privacy(GHTeam.Privacy privacy) {
-<span class="fc" id="L67">        this.builder.with(&quot;privacy&quot;, privacy);</span>
-<span class="fc" id="L68">        return this;</span>
+<span class="fc" id="L65">        this.builder.with(&quot;privacy&quot;, privacy);</span>
+<span class="fc" id="L66">        return this;</span>
     }
 
     /**
@@ -76,8 +74,8 @@ public class GHTeamBuilder {
      * @return a builder to continue with building
      */
     public GHTeamBuilder parentTeamId(long parentTeamId) {
-<span class="fc" id="L79">        this.builder.with(&quot;parent_team_id&quot;, parentTeamId);</span>
-<span class="fc" id="L80">        return this;</span>
+<span class="fc" id="L77">        this.builder.with(&quot;parent_team_id&quot;, parentTeamId);</span>
+<span class="fc" id="L78">        return this;</span>
     }
 
     /**
@@ -88,7 +86,7 @@ public class GHTeamBuilder {
      *             if team cannot be created
      */
     public GHTeam create() throws IOException {
-<span class="fc" id="L91">        return builder.method(&quot;POST&quot;).withUrlPath(&quot;/orgs/&quot; + orgName + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(root);</span>
+<span class="fc" id="L89">        return builder.method(&quot;POST&quot;).withUrlPath(&quot;/orgs/&quot; + orgName + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(root);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHOrganization.
@@ -97,7 +97,7 @@ import static org.kohsuke.github.Previews.INERTIA;
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-<span class="fc" id="L100">        return new GHCreateRepositoryBuilder(root, &quot;/orgs/&quot; + login + &quot;/repos&quot;, name);</span>
+<span class="fc" id="L100">        return new GHCreateRepositoryBuilder(name, root, &quot;/orgs/&quot; + login + &quot;/repos&quot;);</span>
     }
 
     /**
@@ -181,7 +181,7 @@ import static org.kohsuke.github.Previews.INERTIA;
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
-     * 
+     *
      * @param slug
      *            the slug
      * @return the team by slug
@@ -660,4 +660,4 @@ import static org.kohsuke.github.Previews.INERTIA;
 <span class="nc" id="L660">        return createWebHook(url, null);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

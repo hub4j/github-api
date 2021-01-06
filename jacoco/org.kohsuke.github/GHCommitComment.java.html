@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
@@ -121,7 +121,7 @@ import static org.kohsuke.github.Previews.*;
 <span class="fc" id="L121">        this.body = body;</span>
 <span class="fc" id="L122">    }</span>
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
 <span class="nc" id="L127">        return owner.root.createRequest()</span>
@@ -133,7 +133,7 @@ import static org.kohsuke.github.Previews.*;
 <span class="nc" id="L133">                .wrap(owner.root);</span>
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable&lt;GHReaction&gt; listReactions() {
 <span class="nc" id="L139">        return owner.root.createRequest()</span>
@@ -164,4 +164,4 @@ import static org.kohsuke.github.Previews.*;
 <span class="fc" id="L164">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

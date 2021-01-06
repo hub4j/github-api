@@ -33,7 +33,6 @@ import java.util.List;
     public static final String WRITE_KEY = &quot;write:public_key&quot;;
     public static final String ADMIN_KEY = &quot;admin:public_key&quot;;
 
-    private GitHub root;
     private List&lt;String&gt; scopes;
     private String token;
     private String token_last_eight;
@@ -51,7 +50,7 @@ import java.util.List;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L54">        return root;</span>
+<span class="nc" id="L53">        return root;</span>
     }
 
     /**
@@ -60,7 +59,7 @@ import java.util.List;
      * @return the scopes
      */
     public List&lt;String&gt; getScopes() {
-<span class="fc" id="L63">        return scopes;</span>
+<span class="fc" id="L62">        return scopes;</span>
     }
 
     /**
@@ -69,7 +68,7 @@ import java.util.List;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L72">        return token;</span>
+<span class="fc" id="L71">        return token;</span>
     }
 
     /**
@@ -78,7 +77,7 @@ import java.util.List;
      * @return the token last eight
      */
     public String getTokenLastEight() {
-<span class="nc" id="L81">        return token_last_eight;</span>
+<span class="nc" id="L80">        return token_last_eight;</span>
     }
 
     /**
@@ -87,7 +86,7 @@ import java.util.List;
      * @return the hashed token
      */
     public String getHashedToken() {
-<span class="nc" id="L90">        return hashed_token;</span>
+<span class="nc" id="L89">        return hashed_token;</span>
     }
 
     /**
@@ -96,7 +95,7 @@ import java.util.List;
      * @return the app url
      */
     public URL getAppUrl() {
-<span class="nc" id="L99">        return GitHubClient.parseURL(app.url);</span>
+<span class="nc" id="L98">        return GitHubClient.parseURL(app.url);</span>
     }
 
     /**
@@ -105,7 +104,7 @@ import java.util.List;
      * @return the app name
      */
     public String getAppName() {
-<span class="fc" id="L108">        return app.name;</span>
+<span class="fc" id="L107">        return app.name;</span>
     }
 
     /**
@@ -117,7 +116,7 @@ import java.util.List;
     @Deprecated
     @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;, justification = &quot;It's a part of the library API, cannot be changed&quot;)
     public URL getApiURL() {
-<span class="nc" id="L120">        return getUrl();</span>
+<span class="nc" id="L119">        return getUrl();</span>
     }
 
     /**
@@ -125,7 +124,7 @@ import java.util.List;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L128">        return null;</span>
+<span class="nc" id="L127">        return null;</span>
     }
 
     /**
@@ -134,7 +133,7 @@ import java.util.List;
      * @return the note
      */
     public String getNote() {
-<span class="nc" id="L137">        return note;</span>
+<span class="nc" id="L136">        return note;</span>
     }
 
     /**
@@ -143,7 +142,7 @@ import java.util.List;
      * @return the note url
      */
     public URL getNoteUrl() {
-<span class="nc" id="L146">        return GitHubClient.parseURL(note_url);</span>
+<span class="nc" id="L145">        return GitHubClient.parseURL(note_url);</span>
     }
 
     /**
@@ -152,12 +151,12 @@ import java.util.List;
      * @return the fingerprint
      */
     public String getFingerprint() {
-<span class="nc" id="L155">        return fingerprint;</span>
+<span class="nc" id="L154">        return fingerprint;</span>
     }
 
     GHAuthorization wrap(GitHub root) {
-<span class="fc" id="L159">        this.root = root;</span>
-<span class="fc" id="L160">        return this;</span>
+<span class="fc" id="L158">        this.root = root;</span>
+<span class="fc" id="L159">        return this;</span>
     }
 
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
@@ -168,4 +167,4 @@ import java.util.List;
         // private String client_id; not yet used
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

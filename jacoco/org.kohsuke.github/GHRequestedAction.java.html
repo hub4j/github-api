@@ -8,34 +8,33 @@ import java.net.URL;
         justification = &quot;JSON API&quot;)
 <span class="nc" id="L9">public class GHRequestedAction extends GHObject {</span>
     private GHRepository owner;
-    private GitHub root;
     private String identifier;
     private String label;
     private String description;
 
     GHRequestedAction wrap(GHRepository owner) {
-<span class="nc" id="L17">        this.owner = owner;</span>
-<span class="nc" id="L18">        wrap(owner.root);</span>
-<span class="nc" id="L19">        return this;</span>
+<span class="nc" id="L16">        this.owner = owner;</span>
+<span class="nc" id="L17">        wrap(owner.root);</span>
+<span class="nc" id="L18">        return this;</span>
     }
     GHRequestedAction wrap(GitHub root) {
-<span class="nc" id="L22">        this.root = root;</span>
-<span class="nc bnc" id="L23" title="All 2 branches missed.">        if (owner != null) {</span>
-<span class="nc" id="L24">            owner.wrap(root);</span>
+<span class="nc" id="L21">        this.root = root;</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (owner != null) {</span>
+<span class="nc" id="L23">            owner.wrap(root);</span>
         }
-<span class="nc" id="L26">        return this;</span>
+<span class="nc" id="L25">        return this;</span>
     }
 
     String getIdentifier() {
-<span class="nc" id="L30">        return identifier;</span>
+<span class="nc" id="L29">        return identifier;</span>
     }
 
     String getLabel() {
-<span class="nc" id="L34">        return label;</span>
+<span class="nc" id="L33">        return label;</span>
     }
 
     String getDescription() {
-<span class="nc" id="L38">        return description;</span>
+<span class="nc" id="L37">        return description;</span>
     }
 
     /**
@@ -43,8 +42,8 @@ import java.net.URL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L46">        return null;</span>
+<span class="nc" id="L45">        return null;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

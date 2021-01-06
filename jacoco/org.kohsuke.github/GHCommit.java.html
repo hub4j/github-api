@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.GROOT;
+
 /**
  * A commit in a repository.
  *
@@ -19,7 +22,7 @@ import java.util.List;
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */
 @SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L22">public class GHCommit {</span>
+<span class="fc" id="L25">public class GHCommit {</span>
     private GHRepository owner;
 
     private ShortInfo commit;
@@ -31,7 +34,7 @@ import java.util.List;
             value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                     &quot;UWF_UNWRITTEN_FIELD&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L34">    public static class ShortInfo {</span>
+<span class="fc" id="L37">    public static class ShortInfo {</span>
         private GHAuthor author;
         private GHAuthor committer;
 
@@ -41,7 +44,7 @@ import java.util.List;
 
         private GHVerification verification;
 
-<span class="fc" id="L44">        static class Tree {</span>
+<span class="fc" id="L47">        static class Tree {</span>
             String sha;
         }
 
@@ -54,7 +57,7 @@ import java.util.List;
          */
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getAuthor() {
-<span class="fc" id="L57">            return author;</span>
+<span class="fc" id="L60">            return author;</span>
         }
 
         /**
@@ -63,7 +66,7 @@ import java.util.List;
          * @return the authored date
          */
         public Date getAuthoredDate() {
-<span class="nc" id="L66">            return GitHubClient.parseDate(author.date);</span>
+<span class="fc" id="L69">            return author.getDate();</span>
         }
 
         /**
@@ -73,7 +76,7 @@ import java.util.List;
          */
         @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
         public GitUser getCommitter() {
-<span class="nc" id="L76">            return committer;</span>
+<span class="fc" id="L79">            return committer;</span>
         }
 
         /**
@@ -82,7 +85,7 @@ import java.util.List;
          * @return the commit date
          */
         public Date getCommitDate() {
-<span class="nc" id="L85">            return GitHubClient.parseDate(committer.date);</span>
+<span class="fc" id="L88">            return committer.getDate();</span>
         }
 
         /**
@@ -91,7 +94,7 @@ import java.util.List;
          * @return Commit message.
          */
         public String getMessage() {
-<span class="fc" id="L94">            return message;</span>
+<span class="fc" id="L97">            return message;</span>
         }
 
         /**
@@ -100,7 +103,7 @@ import java.util.List;
          * @return the comment count
          */
         public int getCommentCount() {
-<span class="nc" id="L103">            return comment_count;</span>
+<span class="nc" id="L106">            return comment_count;</span>
         }
 
         /**
@@ -109,7 +112,7 @@ import java.util.List;
          * @return the Verification status
          */
         public GHVerification getVerification() {
-<span class="fc" id="L112">            return verification;</span>
+<span class="fc" id="L115">            return verification;</span>
         }
     }
 
@@ -118,14 +121,13 @@ import java.util.List;
      *
      * @deprecated Use {@link GitUser} instead.
      */
-<span class="fc" id="L121">    public static class GHAuthor extends GitUser {</span>
-        private String date;
+<span class="fc" id="L124">    public static class GHAuthor extends GitUser {</span>
     }
 
     /**
      * The type Stats.
      */
-<span class="fc" id="L128">    public static class Stats {</span>
+<span class="fc" id="L130">    public static class Stats {</span>
         int total, additions, deletions;
     }
 
@@ -133,7 +135,7 @@ import java.util.List;
      * A file that was modified.
      */
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;It's being initilized by JSON deserialization&quot;)
-<span class="fc" id="L136">    public static class File {</span>
+<span class="fc" id="L138">    public static class File {</span>
         String status;
         int changes, additions, deletions;
         String raw_url, blob_url, sha, patch;
@@ -145,7 +147,7 @@ import java.util.List;
          * @return Number of lines added + removed.
          */
         public int getLinesChanged() {
-<span class="fc" id="L148">            return changes;</span>
+<span class="fc" id="L150">            return changes;</span>
         }
 
         /**
@@ -154,7 +156,7 @@ import java.util.List;
          * @return Number of lines added.
          */
         public int getLinesAdded() {
-<span class="nc" id="L157">            return additions;</span>
+<span class="nc" id="L159">            return additions;</span>
         }
 
         /**
@@ -163,7 +165,7 @@ import java.util.List;
          * @return Number of lines removed.
          */
         public int getLinesDeleted() {
-<span class="nc" id="L166">            return deletions;</span>
+<span class="nc" id="L168">            return deletions;</span>
         }
 
         /**
@@ -172,7 +174,7 @@ import java.util.List;
          * @return &quot;modified&quot;, &quot;added&quot;, or &quot;removed&quot;
          */
         public String getStatus() {
-<span class="fc" id="L175">            return status;</span>
+<span class="fc" id="L177">            return status;</span>
         }
 
         /**
@@ -183,7 +185,7 @@ import java.util.List;
         @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;,
                 justification = &quot;It's a part of the library's API and cannot be renamed&quot;)
         public String getFileName() {
-<span class="fc" id="L186">            return filename;</span>
+<span class="fc" id="L188">            return filename;</span>
         }
 
         /**
@@ -192,7 +194,7 @@ import java.util.List;
          * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
-<span class="nc" id="L195">            return previous_filename;</span>
+<span class="nc" id="L197">            return previous_filename;</span>
         }
 
         /**
@@ -201,7 +203,7 @@ import java.util.List;
          * @return The actual change.
          */
         public String getPatch() {
-<span class="nc" id="L204">            return patch;</span>
+<span class="nc" id="L206">            return patch;</span>
         }
 
         /**
@@ -212,7 +214,7 @@ import java.util.List;
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-<span class="nc" id="L215">            return GitHubClient.parseURL(raw_url);</span>
+<span class="nc" id="L217">            return GitHubClient.parseURL(raw_url);</span>
         }
 
         /**
@@ -223,7 +225,7 @@ import java.util.List;
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-<span class="nc" id="L226">            return GitHubClient.parseURL(blob_url);</span>
+<span class="nc" id="L228">            return GitHubClient.parseURL(blob_url);</span>
         }
 
         /**
@@ -232,20 +234,20 @@ import java.util.List;
          * @return [0 -9a-f]{40} SHA1 checksum.
          */
         public String getSha() {
-<span class="nc" id="L235">            return sha;</span>
+<span class="nc" id="L237">            return sha;</span>
         }
     }
 
     /**
      * The type Parent.
      */
-<span class="fc" id="L242">    public static class Parent {</span>
+<span class="fc" id="L244">    public static class Parent {</span>
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         String url;
         String sha;
     }
 
-<span class="fc" id="L248">    static class User {</span>
+<span class="fc" id="L250">    static class User {</span>
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         String url, avatar_url, gravatar_id;
@@ -269,9 +271,9 @@ import java.util.List;
      *             the io exception
      */
     public ShortInfo getCommitShortInfo() throws IOException {
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (commit == null)</span>
-<span class="nc" id="L273">            populate();</span>
-<span class="fc" id="L274">        return commit;</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (commit == null)</span>
+<span class="fc" id="L275">            populate();</span>
+<span class="fc" id="L276">        return commit;</span>
     }
 
     /**
@@ -280,7 +282,7 @@ import java.util.List;
      * @return the repository that contains the commit.
      */
     public GHRepository getOwner() {
-<span class="nc" id="L283">        return owner;</span>
+<span class="nc" id="L285">        return owner;</span>
     }
 
     /**
@@ -291,8 +293,8 @@ import java.util.List;
      *             if the field was not populated and refresh fails
      */
     public int getLinesChanged() throws IOException {
-<span class="nc" id="L294">        populate();</span>
-<span class="nc" id="L295">        return stats.total;</span>
+<span class="nc" id="L296">        populate();</span>
+<span class="nc" id="L297">        return stats.total;</span>
     }
 
     /**
@@ -303,8 +305,8 @@ import java.util.List;
      *             if the field was not populated and refresh fails
      */
     public int getLinesAdded() throws IOException {
-<span class="nc" id="L306">        populate();</span>
-<span class="nc" id="L307">        return stats.additions;</span>
+<span class="nc" id="L308">        populate();</span>
+<span class="nc" id="L309">        return stats.additions;</span>
     }
 
     /**
@@ -315,8 +317,8 @@ import java.util.List;
      *             if the field was not populated and refresh fails
      */
     public int getLinesDeleted() throws IOException {
-<span class="nc" id="L318">        populate();</span>
-<span class="nc" id="L319">        return stats.deletions;</span>
+<span class="nc" id="L320">        populate();</span>
+<span class="nc" id="L321">        return stats.deletions;</span>
     }
 
     /**
@@ -327,7 +329,7 @@ import java.util.List;
      *             on error
      */
     public GHTree getTree() throws IOException {
-<span class="fc" id="L330">        return owner.getTree(getCommitShortInfo().tree.sha);</span>
+<span class="fc" id="L332">        return owner.getTree(getCommitShortInfo().tree.sha);</span>
     }
 
     /**
@@ -337,7 +339,7 @@ import java.util.List;
      *         &quot;https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000&quot;
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L340">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L342">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -346,7 +348,7 @@ import java.util.List;
      * @return [0 -9a-f]{40} SHA1 checksum.
      */
     public String getSHA1() {
-<span class="fc" id="L349">        return sha;</span>
+<span class="fc" id="L351">        return sha;</span>
     }
 
     /**
@@ -357,8 +359,8 @@ import java.util.List;
      *             on error
      */
     public List&lt;File&gt; getFiles() throws IOException {
-<span class="fc" id="L360">        populate();</span>
-<span class="pc bpc" id="L361" title="1 of 2 branches missed.">        return files != null ? Collections.unmodifiableList(files) : Collections.&lt;File&gt;emptyList();</span>
+<span class="fc" id="L362">        populate();</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">        return files != null ? Collections.unmodifiableList(files) : Collections.&lt;File&gt;emptyList();</span>
     }
 
     /**
@@ -367,17 +369,17 @@ import java.util.List;
      * @return SHA1 of parent commit objects.
      */
     public List&lt;String&gt; getParentSHA1s() {
-<span class="pc bpc" id="L370" title="1 of 2 branches missed.">        if (parents == null)</span>
-<span class="nc" id="L371">            return Collections.emptyList();</span>
-<span class="fc" id="L372">        return new AbstractList&lt;String&gt;() {</span>
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">        if (parents == null)</span>
+<span class="nc" id="L373">            return Collections.emptyList();</span>
+<span class="fc" id="L374">        return new AbstractList&lt;String&gt;() {</span>
             @Override
             public String get(int index) {
-<span class="fc" id="L375">                return parents.get(index).sha;</span>
+<span class="fc" id="L377">                return parents.get(index).sha;</span>
             }
 
             @Override
             public int size() {
-<span class="fc" id="L380">                return parents.size();</span>
+<span class="fc" id="L382">                return parents.size();</span>
             }
         };
     }
@@ -390,10 +392,10 @@ import java.util.List;
      *             on error
      */
     public List&lt;GHCommit&gt; getParents() throws IOException {
-<span class="fc" id="L393">        List&lt;GHCommit&gt; r = new ArrayList&lt;GHCommit&gt;();</span>
-<span class="fc bfc" id="L394" title="All 2 branches covered.">        for (String sha1 : getParentSHA1s())</span>
-<span class="fc" id="L395">            r.add(owner.getCommit(sha1));</span>
-<span class="fc" id="L396">        return r;</span>
+<span class="fc" id="L395">        List&lt;GHCommit&gt; r = new ArrayList&lt;GHCommit&gt;();</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        for (String sha1 : getParentSHA1s())</span>
+<span class="fc" id="L397">            r.add(owner.getCommit(sha1));</span>
+<span class="fc" id="L398">        return r;</span>
     }
 
     /**
@@ -404,7 +406,7 @@ import java.util.List;
      *             the io exception
      */
     public GHUser getAuthor() throws IOException {
-<span class="nc" id="L407">        return resolveUser(author);</span>
+<span class="nc" id="L409">        return resolveUser(author);</span>
     }
 
     /**
@@ -415,7 +417,7 @@ import java.util.List;
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
     public Date getAuthoredDate() throws IOException {
-<span class="nc" id="L418">        return getCommitShortInfo().getAuthoredDate();</span>
+<span class="nc" id="L420">        return getCommitShortInfo().getAuthoredDate();</span>
     }
 
     /**
@@ -426,7 +428,7 @@ import java.util.List;
      *             the io exception
      */
     public GHUser getCommitter() throws IOException {
-<span class="nc" id="L429">        return resolveUser(committer);</span>
+<span class="nc" id="L431">        return resolveUser(committer);</span>
     }
 
     /**
@@ -437,13 +439,46 @@ import java.util.List;
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
     public Date getCommitDate() throws IOException {
-<span class="nc" id="L440">        return getCommitShortInfo().getCommitDate();</span>
+<span class="nc" id="L442">        return getCommitShortInfo().getCommitDate();</span>
     }
 
     private GHUser resolveUser(User author) throws IOException {
-<span class="nc bnc" id="L444" title="All 4 branches missed.">        if (author == null || author.login == null)</span>
-<span class="nc" id="L445">            return null;</span>
-<span class="nc" id="L446">        return owner.root.getUser(author.login);</span>
+<span class="nc bnc" id="L446" title="All 4 branches missed.">        if (author == null || author.login == null)</span>
+<span class="nc" id="L447">            return null;</span>
+<span class="nc" id="L448">        return owner.root.getUser(author.login);</span>
+    }
+
+    /**
+     * Retrieves a list of pull requests which contain this commit.
+     *
+     * @return {@link PagedIterable} with the pull requests which contain this commit
+     */
+    @Preview(GROOT)
+    @Deprecated
+    public PagedIterable&lt;GHPullRequest&gt; listPullRequests() {
+<span class="fc" id="L459">        return owner.root.createRequest()</span>
+<span class="fc" id="L460">                .withPreview(GROOT)</span>
+<span class="fc" id="L461">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/pulls&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L462">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(owner));</span>
+    }
+
+    /**
+     * Retrieves a list of branches where this commit is the head commit.
+     *
+     * @return {@link PagedIterable} with the branches where the commit is the head commit
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(GROOT)
+    @Deprecated
+    public PagedIterable&lt;GHBranch&gt; listBranchesWhereHead() throws IOException {
+<span class="fc" id="L475">        return owner.root.createRequest()</span>
+<span class="fc" id="L476">                .withPreview(GROOT)</span>
+<span class="fc" id="L477">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
+<span class="fc" id="L478">                        owner.getOwnerName(),</span>
+<span class="fc" id="L479">                        owner.getName(),</span>
+                        sha))
+<span class="fc" id="L481">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -452,10 +487,10 @@ import java.util.List;
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable&lt;GHCommitComment&gt; listComments() {
-<span class="nc" id="L455">        return owner.root.createRequest()</span>
-<span class="nc" id="L456">                .withUrlPath(</span>
-<span class="nc" id="L457">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="nc" id="L458">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(owner));</span>
+<span class="nc" id="L490">        return owner.root.createRequest()</span>
+<span class="nc" id="L491">                .withUrlPath(</span>
+<span class="nc" id="L492">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="nc" id="L493">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -476,16 +511,16 @@ import java.util.List;
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-<span class="fc" id="L479">        GHCommitComment r = owner.root.createRequest()</span>
-<span class="fc" id="L480">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L481">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L482">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L483">                .with(&quot;line&quot;, line)</span>
-<span class="fc" id="L484">                .with(&quot;position&quot;, position)</span>
-<span class="fc" id="L485">                .withUrlPath(</span>
-<span class="fc" id="L486">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L487">                .fetch(GHCommitComment.class);</span>
-<span class="fc" id="L488">        return r.wrap(owner);</span>
+<span class="fc" id="L514">        GHCommitComment r = owner.root.createRequest()</span>
+<span class="fc" id="L515">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L516">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L517">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L518">                .with(&quot;line&quot;, line)</span>
+<span class="fc" id="L519">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L520">                .withUrlPath(</span>
+<span class="fc" id="L521">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L522">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L523">        return r.wrap(owner);</span>
     }
 
     /**
@@ -498,7 +533,7 @@ import java.util.List;
      *             the io exception
      */
     public GHCommitComment createComment(String body) throws IOException {
-<span class="fc" id="L501">        return createComment(body, null, null, null);</span>
+<span class="fc" id="L536">        return createComment(body, null, null, null);</span>
     }
 
     /**
@@ -509,7 +544,7 @@ import java.util.List;
      *             if statuses cannot be read
      */
     public PagedIterable&lt;GHCommitStatus&gt; listStatuses() throws IOException {
-<span class="nc" id="L512">        return owner.listCommitStatuses(sha);</span>
+<span class="nc" id="L547">        return owner.listCommitStatuses(sha);</span>
     }
 
     /**
@@ -520,7 +555,7 @@ import java.util.List;
      *             on error
      */
     public GHCommitStatus getLastStatus() throws IOException {
-<span class="fc" id="L523">        return owner.getLastCommitStatus(sha);</span>
+<span class="fc" id="L558">        return owner.getLastCommitStatus(sha);</span>
     }
 
     /**
@@ -530,26 +565,26 @@ import java.util.List;
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns() throws IOException {
-<span class="nc" id="L536">        return owner.getCheckRuns(sha);</span>
+<span class="nc" id="L571">        return owner.getCheckRuns(sha);</span>
     }
 
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
-     * 
+     *
      * @throws IOException
      *             on error
      */
     void populate() throws IOException {
-<span class="pc bpc" id="L546" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
-<span class="fc" id="L547">            owner.root.createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
-<span class="fc" id="L548">    }</span>
+<span class="pc bpc" id="L581" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
+<span class="fc" id="L582">            owner.root.createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
+<span class="fc" id="L583">    }</span>
 
     GHCommit wrapUp(GHRepository owner) {
-<span class="fc" id="L551">        this.owner = owner;</span>
-<span class="fc" id="L552">        return this;</span>
+<span class="fc" id="L586">        this.owner = owner;</span>
+<span class="fc" id="L587">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

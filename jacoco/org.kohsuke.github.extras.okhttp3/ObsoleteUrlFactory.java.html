@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ObsoleteUrlFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.extras.okhttp3</a> &gt; <span class="el_source">ObsoleteUrlFactory.java</span></div><h1>ObsoleteUrlFactory.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.extras.okhttp3;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Dispatcher;
-import okhttp3.Handshake;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.Okio;
-import okio.Pipe;
-import okio.Timeout;
-
 /*
  * Copyright (C) 2014 Square, Inc.
  *
@@ -35,6 +15,28 @@ import okio.Timeout;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Dispatcher;
+import okhttp3.Handshake;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Pipe;
+import okio.Timeout;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,30 +84,30 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
     static final String RESPONSE_SOURCE = &quot;ObsoleteUrlFactory-Response-Source&quot;;
 
-<span class="fc" id="L85">    static final Set&lt;String&gt; METHODS = new LinkedHashSet&lt;&gt;(</span>
-<span class="fc" id="L86">            Arrays.asList(&quot;OPTIONS&quot;, &quot;GET&quot;, &quot;HEAD&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;TRACE&quot;, &quot;PATCH&quot;));</span>
+<span class="fc" id="L87">    static final Set&lt;String&gt; METHODS = new LinkedHashSet&lt;&gt;(</span>
+<span class="fc" id="L88">            Arrays.asList(&quot;OPTIONS&quot;, &quot;GET&quot;, &quot;HEAD&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;TRACE&quot;, &quot;PATCH&quot;));</span>
 
-<span class="fc" id="L88">    static final TimeZone UTC = TimeZone.getTimeZone(&quot;GMT&quot;);</span>
+<span class="fc" id="L90">    static final TimeZone UTC = TimeZone.getTimeZone(&quot;GMT&quot;);</span>
 
     static final int HTTP_CONTINUE = 100;
 
-<span class="fc" id="L92">    static final ThreadLocal&lt;DateFormat&gt; STANDARD_DATE_FORMAT = ThreadLocal.withInitial(() -&gt; {</span>
+<span class="fc" id="L94">    static final ThreadLocal&lt;DateFormat&gt; STANDARD_DATE_FORMAT = ThreadLocal.withInitial(() -&gt; {</span>
         // Date format specified by RFC 7231 section 7.1.1.1.
-<span class="nc" id="L94">        DateFormat rfc1123 = new SimpleDateFormat(&quot;EEE, dd MMM yyyy HH:mm:ss 'GMT'&quot;, Locale.US);</span>
-<span class="nc" id="L95">        rfc1123.setLenient(false);</span>
-<span class="nc" id="L96">        rfc1123.setTimeZone(UTC);</span>
-<span class="nc" id="L97">        return rfc1123;</span>
+<span class="nc" id="L96">        DateFormat rfc1123 = new SimpleDateFormat(&quot;EEE, dd MMM yyyy HH:mm:ss 'GMT'&quot;, Locale.US);</span>
+<span class="nc" id="L97">        rfc1123.setLenient(false);</span>
+<span class="nc" id="L98">        rfc1123.setTimeZone(UTC);</span>
+<span class="nc" id="L99">        return rfc1123;</span>
     });
 
-<span class="fc" id="L100">    static final Comparator&lt;String&gt; FIELD_NAME_COMPARATOR = (a, b) -&gt; {</span>
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (Objects.equals(a, b)) {</span>
-<span class="fc" id="L102">            return 0;</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        } else if (Objects.isNull(a)) {</span>
-<span class="fc" id="L104">            return -1;</span>
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        } else if (Objects.isNull(b)) {</span>
-<span class="nc" id="L106">            return 1;</span>
+<span class="fc" id="L102">    static final Comparator&lt;String&gt; FIELD_NAME_COMPARATOR = (a, b) -&gt; {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (Objects.equals(a, b)) {</span>
+<span class="fc" id="L104">            return 0;</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        } else if (Objects.isNull(a)) {</span>
+<span class="fc" id="L106">            return -1;</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        } else if (Objects.isNull(b)) {</span>
+<span class="nc" id="L108">            return 1;</span>
         } else {
-<span class="fc" id="L108">            return String.CASE_INSENSITIVE_ORDER.compare(a, b);</span>
+<span class="fc" id="L110">            return String.CASE_INSENSITIVE_ORDER.compare(a, b);</span>
         }
     };
 
@@ -117,9 +119,9 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * @param client
      *            the client
      */
-<span class="fc" id="L120">    public ObsoleteUrlFactory(OkHttpClient client) {</span>
-<span class="fc" id="L121">        this.client = client;</span>
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L122">    public ObsoleteUrlFactory(OkHttpClient client) {</span>
+<span class="fc" id="L123">        this.client = client;</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Client ok http client.
@@ -127,7 +129,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * @return the ok http client
      */
     public OkHttpClient client() {
-<span class="nc" id="L130">        return client;</span>
+<span class="nc" id="L132">        return client;</span>
     }
 
     /**
@@ -138,8 +140,8 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * @return the client
      */
     public ObsoleteUrlFactory setClient(OkHttpClient client) {
-<span class="nc" id="L141">        this.client = client;</span>
-<span class="nc" id="L142">        return this;</span>
+<span class="nc" id="L143">        this.client = client;</span>
+<span class="nc" id="L144">        return this;</span>
     }
 
     /**
@@ -148,7 +150,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      */
     @Override
     public ObsoleteUrlFactory clone() {
-<span class="nc" id="L151">        return new ObsoleteUrlFactory(client);</span>
+<span class="nc" id="L153">        return new ObsoleteUrlFactory(client);</span>
     }
 
     /**
@@ -159,18 +161,18 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * @return the http url connection
      */
     public HttpURLConnection open(URL url) {
-<span class="fc" id="L162">        return open(url, client.proxy());</span>
+<span class="fc" id="L164">        return open(url, client.proxy());</span>
     }
 
     HttpURLConnection open(URL url, @Nullable Proxy proxy) {
-<span class="fc" id="L166">        String protocol = url.getProtocol();</span>
-<span class="fc" id="L167">        OkHttpClient copy = client.newBuilder().proxy(proxy).build();</span>
+<span class="fc" id="L168">        String protocol = url.getProtocol();</span>
+<span class="fc" id="L169">        OkHttpClient copy = client.newBuilder().proxy(proxy).build();</span>
 
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (protocol.equals(&quot;http&quot;))</span>
-<span class="fc" id="L170">            return new OkHttpURLConnection(url, copy);</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (protocol.equals(&quot;https&quot;))</span>
-<span class="nc" id="L172">            return new OkHttpsURLConnection(url, copy);</span>
-<span class="nc" id="L173">        throw new IllegalArgumentException(&quot;Unexpected protocol: &quot; + protocol);</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (protocol.equals(&quot;http&quot;))</span>
+<span class="fc" id="L172">            return new OkHttpURLConnection(url, copy);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (protocol.equals(&quot;https&quot;))</span>
+<span class="nc" id="L174">            return new OkHttpsURLConnection(url, copy);</span>
+<span class="nc" id="L175">        throw new IllegalArgumentException(&quot;Unexpected protocol: &quot; + protocol);</span>
     }
 
     /**
@@ -179,7 +181,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      * &lt;p&gt;
      * This code configures OkHttp to handle all HTTP and HTTPS connections created with
      * {@link java.net.URL#openConnection()}:
-     * 
+     *
      * &lt;pre&gt;
      * {
      *     &amp;#64;code
@@ -191,597 +193,597 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
      */
     @Override
     public URLStreamHandler createURLStreamHandler(final String protocol) {
-<span class="nc bnc" id="L194" title="All 4 branches missed.">        if (!protocol.equals(&quot;http&quot;) &amp;&amp; !protocol.equals(&quot;https&quot;))</span>
-<span class="nc" id="L195">            return null;</span>
+<span class="nc bnc" id="L196" title="All 4 branches missed.">        if (!protocol.equals(&quot;http&quot;) &amp;&amp; !protocol.equals(&quot;https&quot;))</span>
+<span class="nc" id="L197">            return null;</span>
 
-<span class="nc" id="L197">        return new URLStreamHandler() {</span>
+<span class="nc" id="L199">        return new URLStreamHandler() {</span>
             @Override
             protected URLConnection openConnection(URL url) {
-<span class="nc" id="L200">                return open(url);</span>
+<span class="nc" id="L202">                return open(url);</span>
             }
 
             @Override
             protected URLConnection openConnection(URL url, Proxy proxy) {
-<span class="nc" id="L205">                return open(url, proxy);</span>
+<span class="nc" id="L207">                return open(url, proxy);</span>
             }
 
             @Override
             protected int getDefaultPort() {
-<span class="nc bnc" id="L210" title="All 2 branches missed.">                if (protocol.equals(&quot;http&quot;))</span>
-<span class="nc" id="L211">                    return 80;</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (protocol.equals(&quot;https&quot;))</span>
-<span class="nc" id="L213">                    return 443;</span>
-<span class="nc" id="L214">                throw new AssertionError();</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (protocol.equals(&quot;http&quot;))</span>
+<span class="nc" id="L213">                    return 80;</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                if (protocol.equals(&quot;https&quot;))</span>
+<span class="nc" id="L215">                    return 443;</span>
+<span class="nc" id="L216">                throw new AssertionError();</span>
             }
         };
     }
 
     static String format(Date value) {
-<span class="nc" id="L220">        return STANDARD_DATE_FORMAT.get().format(value);</span>
+<span class="nc" id="L222">        return STANDARD_DATE_FORMAT.get().format(value);</span>
     }
 
     static boolean permitsRequestBody(String method) {
-<span class="pc bpc" id="L224" title="1 of 4 branches missed.">        return !(method.equals(&quot;GET&quot;) || method.equals(&quot;HEAD&quot;));</span>
+<span class="pc bpc" id="L226" title="1 of 4 branches missed.">        return !(method.equals(&quot;GET&quot;) || method.equals(&quot;HEAD&quot;));</span>
     }
 
     /** Returns true if the response must have a (possibly 0-length) body. See RFC 7231. */
     static boolean hasBody(Response response) {
         // HEAD requests never yield a body regardless of the response headers.
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (response.request().method().equals(&quot;HEAD&quot;)) {</span>
-<span class="nc" id="L231">            return false;</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (response.request().method().equals(&quot;HEAD&quot;)) {</span>
+<span class="nc" id="L233">            return false;</span>
         }
 
-<span class="fc" id="L234">        int responseCode = response.code();</span>
-<span class="pc bpc" id="L235" title="4 of 8 branches missed.">        if ((responseCode &lt; HTTP_CONTINUE || responseCode &gt;= 200) &amp;&amp; responseCode != HTTP_NO_CONTENT</span>
+<span class="fc" id="L236">        int responseCode = response.code();</span>
+<span class="pc bpc" id="L237" title="4 of 8 branches missed.">        if ((responseCode &lt; HTTP_CONTINUE || responseCode &gt;= 200) &amp;&amp; responseCode != HTTP_NO_CONTENT</span>
                 &amp;&amp; responseCode != HTTP_NOT_MODIFIED) {
-<span class="fc" id="L237">            return true;</span>
+<span class="fc" id="L239">            return true;</span>
         }
 
         // If the Content-Length or Transfer-Encoding headers disagree with the response code, the
         // response is malformed. For best compatibility, we honor the headers.
-<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (contentLength(response.headers()) != -1</span>
-<span class="nc bnc" id="L243" title="All 2 branches missed.">                || &quot;chunked&quot;.equalsIgnoreCase(response.header(&quot;Transfer-Encoding&quot;))) {</span>
-<span class="nc" id="L244">            return true;</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (contentLength(response.headers()) != -1</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">                || &quot;chunked&quot;.equalsIgnoreCase(response.header(&quot;Transfer-Encoding&quot;))) {</span>
+<span class="nc" id="L246">            return true;</span>
         }
 
-<span class="nc" id="L247">        return false;</span>
+<span class="nc" id="L249">        return false;</span>
     }
 
     static long contentLength(Headers headers) {
-<span class="nc" id="L251">        String s = headers.get(&quot;Content-Length&quot;);</span>
-<span class="nc bnc" id="L252" title="All 2 branches missed.">        if (s == null)</span>
-<span class="nc" id="L253">            return -1;</span>
+<span class="nc" id="L253">        String s = headers.get(&quot;Content-Length&quot;);</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (s == null)</span>
+<span class="nc" id="L255">            return -1;</span>
         try {
-<span class="nc" id="L255">            return Long.parseLong(s);</span>
-<span class="nc" id="L256">        } catch (NumberFormatException e) {</span>
-<span class="nc" id="L257">            return -1;</span>
+<span class="nc" id="L257">            return Long.parseLong(s);</span>
+<span class="nc" id="L258">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L259">            return -1;</span>
         }
     }
 
     static String responseSourceHeader(Response response) {
-<span class="fc" id="L262">        Response networkResponse = response.networkResponse();</span>
-<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (networkResponse == null) {</span>
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            return response.cacheResponse() == null ? &quot;NONE&quot; : &quot;CACHE &quot; + response.code();</span>
+<span class="fc" id="L264">        Response networkResponse = response.networkResponse();</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (networkResponse == null) {</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">            return response.cacheResponse() == null ? &quot;NONE&quot; : &quot;CACHE &quot; + response.code();</span>
         } else {
-<span class="fc bfc" id="L266" title="All 2 branches covered.">            return response.cacheResponse() == null</span>
-<span class="fc" id="L267">                    ? &quot;NETWORK &quot; + response.code()</span>
-<span class="fc" id="L268">                    : &quot;CONDITIONAL_CACHE &quot; + networkResponse.code();</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">            return response.cacheResponse() == null</span>
+<span class="fc" id="L269">                    ? &quot;NETWORK &quot; + response.code()</span>
+<span class="fc" id="L270">                    : &quot;CONDITIONAL_CACHE &quot; + networkResponse.code();</span>
         }
     }
 
     static String statusLineToString(Response response) {
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        return (response.protocol() == Protocol.HTTP_1_0 ? &quot;HTTP/1.0&quot; : &quot;HTTP/1.1&quot;) + ' ' + response.code() + ' '</span>
-<span class="fc" id="L274">                + response.message();</span>
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">        return (response.protocol() == Protocol.HTTP_1_0 ? &quot;HTTP/1.0&quot; : &quot;HTTP/1.1&quot;) + ' ' + response.code() + ' '</span>
+<span class="fc" id="L276">                + response.message();</span>
     }
 
     static String toHumanReadableAscii(String s) {
-<span class="nc bnc" id="L278" title="All 2 branches missed.">        for (int i = 0, length = s.length(), c; i &lt; length; i += Character.charCount(c)) {</span>
-<span class="nc" id="L279">            c = s.codePointAt(i);</span>
-<span class="nc bnc" id="L280" title="All 4 branches missed.">            if (c &gt; '\u001f' &amp;&amp; c &lt; '\u007f')</span>
-<span class="nc" id="L281">                continue;</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        for (int i = 0, length = s.length(), c; i &lt; length; i += Character.charCount(c)) {</span>
+<span class="nc" id="L281">            c = s.codePointAt(i);</span>
+<span class="nc bnc" id="L282" title="All 4 branches missed.">            if (c &gt; '\u001f' &amp;&amp; c &lt; '\u007f')</span>
+<span class="nc" id="L283">                continue;</span>
 
-<span class="nc" id="L283">            try (Buffer buffer = new Buffer()) {</span>
-<span class="nc" id="L284">                buffer.writeUtf8(s, 0, i);</span>
-<span class="nc" id="L285">                buffer.writeUtf8CodePoint('?');</span>
-<span class="nc bnc" id="L286" title="All 2 branches missed.">                for (int j = i + Character.charCount(c); j &lt; length; j += Character.charCount(c)) {</span>
-<span class="nc" id="L287">                    c = s.codePointAt(j);</span>
-<span class="nc bnc" id="L288" title="All 4 branches missed.">                    buffer.writeUtf8CodePoint(c &gt; '\u001f' &amp;&amp; c &lt; '\u007f' ? c : '?');</span>
+<span class="nc" id="L285">            try (Buffer buffer = new Buffer()) {</span>
+<span class="nc" id="L286">                buffer.writeUtf8(s, 0, i);</span>
+<span class="nc" id="L287">                buffer.writeUtf8CodePoint('?');</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                for (int j = i + Character.charCount(c); j &lt; length; j += Character.charCount(c)) {</span>
+<span class="nc" id="L289">                    c = s.codePointAt(j);</span>
+<span class="nc bnc" id="L290" title="All 4 branches missed.">                    buffer.writeUtf8CodePoint(c &gt; '\u001f' &amp;&amp; c &lt; '\u007f' ? c : '?');</span>
                 }
-<span class="nc" id="L290">                return buffer.readUtf8();</span>
+<span class="nc" id="L292">                return buffer.readUtf8();</span>
             }
         }
-<span class="nc" id="L293">        return s;</span>
+<span class="nc" id="L295">        return s;</span>
     }
 
     static Map&lt;String, List&lt;String&gt;&gt; toMultimap(Headers headers, @Nullable String valueForNullKey) {
-<span class="fc" id="L297">        Map&lt;String, List&lt;String&gt;&gt; result = new TreeMap&lt;&gt;(FIELD_NAME_COMPARATOR);</span>
-<span class="fc bfc" id="L298" title="All 2 branches covered.">        for (int i = 0, size = headers.size(); i &lt; size; i++) {</span>
-<span class="fc" id="L299">            String fieldName = headers.name(i);</span>
-<span class="fc" id="L300">            String value = headers.value(i);</span>
+<span class="fc" id="L299">        Map&lt;String, List&lt;String&gt;&gt; result = new TreeMap&lt;&gt;(FIELD_NAME_COMPARATOR);</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        for (int i = 0, size = headers.size(); i &lt; size; i++) {</span>
+<span class="fc" id="L301">            String fieldName = headers.name(i);</span>
+<span class="fc" id="L302">            String value = headers.value(i);</span>
 
-<span class="fc" id="L302">            List&lt;String&gt; allValues = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L303">            List&lt;String&gt; otherValues = result.get(fieldName);</span>
-<span class="fc bfc" id="L304" title="All 2 branches covered.">            if (otherValues != null) {</span>
-<span class="fc" id="L305">                allValues.addAll(otherValues);</span>
+<span class="fc" id="L304">            List&lt;String&gt; allValues = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L305">            List&lt;String&gt; otherValues = result.get(fieldName);</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">            if (otherValues != null) {</span>
+<span class="fc" id="L307">                allValues.addAll(otherValues);</span>
             }
-<span class="fc" id="L307">            allValues.add(value);</span>
-<span class="fc" id="L308">            result.put(fieldName, Collections.unmodifiableList(allValues));</span>
+<span class="fc" id="L309">            allValues.add(value);</span>
+<span class="fc" id="L310">            result.put(fieldName, Collections.unmodifiableList(allValues));</span>
         }
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        if (valueForNullKey != null) {</span>
-<span class="fc" id="L311">            result.put(null, Collections.unmodifiableList(Collections.singletonList(valueForNullKey)));</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">        if (valueForNullKey != null) {</span>
+<span class="fc" id="L313">            result.put(null, Collections.unmodifiableList(Collections.singletonList(valueForNullKey)));</span>
         }
-<span class="fc" id="L313">        return Collections.unmodifiableMap(result);</span>
+<span class="fc" id="L315">        return Collections.unmodifiableMap(result);</span>
     }
 
     static String getSystemProperty(String key, @Nullable String defaultValue) {
         String value;
         try {
-<span class="fc" id="L319">            value = System.getProperty(key);</span>
-<span class="nc" id="L320">        } catch (AccessControlException ex) {</span>
-<span class="nc" id="L321">            return defaultValue;</span>
-<span class="fc" id="L322">        }</span>
-<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        return value != null ? value : defaultValue;</span>
+<span class="fc" id="L321">            value = System.getProperty(key);</span>
+<span class="nc" id="L322">        } catch (AccessControlException ex) {</span>
+<span class="nc" id="L323">            return defaultValue;</span>
+<span class="fc" id="L324">        }</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">        return value != null ? value : defaultValue;</span>
     }
 
     static String defaultUserAgent() {
-<span class="fc" id="L327">        String agent = getSystemProperty(&quot;http.agent&quot;, null);</span>
-<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        return agent != null ? toHumanReadableAscii(agent) : &quot;ObsoleteUrlFactory&quot;;</span>
+<span class="fc" id="L329">        String agent = getSystemProperty(&quot;http.agent&quot;, null);</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">        return agent != null ? toHumanReadableAscii(agent) : &quot;ObsoleteUrlFactory&quot;;</span>
     }
 
     static IOException propagate(Throwable throwable) throws IOException {
-<span class="nc bnc" id="L332" title="All 2 branches missed.">        if (throwable instanceof IOException)</span>
-<span class="nc" id="L333">            throw (IOException) throwable;</span>
-<span class="nc bnc" id="L334" title="All 2 branches missed.">        if (throwable instanceof Error)</span>
-<span class="nc" id="L335">            throw (Error) throwable;</span>
-<span class="nc bnc" id="L336" title="All 2 branches missed.">        if (throwable instanceof RuntimeException)</span>
-<span class="nc" id="L337">            throw (RuntimeException) throwable;</span>
-<span class="nc" id="L338">        throw new AssertionError();</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        if (throwable instanceof IOException)</span>
+<span class="nc" id="L335">            throw (IOException) throwable;</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">        if (throwable instanceof Error)</span>
+<span class="nc" id="L337">            throw (Error) throwable;</span>
+<span class="nc bnc" id="L338" title="All 2 branches missed.">        if (throwable instanceof RuntimeException)</span>
+<span class="nc" id="L339">            throw (RuntimeException) throwable;</span>
+<span class="nc" id="L340">        throw new AssertionError();</span>
     }
 
     static final class OkHttpURLConnection extends HttpURLConnection implements Callback {
         // These fields are confined to the application thread that uses HttpURLConnection.
         OkHttpClient client;
-<span class="fc" id="L344">        final NetworkInterceptor networkInterceptor = new NetworkInterceptor();</span>
-<span class="fc" id="L345">        Headers.Builder requestHeaders = new Headers.Builder();</span>
+<span class="fc" id="L346">        final NetworkInterceptor networkInterceptor = new NetworkInterceptor();</span>
+<span class="fc" id="L347">        Headers.Builder requestHeaders = new Headers.Builder();</span>
         Headers responseHeaders;
         boolean executed;
         Call call;
 
         /** Like the superclass field of the same name, but a long and available on all platforms. */
-<span class="fc" id="L351">        long fixedContentLength = -1L;</span>
+<span class="fc" id="L353">        long fixedContentLength = -1L;</span>
 
         // These fields are guarded by lock.
-<span class="fc" id="L354">        private final Object lock = new Object();</span>
+<span class="fc" id="L356">        private final Object lock = new Object();</span>
         private Response response;
         private Throwable callFailure;
         Response networkResponse;
-<span class="fc" id="L358">        boolean connectPending = true;</span>
+<span class="fc" id="L360">        boolean connectPending = true;</span>
         Proxy proxy;
         Handshake handshake;
 
         OkHttpURLConnection(URL url, OkHttpClient client) {
-<span class="fc" id="L363">            super(url);</span>
-<span class="fc" id="L364">            this.client = client;</span>
-<span class="fc" id="L365">        }</span>
+<span class="fc" id="L365">            super(url);</span>
+<span class="fc" id="L366">            this.client = client;</span>
+<span class="fc" id="L367">        }</span>
 
         @Override
         public void connect() throws IOException {
-<span class="nc bnc" id="L369" title="All 2 branches missed.">            if (executed)</span>
-<span class="nc" id="L370">                return;</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">            if (executed)</span>
+<span class="nc" id="L372">                return;</span>
 
-<span class="nc" id="L372">            Call call = buildCall();</span>
-<span class="nc" id="L373">            executed = true;</span>
-<span class="nc" id="L374">            call.enqueue(this);</span>
+<span class="nc" id="L374">            Call call = buildCall();</span>
+<span class="nc" id="L375">            executed = true;</span>
+<span class="nc" id="L376">            call.enqueue(this);</span>
 
-<span class="nc" id="L376">            synchronized (lock) {</span>
+<span class="nc" id="L378">            synchronized (lock) {</span>
                 try {
-<span class="nc bnc" id="L378" title="All 6 branches missed.">                    while (connectPending &amp;&amp; response == null &amp;&amp; callFailure == null) {</span>
-<span class="nc" id="L379">                        lock.wait(); // Wait 'til the network interceptor is reached or the call fails.</span>
+<span class="nc bnc" id="L380" title="All 6 branches missed.">                    while (connectPending &amp;&amp; response == null &amp;&amp; callFailure == null) {</span>
+<span class="nc" id="L381">                        lock.wait(); // Wait 'til the network interceptor is reached or the call fails.</span>
                     }
-<span class="nc bnc" id="L381" title="All 2 branches missed.">                    if (callFailure != null) {</span>
-<span class="nc" id="L382">                        throw propagate(callFailure);</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                    if (callFailure != null) {</span>
+<span class="nc" id="L384">                        throw propagate(callFailure);</span>
                     }
-<span class="nc" id="L384">                } catch (InterruptedException e) {</span>
-<span class="nc" id="L385">                    Thread.currentThread().interrupt(); // Retain interrupted status.</span>
-<span class="nc" id="L386">                    throw new InterruptedIOException();</span>
-<span class="nc" id="L387">                }</span>
-<span class="nc" id="L388">            }</span>
-<span class="nc" id="L389">        }</span>
+<span class="nc" id="L386">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L387">                    Thread.currentThread().interrupt(); // Retain interrupted status.</span>
+<span class="nc" id="L388">                    throw new InterruptedIOException();</span>
+<span class="nc" id="L389">                }</span>
+<span class="nc" id="L390">            }</span>
+<span class="nc" id="L391">        }</span>
 
         @Override
         public void disconnect() {
             // Calling disconnect() before a connection exists should have no effect.
-<span class="nc bnc" id="L394" title="All 2 branches missed.">            if (call == null)</span>
-<span class="nc" id="L395">                return;</span>
+<span class="nc bnc" id="L396" title="All 2 branches missed.">            if (call == null)</span>
+<span class="nc" id="L397">                return;</span>
 
-<span class="nc" id="L397">            networkInterceptor.proceed(); // Unblock any waiting async thread.</span>
-<span class="nc" id="L398">            call.cancel();</span>
-<span class="nc" id="L399">        }</span>
+<span class="nc" id="L399">            networkInterceptor.proceed(); // Unblock any waiting async thread.</span>
+<span class="nc" id="L400">            call.cancel();</span>
+<span class="nc" id="L401">        }</span>
 
         @SuppressFBWarnings(value = &quot;NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE&quot;, justification = &quot;hasBody checks for this&quot;)
         @Override
         public InputStream getErrorStream() {
             try {
-<span class="fc" id="L405">                Response response = getResponse(true);</span>
-<span class="pc bpc" id="L406" title="2 of 4 branches missed.">                if (hasBody(response) &amp;&amp; response.code() &gt;= HTTP_BAD_REQUEST) {</span>
-<span class="fc" id="L407">                    return response.body().byteStream();</span>
+<span class="fc" id="L407">                Response response = getResponse(true);</span>
+<span class="pc bpc" id="L408" title="2 of 4 branches missed.">                if (hasBody(response) &amp;&amp; response.code() &gt;= HTTP_BAD_REQUEST) {</span>
+<span class="fc" id="L409">                    return new ResponseBodyInputStream(response.body());</span>
                 }
-<span class="nc" id="L409">                return null;</span>
-<span class="nc" id="L410">            } catch (IOException e) {</span>
 <span class="nc" id="L411">                return null;</span>
+<span class="nc" id="L412">            } catch (IOException e) {</span>
+<span class="nc" id="L413">                return null;</span>
             }
         }
 
         Headers getHeaders() throws IOException {
-<span class="pc bpc" id="L416" title="1 of 2 branches missed.">            if (responseHeaders == null) {</span>
-<span class="fc" id="L417">                Response response = getResponse(true);</span>
-<span class="fc" id="L418">                Headers headers = response.headers();</span>
-<span class="fc" id="L419">                responseHeaders = headers.newBuilder()</span>
-<span class="fc" id="L420">                        .add(SELECTED_PROTOCOL, response.protocol().toString())</span>
-<span class="fc" id="L421">                        .add(RESPONSE_SOURCE, responseSourceHeader(response))</span>
-<span class="fc" id="L422">                        .build();</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">            if (responseHeaders == null) {</span>
+<span class="fc" id="L419">                Response response = getResponse(true);</span>
+<span class="fc" id="L420">                Headers headers = response.headers();</span>
+<span class="fc" id="L421">                responseHeaders = headers.newBuilder()</span>
+<span class="fc" id="L422">                        .add(SELECTED_PROTOCOL, response.protocol().toString())</span>
+<span class="fc" id="L423">                        .add(RESPONSE_SOURCE, responseSourceHeader(response))</span>
+<span class="fc" id="L424">                        .build();</span>
             }
-<span class="fc" id="L424">            return responseHeaders;</span>
+<span class="fc" id="L426">            return responseHeaders;</span>
         }
 
         @Override
         public String getHeaderField(int position) {
             try {
-<span class="nc" id="L430">                Headers headers = getHeaders();</span>
-<span class="nc bnc" id="L431" title="All 4 branches missed.">                if (position &lt; 0 || position &gt;= headers.size())</span>
-<span class="nc" id="L432">                    return null;</span>
-<span class="nc" id="L433">                return headers.value(position);</span>
-<span class="nc" id="L434">            } catch (IOException e) {</span>
-<span class="nc" id="L435">                return null;</span>
+<span class="nc" id="L432">                Headers headers = getHeaders();</span>
+<span class="nc bnc" id="L433" title="All 4 branches missed.">                if (position &lt; 0 || position &gt;= headers.size())</span>
+<span class="nc" id="L434">                    return null;</span>
+<span class="nc" id="L435">                return headers.value(position);</span>
+<span class="nc" id="L436">            } catch (IOException e) {</span>
+<span class="nc" id="L437">                return null;</span>
             }
         }
 
         @Override
         public String getHeaderField(String fieldName) {
             try {
-<span class="nc bnc" id="L442" title="All 2 branches missed.">                return fieldName == null ? statusLineToString(getResponse(true)) : getHeaders().get(fieldName);</span>
-<span class="nc" id="L443">            } catch (IOException e) {</span>
-<span class="nc" id="L444">                return null;</span>
+<span class="nc bnc" id="L444" title="All 2 branches missed.">                return fieldName == null ? statusLineToString(getResponse(true)) : getHeaders().get(fieldName);</span>
+<span class="nc" id="L445">            } catch (IOException e) {</span>
+<span class="nc" id="L446">                return null;</span>
             }
         }
 
         @Override
         public String getHeaderFieldKey(int position) {
             try {
-<span class="nc" id="L451">                Headers headers = getHeaders();</span>
-<span class="nc bnc" id="L452" title="All 4 branches missed.">                if (position &lt; 0 || position &gt;= headers.size())</span>
-<span class="nc" id="L453">                    return null;</span>
-<span class="nc" id="L454">                return headers.name(position);</span>
-<span class="nc" id="L455">            } catch (IOException e) {</span>
-<span class="nc" id="L456">                return null;</span>
+<span class="nc" id="L453">                Headers headers = getHeaders();</span>
+<span class="nc bnc" id="L454" title="All 4 branches missed.">                if (position &lt; 0 || position &gt;= headers.size())</span>
+<span class="nc" id="L455">                    return null;</span>
+<span class="nc" id="L456">                return headers.name(position);</span>
+<span class="nc" id="L457">            } catch (IOException e) {</span>
+<span class="nc" id="L458">                return null;</span>
             }
         }
 
         @Override
         public Map&lt;String, List&lt;String&gt;&gt; getHeaderFields() {
             try {
-<span class="fc" id="L463">                return toMultimap(getHeaders(), statusLineToString(getResponse(true)));</span>
-<span class="nc" id="L464">            } catch (IOException e) {</span>
-<span class="nc" id="L465">                return Collections.emptyMap();</span>
+<span class="fc" id="L465">                return toMultimap(getHeaders(), statusLineToString(getResponse(true)));</span>
+<span class="nc" id="L466">            } catch (IOException e) {</span>
+<span class="nc" id="L467">                return Collections.emptyMap();</span>
             }
         }
 
         @Override
         public Map&lt;String, List&lt;String&gt;&gt; getRequestProperties() {
-<span class="nc bnc" id="L471" title="All 2 branches missed.">            if (connected) {</span>
-<span class="nc" id="L472">                throw new IllegalStateException(&quot;Cannot access request header fields after connection is set&quot;);</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">            if (connected) {</span>
+<span class="nc" id="L474">                throw new IllegalStateException(&quot;Cannot access request header fields after connection is set&quot;);</span>
             }
 
-<span class="nc" id="L475">            return toMultimap(requestHeaders.build(), null);</span>
+<span class="nc" id="L477">            return toMultimap(requestHeaders.build(), null);</span>
         }
 
         @SuppressFBWarnings(value = &quot;NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE&quot;,
                 justification = &quot;Good request will have body&quot;)
         @Override
         public InputStream getInputStream() throws IOException {
-<span class="pc bpc" id="L482" title="1 of 2 branches missed.">            if (!doInput) {</span>
-<span class="nc" id="L483">                throw new ProtocolException(&quot;This protocol does not support input&quot;);</span>
+<span class="pc bpc" id="L484" title="1 of 2 branches missed.">            if (!doInput) {</span>
+<span class="nc" id="L485">                throw new ProtocolException(&quot;This protocol does not support input&quot;);</span>
             }
 
-<span class="fc" id="L486">            Response response = getResponse(false);</span>
-<span class="fc bfc" id="L487" title="All 2 branches covered.">            if (response.code() &gt;= HTTP_BAD_REQUEST)</span>
-<span class="fc" id="L488">                throw new FileNotFoundException(url.toString());</span>
-<span class="fc" id="L489">            return response.body().byteStream();</span>
+<span class="fc" id="L488">            Response response = getResponse(false);</span>
+<span class="fc bfc" id="L489" title="All 2 branches covered.">            if (response.code() &gt;= HTTP_BAD_REQUEST)</span>
+<span class="fc" id="L490">                throw new FileNotFoundException(url.toString());</span>
+<span class="fc" id="L491">            return new ResponseBodyInputStream(response.body());</span>
         }
 
         @Override
         public OutputStream getOutputStream() throws IOException {
-<span class="fc" id="L494">            OutputStreamRequestBody requestBody = (OutputStreamRequestBody) buildCall().request().body();</span>
-<span class="pc bpc" id="L495" title="1 of 2 branches missed.">            if (requestBody == null) {</span>
-<span class="nc" id="L496">                throw new ProtocolException(&quot;method does not support a request body: &quot; + method);</span>
+<span class="fc" id="L496">            OutputStreamRequestBody requestBody = (OutputStreamRequestBody) buildCall().request().body();</span>
+<span class="pc bpc" id="L497" title="1 of 2 branches missed.">            if (requestBody == null) {</span>
+<span class="nc" id="L498">                throw new ProtocolException(&quot;method does not support a request body: &quot; + method);</span>
             }
 
-<span class="pc bpc" id="L499" title="1 of 2 branches missed.">            if (requestBody instanceof StreamedRequestBody) {</span>
-<span class="nc" id="L500">                connect();</span>
-<span class="nc" id="L501">                networkInterceptor.proceed();</span>
+<span class="pc bpc" id="L501" title="1 of 2 branches missed.">            if (requestBody instanceof StreamedRequestBody) {</span>
+<span class="nc" id="L502">                connect();</span>
+<span class="nc" id="L503">                networkInterceptor.proceed();</span>
             }
 
-<span class="pc bpc" id="L504" title="1 of 2 branches missed.">            if (requestBody.closed) {</span>
-<span class="nc" id="L505">                throw new ProtocolException(&quot;cannot write request body after response has been read&quot;);</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            if (requestBody.closed) {</span>
+<span class="nc" id="L507">                throw new ProtocolException(&quot;cannot write request body after response has been read&quot;);</span>
             }
 
-<span class="fc" id="L508">            return requestBody.outputStream;</span>
+<span class="fc" id="L510">            return requestBody.outputStream;</span>
         }
 
         @SuppressFBWarnings(value = &quot;NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE&quot;,
                 justification = &quot;usingProxy() handles this&quot;)
         @Override
         public Permission getPermission() {
-<span class="nc" id="L515">            URL url = getURL();</span>
-<span class="nc" id="L516">            String hostname = url.getHost();</span>
-<span class="nc bnc" id="L517" title="All 2 branches missed.">            int hostPort = url.getPort() != -1 ? url.getPort() : HttpUrl.defaultPort(url.getProtocol());</span>
-<span class="nc bnc" id="L518" title="All 2 branches missed.">            if (usingProxy()) {</span>
-<span class="nc" id="L519">                InetSocketAddress proxyAddress = (InetSocketAddress) client.proxy().address();</span>
-<span class="nc" id="L520">                hostname = proxyAddress.getHostName();</span>
-<span class="nc" id="L521">                hostPort = proxyAddress.getPort();</span>
+<span class="nc" id="L517">            URL url = getURL();</span>
+<span class="nc" id="L518">            String hostname = url.getHost();</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">            int hostPort = url.getPort() != -1 ? url.getPort() : HttpUrl.defaultPort(url.getProtocol());</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">            if (usingProxy()) {</span>
+<span class="nc" id="L521">                InetSocketAddress proxyAddress = (InetSocketAddress) client.proxy().address();</span>
+<span class="nc" id="L522">                hostname = proxyAddress.getHostName();</span>
+<span class="nc" id="L523">                hostPort = proxyAddress.getPort();</span>
             }
-<span class="nc" id="L523">            return new SocketPermission(hostname + &quot;:&quot; + hostPort, &quot;connect, resolve&quot;);</span>
+<span class="nc" id="L525">            return new SocketPermission(hostname + &quot;:&quot; + hostPort, &quot;connect, resolve&quot;);</span>
         }
 
         @Override
         public String getRequestProperty(String field) {
-<span class="nc bnc" id="L528" title="All 2 branches missed.">            if (field == null)</span>
-<span class="nc" id="L529">                return null;</span>
-<span class="nc" id="L530">            return requestHeaders.get(field);</span>
+<span class="nc bnc" id="L530" title="All 2 branches missed.">            if (field == null)</span>
+<span class="nc" id="L531">                return null;</span>
+<span class="nc" id="L532">            return requestHeaders.get(field);</span>
         }
 
         @Override
         public void setConnectTimeout(int timeoutMillis) {
-<span class="nc" id="L535">            client = client.newBuilder().connectTimeout(timeoutMillis, TimeUnit.MILLISECONDS).build();</span>
-<span class="nc" id="L536">        }</span>
+<span class="nc" id="L537">            client = client.newBuilder().connectTimeout(timeoutMillis, TimeUnit.MILLISECONDS).build();</span>
+<span class="nc" id="L538">        }</span>
 
         @Override
         public void setInstanceFollowRedirects(boolean followRedirects) {
-<span class="nc" id="L540">            client = client.newBuilder().followRedirects(followRedirects).build();</span>
-<span class="nc" id="L541">        }</span>
+<span class="nc" id="L542">            client = client.newBuilder().followRedirects(followRedirects).build();</span>
+<span class="nc" id="L543">        }</span>
 
         @Override
         public boolean getInstanceFollowRedirects() {
-<span class="nc" id="L545">            return client.followRedirects();</span>
+<span class="nc" id="L547">            return client.followRedirects();</span>
         }
 
         @Override
         public int getConnectTimeout() {
-<span class="nc" id="L550">            return client.connectTimeoutMillis();</span>
+<span class="nc" id="L552">            return client.connectTimeoutMillis();</span>
         }
 
         @Override
         public void setReadTimeout(int timeoutMillis) {
-<span class="nc" id="L555">            client = client.newBuilder().readTimeout(timeoutMillis, TimeUnit.MILLISECONDS).build();</span>
-<span class="nc" id="L556">        }</span>
+<span class="nc" id="L557">            client = client.newBuilder().readTimeout(timeoutMillis, TimeUnit.MILLISECONDS).build();</span>
+<span class="nc" id="L558">        }</span>
 
         @Override
         public int getReadTimeout() {
-<span class="nc" id="L560">            return client.readTimeoutMillis();</span>
+<span class="nc" id="L562">            return client.readTimeoutMillis();</span>
         }
 
         @SuppressFBWarnings(&quot;RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE&quot;)
         private Call buildCall() throws IOException {
-<span class="fc bfc" id="L565" title="All 2 branches covered.">            if (call != null) {</span>
-<span class="fc" id="L566">                return call;</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">            if (call != null) {</span>
+<span class="fc" id="L568">                return call;</span>
             }
 
-<span class="fc" id="L569">            connected = true;</span>
-<span class="fc bfc" id="L570" title="All 2 branches covered.">            if (doOutput) {</span>
-<span class="pc bpc" id="L571" title="1 of 2 branches missed.">                if (method.equals(&quot;GET&quot;)) {</span>
-<span class="nc" id="L572">                    method = &quot;POST&quot;;</span>
-<span class="pc bpc" id="L573" title="1 of 2 branches missed.">                } else if (!permitsRequestBody(method)) {</span>
-<span class="nc" id="L574">                    throw new ProtocolException(method + &quot; does not support writing&quot;);</span>
+<span class="fc" id="L571">            connected = true;</span>
+<span class="fc bfc" id="L572" title="All 2 branches covered.">            if (doOutput) {</span>
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">                if (method.equals(&quot;GET&quot;)) {</span>
+<span class="nc" id="L574">                    method = &quot;POST&quot;;</span>
+<span class="pc bpc" id="L575" title="1 of 2 branches missed.">                } else if (!permitsRequestBody(method)) {</span>
+<span class="nc" id="L576">                    throw new ProtocolException(method + &quot; does not support writing&quot;);</span>
                 }
             }
 
-<span class="pc bpc" id="L578" title="1 of 2 branches missed.">            if (requestHeaders.get(&quot;User-Agent&quot;) == null) {</span>
-<span class="fc" id="L579">                requestHeaders.add(&quot;User-Agent&quot;, defaultUserAgent());</span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">            if (requestHeaders.get(&quot;User-Agent&quot;) == null) {</span>
+<span class="fc" id="L581">                requestHeaders.add(&quot;User-Agent&quot;, defaultUserAgent());</span>
             }
 
-<span class="fc" id="L582">            OutputStreamRequestBody requestBody = null;</span>
-<span class="fc bfc" id="L583" title="All 2 branches covered.">            if (permitsRequestBody(method)) {</span>
-<span class="fc" id="L584">                String contentType = requestHeaders.get(&quot;Content-Type&quot;);</span>
-<span class="fc bfc" id="L585" title="All 2 branches covered.">                if (contentType == null) {</span>
-<span class="fc" id="L586">                    contentType = &quot;application/x-www-form-urlencoded&quot;;</span>
-<span class="fc" id="L587">                    requestHeaders.add(&quot;Content-Type&quot;, contentType);</span>
+<span class="fc" id="L584">            OutputStreamRequestBody requestBody = null;</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">            if (permitsRequestBody(method)) {</span>
+<span class="fc" id="L586">                String contentType = requestHeaders.get(&quot;Content-Type&quot;);</span>
+<span class="fc bfc" id="L587" title="All 2 branches covered.">                if (contentType == null) {</span>
+<span class="fc" id="L588">                    contentType = &quot;application/x-www-form-urlencoded&quot;;</span>
+<span class="fc" id="L589">                    requestHeaders.add(&quot;Content-Type&quot;, contentType);</span>
                 }
 
-<span class="pc bpc" id="L590" title="2 of 4 branches missed.">                boolean stream = fixedContentLength != -1L || chunkLength &gt; 0;</span>
+<span class="pc bpc" id="L592" title="2 of 4 branches missed.">                boolean stream = fixedContentLength != -1L || chunkLength &gt; 0;</span>
 
-<span class="fc" id="L592">                long contentLength = -1L;</span>
-<span class="fc" id="L593">                String contentLengthString = requestHeaders.get(&quot;Content-Length&quot;);</span>
-<span class="pc bpc" id="L594" title="1 of 2 branches missed.">                if (fixedContentLength != -1L) {</span>
-<span class="nc" id="L595">                    contentLength = fixedContentLength;</span>
-<span class="pc bpc" id="L596" title="1 of 2 branches missed.">                } else if (contentLengthString != null) {</span>
-<span class="nc" id="L597">                    contentLength = Long.parseLong(contentLengthString);</span>
+<span class="fc" id="L594">                long contentLength = -1L;</span>
+<span class="fc" id="L595">                String contentLengthString = requestHeaders.get(&quot;Content-Length&quot;);</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">                if (fixedContentLength != -1L) {</span>
+<span class="nc" id="L597">                    contentLength = fixedContentLength;</span>
+<span class="pc bpc" id="L598" title="1 of 2 branches missed.">                } else if (contentLengthString != null) {</span>
+<span class="nc" id="L599">                    contentLength = Long.parseLong(contentLengthString);</span>
                 }
 
-<span class="pc bpc" id="L600" title="1 of 2 branches missed.">                requestBody = stream ? new StreamedRequestBody(contentLength) : new BufferedRequestBody(contentLength);</span>
-<span class="fc" id="L601">                requestBody.timeout.timeout(client.writeTimeoutMillis(), TimeUnit.MILLISECONDS);</span>
+<span class="pc bpc" id="L602" title="1 of 2 branches missed.">                requestBody = stream ? new StreamedRequestBody(contentLength) : new BufferedRequestBody(contentLength);</span>
+<span class="fc" id="L603">                requestBody.timeout.timeout(client.writeTimeoutMillis(), TimeUnit.MILLISECONDS);</span>
             }
 
             HttpUrl url;
             try {
-<span class="fc" id="L606">                url = HttpUrl.get(getURL().toString());</span>
-<span class="nc" id="L607">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L608">                MalformedURLException malformedUrl = new MalformedURLException();</span>
-<span class="nc" id="L609">                malformedUrl.initCause(e);</span>
-<span class="nc" id="L610">                throw malformedUrl;</span>
-<span class="fc" id="L611">            }</span>
+<span class="fc" id="L608">                url = HttpUrl.get(getURL().toString());</span>
+<span class="nc" id="L609">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L610">                MalformedURLException malformedUrl = new MalformedURLException();</span>
+<span class="nc" id="L611">                malformedUrl.initCause(e);</span>
+<span class="nc" id="L612">                throw malformedUrl;</span>
+<span class="fc" id="L613">            }</span>
 
-<span class="fc" id="L613">            Request request = new Request.Builder().url(url)</span>
-<span class="fc" id="L614">                    .headers(requestHeaders.build())</span>
-<span class="fc" id="L615">                    .method(method, requestBody)</span>
-<span class="fc" id="L616">                    .build();</span>
+<span class="fc" id="L615">            Request request = new Request.Builder().url(url)</span>
+<span class="fc" id="L616">                    .headers(requestHeaders.build())</span>
+<span class="fc" id="L617">                    .method(method, requestBody)</span>
+<span class="fc" id="L618">                    .build();</span>
 
-<span class="fc" id="L618">            OkHttpClient.Builder clientBuilder = client.newBuilder();</span>
-<span class="fc" id="L619">            clientBuilder.interceptors().clear();</span>
-<span class="fc" id="L620">            clientBuilder.interceptors().add(UnexpectedException.INTERCEPTOR);</span>
-<span class="fc" id="L621">            clientBuilder.networkInterceptors().clear();</span>
-<span class="fc" id="L622">            clientBuilder.networkInterceptors().add(networkInterceptor);</span>
+<span class="fc" id="L620">            OkHttpClient.Builder clientBuilder = client.newBuilder();</span>
+<span class="fc" id="L621">            clientBuilder.interceptors().clear();</span>
+<span class="fc" id="L622">            clientBuilder.interceptors().add(UnexpectedException.INTERCEPTOR);</span>
+<span class="fc" id="L623">            clientBuilder.networkInterceptors().clear();</span>
+<span class="fc" id="L624">            clientBuilder.networkInterceptors().add(networkInterceptor);</span>
 
             // Use a separate dispatcher so that limits aren't impacted. But use the same executor service!
-<span class="fc" id="L625">            clientBuilder.dispatcher(new Dispatcher(client.dispatcher().executorService()));</span>
+<span class="fc" id="L627">            clientBuilder.dispatcher(new Dispatcher(client.dispatcher().executorService()));</span>
 
             // If we're currently not using caches, make sure the engine's client doesn't have one.
-<span class="pc bpc" id="L628" title="1 of 2 branches missed.">            if (!getUseCaches()) {</span>
-<span class="nc" id="L629">                clientBuilder.cache(null);</span>
+<span class="pc bpc" id="L630" title="1 of 2 branches missed.">            if (!getUseCaches()) {</span>
+<span class="nc" id="L631">                clientBuilder.cache(null);</span>
             }
 
-<span class="fc" id="L632">            return call = clientBuilder.build().newCall(request);</span>
+<span class="fc" id="L634">            return call = clientBuilder.build().newCall(request);</span>
         }
 
         private Response getResponse(boolean networkResponseOnError) throws IOException {
-<span class="fc" id="L636">            synchronized (lock) {</span>
-<span class="fc bfc" id="L637" title="All 2 branches covered.">                if (response != null)</span>
-<span class="fc" id="L638">                    return response;</span>
-<span class="pc bpc" id="L639" title="1 of 2 branches missed.">                if (callFailure != null) {</span>
-<span class="nc bnc" id="L640" title="All 4 branches missed.">                    if (networkResponseOnError &amp;&amp; networkResponse != null)</span>
-<span class="nc" id="L641">                        return networkResponse;</span>
-<span class="nc" id="L642">                    throw propagate(callFailure);</span>
+<span class="fc" id="L638">            synchronized (lock) {</span>
+<span class="fc bfc" id="L639" title="All 2 branches covered.">                if (response != null)</span>
+<span class="fc" id="L640">                    return response;</span>
+<span class="pc bpc" id="L641" title="1 of 2 branches missed.">                if (callFailure != null) {</span>
+<span class="nc bnc" id="L642" title="All 4 branches missed.">                    if (networkResponseOnError &amp;&amp; networkResponse != null)</span>
+<span class="nc" id="L643">                        return networkResponse;</span>
+<span class="nc" id="L644">                    throw propagate(callFailure);</span>
                 }
-<span class="fc" id="L644">            }</span>
+<span class="fc" id="L646">            }</span>
 
-<span class="fc" id="L646">            Call call = buildCall();</span>
-<span class="fc" id="L647">            networkInterceptor.proceed();</span>
+<span class="fc" id="L648">            Call call = buildCall();</span>
+<span class="fc" id="L649">            networkInterceptor.proceed();</span>
 
-<span class="fc" id="L649">            OutputStreamRequestBody requestBody = (OutputStreamRequestBody) call.request().body();</span>
-<span class="fc bfc" id="L650" title="All 2 branches covered.">            if (requestBody != null)</span>
-<span class="fc" id="L651">                requestBody.outputStream.close();</span>
+<span class="fc" id="L651">            OutputStreamRequestBody requestBody = (OutputStreamRequestBody) call.request().body();</span>
+<span class="fc bfc" id="L652" title="All 2 branches covered.">            if (requestBody != null)</span>
+<span class="fc" id="L653">                requestBody.outputStream.close();</span>
 
-<span class="pc bpc" id="L653" title="1 of 2 branches missed.">            if (executed) {</span>
-<span class="nc" id="L654">                synchronized (lock) {</span>
+<span class="pc bpc" id="L655" title="1 of 2 branches missed.">            if (executed) {</span>
+<span class="nc" id="L656">                synchronized (lock) {</span>
                     try {
-<span class="nc bnc" id="L656" title="All 4 branches missed.">                        while (response == null &amp;&amp; callFailure == null) {</span>
-<span class="nc" id="L657">                            lock.wait(); // Wait until the response is returned or the call fails.</span>
+<span class="nc bnc" id="L658" title="All 4 branches missed.">                        while (response == null &amp;&amp; callFailure == null) {</span>
+<span class="nc" id="L659">                            lock.wait(); // Wait until the response is returned or the call fails.</span>
                         }
-<span class="nc" id="L659">                    } catch (InterruptedException e) {</span>
-<span class="nc" id="L660">                        Thread.currentThread().interrupt(); // Retain interrupted status.</span>
-<span class="nc" id="L661">                        throw new InterruptedIOException();</span>
-<span class="nc" id="L662">                    }</span>
-<span class="nc" id="L663">                }</span>
+<span class="nc" id="L661">                    } catch (InterruptedException e) {</span>
+<span class="nc" id="L662">                        Thread.currentThread().interrupt(); // Retain interrupted status.</span>
+<span class="nc" id="L663">                        throw new InterruptedIOException();</span>
+<span class="nc" id="L664">                    }</span>
+<span class="nc" id="L665">                }</span>
             } else {
-<span class="fc" id="L665">                executed = true;</span>
+<span class="fc" id="L667">                executed = true;</span>
                 try {
-<span class="fc" id="L667">                    onResponse(call, call.execute());</span>
-<span class="nc" id="L668">                } catch (IOException e) {</span>
-<span class="nc" id="L669">                    onFailure(call, e);</span>
-<span class="fc" id="L670">                }</span>
+<span class="fc" id="L669">                    onResponse(call, call.execute());</span>
+<span class="nc" id="L670">                } catch (IOException e) {</span>
+<span class="nc" id="L671">                    onFailure(call, e);</span>
+<span class="fc" id="L672">                }</span>
             }
 
-<span class="fc" id="L673">            synchronized (lock) {</span>
-<span class="pc bpc" id="L674" title="1 of 2 branches missed.">                if (callFailure != null)</span>
-<span class="nc" id="L675">                    throw propagate(callFailure);</span>
-<span class="pc bpc" id="L676" title="1 of 2 branches missed.">                if (response != null)</span>
-<span class="fc" id="L677">                    return response;</span>
-<span class="nc" id="L678">            }</span>
+<span class="fc" id="L675">            synchronized (lock) {</span>
+<span class="pc bpc" id="L676" title="1 of 2 branches missed.">                if (callFailure != null)</span>
+<span class="nc" id="L677">                    throw propagate(callFailure);</span>
+<span class="pc bpc" id="L678" title="1 of 2 branches missed.">                if (response != null)</span>
+<span class="fc" id="L679">                    return response;</span>
+<span class="nc" id="L680">            }</span>
 
-<span class="nc" id="L680">            throw new AssertionError();</span>
+<span class="nc" id="L682">            throw new AssertionError();</span>
         }
 
         @Override
         public boolean usingProxy() {
-<span class="nc bnc" id="L685" title="All 2 branches missed.">            if (proxy != null)</span>
-<span class="nc" id="L686">                return true;</span>
-<span class="nc" id="L687">            Proxy clientProxy = client.proxy();</span>
-<span class="nc bnc" id="L688" title="All 4 branches missed.">            return clientProxy != null &amp;&amp; clientProxy.type() != Proxy.Type.DIRECT;</span>
+<span class="nc bnc" id="L687" title="All 2 branches missed.">            if (proxy != null)</span>
+<span class="nc" id="L688">                return true;</span>
+<span class="nc" id="L689">            Proxy clientProxy = client.proxy();</span>
+<span class="nc bnc" id="L690" title="All 4 branches missed.">            return clientProxy != null &amp;&amp; clientProxy.type() != Proxy.Type.DIRECT;</span>
         }
 
         @Override
         public String getResponseMessage() throws IOException {
-<span class="nc" id="L693">            return getResponse(true).message();</span>
+<span class="nc" id="L695">            return getResponse(true).message();</span>
         }
 
         @Override
         public int getResponseCode() throws IOException {
-<span class="fc" id="L698">            return getResponse(true).code();</span>
+<span class="fc" id="L700">            return getResponse(true).code();</span>
         }
 
         @Override
         public void setRequestProperty(String field, String newValue) {
-<span class="pc bpc" id="L703" title="1 of 2 branches missed.">            if (connected) {</span>
-<span class="nc" id="L704">                throw new IllegalStateException(&quot;Cannot set request property after connection is made&quot;);</span>
+<span class="pc bpc" id="L705" title="1 of 2 branches missed.">            if (connected) {</span>
+<span class="nc" id="L706">                throw new IllegalStateException(&quot;Cannot set request property after connection is made&quot;);</span>
             }
-<span class="pc bpc" id="L706" title="1 of 2 branches missed.">            if (field == null) {</span>
-<span class="nc" id="L707">                throw new NullPointerException(&quot;field == null&quot;);</span>
+<span class="pc bpc" id="L708" title="1 of 2 branches missed.">            if (field == null) {</span>
+<span class="nc" id="L709">                throw new NullPointerException(&quot;field == null&quot;);</span>
             }
-<span class="pc bpc" id="L709" title="1 of 2 branches missed.">            if (newValue == null) {</span>
-<span class="nc" id="L710">                return;</span>
+<span class="pc bpc" id="L711" title="1 of 2 branches missed.">            if (newValue == null) {</span>
+<span class="nc" id="L712">                return;</span>
             }
 
-<span class="fc" id="L713">            requestHeaders.set(field, newValue);</span>
-<span class="fc" id="L714">        }</span>
+<span class="fc" id="L715">            requestHeaders.set(field, newValue);</span>
+<span class="fc" id="L716">        }</span>
 
         @Override
         public void setIfModifiedSince(long newValue) {
-<span class="nc" id="L718">            super.setIfModifiedSince(newValue);</span>
-<span class="nc bnc" id="L719" title="All 2 branches missed.">            if (ifModifiedSince != 0) {</span>
-<span class="nc" id="L720">                requestHeaders.set(&quot;If-Modified-Since&quot;, format(new Date(ifModifiedSince)));</span>
+<span class="nc" id="L720">            super.setIfModifiedSince(newValue);</span>
+<span class="nc bnc" id="L721" title="All 2 branches missed.">            if (ifModifiedSince != 0) {</span>
+<span class="nc" id="L722">                requestHeaders.set(&quot;If-Modified-Since&quot;, format(new Date(ifModifiedSince)));</span>
             } else {
-<span class="nc" id="L722">                requestHeaders.removeAll(&quot;If-Modified-Since&quot;);</span>
+<span class="nc" id="L724">                requestHeaders.removeAll(&quot;If-Modified-Since&quot;);</span>
             }
-<span class="nc" id="L724">        }</span>
+<span class="nc" id="L726">        }</span>
 
         @Override
         public void addRequestProperty(String field, String value) {
-<span class="nc bnc" id="L728" title="All 2 branches missed.">            if (connected) {</span>
-<span class="nc" id="L729">                throw new IllegalStateException(&quot;Cannot add request property after connection is made&quot;);</span>
+<span class="nc bnc" id="L730" title="All 2 branches missed.">            if (connected) {</span>
+<span class="nc" id="L731">                throw new IllegalStateException(&quot;Cannot add request property after connection is made&quot;);</span>
             }
-<span class="nc bnc" id="L731" title="All 2 branches missed.">            if (field == null) {</span>
-<span class="nc" id="L732">                throw new NullPointerException(&quot;field == null&quot;);</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">            if (field == null) {</span>
+<span class="nc" id="L734">                throw new NullPointerException(&quot;field == null&quot;);</span>
             }
-<span class="nc bnc" id="L734" title="All 2 branches missed.">            if (value == null) {</span>
-<span class="nc" id="L735">                return;</span>
+<span class="nc bnc" id="L736" title="All 2 branches missed.">            if (value == null) {</span>
+<span class="nc" id="L737">                return;</span>
             }
 
-<span class="nc" id="L738">            requestHeaders.add(field, value);</span>
-<span class="nc" id="L739">        }</span>
+<span class="nc" id="L740">            requestHeaders.add(field, value);</span>
+<span class="nc" id="L741">        }</span>
 
         @Override
         public void setRequestMethod(String method) throws ProtocolException {
-<span class="pc bpc" id="L743" title="1 of 2 branches missed.">            if (!METHODS.contains(method)) {</span>
-<span class="nc" id="L744">                throw new ProtocolException(&quot;Expected one of &quot; + METHODS + &quot; but was &quot; + method);</span>
+<span class="pc bpc" id="L745" title="1 of 2 branches missed.">            if (!METHODS.contains(method)) {</span>
+<span class="nc" id="L746">                throw new ProtocolException(&quot;Expected one of &quot; + METHODS + &quot; but was &quot; + method);</span>
             }
-<span class="fc" id="L746">            this.method = method;</span>
-<span class="fc" id="L747">        }</span>
+<span class="fc" id="L748">            this.method = method;</span>
+<span class="fc" id="L749">        }</span>
 
         @Override
         public void setFixedLengthStreamingMode(int contentLength) {
-<span class="nc" id="L751">            setFixedLengthStreamingMode((long) contentLength);</span>
-<span class="nc" id="L752">        }</span>
+<span class="nc" id="L753">            setFixedLengthStreamingMode((long) contentLength);</span>
+<span class="nc" id="L754">        }</span>
 
         @Override
         public void setFixedLengthStreamingMode(long contentLength) {
-<span class="nc bnc" id="L756" title="All 2 branches missed.">            if (super.connected)</span>
-<span class="nc" id="L757">                throw new IllegalStateException(&quot;Already connected&quot;);</span>
-<span class="nc bnc" id="L758" title="All 2 branches missed.">            if (chunkLength &gt; 0)</span>
-<span class="nc" id="L759">                throw new IllegalStateException(&quot;Already in chunked mode&quot;);</span>
-<span class="nc bnc" id="L760" title="All 2 branches missed.">            if (contentLength &lt; 0)</span>
-<span class="nc" id="L761">                throw new IllegalArgumentException(&quot;contentLength &lt; 0&quot;);</span>
-<span class="nc" id="L762">            this.fixedContentLength = contentLength;</span>
-<span class="nc" id="L763">            super.fixedContentLength = (int) Math.min(contentLength, Integer.MAX_VALUE);</span>
-<span class="nc" id="L764">        }</span>
+<span class="nc bnc" id="L758" title="All 2 branches missed.">            if (super.connected)</span>
+<span class="nc" id="L759">                throw new IllegalStateException(&quot;Already connected&quot;);</span>
+<span class="nc bnc" id="L760" title="All 2 branches missed.">            if (chunkLength &gt; 0)</span>
+<span class="nc" id="L761">                throw new IllegalStateException(&quot;Already in chunked mode&quot;);</span>
+<span class="nc bnc" id="L762" title="All 2 branches missed.">            if (contentLength &lt; 0)</span>
+<span class="nc" id="L763">                throw new IllegalArgumentException(&quot;contentLength &lt; 0&quot;);</span>
+<span class="nc" id="L764">            this.fixedContentLength = contentLength;</span>
+<span class="nc" id="L765">            super.fixedContentLength = (int) Math.min(contentLength, Integer.MAX_VALUE);</span>
+<span class="nc" id="L766">        }</span>
 
         @Override
         public void onFailure(Call call, IOException e) {
-<span class="nc" id="L768">            synchronized (lock) {</span>
-<span class="nc bnc" id="L769" title="All 2 branches missed.">                this.callFailure = (e instanceof UnexpectedException) ? e.getCause() : e;</span>
-<span class="nc" id="L770">                lock.notifyAll();</span>
-<span class="nc" id="L771">            }</span>
-<span class="nc" id="L772">        }</span>
+<span class="nc" id="L770">            synchronized (lock) {</span>
+<span class="nc bnc" id="L771" title="All 2 branches missed.">                this.callFailure = (e instanceof UnexpectedException) ? e.getCause() : e;</span>
+<span class="nc" id="L772">                lock.notifyAll();</span>
+<span class="nc" id="L773">            }</span>
+<span class="nc" id="L774">        }</span>
 
         @Override
         public void onResponse(Call call, Response response) {
-<span class="fc" id="L776">            synchronized (lock) {</span>
-<span class="fc" id="L777">                this.response = response;</span>
-<span class="fc" id="L778">                this.handshake = response.handshake();</span>
-<span class="fc" id="L779">                this.url = response.request().url().url();</span>
-<span class="fc" id="L780">                lock.notifyAll();</span>
-<span class="fc" id="L781">            }</span>
-<span class="fc" id="L782">        }</span>
+<span class="fc" id="L778">            synchronized (lock) {</span>
+<span class="fc" id="L779">                this.response = response;</span>
+<span class="fc" id="L780">                this.handshake = response.handshake();</span>
+<span class="fc" id="L781">                this.url = response.request().url().url();</span>
+<span class="fc" id="L782">                lock.notifyAll();</span>
+<span class="fc" id="L783">            }</span>
+<span class="fc" id="L784">        }</span>
 
-<span class="fc" id="L784">        final class NetworkInterceptor implements Interceptor {</span>
+<span class="fc" id="L786">        final class NetworkInterceptor implements Interceptor {</span>
             // Guarded by HttpUrlConnection.this.
             private boolean proceed;
 
@@ -789,119 +791,119 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
              * Proceed.
              */
             public void proceed() {
-<span class="fc" id="L792">                synchronized (lock) {</span>
-<span class="fc" id="L793">                    this.proceed = true;</span>
-<span class="fc" id="L794">                    lock.notifyAll();</span>
-<span class="fc" id="L795">                }</span>
-<span class="fc" id="L796">            }</span>
+<span class="fc" id="L794">                synchronized (lock) {</span>
+<span class="fc" id="L795">                    this.proceed = true;</span>
+<span class="fc" id="L796">                    lock.notifyAll();</span>
+<span class="fc" id="L797">                }</span>
+<span class="fc" id="L798">            }</span>
 
             @SuppressFBWarnings(value = &quot;NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE&quot;,
                     justification = &quot;If we get here there is a connection and request.body() is checked&quot;)
             @Override
             public Response intercept(Chain chain) throws IOException {
-<span class="fc" id="L802">                Request request = chain.request();</span>
+<span class="fc" id="L804">                Request request = chain.request();</span>
 
-<span class="fc" id="L804">                synchronized (lock) {</span>
-<span class="fc" id="L805">                    connectPending = false;</span>
-<span class="fc" id="L806">                    proxy = chain.connection().route().proxy();</span>
-<span class="fc" id="L807">                    handshake = chain.connection().handshake();</span>
-<span class="fc" id="L808">                    lock.notifyAll();</span>
+<span class="fc" id="L806">                synchronized (lock) {</span>
+<span class="fc" id="L807">                    connectPending = false;</span>
+<span class="fc" id="L808">                    proxy = chain.connection().route().proxy();</span>
+<span class="fc" id="L809">                    handshake = chain.connection().handshake();</span>
+<span class="fc" id="L810">                    lock.notifyAll();</span>
 
                     try {
-<span class="pc bpc" id="L811" title="1 of 2 branches missed.">                        while (!proceed) {</span>
-<span class="nc" id="L812">                            lock.wait(); // Wait until proceed() is called.</span>
+<span class="pc bpc" id="L813" title="1 of 2 branches missed.">                        while (!proceed) {</span>
+<span class="nc" id="L814">                            lock.wait(); // Wait until proceed() is called.</span>
                         }
-<span class="nc" id="L814">                    } catch (InterruptedException e) {</span>
-<span class="nc" id="L815">                        Thread.currentThread().interrupt(); // Retain interrupted status.</span>
-<span class="nc" id="L816">                        throw new InterruptedIOException();</span>
-<span class="fc" id="L817">                    }</span>
-<span class="fc" id="L818">                }</span>
+<span class="nc" id="L816">                    } catch (InterruptedException e) {</span>
+<span class="nc" id="L817">                        Thread.currentThread().interrupt(); // Retain interrupted status.</span>
+<span class="nc" id="L818">                        throw new InterruptedIOException();</span>
+<span class="fc" id="L819">                    }</span>
+<span class="fc" id="L820">                }</span>
 
                 // Try to lock in the Content-Length before transmitting the request body.
-<span class="fc bfc" id="L821" title="All 2 branches covered.">                if (request.body() instanceof OutputStreamRequestBody) {</span>
-<span class="fc" id="L822">                    OutputStreamRequestBody requestBody = (OutputStreamRequestBody) request.body();</span>
-<span class="fc" id="L823">                    request = requestBody.prepareToSendRequest(request);</span>
+<span class="fc bfc" id="L823" title="All 2 branches covered.">                if (request.body() instanceof OutputStreamRequestBody) {</span>
+<span class="fc" id="L824">                    OutputStreamRequestBody requestBody = (OutputStreamRequestBody) request.body();</span>
+<span class="fc" id="L825">                    request = requestBody.prepareToSendRequest(request);</span>
                 }
 
-<span class="fc" id="L826">                Response response = chain.proceed(request);</span>
+<span class="fc" id="L828">                Response response = chain.proceed(request);</span>
 
-<span class="fc" id="L828">                synchronized (lock) {</span>
-<span class="fc" id="L829">                    networkResponse = response;</span>
-<span class="fc" id="L830">                    url = response.request().url().url();</span>
-<span class="fc" id="L831">                }</span>
+<span class="fc" id="L830">                synchronized (lock) {</span>
+<span class="fc" id="L831">                    networkResponse = response;</span>
+<span class="fc" id="L832">                    url = response.request().url().url();</span>
+<span class="fc" id="L833">                }</span>
 
-<span class="fc" id="L833">                return response;</span>
+<span class="fc" id="L835">                return response;</span>
             }
         }
     }
 
-<span class="fc" id="L838">    abstract static class OutputStreamRequestBody extends RequestBody {</span>
+<span class="fc" id="L840">    abstract static class OutputStreamRequestBody extends RequestBody {</span>
         Timeout timeout;
         long expectedContentLength;
         OutputStream outputStream;
         boolean closed;
 
         void initOutputStream(BufferedSink sink, long expectedContentLength) {
-<span class="fc" id="L845">            this.timeout = sink.timeout();</span>
-<span class="fc" id="L846">            this.expectedContentLength = expectedContentLength;</span>
+<span class="fc" id="L847">            this.timeout = sink.timeout();</span>
+<span class="fc" id="L848">            this.expectedContentLength = expectedContentLength;</span>
 
             // An output stream that writes to sink. If expectedContentLength is not -1, then this expects
             // exactly that many bytes to be written.
-<span class="fc" id="L850">            this.outputStream = new OutputStream() {</span>
+<span class="fc" id="L852">            this.outputStream = new OutputStream() {</span>
                 private long bytesReceived;
 
                 @Override
                 public void write(int b) throws IOException {
-<span class="nc" id="L855">                    write(new byte[]{ (byte) b }, 0, 1);</span>
-<span class="nc" id="L856">                }</span>
+<span class="nc" id="L857">                    write(new byte[]{ (byte) b }, 0, 1);</span>
+<span class="nc" id="L858">                }</span>
 
                 @Override
                 public void write(byte[] source, int offset, int byteCount) throws IOException {
-<span class="pc bpc" id="L860" title="1 of 2 branches missed.">                    if (closed)</span>
-<span class="nc" id="L861">                        throw new IOException(&quot;closed&quot;); // Not IllegalStateException!</span>
+<span class="pc bpc" id="L862" title="1 of 2 branches missed.">                    if (closed)</span>
+<span class="nc" id="L863">                        throw new IOException(&quot;closed&quot;); // Not IllegalStateException!</span>
 
-<span class="pc bpc" id="L863" title="3 of 4 branches missed.">                    if (expectedContentLength != -1L &amp;&amp; bytesReceived + byteCount &gt; expectedContentLength) {</span>
-<span class="nc" id="L864">                        throw new ProtocolException(&quot;expected &quot; + expectedContentLength + &quot; bytes but received &quot;</span>
+<span class="pc bpc" id="L865" title="3 of 4 branches missed.">                    if (expectedContentLength != -1L &amp;&amp; bytesReceived + byteCount &gt; expectedContentLength) {</span>
+<span class="nc" id="L866">                        throw new ProtocolException(&quot;expected &quot; + expectedContentLength + &quot; bytes but received &quot;</span>
                                 + bytesReceived + byteCount);
                     }
 
-<span class="fc" id="L868">                    bytesReceived += byteCount;</span>
+<span class="fc" id="L870">                    bytesReceived += byteCount;</span>
                     try {
-<span class="fc" id="L870">                        sink.write(source, offset, byteCount);</span>
-<span class="nc" id="L871">                    } catch (InterruptedIOException e) {</span>
-<span class="nc" id="L872">                        throw new SocketTimeoutException(e.getMessage());</span>
-<span class="fc" id="L873">                    }</span>
-<span class="fc" id="L874">                }</span>
+<span class="fc" id="L872">                        sink.write(source, offset, byteCount);</span>
+<span class="nc" id="L873">                    } catch (InterruptedIOException e) {</span>
+<span class="nc" id="L874">                        throw new SocketTimeoutException(e.getMessage());</span>
+<span class="fc" id="L875">                    }</span>
+<span class="fc" id="L876">                }</span>
 
                 @Override
                 public void flush() throws IOException {
-<span class="nc bnc" id="L878" title="All 2 branches missed.">                    if (closed)</span>
-<span class="nc" id="L879">                        return; // Weird, but consistent with historical behavior.</span>
-<span class="nc" id="L880">                    sink.flush();</span>
-<span class="nc" id="L881">                }</span>
+<span class="nc bnc" id="L880" title="All 2 branches missed.">                    if (closed)</span>
+<span class="nc" id="L881">                        return; // Weird, but consistent with historical behavior.</span>
+<span class="nc" id="L882">                    sink.flush();</span>
+<span class="nc" id="L883">                }</span>
 
                 @Override
                 public void close() throws IOException {
-<span class="fc" id="L885">                    closed = true;</span>
+<span class="fc" id="L887">                    closed = true;</span>
 
-<span class="pc bpc" id="L887" title="3 of 4 branches missed.">                    if (expectedContentLength != -1L &amp;&amp; bytesReceived &lt; expectedContentLength) {</span>
-<span class="nc" id="L888">                        throw new ProtocolException(</span>
+<span class="pc bpc" id="L889" title="3 of 4 branches missed.">                    if (expectedContentLength != -1L &amp;&amp; bytesReceived &lt; expectedContentLength) {</span>
+<span class="nc" id="L890">                        throw new ProtocolException(</span>
                                 &quot;expected &quot; + expectedContentLength + &quot; bytes but received &quot; + bytesReceived);
                     }
 
-<span class="fc" id="L892">                    sink.close();</span>
-<span class="fc" id="L893">                }</span>
+<span class="fc" id="L894">                    sink.close();</span>
+<span class="fc" id="L895">                }</span>
             };
-<span class="fc" id="L895">        }</span>
+<span class="fc" id="L897">        }</span>
 
         @Override
         public long contentLength() {
-<span class="nc" id="L899">            return expectedContentLength;</span>
+<span class="nc" id="L901">            return expectedContentLength;</span>
         }
 
         @Override
         public final @Nullable MediaType contentType() {
-<span class="fc" id="L904">            return null; // Let the caller provide this in a regular header.</span>
+<span class="fc" id="L906">            return null; // Let the caller provide this in a regular header.</span>
         }
 
         /**
@@ -914,69 +916,70 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
          *             the io exception
          */
         public Request prepareToSendRequest(Request request) throws IOException {
-<span class="nc" id="L917">            return request;</span>
+<span class="nc" id="L919">            return request;</span>
         }
     }
 
     static final class BufferedRequestBody extends OutputStreamRequestBody {
-<span class="fc" id="L922">        final Buffer buffer = new Buffer();</span>
-<span class="fc" id="L923">        long contentLength = -1L;</span>
+<span class="fc" id="L924">        final Buffer buffer = new Buffer();</span>
+<span class="fc" id="L925">        long contentLength = -1L;</span>
 
-<span class="fc" id="L925">        BufferedRequestBody(long expectedContentLength) {</span>
-<span class="fc" id="L926">            initOutputStream(buffer, expectedContentLength);</span>
-<span class="fc" id="L927">        }</span>
+<span class="fc" id="L927">        BufferedRequestBody(long expectedContentLength) {</span>
+<span class="fc" id="L928">            initOutputStream(buffer, expectedContentLength);</span>
+<span class="fc" id="L929">        }</span>
 
         @Override
         public long contentLength() {
-<span class="fc" id="L931">            return contentLength;</span>
+<span class="fc" id="L933">            return contentLength;</span>
         }
 
         @Override
         public Request prepareToSendRequest(Request request) throws IOException {
-<span class="pc bpc" id="L936" title="1 of 2 branches missed.">            if (request.header(&quot;Content-Length&quot;) != null)</span>
-<span class="nc" id="L937">                return request;</span>
+<span class="pc bpc" id="L938" title="1 of 2 branches missed.">            if (request.header(&quot;Content-Length&quot;) != null)</span>
+<span class="nc" id="L939">                return request;</span>
 
-<span class="fc" id="L939">            outputStream.close();</span>
-<span class="fc" id="L940">            contentLength = buffer.size();</span>
-<span class="fc" id="L941">            return request.newBuilder()</span>
-<span class="fc" id="L942">                    .removeHeader(&quot;Transfer-Encoding&quot;)</span>
-<span class="fc" id="L943">                    .header(&quot;Content-Length&quot;, Long.toString(buffer.size()))</span>
-<span class="fc" id="L944">                    .build();</span>
+<span class="fc" id="L941">            outputStream.close();</span>
+<span class="fc" id="L942">            contentLength = buffer.size();</span>
+<span class="fc" id="L943">            return request.newBuilder()</span>
+<span class="fc" id="L944">                    .removeHeader(&quot;Transfer-Encoding&quot;)</span>
+<span class="fc" id="L945">                    .header(&quot;Content-Length&quot;, Long.toString(buffer.size()))</span>
+<span class="fc" id="L946">                    .build();</span>
         }
 
         @Override
         public void writeTo(BufferedSink sink) {
-<span class="fc" id="L949">            buffer.copyTo(sink.buffer(), 0, buffer.size());</span>
-<span class="fc" id="L950">        }</span>
+<span class="fc" id="L951">            buffer.copyTo(sink.buffer(), 0, buffer.size());</span>
+<span class="fc" id="L952">        }</span>
     }
 
     static final class StreamedRequestBody extends OutputStreamRequestBody {
-<span class="nc" id="L954">        private final Pipe pipe = new Pipe(8192);</span>
+<span class="nc" id="L956">        private final Pipe pipe = new Pipe(8192);</span>
 
-<span class="nc" id="L956">        StreamedRequestBody(long expectedContentLength) {</span>
-<span class="nc" id="L957">            initOutputStream(Okio.buffer(pipe.sink()), expectedContentLength);</span>
-<span class="nc" id="L958">        }</span>
+<span class="nc" id="L958">        StreamedRequestBody(long expectedContentLength) {</span>
+<span class="nc" id="L959">            initOutputStream(Okio.buffer(pipe.sink()), expectedContentLength);</span>
+<span class="nc" id="L960">        }</span>
 
+        @Override
         public boolean isOneShot() {
-<span class="nc" id="L961">            return true;</span>
+<span class="nc" id="L964">            return true;</span>
         }
 
         @Override
         public void writeTo(BufferedSink sink) throws IOException {
-<span class="nc" id="L966">            Buffer buffer = new Buffer();</span>
-<span class="nc bnc" id="L967" title="All 2 branches missed.">            while (pipe.source().read(buffer, 8192) != -1L) {</span>
-<span class="nc" id="L968">                sink.write(buffer, buffer.size());</span>
+<span class="nc" id="L969">            Buffer buffer = new Buffer();</span>
+<span class="nc bnc" id="L970" title="All 2 branches missed.">            while (pipe.source().read(buffer, 8192) != -1L) {</span>
+<span class="nc" id="L971">                sink.write(buffer, buffer.size());</span>
             }
-<span class="nc" id="L970">        }</span>
+<span class="nc" id="L973">        }</span>
     }
 
     abstract static class DelegatingHttpsURLConnection extends HttpsURLConnection {
         private final HttpURLConnection delegate;
 
         DelegatingHttpsURLConnection(HttpURLConnection delegate) {
-<span class="nc" id="L977">            super(delegate.getURL());</span>
-<span class="nc" id="L978">            this.delegate = delegate;</span>
-<span class="nc" id="L979">        }</span>
+<span class="nc" id="L980">            super(delegate.getURL());</span>
+<span class="nc" id="L981">            this.delegate = delegate;</span>
+<span class="nc" id="L982">        }</span>
 
         /**
          * Handshake handshake.
@@ -999,373 +1002,438 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
 
         @Override
         public String getCipherSuite() {
-<span class="nc" id="L1002">            Handshake handshake = handshake();</span>
-<span class="nc bnc" id="L1003" title="All 2 branches missed.">            return handshake != null ? handshake.cipherSuite().javaName() : null;</span>
+<span class="nc" id="L1005">            Handshake handshake = handshake();</span>
+<span class="nc bnc" id="L1006" title="All 2 branches missed.">            return handshake != null ? handshake.cipherSuite().javaName() : null;</span>
         }
 
         @Override
         public Certificate[] getLocalCertificates() {
-<span class="nc" id="L1008">            Handshake handshake = handshake();</span>
-<span class="nc bnc" id="L1009" title="All 2 branches missed.">            if (handshake == null)</span>
-<span class="nc" id="L1010">                return null;</span>
-<span class="nc" id="L1011">            List&lt;Certificate&gt; result = handshake.localCertificates();</span>
-<span class="nc bnc" id="L1012" title="All 2 branches missed.">            return !result.isEmpty() ? result.toArray(new Certificate[result.size()]) : null;</span>
+<span class="nc" id="L1011">            Handshake handshake = handshake();</span>
+<span class="nc bnc" id="L1012" title="All 2 branches missed.">            if (handshake == null)</span>
+<span class="nc" id="L1013">                return null;</span>
+<span class="nc" id="L1014">            List&lt;Certificate&gt; result = handshake.localCertificates();</span>
+<span class="nc bnc" id="L1015" title="All 2 branches missed.">            return !result.isEmpty() ? result.toArray(new Certificate[result.size()]) : null;</span>
         }
 
         @Override
         public Certificate[] getServerCertificates() {
-<span class="nc" id="L1017">            Handshake handshake = handshake();</span>
-<span class="nc bnc" id="L1018" title="All 2 branches missed.">            if (handshake == null)</span>
-<span class="nc" id="L1019">                return null;</span>
-<span class="nc" id="L1020">            List&lt;Certificate&gt; result = handshake.peerCertificates();</span>
-<span class="nc bnc" id="L1021" title="All 2 branches missed.">            return !result.isEmpty() ? result.toArray(new Certificate[result.size()]) : null;</span>
+<span class="nc" id="L1020">            Handshake handshake = handshake();</span>
+<span class="nc bnc" id="L1021" title="All 2 branches missed.">            if (handshake == null)</span>
+<span class="nc" id="L1022">                return null;</span>
+<span class="nc" id="L1023">            List&lt;Certificate&gt; result = handshake.peerCertificates();</span>
+<span class="nc bnc" id="L1024" title="All 2 branches missed.">            return !result.isEmpty() ? result.toArray(new Certificate[result.size()]) : null;</span>
         }
 
         @Override
         public Principal getPeerPrincipal() {
-<span class="nc" id="L1026">            Handshake handshake = handshake();</span>
-<span class="nc bnc" id="L1027" title="All 2 branches missed.">            return handshake != null ? handshake.peerPrincipal() : null;</span>
+<span class="nc" id="L1029">            Handshake handshake = handshake();</span>
+<span class="nc bnc" id="L1030" title="All 2 branches missed.">            return handshake != null ? handshake.peerPrincipal() : null;</span>
         }
 
         @Override
         public Principal getLocalPrincipal() {
-<span class="nc" id="L1032">            Handshake handshake = handshake();</span>
-<span class="nc bnc" id="L1033" title="All 2 branches missed.">            return handshake != null ? handshake.localPrincipal() : null;</span>
+<span class="nc" id="L1035">            Handshake handshake = handshake();</span>
+<span class="nc bnc" id="L1036" title="All 2 branches missed.">            return handshake != null ? handshake.localPrincipal() : null;</span>
         }
 
         @Override
         public void connect() throws IOException {
-<span class="nc" id="L1038">            connected = true;</span>
-<span class="nc" id="L1039">            delegate.connect();</span>
-<span class="nc" id="L1040">        }</span>
+<span class="nc" id="L1041">            connected = true;</span>
+<span class="nc" id="L1042">            delegate.connect();</span>
+<span class="nc" id="L1043">        }</span>
 
         @Override
         public void disconnect() {
-<span class="nc" id="L1044">            delegate.disconnect();</span>
-<span class="nc" id="L1045">        }</span>
+<span class="nc" id="L1047">            delegate.disconnect();</span>
+<span class="nc" id="L1048">        }</span>
 
         @Override
         public InputStream getErrorStream() {
-<span class="nc" id="L1049">            return delegate.getErrorStream();</span>
+<span class="nc" id="L1052">            return delegate.getErrorStream();</span>
         }
 
         @Override
         public String getRequestMethod() {
-<span class="nc" id="L1054">            return delegate.getRequestMethod();</span>
+<span class="nc" id="L1057">            return delegate.getRequestMethod();</span>
         }
 
         @Override
         public int getResponseCode() throws IOException {
-<span class="nc" id="L1059">            return delegate.getResponseCode();</span>
+<span class="nc" id="L1062">            return delegate.getResponseCode();</span>
         }
 
         @Override
         public String getResponseMessage() throws IOException {
-<span class="nc" id="L1064">            return delegate.getResponseMessage();</span>
+<span class="nc" id="L1067">            return delegate.getResponseMessage();</span>
         }
 
         @Override
         public void setRequestMethod(String method) throws ProtocolException {
-<span class="nc" id="L1069">            delegate.setRequestMethod(method);</span>
-<span class="nc" id="L1070">        }</span>
+<span class="nc" id="L1072">            delegate.setRequestMethod(method);</span>
+<span class="nc" id="L1073">        }</span>
 
         @Override
         public boolean usingProxy() {
-<span class="nc" id="L1074">            return delegate.usingProxy();</span>
+<span class="nc" id="L1077">            return delegate.usingProxy();</span>
         }
 
         @Override
         public boolean getInstanceFollowRedirects() {
-<span class="nc" id="L1079">            return delegate.getInstanceFollowRedirects();</span>
+<span class="nc" id="L1082">            return delegate.getInstanceFollowRedirects();</span>
         }
 
         @Override
         public void setInstanceFollowRedirects(boolean followRedirects) {
-<span class="nc" id="L1084">            delegate.setInstanceFollowRedirects(followRedirects);</span>
-<span class="nc" id="L1085">        }</span>
+<span class="nc" id="L1087">            delegate.setInstanceFollowRedirects(followRedirects);</span>
+<span class="nc" id="L1088">        }</span>
 
         @Override
         public boolean getAllowUserInteraction() {
-<span class="nc" id="L1089">            return delegate.getAllowUserInteraction();</span>
+<span class="nc" id="L1092">            return delegate.getAllowUserInteraction();</span>
         }
 
         @Override
         public Object getContent() throws IOException {
-<span class="nc" id="L1094">            return delegate.getContent();</span>
+<span class="nc" id="L1097">            return delegate.getContent();</span>
         }
 
         @Override
         public Object getContent(Class[] types) throws IOException {
-<span class="nc" id="L1099">            return delegate.getContent(types);</span>
+<span class="nc" id="L1102">            return delegate.getContent(types);</span>
         }
 
         @Override
         public String getContentEncoding() {
-<span class="nc" id="L1104">            return delegate.getContentEncoding();</span>
+<span class="nc" id="L1107">            return delegate.getContentEncoding();</span>
         }
 
         @Override
         public int getContentLength() {
-<span class="nc" id="L1109">            return delegate.getContentLength();</span>
+<span class="nc" id="L1112">            return delegate.getContentLength();</span>
         }
 
         // Should only be invoked on Java 8+ or Android API 24+.
         @Override
         public long getContentLengthLong() {
-<span class="nc" id="L1115">            return delegate.getContentLengthLong();</span>
+<span class="nc" id="L1118">            return delegate.getContentLengthLong();</span>
         }
 
         @Override
         public String getContentType() {
-<span class="nc" id="L1120">            return delegate.getContentType();</span>
+<span class="nc" id="L1123">            return delegate.getContentType();</span>
         }
 
         @Override
         public long getDate() {
-<span class="nc" id="L1125">            return delegate.getDate();</span>
+<span class="nc" id="L1128">            return delegate.getDate();</span>
         }
 
         @Override
         public boolean getDefaultUseCaches() {
-<span class="nc" id="L1130">            return delegate.getDefaultUseCaches();</span>
+<span class="nc" id="L1133">            return delegate.getDefaultUseCaches();</span>
         }
 
         @Override
         public boolean getDoInput() {
-<span class="nc" id="L1135">            return delegate.getDoInput();</span>
+<span class="nc" id="L1138">            return delegate.getDoInput();</span>
         }
 
         @Override
         public boolean getDoOutput() {
-<span class="nc" id="L1140">            return delegate.getDoOutput();</span>
+<span class="nc" id="L1143">            return delegate.getDoOutput();</span>
         }
 
         @Override
         public long getExpiration() {
-<span class="nc" id="L1145">            return delegate.getExpiration();</span>
+<span class="nc" id="L1148">            return delegate.getExpiration();</span>
         }
 
         @Override
         public String getHeaderField(int pos) {
-<span class="nc" id="L1150">            return delegate.getHeaderField(pos);</span>
+<span class="nc" id="L1153">            return delegate.getHeaderField(pos);</span>
         }
 
         @Override
         public Map&lt;String, List&lt;String&gt;&gt; getHeaderFields() {
-<span class="nc" id="L1155">            return delegate.getHeaderFields();</span>
+<span class="nc" id="L1158">            return delegate.getHeaderFields();</span>
         }
 
         @Override
         public Map&lt;String, List&lt;String&gt;&gt; getRequestProperties() {
-<span class="nc" id="L1160">            return delegate.getRequestProperties();</span>
+<span class="nc" id="L1163">            return delegate.getRequestProperties();</span>
         }
 
         @Override
         public void addRequestProperty(String field, String newValue) {
-<span class="nc" id="L1165">            delegate.addRequestProperty(field, newValue);</span>
-<span class="nc" id="L1166">        }</span>
+<span class="nc" id="L1168">            delegate.addRequestProperty(field, newValue);</span>
+<span class="nc" id="L1169">        }</span>
 
         @Override
         public String getHeaderField(String key) {
-<span class="nc" id="L1170">            return delegate.getHeaderField(key);</span>
+<span class="nc" id="L1173">            return delegate.getHeaderField(key);</span>
         }
 
         // Should only be invoked on Java 8+ or Android API 24+.
         @Override
         public long getHeaderFieldLong(String field, long defaultValue) {
-<span class="nc" id="L1176">            return delegate.getHeaderFieldLong(field, defaultValue);</span>
+<span class="nc" id="L1179">            return delegate.getHeaderFieldLong(field, defaultValue);</span>
         }
 
         @Override
         public long getHeaderFieldDate(String field, long defaultValue) {
-<span class="nc" id="L1181">            return delegate.getHeaderFieldDate(field, defaultValue);</span>
+<span class="nc" id="L1184">            return delegate.getHeaderFieldDate(field, defaultValue);</span>
         }
 
         @Override
         public int getHeaderFieldInt(String field, int defaultValue) {
-<span class="nc" id="L1186">            return delegate.getHeaderFieldInt(field, defaultValue);</span>
+<span class="nc" id="L1189">            return delegate.getHeaderFieldInt(field, defaultValue);</span>
         }
 
         @Override
         public String getHeaderFieldKey(int position) {
-<span class="nc" id="L1191">            return delegate.getHeaderFieldKey(position);</span>
+<span class="nc" id="L1194">            return delegate.getHeaderFieldKey(position);</span>
         }
 
         @Override
         public long getIfModifiedSince() {
-<span class="nc" id="L1196">            return delegate.getIfModifiedSince();</span>
+<span class="nc" id="L1199">            return delegate.getIfModifiedSince();</span>
         }
 
         @Override
         public InputStream getInputStream() throws IOException {
-<span class="nc" id="L1201">            return delegate.getInputStream();</span>
+<span class="nc" id="L1204">            return delegate.getInputStream();</span>
         }
 
         @Override
         public long getLastModified() {
-<span class="nc" id="L1206">            return delegate.getLastModified();</span>
+<span class="nc" id="L1209">            return delegate.getLastModified();</span>
         }
 
         @Override
         public OutputStream getOutputStream() throws IOException {
-<span class="nc" id="L1211">            return delegate.getOutputStream();</span>
+<span class="nc" id="L1214">            return delegate.getOutputStream();</span>
         }
 
         @Override
         public Permission getPermission() throws IOException {
-<span class="nc" id="L1216">            return delegate.getPermission();</span>
+<span class="nc" id="L1219">            return delegate.getPermission();</span>
         }
 
         @Override
         public String getRequestProperty(String field) {
-<span class="nc" id="L1221">            return delegate.getRequestProperty(field);</span>
+<span class="nc" id="L1224">            return delegate.getRequestProperty(field);</span>
         }
 
         @Override
         public URL getURL() {
-<span class="nc" id="L1226">            return delegate.getURL();</span>
+<span class="nc" id="L1229">            return delegate.getURL();</span>
         }
 
         @Override
         public boolean getUseCaches() {
-<span class="nc" id="L1231">            return delegate.getUseCaches();</span>
+<span class="nc" id="L1234">            return delegate.getUseCaches();</span>
         }
 
         @Override
         public void setAllowUserInteraction(boolean newValue) {
-<span class="nc" id="L1236">            delegate.setAllowUserInteraction(newValue);</span>
-<span class="nc" id="L1237">        }</span>
+<span class="nc" id="L1239">            delegate.setAllowUserInteraction(newValue);</span>
+<span class="nc" id="L1240">        }</span>
 
         @Override
         public void setDefaultUseCaches(boolean newValue) {
-<span class="nc" id="L1241">            delegate.setDefaultUseCaches(newValue);</span>
-<span class="nc" id="L1242">        }</span>
+<span class="nc" id="L1244">            delegate.setDefaultUseCaches(newValue);</span>
+<span class="nc" id="L1245">        }</span>
 
         @Override
         public void setDoInput(boolean newValue) {
-<span class="nc" id="L1246">            delegate.setDoInput(newValue);</span>
-<span class="nc" id="L1247">        }</span>
+<span class="nc" id="L1249">            delegate.setDoInput(newValue);</span>
+<span class="nc" id="L1250">        }</span>
 
         @Override
         public void setDoOutput(boolean newValue) {
-<span class="nc" id="L1251">            delegate.setDoOutput(newValue);</span>
-<span class="nc" id="L1252">        }</span>
+<span class="nc" id="L1254">            delegate.setDoOutput(newValue);</span>
+<span class="nc" id="L1255">        }</span>
 
         // Should only be invoked on Java 8+ or Android API 24+.
         @Override
         public void setFixedLengthStreamingMode(long contentLength) {
-<span class="nc" id="L1257">            delegate.setFixedLengthStreamingMode(contentLength);</span>
-<span class="nc" id="L1258">        }</span>
+<span class="nc" id="L1260">            delegate.setFixedLengthStreamingMode(contentLength);</span>
+<span class="nc" id="L1261">        }</span>
 
         @Override
         public void setIfModifiedSince(long newValue) {
-<span class="nc" id="L1262">            delegate.setIfModifiedSince(newValue);</span>
-<span class="nc" id="L1263">        }</span>
+<span class="nc" id="L1265">            delegate.setIfModifiedSince(newValue);</span>
+<span class="nc" id="L1266">        }</span>
 
         @Override
         public void setRequestProperty(String field, String newValue) {
-<span class="nc" id="L1267">            delegate.setRequestProperty(field, newValue);</span>
-<span class="nc" id="L1268">        }</span>
+<span class="nc" id="L1270">            delegate.setRequestProperty(field, newValue);</span>
+<span class="nc" id="L1271">        }</span>
 
         @Override
         public void setUseCaches(boolean newValue) {
-<span class="nc" id="L1272">            delegate.setUseCaches(newValue);</span>
-<span class="nc" id="L1273">        }</span>
+<span class="nc" id="L1275">            delegate.setUseCaches(newValue);</span>
+<span class="nc" id="L1276">        }</span>
 
         @Override
         public void setConnectTimeout(int timeoutMillis) {
-<span class="nc" id="L1277">            delegate.setConnectTimeout(timeoutMillis);</span>
-<span class="nc" id="L1278">        }</span>
+<span class="nc" id="L1280">            delegate.setConnectTimeout(timeoutMillis);</span>
+<span class="nc" id="L1281">        }</span>
 
         @Override
         public int getConnectTimeout() {
-<span class="nc" id="L1282">            return delegate.getConnectTimeout();</span>
+<span class="nc" id="L1285">            return delegate.getConnectTimeout();</span>
         }
 
         @Override
         public void setReadTimeout(int timeoutMillis) {
-<span class="nc" id="L1287">            delegate.setReadTimeout(timeoutMillis);</span>
-<span class="nc" id="L1288">        }</span>
+<span class="nc" id="L1290">            delegate.setReadTimeout(timeoutMillis);</span>
+<span class="nc" id="L1291">        }</span>
 
         @Override
         public int getReadTimeout() {
-<span class="nc" id="L1292">            return delegate.getReadTimeout();</span>
+<span class="nc" id="L1295">            return delegate.getReadTimeout();</span>
         }
 
         @Override
         public String toString() {
-<span class="nc" id="L1297">            return delegate.toString();</span>
+<span class="nc" id="L1300">            return delegate.toString();</span>
         }
 
         @Override
         public void setFixedLengthStreamingMode(int contentLength) {
-<span class="nc" id="L1302">            delegate.setFixedLengthStreamingMode(contentLength);</span>
-<span class="nc" id="L1303">        }</span>
+<span class="nc" id="L1305">            delegate.setFixedLengthStreamingMode(contentLength);</span>
+<span class="nc" id="L1306">        }</span>
 
         @Override
         public void setChunkedStreamingMode(int chunkLength) {
-<span class="nc" id="L1307">            delegate.setChunkedStreamingMode(chunkLength);</span>
-<span class="nc" id="L1308">        }</span>
+<span class="nc" id="L1310">            delegate.setChunkedStreamingMode(chunkLength);</span>
+<span class="nc" id="L1311">        }</span>
     }
 
     static final class OkHttpsURLConnection extends DelegatingHttpsURLConnection {
         private final OkHttpURLConnection delegate;
 
         OkHttpsURLConnection(URL url, OkHttpClient client) {
-<span class="nc" id="L1315">            this(new OkHttpURLConnection(url, client));</span>
-<span class="nc" id="L1316">        }</span>
+<span class="nc" id="L1318">            this(new OkHttpURLConnection(url, client));</span>
+<span class="nc" id="L1319">        }</span>
 
         OkHttpsURLConnection(OkHttpURLConnection delegate) {
-<span class="nc" id="L1319">            super(delegate);</span>
-<span class="nc" id="L1320">            this.delegate = delegate;</span>
-<span class="nc" id="L1321">        }</span>
+<span class="nc" id="L1322">            super(delegate);</span>
+<span class="nc" id="L1323">            this.delegate = delegate;</span>
+<span class="nc" id="L1324">        }</span>
 
         @Override
         protected Handshake handshake() {
-<span class="nc bnc" id="L1325" title="All 2 branches missed.">            if (delegate.call == null) {</span>
-<span class="nc" id="L1326">                throw new IllegalStateException(&quot;Connection has not yet been established&quot;);</span>
+<span class="nc bnc" id="L1328" title="All 2 branches missed.">            if (delegate.call == null) {</span>
+<span class="nc" id="L1329">                throw new IllegalStateException(&quot;Connection has not yet been established&quot;);</span>
             }
 
-<span class="nc" id="L1329">            return delegate.handshake;</span>
+<span class="nc" id="L1332">            return delegate.handshake;</span>
         }
 
         @Override
         public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
-<span class="nc" id="L1334">            delegate.client = delegate.client.newBuilder().hostnameVerifier(hostnameVerifier).build();</span>
-<span class="nc" id="L1335">        }</span>
+<span class="nc" id="L1337">            delegate.client = delegate.client.newBuilder().hostnameVerifier(hostnameVerifier).build();</span>
+<span class="nc" id="L1338">        }</span>
 
         @Override
         public HostnameVerifier getHostnameVerifier() {
-<span class="nc" id="L1339">            return delegate.client.hostnameVerifier();</span>
+<span class="nc" id="L1342">            return delegate.client.hostnameVerifier();</span>
         }
 
         @Override
         public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
-<span class="nc bnc" id="L1344" title="All 2 branches missed.">            if (sslSocketFactory == null) {</span>
-<span class="nc" id="L1345">                throw new IllegalArgumentException(&quot;sslSocketFactory == null&quot;);</span>
+<span class="nc bnc" id="L1347" title="All 2 branches missed.">            if (sslSocketFactory == null) {</span>
+<span class="nc" id="L1348">                throw new IllegalArgumentException(&quot;sslSocketFactory == null&quot;);</span>
             }
             // This fails in JDK 9 because OkHttp is unable to extract the trust manager.
-<span class="nc" id="L1348">            delegate.client = delegate.client.newBuilder().sslSocketFactory(sslSocketFactory).build();</span>
-<span class="nc" id="L1349">        }</span>
+<span class="nc" id="L1351">            delegate.client = delegate.client.newBuilder().sslSocketFactory(sslSocketFactory).build();</span>
+<span class="nc" id="L1352">        }</span>
 
         @Override
         public SSLSocketFactory getSSLSocketFactory() {
-<span class="nc" id="L1353">            return delegate.client.sslSocketFactory();</span>
+<span class="nc" id="L1356">            return delegate.client.sslSocketFactory();</span>
         }
     }
 
     static final class UnexpectedException extends IOException {
-<span class="fc" id="L1358">        static final Interceptor INTERCEPTOR = chain -&gt; {</span>
+<span class="fc" id="L1361">        static final Interceptor INTERCEPTOR = chain -&gt; {</span>
             try {
-<span class="fc" id="L1360">                return chain.proceed(chain.request());</span>
-<span class="nc" id="L1361">            } catch (Error | RuntimeException e) {</span>
-<span class="nc" id="L1362">                throw new UnexpectedException(e);</span>
+<span class="fc" id="L1363">                return chain.proceed(chain.request());</span>
+<span class="nc" id="L1364">            } catch (Error | RuntimeException e) {</span>
+<span class="nc" id="L1365">                throw new UnexpectedException(e);</span>
             }
         };
 
         UnexpectedException(Throwable cause) {
-<span class="nc" id="L1367">            super(cause);</span>
-<span class="nc" id="L1368">        }</span>
+<span class="nc" id="L1370">            super(cause);</span>
+<span class="nc" id="L1371">        }</span>
+    }
+
+    /**
+     * Make sure both the ResponseBody and the InputStream are closed when the InputStream coming from the ResponseBody
+     * is closed.
+     */
+    private static final class ResponseBodyInputStream extends InputStream {
+
+        private final ResponseBody responseBody;
+
+        private final InputStream inputStream;
+
+<span class="fc" id="L1384">        private ResponseBodyInputStream(ResponseBody responseBody) {</span>
+<span class="fc" id="L1385">            this.responseBody = responseBody;</span>
+<span class="fc" id="L1386">            this.inputStream = responseBody.byteStream();</span>
+<span class="fc" id="L1387">        }</span>
+
+        @Override
+        public int read() throws IOException {
+<span class="fc" id="L1391">            return inputStream.read();</span>
+        }
+
+        @Override
+        public int read(byte b[]) throws IOException {
+<span class="nc" id="L1396">            return inputStream.read(b);</span>
+        }
+
+        @Override
+        public int read(byte b[], int off, int len) throws IOException {
+<span class="fc" id="L1401">            return inputStream.read(b, off, len);</span>
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+<span class="nc" id="L1406">            return inputStream.skip(n);</span>
+        }
+
+        @Override
+        public int available() throws IOException {
+<span class="fc" id="L1411">            return inputStream.available();</span>
+        }
+
+        @Override
+        public synchronized void mark(int readlimit) {
+<span class="nc" id="L1416">            inputStream.mark(readlimit);</span>
+<span class="nc" id="L1417">        }</span>
+
+        @Override
+        public synchronized void reset() throws IOException {
+<span class="nc" id="L1421">            inputStream.reset();</span>
+<span class="nc" id="L1422">        }</span>
+
+        @Override
+        public boolean markSupported() {
+<span class="nc" id="L1426">            return inputStream.markSupported();</span>
+        }
+
+        @Override
+        public void close() throws IOException {
+            try {
+<span class="fc" id="L1432">                inputStream.close();</span>
+            } finally {
+<span class="fc" id="L1434">                responseBody.close();</span>
+            }
+<span class="fc" id="L1436">        }</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

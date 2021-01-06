@@ -20,7 +20,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public abstract class GHObject {
+public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * Capture response HTTP headers on the state object.
      */
@@ -38,7 +38,7 @@ public abstract class GHObject {
 
     /**
      * Called by Jackson
-     * 
+     *
      * @param responseInfo
      *            the {@link GitHubResponse.ResponseInfo} to get headers from.
      */
@@ -178,11 +178,11 @@ public abstract class GHObject {
 <span class="pc bpc" id="L178" title="1 of 2 branches missed.">            if (value instanceof GHObject)</span>
 <span class="nc" id="L179">                return;</span>
             // likewise no point in showing root
-<span class="fc bfc" id="L181" title="All 2 branches covered.">            if (value instanceof GitHub)</span>
-<span class="fc" id="L182">                return;</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">            if (value instanceof GitHub)</span>
+<span class="nc" id="L182">                return;</span>
 
 <span class="fc" id="L184">            super.append(buffer, fieldName, value, fullDetail);</span>
 <span class="fc" id="L185">        }</span>
     };
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

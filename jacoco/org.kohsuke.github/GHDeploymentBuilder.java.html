@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDeploymentBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDeploymentBuilder.java</span></div><h1>GHDeploymentBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -17,10 +19,13 @@ public class GHDeploymentBuilder {
      * @param repo
      *            the repo
      */
-<span class="fc" id="L20">    public GHDeploymentBuilder(GHRepository repo) {</span>
-<span class="fc" id="L21">        this.repo = repo;</span>
-<span class="fc" id="L22">        this.builder = repo.root.createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L22">    public GHDeploymentBuilder(GHRepository repo) {</span>
+<span class="fc" id="L23">        this.repo = repo;</span>
+<span class="fc" id="L24">        this.builder = repo.root.createRequest()</span>
+<span class="fc" id="L25">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L26">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L27">                .method(&quot;POST&quot;);</span>
+<span class="fc" id="L28">    }</span>
 
     /**
      * Instantiates a new Gh deployment builder.
@@ -31,20 +36,21 @@ public class GHDeploymentBuilder {
      *            the ref
      */
     public GHDeploymentBuilder(GHRepository repo, String ref) {
-<span class="fc" id="L34">        this(repo);</span>
-<span class="fc" id="L35">        ref(ref);</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L39">        this(repo);</span>
+<span class="fc" id="L40">        ref(ref);</span>
+<span class="fc" id="L41">    }</span>
 
     /**
      * Ref gh deployment builder.
      *
      * @param branch
      *            the branch
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder ref(String branch) {
-<span class="fc" id="L46">        builder.with(&quot;ref&quot;, branch);</span>
-<span class="fc" id="L47">        return this;</span>
+<span class="fc" id="L52">        builder.with(&quot;ref&quot;, branch);</span>
+<span class="fc" id="L53">        return this;</span>
     }
 
     /**
@@ -52,11 +58,12 @@ public class GHDeploymentBuilder {
      *
      * @param task
      *            the task
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder task(String task) {
-<span class="nc" id="L58">        builder.with(&quot;task&quot;, task);</span>
-<span class="nc" id="L59">        return this;</span>
+<span class="nc" id="L65">        builder.with(&quot;task&quot;, task);</span>
+<span class="nc" id="L66">        return this;</span>
     }
 
     /**
@@ -64,11 +71,12 @@ public class GHDeploymentBuilder {
      *
      * @param autoMerge
      *            the auto merge
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder autoMerge(boolean autoMerge) {
-<span class="nc" id="L70">        builder.with(&quot;auto_merge&quot;, autoMerge);</span>
-<span class="nc" id="L71">        return this;</span>
+<span class="nc" id="L78">        builder.with(&quot;auto_merge&quot;, autoMerge);</span>
+<span class="nc" id="L79">        return this;</span>
     }
 
     /**
@@ -76,11 +84,12 @@ public class GHDeploymentBuilder {
      *
      * @param requiredContexts
      *            the required contexts
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder requiredContexts(List&lt;String&gt; requiredContexts) {
-<span class="nc" id="L82">        builder.with(&quot;required_contexts&quot;, requiredContexts);</span>
-<span class="nc" id="L83">        return this;</span>
+<span class="nc" id="L91">        builder.with(&quot;required_contexts&quot;, requiredContexts);</span>
+<span class="nc" id="L92">        return this;</span>
     }
 
     /**
@@ -88,11 +97,12 @@ public class GHDeploymentBuilder {
      *
      * @param payload
      *            the payload
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder payload(String payload) {
-<span class="fc" id="L94">        builder.with(&quot;payload&quot;, payload);</span>
-<span class="fc" id="L95">        return this;</span>
+<span class="fc" id="L104">        builder.with(&quot;payload&quot;, payload);</span>
+<span class="fc" id="L105">        return this;</span>
     }
 
     /**
@@ -100,11 +110,47 @@ public class GHDeploymentBuilder {
      *
      * @param environment
      *            the environment
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder environment(String environment) {
-<span class="fc" id="L106">        builder.with(&quot;environment&quot;, environment);</span>
-<span class="fc" id="L107">        return this;</span>
+<span class="fc" id="L117">        builder.with(&quot;environment&quot;, environment);</span>
+<span class="fc" id="L118">        return this;</span>
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @param transientEnvironment
+     *            the environment is transient
+     *
+     * @return the gh deployment builder
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
+<span class="nc" id="L135">        builder.with(&quot;transient_environment&quot;, transientEnvironment);</span>
+<span class="nc" id="L136">        return this;</span>
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @param productionEnvironment
+     *            the environment is used by end-users directly
+     *
+     * @return the gh deployment builder
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
+<span class="nc" id="L152">        builder.with(&quot;production_environment&quot;, productionEnvironment);</span>
+<span class="nc" id="L153">        return this;</span>
     }
 
     /**
@@ -112,22 +158,24 @@ public class GHDeploymentBuilder {
      *
      * @param description
      *            the description
+     *
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder description(String description) {
-<span class="fc" id="L118">        builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L119">        return this;</span>
+<span class="fc" id="L165">        builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L166">        return this;</span>
     }
 
     /**
      * Create gh deployment.
      *
      * @return the gh deployment
+     *
      * @throws IOException
      *             the io exception
      */
     public GHDeployment create() throws IOException {
-<span class="fc" id="L130">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments&quot;)).fetch(GHDeployment.class).wrap(repo);</span>
+<span class="fc" id="L178">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments&quot;)).fetch(GHDeployment.class).wrap(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

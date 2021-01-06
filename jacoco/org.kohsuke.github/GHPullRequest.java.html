@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +36,8 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.SHADOW_CAT;
+import static org.kohsuke.github.internal.Previews.LYDIAN;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A pull request.
@@ -72,43 +72,36 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
     private GHUser[] requested_reviewers;
     private GHTeam[] requested_teams;
 
-    /**
-     * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API route as
-     * opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route on this
-     * object to fill in those missing details
-     */
-    private transient boolean fetchedIssueDetails;
-
     GHPullRequest wrapUp(GHRepository owner) {
-<span class="fc" id="L83">        this.wrap(owner);</span>
-<span class="fc" id="L84">        return wrapUp(owner.root);</span>
+<span class="fc" id="L76">        this.wrap(owner);</span>
+<span class="fc" id="L77">        return wrapUp(owner.root);</span>
     }
 
     GHPullRequest wrapUp(GitHub root) {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (owner != null)</span>
-<span class="fc" id="L89">            owner.wrap(root);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (base != null)</span>
-<span class="fc" id="L91">            base.wrapUp(root);</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (head != null)</span>
-<span class="fc" id="L93">            head.wrapUp(root);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (merged_by != null)</span>
-<span class="fc" id="L95">            merged_by.wrapUp(root);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (requested_reviewers != null)</span>
-<span class="fc" id="L97">            GHUser.wrap(requested_reviewers, root);</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (requested_teams != null)</span>
-<span class="fc" id="L99">            GHTeam.wrapUp(requested_teams, this);</span>
-<span class="fc" id="L100">        return this;</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (owner != null)</span>
+<span class="fc" id="L82">            owner.wrap(root);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (base != null)</span>
+<span class="fc" id="L84">            base.wrapUp(root);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (head != null)</span>
+<span class="fc" id="L86">            head.wrapUp(root);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (merged_by != null)</span>
+<span class="fc" id="L88">            merged_by.wrapUp(root);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (requested_reviewers != null)</span>
+<span class="fc" id="L90">            GHUser.wrap(requested_reviewers, root);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (requested_teams != null)</span>
+<span class="fc" id="L92">            GHTeam.wrapUp(requested_teams, this);</span>
+<span class="fc" id="L93">        return this;</span>
     }
 
     @Override
     protected String getApiRoute() {
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Issues returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L107">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L108">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L100">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L101">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L111">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/pulls/&quot; + number;</span>
+<span class="fc" id="L104">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/pulls/&quot; + number;</span>
     }
 
     /**
@@ -117,7 +110,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the patch url
      */
     public URL getPatchUrl() {
-<span class="nc" id="L120">        return GitHubClient.parseURL(patch_url);</span>
+<span class="nc" id="L113">        return GitHubClient.parseURL(patch_url);</span>
     }
 
     /**
@@ -126,7 +119,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the issue url
      */
     public URL getIssueUrl() {
-<span class="nc" id="L129">        return GitHubClient.parseURL(issue_url);</span>
+<span class="nc" id="L122">        return GitHubClient.parseURL(issue_url);</span>
     }
 
     /**
@@ -135,7 +128,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the base
      */
     public GHCommitPointer getBase() {
-<span class="fc" id="L138">        return base;</span>
+<span class="fc" id="L131">        return base;</span>
     }
 
     /**
@@ -144,7 +137,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the head
      */
     public GHCommitPointer getHead() {
-<span class="fc" id="L147">        return head;</span>
+<span class="fc" id="L140">        return head;</span>
     }
 
     /**
@@ -156,7 +149,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      */
     @Deprecated
     public Date getIssueUpdatedAt() throws IOException {
-<span class="nc" id="L159">        return super.getUpdatedAt();</span>
+<span class="nc" id="L152">        return super.getUpdatedAt();</span>
     }
 
     /**
@@ -165,7 +158,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the diff url
      */
     public URL getDiffUrl() {
-<span class="nc" id="L168">        return GitHubClient.parseURL(diff_url);</span>
+<span class="nc" id="L161">        return GitHubClient.parseURL(diff_url);</span>
     }
 
     /**
@@ -174,23 +167,17 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the merged at
      */
     public Date getMergedAt() {
-<span class="nc" id="L177">        return GitHubClient.parseDate(merged_at);</span>
-    }
-
-    @Override
-    public Collection&lt;GHLabel&gt; getLabels() throws IOException {
-<span class="fc" id="L182">        fetchIssue();</span>
-<span class="fc" id="L183">        return super.getLabels();</span>
+<span class="nc" id="L170">        return GitHubClient.parseDate(merged_at);</span>
     }
 
     @Override
     public GHUser getClosedBy() {
-<span class="nc" id="L188">        return null;</span>
+<span class="nc" id="L175">        return null;</span>
     }
 
     @Override
     public PullRequest getPullRequest() {
-<span class="nc" id="L193">        return null;</span>
+<span class="nc" id="L180">        return null;</span>
     }
 
     //
@@ -205,8 +192,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public GHUser getMergedBy() throws IOException {
-<span class="fc" id="L208">        populate();</span>
-<span class="fc" id="L209">        return merged_by;</span>
+<span class="fc" id="L195">        populate();</span>
+<span class="fc" id="L196">        return merged_by;</span>
     }
 
     /**
@@ -217,8 +204,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public int getReviewComments() throws IOException {
-<span class="fc" id="L220">        populate();</span>
-<span class="fc" id="L221">        return review_comments;</span>
+<span class="fc" id="L207">        populate();</span>
+<span class="fc" id="L208">        return review_comments;</span>
     }
 
     /**
@@ -229,8 +216,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public int getAdditions() throws IOException {
-<span class="fc" id="L232">        populate();</span>
-<span class="fc" id="L233">        return additions;</span>
+<span class="fc" id="L219">        populate();</span>
+<span class="fc" id="L220">        return additions;</span>
     }
 
     /**
@@ -241,8 +228,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public int getCommits() throws IOException {
-<span class="nc" id="L244">        populate();</span>
-<span class="nc" id="L245">        return commits;</span>
+<span class="nc" id="L231">        populate();</span>
+<span class="nc" id="L232">        return commits;</span>
     }
 
     /**
@@ -253,8 +240,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public boolean isMerged() throws IOException {
-<span class="fc" id="L256">        populate();</span>
-<span class="fc" id="L257">        return merged;</span>
+<span class="fc" id="L243">        populate();</span>
+<span class="fc" id="L244">        return merged;</span>
     }
 
     /**
@@ -265,8 +252,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public boolean canMaintainerModify() throws IOException {
-<span class="fc" id="L268">        populate();</span>
-<span class="fc" id="L269">        return maintainer_can_modify;</span>
+<span class="fc" id="L255">        populate();</span>
+<span class="fc" id="L256">        return maintainer_can_modify;</span>
     }
 
     /**
@@ -277,8 +264,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public boolean isDraft() throws IOException {
-<span class="fc" id="L280">        populate();</span>
-<span class="fc" id="L281">        return draft;</span>
+<span class="fc" id="L267">        populate();</span>
+<span class="fc" id="L268">        return draft;</span>
     }
 
     /**
@@ -291,8 +278,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public Boolean getMergeable() throws IOException {
-<span class="fc" id="L294">        refresh(mergeable);</span>
-<span class="fc" id="L295">        return mergeable;</span>
+<span class="fc" id="L281">        refresh(mergeable);</span>
+<span class="fc" id="L282">        return mergeable;</span>
     }
 
     /**
@@ -300,7 +287,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      */
     @Deprecated
     Boolean getMergeableNoRefresh() throws IOException {
-<span class="fc" id="L303">        return mergeable;</span>
+<span class="fc" id="L290">        return mergeable;</span>
     }
 
     /**
@@ -311,8 +298,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public int getDeletions() throws IOException {
-<span class="fc" id="L314">        populate();</span>
-<span class="fc" id="L315">        return deletions;</span>
+<span class="fc" id="L301">        populate();</span>
+<span class="fc" id="L302">        return deletions;</span>
     }
 
     /**
@@ -323,8 +310,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public String getMergeableState() throws IOException {
-<span class="fc" id="L326">        populate();</span>
-<span class="fc" id="L327">        return mergeable_state;</span>
+<span class="fc" id="L313">        populate();</span>
+<span class="fc" id="L314">        return mergeable_state;</span>
     }
 
     /**
@@ -335,8 +322,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public int getChangedFiles() throws IOException {
-<span class="fc" id="L338">        populate();</span>
-<span class="fc" id="L339">        return changed_files;</span>
+<span class="fc" id="L325">        populate();</span>
+<span class="fc" id="L326">        return changed_files;</span>
     }
 
     /**
@@ -347,8 +334,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public String getMergeCommitSha() throws IOException {
-<span class="fc" id="L350">        populate();</span>
-<span class="fc" id="L351">        return merge_commit_sha;</span>
+<span class="fc" id="L337">        populate();</span>
+<span class="fc" id="L338">        return merge_commit_sha;</span>
     }
 
     /**
@@ -359,8 +346,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public List&lt;GHUser&gt; getRequestedReviewers() throws IOException {
-<span class="fc" id="L362">        refresh(requested_reviewers);</span>
-<span class="fc" id="L363">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
+<span class="fc" id="L349">        refresh(requested_reviewers);</span>
+<span class="fc" id="L350">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
     }
 
     /**
@@ -371,8 +358,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public List&lt;GHTeam&gt; getRequestedTeams() throws IOException {
-<span class="fc" id="L374">        refresh(requested_teams);</span>
-<span class="fc" id="L375">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
+<span class="fc" id="L361">        refresh(requested_teams);</span>
+<span class="fc" id="L362">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
     }
 
     /**
@@ -381,24 +368,24 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-<span class="fc bfc" id="L384" title="All 2 branches covered.">        if (mergeable_state != null)</span>
-<span class="fc" id="L385">            return; // already populated</span>
-<span class="fc" id="L386">        refresh();</span>
-<span class="fc" id="L387">    }</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (mergeable_state != null)</span>
+<span class="fc" id="L372">            return; // already populated</span>
+<span class="fc" id="L373">        refresh();</span>
+<span class="fc" id="L374">    }</span>
 
     /**
      * Repopulates this object.
      */
     public void refresh() throws IOException {
-<span class="pc bpc" id="L393" title="1 of 4 branches missed.">        if (root == null || root.isOffline()) {</span>
-<span class="fc" id="L394">            return; // cannot populate, will have to live with what we have</span>
+<span class="pc bpc" id="L380" title="1 of 4 branches missed.">        if (root == null || root.isOffline()) {</span>
+<span class="fc" id="L381">            return; // cannot populate, will have to live with what we have</span>
         }
 
-<span class="fc" id="L397">        URL url = getUrl();</span>
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        if (url != null) {</span>
-<span class="fc" id="L399">            root.createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);</span>
+<span class="fc" id="L384">        URL url = getUrl();</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">        if (url != null) {</span>
+<span class="fc" id="L386">            root.createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);</span>
         }
-<span class="fc" id="L401">    }</span>
+<span class="fc" id="L388">    }</span>
 
     /**
      * Retrieves all the files associated to this pull request.
@@ -406,9 +393,9 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestFileDetail&gt; listFiles() {
-<span class="nc" id="L409">        return root.createRequest()</span>
-<span class="nc" id="L410">                .withUrlPath(String.format(&quot;%s/files&quot;, getApiRoute()))</span>
-<span class="nc" id="L411">                .toIterable(GHPullRequestFileDetail[].class, null);</span>
+<span class="nc" id="L396">        return root.createRequest()</span>
+<span class="nc" id="L397">                .withUrlPath(String.format(&quot;%s/files&quot;, getApiRoute()))</span>
+<span class="nc" id="L398">                .toIterable(GHPullRequestFileDetail[].class, null);</span>
     }
 
     /**
@@ -417,9 +404,9 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestReview&gt; listReviews() {
-<span class="fc" id="L420">        return root.createRequest()</span>
-<span class="fc" id="L421">                .withUrlPath(String.format(&quot;%s/reviews&quot;, getApiRoute()))</span>
-<span class="fc" id="L422">                .toIterable(GHPullRequestReview[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L407">        return root.createRequest()</span>
+<span class="fc" id="L408">                .withUrlPath(String.format(&quot;%s/reviews&quot;, getApiRoute()))</span>
+<span class="fc" id="L409">                .toIterable(GHPullRequestReview[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -430,9 +417,9 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() throws IOException {
-<span class="fc" id="L433">        return root.createRequest()</span>
-<span class="fc" id="L434">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
-<span class="fc" id="L435">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L420">        return root.createRequest()</span>
+<span class="fc" id="L421">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
+<span class="fc" id="L422">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -441,9 +428,9 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestCommitDetail&gt; listCommits() {
-<span class="nc" id="L444">        return root.createRequest()</span>
-<span class="nc" id="L445">                .withUrlPath(String.format(&quot;%s/commits&quot;, getApiRoute()))</span>
-<span class="nc" id="L446">                .toIterable(GHPullRequestCommitDetail[].class, item -&gt; item.wrapUp(this));</span>
+<span class="nc" id="L431">        return root.createRequest()</span>
+<span class="nc" id="L432">                .withUrlPath(String.format(&quot;%s/commits&quot;, getApiRoute()))</span>
+<span class="nc" id="L433">                .toIterable(GHPullRequestCommitDetail[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -464,7 +451,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             GHPullRequestReviewComment... comments) throws IOException {
-<span class="nc" id="L467">        return createReview(body, event, Arrays.asList(comments));</span>
+<span class="nc" id="L454">        return createReview(body, event, Arrays.asList(comments));</span>
     }
 
     /**
@@ -485,11 +472,11 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
     public GHPullRequestReview createReview(String body,
             @CheckForNull GHPullRequestReviewState event,
             List&lt;GHPullRequestReviewComment&gt; comments) throws IOException {
-<span class="nc" id="L488">        GHPullRequestReviewBuilder b = createReview().body(body);</span>
-<span class="nc bnc" id="L489" title="All 2 branches missed.">        for (GHPullRequestReviewComment c : comments) {</span>
-<span class="nc" id="L490">            b.comment(c.getBody(), c.getPath(), c.getPosition());</span>
-<span class="nc" id="L491">        }</span>
-<span class="nc" id="L492">        return b.create();</span>
+<span class="nc" id="L475">        GHPullRequestReviewBuilder b = createReview().body(body);</span>
+<span class="nc bnc" id="L476" title="All 2 branches missed.">        for (GHPullRequestReviewComment c : comments) {</span>
+<span class="nc" id="L477">            b.comment(c.getBody(), c.getPath(), c.getPosition());</span>
+<span class="nc" id="L478">        }</span>
+<span class="nc" id="L479">        return b.create();</span>
     }
 
     /**
@@ -498,7 +485,7 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder createReview() {
-<span class="fc" id="L501">        return new GHPullRequestReviewBuilder(this);</span>
+<span class="fc" id="L488">        return new GHPullRequestReviewBuilder(this);</span>
     }
 
     /**
@@ -518,15 +505,15 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      */
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-<span class="fc" id="L521">        return root.createRequest()</span>
-<span class="fc" id="L522">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L523">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L524">                .with(&quot;commit_id&quot;, sha)</span>
-<span class="fc" id="L525">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L526">                .with(&quot;position&quot;, position)</span>
-<span class="fc" id="L527">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
-<span class="fc" id="L528">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L529">                .wrapUp(this);</span>
+<span class="fc" id="L508">        return root.createRequest()</span>
+<span class="fc" id="L509">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L510">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L511">                .with(&quot;commit_id&quot;, sha)</span>
+<span class="fc" id="L512">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L513">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L514">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
+<span class="fc" id="L515">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L516">                .wrapUp(this);</span>
     }
 
     /**
@@ -538,12 +525,12 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public void requestReviewers(List&lt;GHUser&gt; reviewers) throws IOException {
-<span class="fc" id="L541">        root.createRequest()</span>
-<span class="fc" id="L542">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L543">                .with(&quot;reviewers&quot;, getLogins(reviewers))</span>
-<span class="fc" id="L544">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
-<span class="fc" id="L545">                .send();</span>
-<span class="fc" id="L546">    }</span>
+<span class="fc" id="L528">        root.createRequest()</span>
+<span class="fc" id="L529">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L530">                .with(&quot;reviewers&quot;, getLogins(reviewers))</span>
+<span class="fc" id="L531">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L532">                .send();</span>
+<span class="fc" id="L533">    }</span>
 
     /**
      * Request team reviewers.
@@ -554,16 +541,51 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public void requestTeamReviewers(List&lt;GHTeam&gt; teams) throws IOException {
-<span class="fc" id="L557">        List&lt;String&gt; teamReviewers = new ArrayList&lt;String&gt;(teams.size());</span>
-<span class="fc bfc" id="L558" title="All 2 branches covered.">        for (GHTeam team : teams) {</span>
-<span class="fc" id="L559">            teamReviewers.add(team.getSlug());</span>
-<span class="fc" id="L560">        }</span>
-<span class="fc" id="L561">        root.createRequest()</span>
-<span class="fc" id="L562">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L563">                .with(&quot;team_reviewers&quot;, teamReviewers)</span>
-<span class="fc" id="L564">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
-<span class="fc" id="L565">                .send();</span>
-<span class="fc" id="L566">    }</span>
+<span class="fc" id="L544">        List&lt;String&gt; teamReviewers = new ArrayList&lt;String&gt;(teams.size());</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">        for (GHTeam team : teams) {</span>
+<span class="fc" id="L546">            teamReviewers.add(team.getSlug());</span>
+<span class="fc" id="L547">        }</span>
+<span class="fc" id="L548">        root.createRequest()</span>
+<span class="fc" id="L549">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L550">                .with(&quot;team_reviewers&quot;, teamReviewers)</span>
+<span class="fc" id="L551">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L552">                .send();</span>
+<span class="fc" id="L553">    }</span>
+
+    /**
+     * Set the base branch on the pull request
+     *
+     * @param newBaseBranch
+     *            the name of the new base branch
+     * @throws IOException
+     *             the io exception
+     * @return the updated pull request
+     */
+    public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
+<span class="fc" id="L565">        return root.createRequest()</span>
+<span class="fc" id="L566">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L567">                .with(&quot;base&quot;, newBaseBranch)</span>
+<span class="fc" id="L568">                .withUrlPath(getApiRoute())</span>
+<span class="fc" id="L569">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L570">                .wrapUp(root);</span>
+    }
+
+    /**
+     * Updates the branch. The same as pressing the button in the web GUI.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(LYDIAN)
+    @Deprecated
+    public void updateBranch() throws IOException {
+<span class="fc" id="L582">        root.createRequest()</span>
+<span class="fc" id="L583">                .withPreview(LYDIAN)</span>
+<span class="fc" id="L584">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L585">                .with(&quot;expected_head_sha&quot;, head.getSha())</span>
+<span class="fc" id="L586">                .withUrlPath(getApiRoute() + &quot;/update-branch&quot;)</span>
+<span class="fc" id="L587">                .send();</span>
+<span class="fc" id="L588">    }</span>
 
     /**
      * Merge this pull request.
@@ -576,8 +598,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public void merge(String msg) throws IOException {
-<span class="nc" id="L579">        merge(msg, null);</span>
-<span class="nc" id="L580">    }</span>
+<span class="nc" id="L601">        merge(msg, null);</span>
+<span class="nc" id="L602">    }</span>
 
     /**
      * Merge this pull request.
@@ -592,8 +614,8 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public void merge(String msg, String sha) throws IOException {
-<span class="nc" id="L595">        merge(msg, sha, null);</span>
-<span class="nc" id="L596">    }</span>
+<span class="nc" id="L617">        merge(msg, sha, null);</span>
+<span class="nc" id="L618">    }</span>
 
     /**
      * Merge this pull request, using the specified merge method.
@@ -610,27 +632,21 @@ import static org.kohsuke.github.Previews.SHADOW_CAT;
      *             the io exception
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-<span class="fc" id="L613">        root.createRequest()</span>
-<span class="fc" id="L614">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L615">                .with(&quot;commit_message&quot;, msg)</span>
-<span class="fc" id="L616">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L617">                .with(&quot;merge_method&quot;, method)</span>
-<span class="fc" id="L618">                .withUrlPath(getApiRoute() + &quot;/merge&quot;)</span>
-<span class="fc" id="L619">                .send();</span>
-<span class="fc" id="L620">    }</span>
+<span class="fc" id="L635">        root.createRequest()</span>
+<span class="fc" id="L636">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L637">                .with(&quot;commit_message&quot;, msg)</span>
+<span class="fc" id="L638">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L639">                .with(&quot;merge_method&quot;, method)</span>
+<span class="fc" id="L640">                .withUrlPath(getApiRoute() + &quot;/merge&quot;)</span>
+<span class="fc" id="L641">                .send();</span>
+<span class="fc" id="L642">    }</span>
 
     /**
      * The enum MergeMethod.
      */
-<span class="fc" id="L625">    public enum MergeMethod {</span>
-<span class="fc" id="L626">        MERGE, SQUASH, REBASE</span>
+<span class="fc" id="L647">    public enum MergeMethod {</span>
+<span class="fc" id="L648">        MERGE, SQUASH, REBASE</span>
     }
 
-    private void fetchIssue() throws IOException {
-<span class="pc bpc" id="L630" title="1 of 2 branches missed.">        if (!fetchedIssueDetails) {</span>
-<span class="fc" id="L631">            root.createRequest().withUrlPath(getIssuesApiRoute()).fetchInto(this);</span>
-<span class="fc" id="L632">            fetchedIssueDetails = true;</span>
-        }
-<span class="fc" id="L634">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

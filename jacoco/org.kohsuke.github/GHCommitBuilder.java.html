@@ -90,6 +90,19 @@ public class GHCommitBuilder {
     }
 
     /**
+     * Configures the PGP signature of this commit.
+     *
+     * @param signature
+     *            the signature calculated from the commit
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder withSignature(String signature) {
+<span class="fc" id="L101">        req.with(&quot;signature&quot;, signature);</span>
+<span class="fc" id="L102">        return this;</span>
+    }
+
+    /**
      * Configures the committer of this commit.
      *
      * @param name
@@ -101,12 +114,12 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
-<span class="nc" id="L104">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
-<span class="nc" id="L105">        return this;</span>
+<span class="nc" id="L117">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="nc" id="L118">        return this;</span>
     }
 
     private String getApiTail() {
-<span class="fc" id="L109">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L122">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 
     /**
@@ -117,8 +130,8 @@ public class GHCommitBuilder {
      *             the io exception
      */
     public GHCommit create() throws IOException {
-<span class="fc" id="L120">        req.with(&quot;parents&quot;, parents);</span>
-<span class="fc" id="L121">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
+<span class="fc" id="L133">        req.with(&quot;parents&quot;, parents);</span>
+<span class="fc" id="L134">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDiscussion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDiscussion.java</span></div><h1>GHDiscussion.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,8 +18,6 @@ import javax.annotation.Nonnull;
  */
 <span class="fc" id="L19">public class GHDiscussion extends GHObject {</span>
 
-    @JacksonInject
-    private GitHub root;
     private GHTeam team;
     private long number;
     private String body, title, htmlUrl;
@@ -29,12 +27,12 @@ import javax.annotation.Nonnull;
 
     @Override
     public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L32">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="nc" id="L30">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     GHDiscussion wrapUp(GHTeam team) {
-<span class="fc" id="L36">        this.team = team;</span>
-<span class="fc" id="L37">        return this;</span>
+<span class="fc" id="L34">        this.team = team;</span>
+<span class="fc" id="L35">        return this;</span>
     }
 
     /**
@@ -44,7 +42,7 @@ import javax.annotation.Nonnull;
      */
     @Nonnull
     public GHTeam getTeam() {
-<span class="fc" id="L47">        return team;</span>
+<span class="fc" id="L45">        return team;</span>
     }
 
     /**
@@ -53,7 +51,7 @@ import javax.annotation.Nonnull;
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L56">        return title;</span>
+<span class="fc" id="L54">        return title;</span>
     }
 
     /**
@@ -62,7 +60,7 @@ import javax.annotation.Nonnull;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L65">        return body;</span>
+<span class="fc" id="L63">        return body;</span>
     }
 
     /**
@@ -71,7 +69,7 @@ import javax.annotation.Nonnull;
      * @return the number
      */
     public long getNumber() {
-<span class="fc" id="L74">        return number;</span>
+<span class="fc" id="L72">        return number;</span>
     }
 
     /**
@@ -83,7 +81,7 @@ import javax.annotation.Nonnull;
      */
     @Override
     public long getId() {
-<span class="fc" id="L86">        return getNumber();</span>
+<span class="fc" id="L84">        return getNumber();</span>
     }
 
     /**
@@ -92,7 +90,7 @@ import javax.annotation.Nonnull;
      * @return {@code true} if discussion is private.
      */
     public boolean isPrivate() {
-<span class="fc" id="L95">        return isPrivate;</span>
+<span class="fc" id="L93">        return isPrivate;</span>
     }
 
     /**
@@ -107,20 +105,20 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     static GHDiscussion.Creator create(GHTeam team) throws IOException {
-<span class="fc" id="L110">        return new GHDiscussion.Creator(team);</span>
+<span class="fc" id="L108">        return new GHDiscussion.Creator(team);</span>
     }
 
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
-<span class="fc" id="L114">        return team.root.createRequest()</span>
-<span class="fc" id="L115">                .setRawUrlPath(getRawUrlPath(team, discussionNumber))</span>
-<span class="fc" id="L116">                .fetch(GHDiscussion.class)</span>
-<span class="fc" id="L117">                .wrapUp(team);</span>
+<span class="fc" id="L112">        return team.root.createRequest()</span>
+<span class="fc" id="L113">                .setRawUrlPath(getRawUrlPath(team, discussionNumber))</span>
+<span class="fc" id="L114">                .fetch(GHDiscussion.class)</span>
+<span class="fc" id="L115">                .wrapUp(team);</span>
     }
 
     static PagedIterable&lt;GHDiscussion&gt; readAll(GHTeam team) throws IOException {
-<span class="fc" id="L121">        return team.root.createRequest()</span>
-<span class="fc" id="L122">                .setRawUrlPath(getRawUrlPath(team, null))</span>
-<span class="fc" id="L123">                .toIterable(GHDiscussion[].class, item -&gt; item.wrapUp(team));</span>
+<span class="fc" id="L119">        return team.root.createRequest()</span>
+<span class="fc" id="L120">                .setRawUrlPath(getRawUrlPath(team, null))</span>
+<span class="fc" id="L121">                .toIterable(GHDiscussion[].class, item -&gt; item.wrapUp(team));</span>
     }
 
     /**
@@ -130,10 +128,10 @@ import javax.annotation.Nonnull;
      *
      * @return a {@link GHDiscussion.Updater}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Updater update() {
-<span class="fc" id="L136">        return new GHDiscussion.Updater(this);</span>
+<span class="fc" id="L134">        return new GHDiscussion.Updater(this);</span>
     }
 
     /**
@@ -141,10 +139,10 @@ import javax.annotation.Nonnull;
      *
      * @return a {@link GHDiscussion.Setter}
      */
-    @Preview
+    @Preview(Previews.SQUIRREL_GIRL)
     @Deprecated
     public GHDiscussion.Setter set() {
-<span class="fc" id="L147">        return new GHDiscussion.Setter(this);</span>
+<span class="fc" id="L145">        return new GHDiscussion.Setter(this);</span>
     }
 
     /**
@@ -154,11 +152,11 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L157">        team.root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getRawUrlPath(team, number)).send();</span>
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L155">        team.root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getRawUrlPath(team, number)).send();</span>
+<span class="fc" id="L156">    }</span>
 
     private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        return team.getUrl().toString() + &quot;/discussions&quot; + (discussionNumber == null ? &quot;&quot; : &quot;/&quot; + discussionNumber);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        return team.getUrl().toString() + &quot;/discussions&quot; + (discussionNumber == null ? &quot;&quot; : &quot;/&quot; + discussionNumber);</span>
     }
 
     /**
@@ -168,9 +166,9 @@ import javax.annotation.Nonnull;
      */
     public static class Setter extends GHDiscussionBuilder&lt;GHDiscussion&gt; {
         private Setter(@Nonnull GHDiscussion base) {
-<span class="fc" id="L171">            super(GHDiscussion.class, base.team, base);</span>
-<span class="fc" id="L172">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
-<span class="fc" id="L173">        }</span>
+<span class="fc" id="L169">            super(GHDiscussion.class, base.team, base);</span>
+<span class="fc" id="L170">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
+<span class="fc" id="L171">        }</span>
     }
 
     /**
@@ -180,9 +178,9 @@ import javax.annotation.Nonnull;
      */
     public static class Updater extends GHDiscussionBuilder&lt;Updater&gt; {
         private Updater(@Nonnull GHDiscussion base) {
-<span class="fc" id="L183">            super(GHDiscussion.Updater.class, base.team, base);</span>
-<span class="fc" id="L184">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
-<span class="fc" id="L185">        }</span>
+<span class="fc" id="L181">            super(GHDiscussion.Updater.class, base.team, base);</span>
+<span class="fc" id="L182">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
+<span class="fc" id="L183">        }</span>
     }
 
     /**
@@ -193,9 +191,9 @@ import javax.annotation.Nonnull;
     public static class Creator extends GHDiscussionBuilder&lt;Creator&gt; {
 
         private Creator(@Nonnull GHTeam team) {
-<span class="fc" id="L196">            super(GHDiscussion.Creator.class, team, null);</span>
-<span class="fc" id="L197">            requester.method(&quot;POST&quot;).setRawUrlPath(getRawUrlPath(team, null));</span>
-<span class="fc" id="L198">        }</span>
+<span class="fc" id="L194">            super(GHDiscussion.Creator.class, team, null);</span>
+<span class="fc" id="L195">            requester.method(&quot;POST&quot;).setRawUrlPath(getRawUrlPath(team, null));</span>
+<span class="fc" id="L196">        }</span>
 
         /**
          * Sets whether this discussion is private to this team.
@@ -208,26 +206,26 @@ import javax.annotation.Nonnull;
          */
         @Nonnull
         public Creator private_(boolean value) throws IOException {
-<span class="fc" id="L211">            return with(&quot;private&quot;, value);</span>
+<span class="fc" id="L209">            return with(&quot;private&quot;, value);</span>
         }
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (this == o) {</span>
-<span class="nc" id="L218">            return true;</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L216">            return true;</span>
         }
-<span class="pc bpc" id="L220" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L221">            return false;</span>
+<span class="pc bpc" id="L218" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L219">            return false;</span>
         }
-<span class="fc" id="L223">        GHDiscussion that = (GHDiscussion) o;</span>
-<span class="pc bpc" id="L224" title="3 of 6 branches missed.">        return number == that.number &amp;&amp; Objects.equals(getUrl(), that.getUrl()) &amp;&amp; Objects.equals(team, that.team)</span>
-<span class="pc bpc" id="L225" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(body, that.body) &amp;&amp; Objects.equals(title, that.title);</span>
+<span class="fc" id="L221">        GHDiscussion that = (GHDiscussion) o;</span>
+<span class="pc bpc" id="L222" title="3 of 6 branches missed.">        return number == that.number &amp;&amp; Objects.equals(getUrl(), that.getUrl()) &amp;&amp; Objects.equals(team, that.team)</span>
+<span class="pc bpc" id="L223" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(body, that.body) &amp;&amp; Objects.equals(title, that.title);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L230">        return Objects.hash(team, number, body, title);</span>
+<span class="fc" id="L228">        return Objects.hash(team, number, body, title);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -16,7 +16,6 @@ import java.net.URL;
                 &quot;UUF_UNUSED_FIELD&quot; },
         justification = &quot;JSON API&quot;)
 <span class="nc" id="L18">public class GHInvitation extends GHObject {</span>
-    /* package almost final */ GitHub root;
 
     private int id;
     private GHRepository repository;
@@ -25,8 +24,8 @@ import java.net.URL;
     private String html_url;
 
     GHInvitation wrapUp(GitHub root) {
-<span class="nc" id="L28">        this.root = root;</span>
-<span class="nc" id="L29">        return this;</span>
+<span class="nc" id="L27">        this.root = root;</span>
+<span class="nc" id="L28">        return this;</span>
     }
 
     /**
@@ -36,8 +35,8 @@ import java.net.URL;
      *             the io exception
      */
     public void accept() throws IOException {
-<span class="nc" id="L39">        root.createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L38">        root.createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L39">    }</span>
 
     /**
      * Decline a repository invitation.
@@ -46,12 +45,12 @@ import java.net.URL;
      *             the io exception
      */
     public void decline() throws IOException {
-<span class="nc" id="L49">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L48">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L49">    }</span>
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L54">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L53">        return GitHubClient.parseURL(html_url);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

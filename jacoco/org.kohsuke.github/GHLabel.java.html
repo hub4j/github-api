@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */
-public class GHLabel {
+public class GHLabel extends GitHubInteractiveObject {
 
     @Nonnull
     private String url, name, color;
@@ -28,21 +28,18 @@ public class GHLabel {
     @CheckForNull
     private String description;
 
-    @Nonnull
-    private final GitHub root;
-
     @JsonCreator
-<span class="fc" id="L35">    private GHLabel(@JacksonInject @Nonnull GitHub root) {</span>
-<span class="fc" id="L36">        this.root = root;</span>
-<span class="fc" id="L37">        url = &quot;&quot;;</span>
-<span class="fc" id="L38">        name = &quot;&quot;;</span>
-<span class="fc" id="L39">        color = &quot;&quot;;</span>
-<span class="fc" id="L40">        description = null;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L32">    private GHLabel(@JacksonInject @Nonnull GitHub root) {</span>
+<span class="fc" id="L33">        this.root = root;</span>
+<span class="fc" id="L34">        url = &quot;&quot;;</span>
+<span class="fc" id="L35">        name = &quot;&quot;;</span>
+<span class="fc" id="L36">        color = &quot;&quot;;</span>
+<span class="fc" id="L37">        description = null;</span>
+<span class="fc" id="L38">    }</span>
 
     @Nonnull
     GitHub getApiRoot() {
-<span class="fc" id="L45">        return Objects.requireNonNull(root);</span>
+<span class="fc" id="L42">        return Objects.requireNonNull(root);</span>
     }
 
     /**
@@ -52,7 +49,7 @@ public class GHLabel {
      */
     @Nonnull
     public String getUrl() {
-<span class="fc" id="L55">        return url;</span>
+<span class="fc" id="L52">        return url;</span>
     }
 
     /**
@@ -62,7 +59,7 @@ public class GHLabel {
      */
     @Nonnull
     public String getName() {
-<span class="fc" id="L65">        return name;</span>
+<span class="fc" id="L62">        return name;</span>
     }
 
     /**
@@ -72,7 +69,7 @@ public class GHLabel {
      */
     @Nonnull
     public String getColor() {
-<span class="fc" id="L75">        return color;</span>
+<span class="fc" id="L72">        return color;</span>
     }
 
     /**
@@ -82,7 +79,7 @@ public class GHLabel {
      */
     @CheckForNull
     public String getDescription() {
-<span class="fc" id="L85">        return description;</span>
+<span class="fc" id="L82">        return description;</span>
     }
 
     /**
@@ -96,8 +93,8 @@ public class GHLabel {
      */
     @Deprecated
     public void setColor(String newColor) throws IOException {
-<span class="fc" id="L99">        set().color(newColor);</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L96">        set().color(newColor);</span>
+<span class="fc" id="L97">    }</span>
 
     /**
      * Sets description.
@@ -110,15 +107,15 @@ public class GHLabel {
      */
     @Deprecated
     public void setDescription(String newDescription) throws IOException {
-<span class="fc" id="L113">        set().description(newDescription);</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L110">        set().description(newDescription);</span>
+<span class="fc" id="L111">    }</span>
 
     static Collection&lt;String&gt; toNames(Collection&lt;GHLabel&gt; labels) {
-<span class="nc" id="L117">        List&lt;String&gt; r = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">        for (GHLabel l : labels) {</span>
-<span class="nc" id="L119">            r.add(l.getName());</span>
-<span class="nc" id="L120">        }</span>
-<span class="nc" id="L121">        return r;</span>
+<span class="nc" id="L114">        List&lt;String&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        for (GHLabel l : labels) {</span>
+<span class="nc" id="L116">            r.add(l.getName());</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">        return r;</span>
     }
 
     /**
@@ -132,10 +129,10 @@ public class GHLabel {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @BetaApi
     @Deprecated
     static Creator create(GHRepository repository) throws IOException {
-<span class="fc" id="L138">        return new Creator(repository);</span>
+<span class="fc" id="L135">        return new Creator(repository);</span>
     }
 
     /**
@@ -150,9 +147,9 @@ public class GHLabel {
      *             the io exception
      */
     static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
-<span class="fc" id="L153">        return repository.root.createRequest()</span>
-<span class="fc" id="L154">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;), name)</span>
-<span class="fc" id="L155">                .fetch(GHLabel.class);</span>
+<span class="fc" id="L150">        return repository.root.createRequest()</span>
+<span class="fc" id="L151">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;), name)</span>
+<span class="fc" id="L152">                .fetch(GHLabel.class);</span>
 
     }
 
@@ -166,9 +163,9 @@ public class GHLabel {
      *             the io exception
      */
     static PagedIterable&lt;GHLabel&gt; readAll(@Nonnull final GHRepository repository) throws IOException {
-<span class="fc" id="L169">        return repository.root.createRequest()</span>
-<span class="fc" id="L170">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;))</span>
-<span class="fc" id="L171">                .toIterable(GHLabel[].class, null);</span>
+<span class="fc" id="L166">        return repository.root.createRequest()</span>
+<span class="fc" id="L167">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;))</span>
+<span class="fc" id="L168">                .toIterable(GHLabel[].class, null);</span>
 
     }
 
@@ -179,21 +176,21 @@ public class GHLabel {
      *
      * @return a {@link Updater}
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public Updater update() {
-<span class="fc" id="L185">        return new Updater(this);</span>
+<span class="fc" id="L182">        return new Updater(this);</span>
     }
 
     /**
      * Begins a single property update.
-     * 
+     *
      * @return a {@link Setter}
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public Setter set() {
-<span class="fc" id="L196">        return new Setter(this);</span>
+<span class="fc" id="L193">        return new Setter(this);</span>
     }
 
     /**
@@ -203,23 +200,23 @@ public class GHLabel {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L206">        root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getUrl()).send();</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L203">        root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getUrl()).send();</span>
+<span class="fc" id="L204">    }</span>
 
     @Override
     public boolean equals(final Object o) {
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L212">            return true;</span>
-<span class="pc bpc" id="L213" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
-<span class="nc" id="L214">            return false;</span>
-<span class="fc" id="L215">        final GHLabel ghLabel = (GHLabel) o;</span>
-<span class="pc bpc" id="L216" title="2 of 4 branches missed.">        return Objects.equals(url, ghLabel.url) &amp;&amp; Objects.equals(name, ghLabel.name)</span>
-<span class="fc bfc" id="L217" title="All 4 branches covered.">                &amp;&amp; Objects.equals(color, ghLabel.color) &amp;&amp; Objects.equals(description, ghLabel.description);</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L209">            return true;</span>
+<span class="pc bpc" id="L210" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
+<span class="nc" id="L211">            return false;</span>
+<span class="fc" id="L212">        final GHLabel ghLabel = (GHLabel) o;</span>
+<span class="pc bpc" id="L213" title="2 of 4 branches missed.">        return Objects.equals(url, ghLabel.url) &amp;&amp; Objects.equals(name, ghLabel.name)</span>
+<span class="fc bfc" id="L214" title="All 4 branches covered.">                &amp;&amp; Objects.equals(color, ghLabel.color) &amp;&amp; Objects.equals(description, ghLabel.description);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L222">        return Objects.hash(url, name, color, description);</span>
+<span class="nc" id="L219">        return Objects.hash(url, name, color, description);</span>
     }
 
     /**
@@ -227,13 +224,13 @@ public class GHLabel {
      *
      * {@link #done()} is called automatically after the property is set.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Setter extends GHLabelBuilder&lt;GHLabel&gt; {
         private Setter(@Nonnull GHLabel base) {
-<span class="fc" id="L234">            super(GHLabel.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L235">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
-<span class="fc" id="L236">        }</span>
+<span class="fc" id="L231">            super(GHLabel.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L232">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L233">        }</span>
     }
 
     /**
@@ -241,13 +238,13 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to commit changes.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Updater extends GHLabelBuilder&lt;Updater&gt; {
         private Updater(@Nonnull GHLabel base) {
-<span class="fc" id="L248">            super(Updater.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L249">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
-<span class="fc" id="L250">        }</span>
+<span class="fc" id="L245">            super(Updater.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L246">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L247">        }</span>
     }
 
     /**
@@ -255,14 +252,14 @@ public class GHLabel {
      *
      * Consumer must call {@link #done()} to create the new instance.
      */
-    @Preview
+    @BetaApi
     @Deprecated
     public static class Creator extends GHLabelBuilder&lt;Creator&gt; {
         private Creator(@Nonnull GHRepository repository) {
-<span class="fc" id="L262">            super(Creator.class, repository.root, null);</span>
-<span class="fc" id="L263">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(&quot;labels&quot;));</span>
-<span class="fc" id="L264">        }</span>
+<span class="fc" id="L259">            super(Creator.class, repository.root, null);</span>
+<span class="fc" id="L260">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(&quot;labels&quot;));</span>
+<span class="fc" id="L261">        }</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

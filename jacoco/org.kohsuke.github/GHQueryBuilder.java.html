@@ -7,14 +7,13 @@
  *            the type parameter
  * @author Kohsuke Kawaguchi
  */
-public abstract class GHQueryBuilder&lt;T&gt; {
-    protected final GitHub root;
+public abstract class GHQueryBuilder&lt;T&gt; extends GitHubInteractiveObject {
     protected final Requester req;
 
-<span class="fc" id="L14">    GHQueryBuilder(GitHub root) {</span>
-<span class="fc" id="L15">        this.root = root;</span>
-<span class="fc" id="L16">        this.req = root.createRequest();</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L13">    GHQueryBuilder(GitHub root) {</span>
+<span class="fc" id="L14">        this.root = root;</span>
+<span class="fc" id="L15">        this.req = root.createRequest();</span>
+<span class="fc" id="L16">    }</span>
 
     /**
      * Start listing items by using the settings built up on this object.
@@ -23,4 +22,4 @@ public abstract class GHQueryBuilder&lt;T&gt; {
      */
     public abstract PagedIterable&lt;T&gt; list();
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

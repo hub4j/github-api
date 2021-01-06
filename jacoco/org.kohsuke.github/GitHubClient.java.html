@@ -448,13 +448,13 @@ abstract class GitHubClient {
             // statistics - See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
 
-<span class="pc bpc" id="L451" title="1 of 2 branches missed.">            if (responseInfo.url().toString().endsWith(&quot;/forks&quot;)) {</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">            if (responseInfo.url().toString().endsWith(&quot;/forks&quot;)) {</span>
 <span class="fc" id="L452">                LOGGER.log(INFO, &quot;The fork is being created. Please try again in 5 seconds.&quot;);</span>
-<span class="nc bnc" id="L453" title="All 2 branches missed.">            } else if (responseInfo.url().toString().endsWith(&quot;/statistics&quot;)) {</span>
+<span class="pc bpc" id="L453" title="1 of 2 branches missed.">            } else if (responseInfo.url().toString().endsWith(&quot;/statistics&quot;)) {</span>
 <span class="nc" id="L454">                LOGGER.log(INFO, &quot;The statistics are being generated. Please try again in 5 seconds.&quot;);</span>
             } else {
-<span class="nc" id="L456">                LOGGER.log(INFO,</span>
-<span class="nc" id="L457">                        &quot;Received 202 from &quot; + responseInfo.url().toString() + &quot; . Please try again in 5 seconds.&quot;);</span>
+<span class="fc" id="L456">                LOGGER.log(INFO,</span>
+<span class="fc" id="L457">                        &quot;Received 202 from &quot; + responseInfo.url().toString() + &quot; . Please try again in 5 seconds.&quot;);</span>
             }
             // Maybe throw an exception instead?
 <span class="fc bfc" id="L460" title="All 2 branches covered.">        } else if (handler != null) {</span>
@@ -725,4 +725,4 @@ abstract class GitHubClient {
 <span class="fc" id="L725">        return MAPPER.reader(new InjectableValues.Std(injected));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

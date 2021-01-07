@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 /**
  * Represents the state of deployment
  */

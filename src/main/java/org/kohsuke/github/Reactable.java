@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Those {@link GHObject}s that can have {@linkplain GHReaction reactions}.

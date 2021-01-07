@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.118-SNAPSHOT</version>
+  <version>1.120-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -154,7 +154,7 @@
                       <exclude>org.kohsuke.github.example.*</exclude>
 
                       <!-- No methods -->
-                      <exclude>org.kohsuke.github.Previews</exclude>
+                      <exclude>org.kohsuke.github.internal.Previews</exclude>
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
@@ -472,7 +472,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.260</version>
+      <version>1.262</version>
       <scope>test</scope>
     </dependency>
     <dependency>

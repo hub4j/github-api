@@ -28,7 +28,7 @@ import java.net.URL;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Review comment to the pull request

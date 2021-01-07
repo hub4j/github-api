@@ -6,7 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.Collection;
 
-import static org.kohsuke.github.Previews.ZZZAX;
+import static org.kohsuke.github.internal.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.

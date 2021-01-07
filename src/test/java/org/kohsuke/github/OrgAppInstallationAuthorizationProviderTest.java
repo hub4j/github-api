@@ -7,15 +7,16 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class OrgInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
+public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
 
-    public OrgInstallationAuthorizationProviderTest() {
+    public OrgAppInstallationAuthorizationProviderTest() {
         useDefaultGitHub = false;
     }
 
     @Test(expected = HttpException.class)
     public void invalidJWTTokenRaisesException() throws IOException {
-        OrgInstallationAuthorizationProvider provider = new OrgInstallationAuthorizationProvider("testOrganization",
+        OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider(
+                "testOrganization",
                 ImmutableAuthorizationProvider.fromJwtToken("myToken"));
         gitHub = getGitHubBuilder().withAuthorizationProvider(provider)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
@@ -26,7 +27,7 @@ public class OrgInstallationAuthorizationProviderTest extends AbstractGHAppInsta
 
     @Test
     public void validJWTTokenAllowsOauthTokenRequest() throws IOException {
-        OrgInstallationAuthorizationProvider provider = new OrgInstallationAuthorizationProvider("hub4j-test-org",
+        OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider("hub4j-test-org",
                 ImmutableAuthorizationProvider.fromJwtToken("bogus-valid-token"));
         gitHub = getGitHubBuilder().withAuthorizationProvider(provider)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())

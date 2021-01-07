@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 /**
  * Provides an AuthorizationProvider that performs automatic token refresh.
  */
-public class OrgInstallationAuthorizationProvider implements AuthorizationProvider {
+public class OrgAppInstallationAuthorizationProvider implements AuthorizationProvider {
 
     private GitHub baseGitHub;
     private GitHub gitHub;
@@ -35,7 +35,8 @@ public class OrgInstallationAuthorizationProvider implements AuthorizationProvid
      */
     @BetaApi
     @Deprecated
-    public OrgInstallationAuthorizationProvider(String organizationName, AuthorizationProvider authorizationProvider) {
+    public OrgAppInstallationAuthorizationProvider(String organizationName,
+            AuthorizationProvider authorizationProvider) {
         this.organizationName = organizationName;
         this.refreshProvider = authorizationProvider;
     }

@@ -24,9 +24,9 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
     private static String PRIVATE_KEY_FILE_APP_3 = "/ghapi-test-app-3.private-key.pem";
 
-    private static CredentialProvider JWT_PROVIDER_1;
-    private static CredentialProvider JWT_PROVIDER_2;
-    private static CredentialProvider JWT_PROVIDER_3;
+    private static AuthorizationProvider JWT_PROVIDER_1;
+    private static AuthorizationProvider JWT_PROVIDER_2;
+    private static AuthorizationProvider JWT_PROVIDER_3;
 
     AbstractGHAppInstallationTest() {
         try {

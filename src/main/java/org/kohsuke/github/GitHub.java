@@ -101,23 +101,23 @@ public class GitHub {
      *            abuseLimitHandler
      * @param rateLimitChecker
      *            rateLimitChecker
-     * @param credentialProvider
-     *            a credential provider
+     * @param authorizationProvider
+     *            a authorization provider
      */
     GitHub(String apiUrl,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            CredentialProvider credentialProvider) throws IOException {
-        credentialProvider.bind(this);
+            AuthorizationProvider authorizationProvider) throws IOException {
+        authorizationProvider.bind(this);
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
                 (myself) -> setMyself(myself),
-                credentialProvider);
+                authorizationProvider);
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
     }
@@ -130,12 +130,12 @@ public class GitHub {
 
     static class CredentialRefreshGitHubWrapper extends GitHub {
 
-        private final CredentialProvider credentialProvider;
+        private final AuthorizationProvider authorizationProvider;
 
-        CredentialRefreshGitHubWrapper(GitHub github, CredentialProvider credentialProvider) {
+        CredentialRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
             super(github.client);
-            this.credentialProvider = credentialProvider;
-            this.credentialProvider.bind(this);
+            this.authorizationProvider = authorizationProvider;
+            this.authorizationProvider.bind(this);
         }
 
         @Nonnull
@@ -143,7 +143,7 @@ public class GitHub {
         Requester createRequest() {
             try {
                 // Override
-                return super.createRequest().setHeader("Authorization", credentialProvider.getEncodedAuthorization())
+                return super.createRequest().setHeader("Authorization", authorizationProvider.getEncodedAuthorization())
                         .rateLimit(RateLimitTarget.NONE);
             } catch (IOException e) {
                 throw new GHException("Failed to create requester to refresh credentials", e);

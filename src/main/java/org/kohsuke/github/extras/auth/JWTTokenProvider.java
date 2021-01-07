@@ -3,7 +3,7 @@ package org.kohsuke.github.extras.auth;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.kohsuke.github.CredentialProvider;
+import org.kohsuke.github.AuthorizationProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +23,11 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 
 /**
- * A credential provider that gives valid JWT tokens. These tokens are then used to create a time-based token to
+ * A authorization provider that gives valid JWT tokens. These tokens are then used to create a time-based token to
  * authenticate as an application. This token provider does not provide any kind of caching, and will always request a
  * new token to the API.
  */
-public class JWTTokenProvider implements CredentialProvider {
+public class JWTTokenProvider implements AuthorizationProvider {
 
     private static final long MINUTES_10 = Duration.ofMinutes(10).toMillis();
 

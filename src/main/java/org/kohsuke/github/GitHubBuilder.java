@@ -30,7 +30,7 @@ public class GitHubBuilder implements Cloneable {
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
-    /* private */ CredentialProvider credentialProvider = CredentialProvider.ANONYMOUS;
+    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
 
     /**
      * Instantiates a new Git hub builder.
@@ -58,13 +58,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.credentialProvider != null)
+        if (builder.authorizationProvider != null)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.credentialProvider != null)
+            if (builder.authorizationProvider != null)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -255,7 +255,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withPassword(String user, String password) {
-        return withCredentialProvider(ImmutableCredentialProvider.fromLoginAndPassword(user, password));
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromLoginAndPassword(user, password));
     }
 
     /**
@@ -266,7 +266,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken) {
-        return withCredentialProvider(ImmutableCredentialProvider.fromOauthToken(oauthToken));
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken));
     }
 
     /**
@@ -279,21 +279,21 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
-        return withCredentialProvider(ImmutableCredentialProvider.fromOauthToken(oauthToken, user));
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));
     }
 
     /**
-     * Configures a {@link CredentialProvider} for this builder
+     * Configures a {@link AuthorizationProvider} for this builder
      *
-     * There can be only one credential provider per client instance.
+     * There can be only one authorization provider per client instance.
      *
-     * @param credentialProvider
-     *            the credential provider
+     * @param authorizationProvider
+     *            the authorization provider
      * @return the git hub builder
      *
      */
-    public GitHubBuilder withCredentialProvider(final CredentialProvider credentialProvider) {
-        this.credentialProvider = credentialProvider;
+    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
+        this.authorizationProvider = authorizationProvider;
         return this;
     }
 
@@ -306,7 +306,7 @@ public class GitHubBuilder implements Cloneable {
      * @see GHAppInstallation#createToken(java.util.Map) GHAppInstallation#createToken(java.util.Map)
      */
     public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-        return withCredentialProvider(ImmutableCredentialProvider.fromAppInstallationToken(appInstallationToken));
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));
     }
 
     /**
@@ -317,7 +317,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withJwtToken(String jwtToken) {
-        return withCredentialProvider(ImmutableCredentialProvider.fromJwtToken(jwtToken));
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));
     }
 
     /**
@@ -443,7 +443,7 @@ public class GitHubBuilder implements Cloneable {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                credentialProvider);
+                authorizationProvider);
     }
 
     @Override

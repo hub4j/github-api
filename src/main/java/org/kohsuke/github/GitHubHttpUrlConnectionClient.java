@@ -38,14 +38,14 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             Consumer<GHMyself> myselfConsumer,
-            CredentialProvider credentialProvider) throws IOException {
+            AuthorizationProvider authorizationProvider) throws IOException {
         super(apiUrl,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
                 myselfConsumer,
-                credentialProvider);
+                authorizationProvider);
     }
 
     @Nonnull

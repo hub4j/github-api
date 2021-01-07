@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.ImmutableAuthorizationProvider.UserAuthorizationProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,7 +47,7 @@ abstract class GitHubClient {
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
-    private final CredentialProvider credentialProvider;
+    private final AuthorizationProvider authorizationProvider;
 
     private HttpConnector connector;
 
@@ -76,7 +77,7 @@ abstract class GitHubClient {
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             Consumer<GHMyself> myselfConsumer,
-            CredentialProvider credentialProvider) throws IOException {
+            AuthorizationProvider authorizationProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -89,7 +90,7 @@ abstract class GitHubClient {
         this.connector = connector;
 
         // Prefer credential configuration via provider
-        this.credentialProvider = credentialProvider;
+        this.authorizationProvider = authorizationProvider;
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
@@ -100,12 +101,12 @@ abstract class GitHubClient {
 
     private String getCurrentUser(Consumer<GHMyself> myselfConsumer) throws IOException {
         String login = null;
-        if (this.credentialProvider instanceof ImmutableCredentialProvider.UserCredentialProvider
-                && this.credentialProvider.getEncodedAuthorization() != null) {
+        if (this.authorizationProvider instanceof UserAuthorizationProvider
+                && this.authorizationProvider.getEncodedAuthorization() != null) {
 
-            ImmutableCredentialProvider.UserCredentialProvider userCredentialProvider = (ImmutableCredentialProvider.UserCredentialProvider) this.credentialProvider;
+            UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
 
-            login = userCredentialProvider.getLogin();
+            login = userAuthorizationProvider.getLogin();
 
             if (login == null) {
                 try {
@@ -185,7 +186,7 @@ abstract class GitHubClient {
      */
     public boolean isAnonymous() {
         try {
-            return login == null && this.credentialProvider.getEncodedAuthorization() == null;
+            return login == null && this.authorizationProvider.getEncodedAuthorization() == null;
         } catch (IOException e) {
             // An exception here means that the provider failed to provide authorization parameters,
             // basically meaning the same as "no auth"
@@ -214,7 +215,7 @@ abstract class GitHubClient {
 
     @CheckForNull
     protected String getEncodedAuthorization() throws IOException {
-        return credentialProvider.getEncodedAuthorization();
+        return authorizationProvider.getEncodedAuthorization();
     }
 
     @Nonnull

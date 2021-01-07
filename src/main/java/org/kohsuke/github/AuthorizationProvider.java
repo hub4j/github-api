@@ -6,15 +6,15 @@ import java.io.IOException;
  * Provides a functional interface that returns a valid encodedAuthorization. This strategy allows for a provider that
  * dynamically changes the credentials. Each request will request the credentials from the provider.
  */
-public interface CredentialProvider {
+public interface AuthorizationProvider {
     /**
-     * An static instance for an ANONYMOUS credential provider
+     * An static instance for an ANONYMOUS authorization provider
      */
-    CredentialProvider ANONYMOUS = new AnonymousCredentialProvider();
+    AuthorizationProvider ANONYMOUS = new AnonymousAuthorizationProvider();
 
     /**
-     * Returns the credentials to be used with a given request. As an example, a credential provider for a bearer token
-     * will return something like:
+     * Returns the credentials to be used with a given request. As an example, a authorization provider for a bearer
+     * token will return something like:
      *
      * <pre>
      * {@code
@@ -32,7 +32,7 @@ public interface CredentialProvider {
     String getEncodedAuthorization() throws IOException;
 
     /**
-     * Binds this credential provider to a github instance.
+     * Binds this authorization provider to a github instance.
      *
      * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
      *
@@ -43,9 +43,9 @@ public interface CredentialProvider {
     }
 
     /**
-     * A {@link CredentialProvider} that ensures that no credentials are returned
+     * A {@link AuthorizationProvider} that ensures that no credentials are returned
      */
-    class AnonymousCredentialProvider implements CredentialProvider {
+    class AnonymousAuthorizationProvider implements AuthorizationProvider {
         @Override
         public String getEncodedAuthorization() throws IOException {
             return null;

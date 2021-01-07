@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.ImmutableAuthorizationProvider.UserAuthorizationProvider;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -65,37 +66,33 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         assertThat(builder.endpoint, equalTo("bogus endpoint url"));
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                nullValue());
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), nullValue());
 
         props.put("login", "bogus login");
         setupEnvironment(props);
         builder = GitHubBuilder.fromEnvironment();
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                equalTo("bogus login"));
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
 
         props.put("jwt", "bogus jwt token string");
         setupEnvironment(props);
         builder = GitHubBuilder.fromEnvironment();
 
-        assertThat(builder.credentialProvider,
-                not(instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class)));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("Bearer bogus jwt token string"));
+        assertThat(builder.authorizationProvider, not(instanceOf(UserAuthorizationProvider.class)));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("Bearer bogus jwt token string"));
 
         props.put("password", "bogus weak password");
         setupEnvironment(props);
         builder = GitHubBuilder.fromEnvironment();
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(),
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(),
                 equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                equalTo("bogus login"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
 
     }
 
@@ -111,39 +108,35 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
         assertThat(builder.endpoint, equalTo("bogus endpoint url"));
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                nullValue());
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), nullValue());
 
         props.put("customLogin", "bogus login");
         setupEnvironment(props);
         builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                equalTo("bogus login"));
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
 
         props.put("customPassword", "bogus weak password");
         setupEnvironment(props);
         builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
 
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(),
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(),
                 equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                equalTo("bogus login"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
     }
 
     @Test
     public void testGithubBuilderWithAppInstallationToken() throws Exception {
 
         GitHubBuilder builder = new GitHubBuilder().withAppInstallationToken("bogus app token");
-        assertThat(builder.credentialProvider, instanceOf(ImmutableCredentialProvider.UserCredentialProvider.class));
-        assertThat(builder.credentialProvider.getEncodedAuthorization(), equalTo("token bogus app token"));
-        assertThat(((ImmutableCredentialProvider.UserCredentialProvider) builder.credentialProvider).getLogin(),
-                equalTo(""));
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus app token"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo(""));
 
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();

@@ -7,17 +7,17 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class OrgInstallationCredentialProviderTest extends AbstractGHAppInstallationTest {
+public class OrgInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
 
-    public OrgInstallationCredentialProviderTest() {
+    public OrgInstallationAuthorizationProviderTest() {
         useDefaultGitHub = false;
     }
 
     @Test(expected = HttpException.class)
     public void invalidJWTTokenRaisesException() throws IOException {
-        OrgInstallationCredentialProvider provider = new OrgInstallationCredentialProvider("testOrganization",
-                ImmutableCredentialProvider.fromJwtToken("myToken"));
-        gitHub = getGitHubBuilder().withCredentialProvider(provider)
+        OrgInstallationAuthorizationProvider provider = new OrgInstallationAuthorizationProvider("testOrganization",
+                ImmutableAuthorizationProvider.fromJwtToken("myToken"));
+        gitHub = getGitHubBuilder().withAuthorizationProvider(provider)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
 
@@ -26,9 +26,9 @@ public class OrgInstallationCredentialProviderTest extends AbstractGHAppInstalla
 
     @Test
     public void validJWTTokenAllowsOauthTokenRequest() throws IOException {
-        OrgInstallationCredentialProvider provider = new OrgInstallationCredentialProvider("hub4j-test-org",
-                ImmutableCredentialProvider.fromJwtToken("bogus-valid-token"));
-        gitHub = getGitHubBuilder().withCredentialProvider(provider)
+        OrgInstallationAuthorizationProvider provider = new OrgInstallationAuthorizationProvider("hub4j-test-org",
+                ImmutableAuthorizationProvider.fromJwtToken("bogus-valid-token"));
+        gitHub = getGitHubBuilder().withAuthorizationProvider(provider)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
         String encodedAuthorization = provider.getEncodedAuthorization();

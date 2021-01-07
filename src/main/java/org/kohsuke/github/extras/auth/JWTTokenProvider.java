@@ -62,7 +62,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
             if (Instant.now().isAfter(validUntil)) {
                 token = refreshJWT();
             }
-            return token;
+            return String.format("Bearer %s", token);
         }
     }
 

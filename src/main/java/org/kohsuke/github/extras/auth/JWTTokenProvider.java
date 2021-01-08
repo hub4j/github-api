@@ -29,8 +29,6 @@ import javax.annotation.Nonnull;
  */
 public class JWTTokenProvider implements AuthorizationProvider {
 
-    private static final long MINUTES_10 = Duration.ofMinutes(10).toMillis();
-
     private final PrivateKey privateKey;
 
     @Nonnull

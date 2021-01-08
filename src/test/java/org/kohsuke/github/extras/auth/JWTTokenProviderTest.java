@@ -1,12 +1,12 @@
 package org.kohsuke.github.extras.auth;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GitHub;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class JWTTokenProviderTest extends AbstractGitHubWireMockTest {
 

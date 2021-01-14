@@ -1,4 +1,6 @@
-package org.kohsuke.github;
+package org.kohsuke.github.authorization;
+
+import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 

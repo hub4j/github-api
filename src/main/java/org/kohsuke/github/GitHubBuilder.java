@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
 
 import java.io.File;

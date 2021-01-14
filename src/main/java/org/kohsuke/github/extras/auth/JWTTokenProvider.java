@@ -3,7 +3,7 @@ package org.kohsuke.github.extras.auth;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.kohsuke.github.AuthorizationProvider;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
+import org.kohsuke.github.authorization.OrgAppInstallationAuthorizationProvider;
 
 import java.io.IOException;
 

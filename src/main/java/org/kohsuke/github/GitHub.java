@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
@@ -129,11 +130,11 @@ public class GitHub {
         orgs = new ConcurrentHashMap<>();
     }
 
-    static class CredentialRefreshGitHubWrapper extends GitHub {
+    private static class AuthorizationRefreshGitHubWrapper extends GitHub {
 
         private final AuthorizationProvider authorizationProvider;
 
-        CredentialRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
+        AuthorizationRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
             super(github.client);
             this.authorizationProvider = authorizationProvider;
             this.authorizationProvider.bind(this);

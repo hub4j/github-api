@@ -1,4 +1,10 @@
-package org.kohsuke.github;
+package org.kohsuke.github.authorization;
+
+import org.kohsuke.github.BetaApi;
+import org.kohsuke.github.GHAppInstallation;
+import org.kohsuke.github.GHAppInstallationToken;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 import java.time.Duration;

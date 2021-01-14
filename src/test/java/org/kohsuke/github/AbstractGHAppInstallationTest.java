@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.extras.auth.JWTTokenProvider;
 
 import java.io.File;

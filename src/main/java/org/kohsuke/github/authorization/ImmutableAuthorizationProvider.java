@@ -1,4 +1,4 @@
-package org.kohsuke.github;
+package org.kohsuke.github.authorization;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

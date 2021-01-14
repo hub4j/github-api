@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -49,6 +49,10 @@ public class JWTTokenProvider implements AuthorizationProvider {
         this(applicationId, loadPrivateKey(keyPath));
     }
 
+    public JWTTokenProvider(String applicationId, String privateKey) throws GeneralSecurityException {
+        this(applicationId, getPrivateKeyFromString(privateKey));
+    }
+
     public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
         this.privateKey = privateKey;
         this.applicationId = applicationId;

@@ -7,6 +7,8 @@ import org.kohsuke.github.extras.authorization.JWTTokenProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -34,9 +36,12 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
             JWT_PROVIDER_1 = new JWTTokenProvider(TEST_APP_ID_1,
                     new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_1).getFile()));
             JWT_PROVIDER_2 = new JWTTokenProvider(TEST_APP_ID_2,
-                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()));
+                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()).toPath());
             JWT_PROVIDER_3 = new JWTTokenProvider(TEST_APP_ID_3,
-                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()));
+                    new String(
+                            Files.readAllBytes(
+                                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()).toPath()),
+                            StandardCharsets.UTF_8));
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException("These should never fail", e);
         }

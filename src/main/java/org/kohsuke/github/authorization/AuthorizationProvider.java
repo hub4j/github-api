@@ -1,7 +1,5 @@
 package org.kohsuke.github.authorization;
 
-import org.kohsuke.github.GitHub;
-
 import java.io.IOException;
 
 /**
@@ -32,17 +30,6 @@ public interface AuthorizationProvider {
      *             on any error that prevents the provider from getting a valid authorization
      */
     String getEncodedAuthorization() throws IOException;
-
-    /**
-     * Binds this authorization provider to a github instance.
-     *
-     * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
-     *
-     * @param github
-     *            The github instance to be used for refreshing dynamic credentials
-     */
-    default void bind(GitHub github) {
-    }
 
     /**
      * A {@link AuthorizationProvider} that ensures that no credentials are returned

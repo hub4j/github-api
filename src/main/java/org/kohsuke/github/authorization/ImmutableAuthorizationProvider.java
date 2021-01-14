@@ -26,7 +26,7 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
      *         oauthAccessToken
      */
     public static AuthorizationProvider fromOauthToken(String oauthAccessToken) {
-        return new UserAuthorizationProvider(String.format("token %s", oauthAccessToken));
+        return new UserProvider(String.format("token %s", oauthAccessToken));
     }
 
     /**
@@ -41,7 +41,7 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
      *         oauthAccessToken
      */
     public static AuthorizationProvider fromOauthToken(String oauthAccessToken, String login) {
-        return new UserAuthorizationProvider(String.format("token %s", oauthAccessToken), login);
+        return new UserProvider(String.format("token %s", oauthAccessToken), login);
     }
 
     /**
@@ -84,7 +84,7 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
             String charsetName = StandardCharsets.UTF_8.name();
             String b64encoded = Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
             String encodedAuthorization = String.format("Basic %s", b64encoded);
-            return new UserAuthorizationProvider(encodedAuthorization, login);
+            return new UserProvider(encodedAuthorization, login);
         } catch (UnsupportedEncodingException e) {
             // If UTF-8 isn't supported, there are bigger problems
             throw new IllegalStateException("Could not generate encoded authorization", e);
@@ -100,21 +100,22 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
      * An internal class representing all user-related credentials, which are credentials that have a login or should
      * query the user endpoint for the login matching this credential.
      */
-    static class UserAuthorizationProvider extends ImmutableAuthorizationProvider {
+    private static class UserProvider extends ImmutableAuthorizationProvider implements UserAuthorizationProvider {
 
         private final String login;
 
-        UserAuthorizationProvider(String authorization) {
+        UserProvider(String authorization) {
             this(authorization, null);
         }
 
-        UserAuthorizationProvider(String authorization, String login) {
+        UserProvider(String authorization, String login) {
             super(authorization);
             this.login = login;
         }
 
         @CheckForNull
-        String getLogin() {
+        @Override
+        public String getLogin() {
             return login;
         }
 

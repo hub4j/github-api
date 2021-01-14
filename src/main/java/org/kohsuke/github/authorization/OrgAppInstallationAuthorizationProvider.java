@@ -4,7 +4,6 @@ import org.kohsuke.github.BetaApi;
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GitHub;
-import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -16,12 +15,8 @@ import javax.annotation.Nonnull;
 /**
  * Provides an AuthorizationProvider that performs automatic token refresh.
  */
-public class OrgAppInstallationAuthorizationProvider implements AuthorizationProvider {
+public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
 
-    private GitHub baseGitHub;
-    private GitHub gitHub;
-
-    private final AuthorizationProvider refreshProvider;
     private final String organizationName;
 
     private String latestToken;
@@ -43,13 +38,8 @@ public class OrgAppInstallationAuthorizationProvider implements AuthorizationPro
     @Deprecated
     public OrgAppInstallationAuthorizationProvider(String organizationName,
             AuthorizationProvider authorizationProvider) {
+        super(authorizationProvider);
         this.organizationName = organizationName;
-        this.refreshProvider = authorizationProvider;
-    }
-
-    @Override
-    public void bind(GitHub github) {
-        this.baseGitHub = github;
     }
 
     @Override
@@ -63,10 +53,7 @@ public class OrgAppInstallationAuthorizationProvider implements AuthorizationPro
     }
 
     private void refreshToken() throws IOException {
-        if (gitHub == null) {
-            gitHub = new GitHub.CredentialRefreshGitHubWrapper(this.baseGitHub, refreshProvider);
-        }
-
+        GitHub gitHub = this.gitHub();
         GHAppInstallation installationByOrganization = gitHub.getApp()
                 .getInstallationByOrganization(this.organizationName);
         GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();

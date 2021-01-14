@@ -3,8 +3,8 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.authorization.ImmutableAuthorizationProvider.UserAuthorizationProvider;
 import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

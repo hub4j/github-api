@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
-import org.kohsuke.github.authorization.ImmutableAuthorizationProvider.UserAuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

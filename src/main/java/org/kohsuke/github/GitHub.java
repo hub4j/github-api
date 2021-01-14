@@ -112,7 +112,10 @@ public class GitHub {
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             AuthorizationProvider authorizationProvider) throws IOException {
-        authorizationProvider.bind(this);
+        if (authorizationProvider instanceof DependentAuthorizationProvider) {
+            ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+        }
+
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 connector,
                 rateLimitHandler,
@@ -130,6 +133,47 @@ public class GitHub {
         orgs = new ConcurrentHashMap<>();
     }
 
+    public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
+
+        private GitHub baseGitHub;
+        private GitHub gitHub;
+        private final AuthorizationProvider authorizationProvider;
+
+        /**
+         * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
+         *
+         * @param authorizationProvider
+         *            A authorization provider to be used when refreshing this authorization provider.
+         */
+        @BetaApi
+        @Deprecated
+        protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
+            this.authorizationProvider = authorizationProvider;
+        }
+
+        /**
+         * Binds this authorization provider to a github instance.
+         *
+         * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
+         *
+         * @param github
+         *            The github instance to be used for refreshing dynamic credentials
+         */
+        synchronized void bind(GitHub github) {
+            if (baseGitHub != null) {
+                throw new IllegalStateException("Already bound to another GitHub instance.");
+            }
+            this.baseGitHub = github;
+        }
+
+        protected synchronized final GitHub gitHub() {
+            if (gitHub == null) {
+                gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
+            }
+            return gitHub;
+        }
+    }
+
     private static class AuthorizationRefreshGitHubWrapper extends GitHub {
 
         private final AuthorizationProvider authorizationProvider;
@@ -137,7 +181,11 @@ public class GitHub {
         AuthorizationRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
             super(github.client);
             this.authorizationProvider = authorizationProvider;
-            this.authorizationProvider.bind(this);
+
+            // no dependent authorization providers nest like this currently, but they might in future
+            if (authorizationProvider instanceof DependentAuthorizationProvider) {
+                ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+            }
         }
 
         @Nonnull

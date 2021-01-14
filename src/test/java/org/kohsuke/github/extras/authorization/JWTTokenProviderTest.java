@@ -1,4 +1,4 @@
-package org.kohsuke.github.extras.auth;
+package org.kohsuke.github.extras.authorization;
 
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;

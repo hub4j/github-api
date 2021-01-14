@@ -2,8 +2,12 @@ package org.kohsuke.github;
 
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.extras.authorization.JWTTokenProvider;
 
+import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -20,6 +24,23 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
     private static String PRIVATE_KEY_FILE_APP_1 = "/ghapi-test-app-1.private-key.pem";
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
     private static String PRIVATE_KEY_FILE_APP_3 = "/ghapi-test-app-3.private-key.pem";
+
+    private static AuthorizationProvider JWT_PROVIDER_1;
+    private static AuthorizationProvider JWT_PROVIDER_2;
+    private static AuthorizationProvider JWT_PROVIDER_3;
+
+    AbstractGHAppInstallationTest() {
+        try {
+            JWT_PROVIDER_1 = new JWTTokenProvider(TEST_APP_ID_1,
+                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_1).getFile()));
+            JWT_PROVIDER_2 = new JWTTokenProvider(TEST_APP_ID_2,
+                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()));
+            JWT_PROVIDER_3 = new JWTTokenProvider(TEST_APP_ID_3,
+                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()));
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException("These should never fail", e);
+        }
+    }
 
     private String createJwtToken(String keyFileResouceName, String appId) {
         try {
@@ -63,15 +84,15 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
     }
 
     protected GHAppInstallation getAppInstallationWithTokenApp1() throws IOException {
-        return getAppInstallationWithToken(createJwtToken(PRIVATE_KEY_FILE_APP_1, TEST_APP_ID_1));
+        return getAppInstallationWithToken(JWT_PROVIDER_1.getEncodedAuthorization());
     }
 
     protected GHAppInstallation getAppInstallationWithTokenApp2() throws IOException {
-        return getAppInstallationWithToken(createJwtToken(PRIVATE_KEY_FILE_APP_2, TEST_APP_ID_2));
+        return getAppInstallationWithToken(JWT_PROVIDER_2.getEncodedAuthorization());
     }
 
     protected GHAppInstallation getAppInstallationWithTokenApp3() throws IOException {
-        return getAppInstallationWithToken(createJwtToken(PRIVATE_KEY_FILE_APP_3, TEST_APP_ID_3));
+        return getAppInstallationWithToken(JWT_PROVIDER_3.getEncodedAuthorization());
     }
 
 }

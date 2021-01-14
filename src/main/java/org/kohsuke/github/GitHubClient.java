@@ -1,33 +1,19 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -56,17 +42,13 @@ abstract class GitHubClient {
     static final int retryTimeoutMillis = 100;
     /* private */ final String login;
 
-    /**
-     * Value of the authorization header to be sent with the request.
-     */
-    /* private */ final String encodedAuthorization;
-
     // Cache of myself object.
     private final String apiUrl;
 
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
+    private final AuthorizationProvider authorizationProvider;
 
     private HttpConnector connector;
 
@@ -91,15 +73,12 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
+            Consumer<GHMyself> myselfConsumer,
+            AuthorizationProvider authorizationProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -111,33 +90,38 @@ abstract class GitHubClient {
         this.apiUrl = apiUrl;
         this.connector = connector;
 
-        if (oauthAccessToken != null) {
-            encodedAuthorization = "token " + oauthAccessToken;
-        } else {
-            if (jwtToken != null) {
-                encodedAuthorization = "Bearer " + jwtToken;
-            } else if (password != null) {
-                String authorization = (login + ':' + password);
-                String charsetName = StandardCharsets.UTF_8.name();
-                encodedAuthorization = "Basic "
-                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-            } else {// anonymous access
-                encodedAuthorization = null;
-            }
-        }
+        // Prefer credential configuration via provider
+        this.authorizationProvider = authorizationProvider;
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
 
-        if (login == null && encodedAuthorization != null && jwtToken == null) {
-            GHMyself myself = fetch(GHMyself.class, "/user");
-            login = myself.getLogin();
-            if (myselfConsumer != null) {
-                myselfConsumer.accept(myself);
+        this.login = getCurrentUser(myselfConsumer);
+    }
+
+    private String getCurrentUser(Consumer<GHMyself> myselfConsumer) throws IOException {
+        String login = null;
+        if (this.authorizationProvider instanceof UserAuthorizationProvider
+                && this.authorizationProvider.getEncodedAuthorization() != null) {
+
+            UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
+
+            login = userAuthorizationProvider.getLogin();
+
+            if (login == null) {
+                try {
+                    GHMyself myself = fetch(GHMyself.class, "/user");
+                    if (myselfConsumer != null) {
+                        myselfConsumer.accept(myself);
+                    }
+                    login = myself.getLogin();
+                } catch (IOException e) {
+                    return null;
+                }
             }
         }
-        this.login = login;
+        return login;
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
@@ -202,7 +186,13 @@ abstract class GitHubClient {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
+        try {
+            return login == null && this.authorizationProvider.getEncodedAuthorization() == null;
+        } catch (IOException e) {
+            // An exception here means that the provider failed to provide authorization parameters,
+            // basically meaning the same as "no auth"
+            return false;
+        }
     }
 
     /**
@@ -222,6 +212,11 @@ abstract class GitHubClient {
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
         return getRateLimit(RateLimitTarget.NONE);
+    }
+
+    @CheckForNull
+    protected String getEncodedAuthorization() throws IOException {
+        return authorizationProvider.getEncodedAuthorization();
     }
 
     @Nonnull
@@ -394,7 +389,6 @@ abstract class GitHubClient {
                                 "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
                                         + request.method() + " " + request.url().toString());
                     }
-
                     rateLimitChecker.checkRateLimit(this, request);
 
                     responseInfo = getResponseInfo(request);

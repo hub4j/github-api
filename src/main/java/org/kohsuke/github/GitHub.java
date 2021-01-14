@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
@@ -94,37 +95,110 @@ public class GitHub {
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
-     * @param login
-     *            The user ID on GitHub that you are logging in as. Can be omitted if the OAuth token is provided or if
-     *            logging in anonymously. Specifying this would save one API call.
-     * @param oauthAccessToken
-     *            Secret OAuth token.
-     * @param password
-     *            User's password. Always used in conjunction with the {@code login} parameter
      * @param connector
-     *            HttpConnector to use. Pass null to use default connector.
+     *            a connector
+     * @param rateLimitHandler
+     *            rateLimitHandler
+     * @param abuseLimitHandler
+     *            abuseLimitHandler
+     * @param rateLimitChecker
+     *            rateLimitChecker
+     * @param authorizationProvider
+     *            a authorization provider
      */
     GitHub(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
-            GitHubRateLimitChecker rateLimitChecker) throws IOException {
+            GitHubRateLimitChecker rateLimitChecker,
+            AuthorizationProvider authorizationProvider) throws IOException {
+        if (authorizationProvider instanceof DependentAuthorizationProvider) {
+            ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+        }
+
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
-                login,
-                oauthAccessToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                (myself) -> setMyself(myself));
+                (myself) -> setMyself(myself),
+                authorizationProvider);
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
+    }
+
+    private GitHub(GitHubClient client) {
+        this.client = client;
+        users = new ConcurrentHashMap<>();
+        orgs = new ConcurrentHashMap<>();
+    }
+
+    public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
+
+        private GitHub baseGitHub;
+        private GitHub gitHub;
+        private final AuthorizationProvider authorizationProvider;
+
+        /**
+         * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
+         *
+         * @param authorizationProvider
+         *            A authorization provider to be used when refreshing this authorization provider.
+         */
+        @BetaApi
+        @Deprecated
+        protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
+            this.authorizationProvider = authorizationProvider;
+        }
+
+        /**
+         * Binds this authorization provider to a github instance.
+         *
+         * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
+         *
+         * @param github
+         *            The github instance to be used for refreshing dynamic credentials
+         */
+        synchronized void bind(GitHub github) {
+            if (baseGitHub != null) {
+                throw new IllegalStateException("Already bound to another GitHub instance.");
+            }
+            this.baseGitHub = github;
+        }
+
+        protected synchronized final GitHub gitHub() {
+            if (gitHub == null) {
+                gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
+            }
+            return gitHub;
+        }
+    }
+
+    private static class AuthorizationRefreshGitHubWrapper extends GitHub {
+
+        private final AuthorizationProvider authorizationProvider;
+
+        AuthorizationRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
+            super(github.client);
+            this.authorizationProvider = authorizationProvider;
+
+            // no dependent authorization providers nest like this currently, but they might in future
+            if (authorizationProvider instanceof DependentAuthorizationProvider) {
+                ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+            }
+        }
+
+        @Nonnull
+        @Override
+        Requester createRequest() {
+            try {
+                // Override
+                return super.createRequest().setHeader("Authorization", authorizationProvider.getEncodedAuthorization())
+                        .rateLimit(RateLimitTarget.NONE);
+            } catch (IOException e) {
+                throw new GHException("Failed to create requester to refresh credentials", e);
+            }
+        }
     }
 
     /**

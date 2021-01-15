@@ -42,11 +42,15 @@ public class JWTTokenProvider implements AuthorizationProvider {
     private final String applicationId;
 
     public JWTTokenProvider(String applicationId, File keyFile) throws GeneralSecurityException, IOException {
-        this(applicationId, loadPrivateKey(keyFile.toPath()));
+        this(applicationId, keyFile.toPath());
     }
 
     public JWTTokenProvider(String applicationId, Path keyPath) throws GeneralSecurityException, IOException {
-        this(applicationId, loadPrivateKey(keyPath));
+        this(applicationId, new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8));
+    }
+
+    public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
+        this(applicationId, getPrivateKeyFromString(keyString));
     }
 
     public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
@@ -62,18 +66,6 @@ public class JWTTokenProvider implements AuthorizationProvider {
             }
             return String.format("Bearer %s", token);
         }
-    }
-
-    /**
-     * add dependencies for a jwt suite You can generate a key to load in this method with:
-     *
-     * <pre>
-     * openssl pkcs8 -topk8 -inform PEM -outform DER -in ~/github-api-app.private-key.pem -out ~/github-api-app.private-key.der -nocrypt
-     * </pre>
-     */
-    private static PrivateKey loadPrivateKey(Path keyPath) throws GeneralSecurityException, IOException {
-        String keyString = new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8);
-        return getPrivateKeyFromString(keyString);
     }
 
     /**

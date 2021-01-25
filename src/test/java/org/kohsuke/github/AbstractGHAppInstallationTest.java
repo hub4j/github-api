@@ -80,10 +80,11 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
                 .findFirst()
                 .get();
 
-        appInstallation
-                .setRoot(getGitHubBuilder().withAppInstallationToken(appInstallation.createToken().create().getToken())
-                        .withEndpoint(mockGitHub.apiServer().baseUrl())
-                        .build());
+        // TODO: this is odd
+        // appInstallation
+        // .setRoot(getGitHubBuilder().withAppInstallationToken(appInstallation.createToken().create().getToken())
+        // .withEndpoint(mockGitHub.apiServer().baseUrl())
+        // .build());
 
         return appInstallation;
     }

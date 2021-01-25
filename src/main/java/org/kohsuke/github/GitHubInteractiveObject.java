@@ -20,4 +20,8 @@ abstract class GitHubInteractiveObject {
     GitHubInteractiveObject(GitHub root) {
         this.root = root;
     }
+
+    GitHub getRoot() {
+        return root;
+    }
 }

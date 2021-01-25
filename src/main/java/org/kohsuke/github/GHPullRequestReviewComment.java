@@ -153,7 +153,20 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + getId();
+        return getApiRoute(false);
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @param includePullNumber
+     *            if true, includes the owning pull request's number in the route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute(boolean includePullNumber) {
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls"
+                + (includePullNumber ? "/" + owner.getNumber() : "") + "/comments/" + getId();
     }
 
     /**
@@ -192,8 +205,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return owner.root.createRequest()
                 .method("POST")
                 .with("body", body)
-                .with("in_reply_to", getId())
-                .withUrlPath(getApiRoute() + "/comments")
+                .withUrlPath(getApiRoute(true) + "/replies")
                 .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(owner);
     }

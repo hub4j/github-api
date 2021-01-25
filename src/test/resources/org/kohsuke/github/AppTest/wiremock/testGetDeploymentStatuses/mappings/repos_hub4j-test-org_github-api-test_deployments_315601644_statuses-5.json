@@ -1,0 +1,50 @@
+{
+  "id": "a0b7e5be-ca3f-419c-aa68-b6a13c945db2",
+  "name": "repos_hub4j-test-org_github-api-test_deployments_315601644_statuses",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-test/deployments/315601644/statuses",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.ant-man-preview+json, application/vnd.github.flash-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api-test_deployments_315601644_statuses-5.json",
+    "headers": {
+      "Date": "Sat, 23 Jan 2021 05:30:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"21fe0d85ad2d874ab9b70252f4bf3f2ac28e7168ad399f074a55eabd9d1a48f6\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo, repo_deployment",
+      "X-GitHub-Media-Type": "github.ant-man-preview; format=json, github.flash-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4890",
+      "X-RateLimit-Reset": "1611382753",
+      "x-ratelimit-used": "110",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DA01:86BF:FC586:1283BC:600BB48F"
+    }
+  },
+  "uuid": "a0b7e5be-ca3f-419c-aa68-b6a13c945db2",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-test-deployments-315601644-statuses",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-test-deployments-315601644-statuses-2",
+  "insertionIndex": 5
+}

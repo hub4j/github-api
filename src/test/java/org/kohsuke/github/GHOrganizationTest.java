@@ -36,11 +36,12 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
 
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHRepository repository = org.createRepository(GITHUB_API_TEST,
-                "a test repository used to test kohsuke's github-api",
-                "http://github-api.kohsuke.org/",
-                "Core Developers",
-                true);
+        GHRepository repository = org.createRepository(GITHUB_API_TEST)
+                .description("a test repository used to test kohsuke's github-api")
+                .homepage("http://github-api.kohsuke.org/")
+                .team(org.getTeamByName("Core Developers"))
+                .private_(false)
+                .create();
         Assert.assertNotNull(repository);
     }
 
@@ -72,7 +73,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .homepage("http://github-api.kohsuke.org/")
                 .team(team)
                 .autoInit(true)
-                .templateRepository(true)
+                .isTemplate(true)
                 .create();
         Assert.assertNotNull(repository);
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
@@ -136,7 +137,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     public void testListMembersWithFilter() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
-        List<GHUser> admins = org.listMembersWithFilter("all").asList();
+        List<GHUser> admins = org.listMembersWithFilter("all").toList();
 
         assertNotNull(admins);
         assertTrue(admins.size() >= 12); // In case more are added in the future
@@ -158,7 +159,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     public void testListMembersWithRole() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
-        List<GHUser> admins = org.listMembersWithRole("admin").asList();
+        List<GHUser> admins = org.listMembersWithRole("admin").toList();
 
         assertNotNull(admins);
         assertTrue(admins.size() >= 12); // In case more are added in the future

@@ -515,6 +515,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
+        assertThat(event.getRequestedAction(), nullValue());
 
         // Checks the deserialization of check_run
         GHCheckRun checkRun = event.getCheckRun();

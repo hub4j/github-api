@@ -4,7 +4,9 @@ import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -27,6 +29,85 @@ public class CommitTest extends AbstractGitHubWireMockTest {
             GHCommit expected = repo.getCommit(commit.getSHA1());
             assertEquals(expected.getFiles().size(), commit.getFiles().size());
         }
+    }
+
+    @Test
+    public void testQueryCommits() throws Exception {
+        List<String> sha1 = new ArrayList<String>();
+        List<GHCommit> commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(1199174400000L)
+                .until(1201852800000L)
+                .path("pom.xml")
+                .pageSize(100)
+                .list()
+                .toList();
+
+        assertThat(commits.get(0).getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
+        assertThat(commits.size(), equalTo(29));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .pageSize(100)
+                .list()
+                .toList();
+
+        assertThat(commits.get(0).getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
+        assertThat(commits.get(15).getSHA1(), equalTo("a5259970acaec9813e2a12a91f37dfc7871a5ef5"));
+        assertThat(commits.size(), equalTo(29));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .from("a5259970acaec9813e2a12a91f37dfc7871a5ef5")
+                .list()
+                .toList();
+
+        assertThat(commits.get(0).getSHA1(), equalTo("a5259970acaec9813e2a12a91f37dfc7871a5ef5"));
+        assertThat(commits.size(), equalTo(14));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .author("kohsuke")
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(0));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .pageSize(100)
+                .author("kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a")
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(266));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .path("pom.xml")
+                .pageSize(100)
+                .author("kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a")
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(648));
+
     }
 
     @Test

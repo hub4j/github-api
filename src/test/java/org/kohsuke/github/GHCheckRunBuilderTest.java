@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 @SuppressWarnings("deprecation") // preview
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
@@ -116,6 +117,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         } catch (HttpException x) {
             assertEquals(422, x.getResponseCode());
             assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
+            assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
+            assertThat(x.getResponseMessage(), equalTo("422 Unprocessable Entity"));
         }
     }
 

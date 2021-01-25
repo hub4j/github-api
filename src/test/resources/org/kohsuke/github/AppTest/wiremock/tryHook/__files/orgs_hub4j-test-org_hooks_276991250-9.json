@@ -1,0 +1,18 @@
+{
+  "type": "Organization",
+  "id": 276991250,
+  "name": "web",
+  "active": true,
+  "events": [
+    "push"
+  ],
+  "config": {
+    "url": "http://www.google.com/",
+    "insecure_ssl": "0",
+    "content_type": "form"
+  },
+  "updated_at": "2021-01-22T21:07:50Z",
+  "created_at": "2021-01-22T21:07:50Z",
+  "url": "https://api.github.com/orgs/hub4j-test-org/hooks/276991250",
+  "ping_url": "https://api.github.com/orgs/hub4j-test-org/hooks/276991250/pings"
+}

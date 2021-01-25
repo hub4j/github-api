@@ -1,10 +1,10 @@
 {
   "ref": "refs/heads/master",
-  "node_id": "MDM6UmVmMjMyNzE0NTk1Om1hc3Rlcg==",
+  "node_id": "MDM6UmVmMjMyNzE0NTk1OnJlZnMvaGVhZHMvbWFzdGVy",
   "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/refs/heads/master",
   "object": {
-    "sha": "4ae7229c06d96391696155ed9c324bde17a7b665",
+    "sha": "466725309d43aa6fe6cb67f8f4161451d627b43f",
     "type": "commit",
-    "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/4ae7229c06d96391696155ed9c324bde17a7b665"
+    "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/466725309d43aa6fe6cb67f8f4161451d627b43f"
   }
 }

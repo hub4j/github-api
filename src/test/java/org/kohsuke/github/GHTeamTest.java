@@ -41,7 +41,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
 
-        List<GHUser> admins = team.listMembers("admin").asList();
+        List<GHUser> admins = team.listMembers("admin").toList();
 
         assertNotNull(admins);
         assertThat("One admin in dummy team", admins.size() == 1);
@@ -55,7 +55,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
 
-        List<GHUser> justMembers = team.listMembers("member").asList();
+        List<GHUser> justMembers = team.listMembers("member").toList();
 
         assertThat("No regular members in team", justMembers.isEmpty());
     }

@@ -7,7 +7,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
@@ -87,22 +89,30 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         treeBuilder.add(PATH_DATA1, CONTENT_DATA1, false);
         treeBuilder.add(PATH_DATA2, CONTENT_DATA2, false);
 
-        updateTree();
+        GHCommit commit = updateTree();
 
         assertEquals(CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
         assertEquals(CONTENT_README.length(), getFileSize(PATH_README));
         assertEquals(CONTENT_DATA1.length, getFileSize(PATH_DATA1));
         assertEquals(CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+
+        assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
+        assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));
+
     }
 
-    private void updateTree() throws IOException {
+    private GHCommit updateTree() throws IOException {
         String treeSha = treeBuilder.create().getSha();
-        String commitSha = new GHCommitBuilder(repo).message("Add files")
+        GHCommit commit = new GHCommitBuilder(repo).message("Add files")
                 .tree(treeSha)
+                .author("author", "author@author.com", new Date(1611433225969L))
+                .committer("committer", "committer@committer.com", new Date(1611433225968L))
                 .parent(masterRef.getObject().getSha())
-                .create()
-                .getSHA1();
+                .create();
+
+        String commitSha = commit.getSHA1();
         masterRef.updateTo(commitSha);
+        return commit;
     }
 
     private long getFileSize(String path) throws IOException {

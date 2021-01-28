@@ -1160,6 +1160,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
 
             /**
              * Obtains the timestamp of the commit
+             *
              * @return the timestamp
              */
             public Date getTimestamp() {

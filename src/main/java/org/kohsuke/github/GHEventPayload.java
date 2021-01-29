@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -1067,7 +1068,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
         public static class PushCommit {
             private GitUser author;
             private GitUser committer;
-            private String url, sha, message;
+            private String url, sha, message, timestamp;
             private boolean distinct;
             private List<String> added, removed, modified;
 
@@ -1155,6 +1156,15 @@ public class GHEventPayload extends GitHubInteractiveObject {
              */
             public List<String> getModified() {
                 return modified;
+            }
+
+            /**
+             * Obtains the timestamp of the commit
+             *
+             * @return the timestamp
+             */
+            public Date getTimestamp() {
+                return GitHubClient.parseDate(timestamp);
             }
         }
     }

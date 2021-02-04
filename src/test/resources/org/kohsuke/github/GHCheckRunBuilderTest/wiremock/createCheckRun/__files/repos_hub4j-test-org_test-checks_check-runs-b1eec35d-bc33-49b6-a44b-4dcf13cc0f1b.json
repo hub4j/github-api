@@ -13,7 +13,7 @@
   "output": {
     "title": "Some Title",
     "summary": "what happened…",
-    "text": null,
+    "text": "Hello Text!",
     "annotations_count": 1,
     "annotations_url": "https://api.github.com/repos/hub4j-test-org/test-checks/check-runs/1424883286/annotations"
   },

@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.kohsuke.github.Previews.ANTIOPE;
-import static org.kohsuke.github.Previews.GROOT;
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.GROOT;
 
 /**
  * A commit in a repository.

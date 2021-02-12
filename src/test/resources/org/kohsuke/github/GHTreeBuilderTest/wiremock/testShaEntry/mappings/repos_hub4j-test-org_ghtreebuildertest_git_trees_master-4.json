@@ -1,5 +1,5 @@
 {
-  "id": "2193534b-ce04-4633-95ae-aa382de15657",
+  "id": "aa116b70-dab5-412d-9174-5265a0de3bb6",
   "name": "repos_hub4j-test-org_ghtreebuildertest_git_trees_master",
   "request": {
     "url": "/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/master?recursive=1",
@@ -14,35 +14,35 @@
     "status": 200,
     "bodyFileName": "repos_hub4j-test-org_ghtreebuildertest_git_trees_master-4.json",
     "headers": {
-      "Date": "Thu, 09 Jan 2020 03:40:28 GMT",
+      "Date": "Sat, 23 Jan 2021 20:24:26 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4800",
-      "X-RateLimit-Reset": "1578544466",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
         "Accept-Encoding"
       ],
-      "ETag": "W/\"bc1dabae0f1da7c131c222066ece739f\"",
-      "Last-Modified": "Thu, 09 Jan 2020 03:40:27 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "W/\"8aa5db174489f954a0b68d45e2a7800e51bb532f474f1a7fd721a73857628d14\"",
+      "last-modified": "Sat, 23 Jan 2021 20:24:25 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4839",
+      "X-RateLimit-Reset": "1611434953",
+      "x-ratelimit-used": "161",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E87C:6E51:450F6:57F5F:5E16A0AC"
+      "X-GitHub-Request-Id": "F07A:0E3D:17E3C:20153:600C85FA"
     }
   },
-  "uuid": "2193534b-ce04-4633-95ae-aa382de15657",
+  "uuid": "aa116b70-dab5-412d-9174-5265a0de3bb6",
   "persistent": true,
   "insertionIndex": 4
 }

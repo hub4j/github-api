@@ -26,6 +26,22 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getRepository() throws IOException {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+
+        assertThat(repo.getFullName(), equalTo("hub4j/github-api"));
+
+        GHRepository repo2 = gitHub.getRepositoryById(Long.toString(repo.getId()));
+        assertThat(repo2.getFullName(), equalTo("hub4j/github-api"));
+
+        try {
+            gitHub.getRepository("hub4j_github-api");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
+    }
+
+    @Test
     public void getOrgs() throws IOException {
         int iterations = 10;
         Set<Long> orgIds = new HashSet<Long>();
@@ -34,6 +50,18 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             // System.out.println(org.getName());
         }
         assertThat(orgIds.size(), equalTo(iterations));
+
+        GHOrganization org = gitHub.getOrganization("hub4j");
+        GHOrganization org2 = gitHub.getOrganization("hub4j");
+        assertThat(org.getLogin(), equalTo("hub4j"));
+        // caching
+        assertThat(org, sameInstance(org2));
+
+        gitHub.refreshCache();
+        org2 = gitHub.getOrganization("hub4j");
+        assertThat(org2.getLogin(), equalTo("hub4j"));
+        // cache cleared
+        assertThat(org, not(sameInstance(org2)));
     }
 
     @Test

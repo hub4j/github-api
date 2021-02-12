@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -126,6 +127,19 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertEquals(UNKNOWN_SIGNATURE_TYPE, verification.getReason());
     }
 
+    @Test
+    public void listStargazers() throws IOException {
+        GHRepository repository = getRepository();
+        assertThat(repository.listStargazers2().toList(), empty());
+
+        repository = gitHub.getOrganization("hub4j").getRepository("github-api");
+        Iterable<GHStargazer> stargazers = repository.listStargazers2();
+        GHStargazer stargazer = stargazers.iterator().next();
+        assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
+        assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));
+        assertThat(stargazer.getRepository(), sameInstance(repository));
+    }
+
     // Issue #607
     @Test
     public void getBranchNonExistentBut200Status() throws Exception {
@@ -151,11 +165,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void subscription() throws Exception {
         GHRepository r = getRepository();
         assertNull(r.getSubscription());
-
         GHSubscription s = r.subscribe(true, false);
-        assertEquals(s.getRepository(), r);
+        try {
 
-        s.delete();
+            assertEquals(s.getRepository(), r);
+            assertThat(s.isIgnored(), equalTo(false));
+            assertThat(s.isSubscribed(), equalTo(true));
+            assertThat(s.getRepositoryUrl().toString(), containsString("/repos/hub4j-test-org/github-api"));
+            assertThat(s.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/subscription"));
+
+            assertThat(s.getReason(), nullValue());
+            assertThat(s.getCreatedAt(), equalTo(new Date(1611377286000L)));
+        } finally {
+            s.delete();
+        }
 
         assertNull(r.getSubscription());
     }
@@ -656,17 +679,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         } catch (Exception e) {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
             assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
-        }
-
-        try {
-            GHRepository repo = getTempRepository();
-            repo.listRefs("tags").asList();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHException.class));
-            assertThat(e.getMessage(), containsString("Failed to retrieve "));
-            assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
-            assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
         }
     }
 

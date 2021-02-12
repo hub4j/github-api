@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -49,6 +50,10 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         assertEquals(commitSha, tag.getObject().getSha());
         assertFalse(tag.getVerification().isVerified());
         assertEquals(tag.getVerification().getReason(), GHVerification.Reason.UNSIGNED);
+        assertThat(tag.getUrl(),
+                containsString("/repos/hub4j-test-org/github-api/git/tags/e7aa6d4afbaa48669f0bbe11ca3c4d787b2b153c"));
+        assertThat(tag.getOwner().getId(), equalTo(repo.getId()));
+        assertThat(tag.getTagger().getEmail(), equalTo("martin.vanzijl@gmail.com"));
 
         // Make a reference to the newly created tag.
         GHRef ref = repo.createRef("refs/tags/" + tagName, tag.getSha());

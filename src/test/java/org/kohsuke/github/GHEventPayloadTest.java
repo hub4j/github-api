@@ -361,6 +361,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getCommits().get(0).getRemoved().size(), is(0));
         assertThat(event.getCommits().get(0).getModified().size(), is(1));
         assertThat(event.getCommits().get(0).getModified().get(0), is("README.md"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(event.getCommits().get(0).getTimestamp()), is("2015-05-05T23:40:15Z"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwnerName(), is("baxterthehacker"));
         assertThat(event.getRepository().getUrl().toExternalForm(),
@@ -515,6 +518,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
+        assertThat(event.getRequestedAction(), nullValue());
 
         // Checks the deserialization of check_run
         GHCheckRun checkRun = event.getCheckRun();

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
 
 /**
  * Builder to configure the branch protection settings.

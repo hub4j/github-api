@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * Creates a access token for a GitHub App Installation

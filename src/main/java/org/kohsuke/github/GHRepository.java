@@ -58,7 +58,7 @@ import javax.annotation.Nonnull;
 
 import static java.util.Arrays.*;
 import static java.util.Objects.requireNonNull;
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.*;
 
 /**
  * A repository on GitHub.

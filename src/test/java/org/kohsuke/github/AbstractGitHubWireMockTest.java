@@ -100,7 +100,6 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
-            builder.oauthToken = null;
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 

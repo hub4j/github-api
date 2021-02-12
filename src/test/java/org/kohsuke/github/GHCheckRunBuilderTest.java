@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 @SuppressWarnings("deprecation") // preview
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
@@ -48,7 +49,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withExternalID("whatever")
                 .withStartedAt(new Date(999_999_000))
                 .withCompletedAt(new Date(999_999_999))
-                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")
+                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…").withText("Hello Text!")
                         .add(new GHCheckRunBuilder.Annotation("stuff.txt",
                                 1,
                                 GHCheckRun.AnnotationLevel.NOTICE,
@@ -61,11 +62,14 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertEquals("completed", checkRun.getStatus());
         assertEquals(1, checkRun.getOutput().getAnnotationsCount());
         assertEquals(1424883286, checkRun.getId());
+        assertEquals("Hello Text!", checkRun.getOutput().getText());
     }
 
     @Test
     public void createCheckRunManyAnnotations() throws Exception {
-        GHCheckRunBuilder.Output output = new GHCheckRunBuilder.Output("Big Run", "Lots of stuff here »");
+        GHCheckRunBuilder.Output output = new GHCheckRunBuilder.Output("Big Run", "Lots of stuff here »")
+                .withText("Hello Text!");
+
         for (int i = 0; i < 101; i++) {
             output.add(
                     new GHCheckRunBuilder.Annotation("stuff.txt", 1, GHCheckRun.AnnotationLevel.NOTICE, "hello #" + i));
@@ -79,6 +83,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertEquals("Big Run", checkRun.getOutput().getTitle());
         assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
+        assertEquals("Hello Text!", checkRun.getOutput().getText());
         assertEquals(1424883599, checkRun.getId());
     }
 
@@ -116,6 +121,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         } catch (HttpException x) {
             assertEquals(422, x.getResponseCode());
             assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
+            assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
+            assertThat(x.getResponseMessage(), equalTo("422 Unprocessable Entity"));
         }
     }
 

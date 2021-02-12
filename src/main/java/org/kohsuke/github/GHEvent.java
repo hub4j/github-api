@@ -12,6 +12,7 @@ import java.util.Locale;
 public enum GHEvent {
     CHECK_RUN,
     CHECK_SUITE,
+    CODE_SCANNING_ALERT,
     COMMIT_COMMENT,
     CONTENT_REFERENCE,
     CREATE,

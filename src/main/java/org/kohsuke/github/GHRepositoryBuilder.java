@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 

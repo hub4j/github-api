@@ -1,0 +1,55 @@
+{
+  "id": "67d396af-7085-48aa-961c-2c7cd3977744",
+  "name": "orgs_hub4j-test-org_hooks",
+  "request": {
+    "url": "/orgs/hub4j-test-org/hooks",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"web\",\"active\":true,\"config\":{\"url\":\"http://www.google.com/\"}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "orgs_hub4j-test-org_hooks-8.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 21:07:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"ed33789e95d8d9fc5f7c43f007c195db28911a05c717bab6c08607b2e1827510\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org_hook",
+      "Location": "https://api.github.com/orgs/hub4j-test-org/hooks/276991250",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4868",
+      "X-RateLimit-Reset": "1611350375",
+      "x-ratelimit-used": "132",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C912:2DA2:50C373:5DB98D:600B3EA6"
+    }
+  },
+  "uuid": "67d396af-7085-48aa-961c-2c7cd3977744",
+  "persistent": true,
+  "insertionIndex": 8
+}

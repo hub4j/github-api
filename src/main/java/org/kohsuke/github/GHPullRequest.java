@@ -36,8 +36,8 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.LYDIAN;
-import static org.kohsuke.github.Previews.SHADOW_CAT;
+import static org.kohsuke.github.internal.Previews.LYDIAN;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A pull request.

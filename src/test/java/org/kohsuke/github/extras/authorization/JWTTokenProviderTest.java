@@ -3,10 +3,16 @@ package org.kohsuke.github.extras.authorization;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.HttpException;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.Duration;
+import java.time.Instant;
+
+import static org.hamcrest.Matchers.*;
+
 /*
  * This test will request an application ensuring that the header for the "Authorization" matches a valid JWT token.
  * A JWT token in the Authorization header will always start with "ey" which is always the start of the base64
@@ -33,6 +39,9 @@ public class JWTTokenProviderTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testAuthorizationHeaderPattern() throws GeneralSecurityException, IOException {
+        // authorization header check is custom
+        snapshotNotAllowed();
+
         JWTTokenProvider jwtTokenProvider = new JWTTokenProvider(TEST_APP_ID_2,
                 new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()));
         GitHub gh = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
@@ -42,6 +51,37 @@ public class JWTTokenProviderTest extends AbstractGitHubWireMockTest {
         // Request the application, the wiremock matcher will ensure that the header
         // for the authorization is present and has a the format of a valid JWT token
         gh.getApp();
+    }
+
+    @Test
+    public void testIssuedAtSkew() throws GeneralSecurityException, IOException {
+        // TODO: This isn't a great test as it doesn't really check anything in CI
+        // This test was accurate when recorded but it doesn't verify that the jwt token is different
+        // or accurate in anyway.
+
+        JWTTokenProvider jwtTokenProvider = new JWTTokenProvider(TEST_APP_ID_2,
+                new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile())) {
+
+            @Override
+            Instant getIssuedAt(Instant now) {
+                return now.plus(Duration.ofMinutes(2));
+            }
+        };
+        GitHub gh = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAuthorizationProvider(jwtTokenProvider)
+                .build();
+
+        try {
+            // Request the application, the wiremock matcher will ensure that the header
+            // for the authorization is present and has a the format of a valid JWT token
+            gh.getApp();
+            fail();
+        } catch (HttpException e) {
+            assertThat(e.getResponseCode(), equalTo(401));
+            assertThat(e.getMessage(),
+                    containsString(
+                            "'Issued at' claim ('iat') must be an Integer representing the time that the assertion was issued"));
+        }
     }
 
 }

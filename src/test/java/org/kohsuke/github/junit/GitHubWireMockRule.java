@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.google.gson.*;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +65,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return servers.get("uploads");
     }
 
+    public WireMockServer codeloadServer() {
+        return servers.get("codeload");
+    }
+
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
@@ -88,6 +93,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (new File(apiServer().getOptions().filesRoot().getPath() + "_uploads").exists() || isUseProxy()) {
             initializeServer("uploads");
         }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_codeload").exists() || isUseProxy()) {
+            initializeServer("codeload");
+        }
     }
 
     @Override
@@ -106,6 +115,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (this.uploadsServer() != null) {
             this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
         }
+
+        if (this.codeloadServer() != null) {
+            this.codeloadServer().stubFor(proxyAllTo("https://codeload.github.com").atPriority(100));
+        }
+
     }
 
     @Override
@@ -121,6 +135,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.rawServer(), "https://raw.githubusercontent.com", true);
 
         recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
+
+        recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
     }
 
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
@@ -141,7 +157,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .extractTextBodiesOver(255));
 
             // After taking the snapshot, format the output
-            formatTestResources(new File(this.apiServer().getOptions().filesRoot().getPath()).toPath(), false);
+            formatTestResources(new File(server.getOptions().filesRoot().getPath()).toPath(), isRawServer);
         }
     }
 
@@ -213,6 +229,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             fileText = fileText.replace(this.uploadsServer().baseUrl(), "https://uploads.github.com");
                         }
 
+                        if (this.codeloadServer() != null) {
+                            fileText = fileText.replace(this.codeloadServer().baseUrl(), "https://codeload.github.com");
+                        }
+
                         // point bodyFile in the mapping to the renamed body file
                         if (entry != null && filePath.toString().contains("mappings")) {
                             fileText = fileText.replace("-" + entry.getKey(), "-" + entry.getValue());
@@ -263,16 +283,23 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     public String mapToMockGitHub(String body) {
         body = body.replace("https://api.github.com", this.apiServer().baseUrl());
 
-        if (this.rawServer() != null) {
-            body = body.replace("https://raw.githubusercontent.com", this.rawServer().baseUrl());
-        } else {
-            body = body.replace("https://raw.githubusercontent.com", this.apiServer().baseUrl() + "/raw");
-        }
+        body = replaceTargetServerUrl(body, this.rawServer(), "https://raw.githubusercontent.com", "/raw");
 
-        if (this.uploadsServer() != null) {
-            body = body.replace("https://uploads.github.com", this.uploadsServer().baseUrl());
+        body = replaceTargetServerUrl(body, this.uploadsServer(), "https://uploads.github.com", "/uploads");
+
+        body = replaceTargetServerUrl(body, this.codeloadServer(), "https://codeload.github.com", "/codeload");
+        return body;
+    }
+
+    @NonNull
+    private String replaceTargetServerUrl(String body,
+            WireMockServer wireMockServer,
+            String rawTarget,
+            String inactiveTarget) {
+        if (wireMockServer != null) {
+            body = body.replace(rawTarget, wireMockServer.baseUrl());
         } else {
-            body = body.replace("https://uploads.github.com", this.apiServer().baseUrl() + "/uploads");
+            body = body.replace(rawTarget, this.apiServer().baseUrl() + inactiveTarget);
         }
         return body;
     }
@@ -294,6 +321,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             Collection<HttpHeader> headers = response.getHeaders().all();
 
             fixListTraversalHeader(response, headers);
+            fixLocationHeader(response, headers);
 
             if ("application/json".equals(response.getHeaders().getContentTypeHeader().mimeTypePart())) {
 
@@ -321,11 +349,20 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
 
         private void fixListTraversalHeader(Response response, Collection<HttpHeader> headers) {
+            // Lists are broken up into pages. The Link header contains urls for previous and next pages.
             HttpHeader linkHeader = response.getHeaders().getHeader("Link");
             if (linkHeader.isPresent()) {
                 headers.removeIf(item -> item.keyEquals("Link"));
-                headers.add(HttpHeader.httpHeader("Link",
-                        linkHeader.firstValue().replace("https://api.github.com", rule.apiServer().baseUrl())));
+                headers.add(HttpHeader.httpHeader("Link", rule.mapToMockGitHub(linkHeader.firstValue())));
+            }
+        }
+
+        private void fixLocationHeader(Response response, Collection<HttpHeader> headers) {
+            // For redirects, the Location header points to the new target.
+            HttpHeader linkHeader = response.getHeaders().getHeader("Location");
+            if (linkHeader.isPresent()) {
+                headers.removeIf(item -> item.keyEquals("Location"));
+                headers.add(HttpHeader.httpHeader("Location", rule.mapToMockGitHub(linkHeader.firstValue())));
             }
         }
 

@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,7 +50,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
@@ -57,13 +57,8 @@ import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 
 import static java.util.Arrays.*;
-import static org.kohsuke.github.internal.Previews.ANTIOPE;
-import static org.kohsuke.github.internal.Previews.ANT_MAN;
-import static org.kohsuke.github.internal.Previews.BAPTISTE;
-import static org.kohsuke.github.internal.Previews.FLASH;
-import static org.kohsuke.github.internal.Previews.INERTIA;
-import static org.kohsuke.github.internal.Previews.MERCY;
-import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
+import static java.util.Objects.requireNonNull;
+import static org.kohsuke.github.internal.Previews.*;
 
 /**
  * A repository on GitHub.
@@ -1788,7 +1783,7 @@ public class GHRepository extends GHObject {
         return root.createRequest()
                 .withHeader("Accept", "application/vnd.github.v3.raw")
                 .withUrlPath(target)
-                .fetchStream();
+                .fetchStream(Requester::copyInputStream);
     }
 
     /**
@@ -2815,7 +2810,7 @@ public class GHRepository extends GHObject {
                         .with("mode", mode == null ? null : mode.toString())
                         .with("context", getFullName())
                         .withUrlPath("/markdown")
-                        .fetchStream(),
+                        .fetchStream(Requester::copyInputStream),
                 "UTF-8");
     }
 
@@ -2970,6 +2965,52 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
+     *
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @param ref
+     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public <T> T readZip(InputStreamFunction<T> streamFunction, String ref) throws IOException {
+        return downloadArchive("zip", ref, streamFunction);
+    }
+
+    /**
+     * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
+     *
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @param ref
+     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
+        return downloadArchive("tar", ref, streamFunction);
+    }
+
+    private <T> T downloadArchive(@Nonnull String type,
+            @CheckForNull String ref,
+            @Nonnull InputStreamFunction<T> streamFunction) throws IOException {
+        requireNonNull(streamFunction, "Sink must not be null");
+        String tailUrl = getApiTailUrl(type + "ball");
+        if (ref != null) {
+            tailUrl += "/" + ref;
+        }
+        final Requester builder = root.createRequest().method("GET").withUrlPath(tailUrl);
+        return builder.fetchStream(streamFunction);
+    }
+
+    /**
      * Populate this object.
      *
      * @throws java.io.IOException
@@ -2980,7 +3021,7 @@ public class GHRepository extends GHObject {
             return; // can't populate if the root is offline
         }
 
-        final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+        final URL url = requireNonNull(getUrl(), "Missing instance URL!");
 
         try {
             // IMPORTANT: the url for repository records does not reliably point to the API url.

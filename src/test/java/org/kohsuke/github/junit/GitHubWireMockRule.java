@@ -12,12 +12,14 @@ import com.google.gson.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -64,6 +66,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return servers.get("uploads");
     }
 
+    public WireMockServer htmlServer() {
+        return servers.get("html");
+    }
+
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
@@ -74,6 +80,16 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     public boolean isTestWithOrg() {
         return GitHubWireMockRule.testWithOrg;
+    }
+
+    /**
+     * If a test wants to server html as part of the test, they can proxy any target they choose
+     *
+     * @return the url of the target server
+     */
+    @CheckForNull
+    protected URL getHtmlServerProxyTarget() {
+        return null;
     }
 
     @Override
@@ -88,6 +104,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (new File(apiServer().getOptions().filesRoot().getPath() + "_uploads").exists() || isUseProxy()) {
             initializeServer("uploads");
         }
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_html").exists() || isUseProxy()) {
+            initializeServer("html");
+        }
+
     }
 
     @Override
@@ -106,6 +126,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (this.uploadsServer() != null) {
             this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
         }
+
+        URL target = this.getHtmlServerProxyTarget();
+        if (this.htmlServer() != null && target != null) {
+            this.uploadsServer().stubFor(proxyAllTo(target.toString()).atPriority(100));
+        }
+
     }
 
     @Override
@@ -121,6 +147,13 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.rawServer(), "https://raw.githubusercontent.com", true);
 
         recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
+
+        // For raw server, only fix up mapping files
+        URL target = this.getHtmlServerProxyTarget();
+        if (target != null) {
+            recordSnapshot(this.htmlServer(), target.toString(), true);
+        }
+
     }
 
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {

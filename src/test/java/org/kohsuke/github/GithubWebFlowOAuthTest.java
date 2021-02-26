@@ -9,13 +9,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 /**
  * @author Kevin Harrington mad.hephaestus@gmail.com
  */
 public class GithubWebFlowOAuthTest extends AbstractGitHubWireMockTest {
+
+    GithubWebFlowOAuthTest() throws Exception {
+        mockGitHub.setHtmlServerProxyTarget(new URL("http://commonwealthrobotics.com"));
+    }
 
     @Test
     public void testWebFlowToken() throws Exception {
@@ -35,7 +36,7 @@ public class GithubWebFlowOAuthTest extends AbstractGitHubWireMockTest {
                 "madhephaestus", // username of the github user desired. this can be null to allow the user to decide
                 publicAPI, // the public key of the API
                 secret, // the secret which must never be committed in source
-                new URL("http://commonwealthrobotics.com")// where to go on success
+                new URL(mockGitHub.htmlServer().baseUrl()) // where to go on success
         );
         assert token != null;
         for (int i = 0; i < asList.size(); i++) {

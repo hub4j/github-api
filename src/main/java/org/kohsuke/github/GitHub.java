@@ -951,29 +951,29 @@ public class GitHub {
      *
      * @param scope
      *            the scope
-     * 
+     *
      * @param login
      *            the username desired to login as null means let the users browser decide
      * @param OAuthApplicationID
      *            the public ID for the OAuth application that is requesting the token
-     * 
+     *
      * @param OAuthApplicationSecret
      *            the secret code passed to GitHub to identify the application BE CAREFUL HERE this key needs to be kept
      *            secret so be mindful of that when using this API
-     * 
+     *
      * @param allowSignup
      *            If you want the user to signup for Github in the flow, set true
-     * 
+     *
      * @return the gh authorization
-     * 
+     *
      * @throws IOException
      *             the io exception
      * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps">Documentation</a>
-     * 
+     *
      * @note this method will use http://localhost:3737/success as the 'Authorization callback URL' this method will
      *       start an http server on port 3737 for the duration of the call the server will be closed when the user
      *       authenticates the application via the web browser or the server will be closed after 200 seconds.
-     * 
+     *
      * @note This method blocks for a very long time when waiting for user feedback
      */
     public GHAuthorization createOAuthTokenWebFlow(@Nonnull Collection<String> scope,
@@ -1074,14 +1074,14 @@ public class GitHub {
      * Creates a new authorization.
      * <p>
      * The token created can be then used for {@link GitHub#connectUsingOAuth(String)} in the future.
-     * 
+     *
      * @param state
      *            the unguessable random string you provided in Step 1. See
      *            https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github
-     * 
+     *
      * @param OAuthApplicationID
      *            the public ID for the OAuth application that is requesting the token
-     * 
+     *
      * @param OAuthApplicationSecret
      *            the secret code passed to GitHub to identify the application
      * @return the gh authorization
@@ -1089,7 +1089,7 @@ public class GitHub {
      *             the io exception
      * @see <a href=
      *      "https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github">Documentation</a>
-     * 
+     *
      */
     public GHAuthorization createOAuthTokenWebFlowStepTwo(@Nonnull String OAuthApplicationclient_id,
             @Nonnull String OAuthApplicationSecret,

@@ -42,6 +42,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
 
+    private URL htmlServerProxyTarget = null;
+
     public GitHubWireMockRule() {
         this(WireMockConfiguration.options());
     }
@@ -88,8 +90,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
      * @return the url of the target server
      */
     @CheckForNull
-    protected URL getHtmlServerProxyTarget() {
+    public URL getHtmlServerProxyTarget() {
         return null;
+    }
+
+    public void setHtmlServerProxyTarget(URL htmlServerProxyTarget) {
+        this.htmlServerProxyTarget = htmlServerProxyTarget;
     }
 
     @Override
@@ -127,7 +133,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
         }
 
-        URL target = this.getHtmlServerProxyTarget();
+        URL target = getHtmlServerProxyTarget();
         if (this.htmlServer() != null && target != null) {
             this.uploadsServer().stubFor(proxyAllTo(target.toString()).atPriority(100));
         }
@@ -149,7 +155,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
 
         // For raw server, only fix up mapping files
-        URL target = this.getHtmlServerProxyTarget();
+        URL target = getHtmlServerProxyTarget();
         if (target != null) {
             recordSnapshot(this.htmlServer(), target.toString(), true);
         }

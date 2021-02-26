@@ -79,9 +79,19 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         String key = "mit";
         GHLicense license = gitHub.getLicense(key);
         assertNotNull(license);
-        assertTrue("The name is correct", license.getName().equals("MIT License"));
-        assertTrue("The HTML URL is correct",
-                license.getHtmlUrl().equals(new URL("http://choosealicense.com/licenses/mit/")));
+        assertThat("The name is correct", license.getName(), equalTo("MIT License"));
+        assertThat("The HTML URL is correct",
+                license.getHtmlUrl(),
+                equalTo(new URL("http://choosealicense.com/licenses/mit/")));
+        assertThat(license.getBody(), startsWith("MIT License\n" + "\n" + "Copyright (c) [year] [fullname]\n\n"));
+        assertThat(license.getForbidden().size(), equalTo(0));
+        assertThat(license.getPermitted().size(), equalTo(0));
+        assertThat(license.getImplementation(),
+                equalTo("Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders."));
+        assertThat(license.getCategory(), nullValue());
+        assertThat(license.isFeatured(), equalTo(true));
+        assertThat(license.equals(null), equalTo(false));
+        assertThat(license.equals(gitHub.getLicense(key)), equalTo(true));
     }
 
     /**

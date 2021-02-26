@@ -34,6 +34,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         for (GHRepositoryStatistics.ContributorStats statsForAuthor : list) {
             if (authorLogin.equals(statsForAuthor.getAuthor().getLogin())) {
                 assertEquals(715, statsForAuthor.getTotal());
+                assertEquals("kohsuke made 715 contributions over 494 weeks", statsForAuthor.toString());
 
                 List<GHRepositoryStatistics.ContributorStats.Week> weeks = statsForAuthor.getWeeks();
                 assertEquals(494, weeks.size());
@@ -46,6 +47,8 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
                     assertEquals(63, week.getNumberOfAdditions());
                     assertEquals(56, week.getNumberOfDeletions());
                     assertEquals(5, week.getNumberOfCommits());
+                    assertEquals("Week starting 1541289600 - Additions: 63, Deletions: 56, Commits: 5",
+                            week.toString());
                 } catch (NoSuchElementException e) {
                     fail("Did not find week 1546128000");
                 }
@@ -131,6 +134,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             if (item.getWeekTimestamp() == 1535241600) {
                 assertEquals(185, item.getAdditions());
                 assertEquals(-243, item.getDeletions());
+                assertEquals("Week starting 1535241600 has 185 additions and 243 deletions", item.toString());
                 foundWeek = true;
                 break;
             }
@@ -196,6 +200,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
                 // TODO: Make an easier access method. Perhaps wrap in an
                 // object and have a method such as GetCommits(1, 16).
                 assertEquals(16, item.getNumberOfCommits());
+                assertEquals("Day 2 Hour 10: 16 commits", item.toString());
                 hourFound = true;
                 break;
             }

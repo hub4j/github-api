@@ -8,11 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.kohsuke.github.GHVerification.Reason.*;
 
 /**
  * @author Liam Newman
@@ -54,10 +56,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void archive() throws Exception {
+        // Archive is a one-way action in the API.
+        // After taking snapshot, manual state reset is required.
         snapshotNotAllowed();
 
-        // Archive is a one-way action in the API.
-        // We do thi this one
         GHRepository repo = getRepository();
 
         assertThat(repo.isArchived(), is(false));
@@ -73,6 +75,53 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
         assertThat(branch.getName(), is("test/#UrlEncode"));
+    }
+
+    @Test
+    public void createSignedCommitVerifyError() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("-----BEGIN PGP SIGNATURE-----\ninvalid\n-----END PGP SIGNATURE-----")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(GPGVERIFY_ERROR, verification.getReason());
+    }
+
+    @Test
+    public void createSignedCommitUnknownSignatureType() throws IOException {
+        GHRepository repository = getRepository();
+
+        GHTree ghTree = new GHTreeBuilder(repository).textEntry("a", "", false).create();
+
+        GHVerification verification = repository.createCommit()
+                .message("test signing")
+                .withSignature("unknown")
+                .tree(ghTree.getSha())
+                .create()
+                .getCommitShortInfo()
+                .getVerification();
+
+        assertEquals(UNKNOWN_SIGNATURE_TYPE, verification.getReason());
+    }
+
+    @Test
+    public void listStargazers() throws IOException {
+        GHRepository repository = getRepository();
+        assertThat(repository.listStargazers2().toList(), empty());
+
+        repository = gitHub.getOrganization("hub4j").getRepository("github-api");
+        Iterable<GHStargazer> stargazers = repository.listStargazers2();
+        GHStargazer stargazer = stargazers.iterator().next();
+        assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
+        assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));
+        assertThat(stargazer.getRepository(), sameInstance(repository));
     }
 
     // Issue #607
@@ -100,11 +149,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void subscription() throws Exception {
         GHRepository r = getRepository();
         assertNull(r.getSubscription());
-
         GHSubscription s = r.subscribe(true, false);
-        assertEquals(s.getRepository(), r);
+        try {
 
-        s.delete();
+            assertEquals(s.getRepository(), r);
+            assertThat(s.isIgnored(), equalTo(false));
+            assertThat(s.isSubscribed(), equalTo(true));
+            assertThat(s.getRepositoryUrl().toString(), containsString("/repos/hub4j-test-org/github-api"));
+            assertThat(s.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/subscription"));
+
+            assertThat(s.getReason(), nullValue());
+            assertThat(s.getCreatedAt(), equalTo(new Date(1611377286000L)));
+        } finally {
+            s.delete();
+        }
 
         assertNull(r.getSubscription());
     }
@@ -124,6 +182,54 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         } finally {
             repo.delete();
         }
+    }
+
+    @Test
+    public void testUpdateRepository() throws Exception {
+        String homepage = "https://github-api.kohsuke.org/apidocs/index.html";
+        String description = "A test repository for update testing via the github-api project";
+
+        GHRepository repo = getTempRepository();
+        GHRepository.Updater builder = repo.update();
+
+        // one merge option is always required
+        GHRepository updated = builder.allowRebaseMerge(false)
+                .allowSquashMerge(false)
+                .deleteBranchOnMerge(true)
+                .description(description)
+                .downloads(false)
+                .downloads(false)
+                .homepage(homepage)
+                .issues(false)
+                .private_(true)
+                .projects(false)
+                .wiki(false)
+                .done();
+
+        assertTrue(updated.isAllowMergeCommit());
+        assertFalse(updated.isAllowRebaseMerge());
+        assertFalse(updated.isAllowSquashMerge());
+        assertTrue(updated.isDeleteBranchOnMerge());
+        assertTrue(updated.isPrivate());
+        assertFalse(updated.hasDownloads());
+        assertFalse(updated.hasIssues());
+        assertFalse(updated.hasProjects());
+        assertFalse(updated.hasWiki());
+
+        assertEquals(homepage, updated.getHomepage());
+        assertEquals(description, updated.getDescription());
+
+        // test the other merge option and making the repo public again
+        GHRepository redux = updated.update().allowMergeCommit(false).allowRebaseMerge(true).private_(false).done();
+
+        assertFalse(redux.isAllowMergeCommit());
+        assertTrue(redux.isAllowRebaseMerge());
+        assertFalse(redux.isPrivate());
+
+        String updatedDescription = "updated using set()";
+        redux = redux.set().description(updatedDescription);
+
+        assertThat(redux.getDescription(), equalTo(updatedDescription));
     }
 
     @Test
@@ -191,6 +297,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         List<GHUser> users = new ArrayList<GHUser>();
 
         users.add(user);
+        users.add(gitHub.getUser("jimmysombrero2"));
         repo.addCollaborators(users, GHOrganization.Permission.PUSH);
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
@@ -248,6 +355,26 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
         String mainLanguage = r.getLanguage();
         assertTrue(r.listLanguages().containsKey(mainLanguage));
+    }
+
+    @Test
+    public void listCommitCommentsNoComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("c413fc1e3057332b93850ea48202627d29a37de5")
+                .toList();
+
+        assertThat("Commit has no comments", commitComments.isEmpty());
+    }
+
+    @Test
+    public void listCommitCommentsSomeComments() throws IOException {
+        List<GHCommitComment> commitComments = getRepository()
+                .listCommitComments("499d91f9f846b0087b2a20cf3648b49dc9c2eeef")
+                .toList();
+
+        assertThat("Two comments present", commitComments.size() == 2);
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 1")));
+        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 2")));
     }
 
     @Test // Issue #261
@@ -537,17 +664,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(e, instanceOf(GHFileNotFoundException.class));
             assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
         }
-
-        try {
-            GHRepository repo = getTempRepository();
-            repo.listRefs("tags").asList();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHException.class));
-            assertThat(e.getMessage(), containsString("Failed to retrieve "));
-            assertThat(e.getMessage(), containsString("/repos/hub4j-test-org/temp-listRefsEmptyTags/git/refs/tags"));
-            assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
-        }
     }
 
     @Test
@@ -587,6 +703,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         List<GHUser> collaborators = repo.listCollaborators().toList();
         assertThat(collaborators.size(), greaterThan(10));
+    }
+
+    @Test
+    public void listCollaboratorsFiltered() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHUser> allCollaborators = repo.listCollaborators().toList();
+        List<GHUser> filteredCollaborators = repo.listCollaborators(GHRepository.CollaboratorAffiliation.OUTSIDE)
+                .toList();
+        assertThat(filteredCollaborators.size(), lessThan(allCollaborators.size()));
     }
 
     @Test

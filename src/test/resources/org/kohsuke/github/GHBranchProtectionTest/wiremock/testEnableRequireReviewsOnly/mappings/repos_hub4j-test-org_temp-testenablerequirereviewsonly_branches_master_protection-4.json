@@ -1,54 +1,52 @@
 {
-  "id": "b57fab91-f2a6-4d52-b6d4-05e4a8be5df4",
+  "id": "816d7fb5-30e5-486c-8948-11c4e46d9dab",
   "name": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master_protection",
   "request": {
     "url": "/repos/hub4j-test-org/temp-testEnableRequireReviewsOnly/branches/master/protection",
     "method": "PUT",
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"required_pull_request_reviews\":{},\"required_status_checks\":null,\"restrictions\":null,\"enforce_admins\":false}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ],
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github.luke-cage-preview+json"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"required_pull_request_reviews\":{},\"required_status_checks\":null,\"restrictions\":null,\"enforce_admins\":false}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master_protection-b57fab91.json",
+    "bodyFileName": "repos_hub4j-test-org_temp-testenablerequirereviewsonly_branches_master_protection-4.json",
     "headers": {
-      "Date": "Tue, 19 Nov 2019 03:01:41 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
+      "Date": "Fri, 17 Jul 2020 17:50:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Status": "200 OK",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4922",
-      "X-RateLimit-Reset": "1574135997",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1595011796",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"b2d6921837e9e4b720085673dae0aa59\"",
+      "ETag": "W/\"f50071de6fc1a497405fe0ad6da7d674\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.luke-cage-preview; format=json",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C49E:6D70:39AC3:44807:5DD35B15"
+      "X-GitHub-Request-Id": "D206:1C0D:B36E9D:1A83850:5F11E4ED"
     }
   },
-  "uuid": "b57fab91-f2a6-4d52-b6d4-05e4a8be5df4",
+  "uuid": "816d7fb5-30e5-486c-8948-11c4e46d9dab",
   "persistent": true,
   "insertionIndex": 4
 }

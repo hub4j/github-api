@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
@@ -121,7 +121,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         this.body = body;
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root.createRequest()
@@ -133,7 +133,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .wrap(owner.root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()

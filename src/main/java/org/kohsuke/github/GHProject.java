@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * A GitHub project.
@@ -37,7 +37,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  */
 public class GHProject extends GHObject {
-    protected GitHub root;
     protected GHObject owner;
 
     private String owner_url;
@@ -80,10 +79,8 @@ public class GHProject extends GHObject {
                 } else if (owner_url.contains("/users/")) {
                     owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);
                 } else if (owner_url.contains("/repos/")) {
-                    owner = root.createRequest()
-                            .withUrlPath(getOwnerUrl().getPath())
-                            .fetch(GHRepository.class)
-                            .wrap(root);
+                    String[] pathElements = getOwnerUrl().getPath().split("/");
+                    owner = GHRepository.read(root, pathElements[1], pathElements[2]);
                 }
             } catch (FileNotFoundException e) {
                 return null;

@@ -1,0 +1,55 @@
+{
+  "id": "921db344-9c2f-490c-b683-06f269222a5c",
+  "name": "repos_hub4j-test-org_github-api_pulls_395_comments_562972753_replies",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/395/comments/562972753/replies",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"This is a reply.\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_395_comments_562972753_replies-12.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 23:38:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"cb47518f479227da1db2d0ede03e8509ed8384b9ec5536a47c2972091c6f94e0\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/comments/562972758",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4805",
+      "X-RateLimit-Reset": "1611361294",
+      "x-ratelimit-used": "195",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D013:3B95:105851:1263F6:600B61EB"
+    }
+  },
+  "uuid": "921db344-9c2f-490c-b683-06f269222a5c",
+  "persistent": true,
+  "insertionIndex": 12
+}

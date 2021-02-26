@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * A Github App.
@@ -15,7 +15,6 @@ import static org.kohsuke.github.Previews.MACHINE_MAN;
  */
 public class GHApp extends GHObject {
 
-    private GitHub root;
     private GHUser owner;
     private String name;
     private String description;
@@ -189,7 +188,7 @@ public class GHApp extends GHObject {
      * @return a list of App installations
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
         return root.createRequest()
@@ -210,7 +209,7 @@ public class GHApp extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
         return root.createRequest()
@@ -233,7 +232,7 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization
      *      installation</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
         return root.createRequest()
@@ -258,7 +257,7 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository
      *      installation</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
         return root.createRequest()
@@ -280,7 +279,7 @@ public class GHApp extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
         return root.createRequest()

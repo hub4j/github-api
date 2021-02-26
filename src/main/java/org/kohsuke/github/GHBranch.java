@@ -3,11 +3,14 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Objects;
+
+import javax.annotation.CheckForNull;
 
 /**
  * A branch in a repository.
@@ -18,8 +21,7 @@ import java.util.Objects;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHBranch {
-    private GitHub root;
+public class GHBranch extends GitHubInteractiveObject {
     private GHRepository owner;
 
     private String name;
@@ -76,7 +78,7 @@ public class GHBranch {
      *
      * @return true if the push to this branch is restricted via branch protection.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public boolean isProtected() {
         return protection;
@@ -87,7 +89,7 @@ public class GHBranch {
      *
      * @return API URL that deals with the protection of this branch.
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public URL getProtectionUrl() {
         return GitHubClient.parseURL(protection_url);
@@ -100,8 +102,14 @@ public class GHBranch {
      * @throws IOException
      *             the io exception
      */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
     public GHBranchProtection getProtection() throws IOException {
-        return root.createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class).wrap(this);
+        return root.createRequest()
+                .withPreview(Previews.LUKE_CAGE)
+                .setRawUrlPath(protection_url)
+                .fetch(GHBranchProtection.class)
+                .wrap(this);
     }
 
     /**
@@ -129,7 +137,7 @@ public class GHBranch {
      * @return GHBranchProtectionBuilder for enabling protection
      * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
      */
-    @Preview
+    @Preview(Previews.LUKE_CAGE)
     @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
@@ -159,6 +167,59 @@ public class GHBranch {
                         .enable();
                 break;
         }
+    }
+
+    /**
+     * Merge a branch into this branch.
+     *
+     * @param headBranch
+     *            the branch whose head will be merged
+     *
+     * @param commitMessage
+     *            the commit message
+     *
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    @CheckForNull
+    public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
+        return merge(headBranch.getName(), commitMessage);
+    }
+
+    /**
+     * Merge a ref into this branch.
+     *
+     * @param head
+     *            the ref name that will be merged into this branch. Follows the usual ref naming rules, could be a
+     *            branch name, tag, or commit sha.
+     *
+     * @param commitMessage
+     *            the commit message
+     *
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    @CheckForNull
+    public GHCommit merge(String head, String commitMessage) throws IOException {
+        GHCommit result = root.createRequest()
+                .withUrlPath(owner.getApiTailUrl("merges"))
+                .method("POST")
+                .with("commit_message", commitMessage)
+                .with("base", this.name)
+                .with("head", head)
+                .fetch(GHCommit.class);
+
+        if (result != null) {
+            result.wrapUp(owner);
+        }
+
+        return result;
     }
 
     String getApiRoute() {

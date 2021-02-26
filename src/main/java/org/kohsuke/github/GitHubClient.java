@@ -1,34 +1,19 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TimeZone;
+import java.net.*;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -45,7 +30,7 @@ import static java.util.logging.Level.*;
  * A GitHub API Client
  * <p>
  * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link #rateLimit()}.
+ * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
  * </p>
  */
 abstract class GitHubClient {
@@ -57,32 +42,28 @@ abstract class GitHubClient {
     static final int retryTimeoutMillis = 100;
     /* private */ final String login;
 
-    /**
-     * Value of the authorization header to be sent with the request.
-     */
-    /* private */ final String encodedAuthorization;
-
     // Cache of myself object.
     private final String apiUrl;
 
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
+    private final AuthorizationProvider authorizationProvider;
 
     private HttpConnector connector;
 
-    private final Object headerRateLimitLock = new Object();
-    private GHRateLimit headerRateLimit = null;
-    private volatile GHRateLimit rateLimit = null;
+    private final Object rateLimitLock = new Object();
+
+    @Nonnull
+    private GHRateLimit rateLimit = GHRateLimit.DEFAULT;
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     static final String GITHUB_URL = "https://api.github.com";
 
-    private static final String[] TIME_FORMATS = { "yyyy/MM/dd HH:mm:ss ZZZZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss.S'Z'" // GitHub App endpoints return a different date format
-    };
+    private static final DateTimeFormatter DATE_TIME_PARSER_SLASHES = DateTimeFormatter
+            .ofPattern("yyyy/MM/dd HH:mm:ss Z");
 
     static {
         MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
@@ -92,15 +73,12 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
+            Consumer<GHMyself> myselfConsumer,
+            AuthorizationProvider authorizationProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -112,40 +90,43 @@ abstract class GitHubClient {
         this.apiUrl = apiUrl;
         this.connector = connector;
 
-        if (oauthAccessToken != null) {
-            encodedAuthorization = "token " + oauthAccessToken;
-        } else {
-            if (jwtToken != null) {
-                encodedAuthorization = "Bearer " + jwtToken;
-            } else if (password != null) {
-                String authorization = (login + ':' + password);
-                String charsetName = StandardCharsets.UTF_8.name();
-                encodedAuthorization = "Basic "
-                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-            } else {// anonymous access
-                encodedAuthorization = null;
-            }
-        }
+        // Prefer credential configuration via provider
+        this.authorizationProvider = authorizationProvider;
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
 
-        if (login == null && encodedAuthorization != null && jwtToken == null) {
-            GHMyself myself = fetch(GHMyself.class, "/user");
-            login = myself.getLogin();
-            if (myselfConsumer != null) {
-                myselfConsumer.accept(myself);
+        this.login = getCurrentUser(myselfConsumer);
+    }
+
+    private String getCurrentUser(Consumer<GHMyself> myselfConsumer) throws IOException {
+        String login = null;
+        if (this.authorizationProvider instanceof UserAuthorizationProvider
+                && this.authorizationProvider.getEncodedAuthorization() != null) {
+
+            UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
+
+            login = userAuthorizationProvider.getLogin();
+
+            if (login == null) {
+                try {
+                    GHMyself myself = fetch(GHMyself.class, "/user");
+                    if (myselfConsumer != null) {
+                        myselfConsumer.accept(myself);
+                    }
+                    login = myself.getLogin();
+                } catch (IOException e) {
+                    return null;
+                }
             }
         }
-        this.login = login;
+        return login;
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
-        return this
-                .sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build(),
-                        (responseInfo) -> GitHubResponse.parseBody(responseInfo, type))
-                .body();
+        GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
+        return this.sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
 
     /**
@@ -205,15 +186,24 @@ abstract class GitHubClient {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
+        try {
+            return login == null && this.authorizationProvider.getEncodedAuthorization() == null;
+        } catch (IOException e) {
+            // An exception here means that the provider failed to provide authorization parameters,
+            // basically meaning the same as "no auth"
+            return false;
+        }
     }
 
     /**
-     * Gets the current rate limit from the server.
+     * Gets the current full rate limit information from the server.
      *
-     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In
-     * that, if {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. Otherwise, a
-     * placeholder {@link GHRateLimit} instance with {@link GHRateLimit.UnknownLimitRecord}s will be returned.
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
+     * case, the most recent {@link GHRateLimit} information will be returned, including rate limit information returned
+     * in the response header for this request in if was present.
+     *
+     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
+     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      *
      * @return the rate limit
      * @throws IOException
@@ -221,59 +211,100 @@ abstract class GitHubClient {
      */
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
+        return getRateLimit(RateLimitTarget.NONE);
+    }
+
+    @CheckForNull
+    protected String getEncodedAuthorization() throws IOException {
+        return authorizationProvider.getEncodedAuthorization();
+    }
+
+    @Nonnull
+    GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         GHRateLimit result;
         try {
-            result = fetch(JsonRateLimit.class, "/rate_limit").resources;
+            GitHubRequest request = GitHubRequest.newBuilder()
+                    .rateLimit(RateLimitTarget.NONE)
+                    .withApiUrl(getApiUrl())
+                    .withUrlPath("/rate_limit")
+                    .build();
+            result = this
+                    .sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, JsonRateLimit.class))
+                    .body().resources;
         } catch (FileNotFoundException e) {
             // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+            LOGGER.log(FINE, "/rate_limit returned 404 Not Found.");
+
             // However some newer versions of GHE include rate limit header information
-            // Use that if available
-            result = lastRateLimit();
-            if (result == null || result.isExpired()) {
-                // return a default rate limit
-                result = GHRateLimit.Unknown();
-            }
+            // If the header info is missing and the endpoint returns 404, fill the rate limit
+            // with unknown
+            result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
         }
-
-        return rateLimit = result;
+        return updateRateLimit(result);
     }
 
     /**
-     * Returns the most recently observed rate limit data or {@code null} if either there is no rate limit (for example
-     * GitHub Enterprise) or if no requests have been made.
+     * Returns the most recently observed rate limit data.
      *
-     * @return the most recently observed rate limit data or {@code null}.
+     * Generally, instead of calling this you should implement a {@link RateLimitChecker} or call
+     *
+     * @return the most recently observed rate limit data. This may include expired or
+     *         {@link GHRateLimit.UnknownLimitRecord} entries.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
-    @CheckForNull
-    public GHRateLimit lastRateLimit() {
-        synchronized (headerRateLimitLock) {
-            return headerRateLimit;
+    @Nonnull
+    @Deprecated
+    GHRateLimit lastRateLimit() {
+        synchronized (rateLimitLock) {
+            return rateLimit;
         }
     }
 
     /**
-     * Gets the current rate limit while trying not to actually make any remote requests unless absolutely necessary.
+     * Gets the current rate limit for an endpoint while trying not to actually make any remote requests unless
+     * absolutely necessary.
      *
-     * If {@link #lastRateLimit()} is not {@code null} and is not expired, it will be returned. If the information
-     * returned from the last call to {@link #getRateLimit()} is not {@code null} and is not expired, then it will be
-     * returned. Otherwise, the result of a call to {@link #getRateLimit()} will be returned.
+     * If the {@link GHRateLimit.Record} for {@code urlPath} is not expired, it is returned. If the
+     * {@link GHRateLimit.Record} for {@code urlPath} is expired, {@link #getRateLimit()} will be called to get the
+     * current rate limit.
      *
-     * @return the current rate limit data.
+     * @param rateLimitTarget
+     *            the endpoint to get the rate limit for.
+     *
+     * @return the current rate limit data. {@link GHRateLimit.Record}s in this instance may be expired when returned.
      * @throws IOException
      *             if there was an error getting current rate limit data.
      */
     @Nonnull
-    public GHRateLimit rateLimit() throws IOException {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit != null && !headerRateLimit.isExpired()) {
-                return headerRateLimit;
+    GHRateLimit rateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
+        synchronized (rateLimitLock) {
+            if (rateLimit.getRecord(rateLimitTarget).isExpired()) {
+                getRateLimit(rateLimitTarget);
             }
+            return rateLimit;
         }
-        GHRateLimit result = this.rateLimit;
-        if (result == null || result.isExpired()) {
-            result = getRateLimit();
+    }
+
+    /**
+     * Update the Rate Limit with the latest info from response header.
+     *
+     * Due to multi-threading, requests might complete out of order. This method calls
+     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)} to ensure the most current records are used.
+     *
+     * @param observed
+     *            {@link GHRateLimit.Record} constructed from the response header information
+     */
+    private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
+        synchronized (rateLimitLock) {
+            observed = rateLimit.getMergedRateLimit(observed);
+
+            if (rateLimit != observed) {
+                rateLimit = observed;
+                LOGGER.log(FINE, "Rate limit now: {0}", rateLimit);
+            }
+            return rateLimit;
         }
-        return result;
     }
 
     /**
@@ -358,7 +389,6 @@ abstract class GitHubClient {
                                 "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
                                         + request.method() + " " + request.url().toString());
                     }
-
                     rateLimitChecker.checkRateLimit(this, request);
 
                     responseInfo = getResponseInfo(request);
@@ -369,7 +399,7 @@ abstract class GitHubClient {
                         // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                         // "If-Modified-Since" or "If-None-Match" values.
                         // This makes GitHub give us current data (not incorrectly cached data)
-                        request = request.toBuilder().withHeader("Cache-Control", "no-cache").build();
+                        request = request.toBuilder().setHeader("Cache-Control", "no-cache").build();
                         continue;
                     }
                     if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
@@ -517,58 +547,25 @@ abstract class GitHubClient {
     }
 
     private void noteRateLimit(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
-        if (responseInfo.request().urlPath().startsWith("/search")) {
-            // the search API uses a different rate limit
-            return;
-        }
-
-        String limitString = responseInfo.headerField("X-RateLimit-Limit");
-        if (StringUtils.isBlank(limitString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-        String remainingString = responseInfo.headerField("X-RateLimit-Remaining");
-        if (StringUtils.isBlank(remainingString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-        String resetString = responseInfo.headerField("X-RateLimit-Reset");
-        if (StringUtils.isBlank(resetString)) {
-            // if we are missing a header, return fast
-            return;
-        }
-
-        int limit, remaining;
-        long reset;
         try {
+            String limitString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Limit"),
+                    "Missing X-RateLimit-Limit");
+            String remainingString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Remaining"),
+                    "Missing X-RateLimit-Remaining");
+            String resetString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Reset"),
+                    "Missing X-RateLimit-Reset");
+            int limit, remaining;
+            long reset;
             limit = Integer.parseInt(limitString);
-        } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Limit header value " + limitString, e);
-            }
-            return;
-        }
-        try {
-
             remaining = Integer.parseInt(remainingString);
-        } catch (NumberFormatException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Remaining header value " + remainingString, e);
-            }
-            return;
-        }
-        try {
             reset = Long.parseLong(resetString);
-        } catch (NumberFormatException e) {
+            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
+            updateRateLimit(GHRateLimit.fromRecord(observed, responseInfo.request().rateLimitTarget()));
+        } catch (NumberFormatException | NullPointerException e) {
             if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Malformed X-RateLimit-Reset header value " + resetString, e);
+                LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
             }
-            return;
         }
-
-        GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
-
-        updateCoreRateLimit(observed);
     }
 
     private static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
@@ -586,23 +583,6 @@ abstract class GitHubClient {
         if (isAnonymous())
             throw new IllegalStateException(
                     "This operation requires a credential but none is given to the GitHub constructor");
-    }
-
-    /**
-     * Update the Rate Limit with the latest info from response header. Due to multi-threading requests might complete
-     * out of order, we want to pick the one with the most recent info from the server. Calls
-     * {@link #shouldReplace(GHRateLimit.Record, GHRateLimit.Record)}
-     *
-     * @param observed
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     */
-    private void updateCoreRateLimit(@Nonnull GHRateLimit.Record observed) {
-        synchronized (headerRateLimitLock) {
-            if (headerRateLimit == null || shouldReplace(observed, headerRateLimit.getCore())) {
-                headerRateLimit = GHRateLimit.fromHeaderRecord(observed);
-                LOGGER.log(FINE, "Rate limit now: {0}", headerRateLimit);
-            }
-        }
     }
 
     private static class GHApiInfo {
@@ -654,37 +634,6 @@ abstract class GitHubClient {
         }
     }
 
-    /**
-     * Determine if one {@link GHRateLimit.Record} should replace another. Header date is only accurate to the second,
-     * so we look at the information in the record itself.
-     *
-     * {@link GHRateLimit.UnknownLimitRecord}s are always replaced by regular {@link GHRateLimit.Record}s. Regular
-     * {@link GHRateLimit.Record}s are never replaced by {@link GHRateLimit.UnknownLimitRecord}s. Candidates with
-     * resetEpochSeconds later than current record are more recent. Candidates with the same reset and a lower remaining
-     * count are more recent. Candidates with an earlier reset are older.
-     *
-     * @param candidate
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     * @param current
-     *            the current {@link GHRateLimit.Record} record
-     */
-    static boolean shouldReplace(@Nonnull GHRateLimit.Record candidate, @Nonnull GHRateLimit.Record current) {
-        if (candidate instanceof GHRateLimit.UnknownLimitRecord
-                && !(current instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Unknown candidate never replaces a regular record
-            return false;
-        } else if (current instanceof GHRateLimit.UnknownLimitRecord
-                && !(candidate instanceof GHRateLimit.UnknownLimitRecord)) {
-            // Any real record should replace an unknown Record.
-            return true;
-        } else {
-            // records of the same type compare to each other as normal.
-            return current.getResetEpochSeconds() < candidate.getResetEpochSeconds()
-                    || (current.getResetEpochSeconds() == candidate.getResetEpochSeconds()
-                            && current.getRemaining() > candidate.getRemaining());
-        }
-    }
-
     static URL parseURL(String s) {
         try {
             return s == null ? null : new URL(s);
@@ -696,22 +645,24 @@ abstract class GitHubClient {
     static Date parseDate(String timestamp) {
         if (timestamp == null)
             return null;
-        for (String f : TIME_FORMATS) {
-            try {
-                SimpleDateFormat df = new SimpleDateFormat(f);
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                return df.parse(timestamp);
-            } catch (ParseException e) {
-                // try next
-            }
+
+        return Date.from(parseInstant(timestamp));
+    }
+
+    static Instant parseInstant(String timestamp) {
+        if (timestamp == null)
+            return null;
+
+        if (timestamp.charAt(4) == '/') {
+            // Unsure where this is used, but retained for compatibility.
+            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));
+        } else {
+            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));
         }
-        throw new IllegalStateException("Unable to parse the timestamp: " + timestamp);
     }
 
     static String printDate(Date dt) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(dt);
+        return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

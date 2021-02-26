@@ -16,7 +16,6 @@ import java.net.URL;
                 "UUF_UNUSED_FIELD" },
         justification = "JSON API")
 public class GHInvitation extends GHObject {
-    /* package almost final */ GitHub root;
 
     private int id;
     private GHRepository repository;

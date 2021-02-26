@@ -26,7 +26,11 @@ import javax.net.ssl.SSLSocketFactory;
  *
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
+ * @deprecated This class depends on an unsupported version of OkHttp. Switch to
+ *             {@link org.kohsuke.github.extras.okhttp3.OkHttpConnector}.
+ * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
  */
+@Deprecated
 public class OkHttpConnector implements HttpConnector {
     private static final String HEADER_NAME = "Cache-Control";
     private final OkUrlFactory urlFactory;
@@ -45,7 +49,7 @@ public class OkHttpConnector implements HttpConnector {
 
     /**
      * package private for tests to be able to change max-age for cache.
-     * 
+     *
      * @param urlFactory
      * @param cacheMaxAge
      */

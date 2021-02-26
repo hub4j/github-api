@@ -6,22 +6,22 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.Collection;
 
-import static org.kohsuke.github.Previews.ZZZAX;
+import static org.kohsuke.github.internal.Previews.ZZZAX;
 
 /**
  * The type GHBranchProtection.
+ *
+ * @see <a href="https://docs.github.com/en/rest/reference/repos#get-branch-protection">GitHub Branch Protection</a>
  */
 @SuppressFBWarnings(
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHBranchProtection {
+public class GHBranchProtection extends GitHubInteractiveObject {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
     @JsonProperty
     private EnforceAdmins enforceAdmins;
-
-    private GitHub root;
 
     @JsonProperty("required_pull_request_reviews")
     private RequiredReviews requiredReviews;
@@ -41,7 +41,7 @@ public class GHBranchProtection {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @Preview(ZZZAX)
     @Deprecated
     public void enabledSignedCommits() throws IOException {
         requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);
@@ -53,7 +53,7 @@ public class GHBranchProtection {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @Preview(ZZZAX)
     @Deprecated
     public void disableSignedCommits() throws IOException {
         requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).send();
@@ -84,7 +84,7 @@ public class GHBranchProtection {
      * @throws IOException
      *             the io exception
      */
-    @Preview
+    @Preview(ZZZAX)
     @Deprecated
     public boolean getRequiredSignatures() throws IOException {
         return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;

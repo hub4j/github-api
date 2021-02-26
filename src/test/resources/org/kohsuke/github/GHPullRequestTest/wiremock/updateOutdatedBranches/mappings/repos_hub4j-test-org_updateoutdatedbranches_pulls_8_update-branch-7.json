@@ -1,0 +1,47 @@
+{
+  "id": "8da7d3bd-9bd0-4c5d-9d52-19d4b0e9324c",
+  "name": "repos_hub4j-test-org_updateoutdatedbranches_pulls_8_update-branch",
+  "request": {
+    "url": "/repos/hub4j-test-org/updateOutdatedBranches/pulls/8/update-branch",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.lydian-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"expected_head_sha\":\"6440189369f9f33b2366556a94dbc26f2cfdd969\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 202,
+    "body": "{\"message\":\"Updating pull request branch.\",\"url\":\"https://api.github.com/repos/hub4j-test-org/updateOutdatedBranches/pulls/8\"}",
+    "headers": {
+      "Date": "Thu, 03 Sep 2020 19:05:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "202 Accepted",
+      "location": "https://api.github.com/repos/hub4j-test-org/updateOutdatedBranches/pulls/8",
+      "X-GitHub-Media-Type": "github.lydian-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4672",
+      "X-RateLimit-Reset": "1599161295",
+      "X-RateLimit-Used": "328",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C85C:B2ED:10165DB6:137C14C1:5F513E78"
+    }
+  },
+  "uuid": "8da7d3bd-9bd0-4c5d-9d52-19d4b0e9324c",
+  "persistent": true,
+  "insertionIndex": 7
+}

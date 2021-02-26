@@ -1,13 +1,13 @@
 {
-  "url": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/35673784",
-  "html_url": "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000#commitcomment-35673784",
-  "id": 35673784,
-  "node_id": "MDEzOkNvbW1pdENvbW1lbnQzNTY3Mzc4NA==",
+  "url": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/46267761",
+  "html_url": "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000#commitcomment-46267761",
+  "id": 46267761,
+  "node_id": "MDEzOkNvbW1pdENvbW1lbnQ0NjI2Nzc2MQ==",
   "user": {
     "login": "bitwiseman",
     "id": 1958953,
     "node_id": "MDQ6VXNlcjE5NTg5NTM=",
-    "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
     "gravatar_id": "",
     "url": "https://api.github.com/users/bitwiseman",
     "html_url": "https://github.com/bitwiseman",
@@ -27,8 +27,8 @@
   "line": null,
   "path": null,
   "commit_id": "8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
-  "created_at": "2019-10-26T01:28:59Z",
-  "updated_at": "2019-10-26T01:28:59Z",
+  "created_at": "2021-01-23T06:39:40Z",
+  "updated_at": "2021-01-23T06:39:40Z",
   "author_association": "NONE",
   "body": "[testing](http://kohsuse.org/)"
 }

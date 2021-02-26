@@ -12,9 +12,7 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHEventInfo {
-    private GitHub root;
-
+public class GHEventInfo extends GitHubInteractiveObject {
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 

@@ -9,7 +9,6 @@ import java.net.URL;
  * @see GHRelease#getAssets() GHRelease#getAssets()
  */
 public class GHAsset extends GHObject {
-    GitHub root;
     GHRepository owner;
     private String name;
     private String label;

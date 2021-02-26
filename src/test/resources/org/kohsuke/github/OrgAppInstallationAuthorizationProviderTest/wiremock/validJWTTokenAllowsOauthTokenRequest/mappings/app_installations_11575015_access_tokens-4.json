@@ -1,0 +1,48 @@
+{
+  "id": "7e25da60-68c9-41c5-b603-359192783583",
+  "name": "app_installations_11575015_access_tokens",
+  "request": {
+    "url": "/app/installations/11575015/access_tokens",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "body": "{\"token\":\"v1.9a12d913f980a45a16ac9c3a9d34d9b7sa314cb6\",\"expires_at\":\"2020-09-29T13:35:37Z\",\"permissions\":{\"metadata\":\"read\",\"pull_requests\":\"write\"},\"repository_selection\":\"all\"}",
+    "headers": {
+      "Date": "Tue, 29 Sep 2020 12:35:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"168d81847da026cae71dddc5658dc87c05a2b6945d4e635787c451df823fc72a\"",
+      "X-GitHub-Media-Type": "github.v3; param=machine-man-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D11A:F68D:17924C69:1C12341C:5F732A18"
+    }
+  },
+  "uuid": "7e25da60-68c9-41c5-b603-359192783583",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -26,6 +26,8 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
 import java.util.*;
@@ -37,8 +39,8 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static org.kohsuke.github.Previews.INERTIA;
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * Root of the GitHub API.
@@ -93,37 +95,110 @@ public class GitHub {
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
-     * @param login
-     *            The user ID on GitHub that you are logging in as. Can be omitted if the OAuth token is provided or if
-     *            logging in anonymously. Specifying this would save one API call.
-     * @param oauthAccessToken
-     *            Secret OAuth token.
-     * @param password
-     *            User's password. Always used in conjunction with the {@code login} parameter
      * @param connector
-     *            HttpConnector to use. Pass null to use default connector.
+     *            a connector
+     * @param rateLimitHandler
+     *            rateLimitHandler
+     * @param abuseLimitHandler
+     *            abuseLimitHandler
+     * @param rateLimitChecker
+     *            rateLimitChecker
+     * @param authorizationProvider
+     *            a authorization provider
      */
     GitHub(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
-            GitHubRateLimitChecker rateLimitChecker) throws IOException {
+            GitHubRateLimitChecker rateLimitChecker,
+            AuthorizationProvider authorizationProvider) throws IOException {
+        if (authorizationProvider instanceof DependentAuthorizationProvider) {
+            ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+        }
+
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
-                login,
-                oauthAccessToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                (myself) -> setMyself(myself));
+                (myself) -> setMyself(myself),
+                authorizationProvider);
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
+    }
+
+    private GitHub(GitHubClient client) {
+        this.client = client;
+        users = new ConcurrentHashMap<>();
+        orgs = new ConcurrentHashMap<>();
+    }
+
+    public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
+
+        private GitHub baseGitHub;
+        private GitHub gitHub;
+        private final AuthorizationProvider authorizationProvider;
+
+        /**
+         * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
+         *
+         * @param authorizationProvider
+         *            A authorization provider to be used when refreshing this authorization provider.
+         */
+        @BetaApi
+        @Deprecated
+        protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
+            this.authorizationProvider = authorizationProvider;
+        }
+
+        /**
+         * Binds this authorization provider to a github instance.
+         *
+         * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
+         *
+         * @param github
+         *            The github instance to be used for refreshing dynamic credentials
+         */
+        synchronized void bind(GitHub github) {
+            if (baseGitHub != null) {
+                throw new IllegalStateException("Already bound to another GitHub instance.");
+            }
+            this.baseGitHub = github;
+        }
+
+        protected synchronized final GitHub gitHub() {
+            if (gitHub == null) {
+                gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
+            }
+            return gitHub;
+        }
+    }
+
+    private static class AuthorizationRefreshGitHubWrapper extends GitHub {
+
+        private final AuthorizationProvider authorizationProvider;
+
+        AuthorizationRefreshGitHubWrapper(GitHub github, AuthorizationProvider authorizationProvider) {
+            super(github.client);
+            this.authorizationProvider = authorizationProvider;
+
+            // no dependent authorization providers nest like this currently, but they might in future
+            if (authorizationProvider instanceof DependentAuthorizationProvider) {
+                ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+            }
+        }
+
+        @Nonnull
+        @Override
+        Requester createRequest() {
+            try {
+                // Override
+                return super.createRequest().setHeader("Authorization", authorizationProvider.getEncodedAuthorization())
+                        .rateLimit(RateLimitTarget.NONE);
+            } catch (IOException e) {
+                throw new GHException("Failed to create requester to refresh credentials", e);
+            }
+        }
     }
 
     /**
@@ -373,12 +448,20 @@ public class GitHub {
     }
 
     /**
-     * Gets the current rate limit.
+     * Gets the current full rate limit information from the server.
+     *
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
+     * case, the most recent {@link GHRateLimit} information will be returned, including rate limit information returned
+     * in the response header for this request in if was present.
+     *
+     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
+     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      *
      * @return the rate limit
      * @throws IOException
      *             the io exception
      */
+    @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
         return client.getRateLimit();
     }
@@ -388,8 +471,11 @@ public class GitHub {
      * GitHub Enterprise) or if no requests have been made.
      *
      * @return the most recently observed rate limit data or {@code null}.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
-    @CheckForNull
+    @Nonnull
+    @Deprecated
     public GHRateLimit lastRateLimit() {
         return client.lastRateLimit();
     }
@@ -400,10 +486,13 @@ public class GitHub {
      * @return the current rate limit data.
      * @throws IOException
      *             if we couldn't get the current rate limit data.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
      */
     @Nonnull
+    @Deprecated
     public GHRateLimit rateLimit() throws IOException {
-        return client.rateLimit();
+        return client.rateLimit(RateLimitTarget.CORE);
     }
 
     /**
@@ -518,7 +607,7 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from 'user/reponame' string that GitHub calls as "repository name"
+     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name"
      *
      * @param name
      *            the name
@@ -529,9 +618,10 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        return createRequest().withUrlPath("/repos/" + tokens[0] + '/' + tokens[1])
-                .fetch(GHRepository.class)
-                .wrap(this);
+        if (tokens.length < 2) {
+            throw new IllegalArgumentException("Repository name must be in format owner/repo");
+        }
+        return GHRepository.read(this, tokens[0], tokens[1]);
     }
 
     /**
@@ -726,7 +816,7 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
-     * 
+     *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      */
@@ -830,7 +920,7 @@ public class GitHub {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-        return new GHCreateRepositoryBuilder(this, "/user/repos", name);
+        return new GHCreateRepositoryBuilder(name, this, "/user/repos");
     }
 
     /**
@@ -1162,7 +1252,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
-    @Preview
+    @Preview(MACHINE_MAN)
     @Deprecated
     public GHApp getApp() throws IOException {
         return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
@@ -1257,7 +1347,7 @@ public class GitHub {
      *
      * @return the gh commit search builder
      */
-    @Preview
+    @Preview(Previews.CLOAK)
     @Deprecated
     public GHCommitSearchBuilder searchCommits() {
         return new GHCommitSearchBuilder(this);
@@ -1357,26 +1447,34 @@ public class GitHub {
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectWriter} that can be used to convert data objects in this library to JSON.
+     *
+     * If you must convert data object in this library to JSON, the {@link ObjectWriter} returned by this method is the
+     * only supported way of doing so. This {@link ObjectWriter} can be used to convert any library data object to JSON
+     * without throwing an exception.
+     *
+     * WARNING: While the JSON generated is generally expected to be stable, it is not part of the API of this library
+     * and may change without warning. Use with extreme caution.
      *
      * @return an {@link ObjectWriter} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectWriter getMappingObjectWriter() {
         return GitHubClient.getMappingObjectWriter();
     }
 
     /**
-     * Do not use this method. This method will be removed and should never have been needed in the first place.
+     * Gets an {@link ObjectReader} that can be used to convert JSON into library data objects.
+     *
+     * If you must manually create library data objects from JSON, the {@link ObjectReader} returned by this method is
+     * the only supported way of doing so.
+     *
+     * WARNING: Objects generated from this method have limited functionality. They will not throw when being crated
+     * from valid JSON matching the expected object, but they are not guaranteed to be usable beyond that. Use with
+     * extreme caution.
      *
      * @return an {@link ObjectReader} instance that can be further configured.
-     * @deprecated DO NOT USE THIS METHOD. Provided for backward compatibility with projects that did their own jackson
-     *             mapping of this project's data objects, such as Jenkins Blue Ocean.
      */
-    @Deprecated
     @Nonnull
     public static ObjectReader getMappingObjectReader() {
         return GitHubClient.getMappingObjectReader(GitHub.offline());

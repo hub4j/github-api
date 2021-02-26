@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.GROOT;
+
 /**
  * A commit in a repository.
  *
@@ -63,7 +66,7 @@ public class GHCommit {
          * @return the authored date
          */
         public Date getAuthoredDate() {
-            return GitHubClient.parseDate(author.date);
+            return author.getDate();
         }
 
         /**
@@ -82,7 +85,7 @@ public class GHCommit {
          * @return the commit date
          */
         public Date getCommitDate() {
-            return GitHubClient.parseDate(committer.date);
+            return committer.getDate();
         }
 
         /**
@@ -119,7 +122,6 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
-        private String date;
     }
 
     /**
@@ -447,6 +449,39 @@ public class GHCommit {
     }
 
     /**
+     * Retrieves a list of pull requests which contain this commit.
+     *
+     * @return {@link PagedIterable} with the pull requests which contain this commit
+     */
+    @Preview(GROOT)
+    @Deprecated
+    public PagedIterable<GHPullRequest> listPullRequests() {
+        return owner.root.createRequest()
+                .withPreview(GROOT)
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/pulls", owner.getOwnerName(), owner.getName(), sha))
+                .toIterable(GHPullRequest[].class, item -> item.wrapUp(owner));
+    }
+
+    /**
+     * Retrieves a list of branches where this commit is the head commit.
+     *
+     * @return {@link PagedIterable} with the branches where the commit is the head commit
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(GROOT)
+    @Deprecated
+    public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
+        return owner.root.createRequest()
+                .withPreview(GROOT)
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
+                        owner.getOwnerName(),
+                        owner.getName(),
+                        sha))
+                .toIterable(GHBranch[].class, item -> item.wrap(owner));
+    }
+
+    /**
      * List comments paged iterable.
      *
      * @return {@link PagedIterable} with all the commit comments in this repository.
@@ -530,7 +565,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
@@ -538,7 +573,7 @@ public class GHCommit {
 
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
-     * 
+     *
      * @throws IOException
      *             on error
      */

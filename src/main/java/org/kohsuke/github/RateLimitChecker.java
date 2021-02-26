@@ -5,19 +5,16 @@ import java.util.logging.Logger;
 
 /**
  * A GitHub API Rate Limit Checker called before each request
+ *
  * <p>
- * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
- * number of requests remaining is returned in the response header and can also be requested using
- * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+ * GitHub allots a certain number of requests to each user or application per period of time. The number of requests
+ * remaining and the time when the number will be reset is returned in the response header and can also be requested
+ * using {@link GitHub#getRateLimit()}. The "requests per interval" is referred to as the "rate limit".
  * </p>
  * <p>
  * GitHub prefers that clients stop before exceeding their rate limit rather than stopping after they exceed it. The
  * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
  * met.
- * </p>
- * <p>
- * Checking your rate limit using {@link GitHub#getRateLimit()} does not effect your rate limit, but each {@link GitHub}
- * instance will attempt to cache and reuse the last see rate limit rather than making a new request.
  * </p>
  */
 public abstract class RateLimitChecker {
@@ -33,26 +30,19 @@ public abstract class RateLimitChecker {
      * free to choose whatever strategy they prefer for what is considered to exceed the budget and how long to sleep.
      *
      * <p>
-     * The caller of this method figures out which {@link GHRateLimit.Record} applies for the current request add
+     * The caller of this method figures out which {@link GHRateLimit.Record} applies for the current request and
      * provides it to this method.
      * </p>
      * <p>
-     * It is important to remember that rate limit reset times are only accurate to the second. Trying to sleep to
-     * exactly the reset time would be likely to produce worse behavior rather than better. For this reason
-     * {@link GitHubRateLimitChecker} may choose to add more sleep times when a checker indicates the rate limit was
-     * exceeded.
+     * As long as this method returns {@code true} it is guaranteed that {@link GitHubRateLimitChecker} will retrieve
+     * updated rate limit information and call this method again with {@code count} incremented by one. When this
+     * checker returns {@code false}, the calling {@link GitHubRateLimitChecker} will let the request continue.
      * </p>
      * <p>
-     * As long as this method returns {@code true} it is guaranteed that {@link GitHubRateLimitChecker} will get updated
-     * rate limit information and call this method again with {@code count} incremented by one. After this method
-     * returns {@code true} at least once, the calling {@link GitHubRateLimitChecker} may choose to wait some additional
-     * period of time between calls to this checker.
-     * </p>
-     * <p>
-     * After this checker returns {@code false}, the calling {@link GitHubRateLimitChecker} will let the request
-     * continue. If this method returned {@code true} at least once for a particular request, the calling
-     * {@link GitHubRateLimitChecker} may choose to wait some additional period of time before letting the request be
-     * sent.
+     * Rate limit reset times are only accurate to the second. Trying to sleep to exactly the reset time could result in
+     * requests being sent before the new rate limit was available. For this reason, if this method returned
+     * {@code true} at least once for a particular request, {@link GitHubRateLimitChecker} may choose to sleep for some
+     * small additional between calls and before letting the request continue.
      * </p>
      *
      * @param rateLimitRecord

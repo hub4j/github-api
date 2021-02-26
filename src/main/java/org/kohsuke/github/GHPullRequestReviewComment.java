@@ -28,7 +28,7 @@ import java.net.URL;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Review comment to the pull request
@@ -153,7 +153,20 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the api route
      */
     protected String getApiRoute() {
-        return "/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + getId();
+        return getApiRoute(false);
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @param includePullNumber
+     *            if true, includes the owning pull request's number in the route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute(boolean includePullNumber) {
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls"
+                + (includePullNumber ? "/" + owner.getNumber() : "") + "/comments/" + getId();
     }
 
     /**
@@ -192,13 +205,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return owner.root.createRequest()
                 .method("POST")
                 .with("body", body)
-                .with("in_reply_to", getId())
-                .withUrlPath(getApiRoute() + "/comments")
+                .withUrlPath(getApiRoute(true) + "/replies")
                 .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(owner);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root.createRequest()
@@ -210,7 +222,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .wrap(owner.root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return owner.root.createRequest()

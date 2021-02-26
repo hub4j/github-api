@@ -12,6 +12,7 @@ import java.util.Locale;
 public enum GHEvent {
     CHECK_RUN,
     CHECK_SUITE,
+    CODE_SCANNING_ALERT,
     COMMIT_COMMENT,
     CONTENT_REFERENCE,
     CREATE,
@@ -63,6 +64,7 @@ public enum GHEvent {
     TEAM_ADD,
     WATCH,
     WORKFLOW_DISPATCH,
+    WORKFLOW_RUN,
 
     /**
      * Special event type that means "every possible event"

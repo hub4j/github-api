@@ -32,6 +32,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     public void testGitHubRateLimit() throws Exception {
         // Customized response that templates the date to keep things working
         snapshotNotAllowed();
+        GHRateLimit.UnknownLimitRecord.reset();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
 
@@ -45,7 +46,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
 
-        assertThat(gitHub.lastRateLimit(), nullValue());
+        assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
 
         // Checks the rate limit before getting myself
         gitHub.getMyself();

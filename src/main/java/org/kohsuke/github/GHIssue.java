@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Represents an issue on GitHub.
@@ -53,7 +53,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
 public class GHIssue extends GHObject implements Reactable {
     private static final String ASSIGNEES = "assignees";
 
-    GitHub root;
     GHRepository owner;
 
     // API v3
@@ -158,10 +157,8 @@ public class GHIssue extends GHObject implements Reactable {
      * Gets labels.
      *
      * @return the labels
-     * @throws IOException
-     *             the io exception
      */
-    public Collection<GHLabel> getLabels() throws IOException {
+    public Collection<GHLabel> getLabels() {
         if (labels == null) {
             return Collections.emptyList();
         }
@@ -239,7 +236,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
+        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
 
     /**
@@ -296,9 +293,9 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
         if (milestone == null) {
-            editNullable("milestone", null);
+            editIssue("milestone", null);
         } else {
-            edit("milestone", milestone.getNumber());
+            editIssue("milestone", milestone.getNumber());
         }
     }
 
@@ -450,7 +447,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root.createRequest()
@@ -462,7 +459,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .wrap(root);
     }
 
-    @Preview
+    @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return root.createRequest()

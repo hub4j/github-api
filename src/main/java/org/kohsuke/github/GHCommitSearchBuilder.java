@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
-@Preview
+@Preview(Previews.CLOAK)
 @Deprecated
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     GHCommitSearchBuilder(GitHub root) {

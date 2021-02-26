@@ -15,14 +15,15 @@ import static java.lang.String.*;
  * Release in a github repository.
  *
  * @see GHRepository#getReleases() GHRepository#getReleases()
+ * @see GHRepository#listReleases() () GHRepository#listReleases()
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
-    GitHub root;
     GHRepository owner;
 
     private String html_url;
     private String assets_url;
+    private List<GHAsset> assets;
     private String upload_url;
     private String tag_name;
     private String target_commitish;
@@ -249,18 +250,44 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Gets assets.
+     * Get the cached assets.
+     *
+     * @return the assets
+     *
+     * @deprecated This should be the default behavior of {@link #getAssets()} in a future release. This method is
+     *             introduced in addition to enable a transition to using cached asset information while keeping the
+     *             existing logic in place for backwards compatibility.
+     */
+    @Deprecated
+    public List<GHAsset> assets() {
+        return assets;
+    }
+
+    /**
+     * Re-fetch the assets of this release.
+     *
+     * @return the assets
+     * @throws IOException
+     *             the io exception
+     * @deprecated The behavior of this method will change in a future release. It will then provide cached assets as
+     *             provided by {@link #assets()}. Use {@link #listAssets()} instead to fetch up-to-date information of
+     *             assets.
+     */
+    @Deprecated
+    public List<GHAsset> getAssets() throws IOException {
+        return listAssets().toList();
+    }
+
+    /**
+     * Re-fetch the assets of this release.
      *
      * @return the assets
      * @throws IOException
      *             the io exception
      */
-    public List<GHAsset> getAssets() throws IOException {
+    public PagedIterable<GHAsset> listAssets() throws IOException {
         Requester builder = owner.root.createRequest();
-
-        return builder.withUrlPath(getApiTailUrl("assets"))
-                .toIterable(GHAsset[].class, item -> item.wrap(this))
-                .toList();
+        return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
     }
 
     /**

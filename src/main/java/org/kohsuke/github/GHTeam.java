@@ -24,8 +24,6 @@ public class GHTeam extends GHObject implements Refreshable {
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
-    protected /* final */ GitHub root;
-
     public enum Privacy {
         SECRET, // only visible to organization owners and members of this team.
         CLOSED // visible to all members of this organization.
@@ -146,6 +144,22 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listMembers(String role) throws IOException {
+        return root.createRequest()
+                .withUrlPath(api("/members"))
+                .with("role", role)
+                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+    }
+
+    /**
      * Gets a single discussion by ID.
      *
      * @param discussionNumber
@@ -171,7 +185,20 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers() throws IOException {
-        return root.createRequest().withUrlPath(api("/members")).toIterable(GHUser[].class, item -> item.wrapUp(root));
+        return listMembers("all");
+    }
+
+    /**
+     * Retrieves the teams that are children of this team.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHTeam> listChildTeams() throws IOException {
+        return root.createRequest()
+                .withUrlPath(api("/teams"))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
     }
 
     /**

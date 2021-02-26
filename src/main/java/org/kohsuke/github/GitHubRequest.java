@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -45,6 +46,7 @@ class GitHubRequest {
     private final String apiUrl;
     private final String urlPath;
     private final String method;
+    private final RateLimitTarget rateLimitTarget;
     private final InputStream body;
     private final boolean forceBody;
 
@@ -56,6 +58,7 @@ class GitHubRequest {
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
+            @Nonnull RateLimitTarget rateLimitTarget,
             @CheckForNull InputStream body,
             boolean forceBody) throws MalformedURLException {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
@@ -64,6 +67,7 @@ class GitHubRequest {
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
         this.method = method;
+        this.rateLimitTarget = rateLimitTarget;
         this.body = body;
         this.forceBody = forceBody;
         String tailApiUrl = buildTailApiUrl();
@@ -72,7 +76,7 @@ class GitHubRequest {
 
     /**
      * Create a new {@link Builder}.
-     * 
+     *
      * @return a new {@link Builder}.
      */
     public static Builder<?> newBuilder() {
@@ -120,6 +124,16 @@ class GitHubRequest {
     }
 
     /**
+     * The rate limit target for this request.
+     *
+     * @return the rate limit to use for this request.
+     */
+    @Nonnull
+    public RateLimitTarget rateLimitTarget() {
+        return rateLimitTarget;
+    }
+
+    /**
      * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
      * url or to the request body.
      *
@@ -152,7 +166,7 @@ class GitHubRequest {
 
     /**
      * The base GitHub API URL for this request represented as a {@link String}
-     * 
+     *
      * @return the url string
      */
     @Nonnull
@@ -163,7 +177,7 @@ class GitHubRequest {
     /**
      * The url path to be added to the {@link #apiUrl()} for this request. If this does not start with a "/", it instead
      * represents the full url string for this request.
-     * 
+     *
      * @return a url path or full url string
      */
     @Nonnull
@@ -173,7 +187,7 @@ class GitHubRequest {
 
     /**
      * The content type to to be sent by this request.
-     * 
+     *
      * @return the content type.
      */
     @Nonnull
@@ -183,7 +197,7 @@ class GitHubRequest {
 
     /**
      * The {@link InputStream} to be sent as the body of this request.
-     * 
+     *
      * @return the {@link InputStream}.
      */
     @CheckForNull
@@ -193,7 +207,7 @@ class GitHubRequest {
 
     /**
      * The {@link URL} for this request. This is the actual URL the {@link GitHubClient} will send this request to.
-     * 
+     *
      * @return the request {@link URL}
      */
     @Nonnull
@@ -203,7 +217,7 @@ class GitHubRequest {
 
     /**
      * Whether arguments for this request should be included in the URL or in the body of the request.
-     * 
+     *
      * @return true if the arguements should be sent in the body of the request.
      */
     public boolean inBody() {
@@ -213,11 +227,19 @@ class GitHubRequest {
     /**
      * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
      * {@link GitHubRequest}.
-     * 
+     *
      * @return a {@link Builder} based on this request.
      */
     public Builder<?> toBuilder() {
-        return new Builder<>(args, headers, injectedMappingValues, apiUrl, urlPath, method, body, forceBody);
+        return new Builder<>(args,
+                headers,
+                injectedMappingValues,
+                apiUrl,
+                urlPath,
+                method,
+                rateLimitTarget,
+                body,
+                forceBody);
     }
 
     private String buildTailApiUrl() {
@@ -281,6 +303,10 @@ class GitHubRequest {
          */
         @Nonnull
         private String method;
+
+        @Nonnull
+        private RateLimitTarget rateLimitTarget;
+
         private InputStream body;
         private boolean forceBody;
 
@@ -294,6 +320,7 @@ class GitHubRequest {
                     GitHubClient.GITHUB_URL,
                     "/",
                     "GET",
+                    RateLimitTarget.CORE,
                     null,
                     false);
         }
@@ -304,6 +331,7 @@ class GitHubRequest {
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
+                @Nonnull RateLimitTarget rateLimitTarget,
                 @CheckForNull @WillClose InputStream body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
@@ -312,19 +340,28 @@ class GitHubRequest {
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
             this.method = method;
+            this.rateLimitTarget = rateLimitTarget;
             this.body = body;
             this.forceBody = forceBody;
         }
 
         /**
          * Builds a {@link GitHubRequest} from this builder.
-         * 
+         *
          * @return a {@link GitHubRequest}
          * @throws MalformedURLException
          *             if the GitHub API URL cannot be constructed
          */
         public GitHubRequest build() throws MalformedURLException {
-            return new GitHubRequest(args, headers, injectedMappingValues, apiUrl, urlPath, method, body, forceBody);
+            return new GitHubRequest(args,
+                    headers,
+                    injectedMappingValues,
+                    apiUrl,
+                    urlPath,
+                    method,
+                    rateLimitTarget,
+                    body,
+                    forceBody);
         }
 
         /**
@@ -348,9 +385,11 @@ class GitHubRequest {
          *            the name
          * @param value
          *            the value
+         * @return the request builder
          */
-        public void setHeader(String name, String value) {
+        public B setHeader(String name, String value) {
             headers.put(name, value);
+            return (B) this;
         }
 
         /**
@@ -363,8 +402,11 @@ class GitHubRequest {
          * @return the request builder
          */
         public B withHeader(String name, String value) {
-            setHeader(name, value);
-            return (B) this;
+            String oldValue = headers.get(name);
+            if (!StringUtils.isBlank(oldValue)) {
+                value = oldValue + ", " + value;
+            }
+            return setHeader(name, value);
         }
 
         /**
@@ -394,6 +436,25 @@ class GitHubRequest {
 
         public B withPreview(String name) {
             return withHeader("Accept", name);
+        }
+
+        public B withPreview(Previews preview) {
+            return withPreview(preview.mediaType());
+        }
+
+        /**
+         * With requester.
+         *
+         * @param Map
+         *            map of key value pairs to add
+         * @return the request builder
+         */
+        public B with(Map<String, Object> map) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                with(entry.getKey(), entry.getValue());
+            }
+
+            return (B) this;
         }
 
         /**
@@ -563,6 +624,18 @@ class GitHubRequest {
         }
 
         /**
+         * Method requester.
+         *
+         * @param rateLimitTarget
+         *            the rate limit target for this request. Default is {@link RateLimitTarget#CORE}.
+         * @return the request builder
+         */
+        public B rateLimit(@Nonnull RateLimitTarget rateLimitTarget) {
+            this.rateLimitTarget = rateLimitTarget;
+            return (B) this;
+        }
+
+        /**
          * Content type requester.
          *
          * @param contentType
@@ -623,13 +696,9 @@ class GitHubRequest {
                 tailUrlPath += "/" + String.join("/", urlPathItems);
             }
 
-            if (this.urlPath.endsWith("/")) {
-                tailUrlPath = StringUtils.stripStart(tailUrlPath, "/");
-            } else {
-                tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
-            }
+            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, "/");
 
-            this.urlPath += urlPathEncode(tailUrlPath);
+            this.urlPath = urlPathEncode(tailUrlPath);
             return (B) this;
         }
 

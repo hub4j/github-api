@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -37,30 +38,45 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Drafts a check run.
+ * Drafts or updates a check run.
  *
  * @see GHCheckRun
  * @see GHRepository#createCheckRun
  * @see <a href="https://developer.github.com/v3/checks/runs/#create-a-check-run">documentation</a>
+ * @see GHCheckRun#update()
+ * @see <a href="https://developer.github.com/v3/checks/runs/#update-a-check-run">documentation</a>
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
-@Preview
+@Preview(Previews.ANTIOPE)
 @Deprecated
 public final class GHCheckRunBuilder {
 
-    private final GHRepository repo;
-    private final Requester requester;
+    protected final GHRepository repo;
+    protected final Requester requester;
     private Output output;
     private List<Action> actions;
 
-    GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
+    private GHCheckRunBuilder(GHRepository repo, Requester requester) {
         this.repo = repo;
-        requester = repo.root.createRequest()
-                .withPreview(Previews.ANTIOPE)
-                .method("POST")
-                .with("name", name)
-                .with("head_sha", headSHA)
-                .withUrlPath(repo.getApiTailUrl("check-runs"));
+        this.requester = requester;
+    }
+
+    GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
+        this(repo,
+                repo.root.createRequest()
+                        .withPreview(Previews.ANTIOPE)
+                        .method("POST")
+                        .with("name", name)
+                        .with("head_sha", headSHA)
+                        .withUrlPath(repo.getApiTailUrl("check-runs")));
+    }
+
+    GHCheckRunBuilder(GHRepository repo, long checkId) {
+        this(repo,
+                repo.root.createRequest()
+                        .withPreview(Previews.ANTIOPE)
+                        .method("PATCH")
+                        .withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
     }
 
     public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
@@ -136,7 +152,7 @@ public final class GHCheckRunBuilder {
         }
         GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
         while (!extraAnnotations.isEmpty()) {
-            Output output2 = new Output(output.title, output.summary);
+            Output output2 = new Output(output.title, output.summary).withText(output.text);
             int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
             output2.annotations = extraAnnotations.subList(0, i);
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());

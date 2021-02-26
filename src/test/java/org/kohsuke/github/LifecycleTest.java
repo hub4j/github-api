@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.Is.is;
 
 public class LifecycleTest extends AbstractGitHubWireMockTest {
@@ -56,9 +56,18 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
         assertNotNull(asset);
+        List<GHAsset> cachedAssets = release.assets();
+        assertEquals(0, cachedAssets.size());
         List<GHAsset> assets = release.getAssets();
         assertEquals(1, assets.size());
         assertEquals("LICENSE.txt", assets.get(0).getName());
+        assertThat(assets.get(0).getSize(), equalTo(1104L));
+        assertThat(assets.get(0).getContentType(), equalTo("application/text"));
+        assertThat(assets.get(0).getState(), equalTo("uploaded"));
+        assertThat(assets.get(0).getDownloadCount(), equalTo(0L));
+        assertThat(assets.get(0).getOwner(), sameInstance(release.getOwner()));
+        assertThat(assets.get(0).getBrowserDownloadUrl(),
+                containsString("/temp-testCreateRepository/releases/download/release_tag/LICENSE.txt"));
 
         return asset;
     }
@@ -72,6 +81,16 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
         assertEquals(1, releases.size());
         GHRelease release = releases.get(0);
         assertEquals("Test Release", release.getName());
+        assertThat(release.getBody(), startsWith("How exciting!"));
+        assertThat(release.getOwner(), sameInstance(repository));
+        assertThat(release.getZipballUrl(),
+                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/zipball/release_tag"));
+        assertThat(release.getTarballUrl(),
+                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/tarball/release_tag"));
+        assertThat(release.getTargetCommitish(), equalTo("master"));
+        assertThat(release.getHtmlUrl().toString(),
+                endsWith("/hub4j-test-org/temp-testCreateRepository/releases/tag/release_tag"));
+
         return release;
     }
 

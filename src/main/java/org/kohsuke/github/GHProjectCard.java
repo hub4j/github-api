@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHProjectCard.
@@ -14,7 +14,6 @@ import static org.kohsuke.github.Previews.INERTIA;
  * @author Gunnar Skjold
  */
 public class GHProjectCard extends GHObject {
-    private GitHub root;
     private GHProject project;
     private GHProjectColumn column;
 

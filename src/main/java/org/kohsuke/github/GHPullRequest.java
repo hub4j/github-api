@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +36,8 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.SHADOW_CAT;
+import static org.kohsuke.github.internal.Previews.LYDIAN;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A pull request.
@@ -71,13 +71,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     // pull request reviewers
     private GHUser[] requested_reviewers;
     private GHTeam[] requested_teams;
-
-    /**
-     * GitHub doesn't return some properties of {@link GHIssue} when requesting the GET on the 'pulls' API route as
-     * opposed to 'issues' API route. This flag remembers whether we made the GET call on the 'issues' route on this
-     * object to fill in those missing details
-     */
-    private transient boolean fetchedIssueDetails;
 
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
@@ -175,12 +168,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public Date getMergedAt() {
         return GitHubClient.parseDate(merged_at);
-    }
-
-    @Override
-    public Collection<GHLabel> getLabels() throws IOException {
-        fetchIssue();
-        return super.getLabels();
     }
 
     @Override
@@ -566,6 +553,41 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Set the base branch on the pull request
+     *
+     * @param newBaseBranch
+     *            the name of the new base branch
+     * @throws IOException
+     *             the io exception
+     * @return the updated pull request
+     */
+    public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
+        return root.createRequest()
+                .method("PATCH")
+                .with("base", newBaseBranch)
+                .withUrlPath(getApiRoute())
+                .fetch(GHPullRequest.class)
+                .wrapUp(root);
+    }
+
+    /**
+     * Updates the branch. The same as pressing the button in the web GUI.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(LYDIAN)
+    @Deprecated
+    public void updateBranch() throws IOException {
+        root.createRequest()
+                .withPreview(LYDIAN)
+                .method("PUT")
+                .with("expected_head_sha", head.getSha())
+                .withUrlPath(getApiRoute() + "/update-branch")
+                .send();
+    }
+
+    /**
      * Merge this pull request.
      * <p>
      * The equivalent of the big green "Merge pull request" button.
@@ -626,10 +648,4 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         MERGE, SQUASH, REBASE
     }
 
-    private void fetchIssue() throws IOException {
-        if (!fetchedIssueDetails) {
-            root.createRequest().withUrlPath(getIssuesApiRoute()).fetchInto(this);
-            fetchedIssueDetails = true;
-        }
-    }
 }

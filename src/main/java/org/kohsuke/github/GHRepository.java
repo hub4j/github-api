@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,8 +54,16 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 
+import javax.annotation.Nonnull;
+
 import static java.util.Arrays.*;
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.ANT_MAN;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.FLASH;
+import static org.kohsuke.github.internal.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.MERCY;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A repository on GitHub.
@@ -65,10 +74,11 @@ import static org.kohsuke.github.Previews.*;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHRepository extends GHObject {
-    /* package almost final */ transient GitHub root;
 
     private String nodeId, description, homepage, name, full_name;
+
     private String html_url; // this is the UI
+
     /*
      * The license information makes use of the preview API.
      *
@@ -77,28 +87,42 @@ public class GHRepository extends GHObject {
     private GHLicense license;
 
     private String git_url, ssh_url, clone_url, svn_url, mirror_url;
+
     private GHUser owner; // not fully populated. beware.
+
     private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
 
     private boolean allow_squash_merge;
+
     private boolean allow_merge_commit;
+
     private boolean allow_rebase_merge;
 
     private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
     private boolean _private;
+
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
+
     private String pushed_at;
+
     private Map<Integer, GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
 
     private String default_branch, language;
+
     private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
 
     @SkipFromToString
     private GHRepoPermission permissions;
 
     private GHRepository source, parent;
+
+    private Boolean isTemplate;
+
+    static GHRepository read(GitHub root, String owner, String name) throws IOException {
+        return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
+    }
 
     /**
      * Create deployment gh deployment builder.
@@ -146,6 +170,8 @@ public class GHRepository extends GHObject {
                 .with("task", task)
                 .with("environment", environment)
                 .withUrlPath(getApiTailUrl("deployments"))
+                .withPreview(ANT_MAN)
+                .withPreview(FLASH)
                 .toIterable(GHDeployment[].class, item -> item.wrap(this));
     }
 
@@ -161,6 +187,8 @@ public class GHRepository extends GHObject {
     public GHDeployment getDeployment(long id) throws IOException {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("deployments/" + id))
+                .withPreview(ANT_MAN)
+                .withPreview(FLASH)
                 .fetch(GHDeployment.class)
                 .wrap(this);
     }
@@ -682,6 +710,28 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Is template boolean.
+     *
+     * @return the boolean
+     */
+    @Deprecated
+    @Preview(BAPTISTE)
+    public boolean isTemplate() {
+        // isTemplate is still in preview, we do not want to retrieve it unless needed.
+        if (isTemplate == null) {
+            try {
+                populate();
+            } catch (IOException e) {
+                // Convert this to a runtime exception to avoid messy method signature
+                throw new GHException("Could not populate the template setting of the repository", e);
+            }
+            // if this somehow is not populated, set it to false;
+            isTemplate = Boolean.TRUE.equals(isTemplate);
+        }
+        return isTemplate;
+    }
+
+    /**
      * Has downloads boolean.
      *
      * @return the boolean
@@ -776,6 +826,13 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Affiliation of a repository collaborator
+     */
+    public enum CollaboratorAffiliation {
+        ALL, DIRECT, OUTSIDE
+    }
+
+    /**
      * Gets the collaborators on this repository. This set always appear to include the owner.
      *
      * @return the collaborators
@@ -796,6 +853,19 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHUser> listCollaborators() throws IOException {
         return listUsers("collaborators");
+    }
+
+    /**
+     * Lists up the collaborators on this repository.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return Users paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listCollaborators(CollaboratorAffiliation affiliation) throws IOException {
+        return listUsers(root.createRequest().with("affiliation", affiliation), "collaborators");
     }
 
     /**
@@ -838,6 +908,29 @@ public class GHRepository extends GHObject {
         // no initializer - we just want to the logins
         PagedIterable<GHUser> users = root.createRequest()
                 .withUrlPath(getApiTailUrl("collaborators"))
+                .toIterable(GHUser[].class, null);
+        for (GHUser u : users.toArray()) {
+            r.add(u.login);
+        }
+        return r;
+    }
+
+    /**
+     * Gets the names of the collaborators on this repository. This method deviates from the principle of this library
+     * but it works a lot faster than {@link #getCollaborators()}.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return the collaborator names
+     * @throws IOException
+     *             the io exception
+     */
+    public Set<String> getCollaboratorNames(CollaboratorAffiliation affiliation) throws IOException {
+        Set<String> r = new HashSet<>();
+        // no initializer - we just want to the logins
+        PagedIterable<GHUser> users = root.createRequest()
+                .withUrlPath(getApiTailUrl("collaborators"))
+                .with("affiliation", affiliation)
                 .toIterable(GHUser[].class, null);
         for (GHUser u : users.toArray()) {
             r.add(u.login);
@@ -970,12 +1063,12 @@ public class GHRepository extends GHObject {
             @NonNull String method,
             @CheckForNull GHOrganization.Permission permission) throws IOException {
         Requester requester = root.createRequest().method(method);
-
         if (permission != null) {
             requester = requester.with("permission", permission).inBody();
         }
 
-        for (GHUser user : users) {
+        // Make sure that the users collection doesn't have any duplicates
+        for (GHUser user : new LinkedHashSet<GHUser>(users)) {
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
@@ -1000,13 +1093,6 @@ public class GHRepository extends GHObject {
                 .send();
     }
 
-    private void edit(String key, String value) throws IOException {
-        Requester requester = root.createRequest();
-        if (!key.equals("name"))
-            requester.with("name", name); // even when we don't change the name, we need to send it in
-        requester.with(key, value).method("PATCH").withUrlPath(getApiTailUrl("")).send();
-    }
-
     /**
      * Enables or disables the issue tracker for this repository.
      *
@@ -1016,7 +1102,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableIssueTracker(boolean v) throws IOException {
-        edit("has_issues", String.valueOf(v));
+        set().issues(v);
     }
 
     /**
@@ -1028,7 +1114,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableProjects(boolean v) throws IOException {
-        edit("has_projects", String.valueOf(v));
+        set().projects(v);
     }
 
     /**
@@ -1040,7 +1126,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableWiki(boolean v) throws IOException {
-        edit("has_wiki", String.valueOf(v));
+        set().wiki(v);
     }
 
     /**
@@ -1052,7 +1138,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void enableDownloads(boolean v) throws IOException {
-        edit("has_downloads", String.valueOf(v));
+        set().downloads(v);
     }
 
     /**
@@ -1064,7 +1150,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void renameTo(String name) throws IOException {
-        edit("name", name);
+        set().name(name);
     }
 
     /**
@@ -1076,7 +1162,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setDescription(String value) throws IOException {
-        edit("description", value);
+        set().description(value);
     }
 
     /**
@@ -1088,7 +1174,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setHomepage(String value) throws IOException {
-        edit("homepage", value);
+        set().homepage(value);
     }
 
     /**
@@ -1100,7 +1186,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setDefaultBranch(String value) throws IOException {
-        edit("default_branch", value);
+        set().defaultBranch(value);
     }
 
     /**
@@ -1112,7 +1198,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setPrivate(boolean value) throws IOException {
-        edit("private", Boolean.toString(value));
+        set().private_(value);
     }
 
     /**
@@ -1124,7 +1210,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowSquashMerge(boolean value) throws IOException {
-        edit("allow_squash_merge", Boolean.toString(value));
+        set().allowSquashMerge(value);
     }
 
     /**
@@ -1136,7 +1222,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowMergeCommit(boolean value) throws IOException {
-        edit("allow_merge_commit", Boolean.toString(value));
+        set().allowMergeCommit(value);
     }
 
     /**
@@ -1148,7 +1234,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void allowRebaseMerge(boolean value) throws IOException {
-        edit("allow_rebase_merge", Boolean.toString(value));
+        set().allowRebaseMerge(value);
     }
 
     /**
@@ -1160,7 +1246,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void deleteBranchOnMerge(boolean value) throws IOException {
-        edit("delete_branch_on_merge", Boolean.toString(value));
+        set().deleteBranchOnMerge(value);
     }
 
     /**
@@ -1197,10 +1283,28 @@ public class GHRepository extends GHObject {
      *             In case of any networking error or error from the server.
      */
     public void archive() throws IOException {
-        edit("archived", "true");
-        // Generall would not update this record,
-        // but do so here since this will result in any other update actions failing
+        set().archive();
+        // Generally would not update this record,
+        // but doing so here since this will result in any other update actions failing
         archived = true;
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Updater update() {
+        return new Updater(this);
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Setter set() {
+        return new Setter(this);
     }
 
     /**
@@ -1248,8 +1352,9 @@ public class GHRepository extends GHObject {
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
             GHRepository r = root.getMyself().getRepository(name);
-            if (r != null)
+            if (r != null) {
                 return r;
+            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -1278,8 +1383,9 @@ public class GHRepository extends GHObject {
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
             GHRepository r = org.getRepository(name);
-            if (r != null)
+            if (r != null) {
                 return r;
+            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -1747,6 +1853,20 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists all comments on a specific commit.
+     *
+     * @param commitSha
+     *            the hash of the commit
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCommitComment> listCommitComments(String commitSha) {
+        return root.createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/comments", getOwnerName(), name, commitSha))
+                .toIterable(GHCommitComment[].class, item -> item.wrap(this));
+    }
+
+    /**
      * Gets the basic license details for the repository.
      * <p>
      *
@@ -1822,7 +1942,7 @@ public class GHRepository extends GHObject {
      * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
         GitHubRequest request = root.createRequest()
@@ -1896,10 +2016,23 @@ public class GHRepository extends GHObject {
      *            the commit hash
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview
+    @Preview(ANTIOPE)
     @Deprecated
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
         return new GHCheckRunBuilder(this, name, headSHA);
+    }
+
+    /**
+     * Updates an existing check run.
+     *
+     * @param checkId
+     *            the existing checkId
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview(BAPTISTE)
+    @Deprecated
+    public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
+        return new GHCheckRunBuilder(this, checkId);
     }
 
     /**
@@ -2019,9 +2152,11 @@ public class GHRepository extends GHObject {
     }
 
     private PagedIterable<GHUser> listUsers(final String suffix) {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl(suffix))
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+        return listUsers(root.createRequest(), suffix);
+    }
+
+    private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
+        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, item -> item.wrapUp(root));
     }
 
     /**
@@ -2084,7 +2219,12 @@ public class GHRepository extends GHObject {
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @Deprecated
     public Set<URL> getPostCommitHooks() {
-        return postCommitHooks;
+        synchronized (this) {
+            if (postCommitHooks == null) {
+                postCommitHooks = setupPostCommitHooks();
+            }
+            return postCommitHooks;
+        }
     }
 
     /**
@@ -2093,57 +2233,63 @@ public class GHRepository extends GHObject {
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @SkipFromToString
-    private final Set<URL> postCommitHooks = new AbstractSet<URL>() {
-        private List<URL> getPostCommitHooks() {
-            try {
-                List<URL> r = new ArrayList<>();
-                for (GHHook h : getHooks()) {
-                    if (h.getName().equals("web")) {
-                        r.add(new URL(h.getConfig().get("url")));
+    private /* final */ transient Set<URL> postCommitHooks;
+
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
+    private Set<URL> setupPostCommitHooks() {
+        return new AbstractSet<URL>() {
+            private List<URL> getPostCommitHooks() {
+                try {
+                    List<URL> r = new ArrayList<>();
+                    for (GHHook h : getHooks()) {
+                        if (h.getName().equals("web")) {
+                            r.add(new URL(h.getConfig().get("url")));
+                        }
                     }
+                    return r;
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve post-commit hooks", e);
                 }
-                return r;
-            } catch (IOException e) {
-                throw new GHException("Failed to retrieve post-commit hooks", e);
             }
-        }
 
-        @Override
-        public Iterator<URL> iterator() {
-            return getPostCommitHooks().iterator();
-        }
-
-        @Override
-        public int size() {
-            return getPostCommitHooks().size();
-        }
-
-        @Override
-        public boolean add(URL url) {
-            try {
-                createWebHook(url);
-                return true;
-            } catch (IOException e) {
-                throw new GHException("Failed to update post-commit hooks", e);
+            @Override
+            public Iterator<URL> iterator() {
+                return getPostCommitHooks().iterator();
             }
-        }
 
-        @Override
-        public boolean remove(Object url) {
-            try {
-                String _url = ((URL) url).toExternalForm();
-                for (GHHook h : getHooks()) {
-                    if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
-                        h.delete();
-                        return true;
+            @Override
+            public int size() {
+                return getPostCommitHooks().size();
+            }
+
+            @Override
+            public boolean add(URL url) {
+                try {
+                    createWebHook(url);
+                    return true;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+                    String _url = ((URL) url).toExternalForm();
+                    for (GHHook h : getHooks()) {
+                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                            h.delete();
+                            return true;
+                        }
                     }
+                    return false;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
                 }
-                return false;
-            } catch (IOException e) {
-                throw new GHException("Failed to update post-commit hooks", e);
             }
-        }
-    };
+        };
+    }
 
     GHRepository wrap(GitHub root) {
         this.root = root;
@@ -2721,8 +2867,9 @@ public class GHRepository extends GHObject {
     }
 
     String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/"))
+        if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
+        }
         return "/repos/" + getOwnerName() + "/" + name + tail;
     }
 
@@ -2829,23 +2976,64 @@ public class GHRepository extends GHObject {
      *             The IO exception
      */
     void populate() throws IOException {
-        if (root.isOffline())
+        if (root.isOffline()) {
             return; // can't populate if the root is offline
+        }
 
         final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
 
         try {
-            // IMPORTANT: the url for repository records is does not reliably point to the API url.
+            // IMPORTANT: the url for repository records does not reliably point to the API url.
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
-                root.createRequest().withUrlPath("/repos/" + full_name).fetchInto(this).wrap(root);
+                root.createRequest()
+                        .withPreview(BAPTISTE)
+                        .withUrlPath("/repos/" + full_name)
+                        .fetchInto(this)
+                        .wrap(root);
             } else {
                 throw e;
             }
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Updater extends GHRepositoryBuilder<Updater> {
+        protected Updater(@Nonnull GHRepository repository) {
+            super(Updater.class, repository.root, null);
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+            requester.with("name", repository.name);
+
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Setter extends GHRepositoryBuilder<GHRepository> {
+        protected Setter(@Nonnull GHRepository repository) {
+            super(GHRepository.class, repository.root, null);
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+            requester.with("name", repository.name);
+
+            requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
     }
 }

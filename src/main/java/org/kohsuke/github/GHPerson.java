@@ -18,7 +18,6 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
-    /* package almost final */ GitHub root;
 
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url;
@@ -154,10 +153,7 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-            return root.createRequest()
-                    .withUrlPath("/repos/" + login + '/' + name)
-                    .fetch(GHRepository.class)
-                    .wrap(root);
+            return GHRepository.read(root, login, name);
         } catch (FileNotFoundException e) {
             return null;
         }
@@ -239,7 +235,7 @@ public abstract class GHPerson extends GHObject {
 
     /**
      * Gets the Twitter Username of this user, like "GitHub"
-     * 
+     *
      * @return the Twitter username
      * @throws IOException
      *             the io exception

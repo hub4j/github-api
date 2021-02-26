@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHOrganization.
@@ -97,7 +97,7 @@ public class GHOrganization extends GHPerson {
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-        return new GHCreateRepositoryBuilder(root, "/orgs/" + login + "/repos", name);
+        return new GHCreateRepositoryBuilder(name, root, "/orgs/" + login + "/repos");
     }
 
     /**
@@ -181,7 +181,7 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
-     * 
+     *
      * @param slug
      *            the slug
      * @return the team by slug
@@ -421,7 +421,7 @@ public class GHOrganization extends GHPerson {
      * The enum Permission.
      */
     public enum Permission {
-        ADMIN, PUSH, PULL
+        ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
     }
 
     /**

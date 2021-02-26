@@ -1,7 +1,10 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Represents a deployment
@@ -13,7 +16,6 @@ import java.net.URL;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
-    private GitHub root;
     protected String sha;
     protected String ref;
     protected String task;
@@ -23,6 +25,9 @@ public class GHDeployment extends GHObject {
     protected String statuses_url;
     protected String repository_url;
     protected GHUser creator;
+    protected String original_environment;
+    protected boolean transient_environment;
+    protected boolean production_environment;
 
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
@@ -60,12 +65,45 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * Gets payload.
+     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a simple string,
+     * otherwise use {@link #getPayloadObject()}.
      *
      * @return the payload
      */
     public String getPayload() {
         return (String) payload;
+    }
+
+    /**
+     * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a JSON object (Map),
+     * otherwise use {@link #getPayloadObject()}.
+     *
+     * @return the payload
+     */
+    public Map<String, Object> getPayloadMap() {
+        return (Map<String, Object>) payload;
+    }
+
+    /**
+     * Gets payload without assuming its type. It could be a String or a Map.
+     *
+     * @return the payload
+     */
+    public Object getPayloadObject() {
+        return payload;
+    }
+
+    /**
+     * The environment defined when the deployment was first created.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return the original deployment environment
+     */
+    @Deprecated
+    @Preview(Previews.FLASH)
+    public String getOriginalEnvironment() {
+        return original_environment;
     }
 
     /**
@@ -75,6 +113,33 @@ public class GHDeployment extends GHObject {
      */
     public String getEnvironment() {
         return environment;
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return the environment is transient
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public boolean isTransientEnvironment() {
+        return transient_environment;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @deprecated until preview feature has graduated to stable
+     *
+     * @return the environment is used by end-users directly
+     */
+    @Deprecated
+    @Preview(Previews.ANT_MAN)
+    public boolean isProductionEnvironment() {
+        return production_environment;
     }
 
     /**
@@ -133,6 +198,8 @@ public class GHDeployment extends GHObject {
     public PagedIterable<GHDeploymentStatus> listStatuses() {
         return root.createRequest()
                 .withUrlPath(statuses_url)
+                .withPreview(Previews.ANT_MAN)
+                .withPreview(Previews.FLASH)
                 .toIterable(GHDeploymentStatus[].class, item -> item.wrap(owner));
     }
 

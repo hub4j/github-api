@@ -36,6 +36,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     // You can use the proxy without taking a snapshot while writing and debugging tests.
     // You cannot take a snapshot without proxying.
     private final static boolean takeSnapshot = System.getProperty("test.github.takeSnapshot", "false") != "false";
+    private final static boolean testWithOrg = System.getProperty("test.github.org", "true") == "true";
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
 
@@ -69,6 +70,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     public boolean isTakeSnapshot() {
         return GitHubWireMockRule.takeSnapshot;
+    }
+
+    public boolean isTestWithOrg() {
+        return GitHubWireMockRule.testWithOrg;
     }
 
     @Override

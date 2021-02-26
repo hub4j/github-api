@@ -1,0 +1,48 @@
+{
+  "id": "c536ef14-9fde-4a95-ae89-43f6753e4f2a",
+  "name": "repos_daddyfatstacksbig_lerna",
+  "request": {
+    "url": "/repos/daddyfatstacksBIG/lerna",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_daddyfatstacksbig_lerna-12.json",
+    "headers": {
+      "Date": "Fri, 15 Jan 2021 02:18:27 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"a9b6035f2bfdf3830acbea545b9a837965158f59ac8cf616563e29681b0f0098\"",
+      "last-modified": "Tue, 09 Jun 2020 04:42:07 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4777",
+      "X-RateLimit-Reset": "1610678593",
+      "x-ratelimit-used": "223",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D91F:62A3:2C8A07:3712B1:6000FB73"
+    }
+  },
+  "uuid": "c536ef14-9fde-4a95-ae89-43f6753e4f2a",
+  "persistent": true,
+  "insertionIndex": 12
+}

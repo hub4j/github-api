@@ -100,7 +100,6 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
-            builder.oauthToken = null;
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
@@ -174,14 +173,12 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      *             if repository could not be created or retrieved.
      */
     protected GHRepository getTempRepository(String name) throws IOException {
-        String fullName = GITHUB_API_TEST_ORG + '/' + name;
-        if (mockGitHub.isUseProxy()) {
+        String fullName = getOrganization() + '/' + name;
 
+        if (mockGitHub.isUseProxy()) {
             cleanupRepository(fullName);
 
-            GHRepository repository = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG)
-                    .createRepository(name)
-                    .description("A test repository for testing the github-api project: " + name)
+            getCreateBuilder(name).description("A test repository for testing the github-api project: " + name)
                     .homepage("http://github-api.kohsuke.org/")
                     .autoInit(true)
                     .wiki(true)
@@ -242,6 +239,20 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
         // String login = getUserTest().getLogin();
         // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
+    }
+
+    private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
+        GitHub github = getGitHubBeforeAfter();
+
+        if (mockGitHub.isTestWithOrg()) {
+            return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
+        }
+
+        return github.createRepository(name);
+    }
+
+    private String getOrganization() throws IOException {
+        return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {

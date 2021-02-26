@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 public class GHGist extends GHObject {
 
     final GHUser owner;
-    final GitHub root;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
@@ -123,7 +122,7 @@ public class GHGist extends GHObject {
 
     /**
      * Get the html url.
-     * 
+     *
      * @return the github html url
      */
     public URL getHtmlUrl() {

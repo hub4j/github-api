@@ -30,7 +30,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
-import org.kohsuke.github.function.InputStreamConsumer;
+import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -2967,40 +2967,40 @@ public class GHRepository extends GHObject {
     /**
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
-     * @param sink
-     *            The {@link InputStreamConsumer} that will consume the stream
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
      */
-    public void readZip(InputStreamConsumer sink, String ref) throws IOException {
-        downloadArchive("zip", ref, sink);
+    public <T> T readZip(InputStreamFunction<T> streamFunction, String ref) throws IOException {
+        return downloadArchive("zip", ref, streamFunction);
     }
 
     /**
      * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
      *
-     * @param sink
-     *            The {@link InputStreamConsumer} that will consume the stream
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
      */
-    public void readTar(InputStreamConsumer sink, String ref) throws IOException {
-        downloadArchive("tar", ref, sink);
+    public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
+        return downloadArchive("tar", ref, streamFunction);
     }
 
-    private void downloadArchive(@Nonnull String type, @CheckForNull String ref, @Nonnull InputStreamConsumer sink)
+    private <T> T downloadArchive(@Nonnull String type, @CheckForNull String ref, @Nonnull InputStreamFunction<T> streamFunction)
             throws IOException {
-        requireNonNull(sink, "Sink must not be null");
+        requireNonNull(streamFunction, "Sink must not be null");
         String tailUrl = getApiTailUrl(type + "ball");
         if (ref != null) {
             tailUrl += "/" + ref;
         }
         final Requester builder = root.createRequest().method("GET").withUrlPath(tailUrl);
-        builder.fetchStream(sink);
+        return builder.fetchStream(streamFunction);
     }
 
     /**

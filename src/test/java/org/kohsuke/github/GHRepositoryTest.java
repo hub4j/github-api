@@ -34,14 +34,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testZipball() throws IOException {
         getTempRepository().readZip((InputStream inputstream) -> {
-            InputStream i = new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
+            return new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
         }, null);
     }
 
     @Test
     public void testTarball() throws IOException {
         getTempRepository().readTar((InputStream inputstream) -> {
-            InputStream i = new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
+            return new ByteArrayInputStream(IOUtils.toByteArray(inputstream));
         }, null);
     }
 

@@ -25,7 +25,6 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.function.InputStreamConsumer;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.ByteArrayInputStream;
@@ -103,20 +102,6 @@ class Requester extends GitHubRequest.Builder<Requester> {
      */
     public int fetchHttpStatusCode() throws IOException {
         return client.sendRequest(build(), null).statusCode();
-    }
-
-    /**
-     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
-     * {@link #fetch(Class)} where possible.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void fetchStream(@Nonnull InputStreamConsumer consumer) throws IOException {
-        fetchStream((inputStream) -> {
-            consumer.accept(inputStream);
-            return null;
-        });
     }
 
     /**

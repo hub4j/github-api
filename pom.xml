@@ -39,7 +39,6 @@
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.4.1</okhttp3.version>
     <okio.version>2.5.0</okio.version>
-    <spotless-maven-plugin.goal>apply</spotless-maven-plugin.goal>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
     <jacoco.coverage.target.bundle.method>0.70</jacoco.coverage.target.bundle.method>
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
@@ -325,13 +324,14 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.7.0</version>
+        <version>2.8.1</version>
         <executions>
           <execution>
             <id>spotless-check</id>
-            <phase>process-sources</phase>
+            <!-- runs in verify phase by default -->
             <goals>
-              <goal>${spotless-maven-plugin.goal}</goal>
+              <!-- can be disabled using -Dspotless.check.skip=true -->
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>
@@ -574,7 +574,6 @@
       <properties>
         <!-- Only fail code coverage on non-windows machines -->
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
-        <spotless-maven-plugin.goal>check</spotless-maven-plugin.goal>
       </properties>
     </profile>
     <profile>
@@ -590,14 +589,25 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
           </plugin>
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>spotless-check</id>
+                <!-- In CI, run check early in the build -->
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
     <profile>
       <id>release</id>
-      <properties>
-        <spotless-maven-plugin.goal>check</spotless-maven-plugin.goal>
-      </properties>
       <build>
         <plugins>
           <plugin>

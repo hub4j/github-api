@@ -2967,12 +2967,15 @@ public class GHRepository extends GHObject {
     /**
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
+     * @param <T>
+     *            the type of result
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
+     * @return the result of reading the stream.
      */
     public <T> T readZip(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("zip", ref, streamFunction);
@@ -2981,19 +2984,23 @@ public class GHRepository extends GHObject {
     /**
      * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
      *
+     * @param <T>
+     *            the type of result
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>master</code>,
      * @throws IOException
      *             The IO exception.
+     * @return the result of reading the stream.
      */
     public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("tar", ref, streamFunction);
     }
 
-    private <T> T downloadArchive(@Nonnull String type, @CheckForNull String ref, @Nonnull InputStreamFunction<T> streamFunction)
-            throws IOException {
+    private <T> T downloadArchive(@Nonnull String type,
+            @CheckForNull String ref,
+            @Nonnull InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Sink must not be null");
         String tailUrl = getApiTailUrl(type + "ball");
         if (ref != null) {

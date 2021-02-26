@@ -46,6 +46,14 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testGetRepository() throws Exception {
+        GHRepository testRepo = gitHub.getRepositoryById(repo.getId());
+        assertThat(testRepo.getName(), equalTo(repo.getName()));
+        testRepo = gitHub.getRepositoryById(Long.toString(repo.getId()));
+        assertThat(testRepo.getName(), equalTo(repo.getName()));
+    }
+
+    @Test
     public void testGetFileContent() throws Exception {
         repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");

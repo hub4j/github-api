@@ -632,8 +632,25 @@ public class GitHub {
      * @return the repository by id
      * @throws IOException
      *             the io exception
+     *
+     * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter. Use
+     *             {@link #getRepositoryById(long)} instead
      */
+    @Deprecated
     public GHRepository getRepositoryById(String id) throws IOException {
+        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
+    }
+
+    /**
+     * Gets the repository object from its ID
+     *
+     * @param id
+     *            the id
+     * @return the repository by id
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepository getRepositoryById(long id) throws IOException {
         return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
     }
 

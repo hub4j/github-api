@@ -103,20 +103,28 @@ public class JWTTokenProvider implements AuthorizationProvider {
     private String refreshJWT() {
         Instant now = Instant.now();
 
-        // Token expires in 10 minutes
-        Instant expiration = Instant.now().plus(Duration.ofMinutes(10));
+        // Max token expiration is 10 minutes for GitHub
+        // We use a smaller window since we likely will not need more than a few seconds
+        Instant expiration = now.plus(Duration.ofMinutes(8));
+
+        // Setting the issued at to a time in the past to allow for clock skew
+        Instant issuedAt = getIssuedAt(now);
 
         // Let's set the JWT Claims
         JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(Date.from(now))
+                .setIssuedAt(Date.from(issuedAt))
                 .setExpiration(Date.from(expiration))
                 .setIssuer(this.applicationId)
                 .signWith(privateKey, SignatureAlgorithm.RS256);
 
-        // Token will refresh after 8 minutes
+        // Token will refresh 2 minutes before it expires
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
         // Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();
+    }
+
+    Instant getIssuedAt(Instant now) {
+        return now.minus(Duration.ofMinutes(2));
     }
 }

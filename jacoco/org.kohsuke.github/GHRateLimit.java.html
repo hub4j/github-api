@@ -100,20 +100,20 @@ public class GHRateLimit {
 <span class="fc" id="L100">                    UnknownLimitRecord.DEFAULT,</span>
 <span class="fc" id="L101">                    UnknownLimitRecord.DEFAULT,</span>
 <span class="fc" id="L102">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
 <span class="fc" id="L104">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
                     record,
 <span class="fc" id="L106">                    UnknownLimitRecord.DEFAULT,</span>
 <span class="fc" id="L107">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="nc" id="L109">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
-<span class="nc" id="L110">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L109">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L110">                    UnknownLimitRecord.DEFAULT,</span>
                     record,
-<span class="nc" id="L112">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
-<span class="nc" id="L114">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
-<span class="nc" id="L115">                    UnknownLimitRecord.DEFAULT,</span>
-<span class="nc" id="L116">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L112">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L114">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L115">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L116">                    UnknownLimitRecord.DEFAULT,</span>
                     record);
         } else {
 <span class="nc" id="L119">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
@@ -240,8 +240,8 @@ public class GHRateLimit {
 
     @Override
     public String toString() {
-<span class="nc" id="L243">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;, search &quot; + getSearch().toString() + &quot;, graphql &quot;</span>
-<span class="nc" id="L244">                + getGraphQL().toString() + &quot;, integrationManifest &quot; + getIntegrationManifest().toString() + &quot;}&quot;;</span>
+<span class="fc" id="L243">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;, search &quot; + getSearch().toString() + &quot;, graphql &quot;</span>
+<span class="fc" id="L244">                + getGraphQL().toString() + &quot;, integrationManifest &quot; + getIntegrationManifest().toString() + &quot;}&quot;;</span>
     }
 
     @Override
@@ -260,7 +260,7 @@ public class GHRateLimit {
 
     @Override
     public int hashCode() {
-<span class="nc" id="L263">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
+<span class="fc" id="L263">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
     }
 
     /**
@@ -299,16 +299,16 @@ public class GHRateLimit {
      */
     @Nonnull
     Record getRecord(@Nonnull RateLimitTarget rateLimitTarget) {
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (rateLimitTarget == RateLimitTarget.CORE) {</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE) {</span>
 <span class="fc" id="L303">            return getCore();</span>
-<span class="nc bnc" id="L304" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
-<span class="nc" id="L305">            return getSearch();</span>
-<span class="nc bnc" id="L306" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="nc" id="L307">            return getGraphQL();</span>
-<span class="nc bnc" id="L308" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
-<span class="nc" id="L309">            return getIntegrationManifest();</span>
-<span class="nc bnc" id="L310" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.NONE) {</span>
-<span class="nc" id="L311">            return UnknownLimitRecord.DEFAULT;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L305">            return getSearch();</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L307">            return getGraphQL();</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L309">            return getIntegrationManifest();</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L311">            return UnknownLimitRecord.DEFAULT;</span>
         } else {
 <span class="nc" id="L313">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
         }
@@ -603,7 +603,7 @@ public class GHRateLimit {
 
         @Override
         public String toString() {
-<span class="nc" id="L606">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
+<span class="fc" id="L606">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
                     + '}';
         }
 
@@ -617,13 +617,13 @@ public class GHRateLimit {
             }
 <span class="fc" id="L618">            Record record = (Record) o;</span>
 <span class="pc bpc" id="L619" title="1 of 4 branches missed.">            return getRemaining() == record.getRemaining() &amp;&amp; getLimit() == record.getLimit()</span>
-<span class="pc bpc" id="L620" title="1 of 2 branches missed.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
-<span class="pc bnc" id="L621" title="All 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
+<span class="fc bfc" id="L620" title="All 2 branches covered.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
+<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
         }
 
         @Override
         public int hashCode() {
-<span class="nc" id="L626">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
+<span class="fc" id="L626">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
         }
     }
 

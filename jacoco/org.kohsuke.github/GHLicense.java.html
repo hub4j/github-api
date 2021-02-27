@@ -83,8 +83,8 @@ import java.util.Objects;
      *             the io exception
      */
     public Boolean isFeatured() throws IOException {
-<span class="nc" id="L86">        populate();</span>
-<span class="nc" id="L87">        return featured;</span>
+<span class="fc" id="L86">        populate();</span>
+<span class="fc" id="L87">        return featured;</span>
     }
 
     public URL getHtmlUrl() throws IOException {
@@ -112,8 +112,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getCategory() throws IOException {
-<span class="nc" id="L115">        populate();</span>
-<span class="nc" id="L116">        return category;</span>
+<span class="fc" id="L115">        populate();</span>
+<span class="fc" id="L116">        return category;</span>
     }
 
     /**
@@ -124,8 +124,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getImplementation() throws IOException {
-<span class="nc" id="L127">        populate();</span>
-<span class="nc" id="L128">        return implementation;</span>
+<span class="fc" id="L127">        populate();</span>
+<span class="fc" id="L128">        return implementation;</span>
     }
 
     /**
@@ -148,8 +148,8 @@ import java.util.Objects;
      *             the io exception
      */
     public List&lt;String&gt; getPermitted() throws IOException {
-<span class="nc" id="L151">        populate();</span>
-<span class="nc" id="L152">        return permitted;</span>
+<span class="fc" id="L151">        populate();</span>
+<span class="fc" id="L152">        return permitted;</span>
     }
 
     /**
@@ -160,8 +160,8 @@ import java.util.Objects;
      *             the io exception
      */
     public List&lt;String&gt; getForbidden() throws IOException {
-<span class="nc" id="L163">        populate();</span>
-<span class="nc" id="L164">        return forbidden;</span>
+<span class="fc" id="L163">        populate();</span>
+<span class="fc" id="L164">        return forbidden;</span>
     }
 
     /**
@@ -172,8 +172,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getBody() throws IOException {
-<span class="nc" id="L175">        populate();</span>
-<span class="nc" id="L176">        return body;</span>
+<span class="fc" id="L175">        populate();</span>
+<span class="fc" id="L176">        return body;</span>
     }
 
     /**
@@ -200,13 +200,13 @@ import java.util.Objects;
 
     @Override
     public boolean equals(Object o) {
-<span class="nc bnc" id="L203" title="All 2 branches missed.">        if (this == o)</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">        if (this == o)</span>
 <span class="nc" id="L204">            return true;</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">        if (!(o instanceof GHLicense))</span>
-<span class="nc" id="L206">            return false;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (!(o instanceof GHLicense))</span>
+<span class="fc" id="L206">            return false;</span>
 
-<span class="nc" id="L208">        GHLicense that = (GHLicense) o;</span>
-<span class="nc" id="L209">        return Objects.equals(getUrl(), that.getUrl());</span>
+<span class="fc" id="L208">        GHLicense that = (GHLicense) o;</span>
+<span class="fc" id="L209">        return Objects.equals(getUrl(), that.getUrl());</span>
     }
 
     @Override

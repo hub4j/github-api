@@ -152,7 +152,7 @@ public final class GHCheckRunBuilder {
         }
 <span class="fc" id="L153">        GHCheckRun run = requester.with(&quot;output&quot;, output).with(&quot;actions&quot;, actions).fetch(GHCheckRun.class).wrap(repo);</span>
 <span class="fc bfc" id="L154" title="All 2 branches covered.">        while (!extraAnnotations.isEmpty()) {</span>
-<span class="fc" id="L155">            Output output2 = new Output(output.title, output.summary);</span>
+<span class="fc" id="L155">            Output output2 = new Output(output.title, output.summary).withText(output.text);</span>
 <span class="fc" id="L156">            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);</span>
 <span class="fc" id="L157">            output2.annotations = extraAnnotations.subList(0, i);</span>
 <span class="fc" id="L158">            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());</span>
@@ -185,8 +185,8 @@ public final class GHCheckRunBuilder {
 <span class="fc" id="L185">        }</span>
 
         public @NonNull Output withText(@CheckForNull String text) {
-<span class="nc" id="L188">            this.text = text;</span>
-<span class="nc" id="L189">            return this;</span>
+<span class="fc" id="L188">            this.text = text;</span>
+<span class="fc" id="L189">            return this;</span>
         }
 
         public @NonNull Output add(@NonNull Annotation annotation) {

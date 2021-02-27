@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +27,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
     private GHOrganization organization;
     private GHAppInstallation installation;
 
-<span class="fc" id="L29">    GHEventPayload() {</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L30">    GHEventPayload() {</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Gets the action for the triggered event. Most but not all webhook payloads contain an action property that
@@ -36,7 +37,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @return event action
      */
     public String getAction() {
-<span class="fc" id="L39">        return action;</span>
+<span class="fc" id="L40">        return action;</span>
     }
 
     /**
@@ -45,7 +46,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @return the sender or {@code null} if accessed via the events API.
      */
     public GHUser getSender() {
-<span class="fc" id="L48">        return sender;</span>
+<span class="fc" id="L49">        return sender;</span>
     }
 
     /**
@@ -55,8 +56,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *            the sender
      */
     public void setSender(GHUser sender) {
-<span class="nc" id="L58">        this.sender = sender;</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L59">        this.sender = sender;</span>
+<span class="nc" id="L60">    }</span>
 
     /**
      * Gets repository.
@@ -64,7 +65,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @return the repository
      */
     public GHRepository getRepository() {
-<span class="fc" id="L67">        return repository;</span>
+<span class="fc" id="L68">        return repository;</span>
     }
 
     /**
@@ -74,8 +75,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *            the repository
      */
     public void setRepository(GHRepository repository) {
-<span class="nc" id="L77">        this.repository = repository;</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L78">        this.repository = repository;</span>
+<span class="nc" id="L79">    }</span>
 
     /**
      * Gets organization.
@@ -83,7 +84,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @return the organization
      */
     public GHOrganization getOrganization() {
-<span class="fc" id="L86">        return organization;</span>
+<span class="fc" id="L87">        return organization;</span>
     }
 
     /**
@@ -93,8 +94,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *            the organization
      */
     public void setOrganization(GHOrganization organization) {
-<span class="nc" id="L96">        this.organization = organization;</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L97">        this.organization = organization;</span>
+<span class="nc" id="L98">    }</span>
 
     /**
      * Gets installation
@@ -102,24 +103,24 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @return the installation
      */
     public GHAppInstallation getInstallation() {
-<span class="fc" id="L105">        return installation;</span>
+<span class="fc" id="L106">        return installation;</span>
     }
 
     void wrapUp(GitHub root) {
-<span class="fc" id="L109">        this.root = root;</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (sender != null) {</span>
-<span class="fc" id="L111">            sender.wrapUp(root);</span>
+<span class="fc" id="L110">        this.root = root;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (sender != null) {</span>
+<span class="fc" id="L112">            sender.wrapUp(root);</span>
         }
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (repository != null) {</span>
-<span class="fc" id="L114">            repository.wrap(root);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (repository != null) {</span>
+<span class="fc" id="L115">            repository.wrap(root);</span>
         }
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (organization != null) {</span>
-<span class="fc" id="L117">            organization.wrapUp(root);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (organization != null) {</span>
+<span class="fc" id="L118">            organization.wrapUp(root);</span>
         }
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (installation != null) {</span>
-<span class="fc" id="L120">            installation.wrapUp(root);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (installation != null) {</span>
+<span class="fc" id="L121">            installation.wrapUp(root);</span>
         }
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L123">    }</span>
 
     // List of events that still need to be added:
     // ContentReferenceEvent
@@ -136,7 +137,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      check_run event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#check-runs&quot;&gt;Check Runs&lt;/a&gt;
      */
-<span class="fc" id="L139">    public static class CheckRun extends GHEventPayload {</span>
+<span class="fc" id="L140">    public static class CheckRun extends GHEventPayload {</span>
         private int number;
         private GHCheckRun checkRun;
         private GHRequestedAction requestedAction;
@@ -147,7 +148,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the number
          */
         public int getNumber() {
-<span class="nc" id="L150">            return number;</span>
+<span class="nc" id="L151">            return number;</span>
         }
 
         /**
@@ -157,8 +158,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the check run object
          */
         public void setCheckRun(GHCheckRun currentCheckRun) {
-<span class="nc" id="L160">            this.checkRun = currentCheckRun;</span>
-<span class="nc" id="L161">        }</span>
+<span class="nc" id="L161">            this.checkRun = currentCheckRun;</span>
+<span class="nc" id="L162">        }</span>
 
         /**
          * Gets Check Run object
@@ -166,7 +167,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the current checkRun object
          */
         public GHCheckRun getCheckRun() {
-<span class="fc" id="L169">            return checkRun;</span>
+<span class="fc" id="L170">            return checkRun;</span>
         }
 
         /**
@@ -176,8 +177,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the current action
          */
         public void setCheckRun(GHRequestedAction currentRequestedAction) {
-<span class="nc" id="L179">            this.requestedAction = currentRequestedAction;</span>
-<span class="nc" id="L180">        }</span>
+<span class="nc" id="L180">            this.requestedAction = currentRequestedAction;</span>
+<span class="nc" id="L181">        }</span>
 
         /**
          * Gets the Requested Action object
@@ -185,22 +186,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the requested action
          */
         public GHRequestedAction getRequestedAction() {
-<span class="nc" id="L188">            return requestedAction;</span>
+<span class="fc" id="L189">            return requestedAction;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L193">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L194" title="1 of 2 branches missed.">            if (checkRun == null)</span>
-<span class="nc" id="L195">                throw new IllegalStateException(</span>
+<span class="fc" id="L194">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">            if (checkRun == null)</span>
+<span class="nc" id="L196">                throw new IllegalStateException(</span>
                         &quot;Expected check_run payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L197">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L199">                checkRun.wrap(repository);</span>
+<span class="fc" id="L198">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L200">                checkRun.wrap(repository);</span>
             } else {
-<span class="nc" id="L201">                checkRun.wrap(root);</span>
+<span class="nc" id="L202">                checkRun.wrap(root);</span>
             }
-<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">        }</span>
     }
 
     /**
@@ -210,7 +211,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      check_suite event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#check-suites&quot;&gt;Check Suites&lt;/a&gt;
      */
-<span class="fc" id="L213">    public static class CheckSuite extends GHEventPayload {</span>
+<span class="fc" id="L214">    public static class CheckSuite extends GHEventPayload {</span>
         private GHCheckSuite checkSuite;
 
         /**
@@ -219,22 +220,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the Check Suite object
          */
         public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L222">            return checkSuite;</span>
+<span class="fc" id="L223">            return checkSuite;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L227">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">            if (checkSuite == null)</span>
-<span class="nc" id="L229">                throw new IllegalStateException(</span>
+<span class="fc" id="L228">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">            if (checkSuite == null)</span>
+<span class="nc" id="L230">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L231">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L233">                checkSuite.wrap(repository);</span>
+<span class="fc" id="L232">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L234">                checkSuite.wrap(repository);</span>
             } else {
-<span class="nc" id="L235">                checkSuite.wrap(root);</span>
+<span class="nc" id="L236">                checkSuite.wrap(root);</span>
             }
-<span class="fc" id="L237">        }</span>
+<span class="fc" id="L238">        }</span>
     }
 
     /**
@@ -245,7 +246,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      installation event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/apps#installations&quot;&gt;GitHub App Installation&lt;/a&gt;
      */
-<span class="fc" id="L248">    public static class Installation extends GHEventPayload {</span>
+<span class="fc" id="L249">    public static class Installation extends GHEventPayload {</span>
         private List&lt;GHRepository&gt; repositories;
 
         /**
@@ -254,28 +255,28 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L257">            return repositories;</span>
+<span class="fc" id="L258">            return repositories;</span>
         };
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L262">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
-<span class="nc" id="L264">                throw new IllegalStateException(</span>
+<span class="fc" id="L263">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
+<span class="nc" id="L265">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
             }
 
-<span class="pc bpc" id="L268" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
+<span class="pc bpc" id="L269" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
                 try {
-<span class="fc bfc" id="L270" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
-<span class="fc" id="L271">                        singleRepo.wrap(root);</span>
-<span class="fc" id="L272">                        singleRepo.populate();</span>
-<span class="fc" id="L273">                    }</span>
-<span class="nc" id="L274">                } catch (IOException e) {</span>
-<span class="nc" id="L275">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
-<span class="fc" id="L276">                }</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
+<span class="fc" id="L272">                        singleRepo.wrap(root);</span>
+<span class="fc" id="L273">                        singleRepo.populate();</span>
+<span class="fc" id="L274">                    }</span>
+<span class="nc" id="L275">                } catch (IOException e) {</span>
+<span class="nc" id="L276">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
+<span class="fc" id="L277">                }</span>
             }
-<span class="fc" id="L278">        }</span>
+<span class="fc" id="L279">        }</span>
     }
 
     /**
@@ -286,7 +287,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      installation_repositories event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/apps#installations&quot;&gt;GitHub App installation&lt;/a&gt;
      */
-<span class="fc" id="L289">    public static class InstallationRepositories extends GHEventPayload {</span>
+<span class="fc" id="L290">    public static class InstallationRepositories extends GHEventPayload {</span>
         private String repositorySelection;
         private List&lt;GHRepository&gt; repositoriesAdded;
         private List&lt;GHRepository&gt; repositoriesRemoved;
@@ -297,7 +298,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the installation selection
          */
         public String getRepositorySelection() {
-<span class="fc" id="L300">            return repositorySelection;</span>
+<span class="fc" id="L301">            return repositorySelection;</span>
         }
 
         /**
@@ -306,7 +307,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositoriesAdded() {
-<span class="fc" id="L309">            return repositoriesAdded;</span>
+<span class="fc" id="L310">            return repositoriesAdded;</span>
         }
 
         /**
@@ -315,34 +316,34 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositoriesRemoved() {
-<span class="fc" id="L318">            return repositoriesRemoved;</span>
+<span class="fc" id="L319">            return repositoriesRemoved;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L323">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
-<span class="nc" id="L325">                throw new IllegalStateException(</span>
+<span class="fc" id="L324">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
+<span class="nc" id="L326">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
             }
 
             List&lt;GHRepository&gt; repositories;
-<span class="pc bpc" id="L330" title="1 of 2 branches missed.">            if (&quot;added&quot;.equals(getAction()))</span>
-<span class="fc" id="L331">                repositories = repositoriesAdded;</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">            if (&quot;added&quot;.equals(getAction()))</span>
+<span class="fc" id="L332">                repositories = repositoriesAdded;</span>
             else // action == &quot;removed&quot;
-<span class="nc" id="L333">                repositories = repositoriesRemoved;</span>
+<span class="nc" id="L334">                repositories = repositoriesRemoved;</span>
 
-<span class="pc bpc" id="L335" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
+<span class="pc bpc" id="L336" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
                 try {
-<span class="fc bfc" id="L337" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
-<span class="fc" id="L338">                        singleRepo.wrap(root);</span>
-<span class="fc" id="L339">                        singleRepo.populate();</span>
-<span class="fc" id="L340">                    }</span>
-<span class="nc" id="L341">                } catch (IOException e) {</span>
-<span class="nc" id="L342">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
-<span class="fc" id="L343">                }</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
+<span class="fc" id="L339">                        singleRepo.wrap(root);</span>
+<span class="fc" id="L340">                        singleRepo.populate();</span>
+<span class="fc" id="L341">                    }</span>
+<span class="nc" id="L342">                } catch (IOException e) {</span>
+<span class="nc" id="L343">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
+<span class="fc" id="L344">                }</span>
             }
-<span class="fc" id="L345">        }</span>
+<span class="fc" id="L346">        }</span>
     }
 
     /**
@@ -354,7 +355,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls&quot;&gt;Pull Requests&lt;/a&gt;
      */
     @SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L357">    public static class PullRequest extends GHEventPayload {</span>
+<span class="fc" id="L358">    public static class PullRequest extends GHEventPayload {</span>
         private int number;
         private GHPullRequest pullRequest;
         private GHLabel label;
@@ -366,7 +367,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the number
          */
         public int getNumber() {
-<span class="fc" id="L369">            return number;</span>
+<span class="fc" id="L370">            return number;</span>
         }
 
         /**
@@ -375,8 +376,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L378">            pullRequest.root = root;</span>
-<span class="fc" id="L379">            return pullRequest;</span>
+<span class="fc" id="L379">            pullRequest.root = root;</span>
+<span class="fc" id="L380">            return pullRequest;</span>
         }
 
         /**
@@ -385,7 +386,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the label
          */
         public GHLabel getLabel() {
-<span class="fc" id="L388">            return label;</span>
+<span class="fc" id="L389">            return label;</span>
         }
 
         /**
@@ -394,22 +395,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return changes
          */
         public GHPullRequestChanges getChanges() {
-<span class="fc" id="L397">            return changes;</span>
+<span class="fc" id="L398">            return changes;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L402">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L403" title="1 of 2 branches missed.">            if (pullRequest == null)</span>
-<span class="nc" id="L404">                throw new IllegalStateException(</span>
+<span class="fc" id="L403">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L404" title="1 of 2 branches missed.">            if (pullRequest == null)</span>
+<span class="nc" id="L405">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L406">            GHRepository repository = getRepository();</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">            if (repository != null) {</span>
-<span class="fc" id="L408">                pullRequest.wrapUp(repository);</span>
+<span class="fc" id="L407">            GHRepository repository = getRepository();</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">            if (repository != null) {</span>
+<span class="fc" id="L409">                pullRequest.wrapUp(repository);</span>
             } else {
-<span class="fc" id="L410">                pullRequest.wrapUp(root);</span>
+<span class="fc" id="L411">                pullRequest.wrapUp(root);</span>
             }
-<span class="fc" id="L412">        }</span>
+<span class="fc" id="L413">        }</span>
     }
 
     /**
@@ -420,7 +421,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      pull_request_review event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#reviews&quot;&gt;Pull Request Reviews&lt;/a&gt;
      */
-<span class="fc" id="L423">    public static class PullRequestReview extends GHEventPayload {</span>
+<span class="fc" id="L424">    public static class PullRequestReview extends GHEventPayload {</span>
         private GHPullRequestReview review;
         private GHPullRequest pullRequest;
 
@@ -430,7 +431,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the review
          */
         public GHPullRequestReview getReview() {
-<span class="fc" id="L433">            return review;</span>
+<span class="fc" id="L434">            return review;</span>
         }
 
         /**
@@ -439,25 +440,25 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L442">            return pullRequest;</span>
+<span class="fc" id="L443">            return pullRequest;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L447">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L448" title="1 of 2 branches missed.">            if (review == null)</span>
-<span class="nc" id="L449">                throw new IllegalStateException(</span>
+<span class="fc" id="L448">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">            if (review == null)</span>
+<span class="nc" id="L450">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request_review payload, but got something else. Maybe we've got another type of event?&quot;);
 
-<span class="fc" id="L452">            review.wrapUp(pullRequest);</span>
+<span class="fc" id="L453">            review.wrapUp(pullRequest);</span>
 
-<span class="fc" id="L454">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L455" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L456">                pullRequest.wrapUp(repository);</span>
+<span class="fc" id="L455">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L456" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L457">                pullRequest.wrapUp(repository);</span>
             } else {
-<span class="nc" id="L458">                pullRequest.wrapUp(root);</span>
+<span class="nc" id="L459">                pullRequest.wrapUp(root);</span>
             }
-<span class="fc" id="L460">        }</span>
+<span class="fc" id="L461">        }</span>
     }
 
     /**
@@ -468,7 +469,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      pull_request_review_comment event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#review-comments&quot;&gt;Pull Request Review Comments&lt;/a&gt;
      */
-<span class="fc" id="L471">    public static class PullRequestReviewComment extends GHEventPayload {</span>
+<span class="fc" id="L472">    public static class PullRequestReviewComment extends GHEventPayload {</span>
         private GHPullRequestReviewComment comment;
         private GHPullRequest pullRequest;
 
@@ -478,7 +479,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the comment
          */
         public GHPullRequestReviewComment getComment() {
-<span class="fc" id="L481">            return comment;</span>
+<span class="fc" id="L482">            return comment;</span>
         }
 
         /**
@@ -487,25 +488,25 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the pull request
          */
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L490">            return pullRequest;</span>
+<span class="fc" id="L491">            return pullRequest;</span>
         }
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L495">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">            if (comment == null)</span>
-<span class="nc" id="L497">                throw new IllegalStateException(</span>
+<span class="fc" id="L496">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L497" title="1 of 2 branches missed.">            if (comment == null)</span>
+<span class="nc" id="L498">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?&quot;);
 
-<span class="fc" id="L500">            comment.wrapUp(pullRequest);</span>
+<span class="fc" id="L501">            comment.wrapUp(pullRequest);</span>
 
-<span class="fc" id="L502">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L504">                pullRequest.wrapUp(repository);</span>
+<span class="fc" id="L503">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L504" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L505">                pullRequest.wrapUp(repository);</span>
             } else {
-<span class="nc" id="L506">                pullRequest.wrapUp(root);</span>
+<span class="nc" id="L507">                pullRequest.wrapUp(root);</span>
             }
-<span class="fc" id="L508">        }</span>
+<span class="fc" id="L509">        }</span>
     }
 
     /**
@@ -516,7 +517,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      issues events&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/issues#comments&quot;&gt;Issues Comments&lt;/a&gt;
      */
-<span class="fc" id="L519">    public static class Issue extends GHEventPayload {</span>
+<span class="fc" id="L520">    public static class Issue extends GHEventPayload {</span>
         private GHIssue issue;
 
         /**
@@ -525,7 +526,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the issue
          */
         public GHIssue getIssue() {
-<span class="fc" id="L528">            return issue;</span>
+<span class="fc" id="L529">            return issue;</span>
         }
 
         /**
@@ -535,19 +536,19 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the issue
          */
         public void setIssue(GHIssue issue) {
-<span class="nc" id="L538">            this.issue = issue;</span>
-<span class="nc" id="L539">        }</span>
+<span class="nc" id="L539">            this.issue = issue;</span>
+<span class="nc" id="L540">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L543">            super.wrapUp(root);</span>
-<span class="fc" id="L544">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L545" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L546">                issue.wrap(repository);</span>
+<span class="fc" id="L544">            super.wrapUp(root);</span>
+<span class="fc" id="L545">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L547">                issue.wrap(repository);</span>
             } else {
-<span class="nc" id="L548">                issue.wrap(root);</span>
+<span class="nc" id="L549">                issue.wrap(root);</span>
             }
-<span class="fc" id="L550">        }</span>
+<span class="fc" id="L551">        }</span>
     }
 
     /**
@@ -558,7 +559,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      issue_comment event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/issues#comments&quot;&gt;Issue Comments&lt;/a&gt;
      */
-<span class="fc" id="L561">    public static class IssueComment extends GHEventPayload {</span>
+<span class="fc" id="L562">    public static class IssueComment extends GHEventPayload {</span>
         private GHIssueComment comment;
         private GHIssue issue;
 
@@ -568,7 +569,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the comment
          */
         public GHIssueComment getComment() {
-<span class="fc" id="L571">            return comment;</span>
+<span class="fc" id="L572">            return comment;</span>
         }
 
         /**
@@ -578,8 +579,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the comment
          */
         public void setComment(GHIssueComment comment) {
-<span class="nc" id="L581">            this.comment = comment;</span>
-<span class="nc" id="L582">        }</span>
+<span class="nc" id="L582">            this.comment = comment;</span>
+<span class="nc" id="L583">        }</span>
 
         /**
          * Gets issue.
@@ -587,7 +588,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the issue
          */
         public GHIssue getIssue() {
-<span class="fc" id="L590">            return issue;</span>
+<span class="fc" id="L591">            return issue;</span>
         }
 
         /**
@@ -597,20 +598,20 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the issue
          */
         public void setIssue(GHIssue issue) {
-<span class="nc" id="L600">            this.issue = issue;</span>
-<span class="nc" id="L601">        }</span>
+<span class="nc" id="L601">            this.issue = issue;</span>
+<span class="nc" id="L602">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L605">            super.wrapUp(root);</span>
-<span class="fc" id="L606">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L607" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L608">                issue.wrap(repository);</span>
+<span class="fc" id="L606">            super.wrapUp(root);</span>
+<span class="fc" id="L607">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L608" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L609">                issue.wrap(repository);</span>
             } else {
-<span class="nc" id="L610">                issue.wrap(root);</span>
+<span class="nc" id="L611">                issue.wrap(root);</span>
             }
-<span class="fc" id="L612">            comment.wrapUp(issue);</span>
-<span class="fc" id="L613">        }</span>
+<span class="fc" id="L613">            comment.wrapUp(issue);</span>
+<span class="fc" id="L614">        }</span>
     }
 
     /**
@@ -621,7 +622,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      commit comment&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#comments&quot;&gt;Comments&lt;/a&gt;
      */
-<span class="fc" id="L624">    public static class CommitComment extends GHEventPayload {</span>
+<span class="fc" id="L625">    public static class CommitComment extends GHEventPayload {</span>
         private GHCommitComment comment;
 
         /**
@@ -630,7 +631,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the comment
          */
         public GHCommitComment getComment() {
-<span class="fc" id="L633">            return comment;</span>
+<span class="fc" id="L634">            return comment;</span>
         }
 
         /**
@@ -640,17 +641,17 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the comment
          */
         public void setComment(GHCommitComment comment) {
-<span class="nc" id="L643">            this.comment = comment;</span>
-<span class="nc" id="L644">        }</span>
+<span class="nc" id="L644">            this.comment = comment;</span>
+<span class="nc" id="L645">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L648">            super.wrapUp(root);</span>
-<span class="fc" id="L649">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L650" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L651">                comment.wrap(repository);</span>
+<span class="fc" id="L649">            super.wrapUp(root);</span>
+<span class="fc" id="L650">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L651" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L652">                comment.wrap(repository);</span>
             }
-<span class="fc" id="L653">        }</span>
+<span class="fc" id="L654">        }</span>
     }
 
     /**
@@ -660,7 +661,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      create event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/git&quot;&gt;Git data&lt;/a&gt;
      */
-<span class="fc" id="L663">    public static class Create extends GHEventPayload {</span>
+<span class="fc" id="L664">    public static class Create extends GHEventPayload {</span>
         private String ref;
         private String refType;
         private String masterBranch;
@@ -673,7 +674,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRef() {
-<span class="fc" id="L676">            return ref;</span>
+<span class="fc" id="L677">            return ref;</span>
         }
 
         /**
@@ -683,7 +684,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRefType() {
-<span class="fc" id="L686">            return refType;</span>
+<span class="fc" id="L687">            return refType;</span>
         }
 
         /**
@@ -693,7 +694,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getMasterBranch() {
-<span class="fc" id="L696">            return masterBranch;</span>
+<span class="fc" id="L697">            return masterBranch;</span>
         }
 
         /**
@@ -703,7 +704,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getDescription() {
-<span class="fc" id="L706">            return description;</span>
+<span class="fc" id="L707">            return description;</span>
         }
     }
 
@@ -714,7 +715,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      delete event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/git&quot;&gt;Git data&lt;/a&gt;
      */
-<span class="fc" id="L717">    public static class Delete extends GHEventPayload {</span>
+<span class="fc" id="L718">    public static class Delete extends GHEventPayload {</span>
         private String ref;
         private String refType;
 
@@ -725,7 +726,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRef() {
-<span class="fc" id="L728">            return ref;</span>
+<span class="fc" id="L729">            return ref;</span>
         }
 
         /**
@@ -735,7 +736,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRefType() {
-<span class="fc" id="L738">            return refType;</span>
+<span class="fc" id="L739">            return refType;</span>
         }
     }
 
@@ -746,7 +747,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      deployment event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#deployments&quot;&gt;Deployments&lt;/a&gt;
      */
-<span class="fc" id="L749">    public static class Deployment extends GHEventPayload {</span>
+<span class="fc" id="L750">    public static class Deployment extends GHEventPayload {</span>
         private GHDeployment deployment;
 
         /**
@@ -755,7 +756,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the deployment
          */
         public GHDeployment getDeployment() {
-<span class="fc" id="L758">            return deployment;</span>
+<span class="fc" id="L759">            return deployment;</span>
         }
 
         /**
@@ -765,17 +766,17 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the deployment
          */
         public void setDeployment(GHDeployment deployment) {
-<span class="nc" id="L768">            this.deployment = deployment;</span>
-<span class="nc" id="L769">        }</span>
+<span class="nc" id="L769">            this.deployment = deployment;</span>
+<span class="nc" id="L770">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L773">            super.wrapUp(root);</span>
-<span class="fc" id="L774">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L775" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L776">                deployment.wrap(repository);</span>
+<span class="fc" id="L774">            super.wrapUp(root);</span>
+<span class="fc" id="L775">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L776" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L777">                deployment.wrap(repository);</span>
             }
-<span class="fc" id="L778">        }</span>
+<span class="fc" id="L779">        }</span>
     }
 
     /**
@@ -786,7 +787,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      deployment_status event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#deployments&quot;&gt;Deployments&lt;/a&gt;
      */
-<span class="fc" id="L789">    public static class DeploymentStatus extends GHEventPayload {</span>
+<span class="fc" id="L790">    public static class DeploymentStatus extends GHEventPayload {</span>
         private GHDeploymentStatus deploymentStatus;
         private GHDeployment deployment;
 
@@ -796,7 +797,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the deployment status
          */
         public GHDeploymentStatus getDeploymentStatus() {
-<span class="fc" id="L799">            return deploymentStatus;</span>
+<span class="fc" id="L800">            return deploymentStatus;</span>
         }
 
         /**
@@ -806,8 +807,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the deployment status
          */
         public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
-<span class="nc" id="L809">            this.deploymentStatus = deploymentStatus;</span>
-<span class="nc" id="L810">        }</span>
+<span class="nc" id="L810">            this.deploymentStatus = deploymentStatus;</span>
+<span class="nc" id="L811">        }</span>
 
         /**
          * Gets deployment.
@@ -815,7 +816,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the deployment
          */
         public GHDeployment getDeployment() {
-<span class="fc" id="L818">            return deployment;</span>
+<span class="fc" id="L819">            return deployment;</span>
         }
 
         /**
@@ -825,18 +826,18 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the deployment
          */
         public void setDeployment(GHDeployment deployment) {
-<span class="nc" id="L828">            this.deployment = deployment;</span>
-<span class="nc" id="L829">        }</span>
+<span class="nc" id="L829">            this.deployment = deployment;</span>
+<span class="nc" id="L830">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L833">            super.wrapUp(root);</span>
-<span class="fc" id="L834">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L835" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L836">                deployment.wrap(repository);</span>
-<span class="fc" id="L837">                deploymentStatus.wrap(repository);</span>
+<span class="fc" id="L834">            super.wrapUp(root);</span>
+<span class="fc" id="L835">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L836" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L837">                deployment.wrap(repository);</span>
+<span class="fc" id="L838">                deploymentStatus.wrap(repository);</span>
             }
-<span class="fc" id="L839">        }</span>
+<span class="fc" id="L840">        }</span>
     }
 
     /**
@@ -846,7 +847,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#forks&quot;&gt;Forks&lt;/a&gt;
      */
-<span class="fc" id="L849">    public static class Fork extends GHEventPayload {</span>
+<span class="fc" id="L850">    public static class Fork extends GHEventPayload {</span>
         private GHRepository forkee;
 
         /**
@@ -855,7 +856,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the forkee
          */
         public GHRepository getForkee() {
-<span class="fc" id="L858">            return forkee;</span>
+<span class="fc" id="L859">            return forkee;</span>
         }
 
         /**
@@ -865,14 +866,14 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the forkee
          */
         public void setForkee(GHRepository forkee) {
-<span class="nc" id="L868">            this.forkee = forkee;</span>
-<span class="nc" id="L869">        }</span>
+<span class="nc" id="L869">            this.forkee = forkee;</span>
+<span class="nc" id="L870">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L873">            super.wrapUp(root);</span>
-<span class="fc" id="L874">            forkee.wrap(root);</span>
-<span class="fc" id="L875">        }</span>
+<span class="fc" id="L874">            super.wrapUp(root);</span>
+<span class="fc" id="L875">            forkee.wrap(root);</span>
+<span class="fc" id="L876">        }</span>
     }
 
     /**
@@ -881,7 +882,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#ping&quot;&gt; ping
      * event&lt;/a&gt;
      */
-<span class="fc" id="L884">    public static class Ping extends GHEventPayload {</span>
+<span class="fc" id="L885">    public static class Ping extends GHEventPayload {</span>
 
     }
 
@@ -891,7 +892,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#public&quot;&gt;
      *      public event&lt;/a&gt;
      */
-<span class="fc" id="L894">    public static class Public extends GHEventPayload {</span>
+<span class="fc" id="L895">    public static class Public extends GHEventPayload {</span>
 
     }
 
@@ -901,7 +902,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#push&quot;&gt; push
      *      event&lt;/a&gt;
      */
-<span class="fc" id="L904">    public static class Push extends GHEventPayload {</span>
+<span class="fc" id="L905">    public static class Push extends GHEventPayload {</span>
         private String head, before;
         private boolean created, deleted, forced;
         private String ref;
@@ -916,7 +917,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the head
          */
         public String getHead() {
-<span class="fc" id="L919">            return head;</span>
+<span class="fc" id="L920">            return head;</span>
         }
 
         /**
@@ -926,13 +927,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the before
          */
         public String getBefore() {
-<span class="fc" id="L929">            return before;</span>
+<span class="fc" id="L930">            return before;</span>
         }
 
         @JsonSetter // alias
         private void setAfter(String after) {
-<span class="fc" id="L934">            head = after;</span>
-<span class="fc" id="L935">        }</span>
+<span class="fc" id="L935">            head = after;</span>
+<span class="fc" id="L936">        }</span>
 
         /**
          * The full Git ref that was pushed. Example: “refs/heads/master”
@@ -940,7 +941,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the ref
          */
         public String getRef() {
-<span class="fc" id="L943">            return ref;</span>
+<span class="fc" id="L944">            return ref;</span>
         }
 
         /**
@@ -949,7 +950,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the size
          */
         public int getSize() {
-<span class="nc" id="L952">            return size;</span>
+<span class="nc" id="L953">            return size;</span>
         }
 
         /**
@@ -958,7 +959,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isCreated() {
-<span class="fc" id="L961">            return created;</span>
+<span class="fc" id="L962">            return created;</span>
         }
 
         /**
@@ -967,7 +968,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isDeleted() {
-<span class="fc" id="L970">            return deleted;</span>
+<span class="fc" id="L971">            return deleted;</span>
         }
 
         /**
@@ -976,7 +977,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isForced() {
-<span class="fc" id="L979">            return forced;</span>
+<span class="fc" id="L980">            return forced;</span>
         }
 
         /**
@@ -985,7 +986,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the commits
          */
         public List&lt;PushCommit&gt; getCommits() {
-<span class="fc" id="L988">            return commits;</span>
+<span class="fc" id="L989">            return commits;</span>
         }
 
         /**
@@ -994,7 +995,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the pusher
          */
         public Pusher getPusher() {
-<span class="fc" id="L997">            return pusher;</span>
+<span class="fc" id="L998">            return pusher;</span>
         }
 
         /**
@@ -1004,8 +1005,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the pusher
          */
         public void setPusher(Pusher pusher) {
-<span class="nc" id="L1007">            this.pusher = pusher;</span>
-<span class="nc" id="L1008">        }</span>
+<span class="nc" id="L1008">            this.pusher = pusher;</span>
+<span class="nc" id="L1009">        }</span>
 
         /**
          * Gets compare.
@@ -1013,13 +1014,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return compare
          */
         public String getCompare() {
-<span class="fc" id="L1016">            return compare;</span>
+<span class="fc" id="L1017">            return compare;</span>
         }
 
         /**
          * The type Pusher.
          */
-<span class="fc" id="L1022">        public static class Pusher {</span>
+<span class="fc" id="L1023">        public static class Pusher {</span>
             private String name, email;
 
             /**
@@ -1028,7 +1029,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the name
              */
             public String getName() {
-<span class="fc" id="L1031">                return name;</span>
+<span class="fc" id="L1032">                return name;</span>
             }
 
             /**
@@ -1038,8 +1039,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *            the name
              */
             public void setName(String name) {
-<span class="nc" id="L1041">                this.name = name;</span>
-<span class="nc" id="L1042">            }</span>
+<span class="nc" id="L1042">                this.name = name;</span>
+<span class="nc" id="L1043">            }</span>
 
             /**
              * Gets email.
@@ -1047,7 +1048,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the email
              */
             public String getEmail() {
-<span class="fc" id="L1050">                return email;</span>
+<span class="fc" id="L1051">                return email;</span>
             }
 
             /**
@@ -1057,17 +1058,17 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *            the email
              */
             public void setEmail(String email) {
-<span class="nc" id="L1060">                this.email = email;</span>
-<span class="nc" id="L1061">            }</span>
+<span class="nc" id="L1061">                this.email = email;</span>
+<span class="nc" id="L1062">            }</span>
         }
 
         /**
          * Commit in a push. Note: sha is an alias for id.
          */
-<span class="fc" id="L1067">        public static class PushCommit {</span>
+<span class="fc" id="L1068">        public static class PushCommit {</span>
             private GitUser author;
             private GitUser committer;
-            private String url, sha, message;
+            private String url, sha, message, timestamp;
             private boolean distinct;
             private List&lt;String&gt; added, removed, modified;
 
@@ -1077,7 +1078,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the author
              */
             public GitUser getAuthor() {
-<span class="fc" id="L1080">                return author;</span>
+<span class="fc" id="L1081">                return author;</span>
             }
 
             /**
@@ -1086,7 +1087,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the committer
              */
             public GitUser getCommitter() {
-<span class="fc" id="L1089">                return committer;</span>
+<span class="fc" id="L1090">                return committer;</span>
             }
 
             /**
@@ -1095,7 +1096,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the url
              */
             public String getUrl() {
-<span class="nc" id="L1098">                return url;</span>
+<span class="nc" id="L1099">                return url;</span>
             }
 
             /**
@@ -1104,13 +1105,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the sha
              */
             public String getSha() {
-<span class="fc" id="L1107">                return sha;</span>
+<span class="fc" id="L1108">                return sha;</span>
             }
 
             @JsonSetter
             private void setId(String id) {
-<span class="fc" id="L1112">                sha = id;</span>
-<span class="fc" id="L1113">            }</span>
+<span class="fc" id="L1113">                sha = id;</span>
+<span class="fc" id="L1114">            }</span>
 
             /**
              * Gets message.
@@ -1118,7 +1119,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the message
              */
             public String getMessage() {
-<span class="nc" id="L1121">                return message;</span>
+<span class="nc" id="L1122">                return message;</span>
             }
 
             /**
@@ -1127,7 +1128,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the boolean
              */
             public boolean isDistinct() {
-<span class="nc" id="L1130">                return distinct;</span>
+<span class="nc" id="L1131">                return distinct;</span>
             }
 
             /**
@@ -1136,7 +1137,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the added
              */
             public List&lt;String&gt; getAdded() {
-<span class="fc" id="L1139">                return added;</span>
+<span class="fc" id="L1140">                return added;</span>
             }
 
             /**
@@ -1145,7 +1146,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the removed
              */
             public List&lt;String&gt; getRemoved() {
-<span class="fc" id="L1148">                return removed;</span>
+<span class="fc" id="L1149">                return removed;</span>
             }
 
             /**
@@ -1154,7 +1155,16 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the modified
              */
             public List&lt;String&gt; getModified() {
-<span class="fc" id="L1157">                return modified;</span>
+<span class="fc" id="L1158">                return modified;</span>
+            }
+
+            /**
+             * Obtains the timestamp of the commit
+             *
+             * @return the timestamp
+             */
+            public Date getTimestamp() {
+<span class="fc" id="L1167">                return GitHubClient.parseDate(timestamp);</span>
             }
         }
     }
@@ -1168,7 +1178,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
             justification = &quot;Constructed by JSON deserialization&quot;)
-<span class="fc" id="L1171">    public static class Release extends GHEventPayload {</span>
+<span class="fc" id="L1181">    public static class Release extends GHEventPayload {</span>
         private GHRelease release;
 
         /**
@@ -1177,7 +1187,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the release
          */
         public GHRelease getRelease() {
-<span class="fc" id="L1180">            return release;</span>
+<span class="fc" id="L1190">            return release;</span>
         }
 
         /**
@@ -1187,8 +1197,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            the release
          */
         public void setRelease(GHRelease release) {
-<span class="nc" id="L1190">            this.release = release;</span>
-<span class="nc" id="L1191">        }</span>
+<span class="nc" id="L1200">            this.release = release;</span>
+<span class="nc" id="L1201">        }</span>
     }
 
     /**
@@ -1198,7 +1208,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      repository event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos&quot;&gt;Repositories&lt;/a&gt;
      */
-<span class="fc" id="L1201">    public static class Repository extends GHEventPayload {</span>
+<span class="fc" id="L1211">    public static class Repository extends GHEventPayload {</span>
 
     }
 
@@ -1209,7 +1219,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      status event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#statuses&quot;&gt;Repository Statuses&lt;/a&gt;
      */
-<span class="fc" id="L1212">    public static class Status extends GHEventPayload {</span>
+<span class="fc" id="L1222">    public static class Status extends GHEventPayload {</span>
         private String context;
         private String description;
         private GHCommitState state;
@@ -1222,7 +1232,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status content
          */
         public String getContext() {
-<span class="fc" id="L1225">            return context;</span>
+<span class="fc" id="L1235">            return context;</span>
         }
 
         /**
@@ -1231,7 +1241,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return a url
          */
         public String getTargetUrl() {
-<span class="fc" id="L1234">            return targetUrl;</span>
+<span class="fc" id="L1244">            return targetUrl;</span>
         }
 
         /**
@@ -1240,7 +1250,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status description
          */
         public String getDescription() {
-<span class="fc" id="L1243">            return description;</span>
+<span class="fc" id="L1253">            return description;</span>
         }
 
         /**
@@ -1249,7 +1259,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status state
          */
         public GHCommitState getState() {
-<span class="fc" id="L1252">            return state;</span>
+<span class="fc" id="L1262">            return state;</span>
         }
 
         /**
@@ -1259,8 +1269,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            status state
          */
         public void setState(GHCommitState state) {
-<span class="nc" id="L1262">            this.state = state;</span>
-<span class="nc" id="L1263">        }</span>
+<span class="nc" id="L1272">            this.state = state;</span>
+<span class="nc" id="L1273">        }</span>
 
         /**
          * Gets the commit associated with the status event.
@@ -1268,7 +1278,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return commit
          */
         public GHCommit getCommit() {
-<span class="fc" id="L1271">            return commit;</span>
+<span class="fc" id="L1281">            return commit;</span>
         }
 
         /**
@@ -1278,21 +1288,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *            commit
          */
         public void setCommit(GHCommit commit) {
-<span class="nc" id="L1281">            this.commit = commit;</span>
-<span class="nc" id="L1282">        }</span>
+<span class="nc" id="L1291">            this.commit = commit;</span>
+<span class="nc" id="L1292">        }</span>
 
         @Override
         void wrapUp(GitHub root) {
-<span class="fc" id="L1286">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L1287" title="1 of 2 branches missed.">            if (state == null) {</span>
-<span class="nc" id="L1288">                throw new IllegalStateException(</span>
+<span class="fc" id="L1296">            super.wrapUp(root);</span>
+<span class="pc bpc" id="L1297" title="1 of 2 branches missed.">            if (state == null) {</span>
+<span class="nc" id="L1298">                throw new IllegalStateException(</span>
                         &quot;Expected status payload, but got something else. Maybe we've got another type of event?&quot;);
             }
-<span class="fc" id="L1291">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L1292" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L1293">                commit.wrapUp(repository);</span>
+<span class="fc" id="L1301">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L1302" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L1303">                commit.wrapUp(repository);</span>
             }
-<span class="fc" id="L1295">        }</span>
+<span class="fc" id="L1305">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

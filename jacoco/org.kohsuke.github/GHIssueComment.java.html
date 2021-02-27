@@ -52,7 +52,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the parent
      */
     public GHIssue getParent() {
-<span class="nc" id="L55">        return owner;</span>
+<span class="fc" id="L55">        return owner;</span>
     }
 
     /**
@@ -82,12 +82,12 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());</span>
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());</span>
     }
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L90">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L90">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -141,15 +141,15 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
     @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="nc" id="L144">        return owner.root.createRequest()</span>
-<span class="nc" id="L145">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="nc" id="L146">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="nc" id="L147">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
+<span class="fc" id="L144">        return owner.root.createRequest()</span>
+<span class="fc" id="L145">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L146">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L147">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
     }
 
     private String getApiRoute() {
-<span class="nc" id="L151">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
-<span class="nc" id="L152">                + &quot;/issues/comments/&quot; + getId();</span>
+<span class="fc" id="L151">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
+<span class="fc" id="L152">                + &quot;/issues/comments/&quot; + getId();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

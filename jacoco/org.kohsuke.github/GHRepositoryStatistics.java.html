@@ -166,8 +166,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
 
         @Override
         public String toString() {
-<span class="nc" id="L169">            return author.getLogin() + &quot; made &quot; + String.valueOf(total) + &quot; contributions over &quot;</span>
-<span class="nc" id="L170">                    + String.valueOf(weeks.size()) + &quot; weeks&quot;;</span>
+<span class="fc" id="L169">            return author.getLogin() + &quot; made &quot; + String.valueOf(total) + &quot; contributions over &quot;</span>
+<span class="fc" id="L170">                    + String.valueOf(weeks.size()) + &quot; weeks&quot;;</span>
         }
 
         /**
@@ -222,7 +222,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
 
             @Override
             public String toString() {
-<span class="nc" id="L225">                return String.format(&quot;Week starting %d - Additions: %d, Deletions: %d, Commits: %d&quot;, w, a, d, c);</span>
+<span class="fc" id="L225">                return String.format(&quot;Week starting %d - Additions: %d, Deletions: %d, Commits: %d&quot;, w, a, d, c);</span>
             }
         }
 
@@ -374,8 +374,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
 
         @Override
         public String toString() {
-<span class="nc" id="L377">            return &quot;Week starting &quot; + getWeekTimestamp() + &quot; has &quot; + getAdditions() + &quot; additions and &quot;</span>
-<span class="nc" id="L378">                    + Math.abs(getDeletions()) + &quot; deletions&quot;;</span>
+<span class="fc" id="L377">            return &quot;Week starting &quot; + getWeekTimestamp() + &quot; has &quot; + getAdditions() + &quot; additions and &quot;</span>
+<span class="fc" id="L378">                    + Math.abs(getDeletions()) + &quot; deletions&quot;;</span>
         }
     }
 
@@ -495,7 +495,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         }
 
         public String toString() {
-<span class="nc" id="L498">            return &quot;Day &quot; + getDayOfWeek() + &quot; Hour &quot; + getHourOfDay() + &quot;: &quot; + getNumberOfCommits() + &quot; commits&quot;;</span>
+<span class="fc" id="L498">            return &quot;Day &quot; + getDayOfWeek() + &quot; Hour &quot; + getHourOfDay() + &quot;: &quot; + getNumberOfCommits() + &quot; commits&quot;;</span>
         }
     }
 

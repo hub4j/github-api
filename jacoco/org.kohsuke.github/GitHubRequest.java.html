@@ -663,8 +663,8 @@ class GitHubRequest {
         B setRawUrlPath(@Nonnull String rawUrlPath) {
 <span class="fc" id="L664">            Objects.requireNonNull(rawUrlPath);</span>
             // This method should only work for full urls, which must start with &quot;http&quot;
-<span class="pc bpc" id="L666" title="1 of 2 branches missed.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
-<span class="nc" id="L667">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
+<span class="fc bfc" id="L666" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
+<span class="fc" id="L667">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
             }
 <span class="fc" id="L669">            this.urlPath = rawUrlPath;</span>
 <span class="fc" id="L670">            return (B) this;</span>

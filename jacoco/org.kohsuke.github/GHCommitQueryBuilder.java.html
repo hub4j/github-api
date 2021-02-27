@@ -35,8 +35,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder author(String author) {
-<span class="nc" id="L38">        req.with(&quot;author&quot;, author);</span>
-<span class="nc" id="L39">        return this;</span>
+<span class="fc" id="L38">        req.with(&quot;author&quot;, author);</span>
+<span class="fc" id="L39">        return this;</span>
     }
 
     /**
@@ -59,8 +59,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder from(String ref) {
-<span class="nc" id="L62">        req.with(&quot;sha&quot;, ref);</span>
-<span class="nc" id="L63">        return this;</span>
+<span class="fc" id="L62">        req.with(&quot;sha&quot;, ref);</span>
+<span class="fc" id="L63">        return this;</span>
     }
 
     /**
@@ -71,8 +71,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder pageSize(int pageSize) {
-<span class="nc" id="L74">        req.with(&quot;per_page&quot;, pageSize);</span>
-<span class="nc" id="L75">        return this;</span>
+<span class="fc" id="L74">        req.with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L75">        return this;</span>
     }
 
     /**
@@ -83,8 +83,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(Date dt) {
-<span class="nc" id="L86">        req.with(&quot;since&quot;, GitHubClient.printDate(dt));</span>
-<span class="nc" id="L87">        return this;</span>
+<span class="fc" id="L86">        req.with(&quot;since&quot;, GitHubClient.printDate(dt));</span>
+<span class="fc" id="L87">        return this;</span>
     }
 
     /**
@@ -95,7 +95,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
-<span class="nc" id="L98">        return since(new Date(timestamp));</span>
+<span class="fc" id="L98">        return since(new Date(timestamp));</span>
     }
 
     /**
@@ -106,8 +106,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(Date dt) {
-<span class="nc" id="L109">        req.with(&quot;until&quot;, GitHubClient.printDate(dt));</span>
-<span class="nc" id="L110">        return this;</span>
+<span class="fc" id="L109">        req.with(&quot;until&quot;, GitHubClient.printDate(dt));</span>
+<span class="fc" id="L110">        return this;</span>
     }
 
     /**
@@ -118,7 +118,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
-<span class="nc" id="L121">        return until(new Date(timestamp));</span>
+<span class="fc" id="L121">        return until(new Date(timestamp));</span>
     }
 
     /**

@@ -67,7 +67,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="nc" id="L70">        return id;</span>
+<span class="fc" id="L70">        return id;</span>
     }
 
     /**
@@ -76,7 +76,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="nc" id="L79">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L79">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -89,7 +89,7 @@ import java.util.Date;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHRepository getRepository() throws IOException {
-<span class="nc" id="L92">        return root.getRepository(repo.name);</span>
+<span class="fc" id="L92">        return root.getRepository(repo.name);</span>
     }
 
     /**
@@ -113,7 +113,7 @@ import java.util.Date;
      *             on error
      */
     public String getActorLogin() throws IOException {
-<span class="nc" id="L116">        return actor.getLogin();</span>
+<span class="fc" id="L116">        return actor.getLogin();</span>
     }
 
     /**
@@ -126,7 +126,7 @@ import java.util.Date;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="nc bnc" id="L129" title="All 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());</span>
+<span class="pc bpc" id="L129" title="3 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());</span>
     }
 
     /**

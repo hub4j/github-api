@@ -31,7 +31,7 @@ import java.net.URL;
      * @return the mode
      */
     public String getMode() {
-<span class="nc" id="L34">        return mode;</span>
+<span class="fc" id="L34">        return mode;</span>
     }
 
     /**
@@ -40,7 +40,7 @@ import java.net.URL;
      * @return The size of the path or 0 if it is a directory
      */
     public long getSize() {
-<span class="nc" id="L43">        return size;</span>
+<span class="fc" id="L43">        return size;</span>
     }
 
     /**
@@ -58,7 +58,7 @@ import java.net.URL;
      * @return the sha
      */
     public String getSha() {
-<span class="nc" id="L61">        return sha;</span>
+<span class="fc" id="L61">        return sha;</span>
     }
 
     /**
@@ -68,7 +68,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L71">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L71">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -79,8 +79,8 @@ import java.net.URL;
      *             the io exception
      */
     public GHBlob asBlob() throws IOException {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
-<span class="nc" id="L83">            return tree.repo.getBlob(sha);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L83">            return tree.repo.getBlob(sha);</span>
         else
 <span class="nc" id="L85">            return null;</span>
     }

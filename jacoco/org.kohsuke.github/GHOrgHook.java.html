@@ -4,25 +4,25 @@
 
 package org.kohsuke.github;
 
-<span class="nc" id="L7">class GHOrgHook extends GHHook {</span>
+<span class="fc" id="L7">class GHOrgHook extends GHHook {</span>
     /**
      * Organization that the hook belongs to.
      */
     transient GHOrganization organization;
 
     GHOrgHook wrap(GHOrganization owner) {
-<span class="nc" id="L14">        this.organization = owner;</span>
-<span class="nc" id="L15">        return this;</span>
+<span class="fc" id="L14">        this.organization = owner;</span>
+<span class="fc" id="L15">        return this;</span>
     }
 
     @Override
     GitHub getRoot() {
-<span class="nc" id="L20">        return organization.root;</span>
+<span class="fc" id="L20">        return organization.root;</span>
     }
 
     @Override
     String getApiRoute() {
-<span class="nc" id="L25">        return String.format(&quot;/orgs/%s/hooks/%d&quot;, organization.getLogin(), getId());</span>
+<span class="fc" id="L25">        return String.format(&quot;/orgs/%s/hooks/%d&quot;, organization.getLogin(), getId());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

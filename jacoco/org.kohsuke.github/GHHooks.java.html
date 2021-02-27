@@ -47,8 +47,8 @@ import java.util.Map;
          *             the io exception
          */
         public GHHook getHook(int id) throws IOException {
-<span class="nc" id="L50">            GHHook hook = root.createRequest().withUrlPath(collection() + &quot;/&quot; + id).fetch(clazz());</span>
-<span class="nc" id="L51">            return wrap(hook);</span>
+<span class="fc" id="L50">            GHHook hook = root.createRequest().withUrlPath(collection() + &quot;/&quot; + id).fetch(clazz());</span>
+<span class="fc" id="L51">            return wrap(hook);</span>
         }
 
         /**
@@ -131,13 +131,13 @@ import java.util.Map;
         private final GHOrganization organization;
 
         private OrgContext(GHOrganization organization) {
-<span class="nc" id="L134">            super(organization.root);</span>
-<span class="nc" id="L135">            this.organization = organization;</span>
-<span class="nc" id="L136">        }</span>
+<span class="fc" id="L134">            super(organization.root);</span>
+<span class="fc" id="L135">            this.organization = organization;</span>
+<span class="fc" id="L136">        }</span>
 
         @Override
         String collection() {
-<span class="nc" id="L140">            return String.format(&quot;/orgs/%s/hooks&quot;, organization.getLogin());</span>
+<span class="fc" id="L140">            return String.format(&quot;/orgs/%s/hooks&quot;, organization.getLogin());</span>
         }
 
         @Override
@@ -147,12 +147,12 @@ import java.util.Map;
 
         @Override
         Class&lt;? extends GHHook&gt; clazz() {
-<span class="nc" id="L150">            return GHOrgHook.class;</span>
+<span class="fc" id="L150">            return GHOrgHook.class;</span>
         }
 
         @Override
         GHHook wrap(GHHook hook) {
-<span class="nc" id="L155">            return ((GHOrgHook) hook).wrap(organization);</span>
+<span class="fc" id="L155">            return ((GHOrgHook) hook).wrap(organization);</span>
         }
     }
 
@@ -161,7 +161,7 @@ import java.util.Map;
     }
 
     static Context orgContext(GHOrganization organization) {
-<span class="nc" id="L164">        return new OrgContext(organization);</span>
+<span class="fc" id="L164">        return new OrgContext(organization);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

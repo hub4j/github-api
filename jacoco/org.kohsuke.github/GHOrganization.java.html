@@ -46,10 +46,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
             String homepage,
             String team,
             boolean isPublic) throws IOException {
-<span class="fc" id="L49">        GHTeam t = getTeams().get(team);</span>
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (t == null)</span>
+<span class="nc" id="L49">        GHTeam t = getTeams().get(team);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (t == null)</span>
 <span class="nc" id="L51">            throw new IllegalArgumentException(&quot;No such team: &quot; + team);</span>
-<span class="fc" id="L52">        return createRepository(name, description, homepage, t, isPublic);</span>
+<span class="nc" id="L52">        return createRepository(name, description, homepage, t, isPublic);</span>
     }
 
     /**
@@ -76,13 +76,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
             String homepage,
             GHTeam team,
             boolean isPublic) throws IOException {
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (team == null)</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (team == null)</span>
 <span class="nc" id="L80">            throw new IllegalArgumentException(&quot;Invalid team&quot;);</span>
-<span class="fc" id="L81">        return createRepository(name).description(description)</span>
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                .homepage(homepage)</span>
-<span class="fc" id="L83">                .private_(!isPublic)</span>
-<span class="fc" id="L84">                .team(team)</span>
-<span class="fc" id="L85">                .create();</span>
+<span class="nc" id="L81">        return createRepository(name).description(description)</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                .homepage(homepage)</span>
+<span class="nc" id="L83">                .private_(!isPublic)</span>
+<span class="nc" id="L84">                .team(team)</span>
+<span class="nc" id="L85">                .create();</span>
     }
 
     /**
@@ -141,7 +141,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam getTeam(int teamId) throws IOException {
-<span class="fc" id="L144">        return getTeam((long) teamId);</span>
+<span class="nc" id="L144">        return getTeam((long) teamId);</span>
     }
 
     /**
@@ -608,7 +608,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook getHook(int id) throws IOException {
-<span class="nc" id="L611">        return GHHooks.orgContext(this).getHook(id);</span>
+<span class="fc" id="L611">        return GHHooks.orgContext(this).getHook(id);</span>
     }
 
     /**
@@ -629,7 +629,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
             throws IOException {
-<span class="nc" id="L632">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
+<span class="fc" id="L632">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
     }
 
     /**
@@ -644,7 +644,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
-<span class="nc" id="L647">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+<span class="fc" id="L647">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
     }
 
     /**
@@ -657,7 +657,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook createWebHook(URL url) throws IOException {
-<span class="nc" id="L660">        return createWebHook(url, null);</span>
+<span class="fc" id="L660">        return createWebHook(url, null);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

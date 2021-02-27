@@ -10,7 +10,7 @@ import java.util.Date;
  * @author noctarius
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="nc" id="L13">public class GHStargazer {</span>
+<span class="fc" id="L13">public class GHStargazer {</span>
 
     private GHRepository repository;
     private String starred_at;
@@ -22,7 +22,7 @@ import java.util.Date;
      * @return the starred repository
      */
     public GHRepository getRepository() {
-<span class="nc" id="L25">        return repository;</span>
+<span class="fc" id="L25">        return repository;</span>
     }
 
     /**
@@ -32,7 +32,7 @@ import java.util.Date;
      * @return the date the stargazer was added
      */
     public Date getStarredAt() {
-<span class="nc" id="L35">        return GitHubClient.parseDate(starred_at);</span>
+<span class="fc" id="L35">        return GitHubClient.parseDate(starred_at);</span>
     }
 
     /**
@@ -41,12 +41,12 @@ import java.util.Date;
      * @return the stargazer user
      */
     public GHUser getUser() {
-<span class="nc" id="L44">        return user;</span>
+<span class="fc" id="L44">        return user;</span>
     }
 
     void wrapUp(GHRepository repository) {
-<span class="nc" id="L48">        this.repository = repository;</span>
-<span class="nc" id="L49">        user.wrapUp(repository.root);</span>
-<span class="nc" id="L50">    }</span>
+<span class="fc" id="L48">        this.repository = repository;</span>
+<span class="fc" id="L49">        user.wrapUp(repository.root);</span>
+<span class="fc" id="L50">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -22,16 +22,16 @@
      * @deprecated This was an internal method accidentally exposed. Left here for compatibility.
      */
     public String action() {
-<span class="nc" id="L25">        GHPullRequestReviewEvent e = toEvent();</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        return e == null ? null : e.action();</span>
+<span class="fc" id="L25">        GHPullRequestReviewEvent e = toEvent();</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        return e == null ? null : e.action();</span>
     }
 
     GHPullRequestReviewEvent toEvent() {
-<span class="nc bnc" id="L30" title="All 6 branches missed.">        switch (this) {</span>
+<span class="pc bpc" id="L30" title="3 of 6 branches missed.">        switch (this) {</span>
             case PENDING :
-<span class="nc" id="L32">                return GHPullRequestReviewEvent.PENDING;</span>
+<span class="fc" id="L32">                return GHPullRequestReviewEvent.PENDING;</span>
             case APPROVED :
-<span class="nc" id="L34">                return GHPullRequestReviewEvent.APPROVE;</span>
+<span class="fc" id="L34">                return GHPullRequestReviewEvent.APPROVE;</span>
             case CHANGES_REQUESTED :
 <span class="nc" id="L36">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
             case REQUEST_CHANGES :
@@ -39,7 +39,7 @@
             case COMMENTED :
 <span class="nc" id="L40">                return GHPullRequestReviewEvent.COMMENT;</span>
         }
-<span class="nc" id="L42">        return null;</span>
+<span class="fc" id="L42">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

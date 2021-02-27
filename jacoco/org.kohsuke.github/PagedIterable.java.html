@@ -140,9 +140,9 @@ import javax.annotation.Nonnull;
     @Deprecated
     public List&lt;T&gt; asList() {
         try {
-<span class="fc" id="L143">            return this.toList();</span>
-<span class="fc" id="L144">        } catch (IOException e) {</span>
-<span class="fc" id="L145">            throw new GHException(&quot;Failed to retrieve list: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L143">            return this.toList();</span>
+<span class="nc" id="L144">        } catch (IOException e) {</span>
+<span class="nc" id="L145">            throw new GHException(&quot;Failed to retrieve list: &quot; + e.getMessage(), e);</span>
         }
     }
 

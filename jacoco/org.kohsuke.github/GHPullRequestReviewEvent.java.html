@@ -30,16 +30,16 @@ package org.kohsuke.github;
 <span class="fc" id="L30">    PENDING, APPROVE, REQUEST_CHANGES, COMMENT;</span>
 
     String action() {
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        return this == PENDING ? null : name();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        return this == PENDING ? null : name();</span>
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
      */
     GHPullRequestReviewState toState() {
-<span class="pc bpc" id="L40" title="4 of 5 branches missed.">        switch (this) {</span>
+<span class="pc bpc" id="L40" title="3 of 5 branches missed.">        switch (this) {</span>
             case PENDING :
-<span class="nc" id="L42">                return GHPullRequestReviewState.PENDING;</span>
+<span class="fc" id="L42">                return GHPullRequestReviewState.PENDING;</span>
             case APPROVE :
 <span class="nc" id="L44">                return GHPullRequestReviewState.APPROVED;</span>
             case REQUEST_CHANGES :

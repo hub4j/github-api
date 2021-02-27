@@ -187,7 +187,7 @@ import java.util.Map;
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="nc" id="L190">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L190">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -196,11 +196,11 @@ import java.util.Map;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="nc" id="L199">        return root.createRequest()</span>
-<span class="nc" id="L200">                .withUrlPath(statuses_url)</span>
-<span class="nc" id="L201">                .withPreview(Previews.ANT_MAN)</span>
-<span class="nc" id="L202">                .withPreview(Previews.FLASH)</span>
-<span class="nc" id="L203">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
+<span class="fc" id="L199">        return root.createRequest()</span>
+<span class="fc" id="L200">                .withUrlPath(statuses_url)</span>
+<span class="fc" id="L201">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L202">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L203">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
     }
 
 }

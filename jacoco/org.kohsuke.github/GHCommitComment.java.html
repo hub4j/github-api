@@ -41,7 +41,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * show this commit comment in a browser.
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L44">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L44">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -59,7 +59,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the body
      */
     public String getBody() {
-<span class="nc" id="L62">        return body;</span>
+<span class="fc" id="L62">        return body;</span>
     }
 
     /**
@@ -69,7 +69,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the path
      */
     public String getPath() {
-<span class="nc" id="L72">        return path;</span>
+<span class="fc" id="L72">        return path;</span>
     }
 
     /**
@@ -79,7 +79,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the line
      */
     public int getLine() {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        return line != null ? line : -1;</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        return line != null ? line : -1;</span>
     }
 
     /**
@@ -136,10 +136,10 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
     @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="nc" id="L139">        return owner.root.createRequest()</span>
-<span class="nc" id="L140">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="nc" id="L141">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="nc" id="L142">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
+<span class="fc" id="L139">        return owner.root.createRequest()</span>
+<span class="fc" id="L140">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L141">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="pc" id="L142">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
     }
 
     /**

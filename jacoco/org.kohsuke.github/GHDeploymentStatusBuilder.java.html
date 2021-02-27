@@ -31,16 +31,16 @@ public class GHDeploymentStatusBuilder {
 <span class="nc" id="L31">        this(repo, (long) deploymentId, state);</span>
 <span class="nc" id="L32">    }</span>
 
-<span class="nc" id="L34">    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {</span>
-<span class="nc" id="L35">        this.repo = repo;</span>
-<span class="nc" id="L36">        this.deploymentId = deploymentId;</span>
-<span class="nc" id="L37">        this.builder = repo.root.createRequest()</span>
-<span class="nc" id="L38">                .withPreview(Previews.ANT_MAN)</span>
-<span class="nc" id="L39">                .withPreview(Previews.FLASH)</span>
-<span class="nc" id="L40">                .method(&quot;POST&quot;);</span>
+<span class="fc" id="L34">    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {</span>
+<span class="fc" id="L35">        this.repo = repo;</span>
+<span class="fc" id="L36">        this.deploymentId = deploymentId;</span>
+<span class="fc" id="L37">        this.builder = repo.root.createRequest()</span>
+<span class="fc" id="L38">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L39">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L40">                .method(&quot;POST&quot;);</span>
 
-<span class="nc" id="L42">        this.builder.with(&quot;state&quot;, state);</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L42">        this.builder.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L43">    }</span>
 
     /**
      * Add an inactive status to all prior non-transient, non-production environment deployments with the same
@@ -69,8 +69,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder description(String description) {
-<span class="nc" id="L72">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="nc" id="L73">        return this;</span>
+<span class="fc" id="L72">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L73">        return this;</span>
     }
 
     /**
@@ -86,8 +86,8 @@ public class GHDeploymentStatusBuilder {
     @Deprecated
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
-<span class="nc" id="L89">        this.builder.with(&quot;environment&quot;, environment);</span>
-<span class="nc" id="L90">        return this;</span>
+<span class="fc" id="L89">        this.builder.with(&quot;environment&quot;, environment);</span>
+<span class="fc" id="L90">        return this;</span>
     }
 
     /**
@@ -103,8 +103,8 @@ public class GHDeploymentStatusBuilder {
     @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
-<span class="nc" id="L106">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
-<span class="nc" id="L107">        return this;</span>
+<span class="fc" id="L106">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
+<span class="fc" id="L107">        return this;</span>
     }
 
     /**
@@ -122,8 +122,8 @@ public class GHDeploymentStatusBuilder {
     @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
-<span class="nc" id="L125">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
-<span class="nc" id="L126">        return this;</span>
+<span class="fc" id="L125">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
+<span class="fc" id="L126">        return this;</span>
     }
 
     /**
@@ -138,8 +138,8 @@ public class GHDeploymentStatusBuilder {
      */
     @Deprecated
     public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
-<span class="nc" id="L141">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
-<span class="nc" id="L142">        return this;</span>
+<span class="fc" id="L141">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
+<span class="fc" id="L142">        return this;</span>
     }
 
     /**
@@ -151,9 +151,9 @@ public class GHDeploymentStatusBuilder {
      *             the io exception
      */
     public GHDeploymentStatus create() throws IOException {
-<span class="nc" id="L154">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
-<span class="nc" id="L155">                .fetch(GHDeploymentStatus.class)</span>
-<span class="nc" id="L156">                .wrap(repo);</span>
+<span class="fc" id="L154">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
+<span class="fc" id="L155">                .fetch(GHDeploymentStatus.class)</span>
+<span class="fc" id="L156">                .wrap(repo);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

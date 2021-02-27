@@ -64,8 +64,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRoot(GitHub root) {
-<span class="fc" id="L67">        this.root = root;</span>
-<span class="fc" id="L68">    }</span>
+<span class="nc" id="L67">        this.root = root;</span>
+<span class="nc" id="L68">    }</span>
 
     /**
      * Gets account.
@@ -346,8 +346,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
     @BetaApi
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L349">        return new GHAppCreateTokenBuilder(root,</span>
-<span class="fc" id="L350">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
+<span class="nc" id="L349">        return new GHAppCreateTokenBuilder(root,</span>
+<span class="nc" id="L350">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
                 permissions);
     }
 

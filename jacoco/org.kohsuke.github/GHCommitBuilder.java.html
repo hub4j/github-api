@@ -22,14 +22,14 @@ public class GHCommitBuilder {
         private final String email;
         private final String date;
 
-<span class="nc" id="L25">        private UserInfo(String name, String email, Date date) {</span>
-<span class="nc" id="L26">            this.name = name;</span>
-<span class="nc" id="L27">            this.email = email;</span>
-<span class="nc" id="L28">            TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
-<span class="nc" id="L29">            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;);</span>
-<span class="nc" id="L30">            df.setTimeZone(tz);</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">            this.date = df.format((date != null) ? date : new Date());</span>
-<span class="nc" id="L32">        }</span>
+<span class="fc" id="L25">        private UserInfo(String name, String email, Date date) {</span>
+<span class="fc" id="L26">            this.name = name;</span>
+<span class="fc" id="L27">            this.email = email;</span>
+<span class="fc" id="L28">            TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
+<span class="fc" id="L29">            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;);</span>
+<span class="fc" id="L30">            df.setTimeZone(tz);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">            this.date = df.format((date != null) ? date : new Date());</span>
+<span class="fc" id="L32">        }</span>
     }
 
 <span class="fc" id="L35">    GHCommitBuilder(GHRepository repo) {</span>
@@ -85,8 +85,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Date date) {
-<span class="nc" id="L88">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
-<span class="nc" id="L89">        return this;</span>
+<span class="fc" id="L88">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L89">        return this;</span>
     }
 
     /**
@@ -114,8 +114,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
-<span class="nc" id="L117">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
-<span class="nc" id="L118">        return this;</span>
+<span class="fc" id="L117">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L118">        return this;</span>
     }
 
     private String getApiTail() {

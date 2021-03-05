@@ -1,0 +1,45 @@
+{
+  "id": "8d754268-5e5b-48bd-83c9-da20207a6689",
+  "name": "repos_hub4j-test-org_github-api_issues_415_labels_removelabels_label_name_3",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/415/labels/removeLabels_label_name_3",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\":2806271705,\"node_id\":\"MDU6TGFiZWwyODA2MjcxNzA1\",\"url\":\"https://api.github.com/repos/hub4j-test-org/github-api/labels/removeLabels_label_name_1\",\"name\":\"removeLabels_label_name_1\",\"color\":\"ededed\",\"default\":false,\"description\":null}]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 10 Mar 2021 12:52:06 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"69a9e689ce7890f70e9e6f27372f16cb4bec369f672e3a104dbebf85a0f44cbf\"",
+      "X-OAuth-Scopes": "repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4461",
+      "X-RateLimit-Reset": "1615382444",
+      "X-RateLimit-Used": "539",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B702:708A:68E838E:6B43007:6048C0F6"
+    }
+  },
+  "uuid": "8d754268-5e5b-48bd-83c9-da20207a6689",
+  "persistent": true,
+  "insertionIndex": 9
+}

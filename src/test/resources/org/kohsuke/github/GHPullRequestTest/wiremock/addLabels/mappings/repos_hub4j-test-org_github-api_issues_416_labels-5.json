@@ -1,0 +1,52 @@
+{
+  "id": "7caeed60-b9cf-472e-9ba7-08d1372de19c",
+  "name": "repos_hub4j-test-org_github-api_issues_416_labels",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/416/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"labels\":[\"addLabels_label_name_1\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\":2806272360,\"node_id\":\"MDU6TGFiZWwyODA2MjcyMzYw\",\"url\":\"https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabels_label_name_1\",\"name\":\"addLabels_label_name_1\",\"color\":\"ededed\",\"default\":false,\"description\":null}]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 10 Mar 2021 12:52:16 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"e3d0fd12057f6adb3f6d44b4bbd350d297de047fb096b554ab9156f0ac52214a\"",
+      "X-OAuth-Scopes": "repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4428",
+      "X-RateLimit-Reset": "1615382444",
+      "X-RateLimit-Used": "572",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B70E:10969:3CD21E6:3F3BE04:6048C100"
+    }
+  },
+  "uuid": "7caeed60-b9cf-472e-9ba7-08d1372de19c",
+  "persistent": true,
+  "insertionIndex": 5
+}

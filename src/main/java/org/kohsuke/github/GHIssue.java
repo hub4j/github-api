@@ -360,17 +360,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void _addLabels(Collection<String> names) throws IOException {
-        List<String> newLabels = new ArrayList<String>();
-
-        for (GHLabel label : getLabels()) {
-            newLabels.add(label.getName());
-        }
-        for (String name : names) {
-            if (!newLabels.contains(name)) {
-                newLabels.add(name);
-            }
-        }
-        setLabels(newLabels.toArray(new String[0]));
+        root.createRequest().with("labels", names).method("POST").withUrlPath(getIssuesApiRoute() + "/labels").send();
     }
 
     /**
@@ -411,15 +401,9 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void _removeLabels(Collection<String> names) throws IOException {
-        List<String> newLabels = new ArrayList<String>();
-
-        for (GHLabel l : getLabels()) {
-            if (!names.contains(l.getName())) {
-                newLabels.add(l.getName());
-            }
+        for (String name : names) {
+            root.createRequest().method("DELETE").withUrlPath(getIssuesApiRoute() + "/labels", name).send();
         }
-
-        setLabels(newLabels.toArray(new String[0]));
     }
 
     /**

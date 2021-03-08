@@ -219,6 +219,11 @@ abstract class GitHubClient {
         return authorizationProvider.getEncodedAuthorization();
     }
 
+    @CheckForNull
+    protected String getEncodedAuthorization(URL url) throws IOException {
+        return authorizationProvider.getEncodedAuthorization(url);
+    }
+
     @Nonnull
     GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         GHRateLimit result;

@@ -1,4 +1,4 @@
-{
+[{
   "id": 11575015,
   "account": {
     "login": "hub4j-test-org",
@@ -40,4 +40,4 @@
   "single_file_name": null,
   "suspended_by": null,
   "suspended_at": null
-}
+}]

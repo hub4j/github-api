@@ -7,6 +7,7 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,6 +61,11 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     @Override
     public String getEncodedAuthorization() throws IOException {
+        return getEncodedAuthorization(null);
+    }
+
+    @Override
+    public String getEncodedAuthorization(URL url) throws IOException {
         synchronized (this) {
             if (Instant.now().isAfter(validUntil)) {
                 token = refreshJWT();

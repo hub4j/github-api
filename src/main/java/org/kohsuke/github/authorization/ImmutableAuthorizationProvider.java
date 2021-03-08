@@ -1,6 +1,7 @@
 package org.kohsuke.github.authorization;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -92,8 +93,13 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
     }
 
     @Override
-    public String getEncodedAuthorization() {
+    public String getEncodedAuthorization(URL url) {
         return this.authorization;
+    }
+
+    @Override
+    public String getEncodedAuthorization() {
+        return getEncodedAuthorization(null);
     }
 
     /**

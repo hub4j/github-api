@@ -2,7 +2,7 @@
   "id": "9ffe1e34-1d0e-495a-abdc-86fdf1d15334",
   "name": "orgs_hub4j-test-org_installation",
   "request": {
-    "url": "/orgs/hub4j-test-org/installation",
+    "url": "/app/installations",
     "method": "GET",
     "headers": {
       "Accept": {

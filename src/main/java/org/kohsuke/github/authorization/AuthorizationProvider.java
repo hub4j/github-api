@@ -1,6 +1,7 @@
 package org.kohsuke.github.authorization;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Provides a functional interface that returns a valid encodedAuthorization. This strategy allows for a provider that
@@ -30,6 +31,7 @@ public interface AuthorizationProvider {
      *             on any error that prevents the provider from getting a valid authorization
      */
     String getEncodedAuthorization() throws IOException;
+    String getEncodedAuthorization(URL url) throws IOException;
 
     /**
      * A {@link AuthorizationProvider} that ensures that no credentials are returned
@@ -37,6 +39,10 @@ public interface AuthorizationProvider {
     class AnonymousAuthorizationProvider implements AuthorizationProvider {
         @Override
         public String getEncodedAuthorization() throws IOException {
+            return getEncodedAuthorization(null);
+        }
+        @Override
+        public String getEncodedAuthorization(URL url) throws IOException {
             return null;
         }
     }

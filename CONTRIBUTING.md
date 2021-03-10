@@ -21,7 +21,7 @@ Example for a single test case:
 
 ### Setting up credential
 
-1. Create an OAuth token on github.com
+1. Create a "Personal access token" on https://github.com/ (`Settings` > `Developer settings` > `Personal access tokens`)
 2. Set the GITHUB_OAUTH environment variable to the value of that token
 3. Set the system property `test.github.useProxy` (usually like "-Dtest.github.useProxy" as a Java VM option)
 

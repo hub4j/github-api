@@ -312,7 +312,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Sets labels.
+     * Sets labels on the target to a specific list.
      *
      * @param labels
      *            the labels
@@ -326,6 +326,8 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Adds labels to the issue.
      *
+     * Labels that are already present on the target are ignored.
+     *
      * @param names
      *            Names of the label
      * @throws IOException
@@ -338,6 +340,8 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Add labels.
      *
+     * Labels that are already present on the target are ignored.
+     *
      * @param labels
      *            the labels
      * @throws IOException
@@ -349,6 +353,8 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Add labels.
+     *
+     * Labels that are already present on the target are ignored.
      *
      * @param labels
      *            the labels
@@ -364,7 +370,23 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Remove a given label by name from this issue.
+     * Remove a single label.
+     *
+     * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
+     *
+     * @param name
+     *            the name
+     * @throws IOException
+     *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
+     */
+    public void removeLabel(String name) throws IOException {
+        root.createRequest().method("DELETE").withUrlPath(getIssuesApiRoute() + "/labels", name).send();
+    }
+
+    /**
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
      *
      * @param names
      *            the names
@@ -376,7 +398,9 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Remove labels.
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
      *
      * @param labels
      *            the labels
@@ -389,7 +413,9 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Remove labels.
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
      *
      * @param labels
      *            the labels
@@ -402,7 +428,11 @@ public class GHIssue extends GHObject implements Reactable {
 
     private void _removeLabels(Collection<String> names) throws IOException {
         for (String name : names) {
-            root.createRequest().method("DELETE").withUrlPath(getIssuesApiRoute() + "/labels", name).send();
+            try {
+                removeLabel(name);
+            } catch (GHFileNotFoundException e) {
+                // when trying to remove multiple labels, we ignore already removed
+            }
         }
     }
 

@@ -1,9 +1,9 @@
 {
-  "id": "31ee545b-d35d-4533-99c2-6a1f8b74eef9",
-  "name": "repos_hub4j-test-org_github-api_issues_415",
+  "id": "9bd9b0f1-d876-45dd-98c7-c551a4115633",
+  "name": "repos_hub4j-test-org_github-api_issues_427_labels",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/issues/415",
-    "method": "PATCH",
+    "url": "/repos/hub4j-test-org/github-api/issues/427/labels",
+    "method": "POST",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"labels\":[\"removeLabels_label_name_1\",\"removeLabels_label_name_2\",\"removeLabels_label_name_3\"]}",
+        "equalToJson": "{\"labels\":[\"addLabels_label_name_2\",\"addLabels_label_name_3\"]}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -19,34 +19,34 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_github-api_issues_415-5.json",
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues_427_labels-6.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Wed, 10 Mar 2021 12:52:05 GMT",
+      "Date": "Sat, 13 Mar 2021 01:53:59 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1a44e30faa8894fd3dea0182aa0b45e99acb19779a3a7f086c9013b5ed1224ba\"",
-      "X-OAuth-Scopes": "repo, user",
+      "ETag": "W/\"2f80c320a0edd8f013bcc0faf5052d1c2b2ec1b738c44a1bbe92bb1edb5ac93f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4465",
-      "X-RateLimit-Reset": "1615382444",
-      "X-RateLimit-Used": "535",
+      "X-RateLimit-Remaining": "4974",
+      "X-RateLimit-Reset": "1615604003",
+      "X-RateLimit-Used": "26",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "B702:708A:68E808D:6B42CEC:6048C0F4"
+      "X-GitHub-Request-Id": "C596:3EFB:4DAB90:533119:604C1B37"
     }
   },
-  "uuid": "31ee545b-d35d-4533-99c2-6a1f8b74eef9",
+  "uuid": "9bd9b0f1-d876-45dd-98c7-c551a4115633",
   "persistent": true,
-  "insertionIndex": 5
+  "insertionIndex": 6
 }

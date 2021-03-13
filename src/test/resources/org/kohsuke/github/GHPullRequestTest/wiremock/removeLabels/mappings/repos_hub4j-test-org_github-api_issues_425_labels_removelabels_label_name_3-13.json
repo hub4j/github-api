@@ -1,9 +1,9 @@
 {
-  "id": "98f3b23c-8b10-486f-83cd-7d1b4c2622ad",
-  "name": "user",
+  "id": "1a450956-c535-4b7b-b1a5-db01c05b21fc",
+  "name": "repos_hub4j-test-org_github-api_issues_425_labels_removelabels_label_name_3",
   "request": {
-    "url": "/user",
-    "method": "GET",
+    "url": "/repos/hub4j-test-org/github-api/issues/425/labels/removeLabels_label_name_3",
+    "method": "DELETE",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
@@ -11,36 +11,32 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "user-1.json",
+    "status": 404,
+    "body": "{\"message\":\"Label does not exist\",\"documentation_url\":\"https://docs.github.com/rest/reference/issues#remove-a-label-from-an-issue\"}",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sat, 13 Mar 2021 01:48:42 GMT",
+      "Date": "Sat, 13 Mar 2021 01:48:46 GMT",
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
-      ],
-      "ETag": "W/\"2822a9e2f360a7908be6027a75d37eebff6e63fc94c67aceefb1e25113b3240e\"",
-      "Last-Modified": "Sat, 13 Mar 2021 00:53:04 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4904",
+      "X-RateLimit-Remaining": "4888",
       "X-RateLimit-Reset": "1615600351",
-      "X-RateLimit-Used": "96",
+      "X-RateLimit-Used": "112",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C5EC:7528:543673:59CC65:604C19FA"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C5EC:7528:5438D7:59CEEF:604C19FE"
     }
   },
-  "uuid": "98f3b23c-8b10-486f-83cd-7d1b4c2622ad",
+  "uuid": "1a450956-c535-4b7b-b1a5-db01c05b21fc",
   "persistent": true,
-  "insertionIndex": 1
+  "scenarioName": "scenario-3-repos-hub4j-test-org-github-api-issues-425-labels-removeLabels_label_name_3",
+  "requiredScenarioState": "scenario-3-repos-hub4j-test-org-github-api-issues-425-labels-removeLabels_label_name_3-3",
+  "insertionIndex": 13
 }

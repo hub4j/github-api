@@ -430,7 +430,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String addedLabel3 = "addLabels_label_name_3";
 
         p.addLabels(addedLabel1);
+
+        int requestCount = mockGitHub.getRequestCount();
         p.addLabels(addedLabel2, addedLabel3);
+        // multiple labels can be added with one api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(3, labels.size());
@@ -438,6 +442,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
                         hasProperty("name", equalTo(addedLabel2)),
                         hasProperty("name", equalTo(addedLabel3))));
+
+        // Adding a label which is already present does not throw an error
+        p.addLabels(addedLabel1);
     }
 
     @Test
@@ -474,11 +481,26 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(3, labels.size());
 
+        int requestCount = mockGitHub.getRequestCount();
         p.removeLabels(label2, label3);
+        // each label deleted is a separate api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
 
         labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
         assertEquals(label1, labels.iterator().next().getName());
+
+        // Removing some labels that are not present does not throw
+        // This is consistent with earlier behavior and with addLabels()
+        p.removeLabels(label3);
+
+        // Calling removeLabel() on label that is not present will throw
+        try {
+            p.removeLabel(label3);
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Label does not exist"));
+        }
     }
 
     @Test

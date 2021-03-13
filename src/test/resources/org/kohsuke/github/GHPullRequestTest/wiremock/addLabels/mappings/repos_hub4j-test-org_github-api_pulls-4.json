@@ -1,5 +1,5 @@
 {
-  "id": "566a01cf-c9a4-4a1d-ae15-ce28cea04a07",
+  "id": "78c26535-9327-4419-9814-a773eb7edf0c",
   "name": "repos_hub4j-test-org_github-api_pulls",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/pulls",
@@ -22,32 +22,32 @@
     "bodyFileName": "repos_hub4j-test-org_github-api_pulls-4.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Wed, 10 Mar 2021 12:52:16 GMT",
+      "Date": "Sat, 13 Mar 2021 01:53:59 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"a32b3ff45e43333627a8eb0f4bf1d4f70a2a55687284dfb9507d4351edce5e27\"",
-      "X-OAuth-Scopes": "repo, user",
+      "ETag": "\"a6bd1620ffa3d594641e7768679b1b8f66671eba8931acf4774e8efe0f4f2b03\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4429",
-      "X-RateLimit-Reset": "1615382444",
-      "X-RateLimit-Used": "571",
+      "X-RateLimit-Remaining": "4976",
+      "X-RateLimit-Reset": "1615604003",
+      "X-RateLimit-Used": "24",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "B70E:10969:3CD2198:3F3BDAB:6048C0FF",
-      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/416"
+      "X-GitHub-Request-Id": "C596:3EFB:4DAB21:5330A6:604C1B36",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/427"
     }
   },
-  "uuid": "566a01cf-c9a4-4a1d-ae15-ce28cea04a07",
+  "uuid": "78c26535-9327-4419-9814-a773eb7edf0c",
   "persistent": true,
   "insertionIndex": 4
 }

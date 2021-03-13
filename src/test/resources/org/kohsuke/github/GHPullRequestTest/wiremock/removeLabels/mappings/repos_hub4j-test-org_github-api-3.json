@@ -1,5 +1,5 @@
 {
-  "id": "77295f70-74b7-4b1c-bd6c-f48adc960f68",
+  "id": "4435a524-4fd7-4d46-948b-389a3dfe22c8",
   "name": "repos_hub4j-test-org_github-api",
   "request": {
     "url": "/repos/hub4j-test-org/github-api",
@@ -15,32 +15,32 @@
     "bodyFileName": "repos_hub4j-test-org_github-api-3.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Wed, 10 Mar 2021 12:52:03 GMT",
+      "Date": "Sat, 13 Mar 2021 01:48:43 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"ed26d587aba13371e632bce68ccdd87897a565416658f1aa8aae0ac0f0665479\"",
+      "ETag": "W/\"d8b9096c0e44548392bf42177ea1535043ca8d4aa4ba05401299d3219da7fd49\"",
       "Last-Modified": "Fri, 22 Jan 2021 03:50:37 GMT",
-      "X-OAuth-Scopes": "repo, user",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4467",
-      "X-RateLimit-Reset": "1615382444",
-      "X-RateLimit-Used": "533",
+      "X-RateLimit-Remaining": "4898",
+      "X-RateLimit-Reset": "1615600351",
+      "X-RateLimit-Used": "102",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "B702:708A:68E7E49:6B42AAA:6048C0F3"
+      "X-GitHub-Request-Id": "C5EC:7528:54371C:59CD11:604C19FB"
     }
   },
-  "uuid": "77295f70-74b7-4b1c-bd6c-f48adc960f68",
+  "uuid": "4435a524-4fd7-4d46-948b-389a3dfe22c8",
   "persistent": true,
   "scenarioName": "scenario-1-repos-hub4j-test-org-github-api",
   "requiredScenarioState": "Started",

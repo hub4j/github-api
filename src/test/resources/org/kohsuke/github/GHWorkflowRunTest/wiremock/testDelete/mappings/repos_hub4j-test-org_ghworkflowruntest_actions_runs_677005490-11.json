@@ -1,0 +1,38 @@
+{
+  "id": "7c6f1199-f61d-4929-a213-00713d9ec01f",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs_677005490",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/677005490",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 22 Mar 2021 18:03:14 GMT",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4912",
+      "X-RateLimit-Reset": "1616437999",
+      "X-RateLimit-Used": "88",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D4F2:B5EE:81511BC:8433A4C:6058DBE2"
+    }
+  },
+  "uuid": "7c6f1199-f61d-4929-a213-00713d9ec01f",
+  "persistent": true,
+  "insertionIndex": 11
+}

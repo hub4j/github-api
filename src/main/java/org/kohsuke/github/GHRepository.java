@@ -2898,6 +2898,71 @@ public class GHRepository extends GHObject {
                 .wrapUp(root);
     }
 
+    /**
+     * Lists all the workflows of this repository.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHWorkflow> listWorkflows() {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("actions/workflows"))
+                .toIterable(GHWorkflow[].class, item -> item.wrapUp(root));
+    }
+
+    /**
+     * Gets a workflow by id.
+     *
+     * @param id
+     *            the id of the workflow run
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflow getWorkflow(long id) throws IOException {
+        return getWorkflow(String.valueOf(id));
+    }
+
+    /**
+     * Gets a workflow by name of the file.
+     *
+     * @param nameOrId
+     *            either the name of the file (e.g. my-workflow.yml) or the id as a string
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflow getWorkflow(String nameOrId) throws IOException {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("actions/workflows"), nameOrId)
+                .fetch(GHWorkflow.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Retrieves workflow runs.
+     *
+     * @return the workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder queryWorkflowRuns() {
+        return new GHWorkflowRunQueryBuilder(this);
+    }
+
+    /**
+     * Gets a workflow run.
+     *
+     * @param id
+     *            the id of the workflow run
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflowRun getWorkflowRun(long id) throws IOException {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("actions/runs"), String.valueOf(id))
+                .fetch(GHWorkflowRun.class)
+                .wrapUp(this);
+    }
+
     // Only used within listTopics().
     private static class Topics {
         public List<String> names;

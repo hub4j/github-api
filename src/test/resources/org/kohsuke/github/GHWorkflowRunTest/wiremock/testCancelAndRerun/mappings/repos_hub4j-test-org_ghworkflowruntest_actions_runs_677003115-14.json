@@ -1,0 +1,48 @@
+{
+  "id": "4886525f-16a6-4f66-b5ef-7c7b60d500b5",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs_677003115",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/677003115",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghworkflowruntest_actions_runs_677003115-14.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 22 Mar 2021 18:02:34 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"5397e81cb6d8d7e021c67ced4880ad6be2139d9e24d10eaa56e1016f0c70e5e9\"",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4929",
+      "X-RateLimit-Reset": "1616437999",
+      "X-RateLimit-Used": "71",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A250:BD39:9FA3E40:A220CD3:6058DBBA"
+    }
+  },
+  "uuid": "4886525f-16a6-4f66-b5ef-7c7b60d500b5",
+  "persistent": true,
+  "scenarioName": "scenario-3-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-677003115",
+  "requiredScenarioState": "scenario-3-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-677003115-5",
+  "newScenarioState": "scenario-3-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-677003115-6",
+  "insertionIndex": 14
+}

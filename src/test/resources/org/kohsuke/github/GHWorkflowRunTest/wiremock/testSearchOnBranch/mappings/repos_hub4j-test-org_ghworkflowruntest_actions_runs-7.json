@@ -1,0 +1,48 @@
+{
+  "id": "54197ebd-6f31-4da5-bebc-f4047ccaa99e",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs?branch=second-branch&status=completed&event=workflow_dispatch&per_page=20",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"total_count\":0,\"workflow_runs\":[]}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 22 Mar 2021 18:03:26 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"57dec44904a36acf90fabde39c11b0be45401e4ae5d135a4b969c0d068e60a93\"",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4903",
+      "X-RateLimit-Reset": "1616437999",
+      "X-RateLimit-Used": "97",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D526:9DD1:4244E34:43D7B5E:6058DBEE"
+    }
+  },
+  "uuid": "54197ebd-6f31-4da5-bebc-f4047ccaa99e",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-3",
+  "insertionIndex": 7
+}

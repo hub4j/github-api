@@ -1,0 +1,48 @@
+{
+  "id": "0145e126-4289-48ec-a468-690c28a2de25",
+  "name": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/test-workflow.yml",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 22 Mar 2021 13:55:52 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"4a3bd0281d008451da969f0661f16611fd1ebd783c9ef1f18ff167ae03e4bb35\"",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4749",
+      "X-RateLimit-Reset": "1616422330",
+      "X-RateLimit-Used": "251",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A792:B5ED:36735C0:38BF372:6058A1E8"
+    }
+  },
+  "uuid": "0145e126-4289-48ec-a468-690c28a2de25",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml-2",
+  "insertionIndex": 3
+}

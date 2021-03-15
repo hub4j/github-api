@@ -1,0 +1,48 @@
+{
+  "id": "cf26446f-5782-49f7-96c5-0144db6cef41",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs?branch=main&status=in_progress&event=workflow_dispatch&per_page=20",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"total_count\":0,\"workflow_runs\":[]}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 22 Mar 2021 18:02:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"57dec44904a36acf90fabde39c11b0be45401e4ae5d135a4b969c0d068e60a93\"",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4936",
+      "X-RateLimit-Reset": "1616437999",
+      "X-RateLimit-Used": "64",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A250:BD39:9FA078E:A21D569:6058DB9F"
+    }
+  },
+  "uuid": "cf26446f-5782-49f7-96c5-0144db6cef41",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-3",
+  "insertionIndex": 7
+}

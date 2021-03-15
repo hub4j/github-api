@@ -18,7 +18,7 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         GHIssue issue = builder.create();
 
         // Generate some events.
-        issue.addLabels("test-label");
+        issue.setLabels("test-label");
 
         // Test that the events are present.
         List<GHIssueEvent> list = issue.listEvents().toList();

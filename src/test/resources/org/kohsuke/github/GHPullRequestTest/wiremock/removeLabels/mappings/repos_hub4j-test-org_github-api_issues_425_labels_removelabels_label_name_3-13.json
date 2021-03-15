@@ -1,0 +1,42 @@
+{
+  "id": "1a450956-c535-4b7b-b1a5-db01c05b21fc",
+  "name": "repos_hub4j-test-org_github-api_issues_425_labels_removelabels_label_name_3",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/425/labels/removeLabels_label_name_3",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Label does not exist\",\"documentation_url\":\"https://docs.github.com/rest/reference/issues#remove-a-label-from-an-issue\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 13 Mar 2021 01:48:46 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4888",
+      "X-RateLimit-Reset": "1615600351",
+      "X-RateLimit-Used": "112",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C5EC:7528:5438D7:59CEEF:604C19FE"
+    }
+  },
+  "uuid": "1a450956-c535-4b7b-b1a5-db01c05b21fc",
+  "persistent": true,
+  "scenarioName": "scenario-3-repos-hub4j-test-org-github-api-issues-425-labels-removeLabels_label_name_3",
+  "requiredScenarioState": "scenario-3-repos-hub4j-test-org-github-api-issues-425-labels-removeLabels_label_name_3-3",
+  "insertionIndex": 13
+}

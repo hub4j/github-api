@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -419,6 +419,88 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
         assertEquals(label, labels.iterator().next().getName());
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabels() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("addLabels", "test/stable", "master", "## test");
+        String addedLabel1 = "addLabels_label_name_1";
+        String addedLabel2 = "addLabels_label_name_2";
+        String addedLabel3 = "addLabels_label_name_3";
+
+        p.addLabels(addedLabel1);
+
+        int requestCount = mockGitHub.getRequestCount();
+        p.addLabels(addedLabel2, addedLabel3);
+        // multiple labels can be added with one api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
+
+        Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
+        assertEquals(3, labels.size());
+        assertThat(labels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2)),
+                        hasProperty("name", equalTo(addedLabel3))));
+
+        // Adding a label which is already present does not throw an error
+        p.addLabels(addedLabel1);
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabelsConcurrencyIssue() throws Exception {
+        String addedLabel1 = "addLabelsConcurrencyIssue_label_name_1";
+        String addedLabel2 = "addLabelsConcurrencyIssue_label_name_2";
+
+        GHPullRequest p1 = getRepository()
+                .createPullRequest("addLabelsConcurrencyIssue", "test/stable", "master", "## test");
+        p1.getLabels();
+
+        GHPullRequest p2 = getRepository().getPullRequest(p1.getNumber());
+        p2.addLabels(addedLabel2);
+
+        p1.addLabels(addedLabel1);
+
+        Collection<GHLabel> labels = getRepository().getPullRequest(p1.getNumber()).getLabels();
+        assertEquals(2, labels.size());
+        assertThat(labels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2))));
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void removeLabels() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("removeLabels", "test/stable", "master", "## test");
+        String label1 = "removeLabels_label_name_1";
+        String label2 = "removeLabels_label_name_2";
+        String label3 = "removeLabels_label_name_3";
+        p.setLabels(label1, label2, label3);
+
+        Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
+        assertEquals(3, labels.size());
+
+        int requestCount = mockGitHub.getRequestCount();
+        p.removeLabels(label2, label3);
+        // each label deleted is a separate api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
+
+        labels = getRepository().getPullRequest(p.getNumber()).getLabels();
+        assertEquals(1, labels.size());
+        assertEquals(label1, labels.iterator().next().getName());
+
+        // Removing some labels that are not present does not throw
+        // This is consistent with earlier behavior and with addLabels()
+        p.removeLabels(label3);
+
+        // Calling removeLabel() on label that is not present will throw
+        try {
+            p.removeLabel(label3);
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Label does not exist"));
+        }
     }
 
     @Test

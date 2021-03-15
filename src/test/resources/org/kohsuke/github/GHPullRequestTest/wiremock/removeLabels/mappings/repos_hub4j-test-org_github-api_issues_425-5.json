@@ -1,0 +1,52 @@
+{
+  "id": "a9ff34df-2cb5-4986-9669-7c2c8c914a88",
+  "name": "repos_hub4j-test-org_github-api_issues_425",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/425",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"labels\":[\"removeLabels_label_name_1\",\"removeLabels_label_name_2\",\"removeLabels_label_name_3\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues_425-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 13 Mar 2021 01:48:44 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"eeaa05be2d256a89cfda9686c0e354cb6b400ebce40c9be564a3945055f1c806\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4896",
+      "X-RateLimit-Reset": "1615600351",
+      "X-RateLimit-Used": "104",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C5EC:7528:543794:59CD96:604C19FC"
+    }
+  },
+  "uuid": "a9ff34df-2cb5-4986-9669-7c2c8c914a88",
+  "persistent": true,
+  "insertionIndex": 5
+}

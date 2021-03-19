@@ -8,6 +8,7 @@ jobs:
     name: build-only (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ 16 ]
     steps:
@@ -29,6 +30,7 @@ jobs:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ 8, 11 ]
     steps:
@@ -49,6 +51,7 @@ jobs:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
         java: [ 8, 11, 16 ]

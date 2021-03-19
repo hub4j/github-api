@@ -9,7 +9,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -418,7 +425,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
-        assertEquals(label, labels.iterator().next().getName());
+        GHLabel savedLabel = labels.iterator().next();
+        assertEquals(label, savedLabel.getName());
+        assertNotNull(savedLabel.getId());
+        assertNotNull(savedLabel.getNodeId());
+        assertFalse(savedLabel.isDefault());
     }
 
     @Test

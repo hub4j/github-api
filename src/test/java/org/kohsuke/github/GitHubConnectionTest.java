@@ -1,13 +1,20 @@
 package org.kohsuke.github;
 
+import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Unit test for {@link GitHub}.
@@ -56,6 +63,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
+        // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
+        Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
 
         Map<String, String> props = new HashMap<String, String>();
 
@@ -98,6 +107,9 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGitHubBuilderFromCustomEnvironment() throws IOException {
+        // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
+        Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+
         Map<String, String> props = new HashMap<String, String>();
 
         props.put("customEndpoint", "bogus endpoint url");

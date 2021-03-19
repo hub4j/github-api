@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ import javax.annotation.Nonnull;
  */
 public class GHLabel extends GitHubInteractiveObject {
 
+    private long id;
+    private String nodeId;
+    @JsonProperty("default")
+    private boolean default_;
+
     @Nonnull
     private String url, name, color;
 
@@ -40,6 +46,24 @@ public class GHLabel extends GitHubInteractiveObject {
     @Nonnull
     GitHub getApiRoot() {
         return Objects.requireNonNull(root);
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id.
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**
@@ -80,6 +104,15 @@ public class GHLabel extends GitHubInteractiveObject {
     @CheckForNull
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * If the label is one of the default labels created by GitHub automatically.
+     *
+     * @return true if the label is a default one
+     */
+    public boolean isDefault() {
+        return default_;
     }
 
     /**

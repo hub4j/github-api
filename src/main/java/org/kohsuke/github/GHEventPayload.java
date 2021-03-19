@@ -522,6 +522,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
 
         private GHLabel label;
 
+        private GHIssueChanges changes;
+
         /**
          * Gets issue.
          *
@@ -548,6 +550,15 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         public GHLabel getLabel() {
             return label;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHIssueChanges getChanges() {
+            return changes;
         }
 
         @Override

@@ -45,6 +45,8 @@
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
     <jjwt.suite.version>0.11.2</jjwt.suite.version>
+
+    <surefire.argLine></surefire.argLine>
   </properties>
 
   <build>
@@ -272,6 +274,7 @@
             <id>default-test</id>
             <configuration>
               <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+              <argLine>${surefire.argLine}</argLine>
             </configuration>
           </execution>
           <execution>
@@ -284,6 +287,7 @@
               <rerunFailingTestsCount>2</rerunFailingTestsCount>
               <!-- There are some tests that take longer or are a little flaky.  Run them here. -->
               <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+              <argLine>${surefire.argLine}</argLine>
             </configuration>
           </execution>
         </executions>
@@ -561,6 +565,16 @@
     </pluginRepository>
   </pluginRepositories>
   <profiles>
+    <profile>
+      <id>jdk11+</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <properties>
+        <!-- this is required for GithubHttpUrlConnectionClient#setRequestMethod() to work with JDK 16+ -->
+        <surefire.argLine>--add-opens java.base/java.net=ALL-UNNAMED</surefire.argLine>
+      </properties>
+    </profile>
     <profile>
       <id>ci-non-windows</id>
       <activation>

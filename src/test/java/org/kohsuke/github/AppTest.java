@@ -965,6 +965,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHLabel e = r.getLabel("enhancement");
         assertEquals("enhancement", e.getName());
         assertNotNull(e.getUrl());
+        assertEquals(177339106, e.getId());
+        assertEquals("MDU6TGFiZWwxNzczMzkxMDY=", e.getNodeId());
+        assertTrue(e.isDefault());
         assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));
 
         GHLabel t = null;
@@ -976,12 +979,17 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(t, not(sameInstance(t2)));
             assertThat(t, equalTo(t2));
 
+            assertFalse(t2.isDefault());
+
+            assertEquals(t.getId(), t2.getId());
+            assertEquals(t.getNodeId(), t2.getNodeId());
             assertEquals(t.getName(), t2.getName());
             assertEquals(t.getColor(), "123456");
             assertEquals(t.getColor(), t2.getColor());
             assertEquals(t.getDescription(), "");
             assertEquals(t.getDescription(), t2.getDescription());
             assertEquals(t.getUrl(), t2.getUrl());
+            assertEquals(t.isDefault(), t2.isDefault());
 
             // update works on multiple changes in one call
             t3 = t.update().color("000000").description("It is dark!").done();

@@ -2,14 +2,18 @@ name: CI
 
 on: [push, pull_request]
 
+# this is required by spotless for JDK 16+
+env:
+  JAVA_11_PLUS_MAVEN_OPTS: "--add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 
 jobs:
   build:
     name: build-only (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        java: [ 13 ]
+        java: [ 16 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -24,11 +28,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Maven Install (skipTests)
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B install -DskipTests -D enable-ci --file pom.xml
   site:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ 8, 11 ]
     steps:
@@ -49,9 +56,10 @@ jobs:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 8, 11, 13, 15-ea ]
+        java: [ 8, 11, 16 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
@@ -64,9 +72,21 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    # JDK 8
     - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows'
+      if: matrix.os == 'windows' && matrix.java == '8'
       run: mvn -B install --file pom.xml
     - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows'
+      if: matrix.os != 'windows' && matrix.java == '8'
+      run: mvn -B install -D enable-ci --file pom.xml
+    # JDK 11+
+    - name: Maven Install without Code Coverage
+      if: matrix.os == 'windows' && matrix.java != '8'
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+      run: mvn -B install --file pom.xml
+    - name: Maven Install with Code Coverage
+      if: matrix.os != 'windows' && matrix.java != '8'
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B install -D enable-ci --file pom.xml

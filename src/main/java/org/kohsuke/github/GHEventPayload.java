@@ -381,9 +381,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Gets label.
+         * Gets the added or removed label for labeled/unlabeled events.
          *
-         * @return the label
+         * @return label the added or removed label
          */
         public GHLabel getLabel() {
             return label;
@@ -520,6 +520,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
     public static class Issue extends GHEventPayload {
         private GHIssue issue;
 
+        private GHLabel label;
+
         /**
          * Gets issue.
          *
@@ -537,6 +539,15 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         public void setIssue(GHIssue issue) {
             this.issue = issue;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        public GHLabel getLabel() {
+            return label;
         }
 
         @Override

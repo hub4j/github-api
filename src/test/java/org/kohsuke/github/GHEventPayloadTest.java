@@ -141,6 +141,27 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    @Test
+    public void issue_labeled() throws Exception {
+        GHEventPayload.Issue event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("labeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getIssue().getTitle(), is("Test GHEventPayload.Issue label/unlabel"));
+        assertThat(event.getIssue().getLabels().size(), is(1));
+        assertThat(event.getIssue().getLabels().iterator().next().getName(), is("enhancement"));
+        assertThat(event.getLabel().getName(), is("enhancement"));
+    }
+
+    @Test
+    public void issue_unlabeled() throws Exception {
+        GHEventPayload.Issue event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("unlabeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getIssue().getTitle(), is("Test GHEventPayload.Issue label/unlabel"));
+        assertThat(event.getIssue().getLabels().size(), is(0));
+        assertThat(event.getLabel().getName(), is("enhancement"));
+    }
+
     // TODO implement support classes and write test
     // @Test
     // public void label() throws Exception {}

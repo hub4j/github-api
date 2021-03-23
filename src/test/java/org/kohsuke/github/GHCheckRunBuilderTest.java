@@ -25,6 +25,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Status;
 
 import java.io.IOException;
 import java.util.Date;
@@ -59,7 +60,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                                         .withCaption("Princess Unikitty")))
                 .add(new GHCheckRunBuilder.Action("Help", "what I need help with", "doit"))
                 .create();
-        assertEquals("completed", checkRun.getStatus());
+        assertEquals(Status.COMPLETED, checkRun.getStatus());
         assertEquals(1, checkRun.getOutput().getAnnotationsCount());
         assertEquals(1424883286, checkRun.getId());
         assertEquals("Hello Text!", checkRun.getOutput().getText());
@@ -79,7 +80,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .add(output)
                 .create();
-        assertEquals("completed", checkRun.getStatus());
+        assertEquals(Status.COMPLETED, checkRun.getStatus());
         assertEquals("Big Run", checkRun.getOutput().getTitle());
         assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
@@ -94,7 +95,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.NEUTRAL)
                 .add(new GHCheckRunBuilder.Output("Quick note", "nothing more to see here"))
                 .create();
-        assertEquals("completed", checkRun.getStatus());
+        assertEquals(Status.COMPLETED, checkRun.getStatus());
         assertEquals(0, checkRun.getOutput().getAnnotationsCount());
         assertEquals(1424883957, checkRun.getId());
     }
@@ -105,7 +106,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withStatus(GHCheckRun.Status.IN_PROGRESS)
                 .create();
-        assertEquals("in_progress", checkRun.getStatus());
+        assertEquals(Status.IN_PROGRESS, checkRun.getStatus());
         assertNull(checkRun.getConclusion());
         assertEquals(1424883451, checkRun.getId());
     }

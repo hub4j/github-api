@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Conclusion;
+import org.kohsuke.github.GHCheckRun.Status;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -563,7 +565,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHCheckRun checkRun = event.getCheckRun();
         assertThat(checkRun.getName(), is("Octocoders-linter"));
         assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkRun.getStatus(), is("completed"));
+        assertThat(checkRun.getStatus(), is(Status.COMPLETED));
         assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
         assertThat(checkRun.getExternalId(), is(""));
 
@@ -572,7 +574,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(formatter.format(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
         assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
 
-        assertThat(checkRun.getConclusion(), is("success"));
+        assertThat(checkRun.getConclusion(), is(Conclusion.SUCCESS));
         assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
         assertThat(checkRun.getHtmlUrl().toString(),
                 endsWith("https://github.com/Codertocat/Hello-World/runs/128620228"));

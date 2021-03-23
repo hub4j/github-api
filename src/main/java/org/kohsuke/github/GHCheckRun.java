@@ -1,8 +1,12 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.GHWorkflowRun.Conclusion;
+import org.kohsuke.github.GHWorkflowRun.Status;
+import org.kohsuke.github.internal.EnumUtils;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
@@ -11,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents a check run.
@@ -80,12 +85,27 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Status
      */
-    public String getStatus() {
+    @WithBridgeMethods(value = String.class, adapterMethod = "statusAsStr")
+    public Status getStatus() {
+        return Status.from(status);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getStatus")
+    private Object statusAsStr(Status status, Class type) {
         return status;
     }
 
     public static enum Status {
-        QUEUED, IN_PROGRESS, COMPLETED
+        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;
+
+        public static Status from(String value) {
+            return EnumUtils.getEnum(Status.class, value, Status.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /**
@@ -94,7 +114,13 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Conclusion
      */
-    public String getConclusion() {
+    @WithBridgeMethods(value = String.class, adapterMethod = "conclusionAsStr")
+    public Conclusion getConclusion() {
+        return Conclusion.from(conclusion);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getConclusion")
+    private Object conclusionAsStr(Conclusion conclusion, Class type) {
         return conclusion;
     }
 
@@ -105,7 +131,16 @@ public class GHCheckRun extends GHObject {
      * Parameters - <code>conclusion</code></a>.
      */
     public static enum Conclusion {
-        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED
+        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;
+
+        public static Conclusion from(String value) {
+            return EnumUtils.getEnum(Conclusion.class, value, Conclusion.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /**

@@ -99,7 +99,7 @@ public class GHCheckRun extends GHObject {
         QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;
 
         public static Status from(String value) {
-            return EnumUtils.getEnum(Status.class, value, Status.UNKNOWN);
+            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
         }
 
         @Override
@@ -134,7 +134,7 @@ public class GHCheckRun extends GHObject {
         ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;
 
         public static Conclusion from(String value) {
-            return EnumUtils.getEnum(Conclusion.class, value, Conclusion.UNKNOWN);
+            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
         }
 
         @Override

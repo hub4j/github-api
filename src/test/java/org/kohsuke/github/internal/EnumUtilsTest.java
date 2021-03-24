@@ -9,12 +9,12 @@ public class EnumUtilsTest {
 
     @Test
     public void testGetEnum() {
-        assertNull(EnumUtils.getEnum(TestEnum.class, null, TestEnum.UNKNOWN));
-        assertEquals(TestEnum.UNKNOWN, EnumUtils.getEnum(TestEnum.class, "foobar", TestEnum.UNKNOWN));
-        assertEquals(TestEnum.VALUE_1, EnumUtils.getEnum(TestEnum.class, "VALUE_1", TestEnum.UNKNOWN));
-        assertEquals(TestEnum.VALUE_1, EnumUtils.getEnum(TestEnum.class, "value_1", TestEnum.UNKNOWN));
-        assertEquals(TestEnum.VALUE_2, EnumUtils.getEnum(TestEnum.class, "VALUE_2", TestEnum.UNKNOWN));
-        assertEquals(TestEnum.VALUE_2, EnumUtils.getEnum(TestEnum.class, "value_2", TestEnum.UNKNOWN));
+        assertNull(EnumUtils.getNullableEnumOrDefault(TestEnum.class, null, TestEnum.UNKNOWN));
+        assertEquals(TestEnum.UNKNOWN, EnumUtils.getNullableEnumOrDefault(TestEnum.class, "foobar", TestEnum.UNKNOWN));
+        assertEquals(TestEnum.VALUE_1, EnumUtils.getNullableEnumOrDefault(TestEnum.class, "VALUE_1", TestEnum.UNKNOWN));
+        assertEquals(TestEnum.VALUE_1, EnumUtils.getNullableEnumOrDefault(TestEnum.class, "value_1", TestEnum.UNKNOWN));
+        assertEquals(TestEnum.VALUE_2, EnumUtils.getNullableEnumOrDefault(TestEnum.class, "VALUE_2", TestEnum.UNKNOWN));
+        assertEquals(TestEnum.VALUE_2, EnumUtils.getNullableEnumOrDefault(TestEnum.class, "value_2", TestEnum.UNKNOWN));
     }
 
     private enum TestEnum {

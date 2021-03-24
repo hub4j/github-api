@@ -8,10 +8,20 @@ import org.kohsuke.github.GHCheckRun.Status;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
 
 import static java.lang.Boolean.TRUE;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
@@ -694,5 +704,105 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepositories().get(0).isPrivate(), is(false));
 
         assertThat(event.getSender().getLogin(), is("octocat"));
+    }
+
+    @Test
+    public void workflow_dispatch() throws Exception {
+        GHEventPayload.WorkflowDispatch workflowDispatchPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowDispatch.class);
+
+        assertThat(workflowDispatchPayload.getRef(), is("refs/heads/main"));
+        assertThat(workflowDispatchPayload.getAction(), is(nullValue()));
+        assertThat(workflowDispatchPayload.getWorkflow(), is(".github/workflows/main.yml"));
+        assertThat(workflowDispatchPayload.getInputs(), aMapWithSize(1));
+        assertThat(workflowDispatchPayload.getInputs().keySet(), contains("logLevel"));
+        assertThat(workflowDispatchPayload.getInputs().values(), contains("warning"));
+        assertThat(workflowDispatchPayload.getRepository().getName(), is("quarkus-bot-java-playground"));
+        assertThat(workflowDispatchPayload.getSender().getLogin(), is("gsmet"));
+    }
+
+    @Test
+    public void workflow_run() throws Exception {
+        GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+
+        assertThat(workflowRunPayload.getAction(), is("completed"));
+        assertThat(workflowRunPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowRunPayload.getSender().getLogin(), is("gsmet"));
+
+        GHWorkflow workflow = workflowRunPayload.getWorkflow();
+        assertThat(workflow.getId(), is(7087581L));
+        assertThat(workflow.getName(), is("CI"));
+        assertThat(workflow.getPath(), is(".github/workflows/main.yml"));
+        assertThat(workflow.getState(), is("active"));
+        assertThat(workflow.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
+        assertThat(workflow.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/blob/main/.github/workflows/main.yml"));
+        assertThat(workflow.getBadgeUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/workflows/CI/badge.svg"));
+
+        GHWorkflowRun workflowRun = workflowRunPayload.getWorkflowRun();
+        assertThat(workflowRun.getId(), is(680604745L));
+        assertThat(workflowRun.getName(), is("CI"));
+        assertThat(workflowRun.getHeadBranch(), is("main"));
+        assertThat(workflowRun.getHeadSha(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
+        assertThat(workflowRun.getRunNumber(), is(6L));
+        assertThat(workflowRun.getEvent(), is(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), is(GHWorkflowRun.Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), is(GHWorkflowRun.Conclusion.SUCCESS));
+        assertThat(workflowRun.getWorkflowId(), is(7087581L));
+        assertThat(workflowRun.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745"));
+        assertThat(workflowRun.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/actions/runs/680604745"));
+        assertThat(workflowRun.getJobsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/jobs"));
+        assertThat(workflowRun.getLogsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/logs"));
+        assertThat(workflowRun.getCheckSuiteUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-suites/2327154397"));
+        assertThat(workflowRun.getArtifactsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/artifacts"));
+        assertThat(workflowRun.getCancelUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/cancel"));
+        assertThat(workflowRun.getRerunUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/rerun"));
+        assertThat(workflowRun.getWorkflowUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
+        assertThat(workflowRun.getCreatedAt().getTime(), is(1616524526000L));
+        assertThat(workflowRun.getUpdatedAt().getTime(), is(1616524543000L));
+        assertThat(workflowRun.getHeadCommit().getId(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
+        assertThat(workflowRun.getHeadCommit().getTreeId(), is("b17089e6a2574ec1002566fe980923e62dce3026"));
+        assertThat(workflowRun.getHeadCommit().getMessage(), is("Update main.yml"));
+        assertThat(workflowRun.getHeadCommit().getTimestamp().getTime(), is(1616523390000L));
+        assertThat(workflowRun.getHeadCommit().getAuthor().getName(), is("Guillaume Smet"));
+        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), is("guillaume.smet@gmail.com"));
+        assertThat(workflowRun.getHeadCommit().getCommitter().getName(), is("GitHub"));
+        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), is("noreply@github.com"));
+        assertThat(workflowRun.getHeadRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+    }
+
+    @Test
+    public void workflow_run_pull_request() throws Exception {
+        GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+
+        List<GHPullRequest> pullRequests = workflowRunPayload.getWorkflowRun().getPullRequests();
+        assertThat(pullRequests.size(), is(1));
+
+        GHPullRequest pullRequest = pullRequests.get(0);
+        assertThat(pullRequest.getId(), is(599098265L));
+    }
+
+    @Test
+    public void workflow_run_other_repository() throws Exception {
+        GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+        GHWorkflowRun workflowRun = workflowRunPayload.getWorkflowRun();
+
+        assertThat(workflowRunPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowRun.getHeadRepository().getFullName(),
+                is("gsmet-bot-playground/quarkus-bot-java-playground"));
     }
 }

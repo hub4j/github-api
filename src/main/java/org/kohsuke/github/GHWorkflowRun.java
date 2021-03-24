@@ -6,7 +6,10 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -43,10 +46,7 @@ public class GHWorkflowRun extends GHObject {
     private String status;
     private String conclusion;
 
-    // TODO GHWorkflowRun
-    /*
-     * "pull_requests": [],
-     */
+    private GHPullRequest[] pullRequests;
 
     /**
      * The name of the workflow run.
@@ -211,6 +211,27 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
+     * Gets the pull requests participated in this workflow run.
+     *
+     * Note this field is only populated for events. When getting a {@link GHWorkflowRun} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this workflow run. Only populated for events.
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHPullRequest> getPullRequests() throws IOException {
+        if (pullRequests != null && pullRequests.length != 0) {
+            for (GHPullRequest pullRequest : pullRequests) {
+                // Only refresh if we haven't do so before
+                pullRequest.refresh(pullRequest.getTitle());
+            }
+            return Collections.unmodifiableList(Arrays.asList(pullRequests));
+        }
+        return Collections.emptyList();
+    }
+
+    /**
      * Cancel the workflow run.
      *
      * @throws IOException
@@ -257,10 +278,21 @@ public class GHWorkflowRun extends GHObject {
 
     GHWorkflowRun wrapUp(GitHub root) {
         this.root = root;
-        if (owner != null)
+        if (owner != null) {
             owner.wrap(root);
-        if (headRepository != null)
+            if (pullRequests != null) {
+                for (GHPullRequest singlePull : pullRequests) {
+                    singlePull.wrap(owner);
+                }
+            }
+        } else if (pullRequests != null) {
+            for (GHPullRequest singlePull : pullRequests) {
+                singlePull.wrap(root);
+            }
+        }
+        if (headRepository != null) {
             headRepository.wrap(root);
+        }
         return this;
     }
 

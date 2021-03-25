@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Conclusion;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -743,7 +744,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         // Check if the checkruns are all succeeded and if we got all of them
         int checkRunsCount = 0;
         for (GHCheckRun checkRun : checkRuns) {
-            assertThat(checkRun.getConclusion(), equalTo("success"));
+            assertThat(checkRun.getConclusion(), equalTo(Conclusion.SUCCESS));
             checkRunsCount++;
         }
         assertThat(checkRunsCount, equalTo(expectedCount));

@@ -277,19 +277,6 @@
               <argLine>${surefire.argLine}</argLine>
             </configuration>
           </execution>
-          <execution>
-            <id>slow-or-flaky-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-            <configuration>
-              <rerunFailingTestsCount>2</rerunFailingTestsCount>
-              <!-- There are some tests that take longer or are a little flaky.  Run them here. -->
-              <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
-              <argLine>${surefire.argLine}</argLine>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -420,6 +407,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.0.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -565,6 +558,38 @@
     </pluginRepository>
   </pluginRepositories>
   <profiles>
+    <!-- only enable slow-or-flaky-test if -Dtest= is not present -->
+    <profile>
+      <id>slow-or-flaky-test</id>
+      <activation>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>slow-or-flaky-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                  <!-- There are some tests that take longer or are a little
+                    flaky. Run them here. -->
+                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                  <argLine>${surefire.argLine}</argLine>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>jdk11+</id>
       <activation>

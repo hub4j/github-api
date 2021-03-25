@@ -14,8 +14,8 @@ public class EnumTest extends AbstractGitHubWireMockTest {
     @Test
     public void touchEnums() {
         assertThat(GHCheckRun.AnnotationLevel.values().length, equalTo(3));
-        assertThat(GHCheckRun.Conclusion.values().length, equalTo(7));
-        assertThat(GHCheckRun.Status.values().length, equalTo(3));
+        assertThat(GHCheckRun.Conclusion.values().length, equalTo(9));
+        assertThat(GHCheckRun.Status.values().length, equalTo(4));
 
         assertThat(GHCommentAuthorAssociation.values().length, equalTo(7));
 

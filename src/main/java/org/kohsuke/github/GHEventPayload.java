@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Base type for types used in databinding of the event payload.
@@ -1323,6 +1324,88 @@ public class GHEventPayload extends GitHubInteractiveObject {
             GHRepository repository = getRepository();
             if (repository != null) {
                 commit.wrapUp(repository);
+            }
+        }
+    }
+
+    /**
+     * Occurs when someone triggered a workflow run or sends a POST request to the "Create a workflow dispatch event"
+     * endpoint.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#workflow_dispatch">
+     *      workflow dispatch event</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_dispatch">Events that
+     *      trigger workflows</a>
+     */
+    public static class WorkflowDispatch extends GHEventPayload {
+        private Map<String, Object> inputs;
+        private String ref;
+        private String workflow;
+
+        /**
+         * Gets the map of input parameters passed to the workflow.
+         *
+         * @return the map of input parameters
+         */
+        public Map<String, Object> getInputs() {
+            return inputs;
+        }
+
+        /**
+         * Gets the ref of the branch (e.g. refs/heads/main)
+         *
+         * @return the ref of the branch
+         */
+        public String getRef() {
+            return ref;
+        }
+
+        /**
+         * Gets the path of the workflow file (e.g. .github/workflows/hello-world-workflow.yml).
+         *
+         * @return the path of the workflow file
+         */
+        public String getWorkflow() {
+            return workflow;
+        }
+    }
+
+    /**
+     * A workflow run was requested or completed.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#workflow_run">
+     *      workflow run event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/actions#workflow-runs">Actions Workflow Runs</a>
+     */
+    public static class WorkflowRun extends GHEventPayload {
+        private GHWorkflowRun workflowRun;
+        private GHWorkflow workflow;
+
+        public GHWorkflowRun getWorkflowRun() {
+            return workflowRun;
+        }
+
+        public GHWorkflow getWorkflow() {
+            return workflow;
+        }
+
+        @Override
+        void wrapUp(GitHub root) {
+            super.wrapUp(root);
+            if (workflowRun == null || workflow == null) {
+                throw new IllegalStateException(
+                        "Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?");
+            }
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                workflowRun.wrapUp(repository);
+                workflow.wrapUp(repository);
+            } else {
+                workflowRun.wrapUp(root);
+                workflow.wrapUp(root);
             }
         }
     }

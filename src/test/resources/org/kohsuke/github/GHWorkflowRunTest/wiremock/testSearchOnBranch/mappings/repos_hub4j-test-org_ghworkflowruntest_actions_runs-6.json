@@ -1,5 +1,5 @@
 {
-  "id": "e65ff0e6-1e27-44d7-96f0-43a48c340b6a",
+  "id": "7d98cf90-0862-4174-b923-c1bf69c8d975",
   "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs",
   "request": {
     "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs?branch=second-branch&status=completed&event=workflow_dispatch&per_page=20",
@@ -12,37 +12,34 @@
   },
   "response": {
     "status": 200,
-    "body": "{\"total_count\":0,\"workflow_runs\":[]}",
+    "bodyFileName": "repos_hub4j-test-org_ghworkflowruntest_actions_runs-6.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 22 Mar 2021 18:03:21 GMT",
+      "Date": "Thu, 25 Mar 2021 09:38:44 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"57dec44904a36acf90fabde39c11b0be45401e4ae5d135a4b969c0d068e60a93\"",
+      "ETag": "W/\"5d86e8158633c5df5d86da27a022c6abeaceccc4bfa4a627c8d3a5f851a24ca7\"",
       "X-OAuth-Scopes": "repo, user, workflow",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4904",
-      "X-RateLimit-Reset": "1616437999",
-      "X-RateLimit-Used": "96",
+      "X-RateLimit-Remaining": "4913",
+      "X-RateLimit-Reset": "1616667526",
+      "X-RateLimit-Used": "87",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D526:9DD1:4244421:43D711A:6058DBE9"
+      "X-GitHub-Request-Id": "CD46:1470:4059BC7:41589C1:605C5A24"
     }
   },
-  "uuid": "e65ff0e6-1e27-44d7-96f0-43a48c340b6a",
+  "uuid": "7d98cf90-0862-4174-b923-c1bf69c8d975",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-runs-2",
   "insertionIndex": 6
 }

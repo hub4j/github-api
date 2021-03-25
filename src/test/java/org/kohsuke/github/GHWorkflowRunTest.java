@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.awaitility.Awaitility;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +10,8 @@ import org.kohsuke.github.GHWorkflowRun.Status;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
@@ -26,31 +27,9 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
     private GHRepository repo;
 
-    private Duration atLeast;
-    private Duration pollInterval;
-    private Duration atMost;
-
-    private long cancelledWorkflowRunId;
-    private long workflowRunIdToDelete;
-
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
-
-        if (mockGitHub.isUseProxy()) {
-            atLeast = Duration.ofSeconds(5);
-            pollInterval = Duration.ofSeconds(5);
-            atMost = Duration.ofSeconds(60);
-        } else {
-            atLeast = Duration.ofMillis(20);
-            pollInterval = Duration.ofMillis(20);
-            atMost = Duration.ofMillis(240);
-        }
     }
 
     @Test
@@ -61,39 +40,39 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         workflow.dispatch(MAIN_BRANCH);
 
-        // now that we have triggered a workflow run, we can try to get the latest info from the run
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            List<GHWorkflowRun> workflowRuns = getLatestWorkflowRuns(MAIN_BRANCH, Status.COMPLETED);
-            for (GHWorkflowRun workflowRun : workflowRuns) {
-                if (workflowRun.getName().equals(FAST_WORKFLOW_NAME)
-                        && workflowRun.getId() > latestPreexistingWorkflowRunId) {
-                    assertEquals(workflow.getId(), workflowRun.getWorkflowId());
-                    assertTrue(workflowRun.getUrl().getPath().contains("/actions/runs/"));
-                    assertTrue(workflowRun.getHtmlUrl().getPath().contains("/actions/runs/"));
-                    assertTrue(workflowRun.getJobsUrl().getPath().endsWith("/jobs"));
-                    assertTrue(workflowRun.getLogsUrl().getPath().endsWith("/logs"));
-                    assertTrue(workflowRun.getCheckSuiteUrl().getPath().contains("/check-suites/"));
-                    assertTrue(workflowRun.getArtifactsUrl().getPath().endsWith("/artifacts"));
-                    assertTrue(workflowRun.getCancelUrl().getPath().endsWith("/cancel"));
-                    assertTrue(workflowRun.getRerunUrl().getPath().endsWith("/rerun"));
-                    assertTrue(workflowRun.getWorkflowUrl().getPath().contains("/actions/workflows/"));
-                    assertEquals(MAIN_BRANCH, workflowRun.getHeadBranch());
-                    assertNotNull(workflowRun.getHeadCommit().getId());
-                    assertNotNull(workflowRun.getHeadCommit().getTreeId());
-                    assertNotNull(workflowRun.getHeadCommit().getMessage());
-                    assertNotNull(workflowRun.getHeadCommit().getTimestamp());
-                    assertNotNull(workflowRun.getHeadCommit().getAuthor().getEmail());
-                    assertNotNull(workflowRun.getHeadCommit().getCommitter().getEmail());
-                    assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
-                    assertEquals(Status.COMPLETED, workflowRun.getStatus());
-                    assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
-                    assertNotNull(workflowRun.getHeadSha());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
 
-                    return true;
-                }
-            }
-            return false;
-        });
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertEquals(workflow.getId(), workflowRun.getWorkflowId());
+        assertTrue(workflowRun.getUrl().getPath().contains("/actions/runs/"));
+        assertTrue(workflowRun.getHtmlUrl().getPath().contains("/actions/runs/"));
+        assertTrue(workflowRun.getJobsUrl().getPath().endsWith("/jobs"));
+        assertTrue(workflowRun.getLogsUrl().getPath().endsWith("/logs"));
+        assertTrue(workflowRun.getCheckSuiteUrl().getPath().contains("/check-suites/"));
+        assertTrue(workflowRun.getArtifactsUrl().getPath().endsWith("/artifacts"));
+        assertTrue(workflowRun.getCancelUrl().getPath().endsWith("/cancel"));
+        assertTrue(workflowRun.getRerunUrl().getPath().endsWith("/rerun"));
+        assertTrue(workflowRun.getWorkflowUrl().getPath().contains("/actions/workflows/"));
+        assertEquals(MAIN_BRANCH, workflowRun.getHeadBranch());
+        assertNotNull(workflowRun.getHeadCommit().getId());
+        assertNotNull(workflowRun.getHeadCommit().getTreeId());
+        assertNotNull(workflowRun.getHeadCommit().getMessage());
+        assertNotNull(workflowRun.getHeadCommit().getTimestamp());
+        assertNotNull(workflowRun.getHeadCommit().getAuthor().getEmail());
+        assertNotNull(workflowRun.getHeadCommit().getCommitter().getEmail());
+        assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
+        assertEquals(Status.COMPLETED, workflowRun.getStatus());
+        assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
+        assertNotNull(workflowRun.getHeadSha());
     }
 
     @Test
@@ -105,43 +84,39 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         workflow.dispatch(MAIN_BRANCH);
 
         // now that we have triggered the workflow run, we will wait until it's in progress and then cancel it
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            List<GHWorkflowRun> workflowRuns = getLatestWorkflowRuns(MAIN_BRANCH, Status.IN_PROGRESS);
-            for (GHWorkflowRun workflowRun : workflowRuns) {
-                if (workflowRun.getName().equals(SLOW_WORKFLOW_NAME)
-                        && workflowRun.getId() > latestPreexistingWorkflowRunId) {
-                    assertNotNull(workflowRun.getId());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId).isPresent());
 
-                    workflowRun.cancel();
-                    cancelledWorkflowRunId = workflowRun.getId();
-                    return true;
-                }
-            }
-            return false;
-        });
+        GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertNotNull(workflowRun.getId());
+
+        workflowRun.cancel();
+        long cancelledWorkflowRunId = workflowRun.getId();
+
+        // let's wait until it's completed
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo, cancelledWorkflowRunId) == Status.COMPLETED);
 
         // let's check that it has been properly cancelled
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            GHWorkflowRun workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
-            if (workflowRun.getStatus() == Status.COMPLETED && workflowRun.getConclusion() == Conclusion.CANCELLED) {
-                return true;
-            }
-
-            return false;
-        });
+        workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
+        assertEquals(Conclusion.CANCELLED, workflowRun.getConclusion());
 
         // now let's rerun it
-        GHWorkflowRun cancelledWorkflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
-        cancelledWorkflowRun.rerun();
+        workflowRun.rerun();
 
         // let's check that it has been rerun
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            GHWorkflowRun rerunWorkflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
-            return rerunWorkflowRun.getStatus() == Status.IN_PROGRESS;
-        });
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo,
+                cancelledWorkflowRunId) == Status.IN_PROGRESS);
 
         // cancel it again
-        cancelledWorkflowRun.cancel();
+        workflowRun.cancel();
     }
 
     @Test
@@ -152,28 +127,25 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         workflow.dispatch(MAIN_BRANCH);
 
-        // now that we have triggered a workflow run, we can try to get the latest info from the run
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            List<GHWorkflowRun> workflowRuns = getLatestWorkflowRuns(MAIN_BRANCH, Status.COMPLETED);
-            for (GHWorkflowRun workflowRun : workflowRuns) {
-                if (workflowRun.getName().equals(FAST_WORKFLOW_NAME)
-                        && workflowRun.getId() > latestPreexistingWorkflowRunId) {
-                    assertNotNull(workflowRun.getId());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
 
-                    workflowRunIdToDelete = workflowRun.getId();
+        GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-                    return true;
-                }
-            }
-            return false;
-        });
+        assertNotNull(workflowRunToDelete.getId());
 
-        GHWorkflowRun workflowRunToDelete = repo.getWorkflowRun(workflowRunIdToDelete);
         workflowRunToDelete.delete();
 
         try {
-            repo.getWorkflowRun(workflowRunIdToDelete);
-            Assert.fail("The workflow " + workflowRunIdToDelete + " should have been deleted.");
+            repo.getWorkflowRun(workflowRunToDelete.getId());
+            Assert.fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
         } catch (GHFileNotFoundException e) {
             // success
         }
@@ -187,22 +159,34 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         workflow.dispatch(SECOND_BRANCH);
 
-        // now that we have triggered a workflow run, we can try to get the latest info from the run
-        Awaitility.await().atLeast(atLeast).pollInterval(pollInterval).atMost(atMost).until(() -> {
-            List<GHWorkflowRun> workflowRuns = getLatestWorkflowRuns(SECOND_BRANCH, Status.COMPLETED);
-            for (GHWorkflowRun workflowRun : workflowRuns) {
-                if (workflowRun.getName().equals(FAST_WORKFLOW_NAME)
-                        && workflowRun.getId() > latestPreexistingWorkflowRunId) {
-                    assertEquals(workflow.getId(), workflowRun.getWorkflowId());
-                    assertEquals(SECOND_BRANCH, workflowRun.getHeadBranch());
-                    assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
-                    assertEquals(Status.COMPLETED, workflowRun.getStatus());
-                    assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
 
-                    return true;
-                }
-            }
-            return false;
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertEquals(workflow.getId(), workflowRun.getWorkflowId());
+        assertEquals(SECOND_BRANCH, workflowRun.getHeadBranch());
+        assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
+        assertEquals(Status.COMPLETED, workflowRun.getStatus());
+        assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
+    }
+
+    private void await(Function<GHRepository, Boolean> condition) throws IOException {
+        if (!mockGitHub.isUseProxy()) {
+            return;
+        }
+
+        GHRepository nonRecordingRepo = getGitHubBeforeAfter().getRepository(REPO_NAME);
+
+        Awaitility.await().pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
+            return condition.apply(nonRecordingRepo);
         });
     }
 
@@ -210,8 +194,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         return repo.queryWorkflowRuns().list().withPageSize(1).iterator().next().getId();
     }
 
-    private List<GHWorkflowRun> getLatestWorkflowRuns(String branch, Status status) {
-        return repo.queryWorkflowRuns()
+    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
+            String workflowName,
+            String branch,
+            Status status,
+            long latestPreexistingWorkflowRunId) {
+        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
                 .branch(branch)
                 .status(status)
                 .event(GHEvent.WORKFLOW_DISPATCH)
@@ -219,5 +207,27 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .withPageSize(20)
                 .iterator()
                 .nextPage();
+
+        for (GHWorkflowRun workflowRun : workflowRuns) {
+            if (workflowRun.getName().equals(workflowName) && workflowRun.getId() > latestPreexistingWorkflowRunId) {
+                return Optional.of(workflowRun);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName,
+            String branch,
+            Status status,
+            long latestPreexistingWorkflowRunId) {
+        return getWorkflowRun(this.repo, workflowName, branch, status, latestPreexistingWorkflowRunId);
+    }
+
+    private static Status getWorkflowRunStatus(GHRepository repository, long workflowRunId) {
+        try {
+            return repository.getWorkflowRun(workflowRunId).getStatus();
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to get workflow run status", e);
+        }
     }
 }

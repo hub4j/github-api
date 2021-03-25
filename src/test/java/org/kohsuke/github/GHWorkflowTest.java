@@ -7,6 +7,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Collections;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
     private static String REPO_NAME = "hub4j-test-org/GHWorkflowTest";
@@ -71,8 +76,14 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
         workflow.dispatch("main");
-        workflow.dispatch("main", Collections.singletonMap("parameter", "value"));
+        verify(postRequestedFor(
+                urlPathEqualTo("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859/dispatches")));
 
-        // if we implement the logs API at some point, it might be a good idea to validate all this
+        workflow.dispatch("main", Collections.singletonMap("parameter", "value"));
+        verify(postRequestedFor(
+                urlPathEqualTo("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859/dispatches"))
+                        .withRequestBody(containing("inputs"))
+                        .withRequestBody(containing("parameter"))
+                        .withRequestBody(containing("value")));
     }
 }

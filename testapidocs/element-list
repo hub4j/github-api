@@ -3,4 +3,5 @@ org.kohsuke.github
 org.kohsuke.github.extras
 org.kohsuke.github.extras.authorization
 org.kohsuke.github.extras.okhttp3
+org.kohsuke.github.internal
 org.kohsuke.github.junit

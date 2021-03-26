@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestCommitDetail.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestCommitDetail.java</span></div><h1>GHPullRequestCommitDetail.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2013, Luca Milanesio
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.net.URL;
+
+/**
+ * Commit detail inside a {@link GHPullRequest}.
+ *
+ * @author Luca Milanesio
+ * @see GHPullRequest#listCommits() GHPullRequest#listCommits()
+ */
+@SuppressFBWarnings(
+        value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="nc" id="L41">public class GHPullRequestCommitDetail {</span>
+    private GHPullRequest owner;
+
+    void wrapUp(GHPullRequest owner) {
+<span class="nc" id="L45">        this.owner = owner;</span>
+<span class="nc" id="L46">    }</span>
+
+    /**
+     * The type Authorship.
+     *
+     * @deprecated Use {@link GitUser}
+     */
+<span class="nc" id="L53">    public static class Authorship extends GitUser {</span>
+    }
+
+    /**
+     * The type Tree.
+     */
+<span class="nc" id="L59">    public static class Tree {</span>
+        String sha;
+        String url;
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="nc" id="L69">            return sha;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="nc" id="L78">            return GitHubClient.parseURL(url);</span>
+        }
+    }
+
+    /**
+     * The type Commit.
+     */
+<span class="nc" id="L85">    public static class Commit {</span>
+        Authorship author;
+        Authorship committer;
+        String message;
+        Tree tree;
+        String url;
+        int comment_count;
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        @WithBridgeMethods(value = Authorship.class, castRequired = true)
+        public GitUser getAuthor() {
+<span class="nc" id="L100">            return author;</span>
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        @WithBridgeMethods(value = Authorship.class, castRequired = true)
+        public GitUser getCommitter() {
+<span class="nc" id="L110">            return committer;</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return the message
+         */
+        public String getMessage() {
+<span class="nc" id="L119">            return message;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="nc" id="L128">            return GitHubClient.parseURL(url);</span>
+        }
+
+        /**
+         * Gets comment count.
+         *
+         * @return the comment count
+         */
+        public int getComment_count() {
+<span class="nc" id="L137">            return comment_count;</span>
+        }
+
+        /**
+         * Gets tree.
+         *
+         * @return the tree
+         */
+        public Tree getTree() {
+<span class="nc" id="L146">            return tree;</span>
+        }
+    }
+
+    /**
+     * The type CommitPointer.
+     */
+<span class="nc" id="L153">    public static class CommitPointer {</span>
+        String sha;
+        String url;
+        String html_url;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="nc" id="L164">            return GitHubClient.parseURL(url);</span>
+        }
+
+        /**
+         * Gets html url.
+         *
+         * @return the html url
+         */
+        public URL getHtml_url() {
+<span class="nc" id="L173">            return GitHubClient.parseURL(html_url);</span>
+        }
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="nc" id="L182">            return sha;</span>
+        }
+    }
+
+    String sha;
+    Commit commit;
+    String url;
+    String html_url;
+    String comments_url;
+    CommitPointer[] parents;
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="nc" id="L199">        return sha;</span>
+    }
+
+    /**
+     * Gets commit.
+     *
+     * @return the commit
+     */
+    public Commit getCommit() {
+<span class="nc" id="L208">        return commit;</span>
+    }
+
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    public URL getApiUrl() {
+<span class="nc" id="L217">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="nc" id="L226">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets comments url.
+     *
+     * @return the comments url
+     */
+    public URL getCommentsUrl() {
+<span class="nc" id="L235">        return GitHubClient.parseURL(comments_url);</span>
+    }
+
+    /**
+     * Get parents commit pointer [ ].
+     *
+     * @return the commit pointer [ ]
+     */
+    public CommitPointer[] getParents() {
+<span class="nc" id="L244">        CommitPointer[] newValue = new CommitPointer[parents.length];</span>
+<span class="nc" id="L245">        System.arraycopy(parents, 0, newValue, 0, parents.length);</span>
+<span class="nc" id="L246">        return newValue;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

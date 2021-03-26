@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTreeBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTreeBuilder.java</span></div><h1>GHTreeBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Builder pattern for creating a new tree. Based on https://developer.github.com/v3/git/trees/#create-a-tree
+ */
+public class GHTreeBuilder {
+    private final GHRepository repo;
+    private final Requester req;
+
+<span class="fc" id="L19">    private final List&lt;TreeEntry&gt; treeEntries = new ArrayList&lt;TreeEntry&gt;();</span>
+
+    // Issue #636: Create Tree no longer accepts null value in sha field
+    @JsonInclude(Include.NON_NULL)
+    @SuppressFBWarnings(&quot;URF_UNREAD_FIELD&quot;)
+    private static final class TreeEntry {
+
+        private final String path;
+        private final String mode;
+        private final String type;
+        private String sha;
+        private String content;
+
+<span class="fc" id="L32">        private TreeEntry(String path, String mode, String type) {</span>
+<span class="fc" id="L33">            this.path = path;</span>
+<span class="fc" id="L34">            this.mode = mode;</span>
+<span class="fc" id="L35">            this.type = type;</span>
+<span class="fc" id="L36">        }</span>
+    }
+
+<span class="fc" id="L39">    GHTreeBuilder(GHRepository repo) {</span>
+<span class="fc" id="L40">        this.repo = repo;</span>
+<span class="fc" id="L41">        req = repo.root.createRequest();</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Base tree gh tree builder.
+     *
+     * @param baseTree
+     *            the SHA of tree you want to update with new data
+     * @return the gh tree builder
+     */
+    public GHTreeBuilder baseTree(String baseTree) {
+<span class="fc" id="L52">        req.with(&quot;base_tree&quot;, baseTree);</span>
+<span class="fc" id="L53">        return this;</span>
+    }
+
+    /**
+     * Adds a new entry to the tree. Exactly one of the parameters {@code sha} and {@code content} must be non-null.
+     *
+     * @param path
+     *            the path
+     * @param mode
+     *            the mode
+     * @param type
+     *            the type
+     * @param sha
+     *            the sha
+     * @param content
+     *            the content
+     * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
+     */
+    @Deprecated
+    public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
+<span class="nc" id="L74">        TreeEntry entry = new TreeEntry(path, mode, type);</span>
+<span class="nc" id="L75">        entry.sha = sha;</span>
+<span class="nc" id="L76">        entry.content = content;</span>
+<span class="nc" id="L77">        treeEntries.add(entry);</span>
+<span class="nc" id="L78">        return this;</span>
+    }
+
+    /**
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
+     * referred by its SHA.
+     *
+     * @param path
+     *            the path
+     * @param sha
+     *            the sha
+     * @param executable
+     *            the executable
+     * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
+     */
+    @Deprecated
+    public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L97">        entry.sha = sha;</span>
+<span class="fc" id="L98">        treeEntries.add(entry);</span>
+<span class="fc" id="L99">        return this;</span>
+    }
+
+    /**
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the
+     * specified {@code content}.
+     *
+     * @param path
+     *            the path
+     * @param content
+     *            the content
+     * @param executable
+     *            the executable
+     * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
+     */
+    @Deprecated
+    public GHTreeBuilder textEntry(String path, String content, boolean executable) {
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L118">        entry.content = content;</span>
+<span class="fc" id="L119">        treeEntries.add(entry);</span>
+<span class="fc" id="L120">        return this;</span>
+    }
+
+    /**
+     * Adds a new entry with the given binary content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as byte array
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, byte[] content, boolean executable) {
+        try {
+<span class="fc" id="L136">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
+<span class="fc" id="L137">            return shaEntry(path, dataSha, executable);</span>
+<span class="nc" id="L138">        } catch (IOException e) {</span>
+<span class="nc" id="L139">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Adds a new entry with the given text content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as UTF-8 encoded string
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, String content, boolean executable) {
+<span class="fc" id="L155">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L159">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
+    }
+
+    /**
+     * Creates a tree based on the parameters specified thus far.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTree create() throws IOException {
+<span class="fc" id="L170">        req.with(&quot;tree&quot;, treeEntries);</span>
+<span class="fc" id="L171">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

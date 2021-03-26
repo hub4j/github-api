@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHBranchProtection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHBranchProtection.java</span></div><h1>GHBranchProtection.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.util.Collection;
+
+import static org.kohsuke.github.internal.Previews.ZZZAX;
+
+/**
+ * The type GHBranchProtection.
+ *
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#get-branch-protection&quot;&gt;GitHub Branch Protection&lt;/a&gt;
+ */
+@SuppressFBWarnings(
+        value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="fc" id="L20">public class GHBranchProtection extends GitHubInteractiveObject {</span>
+    private static final String REQUIRE_SIGNATURES_URI = &quot;/required_signatures&quot;;
+
+    @JsonProperty
+    private EnforceAdmins enforceAdmins;
+
+    @JsonProperty(&quot;required_pull_request_reviews&quot;)
+    private RequiredReviews requiredReviews;
+
+    @JsonProperty
+    private RequiredStatusChecks requiredStatusChecks;
+
+    @JsonProperty
+    private Restrictions restrictions;
+
+    @JsonProperty
+    private String url;
+
+    /**
+     * Enabled signed commits.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(ZZZAX)
+    @Deprecated
+    public void enabledSignedCommits() throws IOException {
+<span class="fc" id="L47">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Disable signed commits.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(ZZZAX)
+    @Deprecated
+    public void disableSignedCommits() throws IOException {
+<span class="fc" id="L59">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Gets enforce admins.
+     *
+     * @return the enforce admins
+     */
+    public EnforceAdmins getEnforceAdmins() {
+<span class="fc" id="L68">        return enforceAdmins;</span>
+    }
+
+    /**
+     * Gets required reviews.
+     *
+     * @return the required reviews
+     */
+    public RequiredReviews getRequiredReviews() {
+<span class="fc" id="L77">        return requiredReviews;</span>
+    }
+
+    /**
+     * Gets required signatures.
+     *
+     * @return the required signatures
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(ZZZAX)
+    @Deprecated
+    public boolean getRequiredSignatures() throws IOException {
+<span class="fc" id="L90">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
+    }
+
+    /**
+     * Gets required status checks.
+     *
+     * @return the required status checks
+     */
+    public RequiredStatusChecks getRequiredStatusChecks() {
+<span class="fc" id="L99">        return requiredStatusChecks;</span>
+    }
+
+    /**
+     * Gets restrictions.
+     *
+     * @return the restrictions
+     */
+    public Restrictions getRestrictions() {
+<span class="nc" id="L108">        return restrictions;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+<span class="nc" id="L117">        return url;</span>
+    }
+
+    GHBranchProtection wrap(GHBranch branch) {
+<span class="fc" id="L121">        this.root = branch.getRoot();</span>
+<span class="fc" id="L122">        return this;</span>
+    }
+
+    private Requester requester() {
+<span class="fc" id="L126">        return root.createRequest().withPreview(ZZZAX);</span>
+    }
+
+    /**
+     * The type EnforceAdmins.
+     */
+<span class="fc" id="L132">    public static class EnforceAdmins {</span>
+        @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L145">            return url;</span>
+        }
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L154">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type RequiredReviews.
+     */
+<span class="fc" id="L161">    public static class RequiredReviews {</span>
+        @JsonProperty(&quot;dismissal_restrictions&quot;)
+        private Restrictions dismissalRestriction;
+
+        private boolean dismissStaleReviews;
+
+        private boolean requireCodeOwnerReviews;
+
+        @JsonProperty(&quot;required_approving_review_count&quot;)
+        private int requiredReviewers;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets dismissal restrictions.
+         *
+         * @return the dismissal restrictions
+         */
+        public Restrictions getDismissalRestrictions() {
+<span class="nc" id="L181">            return dismissalRestriction;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L190">            return url;</span>
+        }
+
+        /**
+         * Is dismiss stale reviews boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isDismissStaleReviews() {
+<span class="fc" id="L199">            return dismissStaleReviews;</span>
+        }
+
+        /**
+         * Is require code owner reviews boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequireCodeOwnerReviews() {
+<span class="fc" id="L208">            return requireCodeOwnerReviews;</span>
+        }
+
+        /**
+         * Gets required reviewers.
+         *
+         * @return the required reviewers
+         */
+        public int getRequiredReviewers() {
+<span class="fc" id="L217">            return requiredReviewers;</span>
+        }
+    }
+
+    private static class RequiredSignatures {
+        @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L234">            return url;</span>
+        }
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="nc" id="L243">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type RequiredStatusChecks.
+     */
+<span class="fc" id="L250">    public static class RequiredStatusChecks {</span>
+        @JsonProperty
+        private Collection&lt;String&gt; contexts;
+
+        @JsonProperty
+        private boolean strict;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets contexts.
+         *
+         * @return the contexts
+         */
+        public Collection&lt;String&gt; getContexts() {
+<span class="fc" id="L266">            return contexts;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L275">            return url;</span>
+        }
+
+        /**
+         * Is requires branch up to date boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequiresBranchUpToDate() {
+<span class="fc" id="L284">            return strict;</span>
+        }
+    }
+
+    /**
+     * The type Restrictions.
+     */
+<span class="nc" id="L291">    public static class Restrictions {</span>
+        @JsonProperty
+        private Collection&lt;GHTeam&gt; teams;
+
+        private String teamsUrl;
+
+        @JsonProperty
+        private String url;
+
+        @JsonProperty
+        private Collection&lt;GHUser&gt; users;
+
+        private String usersUrl;
+
+        /**
+         * Gets teams.
+         *
+         * @return the teams
+         */
+        public Collection&lt;GHTeam&gt; getTeams() {
+<span class="nc" id="L311">            return teams;</span>
+        }
+
+        /**
+         * Gets teams url.
+         *
+         * @return the teams url
+         */
+        public String getTeamsUrl() {
+<span class="nc" id="L320">            return teamsUrl;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L329">            return url;</span>
+        }
+
+        /**
+         * Gets users.
+         *
+         * @return the users
+         */
+        public Collection&lt;GHUser&gt; getUsers() {
+<span class="nc" id="L338">            return users;</span>
+        }
+
+        /**
+         * Gets users url.
+         *
+         * @return the users url
+         */
+        public String getUsersUrl() {
+<span class="nc" id="L347">            return usersUrl;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

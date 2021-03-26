@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHLabel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHLabel.java</span></div><h1>GHLabel.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * The type GHLabel.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see &lt;a href=&quot;https://developer.github.com/v3/issues/labels/&quot;&gt;Labels&lt;/a&gt;
+ * @see GHIssue#getLabels() GHIssue#getLabels()
+ * @see GHRepository#listLabels() GHRepository#listLabels()
+ */
+public class GHLabel extends GitHubInteractiveObject {
+
+    private long id;
+    private String nodeId;
+    @JsonProperty(&quot;default&quot;)
+    private boolean default_;
+
+    @Nonnull
+    private String url, name, color;
+
+    @CheckForNull
+    private String description;
+
+    @JsonCreator
+<span class="fc" id="L38">    private GHLabel(@JacksonInject @Nonnull GitHub root) {</span>
+<span class="fc" id="L39">        this.root = root;</span>
+<span class="fc" id="L40">        url = &quot;&quot;;</span>
+<span class="fc" id="L41">        name = &quot;&quot;;</span>
+<span class="fc" id="L42">        color = &quot;&quot;;</span>
+<span class="fc" id="L43">        description = null;</span>
+<span class="fc" id="L44">    }</span>
+
+    @Nonnull
+    GitHub getApiRoot() {
+<span class="fc" id="L48">        return Objects.requireNonNull(root);</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L57">        return id;</span>
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id.
+     */
+    public String getNodeId() {
+<span class="fc" id="L66">        return nodeId;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    @Nonnull
+    public String getUrl() {
+<span class="fc" id="L76">        return url;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    @Nonnull
+    public String getName() {
+<span class="fc" id="L86">        return name;</span>
+    }
+
+    /**
+     * Color code without leading '#', such as 'f29513'
+     *
+     * @return the color
+     */
+    @Nonnull
+    public String getColor() {
+<span class="fc" id="L96">        return color;</span>
+    }
+
+    /**
+     * Purpose of Label
+     *
+     * @return the description
+     */
+    @CheckForNull
+    public String getDescription() {
+<span class="fc" id="L106">        return description;</span>
+    }
+
+    /**
+     * If the label is one of the default labels created by GitHub automatically.
+     *
+     * @return true if the label is a default one
+     */
+    public boolean isDefault() {
+<span class="fc" id="L115">        return default_;</span>
+    }
+
+    /**
+     * Sets color.
+     *
+     * @param newColor
+     *            6-letter hex color code, like &quot;f29513&quot;
+     * @throws IOException
+     *             the io exception
+     * @deprecated use {@link #set()} or {@link #update()} instead
+     */
+    @Deprecated
+    public void setColor(String newColor) throws IOException {
+<span class="fc" id="L129">        set().color(newColor);</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Sets description.
+     *
+     * @param newDescription
+     *            Description of label
+     * @throws IOException
+     *             the io exception
+     * @deprecated use {@link #set()} or {@link #update()} instead
+     */
+    @Deprecated
+    public void setDescription(String newDescription) throws IOException {
+<span class="fc" id="L143">        set().description(newDescription);</span>
+<span class="fc" id="L144">    }</span>
+
+    static Collection&lt;String&gt; toNames(Collection&lt;GHLabel&gt; labels) {
+<span class="nc" id="L147">        List&lt;String&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for (GHLabel l : labels) {</span>
+<span class="nc" id="L149">            r.add(l.getName());</span>
+<span class="nc" id="L150">        }</span>
+<span class="nc" id="L151">        return r;</span>
+    }
+
+    /**
+     * Begins the creation of a new instance.
+     *
+     * Consumer must call {@link Creator#done()} to commit changes.
+     *
+     * @param repository
+     *            the repository in which the label will be created.
+     * @return a {@link Creator}
+     * @throws IOException
+     *             the io exception
+     */
+    @BetaApi
+    @Deprecated
+    static Creator create(GHRepository repository) throws IOException {
+<span class="fc" id="L168">        return new Creator(repository);</span>
+    }
+
+    /**
+     * Reads a label from a repository.
+     *
+     * @param repository
+     *            the repository to read from
+     * @param name
+     *            the name of the label
+     * @return a label
+     * @throws IOException
+     *             the io exception
+     */
+    static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
+<span class="fc" id="L183">        return repository.root.createRequest()</span>
+<span class="fc" id="L184">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;), name)</span>
+<span class="fc" id="L185">                .fetch(GHLabel.class);</span>
+
+    }
+
+    /**
+     * Reads all labels from a repository.
+     *
+     * @param repository
+     *            the repository to read from
+     * @return iterable of all labels
+     * @throws IOException
+     *             the io exception
+     */
+    static PagedIterable&lt;GHLabel&gt; readAll(@Nonnull final GHRepository repository) throws IOException {
+<span class="fc" id="L199">        return repository.root.createRequest()</span>
+<span class="fc" id="L200">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;))</span>
+<span class="fc" id="L201">                .toIterable(GHLabel[].class, null);</span>
+
+    }
+
+    /**
+     * Begins a batch update
+     *
+     * Consumer must call {@link Updater#done()} to commit changes.
+     *
+     * @return a {@link Updater}
+     */
+    @BetaApi
+    @Deprecated
+    public Updater update() {
+<span class="fc" id="L215">        return new Updater(this);</span>
+    }
+
+    /**
+     * Begins a single property update.
+     *
+     * @return a {@link Setter}
+     */
+    @BetaApi
+    @Deprecated
+    public Setter set() {
+<span class="fc" id="L226">        return new Setter(this);</span>
+    }
+
+    /**
+     * Delete this label from the repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L236">        root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getUrl()).send();</span>
+<span class="fc" id="L237">    }</span>
+
+    @Override
+    public boolean equals(final Object o) {
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L242">            return true;</span>
+<span class="pc bpc" id="L243" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
+<span class="nc" id="L244">            return false;</span>
+<span class="fc" id="L245">        final GHLabel ghLabel = (GHLabel) o;</span>
+<span class="pc bpc" id="L246" title="2 of 4 branches missed.">        return Objects.equals(url, ghLabel.url) &amp;&amp; Objects.equals(name, ghLabel.name)</span>
+<span class="fc bfc" id="L247" title="All 4 branches covered.">                &amp;&amp; Objects.equals(color, ghLabel.color) &amp;&amp; Objects.equals(description, ghLabel.description);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L252">        return Objects.hash(url, name, color, description);</span>
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that updates a single property per request
+     *
+     * {@link #done()} is called automatically after the property is set.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Setter extends GHLabelBuilder&lt;GHLabel&gt; {
+        private Setter(@Nonnull GHLabel base) {
+<span class="fc" id="L264">            super(GHLabel.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L265">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L266">        }</span>
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Updater extends GHLabelBuilder&lt;Updater&gt; {
+        private Updater(@Nonnull GHLabel base) {
+<span class="fc" id="L278">            super(Updater.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L279">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L280">        }</span>
+    }
+
+    /**
+     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
+     *
+     * Consumer must call {@link #done()} to create the new instance.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Creator extends GHLabelBuilder&lt;Creator&gt; {
+        private Creator(@Nonnull GHRepository repository) {
+<span class="fc" id="L292">            super(Creator.class, repository.root, null);</span>
+<span class="fc" id="L293">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(&quot;labels&quot;));</span>
+<span class="fc" id="L294">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

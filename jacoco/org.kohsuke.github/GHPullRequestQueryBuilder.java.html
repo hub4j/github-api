@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestQueryBuilder.java</span></div><h1>GHPullRequestQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
+
+/**
+ * Lists up pull requests with some filtering and sorting.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHRepository#queryPullRequests() GHRepository#queryPullRequests()
+ */
+public class GHPullRequestQueryBuilder extends GHQueryBuilder&lt;GHPullRequest&gt; {
+    private final GHRepository repo;
+
+    GHPullRequestQueryBuilder(GHRepository repo) {
+<span class="fc" id="L15">        super(repo.root);</span>
+<span class="fc" id="L16">        this.repo = repo;</span>
+<span class="fc" id="L17">    }</span>
+
+    /**
+     * State gh pull request query builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder state(GHIssueState state) {
+<span class="fc" id="L27">        req.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L28">        return this;</span>
+    }
+
+    /**
+     * Head gh pull request query builder.
+     *
+     * @param head
+     *            the head
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder head(String head) {
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">        if (head != null &amp;&amp; !head.contains(&quot;:&quot;)) {</span>
+<span class="fc" id="L40">            head = repo.getOwnerName() + &quot;:&quot; + head;</span>
+        }
+<span class="fc" id="L42">        req.with(&quot;head&quot;, head);</span>
+<span class="fc" id="L43">        return this;</span>
+    }
+
+    /**
+     * Base gh pull request query builder.
+     *
+     * @param base
+     *            the base
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder base(String base) {
+<span class="fc" id="L54">        req.with(&quot;base&quot;, base);</span>
+<span class="fc" id="L55">        return this;</span>
+    }
+
+    /**
+     * Sort gh pull request query builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder sort(Sort sort) {
+<span class="nc" id="L66">        req.with(&quot;sort&quot;, sort);</span>
+<span class="nc" id="L67">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L73">    public enum Sort {</span>
+<span class="fc" id="L74">        CREATED, UPDATED, POPULARITY, LONG_RUNNING</span>
+    }
+
+    /**
+     * Direction gh pull request query builder.
+     *
+     * @param d
+     *            the d
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder direction(GHDirection d) {
+<span class="nc" id="L85">        req.with(&quot;direction&quot;, d);</span>
+<span class="nc" id="L86">        return this;</span>
+    }
+
+    @Override
+    public PagedIterable&lt;GHPullRequest&gt; list() {
+<span class="fc" id="L91">        return req.withPreview(SHADOW_CAT)</span>
+<span class="fc" id="L92">                .withUrlPath(repo.getApiTailUrl(&quot;pulls&quot;))</span>
+<span class="fc" id="L93">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(repo));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

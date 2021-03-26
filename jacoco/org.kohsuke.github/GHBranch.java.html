@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHBranch.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHBranch.java</span></div><h1>GHBranch.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.Previews;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Objects;
+
+import javax.annotation.CheckForNull;
+
+/**
+ * A branch in a repository.
+ *
+ * @author Yusuke Kokubo
+ */
+@SuppressFBWarnings(
+        value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+public class GHBranch extends GitHubInteractiveObject {
+    private GHRepository owner;
+
+    private String name;
+    private Commit commit;
+    @JsonProperty(&quot;protected&quot;)
+    private boolean protection;
+    private String protection_url;
+
+    @JsonCreator
+<span class="fc" id="L34">    GHBranch(@JsonProperty(value = &quot;name&quot;, required = true) String name) throws Exception {</span>
+<span class="fc" id="L35">        Objects.requireNonNull(name);</span>
+<span class="fc" id="L36">        this.name = name;</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * The type Commit.
+     */
+<span class="fc" id="L42">    public static class Commit {</span>
+        String sha;
+
+        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
+        String url;
+    }
+
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
+    public GitHub getRoot() {
+<span class="fc" id="L55">        return root;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    public GHRepository getOwner() {
+<span class="nc" id="L64">        return owner;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L73">        return name;</span>
+    }
+
+    /**
+     * Is protected boolean.
+     *
+     * @return true if the push to this branch is restricted via branch protection.
+     */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
+    public boolean isProtected() {
+<span class="fc" id="L84">        return protection;</span>
+    }
+
+    /**
+     * Gets protection url.
+     *
+     * @return API URL that deals with the protection of this branch.
+     */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
+    public URL getProtectionUrl() {
+<span class="fc" id="L95">        return GitHubClient.parseURL(protection_url);</span>
+    }
+
+    /**
+     * Gets protection.
+     *
+     * @return the protection
+     * @throws IOException
+     *             the io exception
+     */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
+    public GHBranchProtection getProtection() throws IOException {
+<span class="fc" id="L108">        return root.createRequest()</span>
+<span class="fc" id="L109">                .withPreview(Previews.LUKE_CAGE)</span>
+<span class="fc" id="L110">                .setRawUrlPath(protection_url)</span>
+<span class="fc" id="L111">                .fetch(GHBranchProtection.class)</span>
+<span class="fc" id="L112">                .wrap(this);</span>
+    }
+
+    /**
+     * Gets sha 1.
+     *
+     * @return The SHA1 of the commit that this branch currently points to.
+     */
+    public String getSHA1() {
+<span class="nc" id="L121">        return commit.sha;</span>
+    }
+
+    /**
+     * Disables branch protection and allows anyone with push access to push changes.
+     *
+     * @throws IOException
+     *             if disabling protection fails
+     */
+    public void disableProtection() throws IOException {
+<span class="fc" id="L131">        root.createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protection_url).send();</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Enables branch protection to control what commit statuses are required to push.
+     *
+     * @return GHBranchProtectionBuilder for enabling protection
+     * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
+     */
+    @Preview(Previews.LUKE_CAGE)
+    @Deprecated
+    public GHBranchProtectionBuilder enableProtection() {
+<span class="fc" id="L143">        return new GHBranchProtectionBuilder(this);</span>
+    }
+
+    /**
+     * Enable protection.
+     *
+     * @param level
+     *            the level
+     * @param contexts
+     *            the contexts
+     * @throws IOException
+     *             the io exception
+     */
+    // backward compatibility with previous signature
+    @Deprecated
+    public void enableProtection(EnforcementLevel level, Collection&lt;String&gt; contexts) throws IOException {
+<span class="nc bnc" id="L159" title="All 3 branches missed.">        switch (level) {</span>
+            case OFF :
+<span class="nc" id="L161">                disableProtection();</span>
+<span class="nc" id="L162">                break;</span>
+            case NON_ADMINS :
+            case EVERYONE :
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                enableProtection().addRequiredChecks(contexts)</span>
+<span class="nc" id="L166">                        .includeAdmins(level == EnforcementLevel.EVERYONE)</span>
+<span class="nc" id="L167">                        .enable();</span>
+                break;
+        }
+<span class="nc" id="L170">    }</span>
+
+    /**
+     * Merge a branch into this branch.
+     *
+     * @param headBranch
+     *            the branch whose head will be merged
+     *
+     * @param commitMessage
+     *            the commit message
+     *
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    @CheckForNull
+    public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
+<span class="fc" id="L189">        return merge(headBranch.getName(), commitMessage);</span>
+    }
+
+    /**
+     * Merge a ref into this branch.
+     *
+     * @param head
+     *            the ref name that will be merged into this branch. Follows the usual ref naming rules, could be a
+     *            branch name, tag, or commit sha.
+     *
+     * @param commitMessage
+     *            the commit message
+     *
+     * @return the merge {@link GHCommit} created, or {@code null} if the base already contains the head (nothing to
+     *         merge).
+     *
+     * @throws IOException
+     *             if merging fails
+     */
+    @CheckForNull
+    public GHCommit merge(String head, String commitMessage) throws IOException {
+<span class="fc" id="L210">        GHCommit result = root.createRequest()</span>
+<span class="fc" id="L211">                .withUrlPath(owner.getApiTailUrl(&quot;merges&quot;))</span>
+<span class="fc" id="L212">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L213">                .with(&quot;commit_message&quot;, commitMessage)</span>
+<span class="fc" id="L214">                .with(&quot;base&quot;, this.name)</span>
+<span class="fc" id="L215">                .with(&quot;head&quot;, head)</span>
+<span class="fc" id="L216">                .fetch(GHCommit.class);</span>
+
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (result != null) {</span>
+<span class="fc" id="L219">            result.wrapUp(owner);</span>
+        }
+
+<span class="fc" id="L222">        return result;</span>
+    }
+
+    String getApiRoute() {
+<span class="nc" id="L226">        return owner.getApiTailUrl(&quot;/branches/&quot; + name);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        final String url = owner != null ? owner.getUrl().toString() : &quot;unknown&quot;;</span>
+<span class="nc" id="L232">        return &quot;Branch:&quot; + name + &quot; in &quot; + url;</span>
+    }
+
+    GHBranch wrap(GHRepository repo) {
+<span class="fc" id="L236">        this.owner = repo;</span>
+<span class="fc" id="L237">        this.root = repo.root;</span>
+<span class="fc" id="L238">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

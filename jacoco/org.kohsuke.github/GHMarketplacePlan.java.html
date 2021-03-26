@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplacePlan.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplacePlan.java</span></div><h1>GHMarketplacePlan.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.net.URL;
+import java.util.List;
+
+/**
+ * A Github Marketplace plan.
+ *
+ * @author Paulo Miguel Almeida
+ * @see GitHub#listMarketplacePlans()
+ */
+<span class="fc" id="L14">public class GHMarketplacePlan extends GitHubInteractiveObject {</span>
+    private String url;
+    private String accountsUrl;
+    private long id;
+    private long number;
+    private String name;
+    private String description;
+    private long monthlyPriceInCents;
+    private long yearlyPriceInCents;
+    private GHMarketplacePriceModel priceModel;
+    @JsonProperty(&quot;has_free_trial&quot;)
+    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is&lt;propertyName&gt;
+    private String unitName;
+    private String state;
+    private List&lt;String&gt; bullets;
+
+    /**
+     * Wrap up gh marketplace plan.
+     *
+     * @param root
+     *            the root
+     * @return an instance of the GHMarketplacePlan class
+     */
+    GHMarketplacePlan wrapUp(GitHub root) {
+<span class="fc" id="L38">        this.root = root;</span>
+<span class="fc" id="L39">        return this;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="fc" id="L48">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets accounts url.
+     *
+     * @return the accounts url
+     */
+    public String getAccountsUrl() {
+<span class="fc" id="L57">        return accountsUrl;</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L66">        return id;</span>
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public long getNumber() {
+<span class="fc" id="L75">        return number;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L84">        return name;</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L93">        return description;</span>
+    }
+
+    /**
+     * Gets monthly price in cents.
+     *
+     * @return the monthly price in cents
+     */
+    public long getMonthlyPriceInCents() {
+<span class="fc" id="L102">        return monthlyPriceInCents;</span>
+    }
+
+    /**
+     * Gets yearly price in cents.
+     *
+     * @return the yearly price in cents
+     */
+    public long getYearlyPriceInCents() {
+<span class="nc" id="L111">        return yearlyPriceInCents;</span>
+    }
+
+    /**
+     * Gets price model.
+     *
+     * @return the price model
+     */
+    public GHMarketplacePriceModel getPriceModel() {
+<span class="fc" id="L120">        return priceModel;</span>
+    }
+
+    /**
+     * Is free trial boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFreeTrial() {
+<span class="nc" id="L129">        return freeTrial;</span>
+    }
+
+    /**
+     * Gets unit name.
+     *
+     * @return the unit name
+     */
+    public String getUnitName() {
+<span class="nc" id="L138">        return unitName;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="fc" id="L147">        return state;</span>
+    }
+
+    /**
+     * Gets bullets.
+     *
+     * @return the bullets
+     */
+    public List&lt;String&gt; getBullets() {
+<span class="fc" id="L156">        return bullets;</span>
+    }
+
+    /**
+     * Starts a builder that list any accounts associated with a plan, including free plans. For per-seat pricing, you
+     * see the list of accounts that have purchased the plan, including the number of seats purchased. When someone
+     * submits a plan change that won't be processed until the end of their billing cycle, you will also see the
+     * upcoming pending change.
+     *
+     * &lt;p&gt;
+     * You use the returned builder to set various properties, then call
+     * {@link GHMarketplaceListAccountBuilder#createRequest()} to finally list the accounts related to this plan.
+     *
+     * &lt;p&gt;
+     * GitHub Apps must use a JWT to access this endpoint.
+     * &lt;p&gt;
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a GHMarketplaceListAccountBuilder instance
+     * @see &lt;a href=
+     *      &quot;https://developer.github.com/v3/apps/marketplace/#list-all-github-accounts-user-or-organization-on-a-specific-plan&quot;&gt;List
+     *      all GitHub accounts (user or organization) on a specific plan&lt;/a&gt;
+     */
+    public GHMarketplaceListAccountBuilder listAccounts() {
+<span class="fc" id="L180">        return new GHMarketplaceListAccountBuilder(root, this.id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

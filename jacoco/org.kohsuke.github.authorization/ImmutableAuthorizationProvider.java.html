@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImmutableAuthorizationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.authorization</a> &gt; <span class="el_source">ImmutableAuthorizationProvider.java</span></div><h1>ImmutableAuthorizationProvider.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.authorization;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+import javax.annotation.CheckForNull;
+
+/**
+ * A {@link AuthorizationProvider} that always returns the same credentials
+ */
+public class ImmutableAuthorizationProvider implements AuthorizationProvider {
+
+    private final String authorization;
+
+<span class="fc" id="L16">    public ImmutableAuthorizationProvider(String authorization) {</span>
+<span class="fc" id="L17">        this.authorization = authorization;</span>
+<span class="fc" id="L18">    }</span>
+
+    /**
+     * Builds and returns a {@link AuthorizationProvider} from a given oauthAccessToken
+     *
+     * @param oauthAccessToken
+     *            The token
+     * @return a correctly configured {@link AuthorizationProvider} that will always return the same provided
+     *         oauthAccessToken
+     */
+    public static AuthorizationProvider fromOauthToken(String oauthAccessToken) {
+<span class="nc" id="L29">        return new UserProvider(String.format(&quot;token %s&quot;, oauthAccessToken));</span>
+    }
+
+    /**
+     * Builds and returns a {@link AuthorizationProvider} from a given oauthAccessToken
+     *
+     * @param oauthAccessToken
+     *            The token
+     * @param login
+     *            The login for this token
+     *
+     * @return a correctly configured {@link AuthorizationProvider} that will always return the same provided
+     *         oauthAccessToken
+     */
+    public static AuthorizationProvider fromOauthToken(String oauthAccessToken, String login) {
+<span class="fc" id="L44">        return new UserProvider(String.format(&quot;token %s&quot;, oauthAccessToken), login);</span>
+    }
+
+    /**
+     * Builds and returns a {@link AuthorizationProvider} from a given App Installation Token
+     *
+     * @param appInstallationToken
+     *            A string containing the GitHub App installation token
+     * @return the configured Builder from given GitHub App installation token.
+     */
+    public static AuthorizationProvider fromAppInstallationToken(String appInstallationToken) {
+<span class="fc" id="L55">        return fromOauthToken(appInstallationToken, &quot;&quot;);</span>
+    }
+
+    /**
+     * Builds and returns a {@link AuthorizationProvider} from a given jwtToken
+     *
+     * @param jwtToken
+     *            The JWT token
+     * @return a correctly configured {@link AuthorizationProvider} that will always return the same provided jwtToken
+     */
+    public static AuthorizationProvider fromJwtToken(String jwtToken) {
+<span class="fc" id="L66">        return new ImmutableAuthorizationProvider(String.format(&quot;Bearer %s&quot;, jwtToken));</span>
+    }
+
+    /**
+     * Builds and returns a {@link AuthorizationProvider} from the given user/password pair
+     *
+     * @param login
+     *            The login for the user, usually the same as the username
+     * @param password
+     *            The password for the associated user
+     * @return a correctly configured {@link AuthorizationProvider} that will always return the credentials for the same
+     *         user and password combo
+     * @deprecated Login with password credentials are no longer supported by GitHub
+     */
+    @Deprecated
+    public static AuthorizationProvider fromLoginAndPassword(String login, String password) {
+        try {
+<span class="fc" id="L83">            String authorization = (String.format(&quot;%s:%s&quot;, login, password));</span>
+<span class="fc" id="L84">            String charsetName = StandardCharsets.UTF_8.name();</span>
+<span class="fc" id="L85">            String b64encoded = Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));</span>
+<span class="fc" id="L86">            String encodedAuthorization = String.format(&quot;Basic %s&quot;, b64encoded);</span>
+<span class="fc" id="L87">            return new UserProvider(encodedAuthorization, login);</span>
+<span class="nc" id="L88">        } catch (UnsupportedEncodingException e) {</span>
+            // If UTF-8 isn't supported, there are bigger problems
+<span class="nc" id="L90">            throw new IllegalStateException(&quot;Could not generate encoded authorization&quot;, e);</span>
+        }
+    }
+
+    @Override
+    public String getEncodedAuthorization() {
+<span class="fc" id="L96">        return this.authorization;</span>
+    }
+
+    /**
+     * An internal class representing all user-related credentials, which are credentials that have a login or should
+     * query the user endpoint for the login matching this credential.
+     */
+    private static class UserProvider extends ImmutableAuthorizationProvider implements UserAuthorizationProvider {
+
+        private final String login;
+
+        UserProvider(String authorization) {
+<span class="nc" id="L108">            this(authorization, null);</span>
+<span class="nc" id="L109">        }</span>
+
+        UserProvider(String authorization, String login) {
+<span class="fc" id="L112">            super(authorization);</span>
+<span class="fc" id="L113">            this.login = login;</span>
+<span class="fc" id="L114">        }</span>
+
+        @CheckForNull
+        @Override
+        public String getLogin() {
+<span class="fc" id="L119">            return login;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

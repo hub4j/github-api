@@ -1,0 +1,3146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepository.java</span></div><h1>GHRepository.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright (c) 2010, Kohsuke Kawaguchi
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamFunction;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
+import java.io.Reader;
+import java.net.URL;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
+
+import javax.annotation.Nonnull;
+
+import static java.util.Arrays.*;
+import static java.util.Objects.requireNonNull;
+import static org.kohsuke.github.internal.Previews.*;
+
+/**
+ * A repository on GitHub.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+@SuppressWarnings({ &quot;UnusedDeclaration&quot; })
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="fc" id="L71">public class GHRepository extends GHObject {</span>
+
+    private String nodeId, description, homepage, name, full_name;
+
+    private String html_url; // this is the UI
+
+    /*
+     * The license information makes use of the preview API.
+     *
+     * See: https://developer.github.com/v3/licenses/
+     */
+    private GHLicense license;
+
+    private String git_url, ssh_url, clone_url, svn_url, mirror_url;
+
+    private GHUser owner; // not fully populated. beware.
+
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
+
+    private boolean allow_squash_merge;
+
+    private boolean allow_merge_commit;
+
+    private boolean allow_rebase_merge;
+
+    private boolean delete_branch_on_merge;
+
+    @JsonProperty(&quot;private&quot;)
+    private boolean _private;
+
+    private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
+
+    private String pushed_at;
+
+<span class="fc" id="L105">    private Map&lt;Integer, GHMilestone&gt; milestones = new WeakHashMap&lt;Integer, GHMilestone&gt;();</span>
+
+    private String default_branch, language;
+
+<span class="fc" id="L109">    private Map&lt;String, GHCommit&gt; commits = new WeakHashMap&lt;String, GHCommit&gt;();</span>
+
+    @SkipFromToString
+    private GHRepoPermission permissions;
+
+    private GHRepository source, parent;
+
+    private Boolean isTemplate;
+
+    static GHRepository read(GitHub root, String owner, String name) throws IOException {
+<span class="fc" id="L119">        return root.createRequest().withUrlPath(&quot;/repos/&quot; + owner + '/' + name).fetch(GHRepository.class).wrap(root);</span>
+    }
+
+    /**
+     * Create deployment gh deployment builder.
+     *
+     * @param ref
+     *            the ref
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder createDeployment(String ref) {
+<span class="fc" id="L130">        return new GHDeploymentBuilder(this, ref);</span>
+    }
+
+    /**
+     * Gets deployment statuses.
+     *
+     * @param id
+     *            the id
+     * @return the deployment statuses
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@code getDeployment(id).listStatuses()}
+     */
+    @Deprecated
+    public PagedIterable&lt;GHDeploymentStatus&gt; getDeploymentStatuses(final int id) throws IOException {
+<span class="nc" id="L145">        return getDeployment(id).listStatuses();</span>
+    }
+
+    /**
+     * List deployments paged iterable.
+     *
+     * @param sha
+     *            the sha
+     * @param ref
+     *            the ref
+     * @param task
+     *            the task
+     * @param environment
+     *            the environment
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHDeployment&gt; listDeployments(String sha, String ref, String task, String environment) {
+<span class="fc" id="L162">        return root.createRequest()</span>
+<span class="fc" id="L163">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L164">                .with(&quot;ref&quot;, ref)</span>
+<span class="fc" id="L165">                .with(&quot;task&quot;, task)</span>
+<span class="fc" id="L166">                .with(&quot;environment&quot;, environment)</span>
+<span class="fc" id="L167">                .withUrlPath(getApiTailUrl(&quot;deployments&quot;))</span>
+<span class="fc" id="L168">                .withPreview(ANT_MAN)</span>
+<span class="fc" id="L169">                .withPreview(FLASH)</span>
+<span class="fc" id="L170">                .toIterable(GHDeployment[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Obtains a single {@link GHDeployment} by its ID.
+     *
+     * @param id
+     *            the id
+     * @return the deployment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployment getDeployment(long id) throws IOException {
+<span class="fc" id="L183">        return root.createRequest()</span>
+<span class="fc" id="L184">                .withUrlPath(getApiTailUrl(&quot;deployments/&quot; + id))</span>
+<span class="fc" id="L185">                .withPreview(ANT_MAN)</span>
+<span class="fc" id="L186">                .withPreview(FLASH)</span>
+<span class="fc" id="L187">                .fetch(GHDeployment.class)</span>
+<span class="fc" id="L188">                .wrap(this);</span>
+    }
+
+    /**
+     * Gets deploy status.
+     *
+     * @param deploymentId
+     *            the deployment id
+     * @param ghDeploymentState
+     *            the gh deployment state
+     * @return the deploy status
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
+     */
+    @Deprecated
+    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
+            throws IOException {
+<span class="nc" id="L206">        return getDeployment(deploymentId).createStatus(ghDeploymentState);</span>
+    }
+
+    private static class GHRepoPermission {
+        boolean pull, push, admin;
+    }
+
+    /**
+     * Gets node id
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+<span class="fc" id="L219">        return nodeId;</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L228">        return description;</span>
+    }
+
+    /**
+     * Gets homepage.
+     *
+     * @return the homepage
+     */
+    public String getHomepage() {
+<span class="fc" id="L237">        return homepage;</span>
+    }
+
+    /**
+     * Gets the git:// URL to this repository, such as &quot;git://github.com/kohsuke/jenkins.git&quot; This URL is read-only.
+     *
+     * @return the git transport url
+     */
+    public String getGitTransportUrl() {
+<span class="nc" id="L246">        return git_url;</span>
+    }
+
+    /**
+     * Gets the HTTPS URL to this repository, such as &quot;https://github.com/kohsuke/jenkins.git&quot; This URL is read-only.
+     *
+     * @return the http transport url
+     */
+    public String getHttpTransportUrl() {
+<span class="fc" id="L255">        return clone_url;</span>
+    }
+
+    /**
+     * Git http transport url string.
+     *
+     * @return the string
+     * @deprecated Typo of {@link #getHttpTransportUrl()}
+     */
+    @Deprecated
+    public String gitHttpTransportUrl() {
+<span class="fc" id="L266">        return clone_url;</span>
+    }
+
+    /**
+     * Gets the Subversion URL to access this repository: https://github.com/rails/rails
+     *
+     * @return the svn url
+     */
+    public String getSvnUrl() {
+<span class="nc" id="L275">        return svn_url;</span>
+    }
+
+    /**
+     * Gets the Mirror URL to access this repository: https://github.com/apache/tomee mirrored from
+     * git://git.apache.org/tomee.git
+     *
+     * @return the mirror url
+     */
+    public String getMirrorUrl() {
+<span class="nc" id="L285">        return mirror_url;</span>
+    }
+
+    /**
+     * Gets the SSH URL to access this repository, such as git@github.com:rails/rails.git
+     *
+     * @return the ssh url
+     */
+    public String getSshUrl() {
+<span class="nc" id="L294">        return ssh_url;</span>
+    }
+
+    public URL getHtmlUrl() {
+<span class="nc" id="L298">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Short repository name without the owner. For example 'jenkins' in case of http://github.com/jenkinsci/jenkins
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L307">        return name;</span>
+    }
+
+    /**
+     * Full repository name including the owner or organization. For example 'jenkinsci/jenkins' in case of
+     * http://github.com/jenkinsci/jenkins
+     *
+     * @return the full name
+     */
+    public String getFullName() {
+<span class="fc" id="L317">        return full_name;</span>
+    }
+
+    /**
+     * Has pull access boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasPullAccess() {
+<span class="pc bpc" id="L326" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.pull;</span>
+    }
+
+    /**
+     * Has push access boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasPushAccess() {
+<span class="pc bpc" id="L335" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.push;</span>
+    }
+
+    /**
+     * Has admin access boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasAdminAccess() {
+<span class="pc bpc" id="L344" title="2 of 4 branches missed.">        return permissions != null &amp;&amp; permissions.admin;</span>
+    }
+
+    /**
+     * Gets the primary programming language.
+     *
+     * @return the language
+     */
+    public String getLanguage() {
+<span class="fc" id="L353">        return language;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getOwner() throws IOException {
+<span class="fc bfc" id="L364" title="All 2 branches covered.">        return root.isOffline() ? owner : root.getUser(getOwnerName()); // because 'owner' isn't fully populated</span>
+    }
+
+    /**
+     * Gets issue.
+     *
+     * @param id
+     *            the id
+     * @return the issue
+     * @throws IOException
+     *             the io exception
+     */
+    public GHIssue getIssue(int id) throws IOException {
+<span class="fc" id="L377">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;issues/&quot; + id)).fetch(GHIssue.class).wrap(this);</span>
+    }
+
+    /**
+     * Create issue gh issue builder.
+     *
+     * @param title
+     *            the title
+     * @return the gh issue builder
+     */
+    public GHIssueBuilder createIssue(String title) {
+<span class="fc" id="L388">        return new GHIssueBuilder(this, title);</span>
+    }
+
+    /**
+     * Gets issues.
+     *
+     * @param state
+     *            the state
+     * @return the issues
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHIssue&gt; getIssues(GHIssueState state) throws IOException {
+<span class="fc" id="L401">        return listIssues(state).toList();</span>
+    }
+
+    /**
+     * Gets issues.
+     *
+     * @param state
+     *            the state
+     * @param milestone
+     *            the milestone
+     * @return the issues
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHIssue&gt; getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
+<span class="nc" id="L416">        Requester requester = root.createRequest()</span>
+<span class="nc" id="L417">                .with(&quot;state&quot;, state)</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                .with(&quot;milestone&quot;, milestone == null ? &quot;none&quot; : &quot;&quot; + milestone.getNumber());</span>
+<span class="nc" id="L419">        return requester.withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
+<span class="nc" id="L420">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this))</span>
+<span class="nc" id="L421">                .toList();</span>
+    }
+
+    /**
+     * Lists up all the issues in this repository.
+     *
+     * @param state
+     *            the state
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHIssue&gt; listIssues(final GHIssueState state) {
+<span class="fc" id="L432">        return root.createRequest()</span>
+<span class="fc" id="L433">                .with(&quot;state&quot;, state)</span>
+<span class="fc" id="L434">                .withUrlPath(getApiTailUrl(&quot;issues&quot;))</span>
+<span class="fc" id="L435">                .toIterable(GHIssue[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Create release gh release builder.
+     *
+     * @param tag
+     *            the tag
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder createRelease(String tag) {
+<span class="fc" id="L446">        return new GHReleaseBuilder(this, tag);</span>
+    }
+
+    /**
+     * Creates a named ref, such as tag, branch, etc.
+     *
+     * @param name
+     *            The name of the fully qualified reference (ie: refs/heads/master). If it doesn't start with 'refs' and
+     *            have at least two slashes, it will be rejected.
+     * @param sha
+     *            The SHA1 value to set this reference to
+     * @return the gh ref
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRef createRef(String name, String sha) throws IOException {
+<span class="fc" id="L462">        return root.createRequest()</span>
+<span class="fc" id="L463">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L464">                .with(&quot;ref&quot;, name)</span>
+<span class="fc" id="L465">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L466">                .withUrlPath(getApiTailUrl(&quot;git/refs&quot;))</span>
+<span class="fc" id="L467">                .fetch(GHRef.class)</span>
+<span class="fc" id="L468">                .wrap(root);</span>
+    }
+
+    /**
+     * Gets releases.
+     *
+     * @return the releases
+     * @throws IOException
+     *             the io exception
+     * @deprecated use {@link #listReleases()}
+     */
+    public List&lt;GHRelease&gt; getReleases() throws IOException {
+<span class="fc" id="L480">        return listReleases().toList();</span>
+    }
+
+    /**
+     * Gets release.
+     *
+     * @param id
+     *            the id
+     * @return the release
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRelease getRelease(long id) throws IOException {
+        try {
+<span class="fc" id="L494">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/&quot; + id)).fetch(GHRelease.class).wrap(this);</span>
+<span class="fc" id="L495">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L496">            return null; // no release for this id</span>
+        }
+    }
+
+    /**
+     * Gets release by tag name.
+     *
+     * @param tag
+     *            the tag
+     * @return the release by tag name
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRelease getReleaseByTagName(String tag) throws IOException {
+        try {
+<span class="fc" id="L511">            return root.createRequest()</span>
+<span class="fc" id="L512">                    .withUrlPath(getApiTailUrl(&quot;releases/tags/&quot; + tag))</span>
+<span class="fc" id="L513">                    .fetch(GHRelease.class)</span>
+<span class="fc" id="L514">                    .wrap(this);</span>
+<span class="fc" id="L515">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L516">            return null; // no release for this tag</span>
+        }
+    }
+
+    /**
+     * Gets latest release.
+     *
+     * @return the latest release
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRelease getLatestRelease() throws IOException {
+        try {
+<span class="fc" id="L529">            return root.createRequest().withUrlPath(getApiTailUrl(&quot;releases/latest&quot;)).fetch(GHRelease.class).wrap(this);</span>
+<span class="fc" id="L530">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L531">            return null; // no latest release</span>
+        }
+    }
+
+    /**
+     * List releases paged iterable.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHRelease&gt; listReleases() throws IOException {
+<span class="fc" id="L543">        return root.createRequest()</span>
+<span class="fc" id="L544">                .withUrlPath(getApiTailUrl(&quot;releases&quot;))</span>
+<span class="fc" id="L545">                .toIterable(GHRelease[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * List tags paged iterable.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHTag&gt; listTags() throws IOException {
+<span class="fc" id="L556">        return root.createRequest()</span>
+<span class="fc" id="L557">                .withUrlPath(getApiTailUrl(&quot;tags&quot;))</span>
+<span class="fc" id="L558">                .toIterable(GHTag[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * List languages for the specified repository. The value on the right of a language is the number of bytes of code
+     * written in that language. { &quot;C&quot;: 78769, &quot;Python&quot;: 7769 }
+     *
+     * @return the map
+     * @throws IOException
+     *             the io exception
+     */
+    public Map&lt;String, Long&gt; listLanguages() throws IOException {
+<span class="fc" id="L570">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;languages&quot;)).fetch(HashMap.class);</span>
+    }
+
+    /**
+     * Gets owner name.
+     *
+     * @return the owner name
+     */
+    public String getOwnerName() {
+        // consistency of the GitHub API is super... some serialized forms of GHRepository populate
+        // a full GHUser while others populate only the owner and email. This later form is super helpful
+        // in putting the login in owner.name not owner.login... thankfully we can easily identify this
+        // second set because owner.login will be null
+<span class="fc bfc" id="L583" title="All 2 branches covered.">        return owner.login != null ? owner.login : owner.name;</span>
+    }
+
+    /**
+     * Has issues boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasIssues() {
+<span class="fc" id="L592">        return has_issues;</span>
+    }
+
+    /**
+     * Has projects boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasProjects() {
+<span class="fc" id="L601">        return has_projects;</span>
+    }
+
+    /**
+     * Has wiki boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasWiki() {
+<span class="fc" id="L610">        return has_wiki;</span>
+    }
+
+    /**
+     * Is fork boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFork() {
+<span class="fc" id="L619">        return fork;</span>
+    }
+
+    /**
+     * Is archived boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isArchived() {
+<span class="fc" id="L628">        return archived;</span>
+    }
+
+    /**
+     * Is allow squash merge boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAllowSquashMerge() {
+<span class="fc" id="L637">        return allow_squash_merge;</span>
+    }
+
+    /**
+     * Is allow merge commit boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAllowMergeCommit() {
+<span class="fc" id="L646">        return allow_merge_commit;</span>
+    }
+
+    /**
+     * Is allow rebase merge boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAllowRebaseMerge() {
+<span class="fc" id="L655">        return allow_rebase_merge;</span>
+    }
+
+    /**
+     * Automatically deleting head branches when pull requests are merged
+     *
+     * @return the boolean
+     */
+    public boolean isDeleteBranchOnMerge() {
+<span class="fc" id="L664">        return delete_branch_on_merge;</span>
+    }
+
+    /**
+     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
+     * and so on.
+     *
+     * @return the forks
+     * @deprecated use {@link #getForksCount()} instead
+     */
+    @Deprecated
+    public int getForks() {
+<span class="nc" id="L676">        return getForksCount();</span>
+    }
+
+    /**
+     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
+     * and so on.
+     *
+     * @return the forks
+     */
+    public int getForksCount() {
+<span class="nc" id="L686">        return forks_count;</span>
+    }
+
+    /**
+     * Gets stargazers count.
+     *
+     * @return the stargazers count
+     */
+    public int getStargazersCount() {
+<span class="fc" id="L695">        return stargazers_count;</span>
+    }
+
+    /**
+     * Is private boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPrivate() {
+<span class="fc" id="L704">        return _private;</span>
+    }
+
+    /**
+     * Is template boolean.
+     *
+     * @return the boolean
+     */
+    @Deprecated
+    @Preview(BAPTISTE)
+    public boolean isTemplate() {
+        // isTemplate is still in preview, we do not want to retrieve it unless needed.
+<span class="fc bfc" id="L716" title="All 2 branches covered.">        if (isTemplate == null) {</span>
+            try {
+<span class="fc" id="L718">                populate();</span>
+<span class="nc" id="L719">            } catch (IOException e) {</span>
+                // Convert this to a runtime exception to avoid messy method signature
+<span class="nc" id="L721">                throw new GHException(&quot;Could not populate the template setting of the repository&quot;, e);</span>
+<span class="fc" id="L722">            }</span>
+            // if this somehow is not populated, set it to false;
+<span class="fc" id="L724">            isTemplate = Boolean.TRUE.equals(isTemplate);</span>
+        }
+<span class="fc" id="L726">        return isTemplate;</span>
+    }
+
+    /**
+     * Has downloads boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasDownloads() {
+<span class="fc" id="L735">        return has_downloads;</span>
+    }
+
+    /**
+     * Has pages boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasPages() {
+<span class="fc" id="L744">        return has_pages;</span>
+    }
+
+    /**
+     * Gets watchers.
+     *
+     * @return the watchers
+     * @deprecated use {@link #getWatchersCount()} instead
+     */
+    @Deprecated
+    public int getWatchers() {
+<span class="nc" id="L755">        return getWatchersCount();</span>
+    }
+
+    /**
+     * Gets the count of watchers.
+     *
+     * @return the watchers
+     */
+    public int getWatchersCount() {
+<span class="fc" id="L764">        return watchers_count;</span>
+    }
+
+    /**
+     * Gets open issue count.
+     *
+     * @return the open issue count
+     */
+    public int getOpenIssueCount() {
+<span class="nc" id="L773">        return open_issues_count;</span>
+    }
+
+    /**
+     * Gets subscribers count.
+     *
+     * @return the subscribers count
+     */
+    public int getSubscribersCount() {
+<span class="nc" id="L782">        return subscribers_count;</span>
+    }
+
+    /**
+     * Gets pushed at.
+     *
+     * @return null if the repository was never pushed at.
+     */
+    public Date getPushedAt() {
+<span class="nc" id="L791">        return GitHubClient.parseDate(pushed_at);</span>
+    }
+
+    /**
+     * Returns the primary branch you'll configure in the &quot;Admin &amp;gt; Options&quot; config page.
+     *
+     * @return This field is null until the user explicitly configures the master branch.
+     */
+    public String getDefaultBranch() {
+<span class="nc" id="L800">        return default_branch;</span>
+    }
+
+    /**
+     * Gets master branch.
+     *
+     * @return the master branch
+     * @deprecated Renamed to {@link #getDefaultBranch()}
+     */
+    @Deprecated
+    public String getMasterBranch() {
+<span class="nc" id="L811">        return default_branch;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
+    public int getSize() {
+<span class="nc" id="L820">        return size;</span>
+    }
+
+    /**
+     * Affiliation of a repository collaborator
+     */
+<span class="fc" id="L826">    public enum CollaboratorAffiliation {</span>
+<span class="fc" id="L827">        ALL, DIRECT, OUTSIDE</span>
+    }
+
+    /**
+     * Gets the collaborators on this repository. This set always appear to include the owner.
+     *
+     * @return the collaborators
+     * @throws IOException
+     *             the io exception
+     */
+    @WithBridgeMethods(Set.class)
+    public GHPersonSet&lt;GHUser&gt; getCollaborators() throws IOException {
+<span class="fc" id="L839">        return new GHPersonSet&lt;GHUser&gt;(listCollaborators().toList());</span>
+    }
+
+    /**
+     * Lists up the collaborators on this repository.
+     *
+     * @return Users paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHUser&gt; listCollaborators() throws IOException {
+<span class="fc" id="L850">        return listUsers(&quot;collaborators&quot;);</span>
+    }
+
+    /**
+     * Lists up the collaborators on this repository.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return Users paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHUser&gt; listCollaborators(CollaboratorAffiliation affiliation) throws IOException {
+<span class="fc" id="L863">        return listUsers(root.createRequest().with(&quot;affiliation&quot;, affiliation), &quot;collaborators&quot;);</span>
+    }
+
+    /**
+     * Lists all
+     * &lt;a href=&quot;https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/&quot;&gt;the
+     * available assignees&lt;/a&gt; to which issues may be assigned.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHUser&gt; listAssignees() throws IOException {
+<span class="nc" id="L876">        return listUsers(&quot;assignees&quot;);</span>
+    }
+
+    /**
+     * Checks if the given user is an assignee for this repository.
+     *
+     * @param u
+     *            the u
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean hasAssignee(GHUser u) throws IOException {
+<span class="nc bnc" id="L889" title="All 2 branches missed.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;assignees/&quot; + u.getLogin())).fetchHttpStatusCode()</span>
+                / 100 == 2;
+    }
+
+    /**
+     * Gets the names of the collaborators on this repository. This method deviates from the principle of this library
+     * but it works a lot faster than {@link #getCollaborators()}.
+     *
+     * @return the collaborator names
+     * @throws IOException
+     *             the io exception
+     */
+    public Set&lt;String&gt; getCollaboratorNames() throws IOException {
+<span class="fc" id="L902">        Set&lt;String&gt; r = new HashSet&lt;&gt;();</span>
+        // no initializer - we just want to the logins
+<span class="fc" id="L904">        PagedIterable&lt;GHUser&gt; users = root.createRequest()</span>
+<span class="fc" id="L905">                .withUrlPath(getApiTailUrl(&quot;collaborators&quot;))</span>
+<span class="fc" id="L906">                .toIterable(GHUser[].class, null);</span>
+<span class="fc bfc" id="L907" title="All 2 branches covered.">        for (GHUser u : users.toArray()) {</span>
+<span class="fc" id="L908">            r.add(u.login);</span>
+        }
+<span class="fc" id="L910">        return r;</span>
+    }
+
+    /**
+     * Gets the names of the collaborators on this repository. This method deviates from the principle of this library
+     * but it works a lot faster than {@link #getCollaborators()}.
+     *
+     * @param affiliation
+     *            Filter users by affiliation
+     * @return the collaborator names
+     * @throws IOException
+     *             the io exception
+     */
+    public Set&lt;String&gt; getCollaboratorNames(CollaboratorAffiliation affiliation) throws IOException {
+<span class="nc" id="L924">        Set&lt;String&gt; r = new HashSet&lt;&gt;();</span>
+        // no initializer - we just want to the logins
+<span class="nc" id="L926">        PagedIterable&lt;GHUser&gt; users = root.createRequest()</span>
+<span class="nc" id="L927">                .withUrlPath(getApiTailUrl(&quot;collaborators&quot;))</span>
+<span class="nc" id="L928">                .with(&quot;affiliation&quot;, affiliation)</span>
+<span class="nc" id="L929">                .toIterable(GHUser[].class, null);</span>
+<span class="nc bnc" id="L930" title="All 2 branches missed.">        for (GHUser u : users.toArray()) {</span>
+<span class="nc" id="L931">            r.add(u.login);</span>
+        }
+<span class="nc" id="L933">        return r;</span>
+    }
+
+    /**
+     * Obtain permission for a given user in this repository.
+     *
+     * @param user
+     *            a {@link GHUser#getLogin}
+     * @return the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPermissionType getPermission(String user) throws IOException {
+<span class="fc" id="L946">        GHPermission perm = root.createRequest()</span>
+<span class="fc" id="L947">                .withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user + &quot;/permission&quot;))</span>
+<span class="fc" id="L948">                .fetch(GHPermission.class);</span>
+<span class="fc" id="L949">        perm.wrapUp(root);</span>
+<span class="fc" id="L950">        return perm.getPermissionType();</span>
+    }
+
+    /**
+     * Obtain permission for a given user in this repository.
+     *
+     * @param u
+     *            the user
+     * @return the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPermissionType getPermission(GHUser u) throws IOException {
+<span class="nc" id="L963">        return getPermission(u.getLogin());</span>
+    }
+
+    /**
+     * If this repository belongs to an organization, return a set of teams.
+     *
+     * @return the teams
+     * @throws IOException
+     *             the io exception
+     */
+    public Set&lt;GHTeam&gt; getTeams() throws IOException {
+<span class="fc" id="L974">        GHOrganization org = root.getOrganization(getOwnerName());</span>
+<span class="fc" id="L975">        return root.createRequest()</span>
+<span class="fc" id="L976">                .withUrlPath(getApiTailUrl(&quot;teams&quot;))</span>
+<span class="fc" id="L977">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(org))</span>
+<span class="fc" id="L978">                .toSet();</span>
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+<span class="nc" id="L992">        addCollaborators(asList(users), permission);</span>
+<span class="nc" id="L993">    }</span>
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(GHUser... users) throws IOException {
+<span class="nc" id="L1004">        addCollaborators(asList(users));</span>
+<span class="nc" id="L1005">    }</span>
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(Collection&lt;GHUser&gt; users) throws IOException {
+<span class="nc" id="L1016">        modifyCollaborators(users, &quot;PUT&quot;, null);</span>
+<span class="nc" id="L1017">    }</span>
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(Collection&lt;GHUser&gt; users, GHOrganization.Permission permission) throws IOException {
+<span class="fc" id="L1030">        modifyCollaborators(users, &quot;PUT&quot;, permission);</span>
+<span class="fc" id="L1031">    }</span>
+
+    /**
+     * Remove collaborators.
+     *
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void removeCollaborators(GHUser... users) throws IOException {
+<span class="nc" id="L1042">        removeCollaborators(asList(users));</span>
+<span class="nc" id="L1043">    }</span>
+
+    /**
+     * Remove collaborators.
+     *
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     */
+    public void removeCollaborators(Collection&lt;GHUser&gt; users) throws IOException {
+<span class="nc" id="L1054">        modifyCollaborators(users, &quot;DELETE&quot;, null);</span>
+<span class="nc" id="L1055">    }</span>
+
+    private void modifyCollaborators(@NonNull Collection&lt;GHUser&gt; users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.Permission permission) throws IOException {
+<span class="fc" id="L1060">        Requester requester = root.createRequest().method(method);</span>
+<span class="pc bpc" id="L1061" title="1 of 2 branches missed.">        if (permission != null) {</span>
+<span class="fc" id="L1062">            requester = requester.with(&quot;permission&quot;, permission).inBody();</span>
+        }
+
+        // Make sure that the users collection doesn't have any duplicates
+<span class="fc bfc" id="L1066" title="All 2 branches covered.">        for (GHUser user : new LinkedHashSet&lt;GHUser&gt;(users)) {</span>
+<span class="fc" id="L1067">            requester.withUrlPath(getApiTailUrl(&quot;collaborators/&quot; + user.getLogin())).send();</span>
+<span class="fc" id="L1068">        }</span>
+<span class="fc" id="L1069">    }</span>
+
+    /**
+     * Sets email service hook.
+     *
+     * @param address
+     *            the address
+     * @throws IOException
+     *             the io exception
+     */
+    public void setEmailServiceHook(String address) throws IOException {
+<span class="nc" id="L1080">        Map&lt;String, String&gt; config = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L1081">        config.put(&quot;address&quot;, address);</span>
+<span class="nc" id="L1082">        root.createRequest()</span>
+<span class="nc" id="L1083">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L1084">                .with(&quot;name&quot;, &quot;email&quot;)</span>
+<span class="nc" id="L1085">                .with(&quot;config&quot;, config)</span>
+<span class="nc" id="L1086">                .with(&quot;active&quot;, true)</span>
+<span class="nc" id="L1087">                .withUrlPath(getApiTailUrl(&quot;hooks&quot;))</span>
+<span class="nc" id="L1088">                .send();</span>
+<span class="nc" id="L1089">    }</span>
+
+    /**
+     * Enables or disables the issue tracker for this repository.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableIssueTracker(boolean v) throws IOException {
+<span class="fc" id="L1100">        set().issues(v);</span>
+<span class="fc" id="L1101">    }</span>
+
+    /**
+     * Enables or disables projects for this repository.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableProjects(boolean v) throws IOException {
+<span class="fc" id="L1112">        set().projects(v);</span>
+<span class="fc" id="L1113">    }</span>
+
+    /**
+     * Enables or disables Wiki for this repository.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableWiki(boolean v) throws IOException {
+<span class="fc" id="L1124">        set().wiki(v);</span>
+<span class="fc" id="L1125">    }</span>
+
+    /**
+     * Enable downloads.
+     *
+     * @param v
+     *            the v
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableDownloads(boolean v) throws IOException {
+<span class="fc" id="L1136">        set().downloads(v);</span>
+<span class="fc" id="L1137">    }</span>
+
+    /**
+     * Rename this repository.
+     *
+     * @param name
+     *            the name
+     * @throws IOException
+     *             the io exception
+     */
+    public void renameTo(String name) throws IOException {
+<span class="fc" id="L1148">        set().name(name);</span>
+<span class="fc" id="L1149">    }</span>
+
+    /**
+     * Sets description.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void setDescription(String value) throws IOException {
+<span class="fc" id="L1160">        set().description(value);</span>
+<span class="fc" id="L1161">    }</span>
+
+    /**
+     * Sets homepage.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void setHomepage(String value) throws IOException {
+<span class="nc" id="L1172">        set().homepage(value);</span>
+<span class="nc" id="L1173">    }</span>
+
+    /**
+     * Sets default branch.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void setDefaultBranch(String value) throws IOException {
+<span class="nc" id="L1184">        set().defaultBranch(value);</span>
+<span class="nc" id="L1185">    }</span>
+
+    /**
+     * Sets private.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPrivate(boolean value) throws IOException {
+<span class="fc" id="L1196">        set().private_(value);</span>
+<span class="fc" id="L1197">    }</span>
+
+    /**
+     * Allow squash merge.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowSquashMerge(boolean value) throws IOException {
+<span class="fc" id="L1208">        set().allowSquashMerge(value);</span>
+<span class="fc" id="L1209">    }</span>
+
+    /**
+     * Allow merge commit.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowMergeCommit(boolean value) throws IOException {
+<span class="fc" id="L1220">        set().allowMergeCommit(value);</span>
+<span class="fc" id="L1221">    }</span>
+
+    /**
+     * Allow rebase merge.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowRebaseMerge(boolean value) throws IOException {
+<span class="fc" id="L1232">        set().allowRebaseMerge(value);</span>
+<span class="fc" id="L1233">    }</span>
+
+    /**
+     * After pull requests are merged, you can have head branches deleted automatically.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteBranchOnMerge(boolean value) throws IOException {
+<span class="fc" id="L1244">        set().deleteBranchOnMerge(value);</span>
+<span class="fc" id="L1245">    }</span>
+
+    /**
+     * Deletes this repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        try {
+<span class="fc" id="L1255">            root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;&quot;)).send();</span>
+<span class="nc" id="L1256">        } catch (FileNotFoundException x) {</span>
+<span class="nc" id="L1257">            throw (FileNotFoundException) new FileNotFoundException(&quot;Failed to delete &quot; + getOwnerName() + &quot;/&quot; + name</span>
+                    + &quot;; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916&quot;)
+<span class="nc" id="L1259">                            .initCause(x);</span>
+<span class="fc" id="L1260">        }</span>
+<span class="fc" id="L1261">    }</span>
+
+    /**
+     * Will archive and this repository as read-only. When a repository is archived, any operation that can change its
+     * state is forbidden. This applies symmetrically if trying to unarchive it.
+     *
+     * &lt;p&gt;
+     * When you try to do any operation that modifies a read-only repository, it returns the response:
+     *
+     * &lt;pre&gt;
+     * org.kohsuke.github.HttpException: {
+     *     &quot;message&quot;:&quot;Repository was archived so is read-only.&quot;,
+     *     &quot;documentation_url&quot;:&quot;https://developer.github.com/v3/repos/#edit&quot;
+     * }
+     * &lt;/pre&gt;
+     *
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public void archive() throws IOException {
+<span class="fc" id="L1281">        set().archive();</span>
+        // Generally would not update this record,
+        // but doing so here since this will result in any other update actions failing
+<span class="fc" id="L1284">        archived = true;</span>
+<span class="fc" id="L1285">    }</span>
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Updater update() {
+<span class="fc" id="L1293">        return new Updater(this);</span>
+    }
+
+    /**
+     * Creates a builder that can be used to bulk update repository settings.
+     *
+     * @return the repository updater
+     */
+    public Setter set() {
+<span class="fc" id="L1302">        return new Setter(this);</span>
+    }
+
+    /**
+     * Sort orders for listing forks
+     */
+<span class="fc" id="L1308">    public enum ForkSort {</span>
+<span class="fc" id="L1309">        NEWEST, OLDEST, STARGAZERS</span>
+    }
+
+    /**
+     * Lists all the direct forks of this repository, sorted by github api default, currently {@link ForkSort#NEWEST
+     * ForkSort.NEWEST}*.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listForks() {
+<span class="nc" id="L1319">        return listForks(null);</span>
+    }
+
+    /**
+     * Lists all the direct forks of this repository, sorted by the given sort order.
+     *
+     * @param sort
+     *            the sort order. If null, defaults to github api default, currently {@link ForkSort#NEWEST
+     *            ForkSort.NEWEST}.
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listForks(final ForkSort sort) {
+<span class="nc" id="L1331">        return root.createRequest()</span>
+<span class="nc" id="L1332">                .with(&quot;sort&quot;, sort)</span>
+<span class="nc" id="L1333">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
+<span class="nc" id="L1334">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+    }
+
+    /**
+     * Forks this repository as your repository.
+     *
+     * @return Newly forked repository that belong to you.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepository fork() throws IOException {
+<span class="nc" id="L1345">        root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).send();</span>
+
+        // this API is asynchronous. we need to wait for a bit
+<span class="nc bnc" id="L1348" title="All 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="nc" id="L1349">            GHRepository r = root.getMyself().getRepository(name);</span>
+<span class="nc bnc" id="L1350" title="All 2 branches missed.">            if (r != null) {</span>
+<span class="nc" id="L1351">                return r;</span>
+            }
+            try {
+<span class="nc" id="L1354">                Thread.sleep(3000);</span>
+<span class="nc" id="L1355">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L1356">                throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="nc" id="L1357">            }</span>
+        }
+<span class="nc" id="L1359">        throw new IOException(this + &quot; was forked but can't find the new repository&quot;);</span>
+    }
+
+    /**
+     * Forks this repository into an organization.
+     *
+     * @param org
+     *            the org
+     * @return Newly forked repository that belong to you.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepository forkTo(GHOrganization org) throws IOException {
+<span class="fc" id="L1372">        root.createRequest()</span>
+<span class="fc" id="L1373">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1374">                .with(&quot;organization&quot;, org.getLogin())</span>
+<span class="fc" id="L1375">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
+<span class="fc" id="L1376">                .send();</span>
+
+        // this API is asynchronous. we need to wait for a bit
+<span class="pc bpc" id="L1379" title="1 of 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L1380">            GHRepository r = org.getRepository(name);</span>
+<span class="pc bpc" id="L1381" title="1 of 2 branches missed.">            if (r != null) {</span>
+<span class="fc" id="L1382">                return r;</span>
+            }
+            try {
+<span class="nc" id="L1385">                Thread.sleep(3000);</span>
+<span class="nc" id="L1386">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L1387">                throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="nc" id="L1388">            }</span>
+        }
+<span class="nc" id="L1390">        throw new IOException(this + &quot; was forked into &quot; + org.getLogin() + &quot; but can't find the new repository&quot;);</span>
+    }
+
+    /**
+     * Retrieves a specified pull request.
+     *
+     * @param i
+     *            the
+     * @return the pull request
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequest getPullRequest(int i) throws IOException {
+<span class="fc" id="L1403">        return root.createRequest()</span>
+<span class="fc" id="L1404">                .withPreview(SHADOW_CAT)</span>
+<span class="fc" id="L1405">                .withUrlPath(getApiTailUrl(&quot;pulls/&quot; + i))</span>
+<span class="fc" id="L1406">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L1407">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Retrieves all the pull requests of a particular state.
+     *
+     * @param state
+     *            the state
+     * @return the pull requests
+     * @throws IOException
+     *             the io exception
+     * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
+     */
+    public List&lt;GHPullRequest&gt; getPullRequests(GHIssueState state) throws IOException {
+<span class="nc" id="L1421">        return queryPullRequests().state(state).list().toList();</span>
+    }
+
+    /**
+     * Retrieves all the pull requests of a particular state.
+     *
+     * @param state
+     *            the state
+     * @return the paged iterable
+     * @deprecated Use {@link #queryPullRequests()}
+     */
+    @Deprecated
+    public PagedIterable&lt;GHPullRequest&gt; listPullRequests(GHIssueState state) {
+<span class="fc" id="L1434">        return queryPullRequests().state(state).list();</span>
+    }
+
+    /**
+     * Retrieves pull requests.
+     *
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder queryPullRequests() {
+<span class="fc" id="L1443">        return new GHPullRequestQueryBuilder(this);</span>
+    }
+
+    /**
+     * Creates a new pull request.
+     *
+     * @param title
+     *            Required. The title of the pull request.
+     * @param head
+     *            Required. The name of the branch where your changes are implemented. For cross-repository pull
+     *            requests in the same network, namespace head with a user like this: username:branch.
+     * @param base
+     *            Required. The name of the branch you want your changes pulled into. This should be an existing branch
+     *            on the current repository.
+     * @param body
+     *            The contents of the pull request. This is the markdown description of a pull request.
+     * @return the gh pull request
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
+<span class="fc" id="L1464">        return createPullRequest(title, head, base, body, true);</span>
+    }
+
+    /**
+     * Creates a new pull request. Maintainer's permissions aware.
+     *
+     * @param title
+     *            Required. The title of the pull request.
+     * @param head
+     *            Required. The name of the branch where your changes are implemented. For cross-repository pull
+     *            requests in the same network, namespace head with a user like this: username:branch.
+     * @param base
+     *            Required. The name of the branch you want your changes pulled into. This should be an existing branch
+     *            on the current repository.
+     * @param body
+     *            The contents of the pull request. This is the markdown description of a pull request.
+     * @param maintainerCanModify
+     *            Indicates whether maintainers can modify the pull request.
+     * @return the gh pull request
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequest createPullRequest(String title,
+            String head,
+            String base,
+            String body,
+            boolean maintainerCanModify) throws IOException {
+<span class="fc" id="L1491">        return createPullRequest(title, head, base, body, maintainerCanModify, false);</span>
+    }
+
+    /**
+     * Creates a new pull request. Maintainer's permissions and draft aware.
+     *
+     * @param title
+     *            Required. The title of the pull request.
+     * @param head
+     *            Required. The name of the branch where your changes are implemented. For cross-repository pull
+     *            requests in the same network, namespace head with a user like this: username:branch.
+     * @param base
+     *            Required. The name of the branch you want your changes pulled into. This should be an existing branch
+     *            on the current repository.
+     * @param body
+     *            The contents of the pull request. This is the markdown description of a pull request.
+     * @param maintainerCanModify
+     *            Indicates whether maintainers can modify the pull request.
+     * @param draft
+     *            Indicates whether to create a draft pull request or not.
+     * @return the gh pull request
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequest createPullRequest(String title,
+            String head,
+            String base,
+            String body,
+            boolean maintainerCanModify,
+            boolean draft) throws IOException {
+<span class="fc" id="L1521">        return root.createRequest()</span>
+<span class="fc" id="L1522">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1523">                .withPreview(SHADOW_CAT)</span>
+<span class="fc" id="L1524">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L1525">                .with(&quot;head&quot;, head)</span>
+<span class="fc" id="L1526">                .with(&quot;base&quot;, base)</span>
+<span class="fc" id="L1527">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L1528">                .with(&quot;maintainer_can_modify&quot;, maintainerCanModify)</span>
+<span class="fc" id="L1529">                .with(&quot;draft&quot;, draft)</span>
+<span class="fc" id="L1530">                .withUrlPath(getApiTailUrl(&quot;pulls&quot;))</span>
+<span class="fc" id="L1531">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L1532">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Retrieves the currently configured hooks.
+     *
+     * @return the hooks
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHHook&gt; getHooks() throws IOException {
+<span class="fc" id="L1543">        return GHHooks.repoContext(this, owner).getHooks();</span>
+    }
+
+    /**
+     * Gets hook.
+     *
+     * @param id
+     *            the id
+     * @return the hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook getHook(int id) throws IOException {
+<span class="fc" id="L1556">        return GHHooks.repoContext(this, owner).getHook(id);</span>
+    }
+
+    /**
+     * Gets a comparison between 2 points in the repository. This would be similar to calling
+     * &lt;code&gt;git log id1...id2&lt;/code&gt; against a local repository.
+     *
+     * @param id1
+     *            an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a
+     *            direct tag name
+     * @param id2
+     *            an identifier for the second point to compare to. Can be the same as the first point.
+     * @return the comparison output
+     * @throws IOException
+     *             on failure communicating with GitHub
+     */
+    public GHCompare getCompare(String id1, String id2) throws IOException {
+<span class="nc" id="L1573">        GHCompare compare = root.createRequest()</span>
+<span class="nc" id="L1574">                .withUrlPath(getApiTailUrl(String.format(&quot;compare/%s...%s&quot;, id1, id2)))</span>
+<span class="nc" id="L1575">                .fetch(GHCompare.class);</span>
+<span class="nc" id="L1576">        return compare.wrap(this);</span>
+    }
+
+    /**
+     * Gets compare.
+     *
+     * @param id1
+     *            the id 1
+     * @param id2
+     *            the id 2
+     * @return the compare
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
+<span class="nc" id="L1591">        return getCompare(id1.getSHA1(), id2.getSHA1());</span>
+    }
+
+    /**
+     * Gets compare.
+     *
+     * @param id1
+     *            the id 1
+     * @param id2
+     *            the id 2
+     * @return the compare
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {
+
+<span class="nc" id="L1607">        GHRepository owner1 = id1.getOwner();</span>
+<span class="nc" id="L1608">        GHRepository owner2 = id2.getOwner();</span>
+
+        // If the owner of the branches is different, we have a cross-fork compare.
+<span class="nc bnc" id="L1611" title="All 4 branches missed.">        if (owner1 != null &amp;&amp; owner2 != null) {</span>
+<span class="nc" id="L1612">            String ownerName1 = owner1.getOwnerName();</span>
+<span class="nc" id="L1613">            String ownerName2 = owner2.getOwnerName();</span>
+<span class="nc bnc" id="L1614" title="All 2 branches missed.">            if (!StringUtils.equals(ownerName1, ownerName2)) {</span>
+<span class="nc" id="L1615">                String qualifiedName1 = String.format(&quot;%s:%s&quot;, ownerName1, id1.getName());</span>
+<span class="nc" id="L1616">                String qualifiedName2 = String.format(&quot;%s:%s&quot;, ownerName2, id2.getName());</span>
+<span class="nc" id="L1617">                return getCompare(qualifiedName1, qualifiedName2);</span>
+            }
+        }
+
+<span class="nc" id="L1621">        return getCompare(id1.getName(), id2.getName());</span>
+
+    }
+
+    /**
+     * Retrieves all refs for the github repository.
+     *
+     * @return an array of GHRef elements coresponding with the refs in the remote repository.
+     * @throws IOException
+     *             on failure communicating with GitHub
+     */
+    public GHRef[] getRefs() throws IOException {
+<span class="fc" id="L1633">        return listRefs().toArray();</span>
+    }
+
+    /**
+     * Retrieves all refs for the github repository.
+     *
+     * @return paged iterable of all refs
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public PagedIterable&lt;GHRef&gt; listRefs() throws IOException {
+<span class="fc" id="L1644">        return listRefs(&quot;&quot;);</span>
+    }
+
+    /**
+     * Retrieves all refs of the given type for the current GitHub repository.
+     *
+     * @param refType
+     *            the type of reg to search for e.g. &lt;code&gt;tags&lt;/code&gt; or &lt;code&gt;commits&lt;/code&gt;
+     * @return an array of all refs matching the request type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public GHRef[] getRefs(String refType) throws IOException {
+<span class="fc" id="L1657">        return listRefs(refType).toArray();</span>
+    }
+
+    /**
+     * Retrieves all refs of the given type for the current GitHub repository.
+     *
+     * @param refType
+     *            the type of reg to search for e.g. &lt;code&gt;tags&lt;/code&gt; or &lt;code&gt;commits&lt;/code&gt;
+     * @return paged iterable of all refs of the specified type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public PagedIterable&lt;GHRef&gt; listRefs(String refType) throws IOException {
+<span class="fc" id="L1670">        return GHRef.readMatching(this, refType);</span>
+    }
+
+    /**
+     * Retrive a ref of the given type for the current GitHub repository.
+     *
+     * @param refName
+     *            eg: heads/branch
+     * @return refs matching the request type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
+     */
+    public GHRef getRef(String refName) throws IOException {
+<span class="fc" id="L1683">        return GHRef.read(this, refName);</span>
+    }
+
+    /**
+     * Returns the &lt;strong&gt;annotated&lt;/strong&gt; tag object. Only valid if the {@link GHRef#getObject()} has a
+     * {@link GHRef.GHObject#getType()} of {@code tag}.
+     *
+     * @param sha
+     *            the sha of the tag object
+     * @return the annotated tag object
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTagObject getTagObject(String sha) throws IOException {
+<span class="nc" id="L1697">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;git/tags/&quot; + sha)).fetch(GHTagObject.class).wrap(this);</span>
+    }
+
+    /**
+     * Retrive a tree of the given type for the current GitHub repository.
+     *
+     * @param sha
+     *            sha number or branch name ex: &quot;master&quot;
+     * @return refs matching the request type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
+     */
+    public GHTree getTree(String sha) throws IOException {
+<span class="fc" id="L1710">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L1711">        return root.createRequest().withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+    }
+
+    /**
+     * Create tree gh tree builder.
+     *
+     * @return the gh tree builder
+     */
+    public GHTreeBuilder createTree() {
+<span class="fc" id="L1720">        return new GHTreeBuilder(this);</span>
+    }
+
+    /**
+     * Retrieves the tree for the current GitHub repository, recursively as described in here:
+     * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
+     *
+     * @param sha
+     *            sha number or branch name ex: &quot;master&quot;
+     * @param recursive
+     *            use 1
+     * @return the tree recursive
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
+     */
+    public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
+<span class="fc" id="L1736">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L1737">        return root.createRequest().with(&quot;recursive&quot;, recursive).withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+    }
+
+    /**
+     * Obtains the metadata &amp;amp; the content of a blob.
+     *
+     * &lt;p&gt;
+     * This method retrieves the whole content in memory, so beware when you are dealing with large BLOB.
+     *
+     * @param blobSha
+     *            the blob sha
+     * @return the blob
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href=&quot;https://developer.github.com/v3/git/blobs/#get-a-blob&quot;&gt;Get a blob&lt;/a&gt;
+     * @see #readBlob(String) #readBlob(String)
+     */
+    public GHBlob getBlob(String blobSha) throws IOException {
+<span class="fc" id="L1755">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+<span class="fc" id="L1756">        return root.createRequest().withUrlPath(target).fetch(GHBlob.class);</span>
+    }
+
+    /**
+     * Create blob gh blob builder.
+     *
+     * @return the gh blob builder
+     */
+    public GHBlobBuilder createBlob() {
+<span class="fc" id="L1765">        return new GHBlobBuilder(this);</span>
+    }
+
+    /**
+     * Reads the content of a blob as a stream for better efficiency.
+     *
+     * @param blobSha
+     *            the blob sha
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href=&quot;https://developer.github.com/v3/git/blobs/#get-a-blob&quot;&gt;Get a blob&lt;/a&gt;
+     * @see #getBlob(String) #getBlob(String)
+     */
+    public InputStream readBlob(String blobSha) throws IOException {
+<span class="fc" id="L1780">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+
+        // https://developer.github.com/v3/media/ describes this media type
+<span class="fc" id="L1783">        return root.createRequest()</span>
+<span class="fc" id="L1784">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3.raw&quot;)</span>
+<span class="fc" id="L1785">                .withUrlPath(target)</span>
+<span class="fc" id="L1786">                .fetchStream(Requester::copyInputStream);</span>
+    }
+
+    /**
+     * Gets a commit object in this repository.
+     *
+     * @param sha1
+     *            the sha 1
+     * @return the commit
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommit getCommit(String sha1) throws IOException {
+<span class="fc" id="L1799">        GHCommit c = commits.get(sha1);</span>
+<span class="pc bpc" id="L1800" title="1 of 2 branches missed.">        if (c == null) {</span>
+<span class="fc" id="L1801">            c = root.createRequest()</span>
+<span class="fc" id="L1802">                    .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L1803">                    .fetch(GHCommit.class)</span>
+<span class="fc" id="L1804">                    .wrapUp(this);</span>
+<span class="fc" id="L1805">            commits.put(sha1, c);</span>
+        }
+<span class="fc" id="L1807">        return c;</span>
+    }
+
+    /**
+     * Create commit gh commit builder.
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder createCommit() {
+<span class="fc" id="L1816">        return new GHCommitBuilder(this);</span>
+    }
+
+    /**
+     * Lists all the commits.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHCommit&gt; listCommits() {
+<span class="fc" id="L1825">        return root.createRequest()</span>
+<span class="fc" id="L1826">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L1827">                .toIterable(GHCommit[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * Search commits by specifying filters through a builder pattern.
+     *
+     * @return the gh commit query builder
+     */
+    public GHCommitQueryBuilder queryCommits() {
+<span class="fc" id="L1836">        return new GHCommitQueryBuilder(this);</span>
+    }
+
+    /**
+     * Lists up all the commit comments in this repository.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHCommitComment&gt; listCommitComments() {
+<span class="fc" id="L1845">        return root.createRequest()</span>
+<span class="fc" id="L1846">                .withUrlPath(String.format(&quot;/repos/%s/%s/comments&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L1847">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Lists all comments on a specific commit.
+     *
+     * @param commitSha
+     *            the hash of the commit
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHCommitComment&gt; listCommitComments(String commitSha) {
+<span class="fc" id="L1859">        return root.createRequest()</span>
+<span class="fc" id="L1860">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, getOwnerName(), name, commitSha))</span>
+<span class="fc" id="L1861">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Gets the basic license details for the repository.
+     * &lt;p&gt;
+     *
+     * @return null if there's no license.
+     * @throws IOException
+     *             as usual but also if you don't use the preview connector
+     */
+    public GHLicense getLicense() throws IOException {
+<span class="fc" id="L1873">        GHContentWithLicense lic = getLicenseContent_();</span>
+<span class="fc bfc" id="L1874" title="All 2 branches covered.">        return lic != null ? lic.license : null;</span>
+    }
+
+    /**
+     * Retrieves the contents of the repository's license file - makes an additional API call
+     * &lt;p&gt;
+     *
+     * @return details regarding the license contents, or null if there's no license.
+     * @throws IOException
+     *             as usual but also if you don't use the preview connector
+     */
+    public GHContent getLicenseContent() throws IOException {
+<span class="fc" id="L1886">        return getLicenseContent_();</span>
+    }
+
+    private GHContentWithLicense getLicenseContent_() throws IOException {
+        try {
+<span class="fc" id="L1891">            return root.createRequest()</span>
+<span class="fc" id="L1892">                    .withUrlPath(getApiTailUrl(&quot;license&quot;))</span>
+<span class="fc" id="L1893">                    .fetch(GHContentWithLicense.class)</span>
+<span class="fc" id="L1894">                    .wrap(this);</span>
+<span class="fc" id="L1895">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L1896">            return null;</span>
+        }
+    }
+
+    /**
+     * /** Lists all the commit statuses attached to the given commit, newer ones first.
+     *
+     * @param sha1
+     *            the sha 1
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHCommitStatus&gt; listCommitStatuses(final String sha1) throws IOException {
+<span class="fc" id="L1910">        return root.createRequest()</span>
+<span class="fc" id="L1911">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L1912">                .toIterable(GHCommitStatus[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Gets the last status of this commit, which is what gets shown in the UI.
+     *
+     * @param sha1
+     *            the sha 1
+     * @return the last commit status
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
+<span class="fc" id="L1925">        List&lt;GHCommitStatus&gt; v = listCommitStatuses(sha1).toList();</span>
+<span class="pc bpc" id="L1926" title="1 of 2 branches missed.">        return v.isEmpty() ? null : v.get(0);</span>
+    }
+
+    /**
+     * Gets check runs for given ref.
+     *
+     * @param ref
+     *            ref
+     * @return check runs for given ref
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref&quot;&gt;List check runs
+     *      for a specific ref&lt;/a&gt;
+     */
+    @Preview(ANTIOPE)
+    @Deprecated
+    public PagedIterable&lt;GHCheckRun&gt; getCheckRuns(String ref) throws IOException {
+<span class="fc" id="L1943">        GitHubRequest request = root.createRequest()</span>
+<span class="fc" id="L1944">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
+<span class="fc" id="L1945">                .withPreview(ANTIOPE)</span>
+<span class="fc" id="L1946">                .build();</span>
+<span class="fc" id="L1947">        return new GHCheckRunsIterable(root, request);</span>
+    }
+
+    /**
+     * Creates a commit status
+     *
+     * @param sha1
+     *            the sha 1
+     * @param state
+     *            the state
+     * @param targetUrl
+     *            Optional parameter that points to the URL that has more details.
+     * @param description
+     *            Optional short description.
+     * @param context
+     *            Optinal commit status context.
+     * @return the gh commit status
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommitStatus createCommitStatus(String sha1,
+            GHCommitState state,
+            String targetUrl,
+            String description,
+            String context) throws IOException {
+<span class="nc" id="L1972">        return root.createRequest()</span>
+<span class="nc" id="L1973">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L1974">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L1975">                .with(&quot;target_url&quot;, targetUrl)</span>
+<span class="nc" id="L1976">                .with(&quot;description&quot;, description)</span>
+<span class="nc" id="L1977">                .with(&quot;context&quot;, context)</span>
+<span class="nc" id="L1978">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), this.name, sha1))</span>
+<span class="nc" id="L1979">                .fetch(GHCommitStatus.class)</span>
+<span class="nc" id="L1980">                .wrapUp(root);</span>
+    }
+
+    /**
+     * Create commit status gh commit status.
+     *
+     * @param sha1
+     *            the sha 1
+     * @param state
+     *            the state
+     * @param targetUrl
+     *            the target url
+     * @param description
+     *            the description
+     * @return the gh commit status
+     * @throws IOException
+     *             the io exception
+     * @see #createCommitStatus(String, GHCommitState, String, String, String) #createCommitStatus(String,
+     *      GHCommitState,String,String,String)
+     */
+    public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description)
+            throws IOException {
+<span class="nc" id="L2002">        return createCommitStatus(sha1, state, targetUrl, description, null);</span>
+    }
+
+    /**
+     * Creates a check run for a commit.
+     *
+     * @param name
+     *            an identifier for the run
+     * @param headSHA
+     *            the commit hash
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview(ANTIOPE)
+    @Deprecated
+    public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
+<span class="fc" id="L2017">        return new GHCheckRunBuilder(this, name, headSHA);</span>
+    }
+
+    /**
+     * Updates an existing check run.
+     *
+     * @param checkId
+     *            the existing checkId
+     * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
+     */
+    @Preview(BAPTISTE)
+    @Deprecated
+    public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
+<span class="nc" id="L2030">        return new GHCheckRunBuilder(this, checkId);</span>
+    }
+
+    /**
+     * Lists repository events.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
+<span class="nc" id="L2041">        return root.createRequest()</span>
+<span class="nc" id="L2042">                .withUrlPath(String.format(&quot;/repos/%s/%s/events&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L2043">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Lists labels in this repository.
+     * &lt;p&gt;
+     * https://developer.github.com/v3/issues/labels/#list-all-labels-for-this-repository
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHLabel&gt; listLabels() throws IOException {
+<span class="fc" id="L2056">        return GHLabel.readAll(this);</span>
+    }
+
+    /**
+     * Gets label.
+     *
+     * @param name
+     *            the name
+     * @return the label
+     * @throws IOException
+     *             the io exception
+     */
+    public GHLabel getLabel(String name) throws IOException {
+<span class="fc" id="L2069">        return GHLabel.read(this, name);</span>
+    }
+
+    /**
+     * Create label gh label.
+     *
+     * @param name
+     *            the name
+     * @param color
+     *            the color
+     * @return the gh label
+     * @throws IOException
+     *             the io exception
+     */
+    public GHLabel createLabel(String name, String color) throws IOException {
+<span class="fc" id="L2084">        return GHLabel.create(this).name(name).color(color).description(&quot;&quot;).done();</span>
+    }
+
+    /**
+     * Description is still in preview.
+     *
+     * @param name
+     *            the name
+     * @param color
+     *            the color
+     * @param description
+     *            the description
+     * @return gh label
+     * @throws IOException
+     *             the io exception
+     */
+    public GHLabel createLabel(String name, String color, String description) throws IOException {
+<span class="fc" id="L2101">        return GHLabel.create(this).name(name).color(color).description(description).done();</span>
+    }
+
+    /**
+     * Lists all the invitations.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHInvitation&gt; listInvitations() {
+<span class="nc" id="L2110">        return root.createRequest()</span>
+<span class="nc" id="L2111">                .withUrlPath(String.format(&quot;/repos/%s/%s/invitations&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L2112">                .toIterable(GHInvitation[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Lists all the subscribers (aka watchers.)
+     * &lt;p&gt;
+     * https://developer.github.com/v3/activity/watching/
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listSubscribers() {
+<span class="fc" id="L2123">        return listUsers(&quot;subscribers&quot;);</span>
+    }
+
+    /**
+     * Lists all the users who have starred this repo based on the old version of the API. For additional information,
+     * like date when the repository was starred, see {@link #listStargazers2()}
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listStargazers() {
+<span class="nc" id="L2133">        return listUsers(&quot;stargazers&quot;);</span>
+    }
+
+    /**
+     * Lists all the users who have starred this repo based on new version of the API, having extended information like
+     * the time when the repository was starred. For compatibility with the old API see {@link #listStargazers()}
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHStargazer&gt; listStargazers2() {
+<span class="fc" id="L2143">        return root.createRequest()</span>
+<span class="fc" id="L2144">                .withPreview(&quot;application/vnd.github.v3.star+json&quot;)</span>
+<span class="fc" id="L2145">                .withUrlPath(getApiTailUrl(&quot;stargazers&quot;))</span>
+<span class="fc" id="L2146">                .toIterable(GHStargazer[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    private PagedIterable&lt;GHUser&gt; listUsers(final String suffix) {
+<span class="fc" id="L2150">        return listUsers(root.createRequest(), suffix);</span>
+    }
+
+    private PagedIterable&lt;GHUser&gt; listUsers(Requester requester, final String suffix) {
+<span class="fc" id="L2154">        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
+     * binding
+     *
+     * @param name
+     *            Type of the hook to be created. See https://api.github.com/hooks for possible names.
+     * @param config
+     *            The configuration hash.
+     * @param events
+     *            Can be null. Types of events to hook into.
+     * @param active
+     *            the active
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
+            throws IOException {
+<span class="fc" id="L2175">        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);</span>
+    }
+
+    /**
+     * Create web hook gh hook.
+     *
+     * @param url
+     *            the url
+     * @param events
+     *            the events
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
+<span class="fc" id="L2190">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+    }
+
+    /**
+     * Create web hook gh hook.
+     *
+     * @param url
+     *            the url
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook createWebHook(URL url) throws IOException {
+<span class="fc" id="L2203">        return createWebHook(url, null);</span>
+    }
+
+    /**
+     * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
+     * reflected to GitHub.
+     *
+     * @return the post commit hooks
+     * @deprecated Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
+     */
+    @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,
+            justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
+    @Deprecated
+    public Set&lt;URL&gt; getPostCommitHooks() {
+<span class="fc" id="L2217">        synchronized (this) {</span>
+<span class="pc bpc" id="L2218" title="1 of 2 branches missed.">            if (postCommitHooks == null) {</span>
+<span class="fc" id="L2219">                postCommitHooks = setupPostCommitHooks();</span>
+            }
+<span class="fc" id="L2221">            return postCommitHooks;</span>
+        }
+    }
+
+    /**
+     * Live set view of the post-commit hook.
+     */
+    @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,
+            justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
+    @SkipFromToString
+    private /* final */ transient Set&lt;URL&gt; postCommitHooks;
+
+    @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,
+            justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
+    private Set&lt;URL&gt; setupPostCommitHooks() {
+<span class="fc" id="L2236">        return new AbstractSet&lt;URL&gt;() {</span>
+            private List&lt;URL&gt; getPostCommitHooks() {
+                try {
+<span class="fc" id="L2239">                    List&lt;URL&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L2240" title="1 of 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2241" title="All 2 branches missed.">                        if (h.getName().equals(&quot;web&quot;)) {</span>
+<span class="nc" id="L2242">                            r.add(new URL(h.getConfig().get(&quot;url&quot;)));</span>
+                        }
+<span class="nc" id="L2244">                    }</span>
+<span class="fc" id="L2245">                    return r;</span>
+<span class="nc" id="L2246">                } catch (IOException e) {</span>
+<span class="nc" id="L2247">                    throw new GHException(&quot;Failed to retrieve post-commit hooks&quot;, e);</span>
+                }
+            }
+
+            @Override
+            public Iterator&lt;URL&gt; iterator() {
+<span class="nc" id="L2253">                return getPostCommitHooks().iterator();</span>
+            }
+
+            @Override
+            public int size() {
+<span class="fc" id="L2258">                return getPostCommitHooks().size();</span>
+            }
+
+            @Override
+            public boolean add(URL url) {
+                try {
+<span class="nc" id="L2264">                    createWebHook(url);</span>
+<span class="nc" id="L2265">                    return true;</span>
+<span class="nc" id="L2266">                } catch (IOException e) {</span>
+<span class="nc" id="L2267">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+                }
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+<span class="nc" id="L2274">                    String _url = ((URL) url).toExternalForm();</span>
+<span class="nc bnc" id="L2275" title="All 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2276" title="All 4 branches missed.">                        if (h.getName().equals(&quot;web&quot;) &amp;&amp; h.getConfig().get(&quot;url&quot;).equals(_url)) {</span>
+<span class="nc" id="L2277">                            h.delete();</span>
+<span class="nc" id="L2278">                            return true;</span>
+                        }
+<span class="nc" id="L2280">                    }</span>
+<span class="nc" id="L2281">                    return false;</span>
+<span class="nc" id="L2282">                } catch (IOException e) {</span>
+<span class="nc" id="L2283">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+                }
+            }
+        };
+    }
+
+    GHRepository wrap(GitHub root) {
+<span class="fc" id="L2290">        this.root = root;</span>
+<span class="fc bfc" id="L2291" title="All 4 branches covered.">        if (root.isOffline() &amp;&amp; owner != null) {</span>
+<span class="fc" id="L2292">            owner.wrapUp(root);</span>
+        }
+<span class="fc bfc" id="L2294" title="All 2 branches covered.">        if (source != null) {</span>
+<span class="fc" id="L2295">            source.wrap(root);</span>
+        }
+<span class="fc bfc" id="L2297" title="All 2 branches covered.">        if (parent != null) {</span>
+<span class="fc" id="L2298">            parent.wrap(root);</span>
+        }
+<span class="fc" id="L2300">        return this;</span>
+    }
+
+    /**
+     * Gets branches by {@linkplain GHBranch#getName() their names}.
+     *
+     * @return the branches
+     * @throws IOException
+     *             the io exception
+     */
+    public Map&lt;String, GHBranch&gt; getBranches() throws IOException {
+<span class="nc" id="L2311">        Map&lt;String, GHBranch&gt; r = new TreeMap&lt;String, GHBranch&gt;();</span>
+<span class="nc" id="L2312">        for (GHBranch p : root.createRequest()</span>
+<span class="nc" id="L2313">                .withUrlPath(getApiTailUrl(&quot;branches&quot;))</span>
+<span class="nc" id="L2314">                .toIterable(GHBranch[].class, item -&gt; item.wrap(this))</span>
+<span class="nc bnc" id="L2315" title="All 2 branches missed.">                .toArray()) {</span>
+<span class="nc" id="L2316">            r.put(p.getName(), p);</span>
+        }
+<span class="nc" id="L2318">        return r;</span>
+    }
+
+    /**
+     * Gets branch.
+     *
+     * @param name
+     *            the name
+     * @return the branch
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBranch getBranch(String name) throws IOException {
+<span class="fc" id="L2331">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;branches/&quot; + name)).fetch(GHBranch.class).wrap(this);</span>
+    }
+
+    /**
+     * Gets milestones.
+     *
+     * @return the milestones
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #listMilestones(GHIssueState)}
+     */
+    public Map&lt;Integer, GHMilestone&gt; getMilestones() throws IOException {
+<span class="nc" id="L2343">        Map&lt;Integer, GHMilestone&gt; milestones = new TreeMap&lt;Integer, GHMilestone&gt;();</span>
+<span class="nc bnc" id="L2344" title="All 2 branches missed.">        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {</span>
+<span class="nc" id="L2345">            milestones.put(m.getNumber(), m);</span>
+<span class="nc" id="L2346">        }</span>
+<span class="nc" id="L2347">        return milestones;</span>
+    }
+
+    /**
+     * Lists up all the milestones in this repository.
+     *
+     * @param state
+     *            the state
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHMilestone&gt; listMilestones(final GHIssueState state) {
+<span class="nc" id="L2358">        return root.createRequest()</span>
+<span class="nc" id="L2359">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L2360">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="nc" id="L2361">                .toIterable(GHMilestone[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Gets milestone.
+     *
+     * @param number
+     *            the number
+     * @return the milestone
+     * @throws IOException
+     *             the io exception
+     */
+    public GHMilestone getMilestone(int number) throws IOException {
+<span class="fc" id="L2374">        GHMilestone m = milestones.get(number);</span>
+<span class="pc bpc" id="L2375" title="1 of 2 branches missed.">        if (m == null) {</span>
+<span class="fc" id="L2376">            m = root.createRequest().withUrlPath(getApiTailUrl(&quot;milestones/&quot; + number)).fetch(GHMilestone.class);</span>
+<span class="fc" id="L2377">            m.owner = this;</span>
+<span class="fc" id="L2378">            m.root = root;</span>
+<span class="fc" id="L2379">            milestones.put(m.getNumber(), m);</span>
+        }
+<span class="fc" id="L2381">        return m;</span>
+    }
+
+    /**
+     * Gets file content.
+     *
+     * @param path
+     *            the path
+     * @return the file content
+     * @throws IOException
+     *             the io exception
+     */
+    public GHContent getFileContent(String path) throws IOException {
+<span class="fc" id="L2394">        return getFileContent(path, null);</span>
+    }
+
+    /**
+     * Gets file content.
+     *
+     * @param path
+     *            the path
+     * @param ref
+     *            the ref
+     * @return the file content
+     * @throws IOException
+     *             the io exception
+     */
+    public GHContent getFileContent(String path, String ref) throws IOException {
+<span class="fc" id="L2409">        Requester requester = root.createRequest();</span>
+<span class="fc" id="L2410">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+
+<span class="fc" id="L2412">        return requester.with(&quot;ref&quot;, ref).withUrlPath(target).fetch(GHContent.class).wrap(this);</span>
+    }
+
+    /**
+     * Gets directory content.
+     *
+     * @param path
+     *            the path
+     * @return the directory content
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHContent&gt; getDirectoryContent(String path) throws IOException {
+<span class="fc" id="L2425">        return getDirectoryContent(path, null);</span>
+    }
+
+    /**
+     * Gets directory content.
+     *
+     * @param path
+     *            the path
+     * @param ref
+     *            the ref
+     * @return the directory content
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHContent&gt; getDirectoryContent(String path, String ref) throws IOException {
+<span class="fc" id="L2440">        Requester requester = root.createRequest();</span>
+<span class="fc bfc" id="L2441" title="All 2 branches covered.">        while (path.endsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L2442">            path = path.substring(0, path.length() - 1);</span>
+        }
+<span class="fc" id="L2444">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+
+<span class="fc" id="L2446">        return requester.with(&quot;ref&quot;, ref)</span>
+<span class="fc" id="L2447">                .withUrlPath(target)</span>
+<span class="fc" id="L2448">                .toIterable(GHContent[].class, item -&gt; item.wrap(this))</span>
+<span class="fc" id="L2449">                .toList();</span>
+    }
+
+    /**
+     * https://developer.github.com/v3/repos/contents/#get-the-readme
+     *
+     * @return the readme
+     * @throws IOException
+     *             the io exception
+     */
+    public GHContent getReadme() throws IOException {
+<span class="fc" id="L2460">        Requester requester = root.createRequest();</span>
+<span class="fc" id="L2461">        return requester.withUrlPath(getApiTailUrl(&quot;readme&quot;)).fetch(GHContent.class).wrap(this);</span>
+    }
+
+    /**
+     * Creates a new content, or update an existing content.
+     *
+     * @return the gh content builder
+     */
+    public GHContentBuilder createContent() {
+<span class="fc" id="L2470">        return new GHContentBuilder(this);</span>
+    }
+
+    /**
+     * Use {@link #createContent()}.
+     *
+     * @param content
+     *            the content
+     * @param commitMessage
+     *            the commit message
+     * @param path
+     *            the path
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
+<span class="fc" id="L2488">        return createContent().content(content).message(commitMessage).path(path).commit();</span>
+    }
+
+    /**
+     * Use {@link #createContent()}.
+     *
+     * @param content
+     *            the content
+     * @param commitMessage
+     *            the commit message
+     * @param path
+     *            the path
+     * @param branch
+     *            the branch
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch)
+            throws IOException {
+<span class="fc" id="L2509">        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();</span>
+    }
+
+    /**
+     * Use {@link #createContent()}.
+     *
+     * @param contentBytes
+     *            the content bytes
+     * @param commitMessage
+     *            the commit message
+     * @param path
+     *            the path
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path)
+            throws IOException {
+<span class="nc" id="L2528">        return createContent().content(contentBytes).message(commitMessage).path(path).commit();</span>
+    }
+
+    /**
+     * Use {@link #createContent()}.
+     *
+     * @param contentBytes
+     *            the content bytes
+     * @param commitMessage
+     *            the commit message
+     * @param path
+     *            the path
+     * @param branch
+     *            the branch
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch)
+            throws IOException {
+<span class="nc" id="L2549">        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();</span>
+    }
+
+    /**
+     * Create milestone gh milestone.
+     *
+     * @param title
+     *            the title
+     * @param description
+     *            the description
+     * @return the gh milestone
+     * @throws IOException
+     *             the io exception
+     */
+    public GHMilestone createMilestone(String title, String description) throws IOException {
+<span class="fc" id="L2564">        return root.createRequest()</span>
+<span class="fc" id="L2565">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2566">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L2567">                .with(&quot;description&quot;, description)</span>
+<span class="fc" id="L2568">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="fc" id="L2569">                .fetch(GHMilestone.class)</span>
+<span class="fc" id="L2570">                .wrap(this);</span>
+    }
+
+    /**
+     * Add deploy key gh deploy key.
+     *
+     * @param title
+     *            the title
+     * @param key
+     *            the key
+     * @return the gh deploy key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployKey addDeployKey(String title, String key) throws IOException {
+<span class="nc" id="L2585">        return root.createRequest()</span>
+<span class="nc" id="L2586">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L2587">                .with(&quot;title&quot;, title)</span>
+<span class="nc" id="L2588">                .with(&quot;key&quot;, key)</span>
+<span class="nc" id="L2589">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="nc" id="L2590">                .fetch(GHDeployKey.class)</span>
+<span class="nc" id="L2591">                .wrap(this);</span>
+
+    }
+
+    /**
+     * Gets deploy keys.
+     *
+     * @return the deploy keys
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHDeployKey&gt; getDeployKeys() throws IOException {
+<span class="nc" id="L2603">        return root.createRequest()</span>
+<span class="nc" id="L2604">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="nc" id="L2605">                .toIterable(GHDeployKey[].class, item -&gt; item.wrap(this))</span>
+<span class="nc" id="L2606">                .toList();</span>
+    }
+
+    /**
+     * Forked repositories have a 'source' attribute that specifies the ultimate source of the forking chain.
+     *
+     * @return {@link GHRepository} that points to the root repository where this repository is forked (indirectly or
+     *         directly) from. Otherwise null.
+     * @throws IOException
+     *             the io exception
+     * @see #getParent() #getParent()
+     */
+    public GHRepository getSource() throws IOException {
+<span class="pc bpc" id="L2619" title="1 of 4 branches missed.">        if (fork &amp;&amp; source == null) {</span>
+<span class="fc" id="L2620">            populate();</span>
+        }
+<span class="fc bfc" id="L2622" title="All 2 branches covered.">        if (source == null) {</span>
+<span class="fc" id="L2623">            return null;</span>
+        }
+
+<span class="fc" id="L2626">        return source;</span>
+    }
+
+    /**
+     * Forked repositories have a 'parent' attribute that specifies the repository this repository is directly forked
+     * from. If we keep traversing {@link #getParent()} until it returns null, that is {@link #getSource()}.
+     *
+     * @return {@link GHRepository} that points to the repository where this repository is forked directly from.
+     *         Otherwise null.
+     * @throws IOException
+     *             the io exception
+     * @see #getSource() #getSource()
+     */
+    public GHRepository getParent() throws IOException {
+<span class="pc bpc" id="L2640" title="1 of 4 branches missed.">        if (fork &amp;&amp; parent == null) {</span>
+<span class="fc" id="L2641">            populate();</span>
+        }
+
+<span class="fc bfc" id="L2644" title="All 2 branches covered.">        if (parent == null) {</span>
+<span class="fc" id="L2645">            return null;</span>
+        }
+<span class="fc" id="L2647">        return parent;</span>
+    }
+
+    /**
+     * Subscribes to this repository to get notifications.
+     *
+     * @param subscribed
+     *            the subscribed
+     * @param ignored
+     *            the ignored
+     * @return the gh subscription
+     * @throws IOException
+     *             the io exception
+     */
+    public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
+<span class="fc" id="L2662">        return root.createRequest()</span>
+<span class="fc" id="L2663">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L2664">                .with(&quot;subscribed&quot;, subscribed)</span>
+<span class="fc" id="L2665">                .with(&quot;ignored&quot;, ignored)</span>
+<span class="fc" id="L2666">                .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="fc" id="L2667">                .fetch(GHSubscription.class)</span>
+<span class="fc" id="L2668">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Returns the current subscription.
+     *
+     * @return null if no subscription exists.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHSubscription getSubscription() throws IOException {
+        try {
+<span class="pc" id="L2680">            return root.createRequest()</span>
+<span class="fc" id="L2681">                    .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="nc" id="L2682">                    .fetch(GHSubscription.class)</span>
+<span class="nc" id="L2683">                    .wrapUp(this);</span>
+<span class="fc" id="L2684">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L2685">            return null;</span>
+        }
+    }
+
+    /**
+     * List contributors paged iterable.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;Contributor&gt; listContributors() throws IOException {
+<span class="fc" id="L2697">        return root.createRequest()</span>
+<span class="fc" id="L2698">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
+<span class="fc" id="L2699">                .toIterable(Contributor[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * The type Contributor.
+     */
+<span class="fc" id="L2705">    public static class Contributor extends GHUser {</span>
+        private int contributions;
+
+        /**
+         * Gets contributions.
+         *
+         * @return the contributions
+         */
+        public int getContributions() {
+<span class="fc" id="L2714">            return contributions;</span>
+        }
+
+        @Override
+        public int hashCode() {
+            // We ignore contributions in the calculation
+<span class="nc" id="L2720">            return super.hashCode();</span>
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            // We ignore contributions in the calculation
+<span class="nc" id="L2726">            return super.equals(obj);</span>
+        }
+    }
+
+    /**
+     * Returns the statistics for this repository.
+     *
+     * @return the statistics
+     */
+    public GHRepositoryStatistics getStatistics() {
+        // TODO: Use static object and introduce refresh() method,
+        // instead of returning new object each time.
+<span class="fc" id="L2738">        return new GHRepositoryStatistics(this);</span>
+    }
+
+    /**
+     * Create a project for this repository.
+     *
+     * @param name
+     *            the name
+     * @param body
+     *            the body
+     * @return the gh project
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProject createProject(String name, String body) throws IOException {
+<span class="nc" id="L2753">        return root.createRequest()</span>
+<span class="nc" id="L2754">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L2755">                .withPreview(INERTIA)</span>
+<span class="nc" id="L2756">                .with(&quot;name&quot;, name)</span>
+<span class="nc" id="L2757">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L2758">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L2759">                .fetch(GHProject.class)</span>
+<span class="nc" id="L2760">                .wrap(this);</span>
+    }
+
+    /**
+     * Returns the projects for this repository.
+     *
+     * @param status
+     *            The status filter (all, open or closed).
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+<span class="nc" id="L2773">        return root.createRequest()</span>
+<span class="nc" id="L2774">                .withPreview(INERTIA)</span>
+<span class="nc" id="L2775">                .with(&quot;state&quot;, status)</span>
+<span class="nc" id="L2776">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L2777">                .toIterable(GHProject[].class, item -&gt; item.wrap(this));</span>
+    }
+
+    /**
+     * Returns open projects for this repository.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHProject&gt; listProjects() throws IOException {
+<span class="nc" id="L2788">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
+    }
+
+    /**
+     * Render a Markdown document.
+     * &lt;p&gt;
+     * In {@linkplain MarkdownMode#GFM GFM mode}, issue numbers and user mentions are linked accordingly.
+     *
+     * @param text
+     *            the text
+     * @param mode
+     *            the mode
+     * @return the reader
+     * @throws IOException
+     *             the io exception
+     * @see GitHub#renderMarkdown(String) GitHub#renderMarkdown(String)
+     */
+    public Reader renderMarkdown(String text, MarkdownMode mode) throws IOException {
+<span class="fc" id="L2806">        return new InputStreamReader(</span>
+<span class="fc" id="L2807">                root.createRequest()</span>
+<span class="fc" id="L2808">                        .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2809">                        .with(&quot;text&quot;, text)</span>
+<span class="pc bpc" id="L2810" title="1 of 2 branches missed.">                        .with(&quot;mode&quot;, mode == null ? null : mode.toString())</span>
+<span class="fc" id="L2811">                        .with(&quot;context&quot;, getFullName())</span>
+<span class="fc" id="L2812">                        .withUrlPath(&quot;/markdown&quot;)</span>
+<span class="fc" id="L2813">                        .fetchStream(Requester::copyInputStream),</span>
+                &quot;UTF-8&quot;);
+    }
+
+    /**
+     * List all the notifications in a repository for the current user.
+     *
+     * @return the gh notification stream
+     */
+    public GHNotificationStream listNotifications() {
+<span class="nc" id="L2823">        return new GHNotificationStream(root, getApiTailUrl(&quot;/notifications&quot;));</span>
+    }
+
+    /**
+     * &lt;a href=
+     * &quot;https://developer.github.com/v3/repos/traffic/#views&quot;&gt;https://developer.github.com/v3/repos/traffic/#views&lt;/a&gt;
+     *
+     * @return the view traffic
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryViewTraffic getViewTraffic() throws IOException {
+<span class="fc" id="L2835">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/views&quot;)).fetch(GHRepositoryViewTraffic.class);</span>
+    }
+
+    /**
+     * &lt;a href=
+     * &quot;https://developer.github.com/v3/repos/traffic/#clones&quot;&gt;https://developer.github.com/v3/repos/traffic/#clones&lt;/a&gt;
+     *
+     * @return the clone traffic
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryCloneTraffic getCloneTraffic() throws IOException {
+<span class="fc" id="L2847">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/clones&quot;)).fetch(GHRepositoryCloneTraffic.class);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L2852">        return (&quot;Repository:&quot; + getOwnerName() + &quot;:&quot; + name).hashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L2857" title="1 of 2 branches missed.">        if (obj instanceof GHRepository) {</span>
+<span class="fc" id="L2858">            GHRepository that = (GHRepository) obj;</span>
+<span class="pc bpc" id="L2859" title="1 of 4 branches missed.">            return this.getOwnerName().equals(that.getOwnerName()) &amp;&amp; this.name.equals(that.name);</span>
+        }
+<span class="nc" id="L2861">        return false;</span>
+    }
+
+    String getApiTailUrl(String tail) {
+<span class="fc bfc" id="L2865" title="All 4 branches covered.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L2866">            tail = '/' + tail;</span>
+        }
+<span class="fc" id="L2868">        return &quot;/repos/&quot; + getOwnerName() + &quot;/&quot; + name + tail;</span>
+    }
+
+    /**
+     * Get all issue events for this repository. See
+     * https://developer.github.com/v3/issues/events/#list-events-for-a-repository
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHIssueEvent&gt; listIssueEvents() throws IOException {
+<span class="fc" id="L2880">        return root.createRequest()</span>
+<span class="fc" id="L2881">                .withUrlPath(getApiTailUrl(&quot;issues/events&quot;))</span>
+<span class="fc" id="L2882">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Get a single issue event. See https://developer.github.com/v3/issues/events/#get-a-single-event
+     *
+     * @param id
+     *            the id
+     * @return the issue event
+     * @throws IOException
+     *             the io exception
+     */
+    public GHIssueEvent getIssueEvent(long id) throws IOException {
+<span class="fc" id="L2895">        return root.createRequest()</span>
+<span class="fc" id="L2896">                .withUrlPath(getApiTailUrl(&quot;issues/events/&quot; + id))</span>
+<span class="fc" id="L2897">                .fetch(GHIssueEvent.class)</span>
+<span class="fc" id="L2898">                .wrapUp(root);</span>
+    }
+
+    /**
+     * Lists all the workflows of this repository.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHWorkflow&gt; listWorkflows() {
+<span class="nc" id="L2907">        return root.createRequest()</span>
+<span class="nc" id="L2908">                .withUrlPath(getApiTailUrl(&quot;actions/workflows&quot;))</span>
+<span class="nc" id="L2909">                .toIterable(GHWorkflow[].class, item -&gt; item.wrapUp(root));</span>
+    }
+
+    /**
+     * Gets a workflow by id.
+     *
+     * @param id
+     *            the id of the workflow run
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflow getWorkflow(long id) throws IOException {
+<span class="fc" id="L2922">        return getWorkflow(String.valueOf(id));</span>
+    }
+
+    /**
+     * Gets a workflow by name of the file.
+     *
+     * @param nameOrId
+     *            either the name of the file (e.g. my-workflow.yml) or the id as a string
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflow getWorkflow(String nameOrId) throws IOException {
+<span class="fc" id="L2935">        return root.createRequest()</span>
+<span class="fc" id="L2936">                .withUrlPath(getApiTailUrl(&quot;actions/workflows&quot;), nameOrId)</span>
+<span class="fc" id="L2937">                .fetch(GHWorkflow.class)</span>
+<span class="fc" id="L2938">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Retrieves workflow runs.
+     *
+     * @return the workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder queryWorkflowRuns() {
+<span class="fc" id="L2947">        return new GHWorkflowRunQueryBuilder(this);</span>
+    }
+
+    /**
+     * Gets a workflow run.
+     *
+     * @param id
+     *            the id of the workflow run
+     * @return the workflow run
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflowRun getWorkflowRun(long id) throws IOException {
+<span class="fc" id="L2960">        return root.createRequest()</span>
+<span class="fc" id="L2961">                .withUrlPath(getApiTailUrl(&quot;actions/runs&quot;), String.valueOf(id))</span>
+<span class="fc" id="L2962">                .fetch(GHWorkflowRun.class)</span>
+<span class="fc" id="L2963">                .wrapUp(this);</span>
+    }
+
+    // Only used within listTopics().
+    private static class Topics {
+        public List&lt;String&gt; names;
+    }
+
+    /**
+     * Return the topics for this repository. See
+     * https://developer.github.com/v3/repos/#list-all-topics-for-a-repository
+     *
+     * @return the list
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;String&gt; listTopics() throws IOException {
+<span class="fc" id="L2980">        Topics topics = root.createRequest()</span>
+<span class="fc" id="L2981">                .withPreview(MERCY)</span>
+<span class="fc" id="L2982">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
+<span class="fc" id="L2983">                .fetch(Topics.class);</span>
+<span class="fc" id="L2984">        return topics.names;</span>
+    }
+
+    /**
+     * Set the topics for this repository. See
+     * https://developer.github.com/v3/repos/#replace-all-topics-for-a-repository
+     *
+     * @param topics
+     *            the topics
+     * @throws IOException
+     *             the io exception
+     */
+    public void setTopics(List&lt;String&gt; topics) throws IOException {
+<span class="fc" id="L2997">        root.createRequest()</span>
+<span class="fc" id="L2998">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L2999">                .with(&quot;names&quot;, topics)</span>
+<span class="fc" id="L3000">                .withPreview(MERCY)</span>
+<span class="fc" id="L3001">                .withUrlPath(getApiTailUrl(&quot;topics&quot;))</span>
+<span class="fc" id="L3002">                .send();</span>
+<span class="fc" id="L3003">    }</span>
+
+    /**
+     * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
+     *
+     * @param tag
+     *            The tag's name.
+     * @param message
+     *            The tag message.
+     * @param object
+     *            The SHA of the git object this is tagging.
+     * @param type
+     *            The type of the object we're tagging: &quot;commit&quot;, &quot;tree&quot; or &quot;blob&quot;.
+     * @return The newly created tag.
+     * @throws java.io.IOException
+     *             The IO exception.
+     */
+    public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
+<span class="fc" id="L3021">        return root.createRequest()</span>
+<span class="fc" id="L3022">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L3023">                .with(&quot;tag&quot;, tag)</span>
+<span class="fc" id="L3024">                .with(&quot;message&quot;, message)</span>
+<span class="fc" id="L3025">                .with(&quot;object&quot;, object)</span>
+<span class="fc" id="L3026">                .with(&quot;type&quot;, type)</span>
+<span class="fc" id="L3027">                .withUrlPath(getApiTailUrl(&quot;git/tags&quot;))</span>
+<span class="fc" id="L3028">                .fetch(GHTagObject.class)</span>
+<span class="fc" id="L3029">                .wrap(this);</span>
+    }
+
+    /**
+     * Streams a zip archive of the repository, optionally at a given &lt;code&gt;ref&lt;/code&gt;.
+     *
+     * @param &lt;T&gt;
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @param ref
+     *            if &lt;code&gt;null&lt;/code&gt; the repository's default branch, usually &lt;code&gt;master&lt;/code&gt;,
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public &lt;T&gt; T readZip(InputStreamFunction&lt;T&gt; streamFunction, String ref) throws IOException {
+<span class="fc" id="L3046">        return downloadArchive(&quot;zip&quot;, ref, streamFunction);</span>
+    }
+
+    /**
+     * Streams a tar archive of the repository, optionally at a given &lt;code&gt;ref&lt;/code&gt;.
+     *
+     * @param &lt;T&gt;
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @param ref
+     *            if &lt;code&gt;null&lt;/code&gt; the repository's default branch, usually &lt;code&gt;master&lt;/code&gt;,
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public &lt;T&gt; T readTar(InputStreamFunction&lt;T&gt; streamFunction, String ref) throws IOException {
+<span class="fc" id="L3063">        return downloadArchive(&quot;tar&quot;, ref, streamFunction);</span>
+    }
+
+    private &lt;T&gt; T downloadArchive(@Nonnull String type,
+            @CheckForNull String ref,
+            @Nonnull InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
+<span class="fc" id="L3069">        requireNonNull(streamFunction, &quot;Sink must not be null&quot;);</span>
+<span class="fc" id="L3070">        String tailUrl = getApiTailUrl(type + &quot;ball&quot;);</span>
+<span class="pc bpc" id="L3071" title="1 of 2 branches missed.">        if (ref != null) {</span>
+<span class="nc" id="L3072">            tailUrl += &quot;/&quot; + ref;</span>
+        }
+<span class="fc" id="L3074">        final Requester builder = root.createRequest().method(&quot;GET&quot;).withUrlPath(tailUrl);</span>
+<span class="fc" id="L3075">        return builder.fetchStream(streamFunction);</span>
+    }
+
+    /**
+     * Populate this object.
+     *
+     * @throws java.io.IOException
+     *             The IO exception
+     */
+    void populate() throws IOException {
+<span class="fc bfc" id="L3085" title="All 2 branches covered.">        if (root.isOffline()) {</span>
+<span class="fc" id="L3086">            return; // can't populate if the root is offline</span>
+        }
+
+<span class="fc" id="L3089">        final URL url = requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+
+        try {
+            // IMPORTANT: the url for repository records does not reliably point to the API url.
+            // There is bug in Push event payloads that returns the wrong url.
+            // All other occurrences of &quot;url&quot; take the form &quot;https://api.github.com/...&quot;.
+            // For Push event repository records, they take the form &quot;https://github.com/{fullName}&quot;.
+<span class="fc" id="L3096">            root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);</span>
+<span class="fc" id="L3097">        } catch (HttpException e) {</span>
+<span class="pc bpc" id="L3098" title="1 of 2 branches missed.">            if (e.getCause() instanceof JsonParseException) {</span>
+<span class="fc" id="L3099">                root.createRequest()</span>
+<span class="fc" id="L3100">                        .withPreview(BAPTISTE)</span>
+<span class="fc" id="L3101">                        .withUrlPath(&quot;/repos/&quot; + full_name)</span>
+<span class="fc" id="L3102">                        .fetchInto(this)</span>
+<span class="fc" id="L3103">                        .wrap(root);</span>
+            } else {
+<span class="nc" id="L3105">                throw e;</span>
+            }
+<span class="fc" id="L3107">        }</span>
+<span class="fc" id="L3108">    }</span>
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Updater extends GHRepositoryBuilder&lt;Updater&gt; {
+        protected Updater(@Nonnull GHRepository repository) {
+<span class="fc" id="L3119">            super(Updater.class, repository.root, null);</span>
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+<span class="fc" id="L3122">            requester.with(&quot;name&quot;, repository.name);</span>
+
+<span class="fc" id="L3124">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
+<span class="fc" id="L3125">        }</span>
+    }
+
+    /**
+     * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link #done()} to commit changes.
+     */
+    @BetaApi
+    @Deprecated
+    public static class Setter extends GHRepositoryBuilder&lt;GHRepository&gt; {
+        protected Setter(@Nonnull GHRepository repository) {
+<span class="fc" id="L3137">            super(GHRepository.class, repository.root, null);</span>
+            // even when we don't change the name, we need to send it in
+            // this requirement may be out-of-date, but we do not want to break it
+<span class="fc" id="L3140">            requester.with(&quot;name&quot;, repository.name);</span>
+
+<span class="fc" id="L3142">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
+<span class="fc" id="L3143">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

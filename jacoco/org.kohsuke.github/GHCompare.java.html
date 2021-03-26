@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCompare.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCompare.java</span></div><h1>GHCompare.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.net.URL;
+
+/**
+ * The model user for comparing 2 commits in the GitHub API.
+ *
+ * @author Michael Clarke
+ */
+<span class="nc" id="L13">public class GHCompare {</span>
+
+    private String url, html_url, permalink_url, diff_url, patch_url;
+    public Status status;
+    private int ahead_by, behind_by, total_commits;
+    private Commit base_commit, merge_base_commit;
+    private Commit[] commits;
+    private GHCommit.File[] files;
+
+    private GHRepository owner;
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="nc" id="L30">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="nc" id="L39">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Gets permalink url.
+     *
+     * @return the permalink url
+     */
+    public URL getPermalinkUrl() {
+<span class="nc" id="L48">        return GitHubClient.parseURL(permalink_url);</span>
+    }
+
+    /**
+     * Gets diff url.
+     *
+     * @return the diff url
+     */
+    public URL getDiffUrl() {
+<span class="nc" id="L57">        return GitHubClient.parseURL(diff_url);</span>
+    }
+
+    /**
+     * Gets patch url.
+     *
+     * @return the patch url
+     */
+    public URL getPatchUrl() {
+<span class="nc" id="L66">        return GitHubClient.parseURL(patch_url);</span>
+    }
+
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
+    public Status getStatus() {
+<span class="nc" id="L75">        return status;</span>
+    }
+
+    /**
+     * Gets ahead by.
+     *
+     * @return the ahead by
+     */
+    public int getAheadBy() {
+<span class="nc" id="L84">        return ahead_by;</span>
+    }
+
+    /**
+     * Gets behind by.
+     *
+     * @return the behind by
+     */
+    public int getBehindBy() {
+<span class="nc" id="L93">        return behind_by;</span>
+    }
+
+    /**
+     * Gets total commits.
+     *
+     * @return the total commits
+     */
+    public int getTotalCommits() {
+<span class="nc" id="L102">        return total_commits;</span>
+    }
+
+    /**
+     * Gets base commit.
+     *
+     * @return the base commit
+     */
+    public Commit getBaseCommit() {
+<span class="nc" id="L111">        return base_commit;</span>
+    }
+
+    /**
+     * Gets merge base commit.
+     *
+     * @return the merge base commit
+     */
+    public Commit getMergeBaseCommit() {
+<span class="nc" id="L120">        return merge_base_commit;</span>
+    }
+
+    /**
+     * Gets an array of commits.
+     *
+     * @return A copy of the array being stored in the class.
+     */
+    public Commit[] getCommits() {
+<span class="nc" id="L129">        Commit[] newValue = new Commit[commits.length];</span>
+<span class="nc" id="L130">        System.arraycopy(commits, 0, newValue, 0, commits.length);</span>
+<span class="nc" id="L131">        return newValue;</span>
+    }
+
+    /**
+     * Gets an array of commits.
+     *
+     * @return A copy of the array being stored in the class.
+     */
+    public GHCommit.File[] getFiles() {
+<span class="nc" id="L140">        GHCommit.File[] newValue = new GHCommit.File[files.length];</span>
+<span class="nc" id="L141">        System.arraycopy(files, 0, newValue, 0, files.length);</span>
+<span class="nc" id="L142">        return newValue;</span>
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    public GHCompare wrap(GHRepository owner) {
+<span class="nc" id="L153">        this.owner = owner;</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (Commit commit : commits) {</span>
+<span class="nc" id="L155">            commit.wrapUp(owner);</span>
+        }
+<span class="nc" id="L157">        merge_base_commit.wrapUp(owner);</span>
+<span class="nc" id="L158">        base_commit.wrapUp(owner);</span>
+<span class="nc" id="L159">        return this;</span>
+    }
+
+    /**
+     * Compare commits had a child commit element with additional details we want to capture. This extenstion of
+     * GHCommit provides that.
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+<span class="nc" id="L168">    public static class Commit extends GHCommit {</span>
+
+        private InnerCommit commit;
+
+        /**
+         * Gets commit.
+         *
+         * @return the commit
+         */
+        public InnerCommit getCommit() {
+<span class="nc" id="L178">            return commit;</span>
+        }
+    }
+
+    /**
+     * The type InnerCommit.
+     */
+<span class="nc" id="L185">    public static class InnerCommit {</span>
+        private String url, sha, message;
+        private User author, committer;
+        private Tree tree;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L196">            return url;</span>
+        }
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="nc" id="L205">            return sha;</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return the message
+         */
+        public String getMessage() {
+<span class="nc" id="L214">            return message;</span>
+        }
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        @WithBridgeMethods(value = User.class, castRequired = true)
+        public GitUser getAuthor() {
+<span class="nc" id="L224">            return author;</span>
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        @WithBridgeMethods(value = User.class, castRequired = true)
+        public GitUser getCommitter() {
+<span class="nc" id="L234">            return committer;</span>
+        }
+
+        /**
+         * Gets tree.
+         *
+         * @return the tree
+         */
+        public Tree getTree() {
+<span class="nc" id="L243">            return tree;</span>
+        }
+    }
+
+    /**
+     * The type Tree.
+     */
+<span class="nc" id="L250">    public static class Tree {</span>
+        private String url, sha;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L259">            return url;</span>
+        }
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="nc" id="L268">            return sha;</span>
+        }
+    }
+
+    /**
+     * The type User.
+     *
+     * @deprecated use {@link GitUser} instead.
+     */
+<span class="nc" id="L277">    public static class User extends GitUser {</span>
+    }
+
+    /**
+     * The enum Status.
+     */
+<span class="fc" id="L283">    public static enum Status {</span>
+<span class="fc" id="L284">        behind, ahead, identical, diverged</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

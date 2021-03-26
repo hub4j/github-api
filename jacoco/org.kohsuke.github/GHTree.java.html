@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTree.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTree.java</span></div><h1>GHTree.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Provides information for Git Trees https://developer.github.com/v3/git/trees/
+ *
+ * @author Daniel Teixeira - https://github.com/ddtxra
+ * @see GHCommit#getTree() GHCommit#getTree()
+ * @see GHRepository#getTree(String) GHRepository#getTree(String)
+ * @see GHTreeEntry#asTree() GHTreeEntry#asTree()
+ */
+<span class="fc" id="L16">public class GHTree {</span>
+    /* package almost final */GHRepository repo;
+
+    private boolean truncated;
+    private String sha, url;
+    private GHTreeEntry[] tree;
+
+    /**
+     * The SHA for this trees
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L29">        return sha;</span>
+    }
+
+    /**
+     * Return an array of entries of the trees
+     *
+     * @return the tree
+     */
+    public List&lt;GHTreeEntry&gt; getTree() {
+<span class="fc" id="L38">        return Collections.unmodifiableList(Arrays.asList(tree));</span>
+    }
+
+    /**
+     * Finds a tree entry by its name.
+     * &lt;p&gt;
+     * IOW, find a directory entry by a file name.
+     *
+     * @param path
+     *            the path
+     * @return the entry
+     */
+    public GHTreeEntry getEntry(String path) {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        for (GHTreeEntry e : tree) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (e.getPath().equals(path))</span>
+<span class="fc" id="L53">                return e;</span>
+        }
+<span class="nc" id="L55">        return null;</span>
+    }
+
+    /**
+     * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     *
+     * @return true true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     */
+    public boolean isTruncated() {
+<span class="nc" id="L64">        return truncated;</span>
+    }
+
+    /**
+     * The API URL of this tag, such as &quot;url&quot;:
+     * &quot;https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7&quot;,
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="nc" id="L74">        return GitHubClient.parseURL(url);</span>
+    }
+
+    GHTree wrap(GHRepository repo) {
+<span class="fc" id="L78">        this.repo = repo;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (GHTreeEntry e : tree) {</span>
+<span class="fc" id="L80">            e.tree = this;</span>
+        }
+<span class="fc" id="L82">        return this;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

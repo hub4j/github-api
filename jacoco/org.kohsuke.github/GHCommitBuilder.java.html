@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCommitBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCommitBuilder.java</span></div><h1>GHCommitBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+/**
+ * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
+ */
+public class GHCommitBuilder {
+    private final GHRepository repo;
+    private final Requester req;
+
+<span class="fc" id="L18">    private final List&lt;String&gt; parents = new ArrayList&lt;String&gt;();</span>
+
+    private static final class UserInfo {
+        private final String name;
+        private final String email;
+        private final String date;
+
+<span class="fc" id="L25">        private UserInfo(String name, String email, Date date) {</span>
+<span class="fc" id="L26">            this.name = name;</span>
+<span class="fc" id="L27">            this.email = email;</span>
+<span class="fc" id="L28">            TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
+<span class="fc" id="L29">            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;);</span>
+<span class="fc" id="L30">            df.setTimeZone(tz);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">            this.date = df.format((date != null) ? date : new Date());</span>
+<span class="fc" id="L32">        }</span>
+    }
+
+<span class="fc" id="L35">    GHCommitBuilder(GHRepository repo) {</span>
+<span class="fc" id="L36">        this.repo = repo;</span>
+<span class="fc" id="L37">        req = repo.root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Message gh commit builder.
+     *
+     * @param message
+     *            the commit message
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder message(String message) {
+<span class="fc" id="L48">        req.with(&quot;message&quot;, message);</span>
+<span class="fc" id="L49">        return this;</span>
+    }
+
+    /**
+     * Tree gh commit builder.
+     *
+     * @param tree
+     *            the SHA of the tree object this commit points to
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder tree(String tree) {
+<span class="fc" id="L60">        req.with(&quot;tree&quot;, tree);</span>
+<span class="fc" id="L61">        return this;</span>
+    }
+
+    /**
+     * Parent gh commit builder.
+     *
+     * @param parent
+     *            the SHA of a parent commit.
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder parent(String parent) {
+<span class="fc" id="L72">        parents.add(parent);</span>
+<span class="fc" id="L73">        return this;</span>
+    }
+
+    /**
+     * Configures the author of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder author(String name, String email, Date date) {
+<span class="fc" id="L88">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L89">        return this;</span>
+    }
+
+    /**
+     * Configures the PGP signature of this commit.
+     *
+     * @param signature
+     *            the signature calculated from the commit
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder withSignature(String signature) {
+<span class="fc" id="L101">        req.with(&quot;signature&quot;, signature);</span>
+<span class="fc" id="L102">        return this;</span>
+    }
+
+    /**
+     * Configures the committer of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder committer(String name, String email, Date date) {
+<span class="fc" id="L117">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L118">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L122">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
+    }
+
+    /**
+     * Creates a blob based on the parameters specified thus far.
+     *
+     * @return the gh commit
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommit create() throws IOException {
+<span class="fc" id="L133">        req.with(&quot;parents&quot;, parents);</span>
+<span class="fc" id="L134">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

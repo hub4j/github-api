@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthorizationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.authorization</a> &gt; <span class="el_source">AuthorizationProvider.java</span></div><h1>AuthorizationProvider.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.authorization;
+
+import java.io.IOException;
+
+/**
+ * Provides a functional interface that returns a valid encodedAuthorization. This strategy allows for a provider that
+ * dynamically changes the credentials. Each request will request the credentials from the provider.
+ */
+public interface AuthorizationProvider {
+    /**
+     * An static instance for an ANONYMOUS authorization provider
+     */
+<span class="fc" id="L13">    AuthorizationProvider ANONYMOUS = new AnonymousAuthorizationProvider();</span>
+
+    /**
+     * Returns the credentials to be used with a given request. As an example, a authorization provider for a bearer
+     * token will return something like:
+     *
+     * &lt;pre&gt;
+     * {@code
+     *  &amp;#64;Override
+     *  public String getEncodedAuthorization() {
+     *  return &quot;Bearer myBearerToken&quot;;
+     *  }
+     * }
+     * &lt;/pre&gt;
+     *
+     * @return encoded authorization string, can be null
+     * @throws IOException
+     *             on any error that prevents the provider from getting a valid authorization
+     */
+    String getEncodedAuthorization() throws IOException;
+
+    /**
+     * A {@link AuthorizationProvider} that ensures that no credentials are returned
+     */
+<span class="fc" id="L37">    class AnonymousAuthorizationProvider implements AuthorizationProvider {</span>
+        @Override
+        public String getEncodedAuthorization() throws IOException {
+<span class="fc" id="L40">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

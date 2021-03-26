@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueSearchBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueSearchBuilder.java</span></div><h1>GHIssueSearchBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Search issues.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHub#searchIssues() GitHub#searchIssues()
+ */
+public class GHIssueSearchBuilder extends GHSearchBuilder&lt;GHIssue&gt; {
+    GHIssueSearchBuilder(GitHub root) {
+<span class="fc" id="L11">        super(root, IssueSearchResult.class);</span>
+<span class="fc" id="L12">    }</span>
+
+    /**
+     * Search terms.
+     */
+    public GHIssueSearchBuilder q(String term) {
+<span class="fc" id="L18">        super.q(term);</span>
+<span class="fc" id="L19">        return this;</span>
+    }
+
+    /**
+     * Mentions gh issue search builder.
+     *
+     * @param u
+     *            the u
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder mentions(GHUser u) {
+<span class="nc" id="L30">        return mentions(u.getLogin());</span>
+    }
+
+    /**
+     * Mentions gh issue search builder.
+     *
+     * @param login
+     *            the login
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder mentions(String login) {
+<span class="fc" id="L41">        return q(&quot;mentions:&quot; + login);</span>
+    }
+
+    /**
+     * Is open gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isOpen() {
+<span class="fc" id="L50">        return q(&quot;is:open&quot;);</span>
+    }
+
+    /**
+     * Is closed gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isClosed() {
+<span class="nc" id="L59">        return q(&quot;is:closed&quot;);</span>
+    }
+
+    /**
+     * Is merged gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isMerged() {
+<span class="nc" id="L68">        return q(&quot;is:merged&quot;);</span>
+    }
+
+    /**
+     * Order gh issue search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder order(GHDirection v) {
+<span class="nc" id="L79">        req.with(&quot;order&quot;, v);</span>
+<span class="nc" id="L80">        return this;</span>
+    }
+
+    /**
+     * Sort gh issue search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder sort(Sort sort) {
+<span class="fc" id="L91">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L92">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L98">    public enum Sort {</span>
+<span class="fc" id="L99">        COMMENTS, CREATED, UPDATED</span>
+    }
+
+    private static class IssueSearchResult extends SearchResult&lt;GHIssue&gt; {
+        private GHIssue[] items;
+
+        @Override
+        GHIssue[] getItems(GitHub root) {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            for (GHIssue i : items)</span>
+<span class="fc" id="L108">                i.wrap(root);</span>
+<span class="fc" id="L109">            return items;</span>
+        }
+    }
+
+    @Override
+    protected String getApiUrl() {
+<span class="fc" id="L115">        return &quot;/search/issues&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

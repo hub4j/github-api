@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckSuite.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckSuite.java</span></div><h1>GHCheckSuite.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Represents a check suite.
+ *
+ * @see &lt;a href=&quot;https://developer.github.com/v3/checks/suites/&quot;&gt;documentation&lt;/a&gt;
+ */
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="fc" id="L20">public class GHCheckSuite extends GHObject {</span>
+
+    @JsonProperty(&quot;repository&quot;)
+    GHRepository owner;
+
+    private String nodeId;
+    private String headBranch;
+    private String headSha;
+    private String status;
+    private String conclusion;
+    private String before;
+    private String after;
+    private int latestCheckRunsCount;
+    private URL checkRunsUrl;
+    private HeadCommit headCommit;
+    private GHApp app;
+    private GHPullRequest[] pullRequests;
+
+    GHCheckSuite wrap(GHRepository owner) {
+<span class="fc" id="L39">        this.owner = owner;</span>
+<span class="fc" id="L40">        this.wrap(owner.root);</span>
+<span class="fc" id="L41">        return this;</span>
+    }
+
+    GHCheckSuite wrap(GitHub root) {
+<span class="fc" id="L45">        this.root = root;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (owner != null) {</span>
+<span class="fc" id="L47">            owner.wrap(root);</span>
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L50">                    singlePull.wrap(owner);</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (app != null) {</span>
+<span class="fc" id="L55">            app.wrapUp(root);</span>
+        }
+<span class="fc" id="L57">        return this;</span>
+    }
+
+    GHPullRequest[] wrap() {
+<span class="nc" id="L61">        return pullRequests;</span>
+    }
+
+    /**
+     * Gets the global node id to access most objects in GitHub.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
+     * @return global node id
+     */
+    public String getNodeId() {
+<span class="fc" id="L71">        return nodeId;</span>
+    }
+
+    /**
+     * The head branch name the changes are on.
+     *
+     * @return head branch name
+     */
+    public String getHeadBranch() {
+<span class="fc" id="L80">        return headBranch;</span>
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+<span class="fc" id="L89">        return headSha;</span>
+    }
+
+    /**
+     * Gets status of the check suite. It can be one of request, in_progress, or completed.
+     *
+     * @return status of the check suite
+     */
+    public String getStatus() {
+<span class="fc" id="L98">        return status;</span>
+    }
+
+    /**
+     * Gets conclusion of a completed check suite. It can be one of success, failure, neutral, cancelled, time_out,
+     * action_required, or stale. The check suite will report the highest priority check run conclusion in the check
+     * suite's conclusion.
+     *
+     * @return conclusion of the check suite
+     */
+    public String getConclusion() {
+<span class="fc" id="L109">        return conclusion;</span>
+    }
+
+    /**
+     * The SHA of the most recent commit on ref before the push.
+     *
+     * @return sha of a commit
+     */
+    public String getBefore() {
+<span class="fc" id="L118">        return before;</span>
+    }
+
+    /**
+     * The SHA of the most recent commit on ref after the push.
+     *
+     * @return sha of a commit
+     */
+    public String getAfter() {
+<span class="fc" id="L127">        return after;</span>
+    }
+
+    /**
+     * The quantity of check runs that had run as part of the latest push.
+     *
+     * @return sha of the most recent commit
+     */
+    public int getLatestCheckRunsCount() {
+<span class="fc" id="L136">        return latestCheckRunsCount;</span>
+    }
+
+    /**
+     * The url used to list all the check runs belonged to this suite.
+     *
+     * @return url containing all check runs
+     */
+    public URL getCheckRunsUrl() {
+<span class="fc" id="L145">        return checkRunsUrl;</span>
+    }
+
+    /**
+     * The commit of current head.
+     *
+     * @return head commit
+     */
+    public HeadCommit getHeadCommit() {
+<span class="fc" id="L154">        return headCommit;</span>
+    }
+
+    /**
+     * Gets the GitHub app this check suite belongs to, included in response.
+     *
+     * @return GitHub App
+     */
+    public GHApp getApp() {
+<span class="fc" id="L163">        return app;</span>
+    }
+
+    /**
+     * Gets the pull requests participated in this check suite.
+     *
+     * Note this field is only populated for events. When getting a {@link GHCheckSuite} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this check suite. Only populated for events.
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
+<span class="pc bpc" id="L177" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+                // Only refresh if we haven't do so before
+<span class="fc" id="L180">                singlePull.refresh(singlePull.getTitle());</span>
+            }
+<span class="fc" id="L182">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+        }
+<span class="nc" id="L184">        return Collections.emptyList();</span>
+    }
+
+    /**
+     * Check suite doesn't have a HTML URL.
+     *
+     * @return null
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L194">        return null;</span>
+    }
+
+<span class="fc" id="L197">    public static class HeadCommit {</span>
+        private String id;
+        private String treeId;
+        private String message;
+        private String timestamp;
+        private GitUser author;
+        private GitUser committer;
+
+        /**
+         * Gets id of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes
+         *
+         * @return id of the commit
+         */
+        public String getId() {
+<span class="fc" id="L211">            return id;</span>
+        }
+
+        /**
+         * Gets id of the tree.
+         *
+         * @return id of the tree
+         */
+        public String getTreeId() {
+<span class="fc" id="L220">            return treeId;</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return commit message.
+         */
+        public String getMessage() {
+<span class="fc" id="L229">            return message;</span>
+        }
+
+        /**
+         * Gets timestamp of the commit.
+         *
+         * @return timestamp of the commit
+         */
+        public Date getTimestamp() {
+<span class="fc" id="L238">            return GitHubClient.parseDate(timestamp);</span>
+        }
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        public GitUser getAuthor() {
+<span class="fc" id="L247">            return author;</span>
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        public GitUser getCommitter() {
+<span class="fc" id="L256">            return committer;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

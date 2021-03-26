@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRequestedAction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRequestedAction.java</span></div><h1>GHRequestedAction.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.net.URL;
+
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+<span class="nc" id="L9">public class GHRequestedAction extends GHObject {</span>
+    private GHRepository owner;
+    private String identifier;
+    private String label;
+    private String description;
+
+    GHRequestedAction wrap(GHRepository owner) {
+<span class="nc" id="L16">        this.owner = owner;</span>
+<span class="nc" id="L17">        wrap(owner.root);</span>
+<span class="nc" id="L18">        return this;</span>
+    }
+    GHRequestedAction wrap(GitHub root) {
+<span class="nc" id="L21">        this.root = root;</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (owner != null) {</span>
+<span class="nc" id="L23">            owner.wrap(root);</span>
+        }
+<span class="nc" id="L25">        return this;</span>
+    }
+
+    String getIdentifier() {
+<span class="nc" id="L29">        return identifier;</span>
+    }
+
+    String getLabel() {
+<span class="nc" id="L33">        return label;</span>
+    }
+
+    String getDescription() {
+<span class="nc" id="L37">        return description;</span>
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L45">        return null;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

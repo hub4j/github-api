@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflow.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflow.java</span></div><h1>GHWorkflow.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * A workflow.
+ *
+ * @author Guillaume Smet
+ * @see GHRepository#getWorkflow(long)
+ */
+<span class="fc" id="L18">public class GHWorkflow extends GHObject {</span>
+
+    // Not provided by the API.
+    @JsonIgnore
+    private GHRepository owner;
+
+    private String name;
+    private String path;
+    private String state;
+
+    private String htmlUrl;
+    private String badgeUrl;
+
+    /**
+     * The name of the workflow.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L37">        return name;</span>
+    }
+
+    /**
+     * The path of the workflow e.g. .github/workflows/blank.yaml
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L46">        return path;</span>
+    }
+
+    /**
+     * The state of the workflow.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="fc" id="L55">        return state;</span>
+    }
+
+    @Override
+    public URL getHtmlUrl() throws IOException {
+<span class="fc" id="L60">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
+     *
+     * @return the badge url
+     */
+    public URL getBadgeUrl() {
+<span class="fc" id="L69">        return GitHubClient.parseURL(badgeUrl);</span>
+    }
+
+    /**
+     * Disable the workflow.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void disable() throws IOException {
+<span class="fc" id="L79">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Enable the workflow.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void enable() throws IOException {
+<span class="fc" id="L89">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Create a workflow dispatch event which triggers a manual workflow run.
+     *
+     * @param ref
+     *            the git reference for the workflow. The reference can be a branch or tag name.
+     * @throws IOException
+     *             the io exception
+     */
+    public void dispatch(String ref) throws IOException {
+<span class="fc" id="L101">        dispatch(ref, Collections.emptyMap());</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Create a workflow dispatch event which triggers a manual workflow run.
+     *
+     * @param ref
+     *            the git reference for the workflow. The reference can be a branch or tag name.
+     * @param inputs
+     *            input keys and values configured in the workflow file. The maximum number of properties is 10. Any
+     *            default properties configured in the workflow file will be used when inputs are omitted.
+     * @throws IOException
+     *             the io exception
+     */
+    public void dispatch(String ref, Map&lt;String, Object&gt; inputs) throws IOException {
+<span class="fc" id="L116">        Requester requester = root.createRequest()</span>
+<span class="fc" id="L117">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L118">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
+<span class="fc" id="L119">                .with(&quot;ref&quot;, ref);</span>
+
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
+<span class="fc" id="L122">            requester.with(&quot;inputs&quot;, inputs);</span>
+        }
+
+<span class="fc" id="L125">        requester.fetchHttpStatusCode();</span>
+<span class="fc" id="L126">    }</span>
+
+    private String getApiRoute() {
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (owner == null) {</span>
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+<span class="nc" id="L131">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L132">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+
+        }
+<span class="fc" id="L135">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/workflows/&quot; + getId();</span>
+    }
+
+    GHWorkflow wrapUp(GHRepository owner) {
+<span class="fc" id="L139">        this.owner = owner;</span>
+<span class="fc" id="L140">        return wrapUp(owner.root);</span>
+    }
+
+    GHWorkflow wrapUp(GitHub root) {
+<span class="fc" id="L144">        this.root = root;</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (owner != null)</span>
+<span class="fc" id="L146">            owner.wrap(root);</span>
+<span class="fc" id="L147">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

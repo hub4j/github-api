@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHEvent.java</span></div><h1>GHEvent.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.Locale;
+
+/**
+ * Hook event type.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHEventInfo
+ * @see &lt;a href=&quot;https://developer.github.com/v3/activity/events/types/&quot;&gt;Event type reference&lt;/a&gt;
+ */
+<span class="fc" id="L12">public enum GHEvent {</span>
+<span class="fc" id="L13">    CHECK_RUN,</span>
+<span class="fc" id="L14">    CHECK_SUITE,</span>
+<span class="fc" id="L15">    CODE_SCANNING_ALERT,</span>
+<span class="fc" id="L16">    COMMIT_COMMENT,</span>
+<span class="fc" id="L17">    CONTENT_REFERENCE,</span>
+<span class="fc" id="L18">    CREATE,</span>
+<span class="fc" id="L19">    DELETE,</span>
+<span class="fc" id="L20">    DEPLOY_KEY,</span>
+<span class="fc" id="L21">    DEPLOYMENT,</span>
+<span class="fc" id="L22">    DEPLOYMENT_STATUS,</span>
+<span class="fc" id="L23">    DOWNLOAD,</span>
+<span class="fc" id="L24">    FOLLOW,</span>
+<span class="fc" id="L25">    FORK,</span>
+<span class="fc" id="L26">    FORK_APPLY,</span>
+<span class="fc" id="L27">    GITHUB_APP_AUTHORIZATION,</span>
+<span class="fc" id="L28">    GIST,</span>
+<span class="fc" id="L29">    GOLLUM,</span>
+<span class="fc" id="L30">    INSTALLATION,</span>
+<span class="fc" id="L31">    INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L32">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L33">    ISSUE_COMMENT,</span>
+<span class="fc" id="L34">    ISSUES,</span>
+<span class="fc" id="L35">    LABEL,</span>
+<span class="fc" id="L36">    MARKETPLACE_PURCHASE,</span>
+<span class="fc" id="L37">    MEMBER,</span>
+<span class="fc" id="L38">    MEMBERSHIP,</span>
+<span class="fc" id="L39">    META,</span>
+<span class="fc" id="L40">    MILESTONE,</span>
+<span class="fc" id="L41">    ORGANIZATION,</span>
+<span class="fc" id="L42">    ORG_BLOCK,</span>
+<span class="fc" id="L43">    PACKAGE,</span>
+<span class="fc" id="L44">    PAGE_BUILD,</span>
+<span class="fc" id="L45">    PROJECT_CARD,</span>
+<span class="fc" id="L46">    PROJECT_COLUMN,</span>
+<span class="fc" id="L47">    PROJECT,</span>
+<span class="fc" id="L48">    PING,</span>
+<span class="fc" id="L49">    PUBLIC,</span>
+<span class="fc" id="L50">    PULL_REQUEST,</span>
+<span class="fc" id="L51">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L52">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L53">    PUSH,</span>
+<span class="fc" id="L54">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L55">    RELEASE,</span>
+<span class="fc" id="L56">    REPOSITORY_DISPATCH, // only valid for org hooks</span>
+<span class="fc" id="L57">    REPOSITORY,</span>
+<span class="fc" id="L58">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L59">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L60">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L61">    STAR,</span>
+<span class="fc" id="L62">    STATUS,</span>
+<span class="fc" id="L63">    TEAM,</span>
+<span class="fc" id="L64">    TEAM_ADD,</span>
+<span class="fc" id="L65">    WATCH,</span>
+<span class="fc" id="L66">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L67">    WORKFLOW_RUN,</span>
+
+    /**
+     * Special event type that means &quot;every possible event&quot;
+     */
+<span class="fc" id="L72">    ALL;</span>
+
+    /**
+     * Returns GitHub's internal representation of this event.
+     */
+    String symbol() {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L79">            return &quot;*&quot;;</span>
+<span class="fc" id="L80">        return name().toLowerCase(Locale.ENGLISH);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

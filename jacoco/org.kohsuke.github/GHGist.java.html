@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHGist.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHGist.java</span></div><h1>GHGist.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Map.Entry;
+
+/**
+ * Gist
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GHUser#listGists() GHUser#listGists()
+ * @see GitHub#getGist(String) GitHub#getGist(String)
+ * @see GitHub#createGist() GitHub#createGist()
+ * @see &lt;a href=&quot;https://developer.github.com/v3/gists/&quot;&gt;documentation&lt;/a&gt;
+ */
+public class GHGist extends GHObject {
+
+    final GHUser owner;
+
+    private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
+
+    @JsonProperty(&quot;public&quot;)
+    private boolean _public;
+
+    private String description;
+
+    private int comments;
+
+    private String comments_url;
+
+    private final Map&lt;String, GHGistFile&gt; files;
+
+    @JsonCreator
+    private GHGist(@JacksonInject GitHub root,
+            @JsonProperty(&quot;owner&quot;) GHUser owner,
+<span class="fc" id="L43">            @JsonProperty(&quot;files&quot;) Map&lt;String, GHGistFile&gt; files) {</span>
+<span class="fc" id="L44">        this.root = root;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Entry&lt;String, GHGistFile&gt; e : files.entrySet()) {</span>
+<span class="fc" id="L46">            e.getValue().fileName = e.getKey();</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        this.files = Collections.unmodifiableMap(files);</span>
+<span class="fc" id="L49">        this.owner = root.getUser(owner);</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as &quot;aa5a315d61ae9438b18d&quot;. If the id
+     * is numeric, this method will get it. If id is not numeric, this will throw a runtime
+     * {@link NumberFormatException}.
+     *
+     * @return id of the Gist.
+     * @deprecated Use {@link #getGistId()} instead.
+     */
+    @Deprecated
+    @Override
+    public long getId() {
+<span class="fc" id="L63">        return Long.parseLong(getGistId());</span>
+    }
+
+    /**
+     * Gets the id for this Gist. Unlike most other GitHub objects, the id for Gists can be non-numeric, such as
+     * &quot;aa5a315d61ae9438b18d&quot;. This should be used instead of {@link #getId()}.
+     *
+     * @return id of this Gist
+     */
+    public String getGistId() {
+<span class="fc" id="L73">        return this.id;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return User that owns this Gist.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getOwner() throws IOException {
+<span class="fc" id="L84">        return owner;</span>
+    }
+
+    /**
+     * Gets forks url.
+     *
+     * @return the forks url
+     */
+    public String getForksUrl() {
+<span class="nc" id="L93">        return forks_url;</span>
+    }
+
+    /**
+     * Gets commits url.
+     *
+     * @return the commits url
+     */
+    public String getCommitsUrl() {
+<span class="fc" id="L102">        return commits_url;</span>
+    }
+
+    /**
+     * Gets git pull url.
+     *
+     * @return URL like https://gist.github.com/gists/12345.git
+     */
+    public String getGitPullUrl() {
+<span class="fc" id="L111">        return git_pull_url;</span>
+    }
+
+    /**
+     * Gets git push url.
+     *
+     * @return the git push url
+     */
+    public String getGitPushUrl() {
+<span class="fc" id="L120">        return git_push_url;</span>
+    }
+
+    /**
+     * Get the html url.
+     *
+     * @return the github html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L129">        return GitHubClient.parseURL(html_url);</span>
+    }
+
+    /**
+     * Is public boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPublic() {
+<span class="fc" id="L138">        return _public;</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L147">        return description;</span>
+    }
+
+    /**
+     * Gets comment count.
+     *
+     * @return the comment count
+     */
+    public int getCommentCount() {
+<span class="nc" id="L156">        return comments;</span>
+    }
+
+    /**
+     * Gets comments url.
+     *
+     * @return API URL of listing comments.
+     */
+    public String getCommentsUrl() {
+<span class="fc" id="L165">        return comments_url;</span>
+    }
+
+    /**
+     * Gets file.
+     *
+     * @param name
+     *            the name
+     * @return the file
+     */
+    public GHGistFile getFile(String name) {
+<span class="fc" id="L176">        return files.get(name);</span>
+    }
+
+    /**
+     * Gets files.
+     *
+     * @return the files
+     */
+    public Map&lt;String, GHGistFile&gt; getFiles() {
+<span class="fc" id="L185">        return files;</span>
+    }
+
+    String getApiTailUrl(String tail) {
+<span class="fc" id="L189">        String result = &quot;/gists/&quot; + id;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (!StringUtils.isBlank(tail)) {</span>
+<span class="fc" id="L191">            result += StringUtils.prependIfMissing(tail, &quot;/&quot;);</span>
+        }
+<span class="fc" id="L193">        return result;</span>
+    }
+
+    /**
+     * Star.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void star() throws IOException {
+<span class="fc" id="L203">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
+<span class="fc" id="L204">    }</span>
+
+    /**
+     * Unstar.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unstar() throws IOException {
+<span class="fc" id="L213">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTailUrl(&quot;star&quot;)).send();</span>
+<span class="fc" id="L214">    }</span>
+
+    /**
+     * Is starred boolean.
+     *
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isStarred() throws IOException {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;star&quot;)).fetchHttpStatusCode() / 100 == 2;</span>
+    }
+
+    /**
+     * Forks this gist into your own.
+     *
+     * @return the gh gist
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGist fork() throws IOException {
+<span class="fc" id="L235">        return root.createRequest().method(&quot;POST&quot;).withUrlPath(getApiTailUrl(&quot;forks&quot;)).fetch(GHGist.class);</span>
+    }
+
+    /**
+     * List forks paged iterable.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHGist&gt; listForks() {
+<span class="fc" id="L244">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;forks&quot;)).toIterable(GHGist[].class, null);</span>
+    }
+
+    /**
+     * Deletes this gist.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L254">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/gists/&quot; + id).send();</span>
+<span class="fc" id="L255">    }</span>
+
+    /**
+     * Updates this gist via a builder.
+     *
+     * @return the gh gist updater
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGistUpdater update() throws IOException {
+<span class="fc" id="L265">        return new GHGistUpdater(this);</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L271">            return true;</span>
+<span class="pc bpc" id="L272" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
+<span class="nc" id="L273">            return false;</span>
+<span class="fc" id="L274">        GHGist ghGist = (GHGist) o;</span>
+<span class="fc" id="L275">        return id.equals(ghGist.id);</span>
+
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L281">        return id.hashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

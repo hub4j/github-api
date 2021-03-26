@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadOnlyObjects.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.example.dataobject</a> &gt; <span class="el_source">ReadOnlyObjects.java</span></div><h1>ReadOnlyObjects.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.example.dataobject;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+
+/**
+ * {@link org.kohsuke.github.GHMeta} wraps the list of GitHub's IP addresses.
+ * &lt;p&gt;
+ * This class is used to show examples of different ways to create simple read-only data objects. For data objects that
+ * can be modified, perform actions, or get other objects we'll need other examples.
+ * &lt;p&gt;
+ * IMPORTANT: There is no one right way to do this, but there are better and worse.
+ * &lt;ul&gt;
+ * &lt;li&gt;Better: {@link GHMetaGettersUnmodifiable} is a good balance of clarity and brevity&lt;/li&gt;
+ * &lt;li&gt;Worse: {@link GHMetaPublic} exposes setters that are not needed, making it unclear that fields are actually
+ * read-only&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Liam Newman
+ * @see org.kohsuke.github.GHMeta
+ * @see &lt;a href=&quot;https://developer.github.com/v3/meta/#meta&quot;&gt;Get Meta&lt;/a&gt;
+ */
+<span class="nc" id="L31">public final class ReadOnlyObjects {</span>
+
+    /**
+     * All GHMeta data objects should expose these values.
+     *
+     * @author Liam Newman
+     */
+    public interface GHMetaExample {
+        /**
+         * Is verifiable password authentication boolean.
+         *
+         * @return the boolean
+         */
+        boolean isVerifiablePasswordAuthentication();
+
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         */
+        List&lt;String&gt; getHooks();
+
+        /**
+         * Gets git.
+         *
+         * @return the git
+         */
+        List&lt;String&gt; getGit();
+
+        /**
+         * Gets web.
+         *
+         * @return the web
+         */
+        List&lt;String&gt; getWeb();
+
+        /**
+         * Gets api.
+         *
+         * @return the api
+         */
+        List&lt;String&gt; getApi();
+
+        /**
+         * Gets pages.
+         *
+         * @return the pages
+         */
+        List&lt;String&gt; getPages();
+
+        /**
+         * Gets importer.
+         *
+         * @return the importer
+         */
+        List&lt;String&gt; getImporter();
+    }
+
+    /**
+     * This version uses public getters and setters and leaves it up to Jackson how it wants to fill them.
+     * &lt;p&gt;
+     * Pro:
+     * &lt;ul&gt;
+     * &lt;li&gt;Easy to create&lt;/li&gt;
+     * &lt;li&gt;Not much code&lt;/li&gt;
+     * &lt;li&gt;Mininal annotations&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Con:
+     * &lt;ul&gt;
+     * &lt;li&gt;Exposes public setters for fields that should not be changed&lt;/li&gt;
+     * &lt;li&gt;Lists modifiable when they should not be changed&lt;/li&gt;
+     * &lt;li&gt;Jackson generally doesn't call the setters, it just sets the fields directly&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @author Paulo Miguel Almeida
+     * @see org.kohsuke.github.GHMeta
+     */
+<span class="fc" id="L108">    public static class GHMetaPublic implements GHMetaExample {</span>
+
+        @JsonProperty(&quot;verifiable_password_authentication&quot;)
+        private boolean verifiablePasswordAuthentication;
+        private List&lt;String&gt; hooks;
+        private List&lt;String&gt; git;
+        private List&lt;String&gt; web;
+        private List&lt;String&gt; api;
+        private List&lt;String&gt; pages;
+        private List&lt;String&gt; importer;
+
+        public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L120">            return verifiablePasswordAuthentication;</span>
+        }
+
+        /**
+         * Sets verifiable password authentication.
+         *
+         * @param verifiablePasswordAuthentication
+         *            the verifiable password authentication
+         */
+        public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+<span class="nc" id="L130">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="nc" id="L131">        }</span>
+
+        public List&lt;String&gt; getHooks() {
+<span class="fc" id="L134">            return hooks;</span>
+        }
+
+        /**
+         * Sets hooks.
+         *
+         * @param hooks
+         *            the hooks
+         */
+        public void setHooks(List&lt;String&gt; hooks) {
+<span class="nc" id="L144">            this.hooks = hooks;</span>
+<span class="nc" id="L145">        }</span>
+
+        public List&lt;String&gt; getGit() {
+<span class="fc" id="L148">            return git;</span>
+        }
+
+        /**
+         * Sets git.
+         *
+         * @param git
+         *            the git
+         */
+        public void setGit(List&lt;String&gt; git) {
+<span class="nc" id="L158">            this.git = git;</span>
+<span class="nc" id="L159">        }</span>
+
+        public List&lt;String&gt; getWeb() {
+<span class="fc" id="L162">            return web;</span>
+        }
+
+        /**
+         * Sets web.
+         *
+         * @param web
+         *            the web
+         */
+        public void setWeb(List&lt;String&gt; web) {
+<span class="nc" id="L172">            this.web = web;</span>
+<span class="nc" id="L173">        }</span>
+
+        public List&lt;String&gt; getApi() {
+<span class="fc" id="L176">            return api;</span>
+        }
+
+        /**
+         * Sets api.
+         *
+         * @param api
+         *            the api
+         */
+        public void setApi(List&lt;String&gt; api) {
+<span class="nc" id="L186">            this.api = api;</span>
+<span class="nc" id="L187">        }</span>
+
+        public List&lt;String&gt; getPages() {
+<span class="fc" id="L190">            return pages;</span>
+        }
+
+        /**
+         * Sets pages.
+         *
+         * @param pages
+         *            the pages
+         */
+        public void setPages(List&lt;String&gt; pages) {
+<span class="nc" id="L200">            this.pages = pages;</span>
+<span class="nc" id="L201">        }</span>
+
+        public List&lt;String&gt; getImporter() {
+<span class="fc" id="L204">            return importer;</span>
+        }
+
+        /**
+         * Sets importer.
+         *
+         * @param importer
+         *            the importer
+         */
+        public void setImporter(List&lt;String&gt; importer) {
+<span class="nc" id="L214">            this.importer = importer;</span>
+<span class="nc" id="L215">        }</span>
+
+    }
+
+    /**
+     * This version uses public getters and shows that package or private setters both can be used by jackson. You can
+     * check this by running in debug and setting break points in the setters.
+     *
+     * &lt;p&gt;
+     * Pro:
+     * &lt;ul&gt;
+     * &lt;li&gt;Easy to create&lt;/li&gt;
+     * &lt;li&gt;Not much code&lt;/li&gt;
+     * &lt;li&gt;Some annotations&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Con:
+     * &lt;ul&gt;
+     * &lt;li&gt;Exposes some package setters for fields that should not be changed, better than public&lt;/li&gt;
+     * &lt;li&gt;Lists modifiable when they should not be changed&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+<span class="fc" id="L239">    public static class GHMetaPackage implements GHMetaExample {</span>
+
+        private boolean verifiablePasswordAuthentication;
+        private List&lt;String&gt; hooks;
+        private List&lt;String&gt; git;
+        private List&lt;String&gt; web;
+        private List&lt;String&gt; api;
+        private List&lt;String&gt; pages;
+
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         */
+        @JsonProperty
+        private List&lt;String&gt; importer;
+
+        @JsonProperty(&quot;verifiable_password_authentication&quot;)
+        public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L256">            return verifiablePasswordAuthentication;</span>
+        }
+
+        private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+<span class="fc" id="L260">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L261">        }</span>
+
+        @JsonProperty
+        public List&lt;String&gt; getHooks() {
+<span class="fc" id="L265">            return hooks;</span>
+        }
+
+        /**
+         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
+         * got on the getter or setter and still work.
+         *
+         * @param hooks
+         *            list of hooks
+         */
+        private void setHooks(List&lt;String&gt; hooks) {
+<span class="fc" id="L276">            this.hooks = hooks;</span>
+<span class="fc" id="L277">        }</span>
+
+        public List&lt;String&gt; getGit() {
+<span class="fc" id="L280">            return git;</span>
+        }
+
+        /**
+         * Since we mostly use Jackson for deserialization, {@link JsonSetter} is also okay, but {@link JsonProperty} is
+         * preferred.
+         *
+         * @param git
+         *            list of git addresses
+         */
+        @JsonSetter
+        void setGit(List&lt;String&gt; git) {
+<span class="fc" id="L292">            this.git = git;</span>
+<span class="fc" id="L293">        }</span>
+
+        public List&lt;String&gt; getWeb() {
+<span class="fc" id="L296">            return web;</span>
+        }
+
+        /**
+         * The {@link JsonProperty} can got on the getter or setter and still work.
+         *
+         * @param web
+         *            list of web addresses
+         */
+        void setWeb(List&lt;String&gt; web) {
+<span class="nc" id="L306">            this.web = web;</span>
+<span class="nc" id="L307">        }</span>
+
+        @JsonProperty
+        public List&lt;String&gt; getApi() {
+<span class="fc" id="L311">            return api;</span>
+        }
+
+        void setApi(List&lt;String&gt; api) {
+<span class="fc" id="L315">            this.api = api;</span>
+<span class="fc" id="L316">        }</span>
+
+        @JsonProperty
+        public List&lt;String&gt; getPages() {
+<span class="fc" id="L320">            return pages;</span>
+        }
+
+        void setPages(List&lt;String&gt; pages) {
+<span class="fc" id="L324">            this.pages = pages;</span>
+<span class="fc" id="L325">        }</span>
+
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         *
+         * @return list of importer addresses
+         */
+        public List&lt;String&gt; getImporter() {
+<span class="fc" id="L333">            return importer;</span>
+        }
+
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         *
+         * @param importer
+         *            list of importer addresses
+         */
+        void setImporter(List&lt;String&gt; importer) {
+<span class="nc" id="L343">            this.importer = importer;</span>
+<span class="nc" id="L344">        }</span>
+
+    }
+
+    /**
+     * This version uses only public getters and returns unmodifiable lists.
+     *
+     *
+     * &lt;p&gt;
+     * Pro:
+     * &lt;ul&gt;
+     * &lt;li&gt;Very Easy to create&lt;/li&gt;
+     * &lt;li&gt;Minimal code&lt;/li&gt;
+     * &lt;li&gt;Mininal annotations&lt;/li&gt;
+     * &lt;li&gt;Fields effectively final and lists unmodifiable&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Con:
+     * &lt;ul&gt;
+     * &lt;li&gt;Effectively final is not quite really final&lt;/li&gt;
+     * &lt;li&gt;If one of the lists were missing (an option member, for example), it will throw NPE but we could mitigate by
+     * checking for null or assigning a default.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+<span class="fc" id="L370">    public static class GHMetaGettersUnmodifiable implements GHMetaExample {</span>
+
+        @JsonProperty(&quot;verifiable_password_authentication&quot;)
+        private boolean verifiablePasswordAuthentication;
+        private List&lt;String&gt; hooks;
+        private List&lt;String&gt; git;
+        private List&lt;String&gt; web;
+        private List&lt;String&gt; api;
+        private List&lt;String&gt; pages;
+        /**
+         * If this were an optional member, we could fill it with an empty list by default.
+         */
+<span class="fc" id="L382">        private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+
+        public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L385">            return verifiablePasswordAuthentication;</span>
+        }
+
+        public List&lt;String&gt; getHooks() {
+<span class="fc" id="L389">            return Collections.unmodifiableList(hooks);</span>
+        }
+
+        public List&lt;String&gt; getGit() {
+<span class="fc" id="L393">            return Collections.unmodifiableList(git);</span>
+        }
+
+        public List&lt;String&gt; getWeb() {
+<span class="fc" id="L397">            return Collections.unmodifiableList(web);</span>
+        }
+
+        public List&lt;String&gt; getApi() {
+<span class="fc" id="L401">            return Collections.unmodifiableList(api);</span>
+        }
+
+        public List&lt;String&gt; getPages() {
+<span class="fc" id="L405">            return Collections.unmodifiableList(pages);</span>
+        }
+
+        public List&lt;String&gt; getImporter() {
+<span class="fc" id="L409">            return Collections.unmodifiableList(importer);</span>
+        }
+    }
+
+    /**
+     * This version uses only public getters and returns unmodifiable lists and has final fields
+     * &lt;p&gt;
+     * Pro:
+     * &lt;ul&gt;
+     * &lt;li&gt;Moderate amount of code&lt;/li&gt;
+     * &lt;li&gt;More annotations&lt;/li&gt;
+     * &lt;li&gt;Fields final and lists unmodifiable&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Con:
+     * &lt;ul&gt;
+     * &lt;li&gt;Extra allocations - default array lists will be replaced by Jackson (yes, even though they are final)&lt;/li&gt;
+     * &lt;li&gt;Added constructor is annoying&lt;/li&gt;
+     * &lt;li&gt;If this object could be refreshed or populated, then the final is misleading (and possibly buggy)&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+    public static class GHMetaGettersFinal implements GHMetaExample {
+
+        private final boolean verifiablePasswordAuthentication;
+<span class="fc" id="L435">        private final List&lt;String&gt; hooks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L436">        private final List&lt;String&gt; git = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L437">        private final List&lt;String&gt; web = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L438">        private final List&lt;String&gt; api = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L439">        private final List&lt;String&gt; pages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L440">        private final List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+
+        @JsonCreator
+        private GHMetaGettersFinal(
+<span class="fc" id="L444">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
+            // boolean fields when final seem to be really final, so we have to switch to constructor
+<span class="fc" id="L446">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L447">        }</span>
+
+        public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L450">            return verifiablePasswordAuthentication;</span>
+        }
+
+        public List&lt;String&gt; getHooks() {
+<span class="fc" id="L454">            return Collections.unmodifiableList(hooks);</span>
+        }
+
+        public List&lt;String&gt; getGit() {
+<span class="fc" id="L458">            return Collections.unmodifiableList(git);</span>
+        }
+
+        public List&lt;String&gt; getWeb() {
+<span class="fc" id="L462">            return Collections.unmodifiableList(web);</span>
+        }
+
+        public List&lt;String&gt; getApi() {
+<span class="fc" id="L466">            return Collections.unmodifiableList(api);</span>
+        }
+
+        public List&lt;String&gt; getPages() {
+<span class="fc" id="L470">            return Collections.unmodifiableList(pages);</span>
+        }
+
+        public List&lt;String&gt; getImporter() {
+<span class="fc" id="L474">            return Collections.unmodifiableList(importer);</span>
+        }
+    }
+
+    /**
+     * This version uses only public getters and returns unmodifiable lists
+     * &lt;p&gt;
+     * Pro:
+     * &lt;ul&gt;
+     * &lt;li&gt;Fields final and lists unmodifiable&lt;/li&gt;
+     * &lt;li&gt;Construction behavior can be controlled - if values depended on each other or needed to be set in a specific
+     * order, this could do that.&lt;/li&gt;
+     * &lt;li&gt;JsonProrperty &quot;required&quot; works on JsonCreator constructors - lets annotation define required values&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Con:
+     * &lt;ul&gt;
+     * &lt;li&gt;There is no way you'd know about this without some research&lt;/li&gt;
+     * &lt;li&gt;Specific annotations needed&lt;/li&gt;
+     * &lt;li&gt;Nonnull annotations are misleading - null value is not checked even for &quot;required&quot; constructor
+     * parameters&lt;/li&gt;
+     * &lt;li&gt;Brittle and verbose - not friendly to large number of fields&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+    public static class GHMetaGettersFinalCreator implements GHMetaExample {
+
+        private final boolean verifiablePasswordAuthentication;
+        private final List&lt;String&gt; hooks;
+        private final List&lt;String&gt; git;
+        private final List&lt;String&gt; web;
+        private final List&lt;String&gt; api;
+        private final List&lt;String&gt; pages;
+        private final List&lt;String&gt; importer;
+
+        /**
+         *
+         * @param hooks
+         *            the hooks - required property works, but only on creator json properties like this, ignores
+         *            Nonnull, checked manually
+         * @param git
+         *            the git list - required property works, but only on creator json properties like this, misleading
+         *            Nonnull annotation
+         * @param web
+         *            the web list - misleading Nonnull annotation
+         * @param api
+         *            the api list - misleading Nonnull annotation
+         * @param pages
+         *            the pages list - misleading Nonnull annotation
+         * @param importer
+         *            the importer list - misleading Nonnull annotation
+         * @param verifiablePasswordAuthentication
+         *            true or false
+         */
+        @JsonCreator
+        private GHMetaGettersFinalCreator(@Nonnull @JsonProperty(value = &quot;hooks&quot;, required = true) List&lt;String&gt; hooks,
+                @Nonnull @JsonProperty(value = &quot;git&quot;, required = true) List&lt;String&gt; git,
+                @Nonnull @JsonProperty(&quot;web&quot;) List&lt;String&gt; web,
+                @Nonnull @JsonProperty(&quot;api&quot;) List&lt;String&gt; api,
+                @Nonnull @JsonProperty(&quot;pages&quot;) List&lt;String&gt; pages,
+                @Nonnull @JsonProperty(&quot;importer&quot;) List&lt;String&gt; importer,
+<span class="fc" id="L536">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
+
+            // to ensure a value is actually not null we still have to do a null check
+<span class="fc" id="L539">            Objects.requireNonNull(hooks);</span>
+
+<span class="fc" id="L541">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L542">            this.hooks = Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L543">            this.git = Collections.unmodifiableList(git);</span>
+<span class="fc" id="L544">            this.web = Collections.unmodifiableList(web);</span>
+<span class="fc" id="L545">            this.api = Collections.unmodifiableList(api);</span>
+<span class="fc" id="L546">            this.pages = Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L547">            this.importer = Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L548">        }</span>
+
+        public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L551">            return verifiablePasswordAuthentication;</span>
+        }
+
+        public List&lt;String&gt; getHooks() {
+<span class="fc" id="L555">            return hooks;</span>
+        }
+
+        public List&lt;String&gt; getGit() {
+<span class="fc" id="L559">            return git;</span>
+        }
+
+        public List&lt;String&gt; getWeb() {
+<span class="fc" id="L563">            return web;</span>
+        }
+
+        public List&lt;String&gt; getApi() {
+<span class="fc" id="L567">            return api;</span>
+        }
+
+        public List&lt;String&gt; getPages() {
+<span class="fc" id="L571">            return pages;</span>
+        }
+
+        public List&lt;String&gt; getImporter() {
+<span class="fc" id="L575">            return importer;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

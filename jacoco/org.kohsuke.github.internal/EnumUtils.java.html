@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnumUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.internal</a> &gt; <span class="el_source">EnumUtils.java</span></div><h1>EnumUtils.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.internal;
+
+import java.util.Locale;
+
+/**
+ * Utils for Enums.
+ */
+public final class EnumUtils {
+
+    /**
+     * Returns an enum value matching the value if found, null if the value is null and {@code defaultEnum} if the value
+     * cannot be matched to a value of the enum.
+     * &lt;p&gt;
+     * The value is converted to uppercase before being matched to the enum values.
+     *
+     * @param &lt;E&gt;
+     *            the type of the enum
+     * @param enumClass
+     *            the type of the enum
+     * @param value
+     *            the value to interpret
+     * @param defaultEnum
+     *            the default enum value if the value doesn't match one of the enum value
+     * @return an enum value or null
+     */
+    public static &lt;E extends Enum&lt;E&gt;&gt; E getNullableEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L28">            return null;</span>
+        }
+        try {
+<span class="fc" id="L31">            return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));</span>
+<span class="fc" id="L32">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L33">            return defaultEnum;</span>
+        }
+    }
+
+    private EnumUtils() {
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTeamBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTeamBuilder.java</span></div><h1>GHTeamBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+/**
+ * Creates a team.
+ *
+ * https://developer.github.com/v3/teams/#create-team
+ */
+public class GHTeamBuilder extends GitHubInteractiveObject {
+    protected final Requester builder;
+    private final String orgName;
+
+<span class="fc" id="L14">    public GHTeamBuilder(GitHub root, String orgName, String name) {</span>
+<span class="fc" id="L15">        this.root = root;</span>
+<span class="fc" id="L16">        this.orgName = orgName;</span>
+<span class="fc" id="L17">        this.builder = root.createRequest();</span>
+<span class="fc" id="L18">        this.builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L19">    }</span>
+
+    /**
+     * Description for this team.
+     *
+     * @param description
+     *            description of team
+     * @return a builder to continue with building
+     */
+    public GHTeamBuilder description(String description) {
+<span class="fc" id="L29">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L30">        return this;</span>
+    }
+
+    /**
+     * Maintainers for this team.
+     *
+     * @param maintainers
+     *            maintainers of team
+     * @return a builder to continue with building
+     */
+    public GHTeamBuilder maintainers(String... maintainers) {
+<span class="fc" id="L41">        this.builder.with(&quot;maintainers&quot;, maintainers);</span>
+<span class="fc" id="L42">        return this;</span>
+    }
+
+    /**
+     * Repository names to add this team to.
+     *
+     * @param repoNames
+     *            repoNames to add team to
+     * @return a builder to continue with building
+     */
+    public GHTeamBuilder repositories(String... repoNames) {
+<span class="fc" id="L53">        this.builder.with(&quot;repo_names&quot;, repoNames);</span>
+<span class="fc" id="L54">        return this;</span>
+    }
+
+    /**
+     * Description for this team
+     *
+     * @param privacy
+     *            privacy of team
+     * @return a builder to continue with building
+     */
+    public GHTeamBuilder privacy(GHTeam.Privacy privacy) {
+<span class="fc" id="L65">        this.builder.with(&quot;privacy&quot;, privacy);</span>
+<span class="fc" id="L66">        return this;</span>
+    }
+
+    /**
+     * Parent team id for this team
+     *
+     * @param parentTeamId
+     *            parentTeamId of team
+     * @return a builder to continue with building
+     */
+    public GHTeamBuilder parentTeamId(long parentTeamId) {
+<span class="fc" id="L77">        this.builder.with(&quot;parent_team_id&quot;, parentTeamId);</span>
+<span class="fc" id="L78">        return this;</span>
+    }
+
+    /**
+     * Creates a team with all the parameters.
+     *
+     * @return the gh team
+     * @throws IOException
+     *             if team cannot be created
+     */
+    public GHTeam create() throws IOException {
+<span class="fc" id="L89">        return builder.method(&quot;POST&quot;).withUrlPath(&quot;/orgs/&quot; + orgName + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(root);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

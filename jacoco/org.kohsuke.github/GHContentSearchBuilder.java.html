@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHContentSearchBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHContentSearchBuilder.java</span></div><h1>GHContentSearchBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Search code for {@link GHContent}.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHub#searchContent() GitHub#searchContent()
+ */
+public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
+    GHContentSearchBuilder(GitHub root) {
+<span class="fc" id="L11">        super(root, ContentSearchResult.class);</span>
+<span class="fc" id="L12">    }</span>
+
+    /**
+     * Search terms.
+     */
+    public GHContentSearchBuilder q(String term) {
+<span class="fc" id="L18">        super.q(term);</span>
+<span class="fc" id="L19">        return this;</span>
+    }
+
+    /**
+     * In gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder in(String v) {
+<span class="fc" id="L30">        return q(&quot;in:&quot; + v);</span>
+    }
+
+    /**
+     * Language gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder language(String v) {
+<span class="fc" id="L41">        return q(&quot;language:&quot; + v);</span>
+    }
+
+    /**
+     * Fork gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder fork(String v) {
+<span class="nc" id="L52">        return q(&quot;fork:&quot; + v);</span>
+    }
+
+    /**
+     * Size gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder size(String v) {
+<span class="nc" id="L63">        return q(&quot;size:&quot; + v);</span>
+    }
+
+    /**
+     * Path gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder path(String v) {
+<span class="nc" id="L74">        return q(&quot;path:&quot; + v);</span>
+    }
+
+    /**
+     * Filename gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder filename(String v) {
+<span class="nc" id="L85">        return q(&quot;filename:&quot; + v);</span>
+    }
+
+    /**
+     * Extension gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder extension(String v) {
+<span class="nc" id="L96">        return q(&quot;extension:&quot; + v);</span>
+    }
+
+    /**
+     * User gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder user(String v) {
+<span class="nc" id="L107">        return q(&quot;user:&quot; + v);</span>
+    }
+
+    /**
+     * Repo gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder repo(String v) {
+<span class="fc" id="L118">        return q(&quot;repo:&quot; + v);</span>
+    }
+
+    private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
+        private GHContent[] items;
+
+        @Override
+        GHContent[] getItems(GitHub root) {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            for (GHContent item : items)</span>
+<span class="fc" id="L127">                item.wrap(root);</span>
+<span class="fc" id="L128">            return items;</span>
+        }
+    }
+
+    @Override
+    protected String getApiUrl() {
+<span class="fc" id="L134">        return &quot;/search/code&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

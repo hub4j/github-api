@@ -657,7 +657,7 @@
                   <rules>
                     <requireFilesExist>
                       <files>
-                        <file>${project.build.outputDirectory}/jacoco.exec</file>
+                        <file>${project.build.directory}/jacoco.exec</file>
                       </files>
                     </requireFilesExist>
                   </rules>

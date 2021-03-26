@@ -111,7 +111,7 @@
             <!-- attached to Maven test phase -->
             <execution>
               <id>report</id>
-              <phase>test</phase>
+              <phase>package</phase>
               <goals>
                 <goal>report</goal>
               </goals>
@@ -591,9 +591,9 @@
       </build>
     </profile>
     <profile>
-      <id>jdk11+</id>
+      <id>jdk11plus</id>
       <activation>
-        <jdk>[11,)</jdk>
+        <jdk>[13,)</jdk>
       </activation>
       <properties>
         <!-- this is required for GithubHttpUrlConnectionClient#setRequestMethod() to work with JDK 16+ -->

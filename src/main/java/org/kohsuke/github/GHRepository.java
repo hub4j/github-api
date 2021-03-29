@@ -2904,9 +2904,7 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHWorkflow> listWorkflows() {
-        return root.createRequest()
-                .withUrlPath(getApiTailUrl("actions/workflows"))
-                .toIterable(GHWorkflow[].class, item -> item.wrapUp(root));
+        return new GHWorkflowsIterable(this);
     }
 
     /**

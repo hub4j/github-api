@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
@@ -85,5 +86,22 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
                         .withRequestBody(containing("inputs"))
                         .withRequestBody(containing("parameter"))
                         .withRequestBody(containing("value")));
+    }
+
+    @Test
+    public void testListWorkflows() throws IOException {
+        List<GHWorkflow> workflows = repo.listWorkflows().toList();
+
+        GHWorkflow workflow = workflows.get(0);
+        assertEquals(6817859L, workflow.getId());
+        assertEquals("MDg6V29ya2Zsb3c2ODE3ODU5", workflow.getNodeId());
+        assertEquals("test-workflow", workflow.getName());
+        assertEquals(".github/workflows/test-workflow.yml", workflow.getPath());
+        assertEquals("active", workflow.getState());
+        assertEquals("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859", workflow.getUrl().getPath());
+        assertEquals("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml",
+                workflow.getHtmlUrl().getPath());
+        assertEquals("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg",
+                workflow.getBadgeUrl().getPath());
     }
 }

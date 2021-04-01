@@ -1,8 +1,8 @@
 {
-  "id": "af275499-c784-4294-8ee3-5403180edae5",
-  "name": "repos_nvahren_test-repo-public",
+  "id": "c06a30c7-c6ae-40a5-81a6-12077e68bd97",
+  "name": "repos_nvahren_test-repo-visibility",
   "request": {
-    "url": "/repos/nvahren/test-repo-public",
+    "url": "/repos/nvahren/test-repo-visibility",
     "method": "PATCH",
     "headers": {
       "Accept": {
@@ -11,37 +11,42 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"visibility\":\"private\",\"name\":\"test-repo-public\"}",
+        "equalToJson": "{\"visibility\":\"private\",\"name\":\"test-repo-visibility\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
     ]
   },
   "response": {
-    "status": 404,
-    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#update-a-repository\"}",
+    "status": 200,
+    "bodyFileName": "repos_nvahren_test-repo-visibility-3.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 01 Apr 2021 14:18:30 GMT",
+      "Date": "Thu, 01 Apr 2021 16:59:18 GMT",
       "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"4d4f6c371e60c873dd57dd10889f07bf44f141c3c5175535168c5b661694b07c\"",
       "X-OAuth-Scopes": "delete_repo, repo",
-      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.nebula-preview; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4980",
-      "X-RateLimit-Reset": "1617287622",
-      "X-RateLimit-Used": "20",
+      "X-RateLimit-Remaining": "4882",
+      "X-RateLimit-Reset": "1617296411",
+      "X-RateLimit-Used": "118",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "8F68:6930:21F2D5:53AB25:6065D636"
+      "X-GitHub-Request-Id": "5C96:2AB5:5BD94A:96D997:6065FBE6"
     }
   },
-  "uuid": "af275499-c784-4294-8ee3-5403180edae5",
+  "uuid": "c06a30c7-c6ae-40a5-81a6-12077e68bd97",
   "persistent": true,
   "insertionIndex": 3
 }

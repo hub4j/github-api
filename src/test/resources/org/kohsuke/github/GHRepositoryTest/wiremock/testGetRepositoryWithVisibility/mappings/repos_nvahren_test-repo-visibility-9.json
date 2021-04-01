@@ -1,5 +1,5 @@
 {
-  "id": "1e274db4-a019-4d06-9a8d-5652851f2a0f",
+  "id": "2d0d52a5-787d-4b57-88e4-d4a3764f0b59",
   "name": "repos_nvahren_test-repo-visibility",
   "request": {
     "url": "/repos/nvahren/test-repo-visibility",
@@ -14,14 +14,14 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 01 Apr 2021 14:20:20 GMT",
+      "Date": "Thu, 01 Apr 2021 16:59:26 GMT",
       "X-OAuth-Scopes": "delete_repo, repo",
-      "X-Accepted-OAuth-Scopes": "",
+      "X-Accepted-OAuth-Scopes": "delete_repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4973",
-      "X-RateLimit-Reset": "1617287622",
-      "X-RateLimit-Used": "27",
+      "X-RateLimit-Remaining": "4876",
+      "X-RateLimit-Reset": "1617296411",
+      "X-RateLimit-Used": "124",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
@@ -29,10 +29,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "B797:6262:65D4A:197F89:6065D6A4"
+      "X-GitHub-Request-Id": "5C96:2AB5:5BDE5A:96E213:6065FBED"
     }
   },
-  "uuid": "1e274db4-a019-4d06-9a8d-5652851f2a0f",
+  "uuid": "2d0d52a5-787d-4b57-88e4-d4a3764f0b59",
   "persistent": true,
   "insertionIndex": 9
 }

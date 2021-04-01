@@ -1,5 +1,5 @@
 {
-  "id": "d8b0aea5-1cae-4951-8dec-eef4ce748c57",
+  "id": "16c97f06-b9b1-4e6f-b34b-395b7d1e32ac",
   "name": "repos_nvahren_test-repo-visibility",
   "request": {
     "url": "/repos/nvahren/test-repo-visibility",
@@ -15,32 +15,34 @@
     "bodyFileName": "repos_nvahren_test-repo-visibility-7.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 01 Apr 2021 14:20:20 GMT",
+      "Date": "Thu, 01 Apr 2021 16:59:25 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"8faf24807b9ba877ff6eebed150b9ecb1c220ae8eb4f149d0f785168bf6364d1\"",
-      "Last-Modified": "Thu, 01 Apr 2021 14:20:19 GMT",
+      "ETag": "W/\"eb30423ef86be93773c139c1f26ff4f992bfa2a4749be4dbcc975807dc902c13\"",
+      "Last-Modified": "Thu, 01 Apr 2021 16:59:22 GMT",
       "X-OAuth-Scopes": "delete_repo, repo",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4975",
-      "X-RateLimit-Reset": "1617287622",
-      "X-RateLimit-Used": "25",
+      "X-RateLimit-Remaining": "4878",
+      "X-RateLimit-Reset": "1617296411",
+      "X-RateLimit-Used": "122",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "B797:6262:65D3D:197F7B:6065D6A4"
+      "X-GitHub-Request-Id": "5C96:2AB5:5BDE28:96E1B8:6065FBED"
     }
   },
-  "uuid": "d8b0aea5-1cae-4951-8dec-eef4ce748c57",
+  "uuid": "16c97f06-b9b1-4e6f-b34b-395b7d1e32ac",
   "persistent": true,
+  "scenarioName": "scenario-1-repos-nvahren-test-repo-visibility",
+  "requiredScenarioState": "scenario-1-repos-nvahren-test-repo-visibility-2",
   "insertionIndex": 7
 }

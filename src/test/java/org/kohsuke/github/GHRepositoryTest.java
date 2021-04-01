@@ -257,10 +257,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         final GHRepository repo = gitHub.createRepository(repoName)
                 .visibility(GHRepository.GHVisibility.PUBLIC)
                 .create();
+        System.out.println(repo.getOwnerName());
+        System.out.println(repo.getName());
         try {
             assertEquals(GHRepository.GHVisibility.PUBLIC, repo.getVisibility());
             repo.setVisibility(GHRepository.GHVisibility.PRIVATE);
             assertEquals(GHRepository.GHVisibility.PRIVATE, myself.getRepository(repoName).getVisibility());
+            repo.setVisibility(GHRepository.GHVisibility.PUBLIC);
+            assertEquals(GHRepository.GHVisibility.PUBLIC, myself.getRepository(repoName).getVisibility());
         } finally {
             repo.delete();
         }

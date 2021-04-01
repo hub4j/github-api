@@ -1,52 +1,49 @@
 {
-  "id": "fd3146e0-30e3-4c1b-bf5e-8a15602fc06a",
+  "id": "93d85bb4-2dbf-41d5-ba74-7b878c8524bf",
   "name": "repos_nvahren_test-repo-visibility",
   "request": {
     "url": "/repos/nvahren/test-repo-visibility",
-    "method": "PATCH",
+    "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.nebula-preview+json"
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"visibility\":\"public\",\"name\":\"test-repo-visibility\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
-      }
-    ]
+    }
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_nvahren_test-repo-visibility-6.json",
+    "bodyFileName": "repos_nvahren_test-repo-visibility-4.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 01 Apr 2021 16:59:22 GMT",
+      "Date": "Thu, 01 Apr 2021 16:59:21 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"c8e830eccd87608fe99a6162fd59d95d2a7598e27f906c5d209a62f6fac02f3a\"",
+      "ETag": "W/\"b6cbc55a508c491b194bd4a5bde5e4fe9b2c8e4f5d3b422688198b8bc354cce1\"",
+      "Last-Modified": "Thu, 01 Apr 2021 16:59:18 GMT",
       "X-OAuth-Scopes": "delete_repo, repo",
-      "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "github.nebula-preview; format=json",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4879",
+      "X-RateLimit-Remaining": "4881",
       "X-RateLimit-Reset": "1617296411",
-      "X-RateLimit-Used": "121",
+      "X-RateLimit-Used": "119",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "5C96:2AB5:5BDBFF:96DE1C:6065FBEA"
+      "X-GitHub-Request-Id": "5C96:2AB5:5BDBBD:96DDAD:6065FBE9"
     }
   },
-  "uuid": "fd3146e0-30e3-4c1b-bf5e-8a15602fc06a",
+  "uuid": "93d85bb4-2dbf-41d5-ba74-7b878c8524bf",
   "persistent": true,
-  "insertionIndex": 6
+  "scenarioName": "scenario-1-repos-nvahren-test-repo-visibility",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-nvahren-test-repo-visibility-2",
+  "insertionIndex": 4
 }

@@ -713,7 +713,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Visibility of a repository
+     * Visibility of a repository.
      */
     public enum GHVisibility {
         PUBLIC, INTERNAL, PRIVATE

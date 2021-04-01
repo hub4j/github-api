@@ -56,9 +56,15 @@ import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static org.kohsuke.github.internal.Previews.*;
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.ANT_MAN;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.FLASH;
+import static org.kohsuke.github.internal.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.MERCY;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * A repository on GitHub.
@@ -2958,6 +2964,31 @@ public class GHRepository extends GHObject {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("actions/runs"), String.valueOf(id))
                 .fetch(GHWorkflowRun.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Lists all the artifacts of this repository.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHArtifact> listArtifacts() {
+        return new GHArtifactsIterable(this, root.createRequest().withUrlPath(getApiTailUrl("actions/artifacts")));
+    }
+
+    /**
+     * Gets an artifact by id.
+     *
+     * @param id
+     *            the id of the artifact
+     * @return the artifact
+     * @throws IOException
+     *             the io exception
+     */
+    public GHArtifact getArtifact(long id) throws IOException {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("actions/artifacts"), String.valueOf(id))
+                .fetch(GHArtifact.class)
                 .wrapUp(this);
     }
 

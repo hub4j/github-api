@@ -1,0 +1,37 @@
+{
+  "id": "b87f3821-c650-400e-9dd4-b2e5f4715de7",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts_51301319_zip",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/51301319/zip",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 02 Apr 2021 16:54:39 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4861",
+      "X-RateLimit-Reset": "1617384010",
+      "X-RateLimit-Used": "139",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "8870:697D:FBE3EA:1002910:60674C4F",
+      "Location": "https://pipelines.actions.githubusercontent.com/u72ug1Ib1ZBCtek798HyrDYOU28rBK6ssrOKf37ZxrpgUbk95I/_apis/pipelines/1/runs/120/signedartifactscontent?artifactName=artifact1&urlExpires=2021-04-02T16%3A55%3A39.1977156Z&urlSigningMethod=HMACV1&urlSignature=VvF5G83lRj8fd2Win63OksXWXlzV9hwcRINMytp2LMI%3D"
+    }
+  },
+  "uuid": "b87f3821-c650-400e-9dd4-b2e5f4715de7",
+  "persistent": true,
+  "insertionIndex": 8
+}

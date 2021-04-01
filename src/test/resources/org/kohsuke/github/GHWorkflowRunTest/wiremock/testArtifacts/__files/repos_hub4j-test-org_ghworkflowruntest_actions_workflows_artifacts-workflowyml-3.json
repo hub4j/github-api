@@ -1,0 +1,12 @@
+{
+  "id": 7433027,
+  "node_id": "MDg6V29ya2Zsb3c3NDMzMDI3",
+  "name": "Artifacts workflow",
+  "path": ".github/workflows/artifacts-workflow.yml",
+  "state": "active",
+  "created_at": "2021-04-02T17:48:51.000+02:00",
+  "updated_at": "2021-04-02T17:48:51.000+02:00",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/workflows/7433027",
+  "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/blob/main/.github/workflows/artifacts-workflow.yml",
+  "badge_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/workflows/Artifacts%20workflow/badge.svg"
+}

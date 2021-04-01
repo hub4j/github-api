@@ -9,9 +9,15 @@ import org.kohsuke.github.GHWorkflowRun.Status;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.Function;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static org.hamcrest.Matchers.*;
 
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
@@ -24,6 +30,9 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
     private static final String SLOW_WORKFLOW_PATH = "slow-workflow.yml";
     private static final String SLOW_WORKFLOW_NAME = "Slow workflow";
+
+    private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
+    private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
 
     private GHRepository repo;
 
@@ -178,6 +187,142 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
     }
 
+    @Test
+    @SuppressWarnings("resource")
+    public void testLogs() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        List<String> logsArchiveEntries = new ArrayList<>();
+        String fullLogContent = workflowRun.downloadLogs((is) -> {
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+                StringBuilder sb = new StringBuilder();
+
+                ZipEntry ze;
+                while ((ze = zis.getNextEntry()) != null) {
+                    logsArchiveEntries.add(ze.getName());
+                    if ("1_build.txt".equals(ze.getName())) {
+                        // the scanner has to be kept open to avoid closing zis
+                        Scanner scanner = new Scanner(zis);
+                        while (scanner.hasNextLine()) {
+                            sb.append(scanner.nextLine()).append("\n");
+                        }
+                    }
+                }
+
+                return sb.toString();
+            }
+        });
+
+        assertThat(logsArchiveEntries, hasItems("1_build.txt", "build/9_Complete job.txt"));
+        assertThat(fullLogContent, containsString("Hello, world!"));
+
+        workflowRun.deleteLogs();
+
+        try {
+            workflowRun.downloadLogs((is) -> "");
+            Assert.fail("Downloading logs should not be possible as they were deleted");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Not Found"));
+        }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testArtifacts() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(ARTIFACTS_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                ARTIFACTS_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(ARTIFACTS_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        List<GHArtifact> artifacts = new ArrayList<>(workflowRun.listArtifacts().toList());
+        artifacts.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
+
+        assertThat(artifacts.size(), is(2));
+
+        // Test properties
+        checkArtifactProperties(artifacts.get(0), "artifact1");
+        checkArtifactProperties(artifacts.get(1), "artifact2");
+
+        // Test download
+        String artifactContent = artifacts.get(0).download((is) -> {
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+                StringBuilder sb = new StringBuilder();
+
+                ZipEntry ze = zis.getNextEntry();
+                assertThat(ze.getName(), is("artifact1.txt"));
+
+                // the scanner has to be kept open to avoid closing zis
+                Scanner scanner = new Scanner(zis);
+                while (scanner.hasNextLine()) {
+                    sb.append(scanner.nextLine());
+                }
+
+                return sb.toString();
+            }
+        });
+
+        assertThat(artifactContent, is("artifact1"));
+
+        // Test GHRepository#getArtifact(long) as we are sure we have artifacts around
+        GHArtifact artifactById = repo.getArtifact(artifacts.get(0).getId());
+        checkArtifactProperties(artifactById, "artifact1");
+
+        artifactById = repo.getArtifact(artifacts.get(1).getId());
+        checkArtifactProperties(artifactById, "artifact2");
+
+        // Test GHRepository#listArtifacts() as we are sure we have artifacts around
+        List<GHArtifact> artifactsFromRepo = new ArrayList<>(
+                repo.listArtifacts().withPageSize(2).iterator().nextPage());
+        artifactsFromRepo.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
+
+        // We have at least the two artifacts we just added
+        assertThat(artifactsFromRepo.size(), is(2));
+
+        // Test properties
+        checkArtifactProperties(artifactsFromRepo.get(0), "artifact1");
+        checkArtifactProperties(artifactsFromRepo.get(1), "artifact2");
+
+        // Now let's test the delete() method
+        GHArtifact artifact1 = artifacts.get(0);
+        artifact1.delete();
+
+        try {
+            repo.getArtifact(artifact1.getId());
+            Assert.fail("Getting the artifact should fail as it was deleted");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Not Found"));
+        }
+    }
+
     private void await(Function<GHRepository, Boolean> condition) throws IOException {
         if (!mockGitHub.isUseProxy()) {
             return;
@@ -229,5 +374,17 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         } catch (IOException e) {
             throw new IllegalStateException("Unable to get workflow run status", e);
         }
+    }
+
+    private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
+        assertNotNull(artifact.getId());
+        assertNotNull(artifact.getNodeId());
+        assertThat(artifact.getName(), is(artifactName));
+        assertThat(artifact.getArchiveDownloadUrl().getPath(), containsString("actions/artifacts"));
+        assertNotNull(artifact.getCreatedAt());
+        assertNotNull(artifact.getUpdatedAt());
+        assertNotNull(artifact.getExpiresAt());
+        assertThat(artifact.getSizeInBytes(), greaterThan(0L));
+        assertFalse(artifact.isExpired());
     }
 }

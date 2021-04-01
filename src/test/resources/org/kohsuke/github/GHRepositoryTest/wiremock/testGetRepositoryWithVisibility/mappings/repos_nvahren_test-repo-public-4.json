@@ -1,0 +1,40 @@
+{
+  "id": "05a2b170-1523-40c8-9aee-756d287cea66",
+  "name": "repos_nvahren_test-repo-public",
+  "request": {
+    "url": "/repos/nvahren/test-repo-public",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#delete-a-repository\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 01 Apr 2021 14:18:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4979",
+      "X-RateLimit-Reset": "1617287622",
+      "X-RateLimit-Used": "21",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "8F68:6930:21F2E1:53AB3F:6065D636"
+    }
+  },
+  "uuid": "05a2b170-1523-40c8-9aee-756d287cea66",
+  "persistent": true,
+  "insertionIndex": 4
+}

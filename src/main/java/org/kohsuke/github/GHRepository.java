@@ -104,6 +104,8 @@ public class GHRepository extends GHObject {
     @JsonProperty("private")
     private boolean _private;
 
+    private GHVisibility visibility;
+
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
 
     private String pushed_at;
@@ -711,6 +713,32 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Visibility of a repository
+     */
+    public enum GHVisibility {
+        PUBLIC, INTERNAL, PRIVATE
+    }
+
+    /**
+     * Gets the visibility of the repository.
+     *
+     * @return the visibility
+     */
+    @Deprecated
+    @Preview(NEBULA)
+    public GHVisibility getVisibility() {
+        if (visibility == null) {
+            try {
+                populate();
+            } catch (final IOException e) {
+                // Convert this to a runtime exception to avoid messy method signature
+                throw new GHException("Could not populate the visibility of the repository", e);
+            }
+        }
+        return visibility;
+    }
+
+    /**
      * Is template boolean.
      *
      * @return the boolean
@@ -1200,6 +1228,26 @@ public class GHRepository extends GHObject {
      */
     public void setPrivate(boolean value) throws IOException {
         set().private_(value);
+    }
+
+    /**
+     * Sets visibility.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    @Preview(NEBULA)
+    public void setVisibility(final GHVisibility value) throws IOException {
+        root.createRequest()
+                .method("PATCH")
+                .withPreview(NEBULA)
+                .with("name", name)
+                .with("visibility", value)
+                .withUrlPath(getApiTailUrl(""))
+                .send();
     }
 
     /**
@@ -3122,11 +3170,17 @@ public class GHRepository extends GHObject {
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest()
+                    .withPreview(BAPTISTE)
+                    .withPreview(NEBULA)
+                    .setRawUrlPath(url.toString())
+                    .fetchInto(this)
+                    .wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
                 root.createRequest()
                         .withPreview(BAPTISTE)
+                        .withPreview(NEBULA)
                         .withUrlPath("/repos/" + full_name)
                         .fetchInto(this)
                         .wrap(root);

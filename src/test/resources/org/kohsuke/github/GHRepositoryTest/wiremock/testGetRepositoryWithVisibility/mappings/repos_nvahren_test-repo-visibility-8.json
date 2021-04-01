@@ -1,0 +1,46 @@
+{
+  "id": "b6ac3809-8046-423e-87f0-e815d2c86f4b",
+  "name": "repos_nvahren_test-repo-visibility",
+  "request": {
+    "url": "/repos/nvahren/test-repo-visibility",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.baptiste-preview+json, application/vnd.github.nebula-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_nvahren_test-repo-visibility-8.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 01 Apr 2021 14:20:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"bb898ca809fcbbeac520143ab46296e4c9e68fb1e9082f0c389b5d4b8f2f9b5a\"",
+      "Last-Modified": "Thu, 01 Apr 2021 14:20:20 GMT",
+      "X-OAuth-Scopes": "delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.baptiste-preview; format=json, github.nebula-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4974",
+      "X-RateLimit-Reset": "1617287622",
+      "X-RateLimit-Used": "26",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B797:6262:65D44:197F83:6065D6A4"
+    }
+  },
+  "uuid": "b6ac3809-8046-423e-87f0-e815d2c86f4b",
+  "persistent": true,
+  "insertionIndex": 8
+}

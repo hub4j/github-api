@@ -250,6 +250,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testGetRepositoryWithVisibility() throws IOException {
+        kohsuke();
+        final GHUser myself = gitHub.getMyself();
+        final String repoName = "test-repo-visibility";
+        final GHRepository repo = gitHub.createRepository(repoName)
+                .visibility(GHRepository.GHVisibility.PUBLIC)
+                .create();
+        try {
+            assertEquals(GHRepository.GHVisibility.PUBLIC, repo.getVisibility());
+            repo.setVisibility(GHRepository.GHVisibility.PRIVATE);
+            assertEquals(GHRepository.GHVisibility.PRIVATE, myself.getRepository(repoName).getVisibility());
+        } finally {
+            repo.delete();
+        }
+    }
+
+    @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("hub4j").getRepository("github-api");
         int i = 0;

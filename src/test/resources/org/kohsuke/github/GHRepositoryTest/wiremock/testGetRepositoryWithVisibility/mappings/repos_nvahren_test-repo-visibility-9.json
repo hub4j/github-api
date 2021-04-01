@@ -1,0 +1,38 @@
+{
+  "id": "1e274db4-a019-4d06-9a8d-5652851f2a0f",
+  "name": "repos_nvahren_test-repo-visibility",
+  "request": {
+    "url": "/repos/nvahren/test-repo-visibility",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 01 Apr 2021 14:20:20 GMT",
+      "X-OAuth-Scopes": "delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4973",
+      "X-RateLimit-Reset": "1617287622",
+      "X-RateLimit-Used": "27",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "B797:6262:65D4A:197F89:6065D6A4"
+    }
+  },
+  "uuid": "1e274db4-a019-4d06-9a8d-5652851f2a0f",
+  "persistent": true,
+  "insertionIndex": 9
+}

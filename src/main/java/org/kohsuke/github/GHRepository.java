@@ -31,6 +31,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,6 +50,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -104,7 +106,7 @@ public class GHRepository extends GHObject {
     @JsonProperty("private")
     private boolean _private;
 
-    private GHVisibility visibility;
+    private String visibility;
 
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
 
@@ -715,8 +717,17 @@ public class GHRepository extends GHObject {
     /**
      * Visibility of a repository.
      */
-    public enum GHVisibility {
-        PUBLIC, INTERNAL, PRIVATE
+    public enum Visibility {
+        PUBLIC, INTERNAL, PRIVATE, UNKNOWN;
+
+        public static Visibility from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Visibility.class, value, Visibility.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /**
@@ -726,7 +737,8 @@ public class GHRepository extends GHObject {
      */
     @Deprecated
     @Preview(NEBULA)
-    public GHVisibility getVisibility() {
+    @WithBridgeMethods(value = String.class, adapterMethod = "visibilityAsStr")
+    public Visibility getVisibility() {
         if (visibility == null) {
             try {
                 populate();
@@ -735,6 +747,11 @@ public class GHRepository extends GHObject {
                 throw new GHException("Could not populate the visibility of the repository", e);
             }
         }
+        return Visibility.from(visibility);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getVisibility")
+    private Object visibilityAsStr(Visibility visibility, Class type) {
         return visibility;
     }
 
@@ -1240,7 +1257,7 @@ public class GHRepository extends GHObject {
      */
     @Deprecated
     @Preview(NEBULA)
-    public void setVisibility(final GHVisibility value) throws IOException {
+    public void setVisibility(final Visibility value) throws IOException {
         root.createRequest()
                 .method("PATCH")
                 .withPreview(NEBULA)

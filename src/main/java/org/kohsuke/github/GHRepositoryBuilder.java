@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.GHRepository.GHVisibility;
+import org.kohsuke.github.GHRepository.Visibility;
 
 import java.io.IOException;
 import java.net.URL;
@@ -158,7 +158,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S visibility(final GHVisibility visibility) throws IOException {
+    public S visibility(final Visibility visibility) throws IOException {
         requester.withPreview(NEBULA);
         return with("visibility", visibility);
     }

@@ -1,8 +1,8 @@
 {
-  "id": "fd3146e0-30e3-4c1b-bf5e-8a15602fc06a",
-  "name": "repos_nvahren_test-repo-visibility",
+  "id": "15e6bdb7-1476-480d-be32-d962cc51acfa",
+  "name": "repos_hub4j-test-org_test-repo-visibility",
   "request": {
-    "url": "/repos/nvahren/test-repo-visibility",
+    "url": "/repos/hub4j-test-org/test-repo-visibility",
     "method": "PATCH",
     "headers": {
       "Accept": {
@@ -19,34 +19,36 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_nvahren_test-repo-visibility-6.json",
+    "bodyFileName": "repos_hub4j-test-org_test-repo-visibility-10.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 01 Apr 2021 16:59:22 GMT",
+      "Date": "Fri, 02 Apr 2021 15:48:48 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"c8e830eccd87608fe99a6162fd59d95d2a7598e27f906c5d209a62f6fac02f3a\"",
-      "X-OAuth-Scopes": "delete_repo, repo",
+      "ETag": "W/\"069779fe525b573d05c18b9bc6a1f11949fcfe91d3ce720fb87a0d6085ac9d73\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.nebula-preview; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4879",
-      "X-RateLimit-Reset": "1617296411",
-      "X-RateLimit-Used": "121",
+      "X-RateLimit-Remaining": "4976",
+      "X-RateLimit-Reset": "1617382057",
+      "X-RateLimit-Used": "24",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "5C96:2AB5:5BDBFF:96DE1C:6065FBEA"
+      "X-GitHub-Request-Id": "366E:58C4:9E60A7:10C3090:60673CE0"
     }
   },
-  "uuid": "fd3146e0-30e3-4c1b-bf5e-8a15602fc06a",
+  "uuid": "15e6bdb7-1476-480d-be32-d962cc51acfa",
   "persistent": true,
-  "insertionIndex": 6
+  "scenarioName": "scenario-3-repos-hub4j-test-org-test-repo-visibility",
+  "requiredScenarioState": "scenario-3-repos-hub4j-test-org-test-repo-visibility-2",
+  "insertionIndex": 10
 }

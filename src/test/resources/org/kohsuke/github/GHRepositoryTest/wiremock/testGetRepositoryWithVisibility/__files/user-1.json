@@ -30,5 +30,17 @@
   "followers": 0,
   "following": 0,
   "created_at": "2014-09-06T16:40:29Z",
-  "updated_at": "2021-04-01T16:32:12Z"
+  "updated_at": "2021-04-02T13:18:25Z",
+  "private_gists": 0,
+  "total_private_repos": 0,
+  "owned_private_repos": 0,
+  "disk_usage": 24211,
+  "collaborators": 0,
+  "two_factor_authentication": false,
+  "plan": {
+    "name": "free",
+    "space": 976562499,
+    "collaborators": 0,
+    "private_repos": 10000
+  }
 }

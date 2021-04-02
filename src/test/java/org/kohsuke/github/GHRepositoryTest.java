@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
+import org.kohsuke.github.GHRepository.Visibility;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -251,23 +252,26 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetRepositoryWithVisibility() throws IOException {
-        kohsuke();
-        final GHUser myself = gitHub.getMyself();
+        snapshotNotAllowed();
         final String repoName = "test-repo-visibility";
-        final GHRepository repo = gitHub.createRepository(repoName)
-                .visibility(GHRepository.GHVisibility.PUBLIC)
-                .create();
-        System.out.println(repo.getOwnerName());
-        System.out.println(repo.getName());
-        try {
-            assertEquals(GHRepository.GHVisibility.PUBLIC, repo.getVisibility());
-            repo.setVisibility(GHRepository.GHVisibility.PRIVATE);
-            assertEquals(GHRepository.GHVisibility.PRIVATE, myself.getRepository(repoName).getVisibility());
-            repo.setVisibility(GHRepository.GHVisibility.PUBLIC);
-            assertEquals(GHRepository.GHVisibility.PUBLIC, myself.getRepository(repoName).getVisibility());
-        } finally {
-            repo.delete();
-        }
+        final GHRepository repo = getTempRepository(repoName);
+        assertEquals(Visibility.PUBLIC, repo.getVisibility());
+
+        repo.setVisibility(Visibility.INTERNAL);
+        assertEquals(Visibility.INTERNAL,
+                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+
+        repo.setVisibility(Visibility.PRIVATE);
+        assertEquals(Visibility.PRIVATE,
+                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+
+        repo.setVisibility(Visibility.PUBLIC);
+        assertEquals(Visibility.PUBLIC,
+                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+
+        // deliberately bogus response in snapshot
+        assertEquals(Visibility.UNKNOWN,
+                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
     }
 
     @Test

@@ -30,7 +30,7 @@ jobs:
       - name: Maven Install (skipTests)
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B install -DskipTests -D enable-ci --file pom.xml
+        run: mvn -B clean install -DskipTests -D enable-ci --file pom.xml
   site:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
@@ -75,18 +75,18 @@ jobs:
     # JDK 8
     - name: Maven Install without Code Coverage
       if: matrix.os == 'windows' && matrix.java == '8'
-      run: mvn -B install --file pom.xml
+      run: mvn -B clean install --file pom.xml
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows' && matrix.java == '8'
-      run: mvn -B install -D enable-ci --file pom.xml
+      run: mvn -B clean install -D enable-ci --file pom.xml
     # JDK 11+
     - name: Maven Install without Code Coverage
       if: matrix.os == 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B install --file pom.xml
-    - name: Maven Install with Code Coverage
+    - name: Maven Install with Code Coverageddddddd
       if: matrix.os != 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B install -D enable-ci --file pom.xml
+      run: mvn -B clean install -D enable-ci --file pom.xml

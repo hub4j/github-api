@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamFunction;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A workflow run.
@@ -259,6 +262,45 @@ public class GHWorkflowRun extends GHObject {
      */
     public void rerun() throws IOException {
         root.createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").fetchHttpStatusCode();
+    }
+
+    /**
+     * Lists the artifacts attached to this workflow run.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHArtifact> listArtifacts() {
+        return new GHArtifactsIterable(owner, root.createRequest().withUrlPath(getApiRoute(), "artifacts"));
+    }
+
+    /**
+     * Downloads the logs.
+     * <p>
+     * The logs are in the form of a zip archive. The full log file is at the root and called {@code 1_build.txt}. Split
+     * log files are also available in the {@code build} directory.
+     *
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
+        requireNonNull(streamFunction, "Stream function must not be null");
+
+        return root.createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+    }
+
+    /**
+     * Delete the logs.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteLogs() throws IOException {
+        root.createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").fetchHttpStatusCode();
     }
 
     private String getApiRoute() {

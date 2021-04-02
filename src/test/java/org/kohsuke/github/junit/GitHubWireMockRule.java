@@ -69,6 +69,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return servers.get("codeload");
     }
 
+    public WireMockServer actionsUserContentServer() {
+        return servers.get("actions-user-content");
+    }
+
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
@@ -97,6 +101,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (new File(apiServer().getOptions().filesRoot().getPath() + "_codeload").exists() || isUseProxy()) {
             initializeServer("codeload");
         }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_actions-user-content").exists()
+                || isUseProxy()) {
+            initializeServer("actions-user-content");
+        }
     }
 
     @Override
@@ -120,6 +129,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             this.codeloadServer().stubFor(proxyAllTo("https://codeload.github.com").atPriority(100));
         }
 
+        if (this.actionsUserContentServer() != null) {
+            this.actionsUserContentServer()
+                    .stubFor(proxyAllTo("https://pipelines.actions.githubusercontent.com").atPriority(100));
+        }
+
     }
 
     @Override
@@ -137,6 +151,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
 
         recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
+
+        recordSnapshot(this.actionsUserContentServer(), "https://pipelines.actions.githubusercontent.com", true);
     }
 
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
@@ -233,6 +249,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                             fileText = fileText.replace(this.codeloadServer().baseUrl(), "https://codeload.github.com");
                         }
 
+                        if (this.actionsUserContentServer() != null) {
+                            fileText = fileText.replace(this.actionsUserContentServer().baseUrl(),
+                                    "https://pipelines.actions.githubusercontent.com");
+                        }
+
                         // point bodyFile in the mapping to the renamed body file
                         if (entry != null && filePath.toString().contains("mappings")) {
                             fileText = fileText.replace("-" + entry.getKey(), "-" + entry.getValue());
@@ -288,6 +309,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         body = replaceTargetServerUrl(body, this.uploadsServer(), "https://uploads.github.com", "/uploads");
 
         body = replaceTargetServerUrl(body, this.codeloadServer(), "https://codeload.github.com", "/codeload");
+
+        body = replaceTargetServerUrl(body,
+                this.actionsUserContentServer(),
+                "https://pipelines.actions.githubusercontent.com",
+                "/actions-user-content");
         return body;
     }
 

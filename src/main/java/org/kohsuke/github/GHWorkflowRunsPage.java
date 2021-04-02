@@ -11,9 +11,9 @@ class GHWorkflowRunsPage {
         return totalCount;
     }
 
-    GHWorkflowRun[] getWorkflowRuns(GitHub root) {
+    GHWorkflowRun[] getWorkflowRuns(GHRepository owner) {
         for (GHWorkflowRun workflowRun : workflowRuns) {
-            workflowRun.wrapUp(root);
+            workflowRun.wrapUp(owner);
         }
         return workflowRuns;
     }

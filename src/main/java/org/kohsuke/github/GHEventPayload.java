@@ -1400,13 +1400,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
                         "Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?");
             }
             GHRepository repository = getRepository();
-            if (repository != null) {
-                workflowRun.wrapUp(repository);
-                workflow.wrapUp(repository);
-            } else {
-                workflowRun.wrapUp(root);
-                workflow.wrapUp(root);
+            if (repository == null) {
+                throw new IllegalStateException("Repository must not be null");
             }
+            workflowRun.wrapUp(repository);
+            workflow.wrapUp(repository);
         }
     }
 }

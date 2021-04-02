@@ -8,13 +8,13 @@ import javax.annotation.Nonnull;
  * Iterable for workflow runs listing.
  */
 class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
-    private final transient GitHub root;
+    private final GHRepository owner;
     private final GitHubRequest request;
 
     private GHWorkflowRunsPage result;
 
-    public GHWorkflowRunsIterable(GitHub root, GitHubRequest request) {
-        this.root = root;
+    public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest request) {
+        this.owner = owner;
         this.request = request;
     }
 
@@ -22,7 +22,8 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
     @Override
     public PagedIterator<GHWorkflowRun> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(root.getClient(), GHWorkflowRunsPage.class, request, pageSize)),
+                adapt(GitHubPageIterator
+                        .create(owner.getRoot().getClient(), GHWorkflowRunsPage.class, request, pageSize)),
                 null);
     }
 
@@ -37,7 +38,7 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
                 if (result == null) {
                     result = v;
                 }
-                return v.getWorkflowRuns(root);
+                return v.getWorkflowRuns(owner);
             }
         };
     }

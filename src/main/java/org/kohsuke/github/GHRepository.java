@@ -737,7 +737,6 @@ public class GHRepository extends GHObject {
      */
     @Deprecated
     @Preview(NEBULA)
-    @WithBridgeMethods(value = String.class, adapterMethod = "visibilityAsStr")
     public Visibility getVisibility() {
         if (visibility == null) {
             try {
@@ -748,11 +747,6 @@ public class GHRepository extends GHObject {
             }
         }
         return Visibility.from(visibility);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getVisibility")
-    private Object visibilityAsStr(Visibility visibility, Class type) {
-        return visibility;
     }
 
     /**

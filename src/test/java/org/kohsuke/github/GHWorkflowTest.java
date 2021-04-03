@@ -43,6 +43,7 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
         assertEquals("test-workflow", workflow.getName());
+        assertEquals(REPO_NAME, workflow.getRepository().getFullName());
         assertEquals(".github/workflows/test-workflow.yml", workflow.getPath());
         assertEquals("active", workflow.getState());
         assertEquals("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859", workflow.getUrl().getPath());

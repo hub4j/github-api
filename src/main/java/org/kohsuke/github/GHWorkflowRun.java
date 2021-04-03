@@ -214,6 +214,15 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
+     * Repository to which the workflow run belongs.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
      * Gets the pull requests participated in this workflow run.
      *
      * Note this field is only populated for events. When getting a {@link GHWorkflowRun} outside of an event, this is

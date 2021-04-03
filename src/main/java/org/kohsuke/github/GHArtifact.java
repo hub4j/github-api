@@ -74,6 +74,15 @@ public class GHArtifact extends GHObject {
     }
 
     /**
+     * Repository to which the artifact belongs.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
      * @deprecated This object has no HTML URL.
      */
     @Override

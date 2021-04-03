@@ -62,6 +62,9 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertEquals(workflow.getId(), workflowRun.getWorkflowId());
+        assertNotNull(workflowRun.getId());
+        assertNotNull(workflowRun.getNodeId());
+        assertEquals(REPO_NAME, workflowRun.getRepository().getFullName());
         assertTrue(workflowRun.getUrl().getPath().contains("/actions/runs/"));
         assertTrue(workflowRun.getHtmlUrl().getPath().contains("/actions/runs/"));
         assertTrue(workflowRun.getJobsUrl().getPath().endsWith("/jobs"));
@@ -379,6 +382,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
         assertNotNull(artifact.getId());
         assertNotNull(artifact.getNodeId());
+        assertEquals(REPO_NAME, artifact.getRepository().getFullName());
         assertThat(artifact.getName(), is(artifactName));
         assertThat(artifact.getArchiveDownloadUrl().getPath(), containsString("actions/artifacts"));
         assertNotNull(artifact.getCreatedAt());

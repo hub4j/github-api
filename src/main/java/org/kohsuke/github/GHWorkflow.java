@@ -61,6 +61,15 @@ public class GHWorkflow extends GHObject {
     }
 
     /**
+     * Repository to which the workflow belongs.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
      * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
      *
      * @return the badge url

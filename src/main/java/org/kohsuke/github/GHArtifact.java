@@ -28,22 +28,47 @@ public class GHArtifact extends GHObject {
     private boolean expired;
     private String expiresAt;
 
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the size of the artifact in bytes.
+     *
+     * @return the size
+     */
     public long getSizeInBytes() {
         return sizeInBytes;
     }
 
+    /**
+     * Gets the archive download URL.
+     *
+     * @return the archive download URL
+     */
     public URL getArchiveDownloadUrl() {
         return GitHubClient.parseURL(archiveDownloadUrl);
     }
 
+    /**
+     * If this artifact has expired.
+     *
+     * @return if the artifact has expired
+     */
     public boolean isExpired() {
         return expired;
     }
 
+    /**
+     * Gets the date at which this artifact will expire.
+     *
+     * @return the date of expiration
+     */
     public Date getExpiresAt() {
         return GitHubClient.parseDate(expiresAt);
     }

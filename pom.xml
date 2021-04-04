@@ -46,6 +46,7 @@
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
     <jjwt.suite.version>0.11.2</jjwt.suite.version>
 
+    <jacoco.surefire.argLine />
     <surefire.argLine />
   </properties>
 
@@ -107,6 +108,9 @@
               <goals>
                 <goal>prepare-agent</goal>
               </goals>
+              <configuration>
+                <propertyName>jacoco.surefire.argLine</propertyName>
+              </configuration>
             </execution>
             <!-- attached to Maven test phase -->
             <execution>
@@ -274,7 +278,7 @@
             <id>default-test</id>
             <configuration>
               <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-              <argLine>${surefire.argLine}</argLine>
+              <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
             </configuration>
           </execution>
         </executions>
@@ -582,7 +586,7 @@
                   <!-- There are some tests that take longer or are a little
                     flaky. Run them here. -->
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
-                  <argLine>${surefire.argLine}</argLine>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
                 </configuration>
               </execution>
             </executions>

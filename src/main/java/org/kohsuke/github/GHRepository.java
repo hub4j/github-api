@@ -66,6 +66,7 @@ import static org.kohsuke.github.internal.Previews.BAPTISTE;
 import static org.kohsuke.github.internal.Previews.FLASH;
 import static org.kohsuke.github.internal.Previews.INERTIA;
 import static org.kohsuke.github.internal.Previews.MERCY;
+import static org.kohsuke.github.internal.Previews.NEBULA;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**

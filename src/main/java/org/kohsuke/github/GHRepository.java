@@ -31,6 +31,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,6 +50,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -64,6 +66,7 @@ import static org.kohsuke.github.internal.Previews.BAPTISTE;
 import static org.kohsuke.github.internal.Previews.FLASH;
 import static org.kohsuke.github.internal.Previews.INERTIA;
 import static org.kohsuke.github.internal.Previews.MERCY;
+import static org.kohsuke.github.internal.Previews.NEBULA;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
@@ -103,6 +106,8 @@ public class GHRepository extends GHObject {
 
     @JsonProperty("private")
     private boolean _private;
+
+    private String visibility;
 
     private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
 
@@ -711,6 +716,41 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Visibility of a repository.
+     */
+    public enum Visibility {
+        PUBLIC, INTERNAL, PRIVATE, UNKNOWN;
+
+        public static Visibility from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Visibility.class, value, Visibility.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    /**
+     * Gets the visibility of the repository.
+     *
+     * @return the visibility
+     */
+    @Deprecated
+    @Preview(NEBULA)
+    public Visibility getVisibility() {
+        if (visibility == null) {
+            try {
+                populate();
+            } catch (final IOException e) {
+                // Convert this to a runtime exception to avoid messy method signature
+                throw new GHException("Could not populate the visibility of the repository", e);
+            }
+        }
+        return Visibility.from(visibility);
+    }
+
+    /**
      * Is template boolean.
      *
      * @return the boolean
@@ -1200,6 +1240,26 @@ public class GHRepository extends GHObject {
      */
     public void setPrivate(boolean value) throws IOException {
         set().private_(value);
+    }
+
+    /**
+     * Sets visibility.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    @Preview(NEBULA)
+    public void setVisibility(final Visibility value) throws IOException {
+        root.createRequest()
+                .method("PATCH")
+                .withPreview(NEBULA)
+                .with("name", name)
+                .with("visibility", value)
+                .withUrlPath(getApiTailUrl(""))
+                .send();
     }
 
     /**
@@ -3122,11 +3182,17 @@ public class GHRepository extends GHObject {
             // There is bug in Push event payloads that returns the wrong url.
             // All other occurrences of "url" take the form "https://api.github.com/...".
             // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root.createRequest().withPreview(BAPTISTE).setRawUrlPath(url.toString()).fetchInto(this).wrap(root);
+            root.createRequest()
+                    .withPreview(BAPTISTE)
+                    .withPreview(NEBULA)
+                    .setRawUrlPath(url.toString())
+                    .fetchInto(this)
+                    .wrap(root);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
                 root.createRequest()
                         .withPreview(BAPTISTE)
+                        .withPreview(NEBULA)
                         .withUrlPath("/repos/" + full_name)
                         .fetchInto(this)
                         .wrap(root);

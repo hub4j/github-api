@@ -1,9 +1,12 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.GHRepository.Visibility;
+
 import java.io.IOException;
 import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.NEBULA;
 
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
@@ -144,6 +147,20 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      */
     public S private_(boolean enabled) throws IOException {
         return with("private", enabled);
+    }
+
+    /**
+     * Sets the repository visibility
+     *
+     * @param visibility
+     *            visibility of repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S visibility(final Visibility visibility) throws IOException {
+        requester.withPreview(NEBULA);
+        return with("visibility", visibility);
     }
 
     /**

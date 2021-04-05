@@ -70,6 +70,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHRepository.CollaboratorAffiliation.values().length, equalTo(3));
         assertThat(GHRepository.ForkSort.values().length, equalTo(3));
+        assertThat(GHRepository.Visibility.values().length, equalTo(4));
 
         assertThat(GHRepositorySearchBuilder.Sort.values().length, equalTo(3));
 

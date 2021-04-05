@@ -318,8 +318,8 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return list of jobs from the last execution
      */
-    public PagedIterable<GHWorkflowRunJob> listJobs() {
-        return new GHWorkflowRunJobQueryBuilder(this).latest().list();
+    public PagedIterable<GHWorkflowJob> listJobs() {
+        return new GHWorkflowJobQueryBuilder(this).latest().list();
     }
 
     /**
@@ -327,8 +327,8 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return list of jobs from all the executions
      */
-    public PagedIterable<GHWorkflowRunJob> listAllJobs() {
-        return new GHWorkflowRunJobQueryBuilder(this).all().list();
+    public PagedIterable<GHWorkflowJob> listAllJobs() {
+        return new GHWorkflowJobQueryBuilder(this).all().list();
     }
 
     private String getApiRoute() {

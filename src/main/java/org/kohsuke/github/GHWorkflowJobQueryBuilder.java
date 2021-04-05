@@ -7,10 +7,10 @@ import java.net.MalformedURLException;
  *
  * @author Guillaume Smet
  */
-public class GHWorkflowRunJobQueryBuilder extends GHQueryBuilder<GHWorkflowRunJob> {
+public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
     private final GHRepository repo;
 
-    GHWorkflowRunJobQueryBuilder(GHWorkflowRun workflowRun) {
+    GHWorkflowJobQueryBuilder(GHWorkflowRun workflowRun) {
         super(workflowRun.getRepository().root);
         this.repo = workflowRun.getRepository();
         req.withUrlPath(repo.getApiTailUrl("actions/runs"), String.valueOf(workflowRun.getId()), "jobs");
@@ -21,7 +21,7 @@ public class GHWorkflowRunJobQueryBuilder extends GHQueryBuilder<GHWorkflowRunJo
      *
      * @return the workflow run job query builder
      */
-    public GHWorkflowRunJobQueryBuilder latest() {
+    public GHWorkflowJobQueryBuilder latest() {
         req.with("filter", "latest");
         return this;
     }
@@ -31,15 +31,15 @@ public class GHWorkflowRunJobQueryBuilder extends GHQueryBuilder<GHWorkflowRunJo
      *
      * @return the workflow run job run query builder
      */
-    public GHWorkflowRunJobQueryBuilder all() {
+    public GHWorkflowJobQueryBuilder all() {
         req.with("filter", "all");
         return this;
     }
 
     @Override
-    public PagedIterable<GHWorkflowRunJob> list() {
+    public PagedIterable<GHWorkflowJob> list() {
         try {
-            return new GHWorkflowRunJobsIterable(repo, req.build());
+            return new GHWorkflowJobsIterable(repo, req.build());
         } catch (MalformedURLException e) {
             throw new GHException(e.getMessage(), e);
         }

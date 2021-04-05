@@ -3061,10 +3061,10 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHWorkflowRunJob getWorkflowRunJob(long id) throws IOException {
+    public GHWorkflowJob getWorkflowJob(long id) throws IOException {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("/actions/jobs/"), String.valueOf(id))
-                .fetch(GHWorkflowRunJob.class)
+                .fetch(GHWorkflowJob.class)
                 .wrapUp(this);
     }
 

@@ -4,9 +4,9 @@ import org.awaitility.Awaitility;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHWorkflowJob.Step;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
-import org.kohsuke.github.GHWorkflowRunJob.Step;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
@@ -339,7 +339,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        List<GHWorkflowRunJob> jobs = workflowRun.listJobs()
+        List<GHWorkflowJob> jobs = workflowRun.listJobs()
                 .toList()
                 .stream()
                 .sorted((j1, j2) -> j1.getName().compareTo(j2.getName()))
@@ -347,22 +347,22 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         assertThat(jobs.size(), is(2));
 
-        GHWorkflowRunJob job1 = jobs.get(0);
+        GHWorkflowJob job1 = jobs.get(0);
         checkJobProperties(workflowRun.getId(), job1, "job1");
         String fullLogContent = job1.downloadLogs(getLogTextInputStreamFunction());
         assertThat(fullLogContent, containsString("Hello from job1!"));
 
-        GHWorkflowRunJob job2 = jobs.get(1);
+        GHWorkflowJob job2 = jobs.get(1);
         checkJobProperties(workflowRun.getId(), job2, "job2");
         fullLogContent = job2.downloadLogs(getLogTextInputStreamFunction());
         assertThat(fullLogContent, containsString("Hello from job2!"));
 
-        // while we have a job around, test GHRepository#getWorkflowRunJob(id)
-        GHWorkflowRunJob job1ById = repo.getWorkflowRunJob(job1.getId());
+        // while we have a job around, test GHRepository#getWorkflowJob(id)
+        GHWorkflowJob job1ById = repo.getWorkflowJob(job1.getId());
         checkJobProperties(workflowRun.getId(), job1ById, "job1");
 
         // Also test listAllJobs() works correctly
-        List<GHWorkflowRunJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
+        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
         assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 
@@ -468,8 +468,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertFalse(artifact.isExpired());
     }
 
-    private static void checkJobProperties(long workflowRunId, GHWorkflowRunJob job, String jobName)
-            throws IOException {
+    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) throws IOException {
         assertNotNull(job.getId());
         assertNotNull(job.getNodeId());
         assertEquals(REPO_NAME, job.getRepository().getFullName());

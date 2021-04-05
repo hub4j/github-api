@@ -20,7 +20,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Guillaume Smet
  */
-public class GHWorkflowRunJob extends GHObject {
+public class GHWorkflowJob extends GHObject {
 
     // Not provided by the API.
     @JsonIgnore
@@ -171,12 +171,12 @@ public class GHWorkflowRunJob extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/jobs/" + getId();
     }
 
-    GHWorkflowRunJob wrapUp(GHRepository owner) {
+    GHWorkflowJob wrapUp(GHRepository owner) {
         this.owner = owner;
         return wrapUp(owner.root);
     }
 
-    GHWorkflowRunJob wrapUp(GitHub root) {
+    GHWorkflowJob wrapUp(GitHub root) {
         this.root = root;
         if (owner != null) {
             owner.wrap(root);

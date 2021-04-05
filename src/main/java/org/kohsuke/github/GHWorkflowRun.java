@@ -285,8 +285,9 @@ public class GHWorkflowRun extends GHObject {
     /**
      * Downloads the logs.
      * <p>
-     * The logs are in the form of a zip archive. The full log file is at the root and called {@code 1_build.txt}. Split
-     * log files are also available in the {@code build} directory.
+     * The logs are in the form of a zip archive.
+     * <p>
+     * Note that the archive is the same as the one downloaded from a workflow run so it contains the logs for all jobs.
      *
      * @param <T>
      *            the type of result
@@ -310,6 +311,15 @@ public class GHWorkflowRun extends GHObject {
      */
     public void deleteLogs() throws IOException {
         root.createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").fetchHttpStatusCode();
+    }
+
+    /**
+     * Retrieves the jobs of this workflow run.
+     *
+     * @return the jobs query builder
+     */
+    public GHWorkflowRunJobQueryBuilder queryJobs() {
+        return new GHWorkflowRunJobQueryBuilder(this);
     }
 
     private String getApiRoute() {

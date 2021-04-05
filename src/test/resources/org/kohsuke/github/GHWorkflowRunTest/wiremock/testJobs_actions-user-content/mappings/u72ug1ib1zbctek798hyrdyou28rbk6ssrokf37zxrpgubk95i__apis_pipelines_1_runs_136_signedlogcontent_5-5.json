@@ -1,0 +1,34 @@
+{
+  "id": "d026ff59-e581-4a04-9bd5-02a8f575ab5e",
+  "name": "u72ug1ib1zbctek798hyrdyou28rbk6ssrokf37zxrpgubk95i__apis_pipelines_1_runs_136_signedlogcontent_5",
+  "request": {
+    "url": "/u72ug1Ib1ZBCtek798HyrDYOU28rBK6ssrOKf37ZxrpgUbk95I/_apis/pipelines/1/runs/136/signedlogcontent/5?urlExpires=2021-04-05T13%3A15%3A52.3749500Z&urlSigningMethod=HMACV1&urlSignature=gvBxNhvLLsKDO9z7azGKIWMBwfWZvehkVTlsB8%2Bw8%2FY%3D",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "u72ug1ib1zbctek798hyrdyou28rbk6ssrokf37zxrpgubk95i__apis_pipelines_1_runs_136_signedlogcontent_5-5.txt",
+    "headers": {
+      "Cache-Control": "no-store,no-cache",
+      "Pragma": "no-cache",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Vary": "Accept-Encoding",
+      "Strict-Transport-Security": "max-age=2592000",
+      "X-TFS-ProcessId": "0c574eb8-2cea-4c9e-a4f3-0c7ecc98b74b",
+      "ActivityId": "5ec76a7a-62a5-416a-a915-c4537459279c",
+      "X-TFS-Session": "5ec76a7a-62a5-416a-a915-c4537459279c",
+      "X-VSS-E2EID": "5ec76a7a-62a5-416a-a915-c4537459279c",
+      "X-VSS-SenderDeploymentId": "2c974d96-2c30-cef5-eff2-3e0511a903a5",
+      "X-MSEdge-Ref": "Ref A: 593FBB27C8A246DA9ABAFDB826D4E036 Ref B: MRS20EDGE0114 Ref C: 2021-04-05T13:14:52Z",
+      "Date": "Mon, 05 Apr 2021 13:14:52 GMT"
+    }
+  },
+  "uuid": "d026ff59-e581-4a04-9bd5-02a8f575ab5e",
+  "persistent": true,
+  "insertionIndex": 5
+}

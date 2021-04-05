@@ -314,12 +314,21 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Retrieves the jobs of this workflow run.
+     * Returns this list of jobs of this workflow run for the last execution.
      *
-     * @return the jobs query builder
+     * @return list of jobs from the last execution
      */
-    public GHWorkflowRunJobQueryBuilder queryJobs() {
-        return new GHWorkflowRunJobQueryBuilder(this);
+    public PagedIterable<GHWorkflowRunJob> listJobs() {
+        return new GHWorkflowRunJobQueryBuilder(this).latest().list();
+    }
+
+    /**
+     * Returns this list of jobs from all the executions of this workflow run.
+     *
+     * @return list of jobs from all the executions
+     */
+    public PagedIterable<GHWorkflowRunJob> listAllJobs() {
+        return new GHWorkflowRunJobQueryBuilder(this).all().list();
     }
 
     private String getApiRoute() {

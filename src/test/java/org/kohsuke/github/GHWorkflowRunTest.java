@@ -22,6 +22,7 @@ import java.util.zip.ZipInputStream;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
@@ -338,9 +339,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        List<GHWorkflowRunJob> jobs = workflowRun.queryJobs()
-                .latest()
-                .list()
+        List<GHWorkflowRunJob> jobs = workflowRun.listJobs()
                 .toList()
                 .stream()
                 .sorted((j1, j2) -> j1.getName().compareTo(j2.getName()))
@@ -361,6 +360,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         // while we have a job around, test GHRepository#getWorkflowRunJob(id)
         GHWorkflowRunJob job1ById = repo.getWorkflowRunJob(job1.getId());
         checkJobProperties(workflowRun.getId(), job1ById, "job1");
+
+        // Also test listAllJobs() works correctly
+        List<GHWorkflowRunJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
+        assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 
     private void await(Function<GHRepository, Boolean> condition) throws IOException {

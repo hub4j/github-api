@@ -93,6 +93,7 @@
     "url": "https://api.github.com/licenses/mit",
     "node_id": "MDc6TGljZW5zZTEz"
   },
+  "visibility": "public",
   "is_template": false,
   "forks": 0,
   "open_issues": 5,

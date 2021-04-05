@@ -323,7 +323,7 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Returns this list of jobs from all the executions of this workflow run.
+     * Returns the list of jobs from all the executions of this workflow run.
      *
      * @return list of jobs from all the executions
      */

@@ -314,7 +314,7 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Returns this list of jobs of this workflow run for the last execution.
+     * Returns the list of jobs of this workflow run for the last execution.
      *
      * @return list of jobs from the last execution
      */

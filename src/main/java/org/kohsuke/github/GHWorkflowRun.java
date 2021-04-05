@@ -86,7 +86,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The jobs URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/jobs
      *
-     * @return the diff url
+     * @return the jobs url
      */
     public URL getJobsUrl() {
         return GitHubClient.parseURL(jobsUrl);
@@ -95,7 +95,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The logs URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/logs
      *
-     * @return the diff url
+     * @return the logs url
      */
     public URL getLogsUrl() {
         return GitHubClient.parseURL(logsUrl);
@@ -104,7 +104,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The check suite URL, like https://api.github.com/repos/octo-org/octo-repo/check-suites/414944374
      *
-     * @return the diff url
+     * @return the check suite url
      */
     public URL getCheckSuiteUrl() {
         return GitHubClient.parseURL(checkSuiteUrl);
@@ -113,7 +113,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The artifacts URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/artifacts
      *
-     * @return the diff url
+     * @return the artifacts url
      */
     public URL getArtifactsUrl() {
         return GitHubClient.parseURL(artifactsUrl);
@@ -122,7 +122,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/cancel
      *
-     * @return the diff url
+     * @return the cancel url
      */
     public URL getCancelUrl() {
         return GitHubClient.parseURL(cancelUrl);
@@ -131,7 +131,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The rerun URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/rerun
      *
-     * @return the diff url
+     * @return the rerun url
      */
     public URL getRerunUrl() {
         return GitHubClient.parseURL(rerunUrl);
@@ -140,7 +140,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The workflow URL, like https://api.github.com/repos/octo-org/octo-repo/actions/workflows/159038
      *
-     * @return the diff url
+     * @return the workflow url
      */
     public URL getWorkflowUrl() {
         return GitHubClient.parseURL(workflowUrl);

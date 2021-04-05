@@ -30,7 +30,7 @@ jobs:
       - name: Maven Install (skipTests)
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B install -DskipTests -D enable-ci --file pom.xml
+        run: mvn -B install -DskipTests --file pom.xml
   site:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest

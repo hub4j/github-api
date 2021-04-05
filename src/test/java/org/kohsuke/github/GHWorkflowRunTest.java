@@ -4,8 +4,10 @@ import org.awaitility.Awaitility;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHWorkflowJob.Step;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
+import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -14,10 +16,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
@@ -33,6 +40,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
     private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
     private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
+
+    private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
+    private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
+    private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
 
     private GHRepository repo;
 
@@ -191,7 +202,6 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @SuppressWarnings("resource")
     public void testLogs() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
 
@@ -212,25 +222,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<String> logsArchiveEntries = new ArrayList<>();
-        String fullLogContent = workflowRun.downloadLogs((is) -> {
-            try (ZipInputStream zis = new ZipInputStream(is)) {
-                StringBuilder sb = new StringBuilder();
-
-                ZipEntry ze;
-                while ((ze = zis.getNextEntry()) != null) {
-                    logsArchiveEntries.add(ze.getName());
-                    if ("1_build.txt".equals(ze.getName())) {
-                        // the scanner has to be kept open to avoid closing zis
-                        Scanner scanner = new Scanner(zis);
-                        while (scanner.hasNextLine()) {
-                            sb.append(scanner.nextLine()).append("\n");
-                        }
-                    }
-                }
-
-                return sb.toString();
-            }
-        });
+        String fullLogContent = workflowRun
+                .downloadLogs(getLogArchiveInputStreamFunction("1_build.txt", logsArchiveEntries));
 
         assertThat(logsArchiveEntries, hasItems("1_build.txt", "build/9_Complete job.txt"));
         assertThat(fullLogContent, containsString("Hello, world!"));
@@ -326,6 +319,53 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void testJobs() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(MULTI_JOBS_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                MULTI_JOBS_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(MULTI_JOBS_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).orElseThrow(
+                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        List<GHWorkflowJob> jobs = workflowRun.listJobs()
+                .toList()
+                .stream()
+                .sorted((j1, j2) -> j1.getName().compareTo(j2.getName()))
+                .collect(Collectors.toList());
+
+        assertThat(jobs.size(), is(2));
+
+        GHWorkflowJob job1 = jobs.get(0);
+        checkJobProperties(workflowRun.getId(), job1, "job1");
+        String fullLogContent = job1.downloadLogs(getLogTextInputStreamFunction());
+        assertThat(fullLogContent, containsString("Hello from job1!"));
+
+        GHWorkflowJob job2 = jobs.get(1);
+        checkJobProperties(workflowRun.getId(), job2, "job2");
+        fullLogContent = job2.downloadLogs(getLogTextInputStreamFunction());
+        assertThat(fullLogContent, containsString("Hello from job2!"));
+
+        // while we have a job around, test GHRepository#getWorkflowJob(id)
+        GHWorkflowJob job1ById = repo.getWorkflowJob(job1.getId());
+        checkJobProperties(workflowRun.getId(), job1ById, "job1");
+
+        // Also test listAllJobs() works correctly
+        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
+        assertThat(allJobs.size(), greaterThanOrEqualTo(2));
+    }
+
     private void await(Function<GHRepository, Boolean> condition) throws IOException {
         if (!mockGitHub.isUseProxy()) {
             return;
@@ -379,6 +419,42 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @SuppressWarnings("resource")
+    private static InputStreamFunction<String> getLogArchiveInputStreamFunction(String mainLogFileName,
+            List<String> logsArchiveEntries) {
+        return (is) -> {
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+                StringBuilder sb = new StringBuilder();
+
+                ZipEntry ze;
+                while ((ze = zis.getNextEntry()) != null) {
+                    logsArchiveEntries.add(ze.getName());
+                    if (mainLogFileName.equals(ze.getName())) {
+                        // the scanner has to be kept open to avoid closing zis
+                        Scanner scanner = new Scanner(zis);
+                        while (scanner.hasNextLine()) {
+                            sb.append(scanner.nextLine()).append("\n");
+                        }
+                    }
+                }
+
+                return sb.toString();
+            }
+        };
+    }
+
+    @SuppressWarnings("resource")
+    private static InputStreamFunction<String> getLogTextInputStreamFunction() {
+        return (is) -> {
+            StringBuilder sb = new StringBuilder();
+            Scanner scanner = new Scanner(is);
+            while (scanner.hasNextLine()) {
+                sb.append(scanner.nextLine()).append("\n");
+            }
+            return sb.toString();
+        };
+    }
+
     private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
         assertNotNull(artifact.getId());
         assertNotNull(artifact.getNodeId());
@@ -390,5 +466,41 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertNotNull(artifact.getExpiresAt());
         assertThat(artifact.getSizeInBytes(), greaterThan(0L));
         assertFalse(artifact.isExpired());
+    }
+
+    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) throws IOException {
+        assertNotNull(job.getId());
+        assertNotNull(job.getNodeId());
+        assertEquals(REPO_NAME, job.getRepository().getFullName());
+        assertThat(job.getName(), is(jobName));
+        assertNotNull(job.getStartedAt());
+        assertNotNull(job.getCompletedAt());
+        assertNotNull(job.getHeadSha());
+        assertThat(job.getStatus(), is(Status.COMPLETED));
+        assertThat(job.getConclusion(), is(Conclusion.SUCCESS));
+        assertThat(job.getRunId(), is(workflowRunId));
+        assertThat(job.getUrl().getPath(), containsString("/actions/jobs/"));
+        assertThat(job.getHtmlUrl().getPath(), containsString("/runs/" + job.getId()));
+        assertThat(job.getCheckRunUrl().getPath(), containsString("/check-runs/"));
+
+        // we only test the step we have control over, the others are added by GitHub
+        Optional<Step> step = job.getSteps()
+                .stream()
+                .filter(s -> RUN_A_ONE_LINE_SCRIPT_STEP_NAME.equals(s.getName()))
+                .findFirst();
+        if (!step.isPresent()) {
+            fail("Unable to find " + RUN_A_ONE_LINE_SCRIPT_STEP_NAME + " step");
+        }
+
+        checkStepProperties(step.get(), RUN_A_ONE_LINE_SCRIPT_STEP_NAME, 2);
+    }
+
+    private static void checkStepProperties(Step step, String name, int number) {
+        assertThat(step.getName(), is(name));
+        assertThat(step.getNumber(), is(number));
+        assertThat(step.getStatus(), is(Status.COMPLETED));
+        assertThat(step.getConclusion(), is(Conclusion.SUCCESS));
+        assertNotNull(step.getStartedAt());
+        assertNotNull(step.getCompletedAt());
     }
 }

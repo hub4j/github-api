@@ -3052,6 +3052,22 @@ public class GHRepository extends GHObject {
                 .wrapUp(this);
     }
 
+    /**
+     * Gets a job from a workflow run by id.
+     *
+     * @param id
+     *            the id of the job
+     * @return the job
+     * @throws IOException
+     *             the io exception
+     */
+    public GHWorkflowJob getWorkflowJob(long id) throws IOException {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("/actions/jobs/"), String.valueOf(id))
+                .fetch(GHWorkflowJob.class)
+                .wrapUp(this);
+    }
+
     // Only used within listTopics().
     private static class Topics {
         public List<String> names;

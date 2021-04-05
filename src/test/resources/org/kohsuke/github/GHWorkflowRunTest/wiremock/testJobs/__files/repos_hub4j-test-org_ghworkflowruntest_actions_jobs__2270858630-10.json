@@ -1,0 +1,41 @@
+{
+  "id": 2270858630,
+  "run_id": 719643947,
+  "run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/719643947",
+  "node_id": "MDg6Q2hlY2tSdW4yMjcwODU4NjMw",
+  "head_sha": "c7bd3b8db871bbde8629275631ea645622ae89d7",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/jobs/2270858630",
+  "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/runs/2270858630",
+  "status": "completed",
+  "conclusion": "success",
+  "started_at": "2021-04-05T15:42:57Z",
+  "completed_at": "2021-04-05T15:42:59Z",
+  "name": "job1",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2021-04-05T17:42:57.000+02:00",
+      "completed_at": "2021-04-05T17:42:58.000+02:00"
+    },
+    {
+      "name": "Run a one-line script",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2021-04-05T17:42:58.000+02:00",
+      "completed_at": "2021-04-05T17:42:59.000+02:00"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2021-04-05T17:42:59.000+02:00",
+      "completed_at": "2021-04-05T17:42:59.000+02:00"
+    }
+  ],
+  "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858630"
+}

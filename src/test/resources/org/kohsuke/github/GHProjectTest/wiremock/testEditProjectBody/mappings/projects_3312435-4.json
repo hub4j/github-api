@@ -3,7 +3,6 @@
   "name": "projects_3312435",
   "request": {
     "url": "/projects/3312435",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"body\":\"New body\"}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "application/vnd.github.inertia-preview+json"
       }

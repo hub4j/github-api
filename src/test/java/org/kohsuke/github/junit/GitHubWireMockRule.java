@@ -159,6 +159,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         if (server != null) {
 
             server.snapshotRecord(recordSpec().forTarget(target)
+                    // "X-HTTP-Method-Override" is used to send http methods not supported by
+                    // HttpURLConnection without using hacky Java reflection techniques
+                    .captureHeader("X-HTTP-Method-Override")
                     // "If-None-Match" header used for ETag matching for caching connections
                     .captureHeader("If-None-Match")
                     // "If-Modified-Since" header used for ETag matching for caching connections

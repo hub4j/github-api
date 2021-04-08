@@ -1,5 +1,5 @@
 {
-  "id": "e24be5d0-73bf-4748-8c79-a68eb5e2becf",
+  "id": "55f5d0e7-2f1f-4a8a-812c-204ea56540f7",
   "name": "repos_hub4j-test-org_test-labels",
   "request": {
     "url": "/repos/hub4j-test-org/test-labels",
@@ -14,33 +14,33 @@
     "status": 200,
     "bodyFileName": "repos_hub4j-test-org_test-labels-2.json",
     "headers": {
-      "Date": "Thu, 26 Mar 2020 21:52:19 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4993",
-      "X-RateLimit-Reset": "1585263138",
+      "Date": "Thu, 08 Apr 2021 20:38:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"6b3e989ed9af12ce6cd75038c1664ab5\"",
+      "ETag": "W/\"86fbc9276b6690bc16bd74f81c0ce45c1f5fda7db638aaa2c4bb0bcdd63da176\"",
       "Last-Modified": "Sun, 15 Feb 2015 14:49:09 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-OAuth-Scopes": "repo, workflow",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4937",
+      "X-RateLimit-Reset": "1617917629",
+      "X-RateLimit-Used": "63",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E69B:9495:1D1CC:2452B:5E7D2411"
+      "X-GitHub-Request-Id": "E09C:148F:17AC74:19F151:606F69E3"
     }
   },
-  "uuid": "e24be5d0-73bf-4748-8c79-a68eb5e2becf",
+  "uuid": "55f5d0e7-2f1f-4a8a-812c-204ea56540f7",
   "persistent": true,
   "insertionIndex": 2
 }

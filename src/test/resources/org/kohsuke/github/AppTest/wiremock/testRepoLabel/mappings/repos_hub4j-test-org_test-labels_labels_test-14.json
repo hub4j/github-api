@@ -1,5 +1,5 @@
 {
-  "id": "0c78363a-0c1e-4070-9210-a890b324c506",
+  "id": "6b993840-624c-4b20-96c3-d5036b7502a1",
   "name": "repos_hub4j-test-org_test-labels_labels_test",
   "request": {
     "url": "/repos/hub4j-test-org/test-labels/labels/test",
@@ -12,29 +12,29 @@
   },
   "response": {
     "status": 404,
-    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/issues/labels/#get-a-single-label\"}",
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/issues#get-a-label\"}",
     "headers": {
-      "Date": "Thu, 26 Mar 2020 21:52:22 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "404 Not Found",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4981",
-      "X-RateLimit-Reset": "1585263138",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "Date": "Thu, 08 Apr 2021 20:39:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "repo, workflow",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4925",
+      "X-RateLimit-Reset": "1617917629",
+      "X-RateLimit-Used": "75",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "Vary": "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI",
-      "X-GitHub-Request-Id": "E69B:9495:1D211:245AD:5E7D2415"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "E09C:148F:17AD12:19F20A:606F69E5"
     }
   },
-  "uuid": "0c78363a-0c1e-4070-9210-a890b324c506",
+  "uuid": "6b993840-624c-4b20-96c3-d5036b7502a1",
   "persistent": true,
   "scenarioName": "scenario-1-repos-hub4j-test-org-test-labels-labels-test",
   "requiredScenarioState": "scenario-1-repos-hub4j-test-org-test-labels-labels-test-4",

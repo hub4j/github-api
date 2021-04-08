@@ -3,8 +3,11 @@
   "name": "organizations_7544739_team_3451996_discussions_64",
   "request": {
     "url": "/organizations/7544739/team/3451996/discussions/64",
-    "method": "PATCH",
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

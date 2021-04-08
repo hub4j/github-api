@@ -3,7 +3,6 @@
   "name": "projects_columns_6706791",
   "request": {
     "url": "/projects/columns/6706791",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"name\":\"new-name\"}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "application/vnd.github.inertia-preview+json"
       }

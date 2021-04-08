@@ -1,5 +1,5 @@
 {
-  "id": "2c942d88-1a5a-4fba-ae09-ada2a5dff83f",
+  "id": "7896038e-2291-4a94-8ce9-ea12923353b2",
   "name": "repos_hub4j-test-org_test-labels_labels",
   "request": {
     "url": "/repos/hub4j-test-org/test-labels/labels",
@@ -13,41 +13,41 @@
       {
         "equalToJson": "{\"color\":\"123457\",\"name\":\"test2\",\"description\":\"this is a different test\"}",
         "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
+        "ignoreExtraElements": false
       }
     ]
   },
   "response": {
     "status": 201,
-    "body": "{\"id\":1937402965,\"node_id\":\"MDU6TGFiZWwxOTM3NDAyOTY1\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2\",\"name\":\"test2\",\"color\":\"123457\",\"default\":false,\"description\":\"this is a different test\"}",
+    "body": "{\"id\":2897001309,\"node_id\":\"MDU6TGFiZWwyODk3MDAxMzA5\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2\",\"name\":\"test2\",\"color\":\"123457\",\"default\":false,\"description\":\"this is a different test\"}",
     "headers": {
-      "Date": "Thu, 26 Mar 2020 21:52:22 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4980",
-      "X-RateLimit-Reset": "1585263137",
+      "Date": "Thu, 08 Apr 2021 20:39:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"648a902d66c2f46f74c7b836969fdfe9\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "\"6bb2796b20a76d6ab8e7a147bf6b19cf6d0605587e59367c34afe06bb4786f60\"",
+      "X-OAuth-Scopes": "repo, workflow",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2",
       "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4924",
+      "X-RateLimit-Reset": "1617917629",
+      "X-RateLimit-Used": "76",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E69B:9495:1D214:245B7:5E7D2416"
+      "X-GitHub-Request-Id": "E09C:148F:17AD20:19F219:606F69E6",
+      "Location": "https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2"
     }
   },
-  "uuid": "2c942d88-1a5a-4fba-ae09-ada2a5dff83f",
+  "uuid": "7896038e-2291-4a94-8ce9-ea12923353b2",
   "persistent": true,
   "insertionIndex": 15
 }

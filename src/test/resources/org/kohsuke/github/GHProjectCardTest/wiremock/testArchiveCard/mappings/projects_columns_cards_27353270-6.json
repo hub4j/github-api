@@ -3,7 +3,6 @@
   "name": "projects_columns_cards_27353270",
   "request": {
     "url": "/projects/columns/cards/27353270",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"archived\":true}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "application/vnd.github.inertia-preview+json"
       }

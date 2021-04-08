@@ -5,7 +5,6 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
@@ -163,30 +162,9 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                 connection.setRequestMethod(method);
             } catch (ProtocolException e) {
                 // JDK only allows one of the fixed set of verbs. Try to override that
-                try {
-                    Field $method = HttpURLConnection.class.getDeclaredField("method");
-                    $method.setAccessible(true);
-                    $method.set(connection, method);
-                } catch (Exception x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
-                // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
-                try {
-                    Field $delegate = connection.getClass().getDeclaredField("delegate");
-                    $delegate.setAccessible(true);
-                    Object delegate = $delegate.get(connection);
-                    if (delegate instanceof HttpURLConnection) {
-                        HttpURLConnection nested = (HttpURLConnection) delegate;
-                        setRequestMethod(method, nested);
-                    }
-                } catch (NoSuchFieldException x) {
-                    // no problem
-                } catch (IllegalAccessException x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
+                connection.setRequestProperty("X-HTTP-Method-Override", method);
+                connection.setRequestMethod("POST");
             }
-            if (!connection.getRequestMethod().equals(method))
-                throw new IllegalStateException("Failed to set the request method to " + method);
         }
 
         /**

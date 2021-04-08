@@ -3,8 +3,11 @@
   "name": "repos_hub4j-test-org_ghtreebuildertest_git_refs_heads_master",
   "request": {
     "url": "/repos/hub4j-test-org/GHTreeBuilderTest/git/refs/heads/master",
-    "method": "PATCH",
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

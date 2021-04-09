@@ -3,8 +3,11 @@
   "name": "repos_hub4j-test-org_test-repo-visibility",
   "request": {
     "url": "/repos/hub4j-test-org/test-repo-visibility",
-    "method": "PATCH",
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "application/vnd.github.nebula-preview+json"
       }

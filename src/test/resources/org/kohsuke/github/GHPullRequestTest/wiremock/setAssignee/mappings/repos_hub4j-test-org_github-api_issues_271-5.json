@@ -3,7 +3,6 @@
   "name": "repos_hub4j-test-org_github-api_issues_271",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/issues/271",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"assignees\":[\"bitwiseman\"]}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

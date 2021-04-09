@@ -3,7 +3,6 @@
   "name": "repos_bitwiseman_test-repo-public",
   "request": {
     "url": "/repos/bitwiseman/test-repo-public",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"private\":false,\"name\":\"test-repo-public\"}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

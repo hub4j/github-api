@@ -3,7 +3,6 @@
   "name": "notifications_threads_523050578",
   "request": {
     "url": "/notifications/threads/523050578",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

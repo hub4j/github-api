@@ -3,19 +3,22 @@
   "name": "repos_hub4j-test-org_temp-testcreaterepository_releases_assets_16422841",
   "request": {
     "url": "/repos/hub4j-test-org/temp-testCreateRepository/releases/assets/16422841",
-    "method": "PATCH",
+    "method": "POST",
+    "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
     "bodyPatterns": [
       {
         "equalToJson": "{\"label\":\"test label\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }
-    ],
-    "headers": {
-      "Accept": {
-        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
-      }
-    }
+    ]
   },
   "response": {
     "status": 200,

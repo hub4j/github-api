@@ -3,7 +3,6 @@
   "name": "repos_hub4j-test-org_temp-setmergeoptions",
   "request": {
     "url": "/repos/hub4j-test-org/temp-setMergeOptions",
-    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"name\":\"temp-setMergeOptions\",\"allow_rebase_merge\":true}",
@@ -11,7 +10,11 @@
         "ignoreExtraElements": true
       }
     ],
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

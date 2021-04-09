@@ -3,8 +3,11 @@
   "name": "repos_kohsuke_sandbox-ant_comments_46267761",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant/comments/46267761",
-    "method": "PATCH",
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

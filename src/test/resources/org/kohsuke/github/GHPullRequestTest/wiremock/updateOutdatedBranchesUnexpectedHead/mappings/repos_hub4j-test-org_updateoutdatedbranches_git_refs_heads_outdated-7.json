@@ -3,8 +3,11 @@
   "name": "repos_hub4j-test-org_updateoutdatedbranches_git_refs_heads_outdated",
   "request": {
     "url": "/repos/hub4j-test-org/updateOutdatedBranches/git/refs/heads/outdated",
-    "method": "PATCH",
+    "method": "POST",
     "headers": {
+      "X-HTTP-Method-Override": {
+        "equalTo": "PATCH"
+      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

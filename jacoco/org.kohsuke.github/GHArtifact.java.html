@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHArtifact.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHArtifact.java</span></div><h1>GHArtifact.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamFunction;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
+
+/**
+ * An artifact from a workflow run.
+ *
+ * @author Guillaume Smet
+ */
+<span class="fc" id="L19">public class GHArtifact extends GHObject {</span>
+
+    // Not provided by the API.
+    @JsonIgnore
+    private GHRepository owner;
+
+    private String name;
+    private long sizeInBytes;
+    private String archiveDownloadUrl;
+    private boolean expired;
+    private String expiresAt;
+
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L37">        return name;</span>
+    }
+
+    /**
+     * Gets the size of the artifact in bytes.
+     *
+     * @return the size
+     */
+    public long getSizeInBytes() {
+<span class="fc" id="L46">        return sizeInBytes;</span>
+    }
+
+    /**
+     * Gets the archive download URL.
+     *
+     * @return the archive download URL
+     */
+    public URL getArchiveDownloadUrl() {
+<span class="fc" id="L55">        return GitHubClient.parseURL(archiveDownloadUrl);</span>
+    }
+
+    /**
+     * If this artifact has expired.
+     *
+     * @return if the artifact has expired
+     */
+    public boolean isExpired() {
+<span class="fc" id="L64">        return expired;</span>
+    }
+
+    /**
+     * Gets the date at which this artifact will expire.
+     *
+     * @return the date of expiration
+     */
+    public Date getExpiresAt() {
+<span class="fc" id="L73">        return GitHubClient.parseDate(expiresAt);</span>
+    }
+
+    /**
+     * Repository to which the artifact belongs.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+<span class="fc" id="L82">        return owner;</span>
+    }
+
+    /**
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L90">        return null;</span>
+    }
+
+    /**
+     * Deletes the artifact.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L100">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).fetchHttpStatusCode();</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Downloads the artifact.
+     *
+     * @param &lt;T&gt;
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @throws IOException
+     *             The IO exception.
+     * @return the result of reading the stream.
+     */
+    public &lt;T&gt; T download(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
+<span class="fc" id="L115">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+
+<span class="fc" id="L117">        return root.createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;zip&quot;).fetchStream(streamFunction);</span>
+    }
+
+    private String getApiRoute() {
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (owner == null) {</span>
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+<span class="nc" id="L123">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L124">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+        }
+<span class="fc" id="L126">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/artifacts/&quot; + getId();</span>
+    }
+
+    GHArtifact wrapUp(GHRepository owner) {
+<span class="fc" id="L130">        this.owner = owner;</span>
+<span class="fc" id="L131">        return wrapUp(owner.root);</span>
+    }
+
+    GHArtifact wrapUp(GitHub root) {
+<span class="fc" id="L135">        this.root = root;</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (owner != null)</span>
+<span class="fc" id="L137">            owner.wrap(root);</span>
+<span class="fc" id="L138">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

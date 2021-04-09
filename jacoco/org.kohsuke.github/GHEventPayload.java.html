@@ -1400,14 +1400,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
                         &quot;Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?&quot;);
             }
 <span class="fc" id="L1402">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L1403" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L1404">                workflowRun.wrapUp(repository);</span>
-<span class="fc" id="L1405">                workflow.wrapUp(repository);</span>
-            } else {
-<span class="nc" id="L1407">                workflowRun.wrapUp(root);</span>
-<span class="nc" id="L1408">                workflow.wrapUp(root);</span>
+<span class="pc bpc" id="L1403" title="1 of 2 branches missed.">            if (repository == null) {</span>
+<span class="nc" id="L1404">                throw new IllegalStateException(&quot;Repository must not be null&quot;);</span>
             }
-<span class="fc" id="L1410">        }</span>
+<span class="fc" id="L1406">            workflowRun.wrapUp(repository);</span>
+<span class="fc" id="L1407">            workflow.wrapUp(repository);</span>
+<span class="fc" id="L1408">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

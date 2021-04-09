@@ -11,9 +11,9 @@
 <span class="nc" id="L11">        return totalCount;</span>
     }
 
-    GHWorkflowRun[] getWorkflowRuns(GitHub root) {
+    GHWorkflowRun[] getWorkflowRuns(GHRepository owner) {
 <span class="fc bfc" id="L15" title="All 2 branches covered.">        for (GHWorkflowRun workflowRun : workflowRuns) {</span>
-<span class="fc" id="L16">            workflowRun.wrapUp(root);</span>
+<span class="fc" id="L16">            workflowRun.wrapUp(owner);</span>
         }
 <span class="fc" id="L18">        return workflowRuns;</span>
     }

@@ -93,7 +93,7 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
     @Override
     public PagedIterable&lt;GHWorkflowRun&gt; list() {
         try {
-<span class="fc" id="L96">            return new GHWorkflowRunsIterable(root, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)).build());</span>
+<span class="fc" id="L96">            return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)).build());</span>
 <span class="nc" id="L97">        } catch (MalformedURLException e) {</span>
 <span class="nc" id="L98">            throw new GHException(e.getMessage(), e);</span>
         }

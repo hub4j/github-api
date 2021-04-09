@@ -61,12 +61,21 @@ import java.util.Objects;
     }
 
     /**
+     * Repository to which the workflow belongs.
+     *
+     * @return the repository
+     */
+    public GHRepository getRepository() {
+<span class="fc" id="L69">        return owner;</span>
+    }
+
+    /**
      * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
      *
      * @return the badge url
      */
     public URL getBadgeUrl() {
-<span class="fc" id="L69">        return GitHubClient.parseURL(badgeUrl);</span>
+<span class="fc" id="L78">        return GitHubClient.parseURL(badgeUrl);</span>
     }
 
     /**
@@ -76,8 +85,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void disable() throws IOException {
-<span class="fc" id="L79">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).fetchHttpStatusCode();</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L88">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Enable the workflow.
@@ -86,8 +95,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void enable() throws IOException {
-<span class="fc" id="L89">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).fetchHttpStatusCode();</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L98">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -98,8 +107,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void dispatch(String ref) throws IOException {
-<span class="fc" id="L101">        dispatch(ref, Collections.emptyMap());</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L110">        dispatch(ref, Collections.emptyMap());</span>
+<span class="fc" id="L111">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -113,38 +122,38 @@ import java.util.Objects;
      *             the io exception
      */
     public void dispatch(String ref, Map&lt;String, Object&gt; inputs) throws IOException {
-<span class="fc" id="L116">        Requester requester = root.createRequest()</span>
-<span class="fc" id="L117">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L118">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
-<span class="fc" id="L119">                .with(&quot;ref&quot;, ref);</span>
+<span class="fc" id="L125">        Requester requester = root.createRequest()</span>
+<span class="fc" id="L126">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L127">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
+<span class="fc" id="L128">                .with(&quot;ref&quot;, ref);</span>
 
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
-<span class="fc" id="L122">            requester.with(&quot;inputs&quot;, inputs);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
+<span class="fc" id="L131">            requester.with(&quot;inputs&quot;, inputs);</span>
         }
 
-<span class="fc" id="L125">        requester.fetchHttpStatusCode();</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L134">        requester.fetchHttpStatusCode();</span>
+<span class="fc" id="L135">    }</span>
 
     private String getApiRoute() {
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L131">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L132">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L140">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L141">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L135">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/workflows/&quot; + getId();</span>
+<span class="fc" id="L144">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/workflows/&quot; + getId();</span>
     }
 
     GHWorkflow wrapUp(GHRepository owner) {
-<span class="fc" id="L139">        this.owner = owner;</span>
-<span class="fc" id="L140">        return wrapUp(owner.root);</span>
+<span class="fc" id="L148">        this.owner = owner;</span>
+<span class="fc" id="L149">        return wrapUp(owner.root);</span>
     }
 
     GHWorkflow wrapUp(GitHub root) {
-<span class="fc" id="L144">        this.root = root;</span>
-<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (owner != null)</span>
-<span class="fc" id="L146">            owner.wrap(root);</span>
-<span class="fc" id="L147">        return this;</span>
+<span class="fc" id="L153">        this.root = root;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (owner != null)</span>
+<span class="fc" id="L155">            owner.wrap(root);</span>
+<span class="fc" id="L156">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

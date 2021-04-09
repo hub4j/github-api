@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryBuilder.java</span></div><h1>GHRepositoryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import org.kohsuke.github.GHRepository.Visibility;
+
 import java.io.IOException;
 import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.NEBULA;
 
 abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHRepository, S&gt; {
 
     protected GHRepositoryBuilder(Class&lt;S&gt; intermediateReturnType, GitHub root, GHRepository baseInstance) {
-<span class="fc" id="L11">        super(GHRepository.class, intermediateReturnType, root, baseInstance);</span>
-<span class="fc" id="L12">    }</span>
+<span class="fc" id="L14">        super(GHRepository.class, intermediateReturnType, root, baseInstance);</span>
+<span class="fc" id="L15">    }</span>
 
     /**
      * Allow or disallow squash-merging pull requests.
@@ -23,7 +26,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S allowSquashMerge(boolean enabled) throws IOException {
-<span class="fc" id="L26">        return with(&quot;allow_squash_merge&quot;, enabled);</span>
+<span class="fc" id="L29">        return with(&quot;allow_squash_merge&quot;, enabled);</span>
     }
 
     /**
@@ -38,7 +41,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S allowMergeCommit(boolean enabled) throws IOException {
-<span class="fc" id="L41">        return with(&quot;allow_merge_commit&quot;, enabled);</span>
+<span class="fc" id="L44">        return with(&quot;allow_merge_commit&quot;, enabled);</span>
     }
 
     /**
@@ -53,7 +56,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S allowRebaseMerge(boolean enabled) throws IOException {
-<span class="fc" id="L56">        return with(&quot;allow_rebase_merge&quot;, enabled);</span>
+<span class="fc" id="L59">        return with(&quot;allow_rebase_merge&quot;, enabled);</span>
     }
 
     /**
@@ -68,7 +71,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S deleteBranchOnMerge(boolean enabled) throws IOException {
-<span class="fc" id="L71">        return with(&quot;delete_branch_on_merge&quot;, enabled);</span>
+<span class="fc" id="L74">        return with(&quot;delete_branch_on_merge&quot;, enabled);</span>
     }
 
     /**
@@ -83,7 +86,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S defaultBranch(String branch) throws IOException {
-<span class="nc" id="L86">        return with(&quot;default_branch&quot;, branch);</span>
+<span class="nc" id="L89">        return with(&quot;default_branch&quot;, branch);</span>
     }
 
     /**
@@ -98,7 +101,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S description(String description) throws IOException {
-<span class="fc" id="L101">        return with(&quot;description&quot;, description);</span>
+<span class="fc" id="L104">        return with(&quot;description&quot;, description);</span>
     }
 
     /**
@@ -113,7 +116,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S homepage(URL homepage) throws IOException {
-<span class="nc" id="L116">        return homepage(homepage.toExternalForm());</span>
+<span class="nc" id="L119">        return homepage(homepage.toExternalForm());</span>
     }
 
     /**
@@ -128,7 +131,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S homepage(String homepage) throws IOException {
-<span class="fc" id="L131">        return with(&quot;homepage&quot;, homepage);</span>
+<span class="fc" id="L134">        return with(&quot;homepage&quot;, homepage);</span>
     }
 
     /**
@@ -143,7 +146,21 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S private_(boolean enabled) throws IOException {
-<span class="fc" id="L146">        return with(&quot;private&quot;, enabled);</span>
+<span class="fc" id="L149">        return with(&quot;private&quot;, enabled);</span>
+    }
+
+    /**
+     * Sets the repository visibility
+     *
+     * @param visibility
+     *            visibility of repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S visibility(final Visibility visibility) throws IOException {
+<span class="nc" id="L162">        requester.withPreview(NEBULA);</span>
+<span class="nc" id="L163">        return with(&quot;visibility&quot;, visibility);</span>
     }
 
     /**
@@ -158,7 +175,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S issues(boolean enabled) throws IOException {
-<span class="fc" id="L161">        return with(&quot;has_issues&quot;, enabled);</span>
+<span class="fc" id="L178">        return with(&quot;has_issues&quot;, enabled);</span>
     }
 
     /**
@@ -173,7 +190,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S projects(boolean enabled) throws IOException {
-<span class="fc" id="L176">        return with(&quot;has_projects&quot;, enabled);</span>
+<span class="fc" id="L193">        return with(&quot;has_projects&quot;, enabled);</span>
     }
 
     /**
@@ -186,7 +203,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S wiki(boolean enabled) throws IOException {
-<span class="fc" id="L189">        return with(&quot;has_wiki&quot;, enabled);</span>
+<span class="fc" id="L206">        return with(&quot;has_wiki&quot;, enabled);</span>
     }
 
     /**
@@ -201,7 +218,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S downloads(boolean enabled) throws IOException {
-<span class="fc" id="L204">        return with(&quot;has_downloads&quot;, enabled);</span>
+<span class="fc" id="L221">        return with(&quot;has_downloads&quot;, enabled);</span>
     }
 
     /**
@@ -216,21 +233,21 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
     @Preview(BAPTISTE)
     @Deprecated
     public S isTemplate(boolean enabled) throws IOException {
-<span class="fc" id="L219">        requester.withPreview(BAPTISTE);</span>
-<span class="fc" id="L220">        return with(&quot;is_template&quot;, enabled);</span>
+<span class="fc" id="L236">        requester.withPreview(BAPTISTE);</span>
+<span class="fc" id="L237">        return with(&quot;is_template&quot;, enabled);</span>
     }
 
     @Override
     public GHRepository done() throws IOException {
-<span class="fc" id="L225">        return super.done().wrap(this.root);</span>
+<span class="fc" id="L242">        return super.done().wrap(this.root);</span>
     }
 
     S archive() throws IOException {
-<span class="fc" id="L229">        return with(&quot;archived&quot;, true);</span>
+<span class="fc" id="L246">        return with(&quot;archived&quot;, true);</span>
     }
 
     S name(String name) throws IOException {
-<span class="fc" id="L233">        return with(&quot;name&quot;, name);</span>
+<span class="fc" id="L250">        return with(&quot;name&quot;, name);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

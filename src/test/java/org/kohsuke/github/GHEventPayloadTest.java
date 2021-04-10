@@ -805,4 +805,55 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getHeadRepository().getFullName(),
                 is("gsmet-bot-playground/quarkus-bot-java-playground"));
     }
+
+    @Test
+    public void label_created() throws Exception {
+        GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("created"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label"));
+        assertThat(label.getColor(), is("f9d0c4"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
+    }
+
+    @Test
+    public void label_edited() throws Exception {
+        GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("edited"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label-updated"));
+        assertThat(label.getColor(), is("4AE686"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
+
+        assertThat(labelPayload.getChanges().getName().getFrom(), is("new-label"));
+        assertThat(labelPayload.getChanges().getColor().getFrom(), is("f9d0c4"));
+    }
+
+    @Test
+    public void label_deleted() throws Exception {
+        GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("deleted"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label-updated"));
+        assertThat(label.getColor(), is("4AE686"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
+    }
 }

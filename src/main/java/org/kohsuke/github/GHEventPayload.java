@@ -1407,4 +1407,35 @@ public class GHEventPayload extends GitHubInteractiveObject {
             workflow.wrapUp(repository);
         }
     }
+
+    /**
+     * A label was created, edited or deleted.
+     *
+     * @see <a href= "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label">
+     *      label event</a>
+     */
+    public static class Label extends GHEventPayload {
+
+        private GHLabel label;
+
+        private GHLabelChanges changes;
+
+        /**
+         * Gets the label.
+         *
+         * @return the label
+         */
+        public GHLabel getLabel() {
+            return label;
+        }
+
+        /**
+         * Gets changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHLabelChanges getChanges() {
+            return changes;
+        }
+    }
 }

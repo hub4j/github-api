@@ -1384,10 +1384,20 @@ public class GHEventPayload extends GitHubInteractiveObject {
         private GHWorkflowRun workflowRun;
         private GHWorkflow workflow;
 
+        /**
+         * Gets the workflow run.
+         *
+         * @return the workflow run
+         */
         public GHWorkflowRun getWorkflowRun() {
             return workflowRun;
         }
 
+        /**
+         * Gets the associated workflow.
+         *
+         * @return the associated workflow
+         */
         public GHWorkflow getWorkflow() {
             return workflow;
         }

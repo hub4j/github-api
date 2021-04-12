@@ -1,0 +1,3 @@
+codecov:
+  ignore:
+    - "org/kohsuke/github/extras/okhtp3/ObsoleteUrlFactory.java"

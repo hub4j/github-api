@@ -773,6 +773,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             checkRunsCount++;
         }
         assertThat(checkRunsCount, equalTo(expectedCount));
+
+        // Check that we can call update on the results
+        for (GHCheckRun checkRun : checkRuns) {
+            checkRun.update();
+        }
     }
 
     @Test

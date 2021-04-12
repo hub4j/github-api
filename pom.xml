@@ -110,17 +110,6 @@
               </goals>
               <configuration>
                 <propertyName>jacoco.surefire.argLine</propertyName>
-                <excludes>
-                  <!-- Code implemented externally -->
-                  <exclude>org/kohsuke/github/extras/okhtp3/ObsoleteUrlFactory.*</exclude>
-                  <exclude>org/kohsuke/github/extras/okhtp3/ObsoleteUrlFactory$*.*</exclude>
-                  <!-- Sample only -->
-                  <exclude>org/kohsuke/github/example/**</exclude>
-                  <!-- Deprecated -->
-                  <exclude>org/kohsuke/github/extras/OkHttp3Connector.*</exclude>
-                  <exclude>org/kohsuke/github/EnforcementLevel.*</exclude>
-                  <exclude>org/kohsuke/github/GHPerson$1.*</exclude>
-                </excludes>  
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->
@@ -171,6 +160,7 @@
 
 
                       <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>

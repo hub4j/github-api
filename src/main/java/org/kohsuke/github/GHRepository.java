@@ -2010,7 +2010,7 @@ public class GHRepository extends GHObject {
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .withPreview(ANTIOPE)
                 .build();
-        return new GHCheckRunsIterable(root, request);
+        return new GHCheckRunsIterable(this, request);
     }
 
     /**

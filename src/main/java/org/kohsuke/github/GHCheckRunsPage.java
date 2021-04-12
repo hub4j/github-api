@@ -11,9 +11,9 @@ class GHCheckRunsPage {
         return total_count;
     }
 
-    GHCheckRun[] getCheckRuns(GitHub root) {
+    GHCheckRun[] getCheckRuns(GHRepository owner) {
         for (GHCheckRun check_run : check_runs) {
-            check_run.wrap(root);
+            check_run.wrap(owner);
         }
         return check_runs;
     }

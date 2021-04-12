@@ -8,13 +8,13 @@ import javax.annotation.Nonnull;
  * Iterable for check-runs listing.
  */
 class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
-    private final transient GitHub root;
+    private final GHRepository owner;
     private final GitHubRequest request;
 
     private GHCheckRunsPage result;
 
-    public GHCheckRunsIterable(GitHub root, GitHubRequest request) {
-        this.root = root;
+    public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {
+        this.owner = owner;
         this.request = request;
     }
 
@@ -22,7 +22,7 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
     @Override
     public PagedIterator<GHCheckRun> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(root.getClient(), GHCheckRunsPage.class, request, pageSize)),
+                adapt(GitHubPageIterator.create(owner.getRoot().getClient(), GHCheckRunsPage.class, request, pageSize)),
                 null);
     }
 
@@ -37,7 +37,7 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
                 if (result == null) {
                     result = v;
                 }
-                return v.getCheckRuns(root);
+                return v.getCheckRuns(owner);
             }
         };
     }

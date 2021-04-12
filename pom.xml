@@ -103,20 +103,6 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.6</version>
-          <configuration>
-            <excludes>
-              <!-- Code implemented externally -->
-              <exclude>**/extras/okhtp3/ObsoleteUrlFactory.*</exclude>
-              <exclude>**/extras/okhtp3/ObsoleteUrlFactory*</exclude>
-              <!-- Sample only -->
-              <exclude>**/example/**</exclude>
-              <!-- Deprecated -->
-              <exclude>org/kohsuke/github/extras/OkHttpConnector.*</exclude>
-              <exclude>org/kohsuke/github/extras/OkHttp3Connector.*</exclude>
-              <exclude>org/kohsuke/github/EnforcementLevel.*</exclude>
-              <exclude>org/kohsuke/github/GHPerson$1.*</exclude>
-            </excludes>
-          </configuration>
           <executions>
             <execution>
               <goals>

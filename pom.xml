@@ -162,6 +162,19 @@
                       </limit>
                     </limits>
                     <excludes>
+                      <!-- Code implemented externally -->
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+
+                      <!-- Sample only -->
+                      <exclude>org.kohsuke.github.example.*</exclude>
+
+
+                      <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
+                      <exclude>org.kohsuke.github.EnforcementLevel</exclude>
+                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
+                      
                       <!-- TODO: Some coverage, but more needed -->
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>

@@ -12,7 +12,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "-1.json",
+    "bodyFileName": "-2.json",
     "headers": {
       "Date": "Wed, 26 Feb 2020 03:55:33 GMT",
       "Content-Type": "application/json; charset=utf-8",
@@ -41,7 +41,7 @@
   "uuid": "2ce6df61-378a-43bd-9d37-d0851f8699bf",
   "persistent": true,
   "scenarioName": "scenario-1",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-step-2",
+  "requiredScenarioState": "scenario-1-step-2.1",
+  "newScenarioState": "scenario-1-step-3",
   "insertionIndex": 1
 }

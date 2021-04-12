@@ -10,11 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Unit test for {@link GitHub}.
@@ -164,10 +160,24 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         // GitHub hub = GitHub.connectAnonymously();
 
         GitHub hub = GitHub.connectToEnterpriseAnonymously(mockGitHub.apiServer().baseUrl());
+        hub.checkApiUrlValidity();
         try {
             hub.checkApiUrlValidity();
+            fail();
         } catch (IOException ioe) {
-            assertTrue(ioe.getMessage().contains("private mode enabled"));
+            assertThat(ioe.getMessage(), containsString("doesn't look like GitHub API URL"));
+        }
+        try {
+            hub.checkApiUrlValidity();
+            fail();
+        } catch (IOException ioe) {
+            assertThat(ioe.getMessage(), containsString("private mode enabled"));
+        }
+        try {
+            hub.getClient().requireCredential();
+            fail();
+        } catch (Exception e) {
+            assertThat(e.getMessage(), containsString("This operation requires a credential"));
         }
     }
 

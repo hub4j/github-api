@@ -11,13 +11,13 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "-1.json",
+    "status": 401,
+    "body": "{}",
     "headers": {
       "Date": "Wed, 26 Feb 2020 03:55:33 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Status": "401 NOT_AUTHORIZED",
       "X-RateLimit-Limit": "60",
       "X-RateLimit-Remaining": "58",
       "X-RateLimit-Reset": "1582692906",
@@ -41,7 +41,7 @@
   "uuid": "2ce6df61-378a-43bd-9d37-d0851f8699bf",
   "persistent": true,
   "scenarioName": "scenario-1",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-step-2",
+  "requiredScenarioState": "scenario-1-step-3",
+  "newScenarioState": "scenario-1-step-3",
   "insertionIndex": 1
 }

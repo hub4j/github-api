@@ -141,10 +141,9 @@ abstract class GitHubClient {
             getRateLimit();
             return true;
         } catch (IOException e) {
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
-                        e);
+            LOGGER.log(FINE,
+                    "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
+                    e);
             return false;
         }
     }
@@ -384,11 +383,7 @@ abstract class GitHubClient {
             GitHubResponse.ResponseInfo responseInfo = null;
             try {
                 try {
-                    if (LOGGER.isLoggable(FINE)) {
-                        LOGGER.log(FINE,
-                                "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
-                                        + request.method() + " " + request.url().toString());
-                    }
+                    logRequest(request);
                     rateLimitChecker.checkRateLimit(this, request);
 
                     responseInfo = getResponseInfo(request);
@@ -424,6 +419,12 @@ abstract class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
+    private void logRequest(@Nonnull final GitHubRequest request) {
+        LOGGER.log(FINE,
+                () -> "GitHub API request [" + (login == null ? "anonymous" : login) + "]: " + request.method() + " "
+                        + request.url().toString());
+    }
+
     @Nonnull
     protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
@@ -442,14 +443,9 @@ abstract class GitHubClient {
             // statistics - See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
 
-            if (responseInfo.url().toString().endsWith("/forks")) {
-                LOGGER.log(INFO, "The fork is being created. Please try again in 5 seconds.");
-            } else if (responseInfo.url().toString().endsWith("/statistics")) {
-                LOGGER.log(INFO, "The statistics are being generated. Please try again in 5 seconds.");
-            } else {
-                LOGGER.log(INFO,
-                        "Received 202 from " + responseInfo.url().toString() + " . Please try again in 5 seconds.");
-            }
+            LOGGER.log(INFO,
+                    "Received HTTP_ACCEPTED(202) from " + responseInfo.url().toString()
+                            + " . Please try again in 5 seconds.");
             // Maybe throw an exception instead?
         } else if (handler != null) {
             body = handler.apply(responseInfo);
@@ -562,9 +558,7 @@ abstract class GitHubClient {
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
             updateRateLimit(GHRateLimit.fromRecord(observed, responseInfo.request().rateLimitTarget()));
         } catch (NumberFormatException | NullPointerException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
-            }
+            LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
         }
     }
 

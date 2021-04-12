@@ -1,0 +1,3 @@
+ignore:
+  - "**/extras/okhtp3/ObsoleteUrlFactory.*"
+  

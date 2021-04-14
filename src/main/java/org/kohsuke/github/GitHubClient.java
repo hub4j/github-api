@@ -438,15 +438,15 @@ abstract class GitHubClient {
             // special case handling for 304 unmodified, as the content will be ""
         } else if (responseInfo.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
 
-            // Response code 202 means data is being generated.
+            // Response code 202 means data is being generated or an action that can require some time is triggered.
             // This happens in specific cases:
             // statistics - See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
+            // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
-            LOGGER.log(INFO,
+            LOGGER.log(FINE,
                     "Received HTTP_ACCEPTED(202) from " + responseInfo.url().toString()
                             + " . Please try again in 5 seconds.");
-            // Maybe throw an exception instead?
         } else if (handler != null) {
             body = handler.apply(responseInfo);
         }

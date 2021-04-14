@@ -188,7 +188,7 @@ public class GHWorkflowRun extends GHObject {
      * @return type of event
      */
     public GHEvent getEvent() {
-        return Enum.valueOf(GHEvent.class, event.toUpperCase(Locale.ROOT));
+        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);
     }
 
     /**

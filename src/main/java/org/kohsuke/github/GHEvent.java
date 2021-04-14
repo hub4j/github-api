@@ -57,6 +57,7 @@ public enum GHEvent {
     REPOSITORY,
     REPOSITORY_IMPORT,
     REPOSITORY_VULNERABILITY_ALERT,
+    SCHEDULE,
     SECURITY_ADVISORY,
     STAR,
     STATUS,
@@ -65,6 +66,11 @@ public enum GHEvent {
     WATCH,
     WORKFLOW_DISPATCH,
     WORKFLOW_RUN,
+
+    /**
+     * Special event type that means we haven't found an enum value corresponding to the event.
+     */
+    UNKNOWN,
 
     /**
      * Special event type that means "every possible event"

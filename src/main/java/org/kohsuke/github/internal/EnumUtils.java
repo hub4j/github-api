@@ -1,11 +1,14 @@
 package org.kohsuke.github.internal;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  * Utils for Enums.
  */
 public final class EnumUtils {
+
+    private static final Logger LOGGER = Logger.getLogger(EnumUtils.class.getName());
 
     /**
      * Returns an enum value matching the value if found, null if the value is null and {@code defaultEnum} if the value
@@ -30,6 +33,8 @@ public final class EnumUtils {
         try {
             return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
+            LOGGER.warning("Unknown value " + value + " for enum class " + enumClass.getName() + ", defaulting to "
+                    + defaultEnum.name());
             return defaultEnum;
         }
     }

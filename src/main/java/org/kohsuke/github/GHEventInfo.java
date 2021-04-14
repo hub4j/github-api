@@ -53,7 +53,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
             if (e.name().replace("_", "").equalsIgnoreCase(t))
                 return e;
         }
-        return null; // unknown event type
+        return GHEvent.UNKNOWN;
     }
 
     GHEventInfo wrapUp(GitHub root) {

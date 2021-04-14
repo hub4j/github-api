@@ -68,6 +68,11 @@ public enum GHEvent {
     WORKFLOW_RUN,
 
     /**
+     * Special event type that means we haven't found an enum value corresponding to the event.
+     */
+    UNKNOWN,
+
+    /**
      * Special event type that means "every possible event"
      */
     ALL;

@@ -139,7 +139,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      */
     public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
         if (Sort.BEST_MATCH.equals(sort)) {
-            req.unset("sort");
+            req.remove("sort");
         } else {
             req.with("sort", sort);
         }

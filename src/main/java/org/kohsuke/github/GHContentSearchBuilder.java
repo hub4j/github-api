@@ -121,33 +121,35 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
     /**
      * Order gh content search builder.
      *
-     * @param v the v
+     * @param v
+     *            the v
      * @return the gh content search builder
      */
     public GHContentSearchBuilder order(GHDirection v) {
-      req.with("order", v);
-      return this;
+        req.with("order", v);
+        return this;
     }
 
     /**
      * Sort gh content search builder.
      *
-     * @param sort the sort
+     * @param sort
+     *            the sort
      * @return the gh content search builder
      */
     public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
-      req.with("sort", sort);
-      return this;
+        req.with("sort", sort);
+        return this;
     }
 
     /**
      * The enum Sort.
      */
     public enum Sort {
-      INDEXED
+        INDEXED
     }
 
-  private static class ContentSearchResult extends SearchResult<GHContent> {
+    private static class ContentSearchResult extends SearchResult<GHContent> {
         private GHContent[] items;
 
         @Override

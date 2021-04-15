@@ -118,7 +118,36 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         return q("repo:" + v);
     }
 
-    private static class ContentSearchResult extends SearchResult<GHContent> {
+    /**
+     * Order gh content search builder.
+     *
+     * @param v the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder order(GHDirection v) {
+      req.with("order", v);
+      return this;
+    }
+
+    /**
+     * Sort gh content search builder.
+     *
+     * @param sort the sort
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
+      req.with("sort", sort);
+      return this;
+    }
+
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+      INDEXED
+    }
+
+  private static class ContentSearchResult extends SearchResult<GHContent> {
         private GHContent[] items;
 
         @Override

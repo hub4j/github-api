@@ -100,6 +100,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .in("file")
                 .language("js")
                 .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.ASC)
                 .list();
         GHContent c = r.iterator().next();
         // System.out.println(c.getName());

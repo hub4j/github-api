@@ -100,15 +100,60 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .in("file")
                 .language("js")
                 .repo("jquery/jquery")
-                .sort(GHContentSearchBuilder.Sort.INDEXED)
-                .order(GHDirection.ASC)
+                // ignored unless sort is also set
+                .order(GHDirection.DESC)
                 .list();
         GHContent c = r.iterator().next();
+
         // System.out.println(c.getName());
         assertNotNull(c.getDownloadUrl());
         assertNotNull(c.getOwner());
         assertEquals("jquery/jquery", c.getOwner().getFullName());
-        assertTrue(r.getTotalCount() > 0);
+        assertTrue(r.getTotalCount() > 5);
+
+        PagedSearchIterable<GHContent> r2 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                // resets query sort back to default
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .sort(GHContentSearchBuilder.Sort.BEST_MATCH)
+                // ignored unless sort is also set to non-default
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c2 = r2.iterator().next();
+        assertThat(c2.getPath(), equalTo(c.getPath()));
+        assertThat(r2.getTotalCount(), equalTo(r.getTotalCount()));
+
+        PagedSearchIterable<GHContent> r3 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c3 = r3.iterator().next();
+        assertThat(c3.getPath(), not(equalTo(c2.getPath())));
+        assertThat(r3.getTotalCount(), equalTo(r2.getTotalCount()));
+
+        PagedSearchIterable<GHContent> r4 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .list();
+
+        GHContent c4 = r4.iterator().next();
+        assertThat(c4.getPath(), not(equalTo(c2.getPath())));
+        assertThat(c4.getPath(), not(equalTo(c3.getPath())));
+        assertThat(r4.getTotalCount(), equalTo(r2.getTotalCount()));
+
     }
 
     @Test

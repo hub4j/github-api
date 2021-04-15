@@ -1,8 +1,8 @@
 {
-  "id": "e173c8a1-fa95-4d0c-8b5c-b18f3ecc8bab",
-  "name": "user",
+  "id": "e5f64eb4-69a4-400d-9407-4d7b1ab58cf2",
+  "name": "search_code",
   "request": {
-    "url": "/user",
+    "url": "/search/code?order=asc&q=addClass+in%3Afile+language%3Ajs+repo%3Ajquery%2Fjquery",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,35 +12,33 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "search_code-4.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 15 Apr 2021 21:48:47 GMT",
+      "Date": "Thu, 15 Apr 2021 21:48:48 GMT",
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Cache-Control": "no-cache",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"a779685068e37c2251b2697aaa2248c18d1fae62251d4d37f705dddef0ec20d3\"",
-      "Last-Modified": "Thu, 15 Apr 2021 21:34:44 GMT",
       "X-OAuth-Scopes": "repo, workflow",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4966",
-      "X-RateLimit-Reset": "1618523976",
-      "X-RateLimit-Used": "34",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "24",
+      "X-RateLimit-Reset": "1618523351",
+      "X-RateLimit-Used": "6",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F6E8:92BD:298685:2B4CAB:6078B4BF"
+      "X-GitHub-Request-Id": "F6E8:92BD:2986C8:2B4CF5:6078B4C0"
     }
   },
-  "uuid": "e173c8a1-fa95-4d0c-8b5c-b18f3ecc8bab",
+  "uuid": "e5f64eb4-69a4-400d-9407-4d7b1ab58cf2",
   "persistent": true,
-  "insertionIndex": 1
+  "insertionIndex": 4
 }

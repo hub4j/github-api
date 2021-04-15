@@ -138,7 +138,11 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
-        req.with("sort", sort);
+        if (Sort.BEST_MATCH.equals(sort)) {
+            req.unset("sort");
+        } else {
+            req.with("sort", sort);
+        }
         return this;
     }
 
@@ -146,7 +150,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      * The enum Sort.
      */
     public enum Sort {
-        INDEXED
+        BEST_MATCH, INDEXED
     }
 
     private static class ContentSearchResult extends SearchResult<GHContent> {

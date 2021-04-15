@@ -612,6 +612,23 @@ class GitHubRequest {
         }
 
         /**
+         * Unset the key field
+         *
+         * @param key
+         *            the key
+         * @return the request builder
+         */
+        public B unset(String key) {
+            for (int index = 0; index < args.size(); index++) {
+                if (args.get(index).key.equals(key)) {
+                    args.remove(index);
+                    break;
+                }
+            }
+            return (B) this;
+        }
+
+        /**
          * Method requester.
          *
          * @param method

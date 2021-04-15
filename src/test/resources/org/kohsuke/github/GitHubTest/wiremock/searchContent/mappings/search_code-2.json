@@ -2,7 +2,7 @@
   "id": "8ebadd89-ed2a-49f2-9dbd-490cadc9923a",
   "name": "search_code",
   "request": {
-    "url": "/search/code?q=addClass+in%3Afile+language%3Ajs+repo%3Ajquery%2Fjquery",
+    "url": "/search/code?sort=indexed&order=asc&q=addClass+in%3Afile+language%3Ajs+repo%3Ajquery%2Fjquery",
     "method": "GET",
     "headers": {
       "Accept": {

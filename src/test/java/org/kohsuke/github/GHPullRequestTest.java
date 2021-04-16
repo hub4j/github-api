@@ -493,11 +493,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertEquals(3, labels.size());
 
         int requestCount = mockGitHub.getRequestCount();
-        p.removeLabels(label2, label3);
+        labels = p.removeLabels(label2, label3);
         // each label deleted is a separate api call
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
 
-        labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(1, labels.size());
         assertEquals(label1, labels.iterator().next().getName());
 

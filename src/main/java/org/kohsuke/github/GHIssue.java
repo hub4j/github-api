@@ -384,13 +384,18 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
      *
+     * @return the remaining list of labels
      * @param name
      *            the name
      * @throws IOException
      *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
-    public void removeLabel(String name) throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getIssuesApiRoute() + "/labels", name).send();
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabel(String name) throws IOException {
+        return Arrays.asList(root.createRequest()
+                .method("DELETE")
+                .withUrlPath(getIssuesApiRoute() + "/labels", name)
+                .fetch(GHLabel[].class));
     }
 
     /**
@@ -398,13 +403,15 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param names
      *            the names
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(String... names) throws IOException {
-        _removeLabels(Arrays.asList(names));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(String... names) throws IOException {
+        return _removeLabels(Arrays.asList(names));
     }
 
     /**
@@ -412,14 +419,16 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
-    public void removeLabels(GHLabel... labels) throws IOException {
-        removeLabels(Arrays.asList(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(GHLabel... labels) throws IOException {
+        return removeLabels(Arrays.asList(labels));
     }
 
     /**
@@ -427,23 +436,27 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(Collection<GHLabel> labels) throws IOException {
-        _removeLabels(GHLabel.toNames(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
+        return _removeLabels(GHLabel.toNames(labels));
     }
 
-    private void _removeLabels(Collection<String> names) throws IOException {
+    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
+        List<GHLabel> remainingLabels = Collections.emptyList();
         for (String name : names) {
             try {
-                removeLabel(name);
+                remainingLabels = removeLabel(name);
             } catch (GHFileNotFoundException e) {
                 // when trying to remove multiple labels, we ignore already removed
             }
         }
+        return remainingLabels;
     }
 
     /**

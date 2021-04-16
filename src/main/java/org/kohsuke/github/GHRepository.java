@@ -578,7 +578,15 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Map<String, Long> listLanguages() throws IOException {
-        return root.createRequest().withUrlPath(getApiTailUrl("languages")).fetch(HashMap.class);
+        HashMap<String, Long> result = new HashMap<>();
+        root.createRequest().withUrlPath(getApiTailUrl("languages")).fetch(HashMap.class).forEach((key, value) -> {
+            Long addValue = -1L;
+            if (value instanceof Integer) {
+                addValue = Long.valueOf((Integer) value);
+            }
+            result.put(key.toString(), addValue);
+        });
+        return result;
     }
 
     /**

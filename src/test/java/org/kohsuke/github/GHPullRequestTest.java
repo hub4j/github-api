@@ -440,9 +440,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String addedLabel2 = "addLabels_label_name_2";
         String addedLabel3 = "addLabels_label_name_3";
 
-        Collection<GHLabel> resultingLabels = p.addLabels(addedLabel1);
+        List<GHLabel> resultingLabels = p.addLabels(addedLabel1);
         assertEquals(1, resultingLabels.size());
-        assertThat(resultingLabels, containsInAnyOrder(hasProperty("name", equalTo(addedLabel1))));
+        GHLabel ghLabel = resultingLabels.get(0);
+        assertThat(ghLabel.getName(), equalTo(addedLabel1));
 
         int requestCount = mockGitHub.getRequestCount();
         resultingLabels = p.addLabels(addedLabel2, addedLabel3);
@@ -456,7 +457,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                         hasProperty("name", equalTo(addedLabel3))));
 
         // Adding a label which is already present does not throw an error
-        p.addLabels(addedLabel1);
+        resultingLabels = p.addLabels(ghLabel);
+        assertThat(resultingLabels.size(), equalTo(3));
     }
 
     @Test
@@ -491,18 +493,19 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
         assertEquals(3, labels.size());
+        GHLabel ghLabel3 = labels.stream().filter(label -> label3.equals(label.getName())).findFirst().get();
 
         int requestCount = mockGitHub.getRequestCount();
-        labels = p.removeLabels(label2, label3);
+        List<GHLabel> resultingLabels = p.removeLabels(label2, label3);
         // each label deleted is a separate api call
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
 
-        assertEquals(1, labels.size());
-        assertEquals(label1, labels.iterator().next().getName());
+        assertEquals(1, resultingLabels.size());
+        assertEquals(label1, resultingLabels.get(0).getName());
 
         // Removing some labels that are not present does not throw
         // This is consistent with earlier behavior and with addLabels()
-        p.removeLabels(label3);
+        p.removeLabels(ghLabel3);
 
         // Calling removeLabel() on label that is not present will throw
         try {

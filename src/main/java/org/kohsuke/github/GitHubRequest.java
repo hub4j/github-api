@@ -602,13 +602,27 @@ class GitHubRequest {
          * @return the request builder
          */
         public B set(String key, Object value) {
-            for (int index = 0; index < args.size(); index++) {
+            remove(key);
+            return with(key, value);
+
+        }
+
+        /**
+         * Removes all arg entries for a specific key.
+         *
+         * @param key
+         *            the key
+         * @return the request builder
+         */
+        public B remove(String key) {
+            for (int index = 0; index < args.size();) {
                 if (args.get(index).key.equals(key)) {
-                    args.set(index, new Entry(key, value));
-                    return (B) this;
+                    args.remove(index);
+                } else {
+                    index++;
                 }
             }
-            return with(key, value);
+            return (B) this;
         }
 
         /**

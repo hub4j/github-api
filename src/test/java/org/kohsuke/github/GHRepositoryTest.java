@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -396,7 +397,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void listLanguages() throws IOException {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
         String mainLanguage = r.getLanguage();
-        assertTrue(r.listLanguages().containsKey(mainLanguage));
+        assertThat(mainLanguage, equalTo("Java"));
+        Map<String, Long> languages = r.listLanguages();
+        assertTrue(languages.containsKey(mainLanguage));
+        assertThat(languages.get("Java"), greaterThan(100000L));
     }
 
     @Test

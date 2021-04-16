@@ -440,16 +440,17 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String addedLabel2 = "addLabels_label_name_2";
         String addedLabel3 = "addLabels_label_name_3";
 
-        p.addLabels(addedLabel1);
+        Collection<GHLabel> resultingLabels = p.addLabels(addedLabel1);
+        assertEquals(1, resultingLabels.size());
+        assertThat(resultingLabels, containsInAnyOrder(hasProperty("name", equalTo(addedLabel1))));
 
         int requestCount = mockGitHub.getRequestCount();
-        p.addLabels(addedLabel2, addedLabel3);
+        resultingLabels = p.addLabels(addedLabel2, addedLabel3);
         // multiple labels can be added with one api call
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
 
-        Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
-        assertEquals(3, labels.size());
-        assertThat(labels,
+        assertEquals(3, resultingLabels.size());
+        assertThat(resultingLabels,
                 containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
                         hasProperty("name", equalTo(addedLabel2)),
                         hasProperty("name", equalTo(addedLabel3))));
@@ -471,9 +472,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequest p2 = getRepository().getPullRequest(p1.getNumber());
         p2.addLabels(addedLabel2);
 
-        p1.addLabels(addedLabel1);
+        Collection<GHLabel> labels = p1.addLabels(addedLabel1);
 
-        Collection<GHLabel> labels = getRepository().getPullRequest(p1.getNumber()).getLabels();
         assertEquals(2, labels.size());
         assertThat(labels,
                 containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),

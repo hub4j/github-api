@@ -328,13 +328,15 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param names
      *            Names of the label
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(String... names) throws IOException {
-        _addLabels(Arrays.asList(names));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(String... names) throws IOException {
+        return _addLabels(Arrays.asList(names));
     }
 
     /**
@@ -342,13 +344,15 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(GHLabel... labels) throws IOException {
-        addLabels(Arrays.asList(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
+        return addLabels(Arrays.asList(labels));
     }
 
     /**
@@ -356,17 +360,23 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(Collection<GHLabel> labels) throws IOException {
-        _addLabels(GHLabel.toNames(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
+        return _addLabels(GHLabel.toNames(labels));
     }
 
-    private void _addLabels(Collection<String> names) throws IOException {
-        root.createRequest().with("labels", names).method("POST").withUrlPath(getIssuesApiRoute() + "/labels").send();
+    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
+        return Arrays.asList(root.createRequest()
+                .with("labels", names)
+                .method("POST")
+                .withUrlPath(getIssuesApiRoute() + "/labels")
+                .fetch(GHLabel[].class));
     }
 
     /**

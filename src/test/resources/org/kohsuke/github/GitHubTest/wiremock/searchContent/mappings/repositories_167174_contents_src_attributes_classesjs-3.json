@@ -1,8 +1,8 @@
 {
-  "id": "d7ab2e43-a548-4208-a44b-5d15b0c3b195",
+  "id": "c96c1e28-f9ec-42a1-93ff-4140578f63bc",
   "name": "repositories_167174_contents_src_attributes_classesjs",
   "request": {
-    "url": "/repositories/167174/contents/src/attributes/classes.js?ref=cf84696fd1d7fe314a11492606529b5a658ee9e3",
+    "url": "/repositories/167174/contents/src/attributes/classes.js?ref=a684e6ba836f7c553968d7d026ed7941e1a612d8",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -14,35 +14,33 @@
     "status": 200,
     "bodyFileName": "repositories_167174_contents_src_attributes_classesjs-3.json",
     "headers": {
-      "Date": "Mon, 07 Oct 2019 20:19:56 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4816",
-      "X-RateLimit-Reset": "1570482632",
+      "Date": "Thu, 15 Apr 2021 21:48:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"f1571eb5d0685c8cea8a394d90c61f3d9b5a8f82\"",
-      "Last-Modified": "Mon, 29 Apr 2019 20:56:09 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "W/\"796fbcc808ca15bbe771f8c9c1a7bab3388f6128\"",
+      "Last-Modified": "Wed, 24 Mar 2021 22:36:25 GMT",
+      "X-OAuth-Scopes": "repo, workflow",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4964",
+      "X-RateLimit-Reset": "1618523976",
+      "X-RateLimit-Used": "36",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E9A8:67D6:350D5FA:3F0F530:5D9B9DEC"
+      "X-GitHub-Request-Id": "F6E8:92BD:2986BB:2B4CEA:6078B4C0"
     }
   },
-  "uuid": "d7ab2e43-a548-4208-a44b-5d15b0c3b195",
+  "uuid": "c96c1e28-f9ec-42a1-93ff-4140578f63bc",
   "persistent": true,
   "insertionIndex": 3
 }

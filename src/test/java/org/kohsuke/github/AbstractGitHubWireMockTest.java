@@ -45,7 +45,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      */
     protected GitHub gitHub;
 
-    private GitHub gitHubBeforeAfter;
+    private GitHub nonRecordingGitHub;
 
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
@@ -115,9 +115,9 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         }
 
         if (mockGitHub.isUseProxy()) {
-            gitHubBeforeAfter = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
+            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
         } else {
-            gitHubBeforeAfter = null;
+            nonRecordingGitHub = null;
         }
     }
 
@@ -210,7 +210,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         if (mockGitHub.isUseProxy()) {
             tempGitHubRepositories.add(fullName);
             try {
-                GHRepository repository = getGitHubBeforeAfter().getRepository(fullName);
+                GHRepository repository = getNonRecordingGitHub().getRepository(fullName);
                 if (repository != null) {
                     repository.delete();
                 }
@@ -227,22 +227,22 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      *
      * @return a github instance after checking Authentication
      */
-    public GitHub getGitHubBeforeAfter() {
-        verifyAuthenticated(gitHubBeforeAfter);
-        return gitHubBeforeAfter;
+    public GitHub getNonRecordingGitHub() {
+        verifyAuthenticated(nonRecordingGitHub);
+        return nonRecordingGitHub;
     }
 
     protected void kohsuke() {
         // No-op for now
         // Generally this means the test is doing something that requires additional access rights
         // Not always clear which ones.
-        // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
+        // TODO: Add helpers that assert the expected rights using nonRecordingGitHub and only when proxy is enabled
         // String login = getUserTest().getLogin();
         // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
     private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
-        GitHub github = getGitHubBeforeAfter();
+        GitHub github = getNonRecordingGitHub();
 
         if (mockGitHub.isTestWithOrg()) {
             return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);

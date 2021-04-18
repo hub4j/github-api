@@ -74,7 +74,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (card != null) {
-                card = getGitHubBeforeAfter().getProjectCard(card.getId());
+                card = getNonRecordingGitHub().getProjectCard(card.getId());
                 try {
                     card.delete();
                     card = null;
@@ -83,7 +83,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 }
             }
             if (column != null) {
-                column = getGitHubBeforeAfter().getProjectColumn(column.getId());
+                column = getNonRecordingGitHub().getProjectColumn(column.getId());
                 try {
                     column.delete();
                     column = null;
@@ -92,7 +92,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 }
             }
             if (project != null) {
-                project = getGitHubBeforeAfter().getProject(project.getId());
+                project = getNonRecordingGitHub().getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

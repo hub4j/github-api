@@ -73,7 +73,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            GHRepository repo = getRepository(getGitHubBeforeAfter());
+            GHRepository repo = getRepository(getNonRecordingGitHub());
             repo.setDescription("Resetting");
 
             // Let things settle a bit between tests when working against the live site
@@ -252,7 +252,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         // Get Tricky - make a change via a different client
         if (mockGitHub.isUseProxy()) {
-            GHRepository altRepo = getRepository(getGitHubBeforeAfter());
+            GHRepository altRepo = getRepository(getNonRecordingGitHub());
             altRepo.setDescription("Tricky");
         }
 

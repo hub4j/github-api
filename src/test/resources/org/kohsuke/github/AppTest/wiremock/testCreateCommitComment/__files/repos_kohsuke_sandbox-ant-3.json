@@ -90,7 +90,7 @@
   "forks": 2,
   "open_issues": 0,
   "watchers": 2,
-  "default_branch": "master",
+  "default_branch": "main",
   "permissions": {
     "admin": false,
     "push": false,
@@ -189,7 +189,7 @@
     "forks": 4,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "source": {
     "id": 3231216,
@@ -283,7 +283,7 @@
     "forks": 4,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "network_count": 4,
   "subscribers_count": 0

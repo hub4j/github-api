@@ -805,7 +805,7 @@
     "updated_at": "2015-12-02T11:05:03Z",
     "closed_at": "2015-12-02T11:05:03Z",
     "author_association": "NONE",
-    "body": "Hi,\n\nthe RateLimitHandler does not to work as intended. \nIf using the WAIT implementation the API will still throw an exception and terminate.\n\nThe reason therefore is that there is no return statement after the handler execute its onError method.\nThe problem is allocated in the handleApiError method of the Requester.\n\nhttps://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/Requester.java\n"
+    "body": "Hi,\n\nthe RateLimitHandler does not to work as intended. \nIf using the WAIT implementation the API will still throw an exception and terminate.\n\nThe reason therefore is that there is no return statement after the handler execute its onError method.\nThe problem is allocated in the handleApiError method of the Requester.\n\nhttps://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/Requester.java\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/219",
@@ -917,7 +917,7 @@
     "updated_at": "2015-12-03T16:42:58Z",
     "closed_at": "2015-12-03T16:42:58Z",
     "author_association": "NONE",
-    "body": "GHRepository.getCompare(String,String) supports cross-fork comparisons, but this does not:\n\nhttps://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GHRepository.java#L684-L686\n\nThis is a simple fix.\n"
+    "body": "GHRepository.getCompare(String,String) supports cross-fork comparisons, but this does not:\n\nhttps://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GHRepository.java#L684-L686\n\nThis is a simple fix.\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/217",

@@ -461,7 +461,7 @@ public class GHRepository extends GHObject {
      * Creates a named ref, such as tag, branch, etc.
      *
      * @param name
-     *            The name of the fully qualified reference (ie: refs/heads/master). If it doesn't start with 'refs' and
+     *            The name of the fully qualified reference (ie: refs/heads/main). If it doesn't start with 'refs' and
      *            have at least two slashes, it will be rejected.
      * @param sha
      *            The SHA1 value to set this reference to
@@ -848,16 +848,18 @@ public class GHRepository extends GHObject {
     /**
      * Returns the primary branch you'll configure in the "Admin &gt; Options" config page.
      *
-     * @return This field is null until the user explicitly configures the master branch.
+     * @return This field is null until the user explicitly configures the default branch.
      */
     public String getDefaultBranch() {
         return default_branch;
     }
 
     /**
-     * Gets master branch.
+     * Gets default branch.
      *
-     * @return the master branch
+     * Name is an artifact of when "master" was the most common default.
+     *
+     * @return the default branch
      * @deprecated Renamed to {@link #getDefaultBranch()}
      */
     @Deprecated
@@ -1775,7 +1777,7 @@ public class GHRepository extends GHObject {
      * Retrive a tree of the given type for the current GitHub repository.
      *
      * @param sha
-     *            sha number or branch name ex: "master"
+     *            sha number or branch name ex: "main"
      * @return refs matching the request type
      * @throws IOException
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
@@ -1799,7 +1801,7 @@ public class GHRepository extends GHObject {
      * https://developer.github.com/v3/git/trees/#get-a-tree-recursively
      *
      * @param sha
-     *            sha number or branch name ex: "master"
+     *            sha number or branch name ex: "main"
      * @param recursive
      *            use 1
      * @return the tree recursive
@@ -3150,7 +3152,7 @@ public class GHRepository extends GHObject {
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
-     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     *            if <code>null</code> the repository's default branch, usually <code>main</code>,
      * @throws IOException
      *             The IO exception.
      * @return the result of reading the stream.
@@ -3167,7 +3169,7 @@ public class GHRepository extends GHObject {
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
-     *            if <code>null</code> the repository's default branch, usually <code>master</code>,
+     *            if <code>null</code> the repository's default branch, usually <code>main</code>,
      * @throws IOException
      *             The IO exception.
      * @return the result of reading the stream.

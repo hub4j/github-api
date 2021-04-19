@@ -59,7 +59,7 @@
     "created_at": "2018-04-06T15:55:14Z",
     "updated_at": "2018-04-06T15:55:14Z",
     "author_association": "MEMBER",
-    "body": "@jglick It seems that we both got confused... a bit. The actual code of the plugin seems to be hosted here: https://github.com/jenkinsci/jenkins.rb/blob/master/java-runtime/pom.xml\r\n"
+    "body": "@jglick It seems that we both got confused... a bit. The actual code of the plugin seems to be hosted here: https://github.com/jenkinsci/jenkins.rb/blob/main/java-runtime/pom.xml\r\n"
   },
   {
     "url": "https://api.github.com/repos/jenkinsci/ruby-runtime-plugin/issues/comments/379300796",
@@ -121,7 +121,7 @@
     "created_at": "2018-04-17T16:45:56Z",
     "updated_at": "2018-04-17T16:45:56Z",
     "author_association": "MEMBER",
-    "body": "@jglick I meant that https://github.com/jenkinsci/jenkins.rb/blob/master/java-runtime/pom.xml appears to be a full copy of this repository. \r\n"
+    "body": "@jglick I meant that https://github.com/jenkinsci/jenkins.rb/blob/main/java-runtime/pom.xml appears to be a full copy of this repository. \r\n"
   },
   {
     "url": "https://api.github.com/repos/jenkinsci/ruby-runtime-plugin/issues/comments/382071599",
@@ -431,7 +431,7 @@
     "created_at": "2018-04-24T08:07:17Z",
     "updated_at": "2018-04-24T08:07:17Z",
     "author_association": "MEMBER",
-    "body": "@hsbt Ack, thanks for the update! Generally we need to understand why there is a codebase duplication between https://github.com/jenkinsci/ruby-runtime-plugin and https://github.com/jenkinsci/jenkins.rb/blob/master/java-runtime/ and what would be the best way to address it. Maybe you have some knowledge of that, which would be really helpful.\r\n\r\nIf you are fine, I will mark the Ruby Runtime plugin for adoption so that others could take its ownership if they are interested.\r\n"
+    "body": "@hsbt Ack, thanks for the update! Generally we need to understand why there is a codebase duplication between https://github.com/jenkinsci/ruby-runtime-plugin and https://github.com/jenkinsci/jenkins.rb/blob/main/java-runtime/ and what would be the best way to address it. Maybe you have some knowledge of that, which would be really helpful.\r\n\r\nIf you are fine, I will mark the Ruby Runtime plugin for adoption so that others could take its ownership if they are interested.\r\n"
   },
   {
     "url": "https://api.github.com/repos/jenkinsci/ruby-runtime-plugin/issues/comments/385945690",

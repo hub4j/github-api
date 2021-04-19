@@ -3,16 +3,16 @@
   "path": "data/val2.dat",
   "sha": "5bd8bb897b13225c93a1d26baa88c96b7bd5d817",
   "size": 4,
-  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val2.dat?ref=master",
-  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/master/data/val2.dat",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val2.dat?ref=main",
+  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/main/data/val2.dat",
   "git_url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/5bd8bb897b13225c93a1d26baa88c96b7bd5d817",
-  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHTreeBuilderTest/master/data/val2.dat",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHTreeBuilderTest/main/data/val2.dat",
   "type": "file",
   "content": "BAUGBw==\n",
   "encoding": "base64",
   "_links": {
-    "self": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val2.dat?ref=master",
+    "self": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val2.dat?ref=main",
     "git": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/5bd8bb897b13225c93a1d26baa88c96b7bd5d817",
-    "html": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/master/data/val2.dat"
+    "html": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/main/data/val2.dat"
   }
 }

@@ -165,12 +165,12 @@
         "forks": 0,
         "open_issues": 2,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "base": {
-      "label": "hub4j-test-org:master",
-      "ref": "master",
+      "label": "hub4j-test-org:main",
+      "ref": "main",
       "sha": "ab92e13c0fc844fd51a379a48a3ad0b18231215c",
       "user": {
         "login": "hub4j-test-org",
@@ -284,7 +284,7 @@
         "forks": 0,
         "open_issues": 2,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "_links": {
@@ -482,12 +482,12 @@
         "forks": 0,
         "open_issues": 2,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "base": {
-      "label": "hub4j-test-org:master",
-      "ref": "master",
+      "label": "hub4j-test-org:main",
+      "ref": "main",
       "sha": "ab92e13c0fc844fd51a379a48a3ad0b18231215c",
       "user": {
         "login": "hub4j-test-org",
@@ -601,7 +601,7 @@
         "forks": 0,
         "open_issues": 2,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "_links": {

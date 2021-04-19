@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"outdated\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"testUpdateOutdatedBranches\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"outdated\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"testUpdateOutdatedBranches\",\"body\":\"## test\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

@@ -779,7 +779,7 @@
     "created_at": "2011-02-10T14:10:23Z",
     "updated_at": "2011-02-10T14:10:23Z",
     "author_association": "MEMBER",
-    "body": "We are not forgetting to merge this, JENKINS-8592, branch into master?\n"
+    "body": "We are not forgetting to merge this, JENKINS-8592, branch into main?\n"
   },
   {
     "url": "https://api.github.com/repos/jenkinsci/jenkins/comments/267069",

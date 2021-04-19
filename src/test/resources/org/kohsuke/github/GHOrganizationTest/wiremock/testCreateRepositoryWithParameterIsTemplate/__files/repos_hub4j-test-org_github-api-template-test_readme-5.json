@@ -3,16 +3,16 @@
   "path": "README.md",
   "sha": "35aeb188a0da54af7121ef149d90bdfb05694c61",
   "size": 88,
-  "url": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/contents/README.md?ref=master",
-  "html_url": "https://github.com/hub4j-test-org/github-api-template-test/blob/master/README.md",
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/contents/README.md?ref=main",
+  "html_url": "https://github.com/hub4j-test-org/github-api-template-test/blob/main/README.md",
   "git_url": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/git/blobs/35aeb188a0da54af7121ef149d90bdfb05694c61",
-  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/github-api-template-test/master/README.md",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/github-api-template-test/main/README.md",
   "type": "file",
   "content": "IyBnaXRodWItYXBpLXRlbXBsYXRlLXRlc3QKYSB0ZXN0IHRlbXBsYXRlIHJl\ncG9zaXRvcnkgdXNlZCB0byB0ZXN0IGtvaHN1a2UncyBnaXRodWItYXBpCg==\n",
   "encoding": "base64",
   "_links": {
-    "self": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/contents/README.md?ref=master",
+    "self": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/contents/README.md?ref=main",
     "git": "https://api.github.com/repos/hub4j-test-org/github-api-template-test/git/blobs/35aeb188a0da54af7121ef149d90bdfb05694c61",
-    "html": "https://github.com/hub4j-test-org/github-api-template-test/blob/master/README.md"
+    "html": "https://github.com/hub4j-test-org/github-api-template-test/blob/main/README.md"
   }
 }

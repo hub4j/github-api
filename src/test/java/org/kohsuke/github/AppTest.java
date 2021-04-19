@@ -368,7 +368,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testFetchPullRequest() throws Exception {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("jenkins");
-        assertEquals("master", r.getMasterBranch());
+        assertEquals("main", r.getMasterBranch());
+        assertEquals("main", r.getDefaultBranch());
         r.getPullRequest(1);
         r.getPullRequests(GHIssueState.OPEN);
     }
@@ -377,7 +378,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testFetchPullRequestAsList() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
-        assertEquals("master", r.getMasterBranch());
+        assertEquals("main", r.getMasterBranch());
         PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
         List<GHPullRequest> prs = i.toList();
         assertNotNull(prs);
@@ -816,9 +817,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testRef() throws IOException {
-        GHRef masterRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
-        assertEquals(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/master",
-                masterRef.getUrl().toString());
+        GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/main");
+        assertEquals(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/main",
+                mainRef.getUrl().toString());
     }
 
     @Test
@@ -858,8 +859,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCommitStatusContext() throws IOException {
         GHRepository myRepository = getTestRepository();
-        GHRef masterRef = myRepository.getRef("heads/master");
-        GHCommitStatus commitStatus = myRepository.createCommitStatus(masterRef.getObject()
+        GHRef mainRef = myRepository.getRef("heads/main");
+        GHCommitStatus commitStatus = myRepository.createCommitStatus(mainRef.getObject()
                 .getSha(), GHCommitState.SUCCESS, "http://www.example.com", "test", "test/context");
         assertEquals("test/context", commitStatus.getContext());
 
@@ -917,9 +918,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Ignore("Needs mocking check")
     @Test
     public void testTrees() throws IOException {
-        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTree("master");
+        GHTree mainTree = gitHub.getRepository("hub4j/github-api").getTree("main");
         boolean foundReadme = false;
-        for (GHTreeEntry e : masterTree.getTree()) {
+        for (GHTreeEntry e : mainTree.getTree()) {
             if ("readme".equalsIgnoreCase(e.getPath().replaceAll("\\.md", ""))) {
                 foundReadme = true;
                 break;
@@ -930,9 +931,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testTreesRecursive() throws IOException {
-        GHTree masterTree = gitHub.getRepository("hub4j/github-api").getTreeRecursive("master", 1);
+        GHTree mainTree = gitHub.getRepository("hub4j/github-api").getTreeRecursive("main", 1);
         boolean foundThisFile = false;
-        for (GHTreeEntry e : masterTree.getTree()) {
+        for (GHTreeEntry e : mainTree.getTree()) {
             if (e.getPath().endsWith(AppTest.class.getSimpleName() + ".java")) {
                 foundThisFile = true;
                 assertThat(e.getPath(), equalTo("src/test/java/org/kohsuke/github/AppTest.java"));

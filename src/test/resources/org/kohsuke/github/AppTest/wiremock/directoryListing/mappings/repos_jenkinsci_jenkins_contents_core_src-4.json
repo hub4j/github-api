@@ -2,7 +2,7 @@
   "id": "0566ab8b-d260-47cb-a6e6-fafa6fc2836c",
   "name": "repos_jenkinsci_jenkins_contents_core_src",
   "request": {
-    "url": "/repos/jenkinsci/jenkins/contents/core/src?ref=master",
+    "url": "/repos/jenkinsci/jenkins/contents/core/src?ref=main",
     "method": "GET",
     "headers": {
       "Accept": {

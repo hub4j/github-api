@@ -20,7 +20,7 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertEquals("production", deployment.getEnvironment());
         assertEquals("custom", deployment.getPayload());
         assertEquals("custom", deployment.getPayloadObject());
-        assertEquals("master", deployment.getRef());
+        assertEquals("main", deployment.getRef());
         assertEquals("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353", deployment.getSha());
         assertEquals("deploy", deployment.getTask());
         assertEquals("production", deployment.getOriginalEnvironment());
@@ -35,7 +35,7 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertNotNull(deployment);
         assertEquals(178653229, deployment.getId());
         assertEquals("production", deployment.getEnvironment());
-        assertEquals("master", deployment.getRef());
+        assertEquals("main", deployment.getRef());
         assertEquals("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353", deployment.getSha());
         assertEquals("deploy", deployment.getTask());
         final Map<String, Object> payload = deployment.getPayloadMap();

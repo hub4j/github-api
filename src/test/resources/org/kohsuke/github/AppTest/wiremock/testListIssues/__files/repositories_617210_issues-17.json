@@ -111,7 +111,7 @@
     "updated_at": "2015-12-03T16:42:58Z",
     "closed_at": "2015-12-03T16:42:58Z",
     "author_association": "NONE",
-    "body": "GHRepository.getCompare(String,String) supports cross-fork comparisons, but this does not:\n\nhttps://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GHRepository.java#L684-L686\n\nThis is a simple fix.\n"
+    "body": "GHRepository.getCompare(String,String) supports cross-fork comparisons, but this does not:\n\nhttps://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GHRepository.java#L684-L686\n\nThis is a simple fix.\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/217",
@@ -900,7 +900,7 @@
     "updated_at": "2015-12-01T16:28:24Z",
     "closed_at": "2015-12-01T16:28:24Z",
     "author_association": "NONE",
-    "body": "On June 24th, GitHub made some breaking changes to the api.  See https://developer.github.com/changes/2015-06-10-breaking-changes-to-organization-permissions-coming-on-june-24/\n\nI am currently using the Jenkins GitHub Oauth plugin which uses the `getMyOrganizations` method defined at https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GitHub.java#L333  \n\nUnfortunately this method relies on the API endpoint https://api.github.com/users/orgs which no longer works.   \n"
+    "body": "On June 24th, GitHub made some breaking changes to the api.  See https://developer.github.com/changes/2015-06-10-breaking-changes-to-organization-permissions-coming-on-june-24/\n\nI am currently using the Jenkins GitHub Oauth plugin which uses the `getMyOrganizations` method defined at https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GitHub.java#L333  \n\nUnfortunately this method relies on the API endpoint https://api.github.com/users/orgs which no longer works.   \n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/201",

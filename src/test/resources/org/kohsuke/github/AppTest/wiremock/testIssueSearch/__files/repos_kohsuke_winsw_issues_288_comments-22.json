@@ -59,6 +59,6 @@
     "created_at": "2019-02-16T12:35:13Z",
     "updated_at": "2019-02-16T12:38:30Z",
     "author_association": "NONE",
-    "body": "Hi @kohsuke @oleg-nenashev  - I am searching for windows service auto update as my service installed in around 1000 different client servers and found below link for download tag in winsw :\r\nhttps://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md#download - \"This is another useful building block for developing a self-updating service.\" This is mentioned in this link.\r\nSo how can we do auto update of jar using this same download tag ?\r\n"
+    "body": "Hi @kohsuke @oleg-nenashev  - I am searching for windows service auto update as my service installed in around 1000 different client servers and found below link for download tag in winsw :\r\nhttps://github.com/kohsuke/winsw/blob/main/doc/xmlConfigFile.md#download - \"This is another useful building block for developing a self-updating service.\" This is mentioned in this link.\r\nSo how can we do auto update of jar using this same download tag ?\r\n"
   }
 ]

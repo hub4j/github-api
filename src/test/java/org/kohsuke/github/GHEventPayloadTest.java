@@ -50,7 +50,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 .parseEventPayload(payload.asReader(), GHEventPayload.Create.class);
         assertThat(event.getRef(), is("0.0.1"));
         assertThat(event.getRefType(), is("tag"));
-        assertThat(event.getMasterBranch(), is("master"));
+        assertThat(event.getMasterBranch(), is("main"));
         assertThat(event.getDescription(), is(""));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
@@ -241,15 +241,15 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
         assertThat(event.getPullRequest().getBody(),
-                is("This is a pretty simple change that we need to pull into " + "master."));
+                is("This is a pretty simple change that we need to pull into " + "main."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
         assertThat(event.getPullRequest().getHead().getLabel(), is("baxterthehacker:changes"));
         assertThat(event.getPullRequest().getHead().getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getPullRequest().isMerged(), is(false));
         assertThat(event.getPullRequest().getMergeable(), nullValue());
@@ -355,8 +355,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getHead().getLabel(), is("skalnik:patch-2"));
         assertThat(event.getPullRequest().getHead().getSha(), is("b7a1f9c27caa4e03c14a88feb56e2d4f7500aa63"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
 
         assertThat(event.getRepository().getName(), is("public-repo"));
@@ -376,15 +376,15 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
         assertThat(event.getPullRequest().getBody(),
-                is("This is a pretty simple change that we need to pull into master."));
+                is("This is a pretty simple change that we need to pull into main."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
         assertThat(event.getPullRequest().getHead().getLabel(), is("baxterthehacker:changes"));
         assertThat(event.getPullRequest().getHead().getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
 
         assertThat(event.getRepository().getName(), is("public-repo"));
@@ -477,8 +477,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
 
         // ensure that root has been bound after populate
-        event.getRepository().getSource().getRef("heads/master");
-        event.getRepository().getParent().getRef("heads/master");
+        event.getRepository().getSource().getRef("heads/main");
+        event.getRepository().getParent().getRef("heads/main");
 
         // Source
         event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
@@ -559,7 +559,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
         assertThat("pull body should be populated",
                 checkRun.getPullRequests().get(0).getBody(),
-                equalTo("This is a pretty simple change that we need to pull into master."));
+                equalTo("This is a pretty simple change that we need to pull into main."));
         assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
                 mockGitHub.getRequestCount(),
                 equalTo(expectedRequestCount));
@@ -624,7 +624,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
         assertThat("pull body should be populated",
                 checkSuite.getPullRequests().get(0).getBody(),
-                equalTo("This is a pretty simple change that we need to pull into master."));
+                equalTo("This is a pretty simple change that we need to pull into main."));
         assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
                 mockGitHub.getRequestCount(),
                 lessThanOrEqualTo(expectedRequestCount));

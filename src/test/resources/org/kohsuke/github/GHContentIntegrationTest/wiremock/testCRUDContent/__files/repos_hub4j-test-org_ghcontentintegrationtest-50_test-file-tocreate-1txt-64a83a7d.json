@@ -3,16 +3,16 @@
   "path": "test+directory #50/test file-to+create-#1.txt",
   "sha": "8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
   "size": 34,
-  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=master",
-  "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=main",
+  "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/main/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
   "git_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
-  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/main/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt",
   "type": "file",
   "content": "dGhpcyBpcyBhbiBhd2Vzb21lIGZpbGUgSSBjcmVhdGVkCg==\n",
   "encoding": "base64",
   "_links": {
-    "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=master",
+    "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=main",
     "git": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
-    "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/master/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt"
+    "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/main/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt"
   }
 }

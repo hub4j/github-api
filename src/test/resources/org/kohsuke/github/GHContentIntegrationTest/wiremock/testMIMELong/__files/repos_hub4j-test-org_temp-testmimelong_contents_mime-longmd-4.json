@@ -4,15 +4,15 @@
     "path": "MIME-Long.md",
     "sha": "e6a493cf0e30d4fc2d3cc60f690d96fec005a170",
     "size": 58,
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/contents/MIME-Long.md?ref=master",
-    "html_url": "https://github.com/hub4j-test-org/temp-testMIMELong/blob/master/MIME-Long.md",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/contents/MIME-Long.md?ref=main",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMIMELong/blob/main/MIME-Long.md",
     "git_url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/git/blobs/e6a493cf0e30d4fc2d3cc60f690d96fec005a170",
-    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testMIMELong/master/MIME-Long.md",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testMIMELong/main/MIME-Long.md",
     "type": "file",
     "_links": {
-      "self": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/contents/MIME-Long.md?ref=master",
+      "self": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/contents/MIME-Long.md?ref=main",
       "git": "https://api.github.com/repos/hub4j-test-org/temp-testMIMELong/git/blobs/e6a493cf0e30d4fc2d3cc60f690d96fec005a170",
-      "html": "https://github.com/hub4j-test-org/temp-testMIMELong/blob/master/MIME-Long.md"
+      "html": "https://github.com/hub4j-test-org/temp-testMIMELong/blob/main/MIME-Long.md"
     }
   },
   "commit": {

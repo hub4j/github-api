@@ -41,7 +41,7 @@
     "updated_at": "2017-07-28T17:36:12Z",
     "closed_at": "2017-07-28T17:35:59Z",
     "author_association": "NONE",
-    "body": "```\r\nGHPullRequest pull = repo.createPullRequest(\"Release $version\", \"master\", \"production\", body)\r\nwhile(!pull.getMergeable()) {\r\n      println \"PR not yet mergeable, retrying...\"\r\n      sleep 2\r\n}\r\npull.merge(\"Merged via Jenkins\", pull.getHead().getSha())\r\n```\r\n\r\nThe `pull.merge(...)` seemingly results in a no-op. No error. No merge. \r\n\r\nGenerally it's not immediately mergeable via `pull.getMergeable()` and it must pause a moment before that passes. But even accounting for that, I still get nothing. "
+    "body": "```\r\nGHPullRequest pull = repo.createPullRequest(\"Release $version\", \"main\", \"production\", body)\r\nwhile(!pull.getMergeable()) {\r\n      println \"PR not yet mergeable, retrying...\"\r\n      sleep 2\r\n}\r\npull.merge(\"Merged via Jenkins\", pull.getHead().getSha())\r\n```\r\n\r\nThe `pull.merge(...)` seemingly results in a no-op. No error. No merge. \r\n\r\nGenerally it's not immediately mergeable via `pull.getMergeable()` and it must pause a moment before that passes. But even accounting for that, I still get nothing. "
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/366",
@@ -987,7 +987,7 @@
       "diff_url": "https://github.com/hub4j/github-api/pull/343.diff",
       "patch_url": "https://github.com/hub4j/github-api/pull/343.patch"
     },
-    "body": "I already add the latest release, so please add to master and update version so that I can use in my project\r\nFix #341 \r\n\r\nPS  I don't know how to push my fixed module to the maven server so, please. @emlagowski \r\n\r\n\r\nThank you"
+    "body": "I already add the latest release, so please add to main and update version so that I can use in my project\r\nFix #341 \r\n\r\nPS  I don't know how to push my fixed module to the maven server so, please. @emlagowski \r\n\r\n\r\nThank you"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/342",
@@ -1325,7 +1325,7 @@
       "diff_url": "https://github.com/hub4j/github-api/pull/336.diff",
       "patch_url": "https://github.com/hub4j/github-api/pull/336.patch"
     },
-    "body": "Correct namespace\r\n\r\nFile: https://github.com/square/okhttp/blob/master/okhttp-urlconnection/src/main/java/okhttp3/OkUrlFactory.java\r\n\r\nFixes #335"
+    "body": "Correct namespace\r\n\r\nFile: https://github.com/square/okhttp/blob/main/okhttp-urlconnection/src/main/java/okhttp3/OkUrlFactory.java\r\n\r\nFixes #335"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/335",

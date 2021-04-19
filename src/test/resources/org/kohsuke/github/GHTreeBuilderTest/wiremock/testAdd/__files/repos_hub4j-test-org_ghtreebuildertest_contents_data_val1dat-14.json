@@ -3,16 +3,16 @@
   "path": "data/val1.dat",
   "sha": "aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74",
   "size": 3,
-  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val1.dat?ref=master",
-  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/master/data/val1.dat",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val1.dat?ref=main",
+  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/main/data/val1.dat",
   "git_url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74",
-  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHTreeBuilderTest/master/data/val1.dat",
+  "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHTreeBuilderTest/main/data/val1.dat",
   "type": "file",
   "content": "AQID\n",
   "encoding": "base64",
   "_links": {
-    "self": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val1.dat?ref=master",
+    "self": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data/val1.dat?ref=main",
     "git": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74",
-    "html": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/master/data/val1.dat"
+    "html": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/main/data/val1.dat"
   }
 }

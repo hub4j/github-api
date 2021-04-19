@@ -19,7 +19,7 @@
       "push_id": 4176854844,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "d2236eda0eaacce89c1061771ee6b869c1a45f62",
       "before": "c056019ab48ac4112f94e3d3a4b8df5c4a829942",
       "commits": [
@@ -68,7 +68,7 @@
       "push_id": 4176854836,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "803f0f4a487b2b4da9410829dca1cbdc1f0209e4",
       "before": "cb6da22b157a14363ad3a4c4f716ec8390ab7aec",
       "commits": [
@@ -153,7 +153,7 @@
       "push_id": 4176854834,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "520b59ae2047f8b6adaa0a17a17d9ca531de3b3e",
       "before": "38d8e77f999ba5999c013b44f6e8fe808308de7a",
       "commits": [
@@ -191,7 +191,7 @@
     "payload": {
       "ref": null,
       "ref_type": "repository",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": "Documentation on Angreifer.org services (coming soon)",
       "pusher_type": "user"
     },
@@ -284,7 +284,7 @@
             "email": "27856297+dependabot-preview[bot]@users.noreply.github.com",
             "name": "dependabot-preview[bot]"
           },
-          "message": "build(deps): bump date-fns from 2.2.1 to 2.5.1\n\nBumps [date-fns](https://github.com/date-fns/date-fns) from 2.2.1 to 2.5.1.\n- [Release notes](https://github.com/date-fns/date-fns/releases)\n- [Changelog](https://github.com/date-fns/date-fns/blob/master/CHANGELOG.md)\n- [Commits](https://github.com/date-fns/date-fns/compare/v2.2.1...v2.5.1)\n\nSigned-off-by: dependabot-preview[bot] <support@dependabot.com>",
+          "message": "build(deps): bump date-fns from 2.2.1 to 2.5.1\n\nBumps [date-fns](https://github.com/date-fns/date-fns) from 2.2.1 to 2.5.1.\n- [Release notes](https://github.com/date-fns/date-fns/releases)\n- [Changelog](https://github.com/date-fns/date-fns/blob/main/CHANGELOG.md)\n- [Commits](https://github.com/date-fns/date-fns/compare/v2.2.1...v2.5.1)\n\nSigned-off-by: dependabot-preview[bot] <support@dependabot.com>",
           "distinct": true,
           "url": "https://api.github.com/repos/Profiscience/knockout-contrib/commits/3c2acb28c17c60c9f15afa9763dca02d5923b2c3"
         }
@@ -410,7 +410,7 @@
       "push_id": 4176854811,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "9e030787665d1dbf6f75f4020c52cb842d3cd17b",
       "before": "0bb1bbedfa1148e8931dca828cfaa3a6f21dd9a4",
       "commits": [
@@ -473,7 +473,7 @@
       "push_id": 4176854806,
       "size": 61,
       "distinct_size": 0,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "5005a784df3fe79330212c6503c67b05b474df87",
       "before": "36df29735886a29cda5ba7bccf26ef0faa55f1c0",
       "commits": [

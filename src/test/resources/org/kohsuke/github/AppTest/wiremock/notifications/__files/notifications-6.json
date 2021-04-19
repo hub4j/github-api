@@ -4024,7 +4024,7 @@
     "updated_at": "2019-10-14T21:06:40Z",
     "last_read_at": "2019-10-18T20:02:08Z",
     "subject": {
-      "title": "CSDOCS-206 - Adjust Jenkinsfile to only deploy master commits",
+      "title": "CSDOCS-206 - Adjust Jenkinsfile to only deploy main commits",
       "url": "https://api.github.com/repos/cloudbees/docsite-engine/pulls/121",
       "latest_comment_url": "https://api.github.com/repos/cloudbees/docsite-engine/issues/comments/541921810",
       "type": "PullRequest"

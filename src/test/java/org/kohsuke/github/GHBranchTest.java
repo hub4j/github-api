@@ -16,9 +16,9 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
     public void testMergeBranch() throws Exception {
         repository = getTempRepository();
 
-        String masterHead = repository.getRef("heads/master").getObject().getSha();
-        createRefAndPostContent(BRANCH_1, masterHead);
-        createRefAndPostContent(BRANCH_2, masterHead);
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+        createRefAndPostContent(BRANCH_1, mainHead);
+        createRefAndPostContent(BRANCH_2, mainHead);
 
         GHBranch otherBranch = repository.getBranch(BRANCH_2);
         String commitMessage = "merging " + BRANCH_2;
@@ -28,13 +28,13 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
 
         // Merging commit sha should work
         commitMessage = "merging from " + mergeCommit.getSHA1();
-        GHBranch master = repository.getBranch("master");
-        mergeCommit = master.merge(mergeCommit.getSHA1(), commitMessage);
+        GHBranch main = repository.getBranch("main");
+        mergeCommit = main.merge(mergeCommit.getSHA1(), commitMessage);
 
         assertThat(mergeCommit, notNullValue());
         assertThat(mergeCommit.getCommitShortInfo().getMessage(), equalTo(commitMessage));
 
-        mergeCommit = master.merge(mergeCommit.getSHA1(), commitMessage);
+        mergeCommit = main.merge(mergeCommit.getSHA1(), commitMessage);
         // Should be null since all changes already merged
         assertThat(mergeCommit, nullValue());
     }

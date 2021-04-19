@@ -893,7 +893,7 @@
     "updated_at": "2014-05-10T22:31:37Z",
     "closed_at": "2014-05-10T22:31:37Z",
     "author_association": "NONE",
-    "body": "`getRateLimit()` at https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GitHub.java#L228 fails for GitHub Enterprise with a 404 status code, body of\n\n``` json\n{\n  \"message\": \"No rate limit for white listed users\"\n}\n```\n\nGitHub Enterprise users are considered white listed and so don't have rate limits.\n\nSee also janinko/ghprb#127\n"
+    "body": "`getRateLimit()` at https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GitHub.java#L228 fails for GitHub Enterprise with a 404 status code, body of\n\n``` json\n{\n  \"message\": \"No rate limit for white listed users\"\n}\n```\n\nGitHub Enterprise users are considered white listed and so don't have rate limits.\n\nSee also janinko/ghprb#127\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/77",

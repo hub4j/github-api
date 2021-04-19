@@ -3,7 +3,7 @@
   "id": 178653229,
   "node_id": "MDEwOkRlcGxveW1lbnQxNzg2NTMyMjk=",
   "sha": "3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353",
-  "ref": "master",
+  "ref": "main",
   "task": "deploy",
   "payload": "custom",
   "original_environment": "production",

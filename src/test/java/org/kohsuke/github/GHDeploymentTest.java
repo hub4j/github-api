@@ -16,7 +16,7 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         final GHRepository repo = getRepository();
         final GHDeployment deployment = repo.getDeployment(178653229);
         assertNotNull(deployment);
-        assertEquals(178653229, deployment.getId());
+        assertEquals(178653229L, deployment.getId());
         assertEquals("production", deployment.getEnvironment());
         assertEquals("custom", deployment.getPayload());
         assertEquals("custom", deployment.getPayloadObject());
@@ -33,7 +33,7 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         final GHRepository repo = getRepository();
         final GHDeployment deployment = repo.getDeployment(178653229);
         assertNotNull(deployment);
-        assertEquals(178653229, deployment.getId());
+        assertEquals(178653229L, deployment.getId());
         assertEquals("production", deployment.getEnvironment());
         assertEquals("main", deployment.getRef());
         assertEquals("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353", deployment.getSha());

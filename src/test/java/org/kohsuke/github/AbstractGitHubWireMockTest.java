@@ -4,14 +4,10 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.hamcrest.StringDescription;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.*;
 import org.kohsuke.github.junit.GitHubWireMockRule;
 import wiremock.com.github.jknack.handlebars.Helper;
 import wiremock.com.github.jknack.handlebars.Options;
@@ -21,13 +17,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
  */
-public abstract class AbstractGitHubWireMockTest extends Assert {
+public abstract class AbstractGitHubWireMockTest {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
@@ -255,52 +252,79 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
+    public static void fail() {
+        Assert.fail();
+    }
+    public static void fail(String reason) {
+        Assert.fail(reason);
+    }
+
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        assertThat("", actual, matcher);
+        MatcherAssert.assertThat("", actual, matcher);
     }
 
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
-        if (!matcher.matches(actual)) {
-            Description description = new StringDescription();
-            description.appendText(reason)
-                    .appendText(System.lineSeparator())
-                    .appendText("Expected: ")
-                    .appendDescriptionOf(matcher)
-                    .appendText(System.lineSeparator())
-                    .appendText("     but: ");
-            matcher.describeMismatch(actual, description);
-            throw new AssertionError(description.toString());
-        }
+        MatcherAssert.assertThat(reason, actual, matcher);
     }
 
     public static void assertThat(String reason, boolean assertion) {
-        if (!assertion) {
-            throw new AssertionError(reason);
-        }
+        MatcherAssert.assertThat(reason, assertion);
     }
 
     public static void assertEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.equalTo(expected));
+        assertThat(actual, equalTo(expected));
+    }
+
+    public static void assertEquals(String reason, Object expected, Object actual) {
+        assertThat(reason, actual, equalTo(expected));
     }
 
     public static void assertNotEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.not(expected));
+        assertThat(actual, not(expected));
+    }
+
+    public static void assertNotEquals(String reason, Object expected, Object actual) {
+        assertThat(reason, actual, not(expected));
     }
 
     public static void assertNotNull(Object actual) {
-        assertThat(actual, Matchers.notNullValue());
+        assertThat(actual, notNullValue());
+    }
+
+    public static void assertNotNull(String reason, Object actual) {
+        assertThat(reason, actual, notNullValue());
     }
 
     public static void assertNull(Object actual) {
-        assertThat(actual, Matchers.nullValue());
+        assertThat(actual, nullValue());
+    }
+
+    public static void assertNull(String message, Object actual) {
+        assertThat(message, actual, nullValue());
+    }
+
+    public static void assertSame(Object expected, Object actual) {
+        assertThat(actual, sameInstance(expected));
+    }
+
+    public static void assertSame(String message, Object expected, Object actual) {
+        Assert.assertSame(message, expected, actual);
     }
 
     public static void assertTrue(Boolean condition) {
-        assertThat(condition, Matchers.is(true));
+        assertThat(condition, is(true));
+    }
+
+    public static void assertTrue(String reason, Boolean condition) {
+        assertThat(reason, condition, is(true));
     }
 
     public static void assertFalse(Boolean condition) {
-        assertThat(condition, Matchers.is(false));
+        assertThat(condition, is(false));
+    }
+
+    public static void assertFalse(String reason, Boolean condition) {
+        assertThat(reason, condition, is(false));
     }
 
     protected static class TemplatingHelper {

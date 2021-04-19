@@ -62,7 +62,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .create();
         assertEquals(Status.COMPLETED, checkRun.getStatus());
         assertEquals(1, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(1424883286, checkRun.getId());
+        assertEquals(1424883286L, checkRun.getId());
         assertEquals("Hello Text!", checkRun.getOutput().getText());
     }
 
@@ -85,7 +85,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
         assertEquals(101, checkRun.getOutput().getAnnotationsCount());
         assertEquals("Hello Text!", checkRun.getOutput().getText());
-        assertEquals(1424883599, checkRun.getId());
+        assertEquals(1424883599L, checkRun.getId());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .create();
         assertEquals(Status.COMPLETED, checkRun.getStatus());
         assertEquals(0, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(1424883957, checkRun.getId());
+        assertEquals(1424883957L, checkRun.getId());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .create();
         assertEquals(Status.IN_PROGRESS, checkRun.getStatus());
         assertNull(checkRun.getConclusion());
-        assertEquals(1424883451, checkRun.getId());
+        assertEquals(1424883451L, checkRun.getId());
     }
 
     @Test

@@ -91,13 +91,13 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             if (item.getWeek() == 1566691200) {
                 assertEquals(6, item.getTotal());
                 List<Integer> days = item.getDays();
-                assertEquals(0, (long) days.get(0));
-                assertEquals(0, (long) days.get(1));
-                assertEquals(1, (long) days.get(2));
-                assertEquals(0, (long) days.get(3));
-                assertEquals(0, (long) days.get(4));
-                assertEquals(1, (long) days.get(5));
-                assertEquals(4, (long) days.get(6));
+                assertEquals(0L, (long) days.get(0));
+                assertEquals(0L, (long) days.get(1));
+                assertEquals(1L, (long) days.get(2));
+                assertEquals(0L, (long) days.get(3));
+                assertEquals(0L, (long) days.get(4));
+                assertEquals(1L, (long) days.get(5));
+                assertEquals(4L, (long) days.get(6));
                 foundWeek = true;
                 break;
             }
@@ -132,8 +132,8 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         Boolean foundWeek = false;
         for (GHRepositoryStatistics.CodeFrequency item : stats) {
             if (item.getWeekTimestamp() == 1535241600) {
-                assertEquals(185, item.getAdditions());
-                assertEquals(-243, item.getDeletions());
+                assertEquals(185L, item.getAdditions());
+                assertEquals(-243L, item.getDeletions());
                 assertEquals("Week starting 1535241600 has 185 additions and 243 deletions", item.toString());
                 foundWeek = true;
                 break;
@@ -199,7 +199,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             if (item.getDayOfWeek() == 2 && item.getHourOfDay() == 10) {
                 // TODO: Make an easier access method. Perhaps wrap in an
                 // object and have a method such as GetCommits(1, 16).
-                assertEquals(16, item.getNumberOfCommits());
+                assertEquals(16L, item.getNumberOfCommits());
                 assertEquals("Day 2 Hour 10: 16 commits", item.toString());
                 hourFound = true;
                 break;

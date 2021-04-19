@@ -78,8 +78,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         updateTree();
 
-        assertEquals(CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals(CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertEquals((long) CONTENT_DATA1.length, getFileSize(PATH_DATA1));
+        assertEquals((long) CONTENT_DATA2.length, getFileSize(PATH_DATA2));
     }
 
     @Test
@@ -91,10 +91,10 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = updateTree();
 
-        assertEquals(CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
-        assertEquals(CONTENT_README.length(), getFileSize(PATH_README));
-        assertEquals(CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals(CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertEquals((long) CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
+        assertEquals((long) CONTENT_README.length(), getFileSize(PATH_README));
+        assertEquals((long) CONTENT_DATA1.length, getFileSize(PATH_DATA1));
+        assertEquals((long) CONTENT_DATA2.length, getFileSize(PATH_DATA2));
 
         assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
         assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));

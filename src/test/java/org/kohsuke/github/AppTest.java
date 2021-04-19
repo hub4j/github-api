@@ -966,7 +966,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHLabel e = r.getLabel("enhancement");
         assertEquals("enhancement", e.getName());
         assertNotNull(e.getUrl());
-        assertEquals(177339106, e.getId());
+        assertEquals(177339106L, e.getId());
         assertEquals("MDU6TGFiZWwxNzczMzkxMDY=", e.getNodeId());
         assertTrue(e.isDefault());
         assertTrue(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()));

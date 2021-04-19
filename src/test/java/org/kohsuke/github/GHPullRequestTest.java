@@ -31,7 +31,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHPullRequest pr : getRepository(this.getGitHubBeforeAfter()).getPullRequests(GHIssueState.OPEN)) {
+        for (GHPullRequest pr : getRepository(this.getNonRecordingGitHub()).getPullRequests(GHIssueState.OPEN)) {
             pr.close();
         }
     }

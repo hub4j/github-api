@@ -371,7 +371,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        GHRepository nonRecordingRepo = getGitHubBeforeAfter().getRepository(REPO_NAME);
+        GHRepository nonRecordingRepo = getNonRecordingGitHub().getRepository(REPO_NAME);
 
         Awaitility.await().pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
             return condition.apply(nonRecordingRepo);

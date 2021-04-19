@@ -91,7 +91,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     private void cleanupUserRepository(final String name) throws IOException {
         if (mockGitHub.isUseProxy()) {
-            cleanupRepository(getUser(getGitHubBeforeAfter()).getLogin() + "/" + name);
+            cleanupRepository(getUser(getNonRecordingGitHub()).getLogin() + "/" + name);
         }
     }
 
@@ -585,7 +585,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             // System.out.println(hook);
         } finally {
             if (mockGitHub.isUseProxy()) {
-                r = getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+                r = getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
                 for (GHHook h : r.getHooks()) {
                     h.delete();
                 }
@@ -1063,7 +1063,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
             try {
-                GHLabel t = getGitHubBeforeAfter().getRepository("hub4j-test-org/test-labels").getLabel(name);
+                GHLabel t = getNonRecordingGitHub().getRepository("hub4j-test-org/test-labels").getLabel(name);
                 t.delete();
             } catch (IOException e) {
 

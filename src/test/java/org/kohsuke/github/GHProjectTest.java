@@ -69,7 +69,7 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (project != null) {
-                project = getGitHubBeforeAfter().getProject(project.getId());
+                project = getNonRecordingGitHub().getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

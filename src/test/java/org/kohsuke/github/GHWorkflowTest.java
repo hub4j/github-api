@@ -23,7 +23,7 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = getGitHubBeforeAfter().getRepository(REPO_NAME);
+            repo = getNonRecordingGitHub().getRepository(REPO_NAME);
 
             // we need to make sure the workflow is enabled before the tests
             GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");

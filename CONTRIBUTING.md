@@ -41,7 +41,7 @@ Once you have credentials setup, you add new test classes and test methods as yo
 
 Keep `useProxy` enabled and iterate on your tests as needed. With `useProxy` enabled your tests will interact with 
 GitHub - you will need to clean up your server-state between runs. This can be done manually to start with.
-Once your test code is somewhat stable, use `getGitHubBeforeAfter()` to get a `GitHub` instance for test setup and cleanup.
+Once your test code is somewhat stable, use `getNonRecordingGitHub()` to get a `GitHub` instance for test setup and cleanup.
 Interactions with that `GitHub` instance will not be recorded as part of the test, keeping the test data files to a minimum. 
 
 #### Running tests against your personal GitHub user account

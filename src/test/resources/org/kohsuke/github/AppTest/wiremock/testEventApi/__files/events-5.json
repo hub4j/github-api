@@ -183,12 +183,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "DeBuchie:master",
-          "ref": "master",
+          "label": "DeBuchie:main",
+          "ref": "main",
           "sha": "087f5d8dc690e9c2ba31340bd04382d8648b9e66",
           "user": {
             "login": "DeBuchie",
@@ -302,7 +302,7 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -388,7 +388,7 @@
       "push_id": 4176854998,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "cb7fabdb5a14b78a3ee05cde9032cdae0c7fb473",
       "before": "c399ac1645b55107ac4fff9a53116619e53200ff",
       "commits": [
@@ -424,9 +424,9 @@
       "url": "https://api.github.com/repos/jchaconv/spring-boot-microservices"
     },
     "payload": {
-      "ref": "master",
+      "ref": "main",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": "Repository for the course Spring Boot Microservices with Spring Cloud Beginner to Guru",
       "pusher_type": "user"
     },
@@ -766,12 +766,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "SarvagyaGupta:master",
-          "ref": "master",
+          "label": "SarvagyaGupta:main",
+          "ref": "main",
           "sha": "5f1e6fdc621f3186ecaf479cd89e1f07df71d73b",
           "user": {
             "login": "SarvagyaGupta",
@@ -885,7 +885,7 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -1252,9 +1252,9 @@
       "url": "https://api.github.com/repos/MG1222/gossip_sinatra"
     },
     "payload": {
-      "ref": "master",
+      "ref": "main",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -1395,7 +1395,7 @@
       "push_id": 4176854978,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "eeace75e56840498f81e2e8b8ccb1073331b49b2",
       "before": "9f54a7e2e8417b5c442edbdb9bdcf26ff985c578",
       "commits": [
@@ -1567,7 +1567,7 @@
         "updated_at": "2019-10-21T21:54:50Z",
         "closed_at": "2019-10-21T21:54:50Z",
         "author_association": "NONE",
-        "body": "## Welcome!\n\nHello and welcome! In this course you will learn how you can get your best work done in pull requests.  You'll learn when and how to request a review, how to review someone else's code, and how to respond to reviews. To do this, we'll be playing around with the code in this repository that makes a simple Tetris game.\n\nIf you'd like, you can use [GitHub Pages](https://pages.github.com/) to host your Tetris game. Just go to the **Settings** tab of this repository. Scroll down to **GitHub Pages**. Select `master` as a **Source**, and click **Save**. \n\n### New to GitHub?\n\nFor this course, you'll need some background knowledge. If you need a refresher on the GitHub flow, check out [the Introduction to GitHub course](https://lab.github.com/courses/introduction-to-github).\n\n## Pull Requests Reviews 101\n\nReviewing a pull request is an opportunity to examine another contributor's changes. While reviewing a pull request, you can extrapolate how someone else solved a problem. It's an awesome opportunity to learn more about how the code works and how others solve problems. Reviewing a pull request is a great learning opportunity!\n\n## Step 1: Add assignees for issues and pull requests\n\nAssignees on issues and pull requests let other team members know who is responsible. The assignee oversees the issue or pull request in an accessible and visible way.\n\n### :keyboard: Activity: Assign yourself to this issue\n\n1. On the right side of the screen, click the `assign yourself` text under the **Assignees** section\n\n<hr>\n<h3 align=\"center\">I'll respond below for your next step</h3>\n\n> _Sometimes I respond too fast for the page to update! If you perform an expected action and don't see a response, wait a few seconds and refresh the page for your next steps._\n"
+        "body": "## Welcome!\n\nHello and welcome! In this course you will learn how you can get your best work done in pull requests.  You'll learn when and how to request a review, how to review someone else's code, and how to respond to reviews. To do this, we'll be playing around with the code in this repository that makes a simple Tetris game.\n\nIf you'd like, you can use [GitHub Pages](https://pages.github.com/) to host your Tetris game. Just go to the **Settings** tab of this repository. Scroll down to **GitHub Pages**. Select `main` as a **Source**, and click **Save**. \n\n### New to GitHub?\n\nFor this course, you'll need some background knowledge. If you need a refresher on the GitHub flow, check out [the Introduction to GitHub course](https://lab.github.com/courses/introduction-to-github).\n\n## Pull Requests Reviews 101\n\nReviewing a pull request is an opportunity to examine another contributor's changes. While reviewing a pull request, you can extrapolate how someone else solved a problem. It's an awesome opportunity to learn more about how the code works and how others solve problems. Reviewing a pull request is a great learning opportunity!\n\n## Step 1: Add assignees for issues and pull requests\n\nAssignees on issues and pull requests let other team members know who is responsible. The assignee oversees the issue or pull request in an accessible and visible way.\n\n### :keyboard: Activity: Assign yourself to this issue\n\n1. On the right side of the screen, click the `assign yourself` text under the **Assignees** section\n\n<hr>\n<h3 align=\"center\">I'll respond below for your next step</h3>\n\n> _Sometimes I respond too fast for the page to update! If you perform an expected action and don't see a response, wait a few seconds and refresh the page for your next steps._\n"
       }
     },
     "public": true,
@@ -1614,7 +1614,7 @@
     "payload": {
       "ref": "changeProductOnClick",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -1648,7 +1648,7 @@
       "push_id": 4176854972,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "6bf9c3f7d85380942350eb48f8d45eb22f38cac8",
       "before": "8542d53991e43656fdaf4a0ac48425755c02c229",
       "commits": [
@@ -1687,7 +1687,7 @@
       "push_id": 4176854968,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "ff47c37132b9f65b7a019f68bd6f920f9557850f",
       "before": "15016ceee06af3047744c7bac173ebc162c2b3ac",
       "commits": [
@@ -1750,7 +1750,7 @@
       "push_id": 4176854921,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "f0458723e4e88ee34613c984b02b3dc927c4a538",
       "before": "d0973869c9d7f14f0353a7eceddf9d3daa1382e1",
       "commits": [
@@ -1795,7 +1795,7 @@
     "payload": {
       "ref": "branch-c7fa2a10",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -1862,7 +1862,7 @@
         "updated_at": "2019-10-21T21:54:49Z",
         "closed_at": null,
         "author_association": "NONE",
-        "body": "1. Serializing general data\r\n2. Serializing role data\r\nTypeError: Cannot read property 'id' of undefined\r\n    at roleCol.map.role (/home/root2/Bureau/Discord-guild-copy-master/objects/serializer.js:103:57)\r\n"
+        "body": "1. Serializing general data\r\n2. Serializing role data\r\nTypeError: Cannot read property 'id' of undefined\r\n    at roleCol.map.role (/home/root2/Bureau/Discord-guild-copy-main/objects/serializer.js:103:57)\r\n"
       }
     },
     "public": true,
@@ -1887,7 +1887,7 @@
     "payload": {
       "ref": null,
       "ref_type": "repository",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -2078,12 +2078,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "direwolf-github:master",
-          "ref": "master",
+          "label": "direwolf-github:main",
+          "ref": "main",
           "sha": "4d3c6b596570ce87ea9ec7549f75603aaa5a680f",
           "user": {
             "login": "direwolf-github",
@@ -2197,7 +2197,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2263,7 +2263,7 @@
     "payload": {
       "ref": "branch-cdd0a924",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -2290,7 +2290,7 @@
       "push_id": 4176854952,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "7949f68fc3607986a80d4097233450ecc034432e",
       "before": "452fbf0db4f98082c941bd84c2e24d6f4444c402",
       "commits": [
@@ -2489,7 +2489,7 @@
       "push_id": 4176854947,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "0757c0a942788403c9792b434e3b7cee81446a66",
       "before": "1af55801fc12dc12bbe523ff41ea351841bca423",
       "commits": [

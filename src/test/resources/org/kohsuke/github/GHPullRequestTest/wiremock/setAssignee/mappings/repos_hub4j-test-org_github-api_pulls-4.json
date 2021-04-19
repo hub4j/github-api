@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/stable\",\"maintainer_can_modify\":true,\"title\":\"setAssignee\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/stable\",\"maintainer_can_modify\":true,\"title\":\"setAssignee\",\"body\":\"## test\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

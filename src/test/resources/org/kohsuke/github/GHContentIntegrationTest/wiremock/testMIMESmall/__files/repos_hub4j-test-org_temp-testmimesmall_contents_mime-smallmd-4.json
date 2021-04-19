@@ -4,15 +4,15 @@
     "path": "MIME-Small.md",
     "sha": "378ea1c90acccc8371c391c7ad0639b20d6043ec",
     "size": 57,
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/contents/MIME-Small.md?ref=master",
-    "html_url": "https://github.com/hub4j-test-org/temp-testMIMESmall/blob/master/MIME-Small.md",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/contents/MIME-Small.md?ref=main",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMIMESmall/blob/main/MIME-Small.md",
     "git_url": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/git/blobs/378ea1c90acccc8371c391c7ad0639b20d6043ec",
-    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testMIMESmall/master/MIME-Small.md",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testMIMESmall/main/MIME-Small.md",
     "type": "file",
     "_links": {
-      "self": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/contents/MIME-Small.md?ref=master",
+      "self": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/contents/MIME-Small.md?ref=main",
       "git": "https://api.github.com/repos/hub4j-test-org/temp-testMIMESmall/git/blobs/378ea1c90acccc8371c391c7ad0639b20d6043ec",
-      "html": "https://github.com/hub4j-test-org/temp-testMIMESmall/blob/master/MIME-Small.md"
+      "html": "https://github.com/hub4j-test-org/temp-testMIMESmall/blob/main/MIME-Small.md"
     }
   },
   "commit": {

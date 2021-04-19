@@ -157,12 +157,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
 
-        assertThat("Commit which was supposed to be HEAD in the \"master\" branch was not found.",
+        assertThat("Commit which was supposed to be HEAD in the \"main\" branch was not found.",
                 commit.listBranchesWhereHead()
                         .toList()
                         .stream()
                         .findFirst()
-                        .filter(it -> it.getName().equals("master"))
+                        .filter(it -> it.getName().equals("main"))
                         .isPresent());
     }
 

@@ -25,7 +25,7 @@
           }
         },
         "base": {
-          "ref": "master",
+          "ref": "main",
           "sha": "f95f852bd8fca8fcc58a9a2d6c842781e32a215e",
           "repo": {
             "id": 186853002,
@@ -200,7 +200,7 @@
     "forks": 0,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "Codertocat",

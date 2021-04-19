@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/stable\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"addLabelsConcurrencyIssue\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/stable\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"addLabelsConcurrencyIssue\",\"body\":\"## test\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

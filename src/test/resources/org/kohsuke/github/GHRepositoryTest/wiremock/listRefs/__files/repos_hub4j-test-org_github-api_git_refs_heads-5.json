@@ -20,9 +20,9 @@
     }
   },
   {
-    "ref": "refs/heads/master",
+    "ref": "refs/heads/main",
     "node_id": "MDM6UmVmMjA2ODg4MjAxOnJlZnMvaGVhZHMvbWFzdGVy",
-    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/master",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/refs/heads/main",
     "object": {
       "sha": "8051615eff597f4e49f4f47625e6fc2b49f26bfc",
       "type": "commit",

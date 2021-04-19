@@ -711,9 +711,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Gets master branch.
+         * Gets default branch.
          *
-         * @return the master branch
+         * Name is an artifact of when "master" was the most common default.
+         *
+         * @return the default branch
          */
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getMasterBranch() {
@@ -959,7 +961,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * The full Git ref that was pushed. Example: “refs/heads/master”
+         * The full Git ref that was pushed. Example: “refs/heads/main”
          *
          * @return the ref
          */

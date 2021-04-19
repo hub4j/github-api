@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"4cfa1cac01c59db507f550c8c870dac98859b353\",\"commit_message\":\"merging from 4cfa1cac01c59db507f550c8c870dac98859b353\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"4cfa1cac01c59db507f550c8c870dac98859b353\",\"commit_message\":\"merging from 4cfa1cac01c59db507f550c8c870dac98859b353\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

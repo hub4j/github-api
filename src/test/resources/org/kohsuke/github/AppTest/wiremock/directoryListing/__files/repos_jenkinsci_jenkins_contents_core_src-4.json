@@ -4,15 +4,15 @@
     "path": "core/src/filter",
     "sha": "5f087f4c3dd2690948371b4f867087d36fdbb19d",
     "size": 0,
-    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/filter?ref=master",
-    "html_url": "https://github.com/jenkinsci/jenkins/tree/master/core/src/filter",
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/filter?ref=main",
+    "html_url": "https://github.com/jenkinsci/jenkins/tree/main/core/src/filter",
     "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5f087f4c3dd2690948371b4f867087d36fdbb19d",
     "download_url": null,
     "type": "dir",
     "_links": {
-      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/filter?ref=master",
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/filter?ref=main",
       "git": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5f087f4c3dd2690948371b4f867087d36fdbb19d",
-      "html": "https://github.com/jenkinsci/jenkins/tree/master/core/src/filter"
+      "html": "https://github.com/jenkinsci/jenkins/tree/main/core/src/filter"
     }
   },
   {
@@ -20,15 +20,15 @@
     "path": "core/src/main",
     "sha": "7334485bc5155447be2692f1d4acf9c717335d7b",
     "size": 0,
-    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/main?ref=master",
-    "html_url": "https://github.com/jenkinsci/jenkins/tree/master/core/src/main",
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/main?ref=main",
+    "html_url": "https://github.com/jenkinsci/jenkins/tree/main/core/src/main",
     "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7334485bc5155447be2692f1d4acf9c717335d7b",
     "download_url": null,
     "type": "dir",
     "_links": {
-      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/main?ref=master",
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/main?ref=main",
       "git": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7334485bc5155447be2692f1d4acf9c717335d7b",
-      "html": "https://github.com/jenkinsci/jenkins/tree/master/core/src/main"
+      "html": "https://github.com/jenkinsci/jenkins/tree/main/core/src/main"
     }
   },
   {
@@ -36,15 +36,15 @@
     "path": "core/src/site",
     "sha": "59d5107eeacdac5a50a2e2eb3592d79c9a8f8743",
     "size": 0,
-    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/site?ref=master",
-    "html_url": "https://github.com/jenkinsci/jenkins/tree/master/core/src/site",
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/site?ref=main",
+    "html_url": "https://github.com/jenkinsci/jenkins/tree/main/core/src/site",
     "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/59d5107eeacdac5a50a2e2eb3592d79c9a8f8743",
     "download_url": null,
     "type": "dir",
     "_links": {
-      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/site?ref=master",
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/site?ref=main",
       "git": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/59d5107eeacdac5a50a2e2eb3592d79c9a8f8743",
-      "html": "https://github.com/jenkinsci/jenkins/tree/master/core/src/site"
+      "html": "https://github.com/jenkinsci/jenkins/tree/main/core/src/site"
     }
   },
   {
@@ -52,15 +52,15 @@
     "path": "core/src/test",
     "sha": "d600ddfd8eebaf8b605d9f99d3a9f117fac2eb2b",
     "size": 0,
-    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/test?ref=master",
-    "html_url": "https://github.com/jenkinsci/jenkins/tree/master/core/src/test",
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/test?ref=main",
+    "html_url": "https://github.com/jenkinsci/jenkins/tree/main/core/src/test",
     "git_url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d600ddfd8eebaf8b605d9f99d3a9f117fac2eb2b",
     "download_url": null,
     "type": "dir",
     "_links": {
-      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/test?ref=master",
+      "self": "https://api.github.com/repos/jenkinsci/jenkins/contents/core/src/test?ref=main",
       "git": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d600ddfd8eebaf8b605d9f99d3a9f117fac2eb2b",
-      "html": "https://github.com/jenkinsci/jenkins/tree/master/core/src/test"
+      "html": "https://github.com/jenkinsci/jenkins/tree/main/core/src/test"
     }
   }
 ]

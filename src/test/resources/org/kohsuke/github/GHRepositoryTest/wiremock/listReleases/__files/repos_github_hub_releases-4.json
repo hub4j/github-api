@@ -7,7 +7,7 @@
     "id": 20432197,
     "node_id": "MDc6UmVsZWFzZTIwNDMyMTk3",
     "tag_name": "v2.12.8",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.8",
     "draft": false,
     "author": {
@@ -353,7 +353,7 @@
     "id": 20175981,
     "node_id": "MDc6UmVsZWFzZTIwMTc1OTgx",
     "tag_name": "v2.12.7",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.7",
     "draft": false,
     "author": {
@@ -699,7 +699,7 @@
     "id": 20157427,
     "node_id": "MDc6UmVsZWFzZTIwMTU3NDI3",
     "tag_name": "v2.12.6",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.6",
     "draft": false,
     "author": {
@@ -1045,7 +1045,7 @@
     "id": 20157262,
     "node_id": "MDc6UmVsZWFzZTIwMTU3MjYy",
     "tag_name": "v2.12.5",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.5",
     "draft": false,
     "author": {
@@ -1323,7 +1323,7 @@
     "id": 19821302,
     "node_id": "MDc6UmVsZWFzZTE5ODIxMzAy",
     "tag_name": "v2.12.4",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.4",
     "draft": false,
     "author": {
@@ -1601,7 +1601,7 @@
     "id": 18731876,
     "node_id": "MDc6UmVsZWFzZTE4NzMxODc2",
     "tag_name": "v2.12.3",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.3",
     "draft": false,
     "author": {
@@ -1947,7 +1947,7 @@
     "id": 18509954,
     "node_id": "MDc6UmVsZWFzZTE4NTA5OTU0",
     "tag_name": "v2.12.2",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.2",
     "draft": false,
     "author": {
@@ -2293,7 +2293,7 @@
     "id": 18303721,
     "node_id": "MDc6UmVsZWFzZTE4MzAzNzIx",
     "tag_name": "v2.12.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.1",
     "draft": false,
     "author": {
@@ -2639,7 +2639,7 @@
     "id": 18016139,
     "node_id": "MDc6UmVsZWFzZTE4MDE2MTM5",
     "tag_name": "v2.12.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.12.0",
     "draft": false,
     "author": {
@@ -2985,7 +2985,7 @@
     "id": 16749698,
     "node_id": "MDc6UmVsZWFzZTE2NzQ5Njk4",
     "tag_name": "v2.11.2",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.11.2",
     "draft": false,
     "author": {
@@ -3331,7 +3331,7 @@
     "id": 16433801,
     "node_id": "MDc6UmVsZWFzZTE2NDMzODAx",
     "tag_name": "v2.11.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.11.1",
     "draft": false,
     "author": {
@@ -3677,7 +3677,7 @@
     "id": 16425444,
     "node_id": "MDc6UmVsZWFzZTE2NDI1NDQ0",
     "tag_name": "v2.11.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.11.0",
     "draft": false,
     "author": {
@@ -4023,7 +4023,7 @@
     "id": 16424908,
     "node_id": "MDc6UmVsZWFzZTE2NDI0OTA4",
     "tag_name": "v2.10.2",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.10.2",
     "draft": false,
     "author": {
@@ -4369,7 +4369,7 @@
     "id": 16395737,
     "node_id": "MDc6UmVsZWFzZTE2Mzk1NzM3",
     "tag_name": "v2.10.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.10.1",
     "draft": false,
     "author": {
@@ -4715,7 +4715,7 @@
     "id": 15739809,
     "node_id": "MDc6UmVsZWFzZTE1NzM5ODA5",
     "tag_name": "v2.10.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.10.0",
     "draft": false,
     "author": {
@@ -5061,7 +5061,7 @@
     "id": 15523345,
     "node_id": "MDc6UmVsZWFzZTE1NTIzMzQ1",
     "tag_name": "v2.9.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.9.0",
     "draft": false,
     "author": {
@@ -5407,7 +5407,7 @@
     "id": 15221839,
     "node_id": "MDc6UmVsZWFzZTE1MjIxODM5",
     "tag_name": "v2.8.4",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.8.4",
     "draft": false,
     "author": {
@@ -5753,7 +5753,7 @@
     "id": 15197951,
     "node_id": "MDc6UmVsZWFzZTE1MTk3OTUx",
     "tag_name": "v2.8.3",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.8.3",
     "draft": false,
     "author": {
@@ -6099,7 +6099,7 @@
     "id": 15197653,
     "node_id": "MDc6UmVsZWFzZTE1MTk3NjUz",
     "tag_name": "v2.8.2",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.8.2",
     "draft": false,
     "author": {
@@ -6138,7 +6138,7 @@
     "id": 15059882,
     "node_id": "MDc6UmVsZWFzZTE1MDU5ODgy",
     "tag_name": "v2.7.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.7.1",
     "draft": false,
     "author": {
@@ -6484,7 +6484,7 @@
     "id": 14726051,
     "node_id": "MDc6UmVsZWFzZTE0NzI2MDUx",
     "tag_name": "v2.7.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.7.0",
     "draft": false,
     "author": {
@@ -6830,7 +6830,7 @@
     "id": 14462456,
     "node_id": "MDc6UmVsZWFzZTE0NDYyNDU2",
     "tag_name": "v2.6.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.6.1",
     "draft": false,
     "author": {
@@ -7176,7 +7176,7 @@
     "id": 13745445,
     "node_id": "MDc6UmVsZWFzZTEzNzQ1NDQ1",
     "tag_name": "v2.6.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.6.0",
     "draft": false,
     "author": {
@@ -7522,7 +7522,7 @@
     "id": 12542979,
     "node_id": "MDc6UmVsZWFzZTEyNTQyOTc5",
     "tag_name": "v2.5.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.5.1",
     "draft": false,
     "author": {
@@ -7868,7 +7868,7 @@
     "id": 11822683,
     "node_id": "MDc6UmVsZWFzZTExODIyNjgz",
     "tag_name": "v2.5.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.5.0",
     "draft": false,
     "author": {
@@ -8214,7 +8214,7 @@
     "id": 11376644,
     "node_id": "MDc6UmVsZWFzZTExMzc2NjQ0",
     "tag_name": "v2.4.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.4.0",
     "draft": false,
     "author": {
@@ -8560,7 +8560,7 @@
     "id": 11220240,
     "node_id": "MDc6UmVsZWFzZTExMjIwMjQw",
     "tag_name": "v2.3.0",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.3.0 – codename “Ancient Psychic Tandem War Elephant”",
     "draft": false,
     "author": {
@@ -8906,7 +8906,7 @@
     "id": 6839710,
     "node_id": "MDc6UmVsZWFzZTY4Mzk3MTA=",
     "tag_name": "v2.3.0-pre10",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.3.0-pre10",
     "draft": false,
     "author": {
@@ -9184,7 +9184,7 @@
     "id": 5467960,
     "node_id": "MDc6UmVsZWFzZTU0Njc5NjA=",
     "tag_name": "v2.3.0-pre9",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.3.0-pre9",
     "draft": false,
     "author": {
@@ -9530,7 +9530,7 @@
     "id": 5182188,
     "node_id": "MDc6UmVsZWFzZTUxODIxODg=",
     "tag_name": "v2.3.0-pre1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "hub 2.3.0-pre1",
     "draft": false,
     "author": {

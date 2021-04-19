@@ -28,7 +28,7 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static byte[] CONTENT_DATA2 = { 0x04, 0x05, 0x06, 0x07 };
 
     private GHRepository repo;
-    private GHRef masterRef;
+    private GHRef mainRef;
     private GHTreeBuilder treeBuilder;
 
     @Before
@@ -51,9 +51,9 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
-        masterRef = repo.getRef("heads/master");
-        String masterTreeSha = repo.getTreeRecursive("master", 1).getSha();
-        treeBuilder = repo.createTree().baseTree(masterTreeSha);
+        mainRef = repo.getRef("heads/main");
+        String mainTreeSha = repo.getTreeRecursive("main", 1).getSha();
+        treeBuilder = repo.createTree().baseTree(mainTreeSha);
     }
 
     @Test
@@ -107,11 +107,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
                 .tree(treeSha)
                 .author("author", "author@author.com", new Date(1611433225969L))
                 .committer("committer", "committer@committer.com", new Date(1611433225968L))
-                .parent(masterRef.getObject().getSha())
+                .parent(mainRef.getObject().getSha())
                 .create();
 
         String commitSha = commit.getSHA1();
-        masterRef.updateTo(commitSha);
+        mainRef.updateTo(commitSha);
         return commit;
     }
 

@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/stable\",\"draft\":true,\"maintainer_can_modify\":false,\"title\":\"createDraftPullRequest\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/stable\",\"draft\":true,\"maintainer_can_modify\":false,\"title\":\"createDraftPullRequest\",\"body\":\"## test\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

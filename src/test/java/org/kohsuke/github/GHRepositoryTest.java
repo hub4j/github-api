@@ -579,7 +579,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRef[] refs = repo.getRefs();
         assertThat(refs, notNullValue());
         assertThat(refs.length, equalTo(1));
-        assertThat(refs[0].getRef(), equalTo("refs/heads/master"));
+        assertThat(refs[0].getRef(), equalTo("refs/heads/main"));
     }
 
     @Test
@@ -588,7 +588,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRef[] refs = repo.getRefs("heads");
         assertThat(refs, notNullValue());
         assertThat(refs.length, equalTo(1));
-        assertThat(refs[0].getRef(), equalTo("refs/heads/master"));
+        assertThat(refs[0].getRef(), equalTo("refs/heads/main"));
     }
 
     @Test
@@ -697,7 +697,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         List<GHRef> refs = repo.listRefs("heads").toList();
         assertThat(refs, notNullValue());
         assertThat(refs.size(), equalTo(1));
-        assertThat(refs.get(0).getRef(), equalTo("refs/heads/master"));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/main"));
     }
 
     @Test

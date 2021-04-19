@@ -79,10 +79,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testGetDirectoryContentTrailingSlash() throws Exception {
-        // Used to truncate the ?ref=master, see gh-224 https://github.com/kohsuke/github-api/pull/224
-        List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "master");
+        // Used to truncate the ?ref=main, see gh-224 https://github.com/kohsuke/github-api/pull/224
+        List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "main");
 
-        assertTrue(entries.get(0).getUrl().endsWith("?ref=master"));
+        assertTrue(entries.get(0).getUrl().endsWith("?ref=main"));
     }
 
     @Test

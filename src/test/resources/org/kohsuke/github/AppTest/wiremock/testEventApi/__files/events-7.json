@@ -59,7 +59,7 @@
         "updated_at": "2019-10-21T21:54:49Z",
         "closed_at": null,
         "author_association": "NONE",
-        "body": "1. Serializing general data\r\n2. Serializing role data\r\nTypeError: Cannot read property 'id' of undefined\r\n    at roleCol.map.role (/home/root2/Bureau/Discord-guild-copy-master/objects/serializer.js:103:57)\r\n"
+        "body": "1. Serializing general data\r\n2. Serializing role data\r\nTypeError: Cannot read property 'id' of undefined\r\n    at roleCol.map.role (/home/root2/Bureau/Discord-guild-copy-main/objects/serializer.js:103:57)\r\n"
       }
     },
     "public": true,
@@ -84,7 +84,7 @@
     "payload": {
       "ref": null,
       "ref_type": "repository",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -275,12 +275,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "direwolf-github:master",
-          "ref": "master",
+          "label": "direwolf-github:main",
+          "ref": "main",
           "sha": "4d3c6b596570ce87ea9ec7549f75603aaa5a680f",
           "user": {
             "login": "direwolf-github",
@@ -394,7 +394,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -460,7 +460,7 @@
     "payload": {
       "ref": "branch-cdd0a924",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -487,7 +487,7 @@
       "push_id": 4176854952,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "7949f68fc3607986a80d4097233450ecc034432e",
       "before": "452fbf0db4f98082c941bd84c2e24d6f4444c402",
       "commits": [
@@ -686,7 +686,7 @@
       "push_id": 4176854947,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "0757c0a942788403c9792b434e3b7cee81446a66",
       "before": "1af55801fc12dc12bbe523ff41ea351841bca423",
       "commits": [
@@ -861,7 +861,7 @@
     "payload": {
       "ref": null,
       "ref_type": "repository",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": "Repository for the course Spring Boot Microservices with Spring Cloud Beginner to Guru",
       "pusher_type": "user"
     },
@@ -888,7 +888,7 @@
       "push_id": 4176854942,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "abd2e330a3b4b6222c88587d04d71b12f4da870d",
       "before": "1340bbf32da76263b4f65abf9c1690e049de3ade",
       "commits": [
@@ -990,7 +990,7 @@
       "push_id": 4176854935,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "8e7248fcf15480d4b6090b0e02c1fba68bcf1171",
       "before": "65644249a175698e87bb4b6c32ff37ac0f924a3c",
       "commits": [
@@ -1036,7 +1036,7 @@
       "push_id": 4176854937,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "ca3257de9d87f497be2d5d2cfd5ef75c78b1c732",
       "before": "b762a83d2dd69f4d7be63695dff479b39605c9e3",
       "commits": [
@@ -1092,7 +1092,7 @@
       "push_id": 4176854934,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "e57205289100880b63e23f3ac02f6b64d92ef290",
       "before": "dfced045a8f132fc046115d179195aed65a8900a",
       "commits": [
@@ -1131,7 +1131,7 @@
       "push_id": 4176854928,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "dae114332acb5a7dc01b60f74fc20c362a494901",
       "before": "431184bd4d19f6fc1ded8423c4eaca9a2717b580",
       "commits": [
@@ -1180,7 +1180,7 @@
         "number": 20,
         "state": "open",
         "locked": false,
-        "title": "[pull] master from lerna:master",
+        "title": "[pull] main from lerna:main",
         "user": {
           "login": "pull[bot]",
           "id": 39814207,
@@ -1219,8 +1219,8 @@
         "comments_url": "https://api.github.com/repos/daddyfatstacksBIG/lerna/issues/20/comments",
         "statuses_url": "https://api.github.com/repos/daddyfatstacksBIG/lerna/statuses/4872459be7bf88e5900ff907b07279e9516d333c",
         "head": {
-          "label": "lerna:master",
-          "ref": "master",
+          "label": "lerna:main",
+          "ref": "main",
           "sha": "4872459be7bf88e5900ff907b07279e9516d333c",
           "user": {
             "login": "lerna",
@@ -1340,12 +1340,12 @@
             "forks": 1208,
             "open_issues": 230,
             "watchers": 19472,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "daddyfatstacksBIG:master",
-          "ref": "master",
+          "label": "daddyfatstacksBIG:main",
+          "ref": "main",
           "sha": "99425f7e3df4d081c51f9850e71ad93e83dc30c4",
           "user": {
             "login": "daddyfatstacksBIG",
@@ -1465,7 +1465,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -1532,7 +1532,7 @@
       "push_id": 4176854926,
       "size": 4,
       "distinct_size": 4,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "eb3028813d9f14f92538ada84ae11a73346d9b38",
       "before": "a3216a60043f115fa6aa9044250d8a04a3f09bf9",
       "commits": [
@@ -1601,7 +1601,7 @@
       "push_id": 4176854925,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "18fa79ff8011eb750fe61fba8e6c0a344be69f1c",
       "before": "5579db424d40f8b4dfd8cb0338ae87bd2123e858",
       "commits": [
@@ -1804,12 +1804,12 @@
             "forks": 0,
             "open_issues": 3,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "jthielman:master",
-          "ref": "master",
+          "label": "jthielman:main",
+          "ref": "main",
           "sha": "6564f42f20577d964ee9f8c007a961ccd81e8aae",
           "user": {
             "login": "jthielman",
@@ -1923,7 +1923,7 @@
             "forks": 0,
             "open_issues": 3,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -1990,7 +1990,7 @@
       "push_id": 4176854920,
       "size": 8,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "56d21eeee46fd18ad1a3ada1ddc0dde40ee148fd",
       "before": "4586bdd4aba94009ee60a2d01710f50493f60fd7",
       "commits": [
@@ -2010,7 +2010,7 @@
             "email": "jensenjamison@yahoo.com",
             "name": "unknown"
           },
-          "message": "updating to master",
+          "message": "updating to main",
           "distinct": false,
           "url": "https://api.github.com/repos/dm-group-trakd/trakd/commits/3b07c020146eb44e0b73abd21d66f7b7ba6d1d79"
         },
@@ -2030,7 +2030,7 @@
             "email": "jensenjamison@yahoo.com",
             "name": "unknown"
           },
-          "message": "Merge branch 'master' into jamison",
+          "message": "Merge branch 'main' into jamison",
           "distinct": false,
           "url": "https://api.github.com/repos/dm-group-trakd/trakd/commits/5e0396f6e73a7359e5d997b98373a5b8f95261f8"
         },
@@ -2050,7 +2050,7 @@
             "email": "jensenjamison@yahoo.com",
             "name": "unknown"
           },
-          "message": "Merge branch 'master' into jamison",
+          "message": "Merge branch 'main' into jamison",
           "distinct": false,
           "url": "https://api.github.com/repos/dm-group-trakd/trakd/commits/da8b095b65b2aa4dd4538f58a52e498da3b46ba7"
         },
@@ -2106,7 +2106,7 @@
       "push_id": 4176854918,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "15016ceee06af3047744c7bac173ebc162c2b3ac",
       "before": "908784246be05f222167f3f463e1423885f54ac5",
       "commits": [
@@ -2240,7 +2240,7 @@
         "forks": 0,
         "open_issues": 0,
         "watchers": 0,
-        "default_branch": "master",
+        "default_branch": "main",
         "public": true
       }
     },
@@ -2314,7 +2314,7 @@
             "email": "qiutongs@amazon.com",
             "name": "qiutongs"
           },
-          "message": "Merge branch 'master' into feature/cmake_turn_off_demos",
+          "message": "Merge branch 'main' into feature/cmake_turn_off_demos",
           "distinct": false,
           "url": "https://api.github.com/repos/sarenameas/amazon-freertos/commits/c58281840008401cb16961f9d60f37ea0bf4e907"
         },
@@ -2354,7 +2354,7 @@
             "email": "ts.whu@outlook.com",
             "name": "Tiangang Song"
           },
-          "message": "Merge remote-tracking branch 'origin/master' into HEAD",
+          "message": "Merge remote-tracking branch 'origin/main' into HEAD",
           "distinct": false,
           "url": "https://api.github.com/repos/sarenameas/amazon-freertos/commits/1de9a4d51c9d0bccef2f7b5550cc6086ce9525a3"
         },
@@ -2597,7 +2597,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
@@ -2716,7 +2716,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2968,12 +2968,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "codecurious-bln:master",
-          "ref": "master",
+          "label": "codecurious-bln:main",
+          "ref": "main",
           "sha": "b762a83d2dd69f4d7be63695dff479b39605c9e3",
           "user": {
             "login": "codecurious-bln",
@@ -3087,7 +3087,7 @@
             "forks": 8,
             "open_issues": 16,
             "watchers": 10,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -3180,7 +3180,7 @@
       "push_id": 4176854908,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "5b4a25e4146fb31ccfa425c70843ff43bd2814c3",
       "before": "4bd38639fe0332c55961505d4e091f72895b7f73",
       "commits": [

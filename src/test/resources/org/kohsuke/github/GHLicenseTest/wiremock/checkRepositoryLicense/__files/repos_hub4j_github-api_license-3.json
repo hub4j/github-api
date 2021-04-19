@@ -3,17 +3,17 @@
   "path": "LICENSE.txt",
   "sha": "a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
   "size": 1104,
-  "url": "https://api.github.com/repos/hub4j/github-api/contents/LICENSE.txt?ref=master",
-  "html_url": "https://github.com/hub4j/github-api/blob/master/LICENSE.txt",
+  "url": "https://api.github.com/repos/hub4j/github-api/contents/LICENSE.txt?ref=main",
+  "html_url": "https://github.com/hub4j/github-api/blob/main/LICENSE.txt",
   "git_url": "https://api.github.com/repos/hub4j/github-api/git/blobs/a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
-  "download_url": "https://raw.githubusercontent.com/hub4j/github-api/master/LICENSE.txt",
+  "download_url": "https://raw.githubusercontent.com/hub4j/github-api/main/LICENSE.txt",
   "type": "file",
   "content": "IENvcHlyaWdodCAoYykgMjAxMS0gS29oc3VrZSBLYXdhZ3VjaGkgYW5kIG90\naGVyIGNvbnRyaWJ1dG9ycwoKIFBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50\nZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVyc29uCiBvYnRhaW5pbmcg\nYSBjb3B5IG9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0ZWQgZG9jdW1l\nbnRhdGlvbgogZmlsZXMgKHRoZSAiU29mdHdhcmUiKSwgdG8gZGVhbCBpbiB0\naGUgU29mdHdhcmUgd2l0aG91dAogcmVzdHJpY3Rpb24sIGluY2x1ZGluZyB3\naXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cyB0byB1c2UsCiBjb3B5LCBt\nb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNlbnNl\nLCBhbmQvb3Igc2VsbAogY29waWVzIG9mIHRoZSBTb2Z0d2FyZSwgYW5kIHRv\nIHBlcm1pdCBwZXJzb25zIHRvIHdob20gdGhlCiBTb2Z0d2FyZSBpcyBmdXJu\naXNoZWQgdG8gZG8gc28sIHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZwogY29u\nZGl0aW9uczoKCiBUaGUgYWJvdmUgY29weXJpZ2h0IG5vdGljZSBhbmQgdGhp\ncyBwZXJtaXNzaW9uIG5vdGljZSBzaGFsbCBiZQogaW5jbHVkZWQgaW4gYWxs\nIGNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9ucyBvZiB0aGUgU29mdHdh\ncmUuCgogVEhFIFNPRlRXQVJFIElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhP\nVVQgV0FSUkFOVFkgT0YgQU5ZIEtJTkQsCiBFWFBSRVNTIE9SIElNUExJRUQs\nIElOQ0xVRElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJBTlRJRVMK\nIE9GIE1FUkNIQU5UQUJJTElUWSwgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFS\nIFBVUlBPU0UgQU5ECiBOT05JTkZSSU5HRU1FTlQuIElOIE5PIEVWRU5UIFNI\nQUxMIFRIRSBBVVRIT1JTIE9SIENPUFlSSUdIVAogSE9MREVSUyBCRSBMSUFC\nTEUgRk9SIEFOWSBDTEFJTSwgREFNQUdFUyBPUiBPVEhFUiBMSUFCSUxJVFks\nCiBXSEVUSEVSIElOIEFOIEFDVElPTiBPRiBDT05UUkFDVCwgVE9SVCBPUiBP\nVEhFUldJU0UsIEFSSVNJTkcKIEZST00sIE9VVCBPRiBPUiBJTiBDT05ORUNU\nSU9OIFdJVEggVEhFIFNPRlRXQVJFIE9SIFRIRSBVU0UgT1IKIE9USEVSIERF\nQUxJTkdTIElOIFRIRSBTT0ZUV0FSRS4K\n",
   "encoding": "base64",
   "_links": {
-    "self": "https://api.github.com/repos/hub4j/github-api/contents/LICENSE.txt?ref=master",
+    "self": "https://api.github.com/repos/hub4j/github-api/contents/LICENSE.txt?ref=main",
     "git": "https://api.github.com/repos/hub4j/github-api/git/blobs/a12243f2fc5b8c2ba47dd677d0b0c7583539584d",
-    "html": "https://github.com/hub4j/github-api/blob/master/LICENSE.txt"
+    "html": "https://github.com/hub4j/github-api/blob/main/LICENSE.txt"
   },
   "license": {
     "key": "mit",

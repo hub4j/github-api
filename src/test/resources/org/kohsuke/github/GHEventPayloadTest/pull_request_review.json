@@ -190,12 +190,12 @@
         "forks": 0,
         "open_issues": 0,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "base": {
-      "label": "baxterthehacker:master",
-      "ref": "master",
+      "label": "baxterthehacker:main",
+      "ref": "main",
       "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
       "user": {
         "login": "baxterthehacker",
@@ -302,7 +302,7 @@
         "forks": 2,
         "open_issues": 5,
         "watchers": 2,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "_links": {
@@ -418,7 +418,7 @@
     "forks": 2,
     "open_issues": 5,
     "watchers": 2,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "baxterthehacker",

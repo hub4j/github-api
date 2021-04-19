@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/updateContentSquashMerge\",\"maintainer_can_modify\":true,\"title\":\"updateContentSquashMerge\",\"body\":\"## test squash\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/updateContentSquashMerge\",\"maintainer_can_modify\":true,\"title\":\"updateContentSquashMerge\",\"body\":\"## test squash\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/rc\",\"maintainer_can_modify\":true,\"title\":\"queryPullRequestsQualifiedHead_rc\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/rc\",\"maintainer_can_modify\":true,\"title\":\"queryPullRequestsQualifiedHead_rc\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

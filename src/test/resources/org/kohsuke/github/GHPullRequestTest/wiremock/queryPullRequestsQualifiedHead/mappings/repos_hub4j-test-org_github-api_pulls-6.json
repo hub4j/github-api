@@ -2,7 +2,7 @@
   "id": "ab74613d-0613-47a8-a6fc-34add77d9967",
   "name": "repos_hub4j-test-org_github-api_pulls",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/pulls?state=open&head=hub4j-test-org%3Atest%2Fstable&base=master",
+    "url": "/repos/hub4j-test-org/github-api/pulls?state=open&head=hub4j-test-org%3Atest%2Fstable&base=main",
     "method": "GET",
     "headers": {
       "Accept": {

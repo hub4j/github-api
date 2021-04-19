@@ -91,7 +91,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -196,7 +196,7 @@
     "forks": 170,
     "open_issues": 74,
     "watchers": 289,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -301,7 +301,7 @@
     "forks": 50,
     "open_issues": 0,
     "watchers": 77,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -400,7 +400,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -505,7 +505,7 @@
     "forks": 6,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -610,7 +610,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -715,7 +715,7 @@
     "forks": 4,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -820,7 +820,7 @@
     "forks": 15,
     "open_issues": 6,
     "watchers": 10,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -919,7 +919,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1024,7 +1024,7 @@
     "forks": 37,
     "open_issues": 9,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1129,7 +1129,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1228,7 +1228,7 @@
     "forks": 8,
     "open_issues": 2,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1327,7 +1327,7 @@
     "forks": 4,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1432,7 +1432,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1531,7 +1531,7 @@
     "forks": 13,
     "open_issues": 2,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1630,7 +1630,7 @@
     "forks": 8,
     "open_issues": 1,
     "watchers": 6,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1735,7 +1735,7 @@
     "forks": 14,
     "open_issues": 3,
     "watchers": 7,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1834,7 +1834,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -1933,7 +1933,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2032,7 +2032,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2137,7 +2137,7 @@
     "forks": 8,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2242,7 +2242,7 @@
     "forks": 7,
     "open_issues": 0,
     "watchers": 6,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2341,7 +2341,7 @@
     "forks": 58,
     "open_issues": 4,
     "watchers": 14,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": true,
@@ -2440,7 +2440,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2539,7 +2539,7 @@
     "forks": 101,
     "open_issues": 6,
     "watchers": 14,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": true,
       "push": true,
@@ -2638,7 +2638,7 @@
     "forks": 9,
     "open_issues": 0,
     "watchers": 18,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2737,7 +2737,7 @@
     "forks": 5,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2836,7 +2836,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -2935,7 +2935,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3034,7 +3034,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3133,7 +3133,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3232,7 +3232,7 @@
     "forks": 17,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3331,7 +3331,7 @@
     "forks": 22,
     "open_issues": 2,
     "watchers": 14,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3430,7 +3430,7 @@
     "forks": 159,
     "open_issues": 9,
     "watchers": 41,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3535,7 +3535,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3640,7 +3640,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3745,7 +3745,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3844,7 +3844,7 @@
     "forks": 3,
     "open_issues": 2,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -3943,7 +3943,7 @@
     "forks": 5,
     "open_issues": 2,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4048,7 +4048,7 @@
     "forks": 69,
     "open_issues": 3,
     "watchers": 24,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4147,7 +4147,7 @@
     "forks": 2,
     "open_issues": 1,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4252,7 +4252,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4351,7 +4351,7 @@
     "forks": 40,
     "open_issues": 1,
     "watchers": 20,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4450,7 +4450,7 @@
     "forks": 48,
     "open_issues": 2,
     "watchers": 33,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4549,7 +4549,7 @@
     "forks": 12,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4648,7 +4648,7 @@
     "forks": 3,
     "open_issues": 1,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4747,7 +4747,7 @@
     "forks": 72,
     "open_issues": 9,
     "watchers": 32,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4852,7 +4852,7 @@
     "forks": 3,
     "open_issues": 0,
     "watchers": 5,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -4957,7 +4957,7 @@
     "forks": 5,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5056,7 +5056,7 @@
     "forks": 5,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5155,7 +5155,7 @@
     "forks": 129,
     "open_issues": 18,
     "watchers": 61,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5260,7 +5260,7 @@
     "forks": 13,
     "open_issues": 1,
     "watchers": 7,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5359,7 +5359,7 @@
     "forks": 4,
     "open_issues": 1,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5458,7 +5458,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5563,7 +5563,7 @@
     "forks": 6,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5668,7 +5668,7 @@
     "forks": 51,
     "open_issues": 7,
     "watchers": 9,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5773,7 +5773,7 @@
     "forks": 1,
     "open_issues": 1,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5878,7 +5878,7 @@
     "forks": 39,
     "open_issues": 4,
     "watchers": 16,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -5983,7 +5983,7 @@
     "forks": 3,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6082,7 +6082,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6187,7 +6187,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6292,7 +6292,7 @@
     "forks": 9,
     "open_issues": 2,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6391,7 +6391,7 @@
     "forks": 2,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6496,7 +6496,7 @@
     "forks": 17,
     "open_issues": 1,
     "watchers": 16,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6595,7 +6595,7 @@
     "forks": 36,
     "open_issues": 2,
     "watchers": 22,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6694,7 +6694,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6799,7 +6799,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -6904,7 +6904,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7003,7 +7003,7 @@
     "forks": 345,
     "open_issues": 34,
     "watchers": 553,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7108,7 +7108,7 @@
     "forks": 19,
     "open_issues": 2,
     "watchers": 6,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7207,7 +7207,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7312,7 +7312,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7417,7 +7417,7 @@
     "forks": 12,
     "open_issues": 0,
     "watchers": 13,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7522,7 +7522,7 @@
     "forks": 101,
     "open_issues": 1,
     "watchers": 22,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7621,7 +7621,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7720,7 +7720,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7825,7 +7825,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -7930,7 +7930,7 @@
     "forks": 113,
     "open_issues": 63,
     "watchers": 41,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8029,7 +8029,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8128,7 +8128,7 @@
     "forks": 6,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8227,7 +8227,7 @@
     "forks": 6,
     "open_issues": 0,
     "watchers": 5,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8332,7 +8332,7 @@
     "forks": 3,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8431,7 +8431,7 @@
     "forks": 4,
     "open_issues": 2,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8536,7 +8536,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8635,7 +8635,7 @@
     "forks": 25,
     "open_issues": 2,
     "watchers": 5,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8740,7 +8740,7 @@
     "forks": 14,
     "open_issues": 0,
     "watchers": 9,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8845,7 +8845,7 @@
     "forks": 3,
     "open_issues": 1,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -8950,7 +8950,7 @@
     "forks": 7,
     "open_issues": 2,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9049,7 +9049,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9154,7 +9154,7 @@
     "forks": 13,
     "open_issues": 3,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9253,7 +9253,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9358,7 +9358,7 @@
     "forks": 278,
     "open_issues": 61,
     "watchers": 411,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9463,7 +9463,7 @@
     "forks": 7,
     "open_issues": 0,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9568,7 +9568,7 @@
     "forks": 5,
     "open_issues": 1,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9673,7 +9673,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9772,7 +9772,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9871,7 +9871,7 @@
     "forks": 2,
     "open_issues": 0,
     "watchers": 4,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -9976,7 +9976,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 1,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -10081,7 +10081,7 @@
     "forks": 4,
     "open_issues": 2,
     "watchers": 2,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,
@@ -10091,8 +10091,8 @@
   {
     "id": 16412332,
     "node_id": "MDEwOlJlcG9zaXRvcnkxNjQxMjMzMg==",
-    "name": "master-to-master-api-plugin",
-    "full_name": "jenkinsci/master-to-master-api-plugin",
+    "name": "main-to-main-api-plugin",
+    "full_name": "jenkinsci/main-to-main-api-plugin",
     "private": false,
     "owner": {
       "login": "jenkinsci",
@@ -10114,53 +10114,53 @@
       "type": "Organization",
       "site_admin": false
     },
-    "html_url": "https://github.com/jenkinsci/master-to-master-api-plugin",
+    "html_url": "https://github.com/jenkinsci/main-to-main-api-plugin",
     "description": null,
     "fork": false,
-    "url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin",
-    "forks_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/forks",
-    "keys_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/keys{/key_id}",
-    "collaborators_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/collaborators{/collaborator}",
-    "teams_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/teams",
-    "hooks_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/hooks",
-    "issue_events_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/issues/events{/number}",
-    "events_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/events",
-    "assignees_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/assignees{/user}",
-    "branches_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/branches{/branch}",
-    "tags_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/tags",
-    "blobs_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/git/blobs{/sha}",
-    "git_tags_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/git/tags{/sha}",
-    "git_refs_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/git/refs{/sha}",
-    "trees_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/git/trees{/sha}",
-    "statuses_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/statuses/{sha}",
-    "languages_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/languages",
-    "stargazers_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/stargazers",
-    "contributors_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/contributors",
-    "subscribers_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/subscribers",
-    "subscription_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/subscription",
-    "commits_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/commits{/sha}",
-    "git_commits_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/git/commits{/sha}",
-    "comments_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/comments{/number}",
-    "issue_comment_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/issues/comments{/number}",
-    "contents_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/contents/{+path}",
-    "compare_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/compare/{base}...{head}",
-    "merges_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/merges",
-    "archive_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/{archive_format}{/ref}",
-    "downloads_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/downloads",
-    "issues_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/issues{/number}",
-    "pulls_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/pulls{/number}",
-    "milestones_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/milestones{/number}",
-    "notifications_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/notifications{?since,all,participating}",
-    "labels_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/labels{/name}",
-    "releases_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/releases{/id}",
-    "deployments_url": "https://api.github.com/repos/jenkinsci/master-to-master-api-plugin/deployments",
+    "url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin",
+    "forks_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/forks",
+    "keys_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/teams",
+    "hooks_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/hooks",
+    "issue_events_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/events",
+    "assignees_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/tags",
+    "blobs_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/languages",
+    "stargazers_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/stargazers",
+    "contributors_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/contributors",
+    "subscribers_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/subscribers",
+    "subscription_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/subscription",
+    "commits_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/merges",
+    "archive_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/downloads",
+    "issues_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/labels{/name}",
+    "releases_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/jenkinsci/main-to-main-api-plugin/deployments",
     "created_at": "2014-01-31T15:48:15Z",
     "updated_at": "2018-02-10T20:32:29Z",
     "pushed_at": "2014-05-02T14:13:49Z",
-    "git_url": "git://github.com/jenkinsci/master-to-master-api-plugin.git",
-    "ssh_url": "git@github.com:jenkinsci/master-to-master-api-plugin.git",
-    "clone_url": "https://github.com/jenkinsci/master-to-master-api-plugin.git",
-    "svn_url": "https://github.com/jenkinsci/master-to-master-api-plugin",
+    "git_url": "git://github.com/jenkinsci/main-to-main-api-plugin.git",
+    "ssh_url": "git@github.com:jenkinsci/main-to-main-api-plugin.git",
+    "clone_url": "https://github.com/jenkinsci/main-to-main-api-plugin.git",
+    "svn_url": "https://github.com/jenkinsci/main-to-main-api-plugin",
     "homepage": "",
     "size": 204,
     "stargazers_count": 3,
@@ -10180,7 +10180,7 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 3,
-    "default_branch": "master",
+    "default_branch": "main",
     "permissions": {
       "admin": false,
       "push": false,

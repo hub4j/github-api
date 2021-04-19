@@ -9,7 +9,7 @@ import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 import static org.hamcrest.CoreMatchers.*;
 
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
-    private static final String BRANCH = "master";
+    private static final String BRANCH = "main";
     private static final String BRANCH_REF = "heads/" + BRANCH;
 
     private GHBranch branch;

@@ -87,7 +87,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
                 endsWith("/repos/hub4j-test-org/temp-testCreateRepository/zipball/release_tag"));
         assertThat(release.getTarballUrl(),
                 endsWith("/repos/hub4j-test-org/temp-testCreateRepository/tarball/release_tag"));
-        assertThat(release.getTargetCommitish(), equalTo("master"));
+        assertThat(release.getTargetCommitish(), equalTo("main"));
         assertThat(release.getHtmlUrl().toString(),
                 endsWith("/hub4j-test-org/temp-testCreateRepository/releases/tag/release_tag"));
 

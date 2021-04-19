@@ -90,7 +90,7 @@
   "forks": 41,
   "open_issues": 0,
   "watchers": 0,
-  "default_branch": "master",
+  "default_branch": "main",
   "temp_clone_token": null,
   "organization": {
     "login": "hub4j-test-org",
@@ -204,7 +204,7 @@
     "forks": 1,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "source": {
     "id": 14779458,
@@ -298,7 +298,7 @@
     "forks": 59,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "network_count": 59,
   "subscribers_count": 0

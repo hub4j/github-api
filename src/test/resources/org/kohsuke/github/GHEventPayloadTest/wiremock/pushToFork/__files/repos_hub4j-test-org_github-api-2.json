@@ -98,7 +98,7 @@
   "forks": 0,
   "open_issues": 5,
   "watchers": 0,
-  "default_branch": "master",
+  "default_branch": "main",
   "permissions": {
     "admin": true,
     "push": true,
@@ -227,7 +227,7 @@
     "forks": 478,
     "open_issues": 67,
     "watchers": 655,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "source": {
     "id": 617210,
@@ -327,7 +327,7 @@
     "forks": 478,
     "open_issues": 67,
     "watchers": 655,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "network_count": 478,
   "subscribers_count": 0

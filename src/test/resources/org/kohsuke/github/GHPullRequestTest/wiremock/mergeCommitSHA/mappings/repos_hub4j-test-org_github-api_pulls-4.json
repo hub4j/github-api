@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\"head\":\"test/mergeable_branch\",\"maintainer_can_modify\":true,\"title\":\"mergeCommitSHA\",\"body\":\"## test\",\"base\":\"master\"}",
+        "equalToJson": "{\"head\":\"test/mergeable_branch\",\"maintainer_can_modify\":true,\"title\":\"mergeCommitSHA\",\"body\":\"## test\",\"base\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": true
       }

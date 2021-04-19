@@ -443,7 +443,7 @@
           "name": "Kohsuke Kawaguchi",
           "email": "kk@kohsuke.org"
         },
-        "message": "Merge branch 'master' of github.com:kohsuke/github-api",
+        "message": "Merge branch 'main' of github.com:kohsuke/github-api",
         "tree": {
           "url": "https://api.github.com/repos/hub4j/github-api/git/trees/76d86aa0103be48e4dde3b1263c3ead31709c04e",
           "sha": "76d86aa0103be48e4dde3b1263c3ead31709c04e"
@@ -2301,7 +2301,7 @@
           "name": "GitHub",
           "email": "noreply@github.com"
         },
-        "message": "Merge pull request #411 from tadfisher/master\n\nAdd GHRepository.getRelease and GHRepository.getReleaseByTagName",
+        "message": "Merge pull request #411 from tadfisher/main\n\nAdd GHRepository.getRelease and GHRepository.getReleaseByTagName",
         "tree": {
           "url": "https://api.github.com/repos/hub4j/github-api/git/trees/1c7cdc463be852d52019e264162a8fbcdb280678",
           "sha": "1c7cdc463be852d52019e264162a8fbcdb280678"
@@ -3031,7 +3031,7 @@
           "name": "GitHub",
           "email": "noreply@github.com"
         },
-        "message": "Merge pull request #439 from l3ender/master\n\nAdd support for repository searching by \"topic\"",
+        "message": "Merge pull request #439 from l3ender/main\n\nAdd support for repository searching by \"topic\"",
         "tree": {
           "url": "https://api.github.com/repos/hub4j/github-api/git/trees/bff00c66f979c96203d466601499a76d13d0b711",
           "sha": "bff00c66f979c96203d466601499a76d13d0b711"
@@ -3177,7 +3177,7 @@
           "name": "Kohsuke Kawaguchi",
           "email": "kk@kohsuke.org"
         },
-        "message": "Merge remote-tracking branch 'origin/master'",
+        "message": "Merge remote-tracking branch 'origin/main'",
         "tree": {
           "url": "https://api.github.com/repos/hub4j/github-api/git/trees/936eeedfad781d857e393b3c2f6d5fa7a6804438",
           "sha": "936eeedfad781d857e393b3c2f6d5fa7a6804438"

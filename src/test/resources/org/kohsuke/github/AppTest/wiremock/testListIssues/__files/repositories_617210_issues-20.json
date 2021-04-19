@@ -1143,7 +1143,7 @@
       "diff_url": "https://github.com/hub4j/github-api/pull/103.diff",
       "patch_url": "https://github.com/hub4j/github-api/pull/103.patch"
     },
-    "body": "OkHttp changed API with v2.0.0, and the `client.open(url)` method no longer exists:\n\n\"URLConnection support has moved to the okhttp-urlconnection module. If you're upgrading from 1.x, this change will impact you. You will need to add the okhttp-urlconnection module to your project and use\nthe OkUrlFactory to create new instances of HttpURLConnection\"\n\nhttps://github.com/square/okhttp/blob/master/CHANGELOG.md#version-200-rc1\n"
+    "body": "OkHttp changed API with v2.0.0, and the `client.open(url)` method no longer exists:\n\n\"URLConnection support has moved to the okhttp-urlconnection module. If you're upgrading from 1.x, this change will impact you. You will need to add the okhttp-urlconnection module to your project and use\nthe OkUrlFactory to create new instances of HttpURLConnection\"\n\nhttps://github.com/square/okhttp/blob/main/CHANGELOG.md#version-200-rc1\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/102",

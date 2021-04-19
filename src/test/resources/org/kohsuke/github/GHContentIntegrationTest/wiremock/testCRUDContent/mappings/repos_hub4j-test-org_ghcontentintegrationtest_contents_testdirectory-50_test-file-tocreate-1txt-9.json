@@ -2,7 +2,7 @@
   "id": "1d4297f8-515f-48b0-8f13-99894911d416",
   "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt",
   "request": {
-    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=master",
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=main",
     "method": "GET",
     "headers": {
       "Accept": {

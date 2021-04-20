@@ -31,10 +31,7 @@ public class Github2faTest extends AbstractGitHubWireMockTest {
                 });
 
         assertThat(token, notNullValue());
-
-        for (int i = 0; i < asList.size(); i++) {
-            assertThat(token.getScopes().get(i).contentEquals(asList.get(i)), is(true));
-        }
+        assertThat(token.getScopes(), contains(asList.toArray()));
 
         assertThat(token.getToken(), equalTo("63042a99d88bf138e6d6cf5788e0dc4e7a5d7309"));
         assertThat(token.getTokenLastEight(), equalTo("7a5d7309"));

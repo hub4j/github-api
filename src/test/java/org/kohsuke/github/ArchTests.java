@@ -9,8 +9,7 @@ import com.tngtech.archunit.lang.ArchRule;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static com.tngtech.archunit.lang.conditions.ArchConditions.beAnnotatedWith;
-import static com.tngtech.archunit.lang.conditions.ArchConditions.not;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
@@ -20,6 +19,11 @@ public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
+            .withImportOption(new ImportOption.DoNotIncludeJars())
+            .importPackages("org.kohsuke.github");
+
+    private static final JavaClasses tesetClassFiles = new ClassFileImporter()
+            .withImportOption(new ImportOption.OnlyIncludeTests())
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
@@ -104,5 +108,19 @@ public class ArchTests {
         enumFieldsRule.check(classFiles);
         methodRule.check(classFiles);
 
+    }
+
+    @Test
+    public void testRequireUseOfAssertThat() {
+
+        String reason = "This project uses `assertThat(...)` instead of other assert*() methods.";
+
+        ArchRule onlyAssertThatRule = methods().that()
+                .haveNameContaining("assert")
+                .should()
+                .haveName("assertThat")
+                .because(reason);
+
+        onlyAssertThatRule.check(tesetClassFiles);
     }
 }

@@ -1209,15 +1209,15 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
         String sha1 = "a12243f2fc5b8c2ba47dd677d0b0c7583539584d";
 
-        assertBlobContent(r.readBlob(sha1));
+        verifyBlobContent(r.readBlob(sha1));
 
         GHBlob blob = r.getBlob(sha1);
-        assertBlobContent(blob.read());
+        verifyBlobContent(blob.read());
         assertThat(blob.getSha(), is("a12243f2fc5b8c2ba47dd677d0b0c7583539584d"));
         assertThat(blob.getSize(), is(1104L));
     }
 
-    private void assertBlobContent(InputStream is) throws Exception {
+    private void verifyBlobContent(InputStream is) throws Exception {
         String content = new String(IOUtils.toByteArray(is), StandardCharsets.UTF_8);
         assertThat(content, containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
         assertThat(content, containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));

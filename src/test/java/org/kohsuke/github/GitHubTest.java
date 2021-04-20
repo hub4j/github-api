@@ -7,12 +7,7 @@ import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 import java.io.IOException;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
 /**
@@ -73,7 +68,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         GHUser u = r.iterator().next();
         // System.out.println(u.getName());
         assertThat(u.getId(), notNullValue());
-        assertThat(r.getTotalCount() > 0, is(true));
+        assertThat(r.getTotalCount(), greaterThan(0));
     }
 
     @Test
@@ -112,7 +107,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(c.getDownloadUrl(), notNullValue());
         assertThat(c.getOwner(), notNullValue());
         assertThat(c.getOwner().getFullName(), equalTo("jquery/jquery"));
-        assertThat(r.getTotalCount() > 5, is(true));
+        assertThat(r.getTotalCount(), greaterThan(5));
 
         PagedSearchIterable<GHContent> r2 = gitHub.searchContent()
                 .q("addClass")
@@ -220,7 +215,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             // GHMarketplacePlan - primitive fields
             assertThat(plan.getId(), not(0L));
             assertThat(plan.getNumber(), not(0L));
-            assertThat(plan.getMonthlyPriceInCents() >= 0, is(true));
+            assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
 
             // GHMarketplacePlan - list
             assertThat(plan.getBullets().size(), equalTo(2));
@@ -264,13 +259,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         // getResponseHeaderFields is deprecated but we'll use it for testing.
         assertThat(org.getResponseHeaderFields(), notNullValue());
 
-        // Header field names must be case-insensitive
-        assertThat(org.getResponseHeaderFields().containsKey("CacHe-ContrOl"), is(true));
+        assertThat("Header field names must be case-insensitive",
+                org.getResponseHeaderFields().containsKey("CacHe-ContrOl"));
 
-        // The KeySet from header fields should also be case-insensitive
-        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
-        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
-
+        assertThat("KeySet from header fields should also be case-insensitive",
+                org.getResponseHeaderFields().keySet().contains("CacHe-ControL"));
         assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
 
         // GitHub has started changing their headers to all lowercase.

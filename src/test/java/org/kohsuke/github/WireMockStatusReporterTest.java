@@ -130,7 +130,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 
-        assertThat("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy(), is(true));
+        assertThat("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
     }
 
     @Ignore("Not implemented yet")

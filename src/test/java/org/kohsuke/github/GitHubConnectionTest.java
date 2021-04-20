@@ -143,13 +143,13 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         GitHubBuilder builder = new GitHubBuilder().withAppInstallationToken("bogus app token");
         assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
         assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus app token"));
-        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo(""));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), is(emptyString()));
 
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();
         // change this to get a request
         assertThat(github.getClient().getEncodedAuthorization(), equalTo("token bogus app token"));
-        assertThat(github.getClient().login, equalTo(""));
+        assertThat(github.getClient().login, is(emptyString()));
     }
 
     @Test

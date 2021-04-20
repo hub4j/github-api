@@ -70,7 +70,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         // remove the milestone
         issue.setMilestone(null);
         issue = repo.getIssue(issue.getNumber()); // force reload
-        assertThat(issue.getMilestone(), equalTo(null));
+        assertThat(issue.getMilestone(), nullValue());
     }
 
     @Test

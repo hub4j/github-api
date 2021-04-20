@@ -1,12 +1,10 @@
 package org.kohsuke.github;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -102,10 +100,10 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         assertThat(gist.getOwner().getLogin(), equalTo("rtyler"));
 
         gist.star();
-        assertThat(gist.isStarred(), Matchers.is(true));
+        assertThat(gist.isStarred(), is(true));
 
         gist.unstar();
-        assertThat(gist.isStarred(), Matchers.is(false));
+        assertThat(gist.isStarred(), is(false));
 
         GHGist newGist = gist.fork();
 
@@ -127,7 +125,7 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     public void gistFile() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
 
-        assertThat(gist.isPublic(), Matchers.is(true));
+        assertThat(gist.isPublic(), is(true));
         assertThat(gist.getId(), equalTo(9903708L));
         assertThat(gist.getGistId(), equalTo("9903708"));
 
@@ -136,7 +134,6 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
 
         assertThat(f.getType(), equalTo("text/markdown"));
         assertThat(f.getLanguage(), equalTo("Markdown"));
-        assertThat(f.getContent().contains("### Keybase proof"), Matchers.is(true));
-        assertThat(f.getContent(), notNullValue());
+        assertThat(f.getContent(), containsString("### Keybase proof"));
     }
 }

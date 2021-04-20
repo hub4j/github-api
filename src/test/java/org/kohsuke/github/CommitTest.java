@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -84,7 +83,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 .list()
                 .toList();
 
-        assertThat(commits.size(), equalTo(0));
+        assertThat(commits, is(empty()));
 
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")

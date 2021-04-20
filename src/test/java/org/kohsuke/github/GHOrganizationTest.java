@@ -7,6 +7,7 @@ import org.kohsuke.github.GHOrganization.Permission;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
@@ -140,19 +141,20 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         assertThat(admins, notNullValue());
         // In case more are added in the future
-        assertThat(admins.size() >= 12, is(true));
-        assertThat(admins.stream().anyMatch(ghUser11 -> ghUser11.getLogin().equals("alexanderrtaylor")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser10 -> ghUser10.getLogin().equals("asthinasthi")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser9 -> ghUser9.getLogin().equals("bitwiseman")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser8 -> ghUser8.getLogin().equals("farmdawgnation")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser7 -> ghUser7.getLogin().equals("halkeye")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser6 -> ghUser6.getLogin().equals("jberglund-BSFT")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser5 -> ghUser5.getLogin().equals("kohsuke")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser4 -> ghUser4.getLogin().equals("kohsuke2")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser3 -> ghUser3.getLogin().equals("martinvanzijl")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser2 -> ghUser2.getLogin().equals("PauloMigAlmeida")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser1 -> ghUser1.getLogin().equals("Sage-Pierce")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")), is(true));
+        assertThat(admins.size(), greaterThanOrEqualTo(12));
+        assertThat(admins.stream().map(GHUser::getLogin).collect(Collectors.toList()),
+                hasItems("alexanderrtaylor",
+                        "asthinasthi",
+                        "bitwiseman",
+                        "farmdawgnation",
+                        "halkeye",
+                        "jberglund-BSFT",
+                        "kohsuke",
+                        "kohsuke2",
+                        "martinvanzijl",
+                        "PauloMigAlmeida",
+                        "Sage-Pierce",
+                        "timja"));
     }
 
     @Test
@@ -163,19 +165,20 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         assertThat(admins, notNullValue());
         // In case more are added in the future
-        assertThat(admins.size() >= 12, is(true));
-        assertThat(admins.stream().anyMatch(ghUser11 -> ghUser11.getLogin().equals("alexanderrtaylor")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser10 -> ghUser10.getLogin().equals("asthinasthi")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser9 -> ghUser9.getLogin().equals("bitwiseman")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser8 -> ghUser8.getLogin().equals("farmdawgnation")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser7 -> ghUser7.getLogin().equals("halkeye")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser6 -> ghUser6.getLogin().equals("jberglund-BSFT")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser5 -> ghUser5.getLogin().equals("kohsuke")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser4 -> ghUser4.getLogin().equals("kohsuke2")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser3 -> ghUser3.getLogin().equals("martinvanzijl")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser2 -> ghUser2.getLogin().equals("PauloMigAlmeida")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser1 -> ghUser1.getLogin().equals("Sage-Pierce")), is(true));
-        assertThat(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")), is(true));
+        assertThat(admins.size(), greaterThanOrEqualTo(12));
+        assertThat(admins.stream().map(GHUser::getLogin).collect(Collectors.toList()),
+                hasItems("alexanderrtaylor",
+                        "asthinasthi",
+                        "bitwiseman",
+                        "farmdawgnation",
+                        "halkeye",
+                        "jberglund-BSFT",
+                        "kohsuke",
+                        "kohsuke2",
+                        "martinvanzijl",
+                        "PauloMigAlmeida",
+                        "Sage-Pierce",
+                        "timja"));
     }
 
     @Test

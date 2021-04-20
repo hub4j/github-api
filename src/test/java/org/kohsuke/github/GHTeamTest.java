@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 
@@ -45,7 +44,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         List<GHUser> admins = team.listMembers("admin").toList();
 
         assertThat(admins, notNullValue());
-        assertThat("One admin in dummy team", admins.size() == 1);
+        assertThat("One admin in dummy team", admins.size(), equalTo(1));
         assertThat("Specific user in admin team",
                 admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
     }
@@ -104,7 +103,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         GHTeam team = org.getTeamBySlug(teamSlug);
         Set<GHTeam> result = team.listChildTeams().toSet();
 
-        assertThat(result.size(), equalTo(0));
+        assertThat(result, is(empty()));
     }
 
 }

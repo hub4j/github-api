@@ -45,7 +45,7 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         RequiredStatusChecks statusChecks = protection.getRequiredStatusChecks();
         assertThat(statusChecks, notNullValue());
         assertThat(statusChecks.isRequiresBranchUpToDate(), is(true));
-        assertThat(statusChecks.getContexts().contains("test-status-check"), is(true));
+        assertThat(statusChecks.getContexts(), contains("test-status-check"));
 
         RequiredReviews requiredReviews = protection.getRequiredReviews();
         assertThat(requiredReviews, notNullValue());
@@ -110,7 +110,7 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         GHBranchProtection protection = branch.enableProtection().enable();
         GHBranchProtection protectionTest = repo.getBranch(BRANCH).getProtection();
         Boolean condition = protectionTest instanceof GHBranchProtection;
-        assertThat(condition, is(true));
+        assertThat(protectionTest, instanceOf(GHBranchProtection.class));
         assertThat(repo.getBranch(BRANCH).isProtected(), is(true));
     }
 }

@@ -113,7 +113,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         try {
             // System.out.println(p.getUrl());
-            assertThat(p.listReviewComments().toList().isEmpty(), is(true));
+            assertThat(p.listReviewComments().toList(), is(empty()));
             p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(1));
@@ -129,7 +129,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     containsString("hub4j-test-org/github-api/pull/" + p.getNumber()));
 
             List<GHReaction> reactions = comment.listReactions().toList();
-            assertThat(reactions.size(), equalTo(0));
+            assertThat(reactions, is(empty()));
 
             GHReaction reaction = comment.createReaction(ReactionContent.CONFUSED);
             assertThat(reaction.getContent(), equalTo(ReactionContent.CONFUSED));
@@ -164,12 +164,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "testPullRequestReviewRequests";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         // System.out.println(p.getUrl());
-        assertThat(p.getRequestedReviewers().isEmpty(), is(true));
+        assertThat(p.getRequestedReviewers(), is(empty()));
 
         GHUser kohsuke2 = gitHub.getUser("kohsuke2");
         p.requestReviewers(Collections.singletonList(kohsuke2));
         p.refresh();
-        assertThat(p.getRequestedReviewers().isEmpty(), is(false));
+        assertThat(p.getRequestedReviewers(), is(not(empty())));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "testPullRequestTeamReviewRequests";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         // System.out.println(p.getUrl());
-        assertThat(p.getRequestedReviewers().isEmpty(), is(true));
+        assertThat(p.getRequestedReviewers(), is(empty()));
 
         GHOrganization testOrg = gitHub.getOrganization("hub4j-test-org");
         GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");

@@ -43,7 +43,7 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
         List<GHIssueEvent> list = repo.listIssueEvents().toList();
-        assertThat(list.size() > 0, is(true));
+        assertThat(list, is(not(empty())));
 
         int i = 0;
         for (GHIssueEvent event : list) {

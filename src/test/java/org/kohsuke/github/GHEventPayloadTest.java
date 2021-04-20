@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import static java.lang.Boolean.TRUE;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.endsWith;
@@ -314,7 +313,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getBase().getLabel(), is("trilogy-group:3.10"));
         assertThat(event.getPullRequest().getBase().getSha(), is("7a735f17d686c6a1fc7df5b9d395e5863868f364"));
         assertThat(event.getPullRequest().isMerged(), is(false));
-        assertThat(event.getPullRequest().getMergeable(), is(TRUE));
+        assertThat(event.getPullRequest().getMergeable(), is(true));
         assertThat(event.getPullRequest().getMergeableState(), is("draft"));
         assertThat(event.getPullRequest().getMergedBy(), nullValue());
         assertThat(event.getPullRequest().getCommentsCount(), is(1));

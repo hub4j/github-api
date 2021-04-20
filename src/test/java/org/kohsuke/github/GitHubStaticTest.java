@@ -13,7 +13,6 @@ import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.fail;
@@ -140,8 +139,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         assertThat(rateLimit_none, equalTo(rateLimit_core));
         assertThat(rateLimit_none, not(sameInstance(rateLimit_core)));
-        assertThat(rateLimit_none.hashCode() == rateLimit_core.hashCode(), is(true));
-        assertThat(rateLimit_none.equals(rateLimit_core), is(true));
+        assertThat(rateLimit_none.hashCode(), equalTo(rateLimit_core.hashCode()));
+        assertThat(rateLimit_none, equalTo(rateLimit_core));
 
         assertThat(rateLimit_none, not(equalTo(rateLimit_search)));
 

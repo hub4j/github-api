@@ -85,7 +85,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         // primitive fields
         assertThat(plan.getId(), not(0L));
         assertThat(plan.getNumber(), not(0L));
-        assertThat(plan.getMonthlyPriceInCents() >= 0, is(true));
+        assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
 
         // list
         assertThat(plan.getBullets().size(), equalTo(2));

@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;
 
@@ -11,10 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.*;
 
 public class LifecycleTest extends AbstractGitHubWireMockTest {
     @Test
@@ -25,7 +21,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
         // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         GHRepository repository = getTempRepository();
-        assertThat(repository.getReleases().isEmpty(), Matchers.is(true));
+        assertThat(repository.getReleases(), is(empty()));
 
         GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
         GHIssue issue = repository.createIssue("Test Issue")
@@ -53,14 +49,14 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertThat(release.getAssets().size(), equalTo(0));
+        assertThat(release.getAssets(), is(empty()));
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
         assertThat(asset, notNullValue());
         List<GHAsset> cachedAssets = release.assets();
-        assertThat(cachedAssets.size(), equalTo(0));
+        assertThat(cachedAssets, is(empty()));
         List<GHAsset> assets = release.getAssets();
         assertThat(assets.size(), equalTo(1));
         assertThat(assets.get(0).getName(), equalTo("LICENSE.txt"));

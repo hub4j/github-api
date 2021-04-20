@@ -97,7 +97,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             try {
                 gitHub.checkApiUrlValidity();
             } catch (IOException ioe) {
-                assertThat(ioe.getMessage().contains("private mode enabled"), is(true));
+                assertThat(ioe.getMessage(), containsString("private mode enabled"));
             }
             Thread.sleep(100);
         }

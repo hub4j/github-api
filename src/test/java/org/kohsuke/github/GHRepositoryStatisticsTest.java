@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
@@ -60,7 +59,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             }
         }
 
-        assertThat("Did not find author " + authorLogin, developerFound, is(true));
+        assertThat("Did not find author " + authorLogin, developerFound);
     }
 
     @Test
@@ -105,7 +104,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
                 break;
             }
         }
-        assertThat("Could not find week starting 1546128000", foundWeek, is(true));
+        assertThat("Could not find week starting 1546128000", foundWeek);
     }
 
     @Test
@@ -142,7 +141,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
                 break;
             }
         }
-        assertThat("Could not find week starting 1535241600", foundWeek, is(true));
+        assertThat("Could not find week starting 1535241600", foundWeek);
     }
 
     @Test
@@ -208,7 +207,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
                 break;
             }
         }
-        assertThat("Hour 10 for Day 2 not found.", hourFound, is(true));
+        assertThat("Hour 10 for Day 2 not found.", hourFound);
     }
 
     protected GHRepository getRepository() throws IOException {

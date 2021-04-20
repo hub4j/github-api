@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -133,7 +134,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listStargazers() throws IOException {
         GHRepository repository = getRepository();
-        assertThat(repository.listStargazers2().toList(), empty());
+        assertThat(repository.listStargazers2().toList(), is(empty()));
 
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
         Iterable<GHStargazer> stargazers = repository.listStargazers2();
@@ -283,7 +284,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         for (GHRepository.Contributor c : r.listContributors()) {
             if (c.getLogin().equals("kohsuke")) {
-                assertThat(c.getContributions() > 0, is(true));
+                assertThat(c.getContributions(), greaterThan(0));
                 kohsuke = true;
             }
             if (i++ > 5) {
@@ -365,7 +366,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listReleases() throws IOException {
         PagedIterable<GHRelease> releases = gitHub.getOrganization("github").getRepository("hub").listReleases();
-        assertThat(releases.iterator().hasNext(), is(true));
+        assertThat(releases, is(not(emptyIterable())));
     }
 
     @Test
@@ -418,17 +419,17 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .listCommitComments("499d91f9f846b0087b2a20cf3648b49dc9c2eeef")
                 .toList();
 
-        assertThat("Two comments present", commitComments.size() == 2);
-        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 1")));
-        assertThat("Comment text found", commitComments.stream().anyMatch(it -> it.body.equals("comment 2")));
+        assertThat("Two comments present", commitComments.size(), equalTo(2));
+        assertThat("Comment text found",
+                commitComments.stream().map(GHCommitComment::getBody).collect(Collectors.toList()),
+                containsInAnyOrder("comment 1", "comment 2"));
     }
 
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
-        for (GHRepository.Contributor c : gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors()) {
-            // System.out.println(c);
-            fail("This list should be empty, but should return a valid empty iterable.");
-        }
+        assertThat("This list should be empty, but should return a valid empty iterable.",
+                gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty").listContributors(),
+                is(emptyIterable()));
     }
 
     @Test
@@ -442,7 +443,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         // System.out.println(u.getName());
         assertThat(u.getId(), notNullValue());
         assertThat(u.getLanguage(), equalTo("Assembly"));
-        assertThat(r.getTotalCount() > 0, is(true));
+        assertThat(r.getTotalCount(), greaterThan(0));
     }
 
     @Test // issue #162
@@ -467,11 +468,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String actual = IOUtils.toString(
                 gitHub.getRepository("hub4j/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
         // System.out.println(actual);
-        assertThat(actual.contains("href=\"https://github.com/kohsuke\""), is(true));
-        assertThat(actual.contains("href=\"https://github.com/hub4j/github-api/pull/1\""), is(true));
-        assertThat(actual.contains("class=\"user-mention\""), is(true));
-        assertThat(actual.contains("class=\"issue-link "), is(true));
-        assertThat(actual.contains("to fix issue"), is(true));
+        assertThat(actual, containsString("href=\"https://github.com/kohsuke\""));
+        assertThat(actual, containsString("href=\"https://github.com/hub4j/github-api/pull/1\""));
+        assertThat(actual, containsString("class=\"user-mention\""));
+        assertThat(actual, containsString("class=\"issue-link "));
+        assertThat(actual, containsString("to fix issue"));
     }
 
     @Test
@@ -557,7 +558,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         topics = new ArrayList<>();
         repo.setTopics(topics);
-        assertThat("Topics can be set to empty", repo.listTopics().isEmpty(), is(true));
+        assertThat("Topics can be set to empty", repo.listTopics(), is(empty()));
     }
 
     @Test
@@ -571,7 +572,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void getPostCommitHooks() throws Exception {
         GHRepository repo = getRepository(gitHub);
         Set<URL> postcommitHooks = repo.getPostCommitHooks();
-        assertThat(postcommitHooks.size(), equalTo(0));
+        assertThat(postcommitHooks, is(empty()));
     }
 
     @Test
@@ -718,7 +719,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getTempRepository();
         List<GHTag> refs = repo.listTags().toList();
         assertThat(refs, notNullValue());
-        assertThat(refs.size(), equalTo(0));
+        assertThat(refs, is(empty()));
     }
 
     @Test

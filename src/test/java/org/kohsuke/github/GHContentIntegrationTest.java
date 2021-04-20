@@ -11,12 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Integration test for {@link GHContent}.
@@ -71,14 +66,14 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         GHContent content = repo.getFileContent("ghcontent-ro/an-empty-file");
 
         assertThat(content.isFile(), is(true));
-        assertThat(content.getContent(), equalTo(""));
+        assertThat(content.getContent(), is(emptyString()));
     }
 
     @Test
     public void testGetDirectoryContent() throws Exception {
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries");
 
-        assertThat(entries.size() == 3, is(true));
+        assertThat(entries.size(), equalTo(3));
     }
 
     @Test
@@ -86,7 +81,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         // Used to truncate the ?ref=main, see gh-224 https://github.com/kohsuke/github-api/pull/224
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "main");
 
-        assertThat(entries.get(0).getUrl().endsWith("?ref=main"), is(true));
+        assertThat(entries.get(0).getUrl(), endsWith("?ref=main"));
     }
 
     @Test

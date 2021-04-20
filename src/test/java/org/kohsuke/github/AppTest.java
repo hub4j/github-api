@@ -17,7 +17,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
 
@@ -138,7 +137,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHIssue i = repository.getIssue(4);
         List<GHIssueComment> v = i.getComments();
         // System.out.println(v);
-        assertThat(v.isEmpty(), is(true));
+        assertThat(v, is(empty()));
 
         i = repository.getIssue(3);
         v = i.getComments();
@@ -151,7 +150,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(v.get(0).getParent().getNumber(), equalTo(3));
         assertThat(v.get(0).getParent().getId(), equalTo(6863845L));
         assertThat(v.get(0).getUser().getLogin(), equalTo("kohsuke"));
-        assertThat(v.get(0).listReactions().toList().size(), equalTo(0));
+        assertThat(v.get(0).listReactions().toList(), is(empty()));
 
         assertThat(v.get(1).getHtmlUrl().toString(),
                 equalTo("https://github.com/kohsuke/test/issues/3#issuecomment-8547251"));
@@ -196,7 +195,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(deployment.getId(), notNullValue());
             List<GHDeployment> deployments = repository.listDeployments(null, "main", null, "unittest").toList();
             assertThat(deployments, notNullValue());
-            assertThat(Iterables.isEmpty(deployments), is(false));
+            assertThat(deployments, is(not(emptyIterable())));
             GHDeployment unitTestDeployment = deployments.get(0);
             assertThat(unitTestDeployment.getEnvironment(), equalTo("unittest"));
             assertThat(unitTestDeployment.getOriginalEnvironment(), equalTo("unittest"));
@@ -248,7 +247,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getRepository("github-api")
                 .getIssues(GHIssueState.CLOSED);
         // prior to using PagedIterable GHRepository.getIssues(GHIssueState) would only retrieve 30 issues
-        assertThat(closedIssues.size() > 150, is(true));
+        assertThat(closedIssues.size(), greaterThan(150));
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
@@ -268,7 +267,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             x++;
         }
 
-        assertThat(x > 150, is(true));
+        assertThat(x, greaterThan(150));
     }
 
     @Test
@@ -279,7 +278,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testMyOrganizations() throws IOException {
         Map<String, GHOrganization> org = gitHub.getMyOrganizations();
-        assertThat(org.keySet().contains(null), is(false));
+        assertThat(org.containsKey(null), is(false));
         // System.out.println(org);
     }
 
@@ -300,8 +299,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             for (GHTeam team : teamsPerOrg.getValue()) {
                 String teamName = team.getName();
                 assertThat("Team " + teamName + " in organization " + organizationName + " does not contain myself",
-                        shouldBelongToTeam(organizationName, teamName),
-                        is(true));
+                        shouldBelongToTeam(organizationName, teamName));
             }
         }
     }
@@ -313,7 +311,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         user.login = "kohsuke";
 
         Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations(user);
-        assertThat(orgs.isEmpty(), is(false));
+        assertThat(orgs.size(), greaterThan(0));
     }
 
     @Test
@@ -323,7 +321,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         user.login = "bitwiseman";
 
         Map<String, GHOrganization> orgs = gitHub.getUserPublicOrganizations(user);
-        assertThat(orgs.isEmpty(), is(true));
+        assertThat(orgs.size(), equalTo(0));
     }
 
     private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
@@ -383,7 +381,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
         List<GHPullRequest> prs = i.toList();
         assertThat(prs, notNullValue());
-        assertThat(prs.size() > 0, is(true));
+        assertThat(prs, is(not(empty())));
     }
 
     @Ignore("Needs mocking check")
@@ -404,14 +402,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(me, notNullValue());
         assertThat(gitHub.getUser("bitwiseman"), notNullValue());
         PagedIterable<GHRepository> ghRepositories = me.listRepositories();
-        assertThat(ghRepositories.iterator().hasNext(), is(true));
+        assertThat(ghRepositories, is(not(emptyIterable())));
     }
 
     @Ignore("Needs mocking check")
     @Test
     public void testPublicKeys() throws Exception {
         List<GHKey> keys = gitHub.getMyself().getPublicKeys();
-        assertThat(keys.isEmpty(), is(false));
+        assertThat(keys, is(not(empty())));
     }
 
     @Test
@@ -450,7 +448,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(t.getName(), notNullValue());
             sz++;
         }
-        assertThat(sz < 100, is(true));
+        assertThat(sz, lessThan(100));
     }
 
     @Test
@@ -875,7 +873,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             // System.out.println(u.getLogin());
             all.add(u);
         }
-        assertThat(all.isEmpty(), is(false));
+        assertThat(all, is(not(empty())));
     }
 
     @Test
@@ -886,10 +884,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .author("kohsuke")
                 .sort(GHCommitSearchBuilder.Sort.COMMITTER_DATE)
                 .list();
-        assertThat(r.getTotalCount() > 0, is(true));
+        assertThat(r.getTotalCount(), greaterThan(0));
 
         GHCommit firstCommit = r.iterator().next();
-        assertThat(firstCommit.getFiles().size() > 0, is(true));
+        assertThat(firstCommit.getFiles(), is(not(empty())));
     }
 
     @Test
@@ -899,7 +897,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .isOpen()
                 .sort(GHIssueSearchBuilder.Sort.UPDATED)
                 .list();
-        assertThat(r.getTotalCount() > 0, is(true));
+        assertThat(r.getTotalCount(), greaterThan(0));
         for (GHIssue issue : r) {
             assertThat(issue.getTitle(), notNullValue());
             PagedIterable<GHIssueComment> comments = issue.listComments();
@@ -963,14 +961,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
         for (GHLabel l : lst) {
             assertThat(l.getUrl(), containsString(l.getName().replace(" ", "%20")));
         }
-        assertThat(lst.size() > 5, is(true));
+        assertThat(lst.size(), greaterThan(5));
         GHLabel e = r.getLabel("enhancement");
         assertThat(e.getName(), equalTo("enhancement"));
         assertThat(e.getUrl(), notNullValue());
         assertThat(e.getId(), equalTo(177339106L));
         assertThat(e.getNodeId(), equalTo("MDU6TGFiZWwxNzczMzkxMDY="));
         assertThat(e.isDefault(), is(true));
-        assertThat(Pattern.matches("[0-9a-fA-F]{6}", e.getColor()), is(true));
+        assertThat(e.getColor(), matchesPattern("[0-9a-fA-F]{6}"));
 
         GHLabel t = null;
         GHLabel t2 = null;

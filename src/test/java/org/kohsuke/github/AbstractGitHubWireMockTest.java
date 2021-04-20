@@ -4,10 +4,9 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.hamcrest.StringDescription;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,13 +20,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
  */
-public abstract class AbstractGitHubWireMockTest extends Assert {
+public abstract class AbstractGitHubWireMockTest {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
@@ -255,52 +255,23 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
+    public static void fail() {
+        Assert.fail();
+    }
+    public static void fail(String reason) {
+        Assert.fail(reason);
+    }
+
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        assertThat("", actual, matcher);
+        MatcherAssert.assertThat("", actual, matcher);
     }
 
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
-        if (!matcher.matches(actual)) {
-            Description description = new StringDescription();
-            description.appendText(reason)
-                    .appendText(System.lineSeparator())
-                    .appendText("Expected: ")
-                    .appendDescriptionOf(matcher)
-                    .appendText(System.lineSeparator())
-                    .appendText("     but: ");
-            matcher.describeMismatch(actual, description);
-            throw new AssertionError(description.toString());
-        }
+        MatcherAssert.assertThat(reason, actual, matcher);
     }
 
     public static void assertThat(String reason, boolean assertion) {
-        if (!assertion) {
-            throw new AssertionError(reason);
-        }
-    }
-
-    public static void assertEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.equalTo(expected));
-    }
-
-    public static void assertNotEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.not(expected));
-    }
-
-    public static void assertNotNull(Object actual) {
-        assertThat(actual, Matchers.notNullValue());
-    }
-
-    public static void assertNull(Object actual) {
-        assertThat(actual, Matchers.nullValue());
-    }
-
-    public static void assertTrue(Boolean condition) {
-        assertThat(condition, Matchers.is(true));
-    }
-
-    public static void assertFalse(Boolean condition) {
-        assertThat(condition, Matchers.is(false));
+        MatcherAssert.assertThat(reason, assertion);
     }
 
     protected static class TemplatingHelper {

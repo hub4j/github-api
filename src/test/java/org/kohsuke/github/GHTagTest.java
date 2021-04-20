@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  *
@@ -45,11 +43,11 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         String tagType = "commit";
 
         GHTagObject tag = repo.createTag(tagName, tagMessage, commitSha, tagType);
-        assertEquals(tagName, tag.getTag());
-        assertEquals(tagMessage, tag.getMessage());
-        assertEquals(commitSha, tag.getObject().getSha());
-        assertFalse(tag.getVerification().isVerified());
-        assertEquals(tag.getVerification().getReason(), GHVerification.Reason.UNSIGNED);
+        assertThat(tag.getTag(), equalTo(tagName));
+        assertThat(tag.getMessage(), equalTo(tagMessage));
+        assertThat(tag.getObject().getSha(), equalTo(commitSha));
+        assertThat(tag.getVerification().isVerified(), is(false));
+        assertThat(GHVerification.Reason.UNSIGNED, equalTo(tag.getVerification().getReason()));
         assertThat(tag.getUrl(),
                 containsString("/repos/hub4j-test-org/github-api/git/tags/e7aa6d4afbaa48669f0bbe11ca3c4d787b2b153c"));
         assertThat(tag.getOwner().getId(), equalTo(repo.getId()));
@@ -57,7 +55,7 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
 
         // Make a reference to the newly created tag.
         GHRef ref = repo.createRef("refs/tags/" + tagName, tag.getSha());
-        assertNotNull(ref);
+        assertThat(ref, notNullValue());
     }
 
     protected GHRepository getRepository() throws IOException {

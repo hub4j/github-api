@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -26,12 +25,12 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         assertThat(gist.getDescription(), equalTo("Test Gist"));
         assertThat(gist.getFiles().size(), equalTo(3));
 
-        assertNotNull(gist.getUpdatedAt());
-        assertNotNull(gist.getCommentsUrl());
-        assertNotNull(gist.getCommitsUrl());
-        assertNotNull(gist.getGitPullUrl());
-        assertNotNull(gist.getGitPushUrl());
-        assertNotNull(gist.getHtmlUrl());
+        assertThat(gist.getUpdatedAt(), notNullValue());
+        assertThat(gist.getCommentsUrl(), notNullValue());
+        assertThat(gist.getCommitsUrl(), notNullValue());
+        assertThat(gist.getGitPullUrl(), notNullValue());
+        assertThat(gist.getGitPushUrl(), notNullValue());
+        assertThat(gist.getHtmlUrl(), notNullValue());
 
         String id = gist.getGistId();
 
@@ -98,13 +97,13 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     @Test
     public void starTest() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
-        assertEquals("rtyler", gist.getOwner().getLogin());
+        assertThat(gist.getOwner().getLogin(), equalTo("rtyler"));
 
         gist.star();
-        assertTrue(gist.isStarred());
+        assertThat(gist.isStarred(), is(true));
 
         gist.unstar();
-        assertFalse(gist.isStarred());
+        assertThat(gist.isStarred(), is(false));
 
         GHGist newGist = gist.fork();
 
@@ -126,16 +125,15 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     public void gistFile() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
 
-        assertTrue(gist.isPublic());
+        assertThat(gist.isPublic(), is(true));
         assertThat(gist.getId(), equalTo(9903708L));
         assertThat(gist.getGistId(), equalTo("9903708"));
 
-        assertEquals(1, gist.getFiles().size());
+        assertThat(gist.getFiles().size(), equalTo(1));
         GHGistFile f = gist.getFile("keybase.md");
 
-        assertEquals("text/markdown", f.getType());
-        assertEquals("Markdown", f.getLanguage());
-        assertTrue(f.getContent().contains("### Keybase proof"));
-        assertNotNull(f.getContent());
+        assertThat(f.getType(), equalTo("text/markdown"));
+        assertThat(f.getLanguage(), equalTo("Markdown"));
+        assertThat(f.getContent(), containsString("### Keybase proof"));
     }
 }

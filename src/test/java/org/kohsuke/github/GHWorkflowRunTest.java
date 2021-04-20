@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.awaitility.Awaitility;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHWorkflowJob.Step;
@@ -20,11 +19,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
@@ -72,30 +67,30 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        assertEquals(workflow.getId(), workflowRun.getWorkflowId());
-        assertNotNull(workflowRun.getId());
-        assertNotNull(workflowRun.getNodeId());
-        assertEquals(REPO_NAME, workflowRun.getRepository().getFullName());
-        assertTrue(workflowRun.getUrl().getPath().contains("/actions/runs/"));
-        assertTrue(workflowRun.getHtmlUrl().getPath().contains("/actions/runs/"));
-        assertTrue(workflowRun.getJobsUrl().getPath().endsWith("/jobs"));
-        assertTrue(workflowRun.getLogsUrl().getPath().endsWith("/logs"));
-        assertTrue(workflowRun.getCheckSuiteUrl().getPath().contains("/check-suites/"));
-        assertTrue(workflowRun.getArtifactsUrl().getPath().endsWith("/artifacts"));
-        assertTrue(workflowRun.getCancelUrl().getPath().endsWith("/cancel"));
-        assertTrue(workflowRun.getRerunUrl().getPath().endsWith("/rerun"));
-        assertTrue(workflowRun.getWorkflowUrl().getPath().contains("/actions/workflows/"));
-        assertEquals(MAIN_BRANCH, workflowRun.getHeadBranch());
-        assertNotNull(workflowRun.getHeadCommit().getId());
-        assertNotNull(workflowRun.getHeadCommit().getTreeId());
-        assertNotNull(workflowRun.getHeadCommit().getMessage());
-        assertNotNull(workflowRun.getHeadCommit().getTimestamp());
-        assertNotNull(workflowRun.getHeadCommit().getAuthor().getEmail());
-        assertNotNull(workflowRun.getHeadCommit().getCommitter().getEmail());
-        assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
-        assertEquals(Status.COMPLETED, workflowRun.getStatus());
-        assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
-        assertNotNull(workflowRun.getHeadSha());
+        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
+        assertThat(workflowRun.getId(), notNullValue());
+        assertThat(workflowRun.getNodeId(), notNullValue());
+        assertThat(workflowRun.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(workflowRun.getUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getHtmlUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getJobsUrl().getPath(), endsWith("/jobs"));
+        assertThat(workflowRun.getLogsUrl().getPath(), endsWith("/logs"));
+        assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
+        assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
+        assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
+        assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
+        assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
+        assertThat(workflowRun.getHeadBranch(), equalTo(MAIN_BRANCH));
+        assertThat(workflowRun.getHeadCommit().getId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTreeId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getMessage(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTimestamp(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), notNullValue());
+        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+        assertThat(workflowRun.getHeadSha(), notNullValue());
     }
 
     @Test
@@ -119,7 +114,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        assertNotNull(workflowRun.getId());
+        assertThat(workflowRun.getId(), notNullValue());
 
         workflowRun.cancel();
         long cancelledWorkflowRunId = workflowRun.getId();
@@ -129,7 +124,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         // let's check that it has been properly cancelled
         workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
-        assertEquals(Conclusion.CANCELLED, workflowRun.getConclusion());
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
 
         // now let's rerun it
         workflowRun.rerun();
@@ -162,13 +157,13 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        assertNotNull(workflowRunToDelete.getId());
+        assertThat(workflowRunToDelete.getId(), notNullValue());
 
         workflowRunToDelete.delete();
 
         try {
             repo.getWorkflowRun(workflowRunToDelete.getId());
-            Assert.fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
+            fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
         } catch (GHFileNotFoundException e) {
             // success
         }
@@ -194,11 +189,11 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId).orElseThrow(
                         () -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        assertEquals(workflow.getId(), workflowRun.getWorkflowId());
-        assertEquals(SECOND_BRANCH, workflowRun.getHeadBranch());
-        assertEquals(GHEvent.WORKFLOW_DISPATCH, workflowRun.getEvent());
-        assertEquals(Status.COMPLETED, workflowRun.getStatus());
-        assertEquals(Conclusion.SUCCESS, workflowRun.getConclusion());
+        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
+        assertThat(workflowRun.getHeadBranch(), equalTo(SECOND_BRANCH));
+        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
     }
 
     @Test
@@ -232,7 +227,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         try {
             workflowRun.downloadLogs((is) -> "");
-            Assert.fail("Downloading logs should not be possible as they were deleted");
+            fail("Downloading logs should not be possible as they were deleted");
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(), containsString("Not Found"));
         }
@@ -313,7 +308,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         try {
             repo.getArtifact(artifact1.getId());
-            Assert.fail("Getting the artifact should fail as it was deleted");
+            fail("Getting the artifact should fail as it was deleted");
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(), containsString("Not Found"));
         }
@@ -456,26 +451,26 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
-        assertNotNull(artifact.getId());
-        assertNotNull(artifact.getNodeId());
-        assertEquals(REPO_NAME, artifact.getRepository().getFullName());
+        assertThat(artifact.getId(), notNullValue());
+        assertThat(artifact.getNodeId(), notNullValue());
+        assertThat(artifact.getRepository().getFullName(), equalTo(REPO_NAME));
         assertThat(artifact.getName(), is(artifactName));
         assertThat(artifact.getArchiveDownloadUrl().getPath(), containsString("actions/artifacts"));
-        assertNotNull(artifact.getCreatedAt());
-        assertNotNull(artifact.getUpdatedAt());
-        assertNotNull(artifact.getExpiresAt());
+        assertThat(artifact.getCreatedAt(), notNullValue());
+        assertThat(artifact.getUpdatedAt(), notNullValue());
+        assertThat(artifact.getExpiresAt(), notNullValue());
         assertThat(artifact.getSizeInBytes(), greaterThan(0L));
-        assertFalse(artifact.isExpired());
+        assertThat(artifact.isExpired(), is(false));
     }
 
     private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) throws IOException {
-        assertNotNull(job.getId());
-        assertNotNull(job.getNodeId());
-        assertEquals(REPO_NAME, job.getRepository().getFullName());
+        assertThat(job.getId(), notNullValue());
+        assertThat(job.getNodeId(), notNullValue());
+        assertThat(job.getRepository().getFullName(), equalTo(REPO_NAME));
         assertThat(job.getName(), is(jobName));
-        assertNotNull(job.getStartedAt());
-        assertNotNull(job.getCompletedAt());
-        assertNotNull(job.getHeadSha());
+        assertThat(job.getStartedAt(), notNullValue());
+        assertThat(job.getCompletedAt(), notNullValue());
+        assertThat(job.getHeadSha(), notNullValue());
         assertThat(job.getStatus(), is(Status.COMPLETED));
         assertThat(job.getConclusion(), is(Conclusion.SUCCESS));
         assertThat(job.getRunId(), is(workflowRunId));
@@ -500,7 +495,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(step.getNumber(), is(number));
         assertThat(step.getStatus(), is(Status.COMPLETED));
         assertThat(step.getConclusion(), is(Conclusion.SUCCESS));
-        assertNotNull(step.getStartedAt());
-        assertNotNull(step.getCompletedAt());
+        assertThat(step.getStartedAt(), notNullValue());
+        assertThat(step.getCompletedAt(), notNullValue());
     }
 }

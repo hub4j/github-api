@@ -6,7 +6,7 @@ import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     private static final String BRANCH = "main";
@@ -43,33 +43,33 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
 
     private void verifyBranchProtection(GHBranchProtection protection) {
         RequiredStatusChecks statusChecks = protection.getRequiredStatusChecks();
-        assertNotNull(statusChecks);
-        assertTrue(statusChecks.isRequiresBranchUpToDate());
-        assertTrue(statusChecks.getContexts().contains("test-status-check"));
+        assertThat(statusChecks, notNullValue());
+        assertThat(statusChecks.isRequiresBranchUpToDate(), is(true));
+        assertThat(statusChecks.getContexts(), contains("test-status-check"));
 
         RequiredReviews requiredReviews = protection.getRequiredReviews();
-        assertNotNull(requiredReviews);
-        assertTrue(requiredReviews.isDismissStaleReviews());
-        assertTrue(requiredReviews.isRequireCodeOwnerReviews());
-        assertEquals(2, requiredReviews.getRequiredReviewers());
+        assertThat(requiredReviews, notNullValue());
+        assertThat(requiredReviews.isDismissStaleReviews(), is(true));
+        assertThat(requiredReviews.isRequireCodeOwnerReviews(), is(true));
+        assertThat(requiredReviews.getRequiredReviewers(), equalTo(2));
 
         EnforceAdmins enforceAdmins = protection.getEnforceAdmins();
-        assertNotNull(enforceAdmins);
-        assertTrue(enforceAdmins.isEnabled());
+        assertThat(enforceAdmins, notNullValue());
+        assertThat(enforceAdmins.isEnabled(), is(true));
     }
 
     @Test
     public void testEnableProtectionOnly() throws Exception {
         branch.enableProtection().enable();
-        assertTrue(repo.getBranch(BRANCH).isProtected());
+        assertThat(repo.getBranch(BRANCH).isProtected(), is(true));
     }
 
     @Test
     public void testDisableProtectionOnly() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
-        assertTrue(repo.getBranch(BRANCH).isProtected());
+        assertThat(repo.getBranch(BRANCH).isProtected(), is(true));
         branch.disableProtection();
-        assertFalse(repo.getBranch(BRANCH).isProtected());
+        assertThat(repo.getBranch(BRANCH).isProtected(), is(false));
     }
 
     @Test
@@ -77,18 +77,18 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         GHBranchProtection protection = branch.enableProtection().requireReviews().enable();
 
         RequiredReviews requiredReviews = protection.getRequiredReviews();
-        assertNotNull(protection.getRequiredReviews());
-        assertFalse(requiredReviews.isDismissStaleReviews());
-        assertFalse(requiredReviews.isRequireCodeOwnerReviews());
+        assertThat(protection.getRequiredReviews(), notNullValue());
+        assertThat(requiredReviews.isDismissStaleReviews(), is(false));
+        assertThat(requiredReviews.isRequireCodeOwnerReviews(), is(false));
         assertThat(protection.getRequiredReviews().getRequiredReviewers(), equalTo(1));
 
         // Get goes through a different code path. Make sure it also gets the correct data.
         protection = branch.getProtection();
         requiredReviews = protection.getRequiredReviews();
 
-        assertNotNull(protection.getRequiredReviews());
-        assertFalse(requiredReviews.isDismissStaleReviews());
-        assertFalse(requiredReviews.isRequireCodeOwnerReviews());
+        assertThat(protection.getRequiredReviews(), notNullValue());
+        assertThat(requiredReviews.isDismissStaleReviews(), is(false));
+        assertThat(requiredReviews.isRequireCodeOwnerReviews(), is(false));
         assertThat(protection.getRequiredReviews().getRequiredReviewers(), equalTo(1));
     }
 
@@ -96,20 +96,21 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     public void testSignedCommits() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
 
-        assertFalse(protection.getRequiredSignatures());
+        assertThat(protection.getRequiredSignatures(), is(false));
 
         protection.enabledSignedCommits();
-        assertTrue(protection.getRequiredSignatures());
+        assertThat(protection.getRequiredSignatures(), is(true));
 
         protection.disableSignedCommits();
-        assertFalse(protection.getRequiredSignatures());
+        assertThat(protection.getRequiredSignatures(), is(false));
     }
 
     @Test
     public void testGetProtection() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
         GHBranchProtection protectionTest = repo.getBranch(BRANCH).getProtection();
-        assertTrue(protectionTest instanceof GHBranchProtection);
-        assertTrue(repo.getBranch(BRANCH).isProtected());
+        Boolean condition = protectionTest instanceof GHBranchProtection;
+        assertThat(protectionTest, instanceOf(GHBranchProtection.class));
+        assertThat(repo.getBranch(BRANCH).isProtected(), is(true));
     }
 }

@@ -493,7 +493,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // This time, rateLimit() should find an expired record and get a new one.
         Thread.sleep(2500);
 
-        assertThat("Header instance has expired", gitHub.lastRateLimit().isExpired(), is(true));
+        assertThat("Header instance has expired", gitHub.lastRateLimit().isExpired());
 
         assertThat("rateLimit() will ask server when cached instance has expired",
                 gitHub.rateLimit(),

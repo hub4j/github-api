@@ -5,11 +5,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
 import static org.kohsuke.github.GHDirection.DESC;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
@@ -31,30 +27,30 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     @Test
     public void listMarketplacePlans() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
-        assertEquals(3, plans.size());
+        assertThat(plans.size(), equalTo(3));
         plans.forEach(this::testMarketplacePlan);
     }
 
     @Test
     public void listAccounts() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
-        assertEquals(3, plans.size());
+        assertThat(plans.size(), equalTo(3));
         List<GHMarketplaceAccountPlan> marketplaceUsers = plans.get(0).listAccounts().createRequest().toList();
-        assertEquals(2, marketplaceUsers.size());
+        assertThat(marketplaceUsers.size(), equalTo(2));
         marketplaceUsers.forEach(this::testMarketplaceAccount);
     }
 
     @Test
     public void listAccountsWithDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
-        assertEquals(3, plans.size());
+        assertThat(plans.size(), equalTo(3));
 
         for (GHMarketplacePlan plan : plans) {
             List<GHMarketplaceAccountPlan> marketplaceUsers = plan.listAccounts()
                     .direction(DESC)
                     .createRequest()
                     .toList();
-            assertEquals(2, marketplaceUsers.size());
+            assertThat(marketplaceUsers.size(), equalTo(2));
             marketplaceUsers.forEach(this::testMarketplaceAccount);
         }
 
@@ -63,7 +59,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     @Test
     public void listAccountsWithSortAndDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
-        assertEquals(3, plans.size());
+        assertThat(plans.size(), equalTo(3));
 
         for (GHMarketplacePlan plan : plans) {
             List<GHMarketplaceAccountPlan> marketplaceUsers = plan.listAccounts()
@@ -71,7 +67,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                     .direction(DESC)
                     .createRequest()
                     .toList();
-            assertEquals(2, marketplaceUsers.size());
+            assertThat(marketplaceUsers.size(), equalTo(2));
             marketplaceUsers.forEach(this::testMarketplaceAccount);
         }
 
@@ -79,39 +75,39 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     private void testMarketplacePlan(GHMarketplacePlan plan) {
         // Non-nullable fields
-        assertNotNull(plan.getUrl());
-        assertNotNull(plan.getAccountsUrl());
-        assertNotNull(plan.getName());
-        assertNotNull(plan.getDescription());
-        assertNotNull(plan.getPriceModel());
-        assertNotNull(plan.getState());
+        assertThat(plan.getUrl(), notNullValue());
+        assertThat(plan.getAccountsUrl(), notNullValue());
+        assertThat(plan.getName(), notNullValue());
+        assertThat(plan.getDescription(), notNullValue());
+        assertThat(plan.getPriceModel(), notNullValue());
+        assertThat(plan.getState(), notNullValue());
 
         // primitive fields
-        assertNotEquals(0L, plan.getId());
-        assertNotEquals(0L, plan.getNumber());
-        assertTrue(plan.getMonthlyPriceInCents() >= 0);
+        assertThat(plan.getId(), not(0L));
+        assertThat(plan.getNumber(), not(0L));
+        assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
 
         // list
-        assertEquals(2, plan.getBullets().size());
+        assertThat(plan.getBullets().size(), equalTo(2));
     }
 
     private void testMarketplaceAccount(GHMarketplaceAccountPlan account) {
         // Non-nullable fields
-        assertNotNull(account.getLogin());
-        assertNotNull(account.getUrl());
-        assertNotNull(account.getType());
-        assertNotNull(account.getMarketplacePurchase());
+        assertThat(account.getLogin(), notNullValue());
+        assertThat(account.getUrl(), notNullValue());
+        assertThat(account.getType(), notNullValue());
+        assertThat(account.getMarketplacePurchase(), notNullValue());
         testMarketplacePurchase(account.getMarketplacePurchase());
 
         // primitive fields
-        assertNotEquals(0L, account.getId());
+        assertThat(account.getId(), not(0L));
 
         /* logical combination tests */
         // Rationale: organization_billing_email is only set when account type is ORGANIZATION.
         if (account.getType() == ORGANIZATION)
-            assertNotNull(account.getOrganizationBillingEmail());
+            assertThat(account.getOrganizationBillingEmail(), notNullValue());
         else
-            assertNull(account.getOrganizationBillingEmail());
+            assertThat(account.getOrganizationBillingEmail(), nullValue());
 
         // Rationale: marketplace_pending_change isn't always set... This is what GitHub says about it:
         // "When someone submits a plan change that won't be processed until the end of their billing cycle,
@@ -122,41 +118,41 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     private void testMarketplacePurchase(GHMarketplacePurchase marketplacePurchase) {
         // Non-nullable fields
-        assertNotNull(marketplacePurchase.getBillingCycle());
-        assertNotNull(marketplacePurchase.getNextBillingDate());
-        assertNotNull(marketplacePurchase.getUpdatedAt());
+        assertThat(marketplacePurchase.getBillingCycle(), notNullValue());
+        assertThat(marketplacePurchase.getNextBillingDate(), notNullValue());
+        assertThat(marketplacePurchase.getUpdatedAt(), notNullValue());
         testMarketplacePlan(marketplacePurchase.getPlan());
 
         /* logical combination tests */
         // Rationale: if onFreeTrial is true, then we should see free_trial_ends_on property set to something
         // different than null
         if (marketplacePurchase.isOnFreeTrial())
-            assertNotNull(marketplacePurchase.getFreeTrialEndsOn());
+            assertThat(marketplacePurchase.getFreeTrialEndsOn(), notNullValue());
         else
-            assertNull(marketplacePurchase.getFreeTrialEndsOn());
+            assertThat(marketplacePurchase.getFreeTrialEndsOn(), nullValue());
 
         // Rationale: if price model is PER_UNIT then unit_count can't be null
         if (marketplacePurchase.getPlan().getPriceModel() == GHMarketplacePriceModel.PER_UNIT)
-            assertNotNull(marketplacePurchase.getUnitCount());
+            assertThat(marketplacePurchase.getUnitCount(), notNullValue());
         else
-            assertNull(marketplacePurchase.getUnitCount());
+            assertThat(marketplacePurchase.getUnitCount(), nullValue());
 
     }
 
     private void testMarketplacePendingChange(GHMarketplacePendingChange marketplacePendingChange) {
         // Non-nullable fields
-        assertNotNull(marketplacePendingChange.getEffectiveDate());
+        assertThat(marketplacePendingChange.getEffectiveDate(), notNullValue());
         testMarketplacePlan(marketplacePendingChange.getPlan());
 
         // primitive fields
-        assertNotEquals(0L, marketplacePendingChange.getId());
+        assertThat(marketplacePendingChange.getId(), not(0L));
 
         /* logical combination tests */
         // Rationale: if price model is PER_UNIT then unit_count can't be null
         if (marketplacePendingChange.getPlan().getPriceModel() == GHMarketplacePriceModel.PER_UNIT)
-            assertNotNull(marketplacePendingChange.getUnitCount());
+            assertThat(marketplacePendingChange.getUnitCount(), notNullValue());
         else
-            assertNull(marketplacePendingChange.getUnitCount());
+            assertThat(marketplacePendingChange.getUnitCount(), nullValue());
 
     }
 

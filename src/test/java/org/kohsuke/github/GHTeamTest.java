@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.*;
 
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 
@@ -23,7 +23,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertEquals(description, team.getDescription());
+        assertThat(team.getDescription(), equalTo(description));
 
         description += "Modified";
 
@@ -32,7 +32,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertEquals(description, team.getDescription());
+        assertThat(team.getDescription(), equalTo(description));
     }
 
     @Test
@@ -43,8 +43,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         List<GHUser> admins = team.listMembers("admin").toList();
 
-        assertNotNull(admins);
-        assertThat("One admin in dummy team", admins.size() == 1);
+        assertThat(admins, notNullValue());
+        assertThat("One admin in dummy team", admins.size(), equalTo(1));
         assertThat("Specific user in admin team",
                 admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
     }
@@ -71,7 +71,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertEquals(privacy, team.getPrivacy());
+        assertThat(team.getPrivacy(), equalTo(privacy));
 
         privacy = Privacy.SECRET;
 
@@ -80,7 +80,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
         // Check that it was set correctly.
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertEquals(privacy, team.getPrivacy());
+        assertThat(team.getPrivacy(), equalTo(privacy));
     }
 
     @Test
@@ -91,8 +91,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         GHTeam team = org.getTeamBySlug(teamSlug);
         Set<GHTeam> result = team.listChildTeams().toSet();
 
-        assertEquals(1, result.size());
-        assertEquals("child-team-for-dummy", result.toArray(new GHTeam[]{})[0].getName());
+        assertThat(result.size(), equalTo(1));
+        assertThat(result.toArray(new GHTeam[]{})[0].getName(), equalTo("child-team-for-dummy"));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         GHTeam team = org.getTeamBySlug(teamSlug);
         Set<GHTeam> result = team.listChildTeams().toSet();
 
-        assertEquals(0, result.size());
+        assertThat(result, is(empty()));
     }
 
 }

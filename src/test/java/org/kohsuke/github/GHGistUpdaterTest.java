@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.*;
+
 /**
  * @author Martin van Zijl
  */
@@ -46,24 +48,24 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
                 .updateFile("update-me.txt", "Content updated by API")
                 .update();
 
-        assertEquals("Description updated by API", updatedGist.getDescription());
+        assertThat(updatedGist.getDescription(), equalTo("Description updated by API"));
 
         Map<String, GHGistFile> files = updatedGist.getFiles();
 
         // Check that the unmodified file stays intact.
-        assertTrue(files.containsKey("unmodified.txt"));
-        assertEquals("Should be unmodified", files.get("unmodified.txt").getContent());
+        assertThat(files.get("unmodified.txt"), is(notNullValue()));
+        assertThat(files.get("unmodified.txt").getContent(), equalTo("Should be unmodified"));
 
         // Check that the files are updated as expected.
         // assertFalse("File was not deleted.", files.containsKey("delete-me.txt"));
 
-        assertTrue(files.containsKey("new-file.txt"));
-        assertEquals("Added by updater", files.get("new-file.txt").getContent());
+        assertThat(files.get("new-file.txt"), is(notNullValue()));
+        assertThat(files.get("new-file.txt").getContent(), equalTo("Added by updater"));
 
-        assertFalse(files.containsKey("rename-me.py"));
-        assertTrue(files.containsKey("renamed.py"));
-        assertEquals("print 'hello'", files.get("renamed.py").getContent());
+        assertThat(files.containsKey("rename-me.py"), is(false));
+        assertThat(files.get("renamed.py"), is(notNullValue()));
+        assertThat(files.get("renamed.py").getContent(), equalTo("print 'hello'"));
 
-        assertEquals("Content updated by API", files.get("update-me.txt").getContent());
+        assertThat(files.get("update-me.txt").getContent(), equalTo("Content updated by API"));
     }
 }

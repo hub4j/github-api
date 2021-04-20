@@ -97,7 +97,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             try {
                 gitHub.checkApiUrlValidity();
             } catch (IOException ioe) {
-                assertTrue(ioe.getMessage().contains("private mode enabled"));
+                assertThat(ioe.getMessage(), containsString("private mode enabled"));
             }
             Thread.sleep(100);
         }
@@ -127,8 +127,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
 
         String capturedLog = getTestCapturedLog();
-        assertTrue(capturedLog.contains("will try 2 more time"));
-        assertTrue(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog.contains("will try 2 more time"), is(true));
+        assertThat(capturedLog.contains("will try 1 more time"), is(true));
 
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
@@ -156,8 +156,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
 
         String capturedLog = getTestCapturedLog();
-        assertTrue(capturedLog.contains("will try 2 more time"));
-        assertTrue(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog.contains("will try 2 more time"), is(true));
+        assertThat(capturedLog.contains("will try 1 more time"), is(true));
 
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
@@ -206,8 +206,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         GHBranch branch = repo.getBranch("test/timeout");
         assertThat(branch, notNullValue());
         String capturedLog = getTestCapturedLog();
-        assertTrue(capturedLog.contains("will try 2 more time"));
-        assertTrue(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog.contains("will try 2 more time"), is(true));
+        assertThat(capturedLog.contains("will try 1 more time"), is(true));
 
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
@@ -232,8 +232,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getCause(), instanceOf(IOException.class));
             assertThat(e.getCause().getMessage(), is("Custom"));
             String capturedLog = getTestCapturedLog();
-            assertFalse(capturedLog.contains("will try 2 more time"));
-            assertFalse(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog.contains("will try 2 more time"), is(false));
+            assertThat(capturedLog.contains("will try 1 more time"), is(false));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
 
@@ -253,8 +253,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             assertThat(e, instanceOf(FileNotFoundException.class));
             assertThat(e.getMessage(), is("Custom"));
             String capturedLog = getTestCapturedLog();
-            assertFalse(capturedLog.contains("will try 2 more time"));
-            assertFalse(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog.contains("will try 2 more time"), is(false));
+            assertThat(capturedLog.contains("will try 1 more time"), is(false));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
     }
@@ -279,8 +279,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getCause(), instanceOf(IOException.class));
             assertThat(e.getCause().getMessage(), is("Custom"));
             String capturedLog = getTestCapturedLog();
-            assertFalse(capturedLog.contains("will try 2 more time"));
-            assertFalse(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog.contains("will try 2 more time"), is(false));
+            assertThat(capturedLog.contains("will try 1 more time"), is(false));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
         }
 
@@ -297,8 +297,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
             assertThat(e.getCause().getMessage(), containsString("hub4j-test-org-missing"));
             String capturedLog = getTestCapturedLog();
-            assertFalse(capturedLog.contains("will try 2 more time"));
-            assertFalse(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog.contains("will try 2 more time"), is(false));
+            assertThat(capturedLog.contains("will try 1 more time"), is(false));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
         }
 
@@ -313,8 +313,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                         .fetchHttpStatusCode(),
                 equalTo(404));
         String capturedLog = getTestCapturedLog();
-        assertFalse(capturedLog.contains("will try 2 more time"));
-        assertFalse(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog.contains("will try 2 more time"), is(false));
+        assertThat(capturedLog.contains("will try 1 more time"), is(false));
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
     }
 
@@ -373,16 +373,16 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         baseRequestCount = this.mockGitHub.getRequestCount();
         assertThat(this.gitHub.getOrganization(GITHUB_API_TEST_ORG), is(notNullValue()));
         String capturedLog = getTestCapturedLog();
-        assertTrue(capturedLog.contains("will try 2 more time"));
-        assertTrue(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog, containsString("will try 2 more time"));
+        assertThat(capturedLog, containsString("will try 1 more time"));
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
 
         resetTestCapturedLog();
         baseRequestCount = this.mockGitHub.getRequestCount();
         this.gitHub.createRequest().withUrlPath("/orgs/" + GITHUB_API_TEST_ORG).send();
         capturedLog = getTestCapturedLog();
-        assertTrue(capturedLog.contains("will try 2 more time"));
-        assertTrue(capturedLog.contains("will try 1 more time"));
+        assertThat(capturedLog, containsString("will try 2 more time"));
+        assertThat(capturedLog, containsString("will try 1 more time"));
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
     }
 
@@ -399,13 +399,13 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                 equalTo(200));
         String capturedLog = getTestCapturedLog();
         if (expectedRequestCount > 0) {
-            assertTrue(capturedLog.contains("will try 2 more time"));
-            assertTrue(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog, containsString("will try 2 more time"));
+            assertThat(capturedLog, containsString("will try 1 more time"));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
         } else {
             // Success without retries
-            assertFalse(capturedLog.contains("will try 2 more time"));
-            assertFalse(capturedLog.contains("will try 1 more time"));
+            assertThat(capturedLog, not(containsString("will try 2 more time")));
+            assertThat(capturedLog, not(containsString("will try 1 more time")));
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
         }
     }

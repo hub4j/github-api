@@ -126,7 +126,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken2.getRepositorySelection(), is(GHRepositorySelection.ALL));
         assertThat(installationToken2.getExpiresAt(), is(GitHubClient.parseDate("2019-12-19T12:27:59Z")));
 
-        assertNull(installationToken2.getRepositories());;
+        assertThat(installationToken2.getRepositories(), nullValue());;
     }
 
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {
@@ -154,7 +154,7 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
         assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2019-07-04T01:19:36.000Z")));
         assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseDate("2019-07-30T22:48:09.000Z")));
-        assertNull(appInstallation.getSingleFileName());
+        assertThat(appInstallation.getSingleFileName(), nullValue());
     }
 
 }

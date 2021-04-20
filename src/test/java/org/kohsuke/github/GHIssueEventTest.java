@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static org.hamcrest.Matchers.*;
+
 /**
  * @author Martin van Zijl
  */
@@ -22,16 +24,16 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
         // Test that the events are present.
         List<GHIssueEvent> list = issue.listEvents().toList();
-        assertEquals(1, list.size());
+        assertThat(list.size(), equalTo(1));
 
         GHIssueEvent event = list.get(0);
-        assertEquals(issue.getNumber(), event.getIssue().getNumber());
-        assertEquals("labeled", event.getEvent());
+        assertThat(event.getIssue().getNumber(), equalTo(issue.getNumber()));
+        assertThat(event.getEvent(), equalTo("labeled"));
 
         // Test that we can get a single event directly.
         GHIssueEvent eventFromRepo = repo.getIssueEvent(event.getId());
-        assertEquals(event.getId(), eventFromRepo.getId());
-        assertEquals(event.getCreatedAt(), eventFromRepo.getCreatedAt());
+        assertThat(eventFromRepo.getId(), equalTo(event.getId()));
+        assertThat(eventFromRepo.getCreatedAt(), equalTo(event.getCreatedAt()));
 
         // Close the issue.
         issue.close();
@@ -41,11 +43,11 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
         List<GHIssueEvent> list = repo.listIssueEvents().toList();
-        assertTrue(list.size() > 0);
+        assertThat(list, is(not(empty())));
 
         int i = 0;
         for (GHIssueEvent event : list) {
-            assertNotNull(event.getIssue());
+            assertThat(event.getIssue(), notNullValue());
             if (i++ > 10)
                 break;
         }

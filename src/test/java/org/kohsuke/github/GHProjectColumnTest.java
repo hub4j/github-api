@@ -1,12 +1,14 @@
 package org.kohsuke.github;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Gunnar Skjold
@@ -23,14 +25,14 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreatedColumn() {
-        Assert.assertEquals("column-one", column.getName());
+        assertThat(column.getName(), equalTo("column-one"));
     }
 
     @Test
     public void testEditColumnName() throws IOException {
         column.setName("new-name");
         column = gitHub.getProjectColumn(column.getId());
-        Assert.assertEquals("new-name", column.getName());
+        assertThat(column.getName(), equalTo("new-name"));
     }
 
     @Test
@@ -38,7 +40,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
         column.delete();
         try {
             column = gitHub.getProjectColumn(column.getId());
-            Assert.assertNull(column);
+            assertThat(column, nullValue());
         } catch (FileNotFoundException e) {
             column = null;
         }

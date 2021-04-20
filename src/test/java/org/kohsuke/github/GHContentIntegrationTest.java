@@ -11,8 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Integration test for {@link GHContent}.
@@ -58,23 +57,23 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
 
-        assertTrue(content.isFile());
-        assertEquals("thanks for reading me\n", content.getContent());
+        assertThat(content.isFile(), is(true));
+        assertThat(content.getContent(), equalTo("thanks for reading me\n"));
     }
 
     @Test
     public void testGetEmptyFileContent() throws Exception {
         GHContent content = repo.getFileContent("ghcontent-ro/an-empty-file");
 
-        assertTrue(content.isFile());
-        assertEquals("", content.getContent());
+        assertThat(content.isFile(), is(true));
+        assertThat(content.getContent(), is(emptyString()));
     }
 
     @Test
     public void testGetDirectoryContent() throws Exception {
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries");
 
-        assertTrue(entries.size() == 3);
+        assertThat(entries.size(), equalTo(3));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         // Used to truncate the ?ref=main, see gh-224 https://github.com/kohsuke/github-api/pull/224
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "main");
 
-        assertTrue(entries.get(0).getUrl().endsWith("?ref=main"));
+        assertThat(entries.get(0).getUrl(), endsWith("?ref=main"));
     }
 
     @Test
@@ -92,11 +91,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 createdFilename);
         GHContent createdContent = created.getContent();
 
-        assertNotNull(created.getCommit());
-        assertNotNull(created.getContent());
-        assertNotNull(createdContent.getContent());
+        assertThat(created.getCommit(), notNullValue());
+        assertThat(created.getContent(), notNullValue());
+        assertThat(createdContent.getContent(), notNullValue());
         assertThat(createdContent.getPath(), equalTo(createdFilename));
-        assertEquals("this is an awesome file I created\n", createdContent.getContent());
+        assertThat(createdContent.getContent(), equalTo("this is an awesome file I created\n"));
 
         GHContent content = repo.getFileContent(createdFilename);
         assertThat(content, is(notNullValue()));
@@ -116,17 +115,17 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 "Updated file for integration tests.");
         GHContent updatedContent = updatedContentResponse.getContent();
 
-        assertNotNull(updatedContentResponse.getCommit());
-        assertNotNull(updatedContentResponse.getContent());
+        assertThat(updatedContentResponse.getCommit(), notNullValue());
+        assertThat(updatedContentResponse.getContent(), notNullValue());
         // due to what appears to be a cache propagation delay, this test is too flaky
-        assertEquals("this is some new content",
-                new BufferedReader(new InputStreamReader(updatedContent.read())).readLine());
-        assertEquals("this is some new content\n", updatedContent.getContent());
+        assertThat(new BufferedReader(new InputStreamReader(updatedContent.read())).readLine(),
+                equalTo("this is some new content"));
+        assertThat(updatedContent.getContent(), equalTo("this is some new content\n"));
 
         GHContentUpdateResponse deleteResponse = updatedContent.delete("Enough of this foolishness!");
 
-        assertNotNull(deleteResponse.getCommit());
-        assertNull(deleteResponse.getContent());
+        assertThat(deleteResponse.getCommit(), notNullValue());
+        assertThat(deleteResponse.getContent(), nullValue());
 
         try {
             repo.getFileContent(createdFilename);

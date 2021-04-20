@@ -139,8 +139,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         assertThat(rateLimit_none, equalTo(rateLimit_core));
         assertThat(rateLimit_none, not(sameInstance(rateLimit_core)));
-        assertTrue(rateLimit_none.hashCode() == rateLimit_core.hashCode());
-        assertTrue(rateLimit_none.equals(rateLimit_core));
+        assertThat(rateLimit_none.hashCode(), equalTo(rateLimit_core.hashCode()));
+        assertThat(rateLimit_none, equalTo(rateLimit_core));
 
         assertThat(rateLimit_none, not(equalTo(rateLimit_search)));
 

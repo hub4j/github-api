@@ -24,37 +24,36 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testOffline() throws Exception {
         GitHub hub = GitHub.offline();
-        assertEquals("https://api.github.invalid/test",
-
-                GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString());
-        assertTrue(hub.isAnonymous());
+        assertThat(GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString(),
+                equalTo("https://api.github.invalid/test"));
+        assertThat(hub.isAnonymous(), is(true));
         try {
             hub.getRateLimit();
             fail("Offline instance should always fail");
         } catch (IOException e) {
-            assertEquals("Offline", e.getMessage());
+            assertThat(e.getMessage(), equalTo("Offline"));
         }
     }
 
     @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
-        assertEquals("http://enterprise.kohsuke.org/api/v3/test",
-                GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString());
+        assertThat(GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString(),
+                equalTo("http://enterprise.kohsuke.org/api/v3/test"));
     }
 
     @Test
     public void testGitHubServerWithHttps() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
-        assertEquals("https://enterprise.kohsuke.org/api/v3/test",
-                GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString());
+        assertThat(GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString(),
+                equalTo("https://enterprise.kohsuke.org/api/v3/test"));
     }
 
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
-        assertEquals("https://api.github.com/test",
-                GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString());
+        assertThat(GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString(),
+                equalTo("https://api.github.com/test"));
     }
 
     @Test
@@ -149,8 +148,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         // test authorization header is set as in the RFC6749
         GitHub github = builder.build();
         // change this to get a request
-        assertEquals("token bogus app token", github.getClient().getEncodedAuthorization());
-        assertEquals("", github.getClient().login);
+        assertThat(github.getClient().getEncodedAuthorization(), equalTo("token bogus app token"));
+        assertThat(github.getClient().login, equalTo(""));
     }
 
     @Test

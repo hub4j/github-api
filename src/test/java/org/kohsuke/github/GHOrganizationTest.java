@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHOrganization.Permission;
@@ -42,7 +41,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .team(org.getTeamByName("Core Developers"))
                 .private_(false)
                 .create();
-        Assert.assertNotNull(repository);
+        assertThat(repository, notNullValue());
     }
 
     @Test
@@ -56,8 +55,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .team(org.getTeamByName("Core Developers"))
                 .autoInit(true)
                 .create();
-        Assert.assertNotNull(repository);
-        Assert.assertNotNull(repository.getReadme());
+        assertThat(repository, notNullValue());
+        assertThat(repository.getReadme(), notNullValue());
     }
 
     @Test
@@ -75,10 +74,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .autoInit(true)
                 .isTemplate(true)
                 .create();
-        Assert.assertNotNull(repository);
+        assertThat(repository, notNullValue());
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
 
-        Assert.assertNotNull(repository.getReadme());
+        assertThat(repository.getReadme(), notNullValue());
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
 
         // isTemplate() does not call populate() from create
@@ -107,8 +106,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .owner(GITHUB_API_TEST_ORG)
                 .create();
 
-        Assert.assertNotNull(repository);
-        Assert.assertNotNull(repository.getReadme());
+        assertThat(repository, notNullValue());
+        assertThat(repository.getReadme(), notNullValue());
 
     }
 
@@ -139,20 +138,21 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         List<GHUser> admins = org.listMembersWithFilter("all").toList();
 
-        assertNotNull(admins);
-        assertTrue(admins.size() >= 12); // In case more are added in the future
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("alexanderrtaylor")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("asthinasthi")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("farmdawgnation")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("halkeye")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("jberglund-BSFT")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke2")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("martinvanzijl")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("PauloMigAlmeida")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("Sage-Pierce")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")));
+        assertThat(admins, notNullValue());
+        // In case more are added in the future
+        assertThat(admins.size() >= 12, is(true));
+        assertThat(admins.stream().anyMatch(ghUser11 -> ghUser11.getLogin().equals("alexanderrtaylor")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser10 -> ghUser10.getLogin().equals("asthinasthi")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser9 -> ghUser9.getLogin().equals("bitwiseman")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser8 -> ghUser8.getLogin().equals("farmdawgnation")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser7 -> ghUser7.getLogin().equals("halkeye")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser6 -> ghUser6.getLogin().equals("jberglund-BSFT")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser5 -> ghUser5.getLogin().equals("kohsuke")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser4 -> ghUser4.getLogin().equals("kohsuke2")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser3 -> ghUser3.getLogin().equals("martinvanzijl")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser2 -> ghUser2.getLogin().equals("PauloMigAlmeida")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser1 -> ghUser1.getLogin().equals("Sage-Pierce")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")), is(true));
     }
 
     @Test
@@ -161,20 +161,21 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         List<GHUser> admins = org.listMembersWithRole("admin").toList();
 
-        assertNotNull(admins);
-        assertTrue(admins.size() >= 12); // In case more are added in the future
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("alexanderrtaylor")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("asthinasthi")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("farmdawgnation")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("halkeye")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("jberglund-BSFT")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("kohsuke2")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("martinvanzijl")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("PauloMigAlmeida")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("Sage-Pierce")));
-        assertTrue(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")));
+        assertThat(admins, notNullValue());
+        // In case more are added in the future
+        assertThat(admins.size() >= 12, is(true));
+        assertThat(admins.stream().anyMatch(ghUser11 -> ghUser11.getLogin().equals("alexanderrtaylor")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser10 -> ghUser10.getLogin().equals("asthinasthi")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser9 -> ghUser9.getLogin().equals("bitwiseman")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser8 -> ghUser8.getLogin().equals("farmdawgnation")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser7 -> ghUser7.getLogin().equals("halkeye")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser6 -> ghUser6.getLogin().equals("jberglund-BSFT")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser5 -> ghUser5.getLogin().equals("kohsuke")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser4 -> ghUser4.getLogin().equals("kohsuke2")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser3 -> ghUser3.getLogin().equals("martinvanzijl")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser2 -> ghUser2.getLogin().equals("PauloMigAlmeida")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser1 -> ghUser1.getLogin().equals("Sage-Pierce")), is(true));
+        assertThat(admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("timja")), is(true));
     }
 
     @Test
@@ -186,8 +187,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
-        Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
-        assertEquals(Permission.PUSH.toString().toLowerCase(), team.getPermission());
+        assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
+        assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
     }
 
     @Test
@@ -200,8 +201,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Create team with no permission field. Verify that default permission is pull
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, repo);
-        Assert.assertTrue(team.getRepositories().containsKey(REPO_NAME));
-        assertEquals(DEFAULT_PERMISSION, team.getPermission());
+        assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
+        assertThat(team.getPermission(), equalTo(DEFAULT_PERMISSION));
     }
 
     @Test
@@ -209,7 +210,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).privacy(GHTeam.Privacy.CLOSED).create();
-        assertEquals(GHTeam.Privacy.CLOSED, team.getPrivacy());
+        assertThat(team.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
     }
 
     @Test
@@ -224,7 +225,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .privacy(GHTeam.Privacy.CLOSED)
                 .parentTeamId(3617900)
                 .create();
-        assertEquals("Team description", team.getDescription());
-        assertEquals(GHTeam.Privacy.CLOSED, team.getPrivacy());
+        assertThat(team.getDescription(), equalTo("Team description"));
+        assertThat(team.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
     }
 }

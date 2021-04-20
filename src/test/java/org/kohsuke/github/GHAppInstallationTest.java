@@ -5,6 +5,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
 
     @Test
@@ -13,17 +16,18 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
 
         List<GHRepository> repositories = appInstallation.listRepositories().toList();
 
-        assertEquals(2, repositories.size());
-        assertTrue(repositories.stream().anyMatch(it -> it.getName().equals("empty")));
-        assertTrue(repositories.stream().anyMatch(it -> it.getName().equals("test-readme")));
+        assertThat(repositories.size(), equalTo(2));
+        assertThat(repositories.stream().anyMatch(it1 -> it1.getName().equals("empty")), is(true));
+        assertThat(repositories.stream().anyMatch(it -> it.getName().equals("test-readme")), is(true));
     }
 
     @Test
     public void testListRepositoriesNoPermissions() throws IOException {
         GHAppInstallation appInstallation = getAppInstallationWithTokenApp2();
 
-        assertTrue("App does not have permissions and should have 0 repositories",
-                appInstallation.listRepositories().toList().isEmpty());
+        assertThat("App does not have permissions and should have 0 repositories",
+                appInstallation.listRepositories().toList().isEmpty(),
+                is(true));
     }
 
 }

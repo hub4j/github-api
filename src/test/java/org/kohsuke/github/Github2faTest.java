@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kevin Harrington mad.hephaestus@gmail.com
@@ -17,7 +15,7 @@ public class Github2faTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void test2faToken() throws IOException {
-        assertFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
+        assertThat("Test only valid when not proxying", mockGitHub.isUseProxy(), is(false));
 
         List<String> asList = Arrays
                 .asList("repo", "gist", "write:packages", "read:packages", "delete:packages", "user", "delete_repo");
@@ -35,7 +33,7 @@ public class Github2faTest extends AbstractGitHubWireMockTest {
         assertThat(token, notNullValue());
 
         for (int i = 0; i < asList.size(); i++) {
-            assertTrue(token.getScopes().get(i).contentEquals(asList.get(i)));
+            assertThat(token.getScopes().get(i).contentEquals(asList.get(i)), is(true));
         }
 
         assertThat(token.getToken(), equalTo("63042a99d88bf138e6d6cf5788e0dc4e7a5d7309"));

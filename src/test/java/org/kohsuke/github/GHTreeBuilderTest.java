@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
 
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
@@ -64,8 +63,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         updateTree();
 
-        assertEquals(CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
-        assertEquals(CONTENT_README.length(), getFileSize(PATH_README));
+        assertThat(getFileSize(PATH_SCRIPT), equalTo(CONTENT_SCRIPT.length()));
+        assertThat(getFileSize(PATH_README), equalTo(CONTENT_README.length()));
     }
 
     @Test
@@ -78,8 +77,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         updateTree();
 
-        assertEquals((long) CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals((long) CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
+        assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
     }
 
     @Test
@@ -91,10 +90,10 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = updateTree();
 
-        assertEquals((long) CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
-        assertEquals((long) CONTENT_README.length(), getFileSize(PATH_README));
-        assertEquals((long) CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals((long) CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertThat(getFileSize(PATH_SCRIPT), equalTo((long) CONTENT_SCRIPT.length()));
+        assertThat(getFileSize(PATH_README), equalTo((long) CONTENT_README.length()));
+        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
+        assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
 
         assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
         assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));

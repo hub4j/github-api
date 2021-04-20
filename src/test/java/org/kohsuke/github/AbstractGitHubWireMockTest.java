@@ -271,60 +271,74 @@ public abstract class AbstractGitHubWireMockTest {
         MatcherAssert.assertThat(reason, assertion);
     }
 
+    @Deprecated
     public static void assertEquals(Object expected, Object actual) {
-        assertThat(actual, equalTo(expected));
+        fail("In this project we use 'assertThat(actual, equalTo(expected))");
     }
 
+    @Deprecated
     public static void assertEquals(String reason, Object expected, Object actual) {
-        assertThat(reason, actual, equalTo(expected));
+        fail("In this project we use 'assertThat(reason, actual, equalTo(expected))");
     }
 
+    @Deprecated
     public static void assertNotEquals(Object expected, Object actual) {
-        assertThat(actual, not(expected));
+        fail("In this project we use 'assertThat(actual, not(expected))");
     }
 
+    @Deprecated
     public static void assertNotEquals(String reason, Object expected, Object actual) {
-        assertThat(reason, actual, not(expected));
+        fail("In this project we use 'assertThat(reason, actual, not(expected))");
     }
 
+    @Deprecated
     public static void assertNotNull(Object actual) {
-        assertThat(actual, notNullValue());
+        fail("In this project we use 'assertThat(actual, notNullValue())");
     }
 
+    @Deprecated
     public static void assertNotNull(String reason, Object actual) {
-        assertThat(reason, actual, notNullValue());
+        fail("In this project we use 'assertThat(reason, actual, notNullValue())");
     }
 
+    @Deprecated
     public static void assertNull(Object actual) {
-        assertThat(actual, nullValue());
+        fail("In this project we use 'assertThat(actual, nullValue())");
     }
 
-    public static void assertNull(String message, Object actual) {
-        assertThat(message, actual, nullValue());
+    @Deprecated
+    public static void assertNull(String reason, Object actual) {
+        fail("In this project we use 'assertThat(reason, actual, nullValue())");
     }
 
+    @Deprecated
     public static void assertSame(Object expected, Object actual) {
-        assertThat(actual, sameInstance(expected));
+        fail("In this project we use 'assertThat(actual, sameInstance(expected))");
     }
 
-    public static void assertSame(String message, Object expected, Object actual) {
-        Assert.assertSame(message, expected, actual);
+    @Deprecated
+    public static void assertSame(String reason, Object expected, Object actual) {
+        fail("In this project we use 'assertThat(reason, actual, sameInstance(expected))");
     }
 
+    @Deprecated
     public static void assertTrue(Boolean condition) {
-        assertThat(condition, is(true));
+        fail("In this project we use 'assertThat(condition, is(true)) or more appropirate matchers");
     }
 
+    @Deprecated
     public static void assertTrue(String reason, Boolean condition) {
-        assertThat(reason, condition, is(true));
+        fail("In this project we use 'assertThat(reason, condition, is(true)) or more appropirate matchers");
     }
 
+    @Deprecated
     public static void assertFalse(Boolean condition) {
-        assertThat(condition, is(false));
+        fail("In this project we use 'assertThat(condition, is(true)) or more appropirate matchers");
     }
 
+    @Deprecated
     public static void assertFalse(String reason, Boolean condition) {
-        assertThat(reason, condition, is(false));
+        fail("In this project we use 'assertThat(reason, condition, is(false)) or more appropirate matchers");
     }
 
     protected static class TemplatingHelper {

@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import org.junit.Assert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.kohsuke.github.GHRepositoryTraffic.DailyInfo;
 
@@ -14,24 +14,24 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
 
     @SuppressWarnings("unchecked")
     private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual) {
-        Assert.assertEquals(expected.getCount(), actual.getCount());
-        Assert.assertEquals(expected.getUniques(), actual.getUniques());
+        assertThat(actual.getCount(), Matchers.equalTo(expected.getCount()));
+        assertThat(actual.getUniques(), Matchers.equalTo(expected.getUniques()));
 
         List<? extends DailyInfo> expectedList = expected.getDailyInfo();
         List<? extends DailyInfo> actualList = actual.getDailyInfo();
         Iterator<? extends DailyInfo> expectedIt;
         Iterator<? extends DailyInfo> actualIt;
 
-        Assert.assertEquals(expectedList.size(), actualList.size());
+        assertThat(actualList.size(), Matchers.equalTo(expectedList.size()));
         expectedIt = expectedList.iterator();
         actualIt = actualList.iterator();
 
         while (expectedIt.hasNext() && actualIt.hasNext()) {
             DailyInfo expectedDailyInfo = expectedIt.next();
             DailyInfo actualDailyInfo = actualIt.next();
-            Assert.assertEquals(expectedDailyInfo.getCount(), actualDailyInfo.getCount());
-            Assert.assertEquals(expectedDailyInfo.getUniques(), actualDailyInfo.getUniques());
-            Assert.assertEquals(expectedDailyInfo.getTimestamp(), actualDailyInfo.getTimestamp());
+            assertThat(actualDailyInfo.getCount(), Matchers.equalTo(expectedDailyInfo.getCount()));
+            assertThat(actualDailyInfo.getUniques(), Matchers.equalTo(expectedDailyInfo.getUniques()));
+            assertThat(actualDailyInfo.getTimestamp(), Matchers.equalTo(expectedDailyInfo.getTimestamp()));
         }
     }
 
@@ -100,12 +100,12 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository(repositoryName);
         try {
             repo.getViewTraffic();
-            Assert.fail(errorMsg);
+            fail(errorMsg);
         } catch (HttpException ex) {
         }
         try {
             repo.getCloneTraffic();
-            Assert.fail(errorMsg);
+            fail(errorMsg);
         } catch (HttpException ex) {
         }
     }

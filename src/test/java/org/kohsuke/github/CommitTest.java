@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -18,7 +19,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 152
     public void lastStatus() throws IOException {
         GHTag t = gitHub.getRepository("stapler/stapler").listTags().iterator().next();
-        assertNotNull(t.getCommit().getLastStatus());
+        assertThat(t.getCommit().getLastStatus(), notNullValue());
     }
 
     @Test // issue 230
@@ -27,7 +28,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
-            assertEquals(expected.getFiles().size(), commit.getFiles().size());
+            assertThat(commit.getFiles().size(), equalTo(expected.getFiles().size()));
         }
     }
 
@@ -129,7 +130,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
 
-        assertEquals(listedPrs.size(), 1);
+        assertThat(1, equalTo(listedPrs.size()));
 
         assertThat("Pull request " + prNumber + " not found by searching from commit.",
                 listedPrs.stream().findFirst().filter(it -> it.getNumber() == prNumber).isPresent());
@@ -144,7 +145,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
 
-        assertEquals(listedPrs.size(), 2);
+        assertThat(2, equalTo(listedPrs.size()));
 
         listedPrs.stream()
                 .forEach(pr -> assertThat("PR#" + pr.getNumber() + " not expected to be matched.",
@@ -172,9 +173,9 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
 
-        assertEquals("Commit which was supposed to be HEAD in 2 branches was not found as such.",
-                2,
-                commit.listBranchesWhereHead().toList().size());
+        assertThat("Commit which was supposed to be HEAD in 2 branches was not found as such.",
+                commit.listBranchesWhereHead().toList().size(),
+                equalTo(2));
     }
 
     @Test
@@ -193,14 +194,14 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
-            assertEquals(expected.getCommitShortInfo().getVerification().isVerified(),
-                    commit.getCommitShortInfo().getVerification().isVerified());
-            assertEquals(expected.getCommitShortInfo().getVerification().getReason(),
-                    commit.getCommitShortInfo().getVerification().getReason());
-            assertEquals(expected.getCommitShortInfo().getVerification().getSignature(),
-                    commit.getCommitShortInfo().getVerification().getSignature());
-            assertEquals(expected.getCommitShortInfo().getVerification().getPayload(),
-                    commit.getCommitShortInfo().getVerification().getPayload());
+            assertThat(commit.getCommitShortInfo().getVerification().isVerified(),
+                    equalTo(expected.getCommitShortInfo().getVerification().isVerified()));
+            assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getReason()));
+            assertThat(commit.getCommitShortInfo().getVerification().getSignature(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getSignature()));
+            assertThat(commit.getCommitShortInfo().getVerification().getPayload(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getPayload()));
         }
     }
 

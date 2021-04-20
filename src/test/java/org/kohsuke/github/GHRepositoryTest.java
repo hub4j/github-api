@@ -110,7 +110,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .getCommitShortInfo()
                 .getVerification();
 
-        assertEquals(GPGVERIFY_ERROR, verification.getReason());
+        assertThat(verification.getReason(), equalTo(GPGVERIFY_ERROR));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .getCommitShortInfo()
                 .getVerification();
 
-        assertEquals(UNKNOWN_SIGNATURE_TYPE, verification.getReason());
+        assertThat(verification.getReason(), equalTo(UNKNOWN_SIGNATURE_TYPE));
     }
 
     @Test
@@ -167,11 +167,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void subscription() throws Exception {
         GHRepository r = getRepository();
-        assertNull(r.getSubscription());
+        assertThat(r.getSubscription(), nullValue());
         GHSubscription s = r.subscribe(true, false);
         try {
 
-            assertEquals(s.getRepository(), r);
+            assertThat(r, equalTo(s.getRepository()));
             assertThat(s.isIgnored(), equalTo(false));
             assertThat(s.isSubscribed(), equalTo(true));
             assertThat(s.getRepositoryUrl().toString(), containsString("/repos/hub4j-test-org/github-api"));
@@ -183,7 +183,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             s.delete();
         }
 
-        assertNull(r.getSubscription());
+        assertThat(r.getSubscription(), nullValue());
     }
 
     @Test
@@ -193,11 +193,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String repoName = "test-repo-public";
         GHRepository repo = gitHub.createRepository(repoName).private_(false).create();
         try {
-            assertFalse(repo.isPrivate());
+            assertThat(repo.isPrivate(), is(false));
             repo.setPrivate(true);
-            assertTrue(myself.getRepository(repoName).isPrivate());
+            assertThat(myself.getRepository(repoName).isPrivate(), is(true));
             repo.setPrivate(false);
-            assertFalse(myself.getRepository(repoName).isPrivate());
+            assertThat(myself.getRepository(repoName).isPrivate(), is(false));
         } finally {
             repo.delete();
         }
@@ -225,25 +225,25 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .wiki(false)
                 .done();
 
-        assertTrue(updated.isAllowMergeCommit());
-        assertFalse(updated.isAllowRebaseMerge());
-        assertFalse(updated.isAllowSquashMerge());
-        assertTrue(updated.isDeleteBranchOnMerge());
-        assertTrue(updated.isPrivate());
-        assertFalse(updated.hasDownloads());
-        assertFalse(updated.hasIssues());
-        assertFalse(updated.hasProjects());
-        assertFalse(updated.hasWiki());
+        assertThat(updated.isAllowMergeCommit(), is(true));
+        assertThat(updated.isAllowRebaseMerge(), is(false));
+        assertThat(updated.isAllowSquashMerge(), is(false));
+        assertThat(updated.isDeleteBranchOnMerge(), is(true));
+        assertThat(updated.isPrivate(), is(true));
+        assertThat(updated.hasDownloads(), is(false));
+        assertThat(updated.hasIssues(), is(false));
+        assertThat(updated.hasProjects(), is(false));
+        assertThat(updated.hasWiki(), is(false));
 
-        assertEquals(homepage, updated.getHomepage());
-        assertEquals(description, updated.getDescription());
+        assertThat(updated.getHomepage(), equalTo(homepage));
+        assertThat(updated.getDescription(), equalTo(description));
 
         // test the other merge option and making the repo public again
         GHRepository redux = updated.update().allowMergeCommit(false).allowRebaseMerge(true).private_(false).done();
 
-        assertFalse(redux.isAllowMergeCommit());
-        assertTrue(redux.isAllowRebaseMerge());
-        assertFalse(redux.isPrivate());
+        assertThat(redux.isAllowMergeCommit(), is(false));
+        assertThat(redux.isAllowRebaseMerge(), is(true));
+        assertThat(redux.isPrivate(), is(false));
 
         String updatedDescription = "updated using set()";
         redux = redux.set().description(updatedDescription);
@@ -256,23 +256,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         final String repoName = "test-repo-visibility";
         final GHRepository repo = getTempRepository(repoName);
-        assertEquals(Visibility.PUBLIC, repo.getVisibility());
+        assertThat(repo.getVisibility(), equalTo(Visibility.PUBLIC));
 
         repo.setVisibility(Visibility.INTERNAL);
-        assertEquals(Visibility.INTERNAL,
-                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+        assertThat(gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility(),
+                equalTo(Visibility.INTERNAL));
 
         repo.setVisibility(Visibility.PRIVATE);
-        assertEquals(Visibility.PRIVATE,
-                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+        assertThat(gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility(),
+                equalTo(Visibility.PRIVATE));
 
         repo.setVisibility(Visibility.PUBLIC);
-        assertEquals(Visibility.PUBLIC,
-                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+        assertThat(gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility(),
+                equalTo(Visibility.PUBLIC));
 
         // deliberately bogus response in snapshot
-        assertEquals(Visibility.UNKNOWN,
-                gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility());
+        assertThat(gitHub.getRepository(repo.getOwnerName() + "/" + repo.getName()).getVisibility(),
+                equalTo(Visibility.UNKNOWN));
     }
 
     @Test
@@ -283,7 +283,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         for (GHRepository.Contributor c : r.listContributors()) {
             if (c.getLogin().equals("kohsuke")) {
-                assertTrue(c.getContributions() > 0);
+                assertThat(c.getContributions() > 0, is(true));
                 kohsuke = true;
             }
             if (i++ > 5) {
@@ -291,22 +291,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             }
         }
 
-        assertTrue(kohsuke);
+        assertThat(kohsuke, is(true));
     }
 
     @Test
     public void getPermission() throws Exception {
         kohsuke();
         GHRepository r = gitHub.getRepository("hub4j-test-org/test-permission");
-        assertEquals(GHPermissionType.ADMIN, r.getPermission("kohsuke"));
-        assertEquals(GHPermissionType.READ, r.getPermission("dude"));
+        assertThat(r.getPermission("kohsuke"), equalTo(GHPermissionType.ADMIN));
+        assertThat(r.getPermission("dude"), equalTo(GHPermissionType.READ));
         r = gitHub.getOrganization("apache").getRepository("groovy");
         try {
             r.getPermission("jglick");
             fail();
         } catch (HttpException x) {
             // x.printStackTrace(); // good
-            assertEquals(403, x.getResponseCode());
+            assertThat(x.getResponseCode(), equalTo(403));
         }
 
         if (false) {
@@ -326,7 +326,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         try {
             // add the repository that have latest release
             GHRelease release = gitHub.getRepository("kamontat/CheckIDNumber").getLatestRelease();
-            assertEquals("v3.0", release.getTagName());
+            assertThat(release.getTagName(), equalTo("v3.0"));
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -347,7 +347,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         GHUser colabUser = collabs.byLogin("jimmysombrero");
 
-        assertEquals(colabUser.getName(), user.getName());
+        assertThat(user.getName(), equalTo(colabUser.getName()));
     }
 
     @Test
@@ -355,7 +355,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         try {
             // add the repository that `NOT` have latest release
             GHRelease release = gitHub.getRepository("kamontat/Java8Example").getLatestRelease();
-            assertNull(release);
+            assertThat(release, nullValue());
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -365,32 +365,32 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listReleases() throws IOException {
         PagedIterable<GHRelease> releases = gitHub.getOrganization("github").getRepository("hub").listReleases();
-        assertTrue(releases.iterator().hasNext());
+        assertThat(releases.iterator().hasNext(), is(true));
     }
 
     @Test
     public void getReleaseExists() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(6839710);
-        assertEquals("v2.3.0-pre10", release.getTagName());
+        assertThat(release.getTagName(), equalTo("v2.3.0-pre10"));
     }
 
     @Test
     public void getReleaseDoesNotExist() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(Long.MAX_VALUE);
-        assertNull(release);
+        assertThat(release, nullValue());
     }
 
     @Test
     public void getReleaseByTagNameExists() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getReleaseByTagName("v2.3.0-pre10");
-        assertNotNull(release);
-        assertEquals("v2.3.0-pre10", release.getTagName());
+        assertThat(release, notNullValue());
+        assertThat(release.getTagName(), equalTo("v2.3.0-pre10"));
     }
 
     @Test
     public void getReleaseByTagNameDoesNotExist() throws IOException {
         GHRelease release = getRepository().getReleaseByTagName("foo-bar-baz");
-        assertNull(release);
+        assertThat(release, nullValue());
     }
 
     @Test
@@ -399,7 +399,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String mainLanguage = r.getLanguage();
         assertThat(mainLanguage, equalTo("Java"));
         Map<String, Long> languages = r.listLanguages();
-        assertTrue(languages.containsKey(mainLanguage));
+        assertThat(languages.containsKey(mainLanguage), is(true));
         assertThat(languages.get("Java"), greaterThan(100000L));
     }
 
@@ -440,9 +440,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .list();
         GHRepository u = r.iterator().next();
         // System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertEquals("Assembly", u.getLanguage());
-        assertTrue(r.getTotalCount() > 0);
+        assertThat(u.getId(), notNullValue());
+        assertThat(u.getLanguage(), equalTo("Assembly"));
+        assertThat(r.getTotalCount() > 0, is(true));
     }
 
     @Test // issue #162
@@ -454,23 +454,24 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 String content1 = content.getContent();
                 String content2 = r.getFileContent(content.getPath(), "gh-pages").getContent();
                 // System.out.println(content.getPath());
-                assertEquals(content1, content2);
+                assertThat(content2, equalTo(content1));
             }
         }
     }
 
     @Test
     public void markDown() throws Exception {
-        assertEquals("<p><strong>Test日本語</strong></p>", IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim());
+        assertThat(IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim(),
+                equalTo("<p><strong>Test日本語</strong></p>"));
 
         String actual = IOUtils.toString(
                 gitHub.getRepository("hub4j/github-api").renderMarkdown("@kohsuke to fix issue #1", MarkdownMode.GFM));
         // System.out.println(actual);
-        assertTrue(actual.contains("href=\"https://github.com/kohsuke\""));
-        assertTrue(actual.contains("href=\"https://github.com/hub4j/github-api/pull/1\""));
-        assertTrue(actual.contains("class=\"user-mention\""));
-        assertTrue(actual.contains("class=\"issue-link "));
-        assertTrue(actual.contains("to fix issue"));
+        assertThat(actual.contains("href=\"https://github.com/kohsuke\""), is(true));
+        assertThat(actual.contains("href=\"https://github.com/hub4j/github-api/pull/1\""), is(true));
+        assertThat(actual.contains("class=\"user-mention\""), is(true));
+        assertThat(actual.contains("class=\"issue-link "), is(true));
+        assertThat(actual.contains("to fix issue"), is(true));
     }
 
     @Test
@@ -486,9 +487,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         r.allowRebaseMerge(false);
 
         r = gitHub.getRepository(r.getFullName());
-        assertFalse(r.isAllowMergeCommit());
-        assertFalse(r.isAllowRebaseMerge());
-        assertTrue(r.isAllowSquashMerge());
+        assertThat(r.isAllowMergeCommit(), is(false));
+        assertThat(r.isAllowRebaseMerge(), is(false));
+        assertThat(r.isAllowSquashMerge(), is(true));
 
         // flip the last value
         r.allowMergeCommit(true);
@@ -496,15 +497,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         r.allowSquashMerge(false);
 
         r = gitHub.getRepository(r.getFullName());
-        assertTrue(r.isAllowMergeCommit());
-        assertTrue(r.isAllowRebaseMerge());
-        assertFalse(r.isAllowSquashMerge());
+        assertThat(r.isAllowMergeCommit(), is(true));
+        assertThat(r.isAllowRebaseMerge(), is(true));
+        assertThat(r.isAllowSquashMerge(), is(false));
     }
 
     @Test
     public void getDeleteBranchOnMerge() throws IOException {
         GHRepository r = getRepository();
-        assertNotNull(r.isDeleteBranchOnMerge());
+        assertThat(r.isDeleteBranchOnMerge(), notNullValue());
     }
 
     @Test
@@ -515,13 +516,13 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         r.deleteBranchOnMerge(true);
 
         r = gitHub.getRepository(r.getFullName());
-        assertTrue(r.isDeleteBranchOnMerge());
+        assertThat(r.isDeleteBranchOnMerge(), is(true));
 
         // flip the last value
         r.deleteBranchOnMerge(false);
 
         r = gitHub.getRepository(r.getFullName());
-        assertFalse(r.isDeleteBranchOnMerge());
+        assertThat(r.isDeleteBranchOnMerge(), is(false));
     }
 
     @Test
@@ -556,7 +557,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         topics = new ArrayList<>();
         repo.setTopics(topics);
-        assertTrue("Topics can be set to empty", repo.listTopics().isEmpty());
+        assertThat("Topics can be set to empty", repo.listTopics().isEmpty(), is(true));
     }
 
     @Test
@@ -733,7 +734,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         GHRepository repo = getTempRepository();
         int watchersCount = repo.getWatchersCount();
-        assertEquals(10, watchersCount);
+        assertThat(watchersCount, equalTo(10));
     }
 
     @Test
@@ -741,7 +742,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         GHRepository repo = getTempRepository();
         int stargazersCount = repo.getStargazersCount();
-        assertEquals(10, stargazersCount);
+        assertThat(stargazersCount, equalTo(10));
     }
 
     @Test

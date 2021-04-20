@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
 /**
@@ -69,19 +72,19 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
         GHUser u = r.iterator().next();
         // System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertTrue(r.getTotalCount() > 0);
+        assertThat(u.getId(), notNullValue());
+        assertThat(r.getTotalCount() > 0, is(true));
     }
 
     @Test
     public void testListAllRepositories() throws Exception {
         Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
         for (int i = 0; i < 115; i++) {
-            assertTrue(itr.hasNext());
+            assertThat(itr.hasNext(), is(true));
             GHRepository r = itr.next();
             // System.out.println(r.getFullName());
-            assertNotNull(r.getUrl());
-            assertNotEquals(0L, r.getId());
+            assertThat(r.getUrl(), notNullValue());
+            assertThat(r.getId(), not(0L));
         }
 
         // ensure the iterator throws as expected
@@ -106,10 +109,10 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         GHContent c = r.iterator().next();
 
         // System.out.println(c.getName());
-        assertNotNull(c.getDownloadUrl());
-        assertNotNull(c.getOwner());
-        assertEquals("jquery/jquery", c.getOwner().getFullName());
-        assertTrue(r.getTotalCount() > 5);
+        assertThat(c.getDownloadUrl(), notNullValue());
+        assertThat(c.getOwner(), notNullValue());
+        assertThat(c.getOwner().getFullName(), equalTo("jquery/jquery"));
+        assertThat(r.getTotalCount() > 5, is(true));
 
         PagedSearchIterable<GHContent> r2 = gitHub.searchContent()
                 .q("addClass")
@@ -161,20 +164,20 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
 
         for (GHAuthorization auth : list) {
-            assertNotNull(auth.getAppName());
+            assertThat(auth.getAppName(), notNullValue());
         }
     }
 
     @Test
     public void getMeta() throws IOException {
         GHMeta meta = gitHub.getMeta();
-        assertTrue(meta.isVerifiablePasswordAuthentication());
-        assertEquals(19, meta.getApi().size());
-        assertEquals(19, meta.getGit().size());
-        assertEquals(3, meta.getHooks().size());
-        assertEquals(6, meta.getImporter().size());
-        assertEquals(6, meta.getPages().size());
-        assertEquals(19, meta.getWeb().size());
+        assertThat(meta.isVerifiablePasswordAuthentication(), is(true));
+        assertThat(meta.getApi().size(), equalTo(19));
+        assertThat(meta.getGit().size(), equalTo(19));
+        assertThat(meta.getHooks().size(), equalTo(3));
+        assertThat(meta.getImporter().size(), equalTo(6));
+        assertThat(meta.getPages().size(), equalTo(6));
+        assertThat(meta.getWeb().size(), equalTo(19));
 
         // Also test examples here
         Class[] examples = new Class[]{ ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
@@ -185,58 +188,58 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             ReadOnlyObjects.GHMetaExample metaExample = gitHub.createRequest()
                     .withUrlPath("/meta")
                     .fetch((Class<ReadOnlyObjects.GHMetaExample>) metaClass);
-            assertTrue(metaExample.isVerifiablePasswordAuthentication());
-            assertEquals(19, metaExample.getApi().size());
-            assertEquals(19, metaExample.getGit().size());
-            assertEquals(3, metaExample.getHooks().size());
-            assertEquals(6, metaExample.getImporter().size());
-            assertEquals(6, metaExample.getPages().size());
-            assertEquals(19, metaExample.getWeb().size());
+            assertThat(metaExample.isVerifiablePasswordAuthentication(), is(true));
+            assertThat(metaExample.getApi().size(), equalTo(19));
+            assertThat(metaExample.getGit().size(), equalTo(19));
+            assertThat(metaExample.getHooks().size(), equalTo(3));
+            assertThat(metaExample.getImporter().size(), equalTo(6));
+            assertThat(metaExample.getPages().size(), equalTo(6));
+            assertThat(metaExample.getWeb().size(), equalTo(19));
         }
     }
 
     @Test
     public void getMyMarketplacePurchases() throws IOException {
         List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().toList();
-        assertEquals(2, userPurchases.size());
+        assertThat(userPurchases.size(), equalTo(2));
 
         for (GHMarketplaceUserPurchase userPurchase : userPurchases) {
-            assertFalse(userPurchase.isOnFreeTrial());
-            assertNull(userPurchase.getFreeTrialEndsOn());
-            assertEquals("monthly", userPurchase.getBillingCycle());
+            assertThat(userPurchase.isOnFreeTrial(), is(false));
+            assertThat(userPurchase.getFreeTrialEndsOn(), nullValue());
+            assertThat(userPurchase.getBillingCycle(), equalTo("monthly"));
 
             GHMarketplacePlan plan = userPurchase.getPlan();
             // GHMarketplacePlan - Non-nullable fields
-            assertNotNull(plan.getUrl());
-            assertNotNull(plan.getAccountsUrl());
-            assertNotNull(plan.getName());
-            assertNotNull(plan.getDescription());
-            assertNotNull(plan.getPriceModel());
-            assertNotNull(plan.getState());
+            assertThat(plan.getUrl(), notNullValue());
+            assertThat(plan.getAccountsUrl(), notNullValue());
+            assertThat(plan.getName(), notNullValue());
+            assertThat(plan.getDescription(), notNullValue());
+            assertThat(plan.getPriceModel(), notNullValue());
+            assertThat(plan.getState(), notNullValue());
 
             // GHMarketplacePlan - primitive fields
-            assertNotEquals(0L, plan.getId());
-            assertNotEquals(0L, plan.getNumber());
-            assertTrue(plan.getMonthlyPriceInCents() >= 0);
+            assertThat(plan.getId(), not(0L));
+            assertThat(plan.getNumber(), not(0L));
+            assertThat(plan.getMonthlyPriceInCents() >= 0, is(true));
 
             // GHMarketplacePlan - list
-            assertEquals(2, plan.getBullets().size());
+            assertThat(plan.getBullets().size(), equalTo(2));
 
             GHMarketplaceAccount account = userPurchase.getAccount();
             // GHMarketplaceAccount - Non-nullable fields
-            assertNotNull(account.getLogin());
-            assertNotNull(account.getUrl());
-            assertNotNull(account.getType());
+            assertThat(account.getLogin(), notNullValue());
+            assertThat(account.getUrl(), notNullValue());
+            assertThat(account.getType(), notNullValue());
 
             // GHMarketplaceAccount - primitive fields
-            assertNotEquals(0L, account.getId());
+            assertThat(account.getId(), not(0L));
 
             /* logical combination tests */
             // Rationale: organization_billing_email is only set when account type is ORGANIZATION.
             if (account.getType() == ORGANIZATION)
-                assertNotNull(account.getOrganizationBillingEmail());
+                assertThat(account.getOrganizationBillingEmail(), notNullValue());
             else
-                assertNull(account.getOrganizationBillingEmail());
+                assertThat(account.getOrganizationBillingEmail(), nullValue());
         }
     }
 

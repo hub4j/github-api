@@ -12,6 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static org.hamcrest.Matchers.equalTo;
 
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
@@ -42,35 +43,36 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     public void testBasicInformation() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
-        assertEquals("test-workflow", workflow.getName());
-        assertEquals(REPO_NAME, workflow.getRepository().getFullName());
-        assertEquals(".github/workflows/test-workflow.yml", workflow.getPath());
-        assertEquals("active", workflow.getState());
-        assertEquals("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859", workflow.getUrl().getPath());
-        assertEquals("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml",
-                workflow.getHtmlUrl().getPath());
-        assertEquals("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg",
-                workflow.getBadgeUrl().getPath());
+        assertThat(workflow.getName(), equalTo("test-workflow"));
+        assertThat(workflow.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(workflow.getPath(), equalTo(".github/workflows/test-workflow.yml"));
+        assertThat(workflow.getState(), equalTo("active"));
+        assertThat(workflow.getUrl().getPath(),
+                equalTo("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859"));
+        assertThat(workflow.getHtmlUrl().getPath(),
+                equalTo("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml"));
+        assertThat(workflow.getBadgeUrl().getPath(),
+                equalTo("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg"));
 
         GHWorkflow workflowById = repo.getWorkflow(workflow.getId());
-        assertEquals(workflow.getNodeId(), workflowById.getNodeId());
+        assertThat(workflowById.getNodeId(), equalTo(workflow.getNodeId()));
     }
 
     @Test
     public void testDisableEnable() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
-        assertEquals("active", workflow.getState());
+        assertThat(workflow.getState(), equalTo("active"));
 
         workflow.disable();
 
         workflow = repo.getWorkflow("test-workflow.yml");
-        assertEquals("disabled_manually", workflow.getState());
+        assertThat(workflow.getState(), equalTo("disabled_manually"));
 
         workflow.enable();
 
         workflow = repo.getWorkflow("test-workflow.yml");
-        assertEquals("active", workflow.getState());
+        assertThat(workflow.getState(), equalTo("active"));
     }
 
     @Test
@@ -94,15 +96,16 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         List<GHWorkflow> workflows = repo.listWorkflows().toList();
 
         GHWorkflow workflow = workflows.get(0);
-        assertEquals(6817859L, workflow.getId());
-        assertEquals("MDg6V29ya2Zsb3c2ODE3ODU5", workflow.getNodeId());
-        assertEquals("test-workflow", workflow.getName());
-        assertEquals(".github/workflows/test-workflow.yml", workflow.getPath());
-        assertEquals("active", workflow.getState());
-        assertEquals("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859", workflow.getUrl().getPath());
-        assertEquals("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml",
-                workflow.getHtmlUrl().getPath());
-        assertEquals("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg",
-                workflow.getBadgeUrl().getPath());
+        assertThat(workflow.getId(), equalTo(6817859L));
+        assertThat(workflow.getNodeId(), equalTo("MDg6V29ya2Zsb3c2ODE3ODU5"));
+        assertThat(workflow.getName(), equalTo("test-workflow"));
+        assertThat(workflow.getPath(), equalTo(".github/workflows/test-workflow.yml"));
+        assertThat(workflow.getState(), equalTo("active"));
+        assertThat(workflow.getUrl().getPath(),
+                equalTo("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859"));
+        assertThat(workflow.getHtmlUrl().getPath(),
+                equalTo("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml"));
+        assertThat(workflow.getBadgeUrl().getPath(),
+                equalTo("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg"));
     }
 }

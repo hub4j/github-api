@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;
 
@@ -11,6 +12,8 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class LifecycleTest extends AbstractGitHubWireMockTest {
@@ -22,7 +25,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
         // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         GHRepository repository = getTempRepository();
-        assertTrue(repository.getReleases().isEmpty());
+        assertThat(repository.getReleases().isEmpty(), Matchers.is(true));
 
         GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
         GHIssue issue = repository.createIssue("Test Issue")
@@ -45,22 +48,22 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     private void updateAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.setLabel("test label");
-        assertEquals("test label", release.getAssets().get(0).getLabel());
+        assertThat(release.getAssets().get(0).getLabel(), equalTo("test label"));
     }
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertEquals(0, release.getAssets().size());
+        assertThat(release.getAssets().size(), equalTo(0));
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
-        assertNotNull(asset);
+        assertThat(asset, notNullValue());
         List<GHAsset> cachedAssets = release.assets();
-        assertEquals(0, cachedAssets.size());
+        assertThat(cachedAssets.size(), equalTo(0));
         List<GHAsset> assets = release.getAssets();
-        assertEquals(1, assets.size());
-        assertEquals("LICENSE.txt", assets.get(0).getName());
+        assertThat(assets.size(), equalTo(1));
+        assertThat(assets.get(0).getName(), equalTo("LICENSE.txt"));
         assertThat(assets.get(0).getSize(), equalTo(1104L));
         assertThat(assets.get(0).getContentType(), equalTo("application/text"));
         assertThat(assets.get(0).getState(), equalTo("uploaded"));
@@ -78,9 +81,9 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
                 .body("How exciting!  To be able to programmatically create releases is a dream come true!")
                 .create();
         List<GHRelease> releases = repository.getReleases();
-        assertEquals(1, releases.size());
+        assertThat(releases.size(), equalTo(1));
         GHRelease release = releases.get(0);
-        assertEquals("Test Release", release.getName());
+        assertThat(release.getName(), equalTo("Test Release"));
         assertThat(release.getBody(), startsWith("How exciting!"));
         assertThat(release.getOwner(), sameInstance(repository));
         assertThat(release.getZipballUrl(),

@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 /**
  * Hook event type.
  *
@@ -84,5 +86,51 @@ public enum GHEvent {
         if (this == ALL)
             return "*";
         return name().toLowerCase(Locale.ENGLISH);
+    }
+
+    /**
+     * Representation of GitHub Event Type
+     *
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
+     *      types</a>
+     */
+    public enum GitHubEventType {
+        CommitCommentEvent(COMMIT_COMMENT),
+        CreateEvent(CREATE),
+        DeleteEvent(DELETE),
+        ForkEvent(FORK),
+        GollumEvent(GOLLUM),
+        IssueCommentEvent(ISSUE_COMMENT),
+        IssuesEvent(ISSUES),
+        MemberEvent(MEMBER),
+        PublicEvent(PUBLIC),
+        PullRequestEvent(PULL_REQUEST),
+        PullRequestReviewEvent(PULL_REQUEST_REVIEW),
+        PullRequestReviewCommentEvent(PULL_REQUEST_REVIEW_COMMENT),
+        PushEvent(PUSH),
+        ReleaseEvent(RELEASE),
+        WatchEvent(WATCH);
+
+        private final GHEvent event;
+        GitHubEventType(GHEvent event) {
+            this.event = event;
+        }
+
+        /**
+         * Required due to different naming conventions between different GitHub event names for Webhook events and
+         * GitHub events
+         *
+         * @param event
+         *            the github event as a string to convert to Event enum
+         * @return GHEvent
+         */
+        public static GHEvent transformToGHEvent(@Nonnull String event) {
+            try {
+                GitHubEventType gitHubEventType = GitHubEventType.valueOf(event);
+                return gitHubEventType.event;
+            } catch (IllegalArgumentException ignored) {
+                return UNKNOWN;
+            }
+        }
     }
 }

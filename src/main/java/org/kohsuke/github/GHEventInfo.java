@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.GHEvent.GitHubEventType;
 
 import java.io.IOException;
 import java.util.Date;
@@ -46,14 +47,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @return the type
      */
     public GHEvent getType() {
-        String t = type;
-        if (t.endsWith("Event"))
-            t = t.substring(0, t.length() - 5);
-        for (GHEvent e : GHEvent.values()) {
-            if (e.name().replace("_", "").equalsIgnoreCase(t))
-                return e;
-        }
-        return GHEvent.UNKNOWN;
+        return GitHubEventType.transformToGHEvent(type);
     }
 
     GHEventInfo wrapUp(GitHub root) {

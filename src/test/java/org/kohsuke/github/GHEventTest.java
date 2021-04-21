@@ -26,6 +26,7 @@ public class GHEventTest {
 
     @Test
     public void regressionTest() {
+        assertThat(GitHubEventType.transformToGHEvent("NewlyAddedOrBogusEvent"), is(GHEvent.UNKNOWN));
         for (GitHubEventType gitHubEventType : GitHubEventType.values()) {
             assertThat(GitHubEventType.transformToGHEvent(gitHubEventType.name()),
                     is(oldTransformationFunction(gitHubEventType.name())));

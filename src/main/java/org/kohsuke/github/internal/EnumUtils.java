@@ -30,8 +30,26 @@ public final class EnumUtils {
         if (value == null) {
             return null;
         }
+        return getEnumOrDefault(enumClass, value.toUpperCase(Locale.ROOT), defaultEnum);
+    }
+
+    /**
+     * Returns an enum value matching the value if found, {@code defaultEnum} if the value is null or cannot be matched
+     * to a value of the enum.
+     *
+     * @param <E>
+     *            the type of the enum
+     * @param enumClass
+     *            the type of the enum
+     * @param value
+     *            the value to interpret
+     * @param defaultEnum
+     *            the default enum value if the value doesn't match one of the enum value
+     * @return an enum value
+     */
+    public static <E extends Enum<E>> E getEnumOrDefault(Class<E> enumClass, String value, E defaultEnum) {
         try {
-            return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));
+            return Enum.valueOf(enumClass, value);
         } catch (IllegalArgumentException e) {
             LOGGER.warning("Unknown value " + value + " for enum class " + enumClass.getName() + ", defaulting to "
                     + defaultEnum.name());

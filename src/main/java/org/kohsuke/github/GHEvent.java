@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.EnumUtils;
+
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -94,7 +96,7 @@ public enum GHEvent {
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
      *      types</a>
      */
-    public enum GitHubEventType {
+    enum GitHubEventType {
         CommitCommentEvent(COMMIT_COMMENT),
         CreateEvent(CREATE),
         DeleteEvent(DELETE),
@@ -109,7 +111,8 @@ public enum GHEvent {
         PullRequestReviewCommentEvent(PULL_REQUEST_REVIEW_COMMENT),
         PushEvent(PUSH),
         ReleaseEvent(RELEASE),
-        WatchEvent(WATCH);
+        WatchEvent(WATCH),
+        UnknownEvent(UNKNOWN);
 
         private final GHEvent event;
         GitHubEventType(GHEvent event) {
@@ -124,13 +127,8 @@ public enum GHEvent {
          *            the github event as a string to convert to Event enum
          * @return GHEvent
          */
-        public static GHEvent transformToGHEvent(@Nonnull String event) {
-            try {
-                GitHubEventType gitHubEventType = GitHubEventType.valueOf(event);
-                return gitHubEventType.event;
-            } catch (IllegalArgumentException ignored) {
-                return UNKNOWN;
-            }
+        static GHEvent transformToGHEvent(@Nonnull String event) {
+            return EnumUtils.getEnumOrDefault(GitHubEventType.class, event, UnknownEvent).event;
         }
     }
 }

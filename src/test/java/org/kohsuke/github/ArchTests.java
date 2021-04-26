@@ -3,17 +3,22 @@ package org.kohsuke.github;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.ArchRule;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class ArchTests {
 
@@ -22,7 +27,9 @@ public class ArchTests {
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
-    private static final JavaClasses tesetClassFiles = new ClassFileImporter()
+    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
+
+    private static final JavaClasses testClassFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.OnlyIncludeTests())
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
@@ -40,7 +47,7 @@ public class ArchTests {
 
     @BeforeClass
     public static void beforeClass() {
-        assertTrue(classFiles.size() > 0);
+        assertThat(classFiles.size(), greaterThan(0));
     }
 
     @Test
@@ -113,14 +120,15 @@ public class ArchTests {
     @Test
     public void testRequireUseOfAssertThat() {
 
-        String reason = "This project uses `assertThat(...)` instead of other assert*() methods.";
+        final String reason = "This project uses `assertThat(...)` instead of other `assert*()` methods.";
 
-        ArchRule onlyAssertThatRule = methods().that()
-                .haveNameContaining("assert")
-                .should()
-                .haveName("assertThat")
+        final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
+                .and(DescribedPredicate.not(name("assertThat")));
+
+        final ArchRule onlyAssertThatRule = classes()
+                .should(not(callMethodWhere(target(assertMethodOtherThanAssertThat))))
                 .because(reason);
 
-        onlyAssertThatRule.check(tesetClassFiles);
+        onlyAssertThatRule.check(testClassFiles);
     }
 }

@@ -2,8 +2,11 @@ package org.kohsuke.github;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
+import com.tngtech.archunit.core.domain.JavaCall;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.properties.HasName;
+import com.tngtech.archunit.core.domain.properties.HasOwner;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.ArchRule;
@@ -11,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
@@ -131,4 +135,49 @@ public class ArchTests {
 
         onlyAssertThatRule.check(testClassFiles);
     }
+
+    @Test
+    public void testRequireUseOfOnlySpecificApacheCommons() {
+
+        final DescribedPredicate<JavaCall<?>> approvedStringUtilsMethods = target(
+                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.StringUtils")))
+                        .and(target(name("prependIfMissing").or(name("isBlank"))
+                                .or(name("isEmpty"))
+                                .or(name("equals"))
+                                .or(name("capitalize"))
+                                .or(name("join"))
+                                .or(name("defaultString"))));
+        final DescribedPredicate<JavaCall<?>> approvedToStringBuilderMethods = target(
+                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.builder.ToStringBuilder")))
+                        .and(target(name("toString").or(name("append"))
+                                .or(name("isEmpty"))
+                                .or(name("equals"))
+                                .or(name("capitalize"))));
+        final DescribedPredicate<JavaCall<?>> approvedToStringStyleMethods = target(
+                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.builder.ToStringStyle")))
+                        .and(target(name("append")));
+        final DescribedPredicate<JavaCall<?>> approvedReflectionStringBuilderMethods = target(HasOwner.Predicates.With
+                .<JavaClass>owner(name("org.apache.commons.lang3.builder.ReflectionToStringBuilder")))
+                        .and(target(name("accept")));
+
+        final DescribedPredicate<JavaCall<?>> approvedIOUtilsMethods = target(
+                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.io.IOUtils")))
+                        .and(target(name("closeQuietly").or(name("toString")).or(name("toByteArray"))));
+
+        final DescribedPredicate<JavaCall<?>> approvedApacheCommonsMethods = approvedStringUtilsMethods
+                .or(approvedToStringBuilderMethods)
+                .or(approvedToStringStyleMethods)
+                .or(approvedReflectionStringBuilderMethods)
+                .or(approvedIOUtilsMethods);
+        
+        final ArchRule onlyApprovedApacheCommonsLang3Methods = classes()
+                .should(not(callMethodWhere(
+                        target(HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage("org.apache.commons..")))
+                                .and(DescribedPredicate.not(approvedApacheCommonsMethods)))))
+                .because(
+                        "Only commons methods that have been manually verified to be compatible with v2.4 should be used.");
+
+        onlyApprovedApacheCommonsLang3Methods.check(classFiles);
+    }
+
 }

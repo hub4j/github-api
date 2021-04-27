@@ -175,7 +175,7 @@ public class ArchTests {
                         target(HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage("org.apache.commons..")))
                                 .and(DescribedPredicate.not(approvedApacheCommonsMethods)))))
                 .because(
-                        "Only commons methods that have been manually verified to be compatible with v2.4 should be used.");
+                        "Only commons methods that have been manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier should be used.");
 
         onlyApprovedApacheCommonsLang3Methods.check(classFiles);
     }

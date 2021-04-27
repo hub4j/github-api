@@ -1,22 +1,36 @@
 package org.kohsuke.github;
 
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.JavaAnnotation;
-import com.tngtech.archunit.core.domain.JavaCall;
-import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.domain.properties.HasOwner;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.Closeable;
+import java.io.InputStream;
+import java.io.Reader;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
+import static com.tngtech.archunit.core.domain.JavaClass.namesOf;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
+import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
+import static com.tngtech.archunit.core.domain.properties.HasParameterTypes.Predicates.rawParameterTypes;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
@@ -139,45 +153,88 @@ public class ArchTests {
     @Test
     public void testRequireUseOfOnlySpecificApacheCommons() {
 
-        final DescribedPredicate<JavaCall<?>> approvedStringUtilsMethods = target(
-                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.StringUtils")))
-                        .and(target(name("prependIfMissing").or(name("isBlank"))
-                                .or(name("isEmpty"))
-                                .or(name("equals"))
-                                .or(name("capitalize"))
-                                .or(name("join"))
-                                .or(name("defaultString"))));
-        final DescribedPredicate<JavaCall<?>> approvedToStringBuilderMethods = target(
-                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.builder.ToStringBuilder")))
-                        .and(target(name("toString").or(name("append"))
-                                .or(name("isEmpty"))
-                                .or(name("equals"))
-                                .or(name("capitalize"))));
-        final DescribedPredicate<JavaCall<?>> approvedToStringStyleMethods = target(
-                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.lang3.builder.ToStringStyle")))
-                        .and(target(name("append")));
-        final DescribedPredicate<JavaCall<?>> approvedReflectionStringBuilderMethods = target(HasOwner.Predicates.With
-                .<JavaClass>owner(name("org.apache.commons.lang3.builder.ReflectionToStringBuilder")))
-                        .and(target(name("accept")));
-
-        final DescribedPredicate<JavaCall<?>> approvedIOUtilsMethods = target(
-                HasOwner.Predicates.With.<JavaClass>owner(name("org.apache.commons.io.IOUtils")))
-                        .and(target(name("closeQuietly").or(name("toString")).or(name("toByteArray"))));
-
-        final DescribedPredicate<JavaCall<?>> approvedApacheCommonsMethods = approvedStringUtilsMethods
-                .or(approvedToStringBuilderMethods)
-                .or(approvedToStringStyleMethods)
-                .or(approvedReflectionStringBuilderMethods)
-                .or(approvedIOUtilsMethods);
-
         final ArchRule onlyApprovedApacheCommonsLang3Methods = classes()
-                .should(not(callMethodWhere(
-                        target(HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage("org.apache.commons..")))
-                                .and(DescribedPredicate.not(approvedApacheCommonsMethods)))))
+                .should(notCallMethodsInPackageUnless("org.apache.commons..",
+                        // unless it is one of these methods
+                        targetMethodIs(StringUtils.class, "capitalize", String.class),
+                        targetMethodIs(StringUtils.class, "defaultString", String.class, String.class),
+                        targetMethodIs(StringUtils.class, "equals", CharSequence.class, CharSequence.class),
+                        targetMethodIs(StringUtils.class, "isBlank", CharSequence.class),
+                        targetMethodIs(StringUtils.class, "isEmpty", CharSequence.class),
+                        targetMethodIs(StringUtils.class, "join", Iterable.class, String.class),
+                        targetMethodIs(StringUtils.class,
+                                "prependIfMissing",
+                                String.class,
+                                CharSequence.class,
+                                CharSequence[].class),
+                        targetMethodIs(ToStringBuilder.class, "toString"),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, Object.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, long.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, int.class),
+                        targetMethodIs(ToStringBuilder.class, "isEmpty"),
+                        targetMethodIs(ToStringBuilder.class, "equals"),
+                        targetMethodIs(ToStringBuilder.class, "capitalize"),
+                        targetMethodIs(ToStringStyle.class,
+                                "append",
+                                StringBuffer.class,
+                                String.class,
+                                Object.class,
+                                Boolean.class),
+                        targetMethodIs(ReflectionToStringBuilder.class, "accept", Field.class),
+                        targetMethodIs(IOUtils.class, "closeQuietly", InputStream.class),
+                        targetMethodIs(IOUtils.class, "closeQuietly", Closeable.class),
+                        targetMethodIs(IOUtils.class, "toString", InputStream.class, Charset.class),
+                        targetMethodIs(IOUtils.class, "toString", Reader.class),
+                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class)))
                 .because(
-                        "Only commons methods that have been manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier should be used.");
+                        "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier should be used.");
 
         onlyApprovedApacheCommonsLang3Methods.check(classFiles);
     }
 
+    public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
+            final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
+        DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
+                HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage(packageIdentifier)));
+
+        if (unlessPredicates.length > 0) {
+            DescribedPredicate<JavaCall<?>> allowed = unlessPredicates[0];
+            for (int x = 1; x < unlessPredicates.length; x++) {
+                allowed = allowed.or(unlessPredicates[x]);
+            }
+            restrictedPackageCalls = unless(restrictedPackageCalls, allowed);
+        }
+        return not(callMethodWhere(restrictedPackageCalls));
+    }
+
+    public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
+            String methodName,
+            Class<?>... parameterTypes) {
+        return JavaCall.Predicates.target(owner(type(owner)))
+                .and(JavaCall.Predicates.target(name(methodName)))
+                .and(JavaCall.Predicates.target(rawParameterTypes(parameterTypes)))
+                .as("method is %s",
+                        Formatters.formatMethodSimple(owner.getSimpleName(), methodName, namesOf(parameterTypes)));
+    }
+
+    public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,
+            DescribedPredicate<? super T> second) {
+        return new UnlessPredicate(first, second);
+    }
+
+    private static class UnlessPredicate<T> extends DescribedPredicate<T> {
+        private final DescribedPredicate<T> current;
+        private final DescribedPredicate<? super T> other;
+
+        UnlessPredicate(DescribedPredicate<T> current, DescribedPredicate<? super T> other) {
+            super(current.getDescription() + " unless " + other.getDescription());
+            this.current = checkNotNull(current);
+            this.other = checkNotNull(other);
+        }
+
+        @Override
+        public boolean apply(T input) {
+            return current.apply(input) && !other.apply(input);
+        }
+    }
 }

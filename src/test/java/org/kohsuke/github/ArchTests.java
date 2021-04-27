@@ -169,7 +169,7 @@ public class ArchTests {
                 .or(approvedToStringStyleMethods)
                 .or(approvedReflectionStringBuilderMethods)
                 .or(approvedIOUtilsMethods);
-        
+
         final ArchRule onlyApprovedApacheCommonsLang3Methods = classes()
                 .should(not(callMethodWhere(
                         target(HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage("org.apache.commons..")))

@@ -18,7 +18,7 @@ public class EnumUtilsTest {
                 equalTo(TestEnum.VALUE_1));
         assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, "VALUE_2", TestEnum.UNKNOWN),
                 equalTo(TestEnum.VALUE_2));
-        assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, "vAlUe_2 ", TestEnum.UNKNOWN),
+        assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, "vAlUe_2", TestEnum.UNKNOWN),
                 equalTo(TestEnum.VALUE_2));
     }
 

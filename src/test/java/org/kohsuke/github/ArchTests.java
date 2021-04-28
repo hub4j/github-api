@@ -153,7 +153,7 @@ public class ArchTests {
     @Test
     public void testRequireUseOfOnlySpecificApacheCommons() {
 
-        final ArchRule onlyApprovedApacheCommonsLang3Methods = classes()
+        final ArchRule onlyApprovedApacheCommonsMethods = classes()
                 .should(notCallMethodsInPackageUnless("org.apache.commons..",
                         // unless it is one of these methods
                         targetMethodIs(StringUtils.class, "capitalize", String.class),
@@ -187,9 +187,9 @@ public class ArchTests {
                         targetMethodIs(IOUtils.class, "toString", Reader.class),
                         targetMethodIs(IOUtils.class, "toByteArray", InputStream.class)))
                 .because(
-                        "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier should be used.");
+                        "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
 
-        onlyApprovedApacheCommonsLang3Methods.check(classFiles);
+        onlyApprovedApacheCommonsMethods.check(classFiles);
     }
 
     public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,

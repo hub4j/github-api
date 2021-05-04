@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -52,10 +53,8 @@ abstract class GitHubClient {
 
     private HttpConnector connector;
 
-    private final Object rateLimitLock = new Object();
-
     @Nonnull
-    private GHRateLimit rateLimit = GHRateLimit.DEFAULT;
+    private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -255,9 +254,7 @@ abstract class GitHubClient {
     @Nonnull
     @Deprecated
     GHRateLimit lastRateLimit() {
-        synchronized (rateLimitLock) {
-            return rateLimit;
-        }
+        return rateLimit.get();
     }
 
     /**
@@ -277,12 +274,19 @@ abstract class GitHubClient {
      */
     @Nonnull
     GHRateLimit rateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
-        synchronized (rateLimitLock) {
-            if (rateLimit.getRecord(rateLimitTarget).isExpired()) {
-                getRateLimit(rateLimitTarget);
+        GHRateLimit result = rateLimit.get();
+        // Most of the time rate limit is not expired, so try to avoid locking.
+        if (result.getRecord(rateLimitTarget).isExpired()) {
+            // if the rate limit is expired, synchronize to ensure
+            // only one call to getRateLimit() is made to refresh it.
+            synchronized (this) {
+                if (rateLimit.get().getRecord(rateLimitTarget).isExpired()) {
+                    getRateLimit(rateLimitTarget);
+                }
             }
-            return rateLimit;
+            result = rateLimit.get();
         }
+        return result;
     }
 
     /**
@@ -295,15 +299,9 @@ abstract class GitHubClient {
      *            {@link GHRateLimit.Record} constructed from the response header information
      */
     private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
-        synchronized (rateLimitLock) {
-            observed = rateLimit.getMergedRateLimit(observed);
-
-            if (rateLimit != observed) {
-                rateLimit = observed;
-                LOGGER.log(FINE, "Rate limit now: {0}", rateLimit);
-            }
-            return rateLimit;
-        }
+        GHRateLimit result = rateLimit.accumulateAndGet(observed, (current, x) -> current.getMergedRateLimit(x));
+        LOGGER.log(FINEST, "Rate limit now: {0}", rateLimit.get());
+        return result;
     }
 
     /**

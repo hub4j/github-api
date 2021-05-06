@@ -345,7 +345,7 @@ public class GHRateLimit {
         private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
 
         // The starting current UnknownLimitRecord is an expired record.
-        private static AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
+        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
 
         /**
          * Create a new unknown record that resets at the specified time.

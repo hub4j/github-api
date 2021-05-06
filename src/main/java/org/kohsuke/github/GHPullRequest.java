@@ -55,6 +55,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private GHCommitPointer base;
     private String merged_at;
     private GHCommitPointer head;
+    private String merge_commit_sha;
 
     // details that are only available when obtained from ID
     private GHUser merged_by;
@@ -66,7 +67,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private int deletions;
     private String mergeable_state;
     private int changed_files;
-    private String merge_commit_sha;
 
     // pull request reviewers
     private GHUser[] requested_reviewers;
@@ -334,7 +334,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public String getMergeCommitSha() throws IOException {
-        populate();
         return merge_commit_sha;
     }
 

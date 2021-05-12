@@ -380,6 +380,26 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Sets organization projects enabled status boolean
+     *
+     * @param newStatus
+     *            enable status
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableOrganizationProjects(boolean newStatus) throws IOException {
+        edit("has_organization_projects", newStatus);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root.createRequest()
+                .withUrlPath(String.format("/orgs/%s", login))
+                .method("PATCH")
+                .with(key, value)
+                .fetchInto(this);
+    }
+
+    /**
      * Returns the projects for this organization.
      *
      * @param status

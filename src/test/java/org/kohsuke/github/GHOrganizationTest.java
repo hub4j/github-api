@@ -29,6 +29,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         if (team != null) {
             team.delete();
         }
+
+        getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).enableOrganizationProjects(true);
     }
 
     @Test
@@ -230,5 +232,29 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 .create();
         assertThat(team.getDescription(), equalTo("Team description"));
         assertThat(team.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
+    }
+
+    @Test
+    public void testAreOrganizationProjectsEnabled() throws IOException {
+        // Arrange
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // Act
+        boolean result = org.areOrganizationProjectsEnabled();
+
+        // Assert
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void testEnableOrganizationProjects() throws IOException {
+        // Arrange
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // Act
+        org.enableOrganizationProjects(false);
+
+        // Assert
+        assertThat(org.areOrganizationProjectsEnabled(), is(false));
     }
 }

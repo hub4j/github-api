@@ -18,6 +18,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  * @author Kohsuke Kawaguchi
  */
 public class GHOrganization extends GHPerson {
+
+    private boolean has_organization_projects;
+
     GHOrganization wrapUp(GitHub root) {
         return (GHOrganization) super.wrapUp(root);
     }
@@ -365,6 +368,35 @@ public class GHOrganization extends GHPerson {
      */
     public void conceal(GHUser u) throws IOException {
         root.createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
+    }
+
+    /**
+     * Are projects enabled for organization boolean.
+     *
+     * @return the boolean
+     */
+    public boolean areOrganizationProjectsEnabled() {
+        return has_organization_projects;
+    }
+
+    /**
+     * Sets organization projects enabled status boolean
+     *
+     * @param newStatus
+     *            enable status
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableOrganizationProjects(boolean newStatus) throws IOException {
+        edit("has_organization_projects", newStatus);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root.createRequest()
+                .withUrlPath(String.format("/orgs/%s", login))
+                .method("PATCH")
+                .with(key, value)
+                .fetchInto(this);
     }
 
     /**

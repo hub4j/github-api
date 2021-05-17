@@ -1,0 +1,86 @@
+{
+  "number": 1,
+  "created_at": "2021-05-17T14:55:01Z",
+  "url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/1",
+  "html_url": "https://github.com/hub4j-test-org/Pixi/security/code-scanning/1",
+  "state": "dismissed",
+  "dismissed_by": {
+    "login": "akashRindhe",
+    "id": 14114123,
+    "node_id": "MDQ6VXNlcjE0MTE0MTIz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/14114123?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/akashRindhe",
+    "html_url": "https://github.com/akashRindhe",
+    "followers_url": "https://api.github.com/users/akashRindhe/followers",
+    "following_url": "https://api.github.com/users/akashRindhe/following{/other_user}",
+    "gists_url": "https://api.github.com/users/akashRindhe/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/akashRindhe/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/akashRindhe/subscriptions",
+    "organizations_url": "https://api.github.com/users/akashRindhe/orgs",
+    "repos_url": "https://api.github.com/users/akashRindhe/repos",
+    "events_url": "https://api.github.com/users/akashRindhe/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/akashRindhe/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "dismissed_at": "2021-05-18T01:45:16Z",
+  "dismissed_reason": "used in tests",
+  "rule": {
+    "id": "js/angular/disabling-sce",
+    "severity": "warning",
+    "description": "Disabling SCE",
+    "name": "js/angular/disabling-sce",
+    "full_description": "Disabling strict contextual escaping (SCE) can cause security vulnerabilities.",
+    "tags": [
+      "frameworks/angularjs",
+      "maintainability",
+      "security"
+    ],
+    "help": "# Disabling SCE\nAngularJS is secure by default through automated sanitization and filtering of untrusted values that could cause vulnerabilities such as XSS. Strict Contextual Escaping (SCE) is an execution mode in AngularJS that provides this security mechanism.\n\nDisabling SCE in an AngularJS application is strongly discouraged. It is even more discouraged to disable SCE in a library, since it is an application-wide setting.\n\n\n## Recommendation\nDo not disable SCE.\n\n\n## Example\nThe following example shows an AngularJS application that disables SCE in order to dynamically construct an HTML fragment, which is later inserted into the DOM through `$scope.html`.\n\n\n```javascript\nangular.module('app', [])\n    .config(function($sceProvider) {\n        $sceProvider.enabled(false); // BAD\n    }).controller('controller', function($scope) {\n        // ...\n        $scope.html = '<ul><li>' + item.toString() + '</li></ul>';\n    });\n\n```\nThis is problematic, since it disables SCE for the entire AngularJS application.\n\nInstead, just mark the dynamically constructed HTML fragment as safe using `$sce.trustAsHtml`, before assigning it to `$scope.html`:\n\n\n```javascript\nangular.module('app', [])\n    .controller('controller', function($scope, $sce) {\n        // ...\n        // GOOD (but should use the templating system instead)\n        $scope.html = $sce.trustAsHtml('<ul><li>' + item.toString() + '</li></ul>'); \n    });\n\n```\nPlease note that this example is for illustrative purposes only; use the AngularJS templating system to dynamically construct HTML when possible.\n\n\n## References\n* AngularJS Developer Guide: [Strict Contextual Escaping](https://docs.angularjs.org/api/ng/service/$sce)\n* AngularJS Developer Guide: [Can I disable SCE completely?](https://docs.angularjs.org/api/ng/service/$sce#can-i-disable-sce-completely-).\n"
+  },
+  "tool": {
+    "name": "CodeQL",
+    "guid": null,
+    "version": "2.5.4"
+  },
+  "most_recent_instance": {
+    "ref": "refs/heads/master",
+    "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+    "environment": "{\"language\":\"javascript\"}",
+    "state": "dismissed",
+    "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+    "message": {
+      "text": "Disabling SCE is strongly discouraged."
+    },
+    "location": {
+      "path": "app/pixi.html",
+      "start_line": 179,
+      "end_line": 179,
+      "start_column": 4,
+      "end_column": 31
+    },
+    "classifications": []
+  },
+  "instances_url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/1/instances",
+  "instances": [
+    {
+      "ref": "refs/heads/master",
+      "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "state": "dismissed",
+      "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+      "message": {
+        "text": "Disabling SCE is strongly discouraged."
+      },
+      "location": {
+        "path": "app/pixi.html",
+        "start_line": 179,
+        "end_line": 179,
+        "start_column": 4,
+        "end_column": 31
+      },
+      "classifications": []
+    }
+  ]
+}

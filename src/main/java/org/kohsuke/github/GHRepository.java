@@ -3181,6 +3181,22 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Get code scanning alert by id
+     *
+     * @param id
+     *            id of the code scanning alert
+     * @return the code scanning alert
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCodeScanningAlert getCodeScanningAlert(long id) throws IOException {
+        return root.createRequest()
+                .withUrlPath(getApiTailUrl("code-scanning/alerts"), String.valueOf(id))
+                .fetch(GHCodeScanningAlert.class)
+                .wrap(this);
+    }
+
+    /**
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
      * @param <T>

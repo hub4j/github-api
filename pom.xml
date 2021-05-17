@@ -110,6 +110,8 @@
               </goals>
               <configuration>
                 <propertyName>jacoco.surefire.argLine</propertyName>
+                <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
+                <include>org.kohsuke.*</include>
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->

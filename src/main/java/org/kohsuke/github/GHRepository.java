@@ -3145,6 +3145,42 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Lists the code scanning alerts of this repository.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCodeScanningAlert> listCodeScanningAlerts() {
+        return listCodeScanningAlerts(Collections.emptyMap());
+    }
+
+    /**
+     * Lists the code scanning alerts of this repository filtered on the alert status
+     *
+     * @param state
+     *            alert status to filter on
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCodeScanningAlert> listCodeScanningAlerts(GHCodeScanningAlertState state) {
+        return listCodeScanningAlerts(Collections.singletonMap("state", state.name().toLowerCase()));
+    }
+
+    /**
+     * Lists the code scanning alerts of this repository filtered on the code scanning tool name
+     *
+     * @param toolName
+     *            name of code scanning tool that creates alerts
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCodeScanningAlert> listCodeScanningAlerts(String toolName) {
+        return listCodeScanningAlerts(Collections.singletonMap("tool_name", toolName));
+    }
+
+    private PagedIterable<GHCodeScanningAlert> listCodeScanningAlerts(Map<String, Object> filters) {
+        return new GHCodeScanningAlertsIterable(this,
+                root.createRequest().withUrlPath(getApiTailUrl("code-scanning/alerts")).with(filters));
+    }
+
+    /**
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
      * @param <T>

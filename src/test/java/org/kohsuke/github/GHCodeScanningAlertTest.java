@@ -1,11 +1,14 @@
 package org.kohsuke.github;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -44,7 +47,7 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
         assertThat(tool.getName(), is("CodeQL"));
         assertThat(tool.getVersion(), not((Object) null));
 
-        // Verify the generic values of the code scanning rule
+        // Verify that fields of the code scanning rule are non-null
         assertThat(alert.getRule(), not((Object) null));
         GHCodeScanningAlert.Rule rule = alert.getRule();
         assertThat(rule.getId(), not((Object) null));
@@ -61,6 +64,27 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
         assertThat(openAlerts.size(), equalTo(2));
         GHCodeScanningAlert openAlert = openAlerts.get(0);
         assertThat(openAlert.getState(), is(GHCodeScanningAlertState.OPEN));
+    }
+
+    @Test
+    public void testGetCodeScanningAlert() throws IOException {
+        // Arrange
+        List<GHCodeScanningAlert> dismissedAlerts = repo.listCodeScanningAlerts(GHCodeScanningAlertState.DISMISSED)
+                ._iterator(1)
+                .nextPage();
+        Assume.assumeThat(dismissedAlerts.size(), greaterThanOrEqualTo(1));
+        GHCodeScanningAlert dismissedAlert = dismissedAlerts.get(0);
+        long idOfDismissed = dismissedAlert.getId();
+
+        // Act
+        GHCodeScanningAlert result = repo.getCodeScanningAlert(idOfDismissed);
+
+        // Assert
+        assertThat(result, not((Object) null));
+        assertThat(result.getId(), equalTo(idOfDismissed));
+        assertThat(result.getDismissedReason(), equalTo(dismissedAlert.getDismissedReason()));
+        assertThat(result.getDismissedAt(), equalTo(dismissedAlert.getDismissedAt()));
+        assertThat(result.getDismissedBy().login, equalTo(dismissedAlert.getDismissedBy().login));
     }
 
 }

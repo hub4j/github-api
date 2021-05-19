@@ -1,0 +1,46 @@
+{
+  "id": "80a85afe-0843-4749-a7fc-9ff3bfef9d98",
+  "name": "repos_hub4j-test-org_pixi_code-scanning_alerts_1_instances",
+  "request": {
+    "url": "/repos/hub4j-test-org/Pixi/code-scanning/alerts/1/instances",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_pixi_code-scanning_alerts_1_instances-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 19 May 2021 13:19:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"c919e1cdca3a115eeb46d88ad4f4f4ca2cf3a73f1ef3f8759d3f1912d0501847\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:repo_hook, delete_repo, read:repo_hook, repo, repo:invite, repo:status, repo_deployment, security_events, write:repo_hook",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4995",
+      "X-RateLimit-Reset": "1621433945",
+      "X-RateLimit-Used": "5",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "ECF6:0F89:98841:A70E9:60A5104C"
+    }
+  },
+  "uuid": "80a85afe-0843-4749-a7fc-9ff3bfef9d98",
+  "persistent": true,
+  "insertionIndex": 4
+}

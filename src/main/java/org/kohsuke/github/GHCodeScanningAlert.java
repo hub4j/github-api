@@ -128,6 +128,15 @@ public class GHCodeScanningAlert extends GHObject {
         return most_recent_instance;
     }
 
+    /**
+     * List all instances of the alert
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCodeScanningAlertInstance> listAlertInstances() {
+        return new GHCodeScanningAlertInstancesIterable(this, root.createRequest().withUrlPath(instances_url));
+    }
+
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(html_url);

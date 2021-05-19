@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Arrays;
@@ -8,10 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GHCodeScanningAlertInstance {
-
-    @JsonIgnore
-    private GHCodeScanningAlert owner;
-
     private String ref;
     private String analysis_key;
     private String environment;
@@ -55,7 +50,6 @@ public class GHCodeScanningAlertInstance {
 
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     static class Message {
-
         private String text;
 
         public String getText() {

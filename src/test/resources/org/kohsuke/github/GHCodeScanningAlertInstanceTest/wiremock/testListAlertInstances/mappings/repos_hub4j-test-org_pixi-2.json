@@ -1,0 +1,47 @@
+{
+  "id": "739d3462-2e22-426c-a77c-d20fd076943a",
+  "name": "repos_hub4j-test-org_pixi",
+  "request": {
+    "url": "/repos/hub4j-test-org/Pixi",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_pixi-2.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 19 May 2021 13:19:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"798dc78bb4c7a5f7af29dd24986abff44807dbd0601e8a2e0b5768a9e86d236f\"",
+      "Last-Modified": "Mon, 17 May 2021 14:50:01 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4997",
+      "X-RateLimit-Reset": "1621433945",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "ECF6:0F89:98810:A70AE:60A5104A"
+    }
+  },
+  "uuid": "739d3462-2e22-426c-a77c-d20fd076943a",
+  "persistent": true,
+  "insertionIndex": 2
+}

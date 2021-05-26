@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,7 +44,7 @@ public abstract class GHHook extends GHObject {
             if (e.equals("*"))
                 s.add(GHEvent.ALL);
             else
-                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
+                s.add(EnumUtils.getEnumOrDefault(GHEvent.class, e.toUpperCase(Locale.ROOT), GHEvent.UNKNOWN));
         }
         return s;
     }

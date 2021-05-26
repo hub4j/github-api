@@ -1,12 +1,15 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.kohsuke.github.internal.Previews.GAMBIT;
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
@@ -35,7 +38,7 @@ public class GHAppInstallation extends GHObject {
     @JsonProperty("target_type")
     private GHTargetType targetType;
     private Map<String, GHPermissionType> permissions;
-    private List<GHEvent> events;
+    private List<String> events;
     @JsonProperty("single_file_name")
     private String singleFileName;
     @JsonProperty("repository_selection")
@@ -250,7 +253,9 @@ public class GHAppInstallation extends GHObject {
      * @return the events
      */
     public List<GHEvent> getEvents() {
-        return events;
+        return events.stream()
+                .map(e -> EnumUtils.getEnumOrDefault(GHEvent.class, e.toUpperCase(Locale.ROOT), GHEvent.UNKNOWN))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -262,7 +267,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setEvents(List<GHEvent> events) {
-        this.events = events;
+        this.events = events.stream().map(GHEvent::symbol).collect(Collectors.toList());
     }
 
     /**

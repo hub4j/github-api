@@ -24,6 +24,8 @@ public enum GHEvent {
     DEPLOY_KEY,
     DEPLOYMENT,
     DEPLOYMENT_STATUS,
+    DISCUSSION,
+    DISCUSSION_COMMENT,
     DOWNLOAD,
     FOLLOW,
     FORK,

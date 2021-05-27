@@ -3,6 +3,7 @@
   "name": "repos_hub4j-test-org_github-api_pulls_263",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/pulls/263",
+    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"state\":\"closed\"}",
@@ -10,11 +11,7 @@
         "ignoreExtraElements": true
       }
     ],
-    "method": "POST",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "application/vnd.github.shadow-cat-preview+json"
       }

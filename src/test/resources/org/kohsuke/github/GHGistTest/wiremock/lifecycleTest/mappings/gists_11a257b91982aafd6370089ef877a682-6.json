@@ -3,11 +3,8 @@
   "name": "gists_11a257b91982aafd6370089ef877a682",
   "request": {
     "url": "/gists/11a257b91982aafd6370089ef877a682",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

@@ -60,13 +60,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.authorizationProvider != null)
+        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.authorizationProvider != null)
+            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through

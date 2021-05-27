@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.junit.Assume;
 import org.junit.Test;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.IOException;
@@ -135,6 +136,67 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(builder.authorizationProvider.getEncodedAuthorization(),
                 equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
         assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+    }
+
+    @Test
+    public void testGitHubBuilderFromCredentials() throws IOException {
+        // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
+        Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+
+        Map<String, String> props = new HashMap<String, String>();
+
+        props.put("endpoint", "bogus endpoint url");
+        props.put("oauth", "bogus oauth token string");
+        setupEnvironment(props);
+        GitHubBuilder builder = GitHubBuilder.fromCredentials();
+
+        assertThat(builder.endpoint, equalTo("bogus endpoint url"));
+
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), nullValue());
+
+        props.put("login", "bogus login");
+        setupEnvironment(props);
+        builder = GitHubBuilder.fromCredentials();
+
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("token bogus oauth token string"));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+
+        props.put("jwt", "bogus jwt token string");
+        setupEnvironment(props);
+        builder = GitHubBuilder.fromCredentials();
+
+        assertThat(builder.authorizationProvider, not(instanceOf(UserAuthorizationProvider.class)));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(), equalTo("Bearer bogus jwt token string"));
+
+        props.put("password", "bogus weak password");
+        setupEnvironment(props);
+        builder = GitHubBuilder.fromCredentials();
+
+        assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+        assertThat(builder.authorizationProvider.getEncodedAuthorization(),
+                equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
+        assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+    }
+
+    @Test
+    public void testAnonymous() throws IOException {
+        // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
+        Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+
+        Map<String, String> props = new HashMap<String, String>();
+
+        props.put("endpoint", mockGitHub.apiServer().baseUrl());
+        setupEnvironment(props);
+
+        // No values present except endpoint
+        GitHubBuilder builder = GitHubBuilder
+                .fromEnvironment("customLogin", "customPassword", "customOauth", "endpoint");
+
+        assertThat(builder.endpoint, equalTo(mockGitHub.apiServer().baseUrl()));
+        assertThat(builder.authorizationProvider, sameInstance(AuthorizationProvider.ANONYMOUS));
     }
 
     @Test

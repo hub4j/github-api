@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.authorization.AuthorizationProvider;
@@ -145,6 +146,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     public void testGitHubBuilderFromCredentialsWithEnvironment() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
         Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
 
         Map<String, String> props = new HashMap<String, String>();
 
@@ -188,13 +190,14 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     public void testGitHubBuilderFromCredentialsWithPropertyFile() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
         Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
 
         Map<String, String> props = new HashMap<String, String>();
 
         // Clear the environment
         setupEnvironment(props);
-        GitHubBuilder.HOME_DIRECTORY = new File(getTestDirectory());
         try {
+            GitHubBuilder.HOME_DIRECTORY = new File(getTestDirectory());
             try {
                 GitHubBuilder builder = GitHubBuilder.fromCredentials();
                 fail();
@@ -245,6 +248,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
                     equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
             assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
         } finally {
+            GitHubBuilder.HOME_DIRECTORY = null;
             File propertyFile = new File(getTestDirectory(), ".github");
             propertyFile.delete();
         }

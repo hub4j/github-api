@@ -3,11 +3,8 @@
   "name": "orgs_hub4j-test-org",
   "request": {
     "url": "/orgs/hub4j-test-org",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

@@ -2,7 +2,7 @@
   "id": "3e411914-13ab-4047-9b13-8394a37a3f62",
   "name": "repos_hub4j-test-org_ghworkflowruntest_actions_jobs__2270858630",
   "request": {
-    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/jobs//2270858630",
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/jobs/2270858630",
     "method": "GET",
     "headers": {
       "Accept": {

@@ -90,9 +90,9 @@ jobs:
       if: matrix.os == 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B install --file pom.xml
+      run: mvn -B install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B install -D enable-ci --file pom.xml
+      run: mvn -B install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"

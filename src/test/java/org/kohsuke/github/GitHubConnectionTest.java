@@ -5,11 +5,14 @@ import org.junit.Test;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import static org.hamcrest.Matchers.*;
 
@@ -139,7 +142,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testGitHubBuilderFromCredentials() throws IOException {
+    public void testGitHubBuilderFromCredentialsWithEnvironment() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
         Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
 
@@ -179,6 +182,83 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(builder.authorizationProvider.getEncodedAuthorization(),
                 equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
         assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+    }
+
+    @Test
+    public void testGitHubBuilderFromCredentialsWithPropertyFile() throws IOException {
+        // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
+        Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
+
+        Map<String, String> props = new HashMap<String, String>();
+
+        // Clear the environment
+        setupEnvironment(props);
+        GitHubBuilder.HOME_DIRECTORY = new File(getTestDirectory());
+        try {
+            try {
+                GitHubBuilder builder = GitHubBuilder.fromCredentials();
+                fail();
+            } catch (Exception e) {
+                assertThat(e, instanceOf(IOException.class));
+                assertThat(e.getMessage(), equalTo("Failed to resolve credentials from ~/.github or the environment."));
+            }
+
+            props = new HashMap<String, String>();
+
+            props.put("endpoint", "bogus endpoint url");
+            props.put("oauth", "bogus oauth token string");
+
+            setupPropertyFile(props);
+
+            GitHubBuilder builder = GitHubBuilder.fromCredentials();
+
+            assertThat(builder.endpoint, equalTo("bogus endpoint url"));
+
+            assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+            assertThat(builder.authorizationProvider.getEncodedAuthorization(),
+                    equalTo("token bogus oauth token string"));
+            assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), nullValue());
+
+            props.put("login", "bogus login");
+            setupPropertyFile(props);
+            builder = GitHubBuilder.fromCredentials();
+
+            assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+            assertThat(builder.authorizationProvider.getEncodedAuthorization(),
+                    equalTo("token bogus oauth token string"));
+            assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+
+            props.put("jwt", "bogus jwt token string");
+            setupPropertyFile(props);
+            builder = GitHubBuilder.fromCredentials();
+
+            assertThat(builder.authorizationProvider, not(instanceOf(UserAuthorizationProvider.class)));
+            assertThat(builder.authorizationProvider.getEncodedAuthorization(),
+                    equalTo("Bearer bogus jwt token string"));
+
+            props.put("password", "bogus weak password");
+            setupPropertyFile(props);
+            builder = GitHubBuilder.fromCredentials();
+
+            assertThat(builder.authorizationProvider, instanceOf(UserAuthorizationProvider.class));
+            assertThat(builder.authorizationProvider.getEncodedAuthorization(),
+                    equalTo("Basic Ym9ndXMgbG9naW46Ym9ndXMgd2VhayBwYXNzd29yZA=="));
+            assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
+        } finally {
+            File propertyFile = new File(getTestDirectory(), ".github");
+            propertyFile.delete();
+        }
+    }
+
+    private void setupPropertyFile(Map<String, String> props) throws IOException {
+        File propertyFile = new File(getTestDirectory(), ".github");
+        Properties properties = new Properties();
+        properties.putAll(props);
+        properties.store(new FileOutputStream(propertyFile), "");
+    }
+
+    private String getTestDirectory() {
+        return new File("target").getAbsolutePath();
     }
 
     @Test

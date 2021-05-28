@@ -24,6 +24,9 @@ import javax.annotation.Nonnull;
  */
 public class GitHubBuilder implements Cloneable {
 
+    // for testing
+    static File HOME_DIRECTORY = null;
+
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHubClient.GITHUB_URL;
 
@@ -60,13 +63,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.authorizationProvider != null)
+        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.authorizationProvider != null)
+            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -178,7 +181,7 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromPropertyFile() throws IOException {
-        File homeDir = new File(System.getProperty("user.home"));
+        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");
         return fromPropertyFile(propertyFile.getPath());
     }

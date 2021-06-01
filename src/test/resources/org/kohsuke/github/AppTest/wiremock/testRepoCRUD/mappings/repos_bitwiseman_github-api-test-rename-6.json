@@ -3,11 +3,8 @@
   "name": "repos_bitwiseman_github-api-test-rename",
   "request": {
     "url": "/repos/bitwiseman/github-api-test-rename",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

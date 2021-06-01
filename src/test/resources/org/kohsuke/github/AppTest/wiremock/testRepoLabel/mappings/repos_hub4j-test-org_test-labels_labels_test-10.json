@@ -1,13 +1,10 @@
 {
-  "id": "d17664b2-c30b-4d25-b10e-a5d14ce27509",
+  "id": "cfabb012-1a36-4232-8f6d-e7d3f35673e3",
   "name": "repos_hub4j-test-org_test-labels_labels_test",
   "request": {
     "url": "/repos/hub4j-test-org/test-labels/labels/test",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
@@ -16,40 +13,40 @@
       {
         "equalToJson": "{\"color\":\"000000\",\"name\":\"test\",\"description\":\"Deprecated\"}",
         "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
+        "ignoreExtraElements": true
       }
     ]
   },
   "response": {
     "status": 200,
-    "body": "{\"id\":2897001281,\"node_id\":\"MDU6TGFiZWwyODk3MDAxMjgx\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"Deprecated\"}",
+    "body": "{\"id\":1937402918,\"node_id\":\"MDU6TGFiZWwxOTM3NDAyOTE4\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test\",\"name\":\"test\",\"color\":\"000000\",\"default\":false,\"description\":\"Deprecated\"}",
     "headers": {
-      "Server": "GitHub.com",
-      "Date": "Thu, 08 Apr 2021 20:39:01 GMT",
+      "Date": "Thu, 26 Mar 2020 21:52:20 GMT",
       "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1585263137",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
       ],
-      "ETag": "W/\"07a5cf65f90f90ff1092d072a4eeae55a8eb0e6442fbc7b222596f3d1fbc8983\"",
-      "X-OAuth-Scopes": "repo, workflow",
+      "ETag": "W/\"4a7241dfa969b562ba29b03b5ac9bc3a\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4929",
-      "X-RateLimit-Reset": "1617917629",
-      "X-RateLimit-Used": "71",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "0",
+      "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E09C:148F:17ACBC:19F1AE:606F69E4"
+      "X-GitHub-Request-Id": "E69B:9495:1D1F5:2458C:5E7D2414"
     }
   },
-  "uuid": "d17664b2-c30b-4d25-b10e-a5d14ce27509",
+  "uuid": "cfabb012-1a36-4232-8f6d-e7d3f35673e3",
   "persistent": true,
   "insertionIndex": 10
 }

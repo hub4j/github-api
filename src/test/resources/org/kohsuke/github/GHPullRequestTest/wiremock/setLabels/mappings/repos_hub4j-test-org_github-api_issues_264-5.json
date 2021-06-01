@@ -3,6 +3,7 @@
   "name": "repos_hub4j-test-org_github-api_issues_264",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/issues/264",
+    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"labels\":[\"setLabels_label_name\"]}",
@@ -10,11 +11,7 @@
         "ignoreExtraElements": true
       }
     ],
-    "method": "POST",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

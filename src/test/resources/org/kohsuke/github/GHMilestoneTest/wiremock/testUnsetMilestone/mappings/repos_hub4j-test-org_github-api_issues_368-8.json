@@ -3,11 +3,8 @@
   "name": "repos_hub4j-test-org_github-api_issues_368",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/issues/368",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

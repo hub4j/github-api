@@ -168,11 +168,14 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         GHMeta meta = gitHub.getMeta();
         assertThat(meta.isVerifiablePasswordAuthentication(), is(true));
         assertThat(meta.getApi().size(), equalTo(19));
-        assertThat(meta.getGit().size(), equalTo(19));
-        assertThat(meta.getHooks().size(), equalTo(3));
-        assertThat(meta.getImporter().size(), equalTo(6));
+        assertThat(meta.getGit().size(), equalTo(36));
+        assertThat(meta.getHooks().size(), equalTo(4));
+        assertThat(meta.getImporter().size(), equalTo(3));
         assertThat(meta.getPages().size(), equalTo(6));
-        assertThat(meta.getWeb().size(), equalTo(19));
+        assertThat(meta.getWeb().size(), equalTo(20));
+        assertThat(meta.getPackages().size(), equalTo(25));
+        assertThat(meta.getActions().size(), equalTo(1739));
+        assertThat(meta.getDependabot().size(), equalTo(3));
 
         // Also test examples here
         Class[] examples = new Class[]{ ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
@@ -185,11 +188,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                     .fetch((Class<ReadOnlyObjects.GHMetaExample>) metaClass);
             assertThat(metaExample.isVerifiablePasswordAuthentication(), is(true));
             assertThat(metaExample.getApi().size(), equalTo(19));
-            assertThat(metaExample.getGit().size(), equalTo(19));
-            assertThat(metaExample.getHooks().size(), equalTo(3));
-            assertThat(metaExample.getImporter().size(), equalTo(6));
+            assertThat(metaExample.getGit().size(), equalTo(36));
+            assertThat(metaExample.getHooks().size(), equalTo(4));
+            assertThat(metaExample.getImporter().size(), equalTo(3));
             assertThat(metaExample.getPages().size(), equalTo(6));
-            assertThat(metaExample.getWeb().size(), equalTo(19));
+            assertThat(metaExample.getWeb().size(), equalTo(20));
         }
     }
 

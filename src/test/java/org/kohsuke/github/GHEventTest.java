@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
-import org.kohsuke.github.GHEvent.GitHubEventType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -26,10 +25,9 @@ public class GHEventTest {
 
     @Test
     public void regressionTest() {
-        assertThat(GitHubEventType.transformToGHEvent("NewlyAddedOrBogusEvent"), is(GHEvent.UNKNOWN));
-        for (GitHubEventType gitHubEventType : GitHubEventType.values()) {
-            assertThat(GitHubEventType.transformToGHEvent(gitHubEventType.name()),
-                    is(oldTransformationFunction(gitHubEventType.name())));
+        assertThat(GHEventInfo.transformTypeToGHEvent("NewlyAddedOrBogusEvent"), is(GHEvent.UNKNOWN));
+        for (String eventInfoType : GHEventInfo.mapTypeStringToEvent.keySet()) {
+            assertThat(GHEventInfo.transformTypeToGHEvent(eventInfoType), is(oldTransformationFunction(eventInfoType)));
         }
     }
 }

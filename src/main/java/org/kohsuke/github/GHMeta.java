@@ -23,6 +23,9 @@ public class GHMeta {
     private List<String> api;
     private List<String> pages;
     private List<String> importer = new ArrayList<>();
+    private List<String> packages;
+    private List<String> actions;
+    private List<String> dependabot;
 
     /**
      * Is verifiable password authentication boolean.
@@ -85,5 +88,32 @@ public class GHMeta {
      */
     public List<String> getImporter() {
         return Collections.unmodifiableList(importer);
+    }
+
+    /**
+     * Gets package.
+     *
+     * @return the package
+     */
+    public List<String> getPackages() {
+        return Collections.unmodifiableList(packages);
+    }
+
+    /**
+     * Gets actions.
+     *
+     * @return the actions
+     */
+    public List<String> getActions() {
+        return Collections.unmodifiableList(actions);
+    }
+
+    /**
+     * Gets dependabot.
+     *
+     * @return the dependabot
+     */
+    public List<String> getDependabot() {
+        return Collections.unmodifiableList(dependabot);
     }
 }

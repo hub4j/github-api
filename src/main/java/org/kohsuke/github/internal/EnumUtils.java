@@ -30,7 +30,7 @@ public final class EnumUtils {
         if (value == null) {
             return null;
         }
-        return getEnumOrDefault(enumClass, value.toUpperCase(Locale.ROOT), defaultEnum);
+        return getEnumOrDefault(enumClass, value, defaultEnum);
     }
 
     /**
@@ -49,8 +49,8 @@ public final class EnumUtils {
      */
     public static <E extends Enum<E>> E getEnumOrDefault(Class<E> enumClass, String value, E defaultEnum) {
         try {
-            return Enum.valueOf(enumClass, value);
-        } catch (IllegalArgumentException e) {
+            return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));
+        } catch (NullPointerException | IllegalArgumentException e) {
             LOGGER.warning("Unknown value " + value + " for enum class " + enumClass.getName() + ", defaulting to "
                     + defaultEnum.name());
             return defaultEnum;

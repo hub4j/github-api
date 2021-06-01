@@ -1,13 +1,13 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -40,10 +40,7 @@ public abstract class GHHook extends GHObject {
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
         for (String e : events) {
-            if (e.equals("*"))
-                s.add(GHEvent.ALL);
-            else
-                s.add(Enum.valueOf(GHEvent.class, e.toUpperCase(Locale.ENGLISH)));
+            s.add(e.equals("*") ? GHEvent.ALL : EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN));
         }
         return s;
     }

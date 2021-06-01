@@ -9,6 +9,8 @@ public class EnumUtilsTest {
 
     @Test
     public void testGetEnum() {
+        assertThat(EnumUtils.getEnumOrDefault(TestEnum.class, null, TestEnum.UNKNOWN), equalTo(TestEnum.UNKNOWN));
+
         assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, null, TestEnum.UNKNOWN), nullValue());
         assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, "foobar", TestEnum.UNKNOWN),
                 equalTo(TestEnum.UNKNOWN));

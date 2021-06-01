@@ -3,11 +3,8 @@
   "name": "teams_3451996",
   "request": {
     "url": "/teams/3451996",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

@@ -3,6 +3,7 @@
   "name": "repos_hub4j-test-org_github-api",
   "request": {
     "url": "/repos/hub4j-test-org/github-api",
+    "method": "PATCH",
     "bodyPatterns": [
       {
         "equalToJson": "{\"archived\":true,\"name\":\"github-api\"}",
@@ -10,11 +11,7 @@
         "ignoreExtraElements": false
       }
     ],
-    "method": "POST",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

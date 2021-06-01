@@ -3,11 +3,8 @@
   "name": "repos_hub4j-test-org_updateoutdatedbranches_pulls_9",
   "request": {
     "url": "/repos/hub4j-test-org/updateOutdatedBranches/pulls/9",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }

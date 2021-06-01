@@ -3,11 +3,8 @@
   "name": "repos_hub4j-test-org_test-checks_check-runs_1424883037",
   "request": {
     "url": "/repos/hub4j-test-org/test-checks/check-runs/1424883037",
-    "method": "POST",
+    "method": "PATCH",
     "headers": {
-      "X-HTTP-Method-Override": {
-        "equalTo": "PATCH"
-      },
       "Accept": {
         "equalTo": "application/vnd.github.antiope-preview+json"
       }

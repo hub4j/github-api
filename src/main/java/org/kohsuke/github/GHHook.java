@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -41,10 +40,7 @@ public abstract class GHHook extends GHObject {
     public EnumSet<GHEvent> getEvents() {
         EnumSet<GHEvent> s = EnumSet.noneOf(GHEvent.class);
         for (String e : events) {
-            if (e.equals("*"))
-                s.add(GHEvent.ALL);
-            else
-                s.add(EnumUtils.getEnumOrDefault(GHEvent.class, e.toUpperCase(Locale.ROOT), GHEvent.UNKNOWN));
+            s.add(e.equals("*") ? GHEvent.ALL : EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN));
         }
         return s;
     }

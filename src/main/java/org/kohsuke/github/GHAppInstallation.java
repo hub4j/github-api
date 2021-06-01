@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -254,7 +253,7 @@ public class GHAppInstallation extends GHObject {
      */
     public List<GHEvent> getEvents() {
         return events.stream()
-                .map(e -> EnumUtils.getEnumOrDefault(GHEvent.class, e.toUpperCase(Locale.ROOT), GHEvent.UNKNOWN))
+                .map(e -> EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))
                 .collect(Collectors.toList());
     }
 

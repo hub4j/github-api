@@ -8,13 +8,13 @@ import javax.annotation.Nonnull;
  * Iterable for check-runs listing.
  */
 class GHCheckRunsIterable extends PagedIterable&lt;GHCheckRun&gt; {
-    private final transient GitHub root;
+    private final GHRepository owner;
     private final GitHubRequest request;
 
     private GHCheckRunsPage result;
 
-<span class="fc" id="L16">    public GHCheckRunsIterable(GitHub root, GitHubRequest request) {</span>
-<span class="fc" id="L17">        this.root = root;</span>
+<span class="fc" id="L16">    public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {</span>
+<span class="fc" id="L17">        this.owner = owner;</span>
 <span class="fc" id="L18">        this.request = request;</span>
 <span class="fc" id="L19">    }</span>
 
@@ -22,7 +22,7 @@ class GHCheckRunsIterable extends PagedIterable&lt;GHCheckRun&gt; {
     @Override
     public PagedIterator&lt;GHCheckRun&gt; _iterator(int pageSize) {
 <span class="fc" id="L24">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L25">                adapt(GitHubPageIterator.create(root.getClient(), GHCheckRunsPage.class, request, pageSize)),</span>
+<span class="fc" id="L25">                adapt(GitHubPageIterator.create(owner.getRoot().getClient(), GHCheckRunsPage.class, request, pageSize)),</span>
                 null);
     }
 
@@ -37,9 +37,9 @@ class GHCheckRunsIterable extends PagedIterable&lt;GHCheckRun&gt; {
 <span class="fc bfc" id="L37" title="All 2 branches covered.">                if (result == null) {</span>
 <span class="fc" id="L38">                    result = v;</span>
                 }
-<span class="fc" id="L40">                return v.getCheckRuns(root);</span>
+<span class="fc" id="L40">                return v.getCheckRuns(owner);</span>
             }
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

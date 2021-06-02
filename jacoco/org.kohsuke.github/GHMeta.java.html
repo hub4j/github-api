@@ -23,6 +23,9 @@ import java.util.List;
     private List&lt;String&gt; api;
     private List&lt;String&gt; pages;
 <span class="fc" id="L25">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+    private List&lt;String&gt; packages;
+    private List&lt;String&gt; actions;
+    private List&lt;String&gt; dependabot;
 
     /**
      * Is verifiable password authentication boolean.
@@ -30,7 +33,7 @@ import java.util.List;
      * @return the boolean
      */
     public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L33">        return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L36">        return verifiablePasswordAuthentication;</span>
     }
 
     /**
@@ -39,7 +42,7 @@ import java.util.List;
      * @return the hooks
      */
     public List&lt;String&gt; getHooks() {
-<span class="fc" id="L42">        return Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L45">        return Collections.unmodifiableList(hooks);</span>
     }
 
     /**
@@ -48,7 +51,7 @@ import java.util.List;
      * @return the git
      */
     public List&lt;String&gt; getGit() {
-<span class="fc" id="L51">        return Collections.unmodifiableList(git);</span>
+<span class="fc" id="L54">        return Collections.unmodifiableList(git);</span>
     }
 
     /**
@@ -57,7 +60,7 @@ import java.util.List;
      * @return the web
      */
     public List&lt;String&gt; getWeb() {
-<span class="fc" id="L60">        return Collections.unmodifiableList(web);</span>
+<span class="fc" id="L63">        return Collections.unmodifiableList(web);</span>
     }
 
     /**
@@ -66,7 +69,7 @@ import java.util.List;
      * @return the api
      */
     public List&lt;String&gt; getApi() {
-<span class="fc" id="L69">        return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L72">        return Collections.unmodifiableList(api);</span>
     }
 
     /**
@@ -75,7 +78,7 @@ import java.util.List;
      * @return the pages
      */
     public List&lt;String&gt; getPages() {
-<span class="fc" id="L78">        return Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L81">        return Collections.unmodifiableList(pages);</span>
     }
 
     /**
@@ -84,7 +87,34 @@ import java.util.List;
      * @return the importer
      */
     public List&lt;String&gt; getImporter() {
-<span class="fc" id="L87">        return Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L90">        return Collections.unmodifiableList(importer);</span>
+    }
+
+    /**
+     * Gets package.
+     *
+     * @return the package
+     */
+    public List&lt;String&gt; getPackages() {
+<span class="fc" id="L99">        return Collections.unmodifiableList(packages);</span>
+    }
+
+    /**
+     * Gets actions.
+     *
+     * @return the actions
+     */
+    public List&lt;String&gt; getActions() {
+<span class="fc" id="L108">        return Collections.unmodifiableList(actions);</span>
+    }
+
+    /**
+     * Gets dependabot.
+     *
+     * @return the dependabot
+     */
+    public List&lt;String&gt; getDependabot() {
+<span class="fc" id="L117">        return Collections.unmodifiableList(dependabot);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -11,11 +11,11 @@
 <span class="nc" id="L11">        return total_count;</span>
     }
 
-    GHCheckRun[] getCheckRuns(GitHub root) {
+    GHCheckRun[] getCheckRuns(GHRepository owner) {
 <span class="fc bfc" id="L15" title="All 2 branches covered.">        for (GHCheckRun check_run : check_runs) {</span>
-<span class="fc" id="L16">            check_run.wrap(root);</span>
+<span class="fc" id="L16">            check_run.wrap(owner);</span>
         }
 <span class="fc" id="L18">        return check_runs;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

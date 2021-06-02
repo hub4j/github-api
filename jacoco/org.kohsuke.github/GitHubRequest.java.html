@@ -602,13 +602,27 @@ class GitHubRequest {
          * @return the request builder
          */
         public B set(String key, Object value) {
-<span class="fc bfc" id="L605" title="All 2 branches covered.">            for (int index = 0; index &lt; args.size(); index++) {</span>
-<span class="pc bpc" id="L606" title="1 of 2 branches missed.">                if (args.get(index).key.equals(key)) {</span>
-<span class="nc" id="L607">                    args.set(index, new Entry(key, value));</span>
-<span class="nc" id="L608">                    return (B) this;</span>
+<span class="fc" id="L605">            remove(key);</span>
+<span class="fc" id="L606">            return with(key, value);</span>
+
+        }
+
+        /**
+         * Removes all arg entries for a specific key.
+         *
+         * @param key
+         *            the key
+         * @return the request builder
+         */
+        public B remove(String key) {
+<span class="fc bfc" id="L618" title="All 2 branches covered.">            for (int index = 0; index &lt; args.size();) {</span>
+<span class="fc bfc" id="L619" title="All 2 branches covered.">                if (args.get(index).key.equals(key)) {</span>
+<span class="fc" id="L620">                    args.remove(index);</span>
+                } else {
+<span class="fc" id="L622">                    index++;</span>
                 }
             }
-<span class="fc" id="L611">            return with(key, value);</span>
+<span class="fc" id="L625">            return (B) this;</span>
         }
 
         /**
@@ -619,8 +633,8 @@ class GitHubRequest {
          * @return the request builder
          */
         public B method(@Nonnull String method) {
-<span class="fc" id="L622">            this.method = method;</span>
-<span class="fc" id="L623">            return (B) this;</span>
+<span class="fc" id="L636">            this.method = method;</span>
+<span class="fc" id="L637">            return (B) this;</span>
         }
 
         /**
@@ -631,8 +645,8 @@ class GitHubRequest {
          * @return the request builder
          */
         public B rateLimit(@Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc" id="L634">            this.rateLimitTarget = rateLimitTarget;</span>
-<span class="fc" id="L635">            return (B) this;</span>
+<span class="fc" id="L648">            this.rateLimitTarget = rateLimitTarget;</span>
+<span class="fc" id="L649">            return (B) this;</span>
         }
 
         /**
@@ -643,8 +657,8 @@ class GitHubRequest {
          * @return the request builder
          */
         public B contentType(String contentType) {
-<span class="fc" id="L646">            this.headers.put(&quot;Content-type&quot;, contentType);</span>
-<span class="fc" id="L647">            return (B) this;</span>
+<span class="fc" id="L660">            this.headers.put(&quot;Content-type&quot;, contentType);</span>
+<span class="fc" id="L661">            return (B) this;</span>
         }
 
         /**
@@ -661,13 +675,13 @@ class GitHubRequest {
          * @return the request builder
          */
         B setRawUrlPath(@Nonnull String rawUrlPath) {
-<span class="fc" id="L664">            Objects.requireNonNull(rawUrlPath);</span>
+<span class="fc" id="L678">            Objects.requireNonNull(rawUrlPath);</span>
             // This method should only work for full urls, which must start with &quot;http&quot;
-<span class="fc bfc" id="L666" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
-<span class="fc" id="L667">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
+<span class="fc bfc" id="L680" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
+<span class="fc" id="L681">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
             }
-<span class="fc" id="L669">            this.urlPath = rawUrlPath;</span>
-<span class="fc" id="L670">            return (B) this;</span>
+<span class="fc" id="L683">            this.urlPath = rawUrlPath;</span>
+<span class="fc" id="L684">            return (B) this;</span>
         }
 
         /**
@@ -682,24 +696,24 @@ class GitHubRequest {
          */
         public B withUrlPath(@Nonnull String urlPath, @Nonnull String... urlPathItems) {
             // full url may be set and reset as needed
-<span class="fc bfc" id="L685" title="All 4 branches covered.">            if (urlPathItems.length == 0 &amp;&amp; !urlPath.startsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L686">                return setRawUrlPath(urlPath);</span>
+<span class="fc bfc" id="L699" title="All 4 branches covered.">            if (urlPathItems.length == 0 &amp;&amp; !urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L700">                return setRawUrlPath(urlPath);</span>
             }
 
             // Once full url is set, do not allow path setting
-<span class="pc bpc" id="L690" title="1 of 2 branches missed.">            if (!this.urlPath.startsWith(&quot;/&quot;)) {</span>
-<span class="nc" id="L691">                throw new GHException(&quot;Cannot append to url path after setting a full url&quot;);</span>
+<span class="pc bpc" id="L704" title="1 of 2 branches missed.">            if (!this.urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L705">                throw new GHException(&quot;Cannot append to url path after setting a full url&quot;);</span>
             }
 
-<span class="fc" id="L694">            String tailUrlPath = urlPath;</span>
-<span class="fc bfc" id="L695" title="All 2 branches covered.">            if (urlPathItems.length != 0) {</span>
-<span class="fc" id="L696">                tailUrlPath += &quot;/&quot; + String.join(&quot;/&quot;, urlPathItems);</span>
+<span class="fc" id="L708">            String tailUrlPath = urlPath;</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">            if (urlPathItems.length != 0) {</span>
+<span class="fc" id="L710">                tailUrlPath += &quot;/&quot; + String.join(&quot;/&quot;, urlPathItems);</span>
             }
 
-<span class="fc" id="L699">            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, &quot;/&quot;);</span>
+<span class="fc" id="L713">            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, &quot;/&quot;);</span>
 
-<span class="fc" id="L701">            this.urlPath = urlPathEncode(tailUrlPath);</span>
-<span class="fc" id="L702">            return (B) this;</span>
+<span class="fc" id="L715">            this.urlPath = urlPathEncode(tailUrlPath);</span>
+<span class="fc" id="L716">            return (B) this;</span>
         }
 
         /**
@@ -710,8 +724,8 @@ class GitHubRequest {
          * @return the request builder
          */
         public B inBody() {
-<span class="fc" id="L713">            forceBody = true;</span>
-<span class="fc" id="L714">            return (B) this;</span>
+<span class="fc" id="L727">            forceBody = true;</span>
+<span class="fc" id="L728">            return (B) this;</span>
         }
     }
 
@@ -719,10 +733,10 @@ class GitHubRequest {
         final String key;
         final Object value;
 
-<span class="fc" id="L722">        protected Entry(String key, Object value) {</span>
-<span class="fc" id="L723">            this.key = key;</span>
-<span class="fc" id="L724">            this.value = value;</span>
-<span class="fc" id="L725">        }</span>
+<span class="fc" id="L736">        protected Entry(String key, Object value) {</span>
+<span class="fc" id="L737">            this.key = key;</span>
+<span class="fc" id="L738">            this.value = value;</span>
+<span class="fc" id="L739">        }</span>
     }
 
     /**
@@ -734,11 +748,11 @@ class GitHubRequest {
      */
     private static String urlPathEncode(String value) {
         try {
-<span class="fc" id="L737">            return new URI(null, null, value, null, null).toASCIIString();</span>
-<span class="nc" id="L738">        } catch (URISyntaxException ex) {</span>
-<span class="nc" id="L739">            throw new AssertionError(ex);</span>
+<span class="fc" id="L751">            return new URI(null, null, value, null, null).toASCIIString();</span>
+<span class="nc" id="L752">        } catch (URISyntaxException ex) {</span>
+<span class="nc" id="L753">            throw new AssertionError(ex);</span>
         }
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -328,113 +328,136 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param names
      *            Names of the label
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(String... names) throws IOException {
-<span class="fc" id="L337">        _addLabels(Arrays.asList(names));</span>
-<span class="fc" id="L338">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; addLabels(String... names) throws IOException {
+<span class="fc" id="L339">        return _addLabels(Arrays.asList(names));</span>
+    }
 
     /**
      * Add labels.
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(GHLabel... labels) throws IOException {
-<span class="nc" id="L351">        addLabels(Arrays.asList(labels));</span>
-<span class="nc" id="L352">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; addLabels(GHLabel... labels) throws IOException {
+<span class="fc" id="L355">        return addLabels(Arrays.asList(labels));</span>
+    }
 
     /**
      * Add labels.
      *
      * Labels that are already present on the target are ignored.
      *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
-<span class="nc" id="L365">        _addLabels(GHLabel.toNames(labels));</span>
-<span class="nc" id="L366">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; addLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
+<span class="fc" id="L371">        return _addLabels(GHLabel.toNames(labels));</span>
+    }
 
-    private void _addLabels(Collection&lt;String&gt; names) throws IOException {
-<span class="fc" id="L369">        root.createRequest().with(&quot;labels&quot;, names).method(&quot;POST&quot;).withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;).send();</span>
-<span class="fc" id="L370">    }</span>
+    private List&lt;GHLabel&gt; _addLabels(Collection&lt;String&gt; names) throws IOException {
+<span class="fc" id="L375">        return Arrays.asList(root.createRequest()</span>
+<span class="fc" id="L376">                .with(&quot;labels&quot;, names)</span>
+<span class="fc" id="L377">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L378">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;)</span>
+<span class="fc" id="L379">                .fetch(GHLabel[].class));</span>
+    }
 
     /**
      * Remove a single label.
      *
      * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
      *
+     * @return the remaining list of labels
      * @param name
      *            the name
      * @throws IOException
      *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
-    public void removeLabel(String name) throws IOException {
-<span class="fc" id="L383">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;, name).send();</span>
-<span class="fc" id="L384">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; removeLabel(String name) throws IOException {
+<span class="fc" id="L395">        return Arrays.asList(root.createRequest()</span>
+<span class="fc" id="L396">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L397">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;, name)</span>
+<span class="fc" id="L398">                .fetch(GHLabel[].class));</span>
+    }
 
     /**
      * Remove a collection of labels.
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param names
      *            the names
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(String... names) throws IOException {
-<span class="fc" id="L397">        _removeLabels(Arrays.asList(names));</span>
-<span class="fc" id="L398">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; removeLabels(String... names) throws IOException {
+<span class="fc" id="L414">        return _removeLabels(Arrays.asList(names));</span>
+    }
 
     /**
      * Remove a collection of labels.
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
-    public void removeLabels(GHLabel... labels) throws IOException {
-<span class="nc" id="L412">        removeLabels(Arrays.asList(labels));</span>
-<span class="nc" id="L413">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; removeLabels(GHLabel... labels) throws IOException {
+<span class="fc" id="L431">        return removeLabels(Arrays.asList(labels));</span>
+    }
 
     /**
      * Remove a collection of labels.
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
-<span class="nc" id="L426">        _removeLabels(GHLabel.toNames(labels));</span>
-<span class="nc" id="L427">    }</span>
+    @WithBridgeMethods(void.class)
+    public List&lt;GHLabel&gt; removeLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
+<span class="fc" id="L447">        return _removeLabels(GHLabel.toNames(labels));</span>
+    }
 
-    private void _removeLabels(Collection&lt;String&gt; names) throws IOException {
-<span class="fc bfc" id="L430" title="All 2 branches covered.">        for (String name : names) {</span>
+    private List&lt;GHLabel&gt; _removeLabels(Collection&lt;String&gt; names) throws IOException {
+<span class="fc" id="L451">        List&lt;GHLabel&gt; remainingLabels = Collections.emptyList();</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">        for (String name : names) {</span>
             try {
-<span class="fc" id="L432">                removeLabel(name);</span>
-<span class="fc" id="L433">            } catch (GHFileNotFoundException e) {</span>
+<span class="fc" id="L454">                remainingLabels = removeLabel(name);</span>
+<span class="fc" id="L455">            } catch (GHFileNotFoundException e) {</span>
                 // when trying to remove multiple labels, we ignore already removed
-<span class="fc" id="L435">            }</span>
-<span class="fc" id="L436">        }</span>
-<span class="fc" id="L437">    }</span>
+<span class="fc" id="L457">            }</span>
+<span class="fc" id="L458">        }</span>
+<span class="fc" id="L459">        return remainingLabels;</span>
+    }
 
     /**
      * Obtains all the comments associated with this issue.
@@ -445,7 +468,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @see #listComments() #listComments()
      */
     public List&lt;GHIssueComment&gt; getComments() throws IOException {
-<span class="fc" id="L448">        return listComments().toList();</span>
+<span class="fc" id="L471">        return listComments().toList();</span>
     }
 
     /**
@@ -456,30 +479,30 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public PagedIterable&lt;GHIssueComment&gt; listComments() throws IOException {
-<span class="fc" id="L459">        return root.createRequest()</span>
-<span class="fc" id="L460">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L461">                .toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L482">        return root.createRequest()</span>
+<span class="fc" id="L483">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L484">                .toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     @Preview(SQUIRREL_GIRL)
     @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L467">        return root.createRequest()</span>
-<span class="fc" id="L468">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L469">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L470">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L471">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L472">                .fetch(GHReaction.class)</span>
-<span class="fc" id="L473">                .wrap(root);</span>
+<span class="fc" id="L490">        return root.createRequest()</span>
+<span class="fc" id="L491">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L492">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L493">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L494">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L495">                .fetch(GHReaction.class)</span>
+<span class="fc" id="L496">                .wrap(root);</span>
     }
 
     @Preview(SQUIRREL_GIRL)
     @Deprecated
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L479">        return root.createRequest()</span>
-<span class="fc" id="L480">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L481">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L482">                .toIterable(GHReaction[].class, item -&gt; item.wrap(root));</span>
+<span class="fc" id="L502">        return root.createRequest()</span>
+<span class="fc" id="L503">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L504">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L505">                .toIterable(GHReaction[].class, item -&gt; item.wrap(root));</span>
     }
 
     /**
@@ -491,8 +514,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void addAssignees(GHUser... assignees) throws IOException {
-<span class="nc" id="L494">        addAssignees(Arrays.asList(assignees));</span>
-<span class="nc" id="L495">    }</span>
+<span class="nc" id="L517">        addAssignees(Arrays.asList(assignees));</span>
+<span class="nc" id="L518">    }</span>
 
     /**
      * Add assignees.
@@ -503,12 +526,12 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void addAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="nc" id="L506">        root.createRequest()</span>
-<span class="nc" id="L507">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L508">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="nc" id="L509">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
-<span class="nc" id="L510">                .fetchInto(this);</span>
-<span class="nc" id="L511">    }</span>
+<span class="nc" id="L529">        root.createRequest()</span>
+<span class="nc" id="L530">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L531">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="nc" id="L532">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
+<span class="nc" id="L533">                .fetchInto(this);</span>
+<span class="nc" id="L534">    }</span>
 
     /**
      * Sets assignees.
@@ -519,8 +542,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void setAssignees(GHUser... assignees) throws IOException {
-<span class="fc" id="L522">        setAssignees(Arrays.asList(assignees));</span>
-<span class="fc" id="L523">    }</span>
+<span class="fc" id="L545">        setAssignees(Arrays.asList(assignees));</span>
+<span class="fc" id="L546">    }</span>
 
     /**
      * Sets assignees.
@@ -531,12 +554,12 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void setAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="fc" id="L534">        root.createRequest()</span>
-<span class="fc" id="L535">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L536">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="fc" id="L537">                .withUrlPath(getIssuesApiRoute())</span>
-<span class="fc" id="L538">                .send();</span>
-<span class="fc" id="L539">    }</span>
+<span class="fc" id="L557">        root.createRequest()</span>
+<span class="fc" id="L558">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L559">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="fc" id="L560">                .withUrlPath(getIssuesApiRoute())</span>
+<span class="fc" id="L561">                .send();</span>
+<span class="fc" id="L562">    }</span>
 
     /**
      * Remove assignees.
@@ -547,8 +570,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void removeAssignees(GHUser... assignees) throws IOException {
-<span class="nc" id="L550">        removeAssignees(Arrays.asList(assignees));</span>
-<span class="nc" id="L551">    }</span>
+<span class="nc" id="L573">        removeAssignees(Arrays.asList(assignees));</span>
+<span class="nc" id="L574">    }</span>
 
     /**
      * Remove assignees.
@@ -559,13 +582,13 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void removeAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="nc" id="L562">        root.createRequest()</span>
-<span class="nc" id="L563">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L564">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="nc" id="L565">                .inBody()</span>
-<span class="nc" id="L566">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
-<span class="nc" id="L567">                .fetchInto(this);</span>
-<span class="nc" id="L568">    }</span>
+<span class="nc" id="L585">        root.createRequest()</span>
+<span class="nc" id="L586">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L587">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="nc" id="L588">                .inBody()</span>
+<span class="nc" id="L589">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
+<span class="nc" id="L590">                .fetchInto(this);</span>
+<span class="nc" id="L591">    }</span>
 
     /**
      * Gets api route.
@@ -573,7 +596,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L576">        return getIssuesApiRoute();</span>
+<span class="fc" id="L599">        return getIssuesApiRoute();</span>
     }
 
     /**
@@ -582,12 +605,12 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the issues api route
      */
     protected String getIssuesApiRoute() {
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (owner == null) {</span>
+<span class="fc bfc" id="L608" title="All 2 branches covered.">        if (owner == null) {</span>
             // Issues returned from search to do not have an owner. Attempt to use url.
-<span class="fc" id="L587">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="fc" id="L588">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="fc" id="L610">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L611">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
         }
-<span class="fc" id="L590">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/issues/&quot; + number;</span>
+<span class="fc" id="L613">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/issues/&quot; + number;</span>
     }
 
     /**
@@ -598,7 +621,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getAssignee() throws IOException {
-<span class="fc" id="L601">        return root.intern(assignee);</span>
+<span class="fc" id="L624">        return root.intern(assignee);</span>
     }
 
     /**
@@ -607,7 +630,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the assignees
      */
     public List&lt;GHUser&gt; getAssignees() {
-<span class="nc" id="L610">        return Collections.unmodifiableList(Arrays.asList(assignees));</span>
+<span class="nc" id="L633">        return Collections.unmodifiableList(Arrays.asList(assignees));</span>
     }
 
     /**
@@ -618,7 +641,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L621">        return root.intern(user);</span>
+<span class="fc" id="L644">        return root.intern(user);</span>
     }
 
     /**
@@ -633,14 +656,14 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getClosedBy() throws IOException {
-<span class="nc bnc" id="L636" title="All 2 branches missed.">        if (!&quot;closed&quot;.equals(state))</span>
-<span class="nc" id="L637">            return null;</span>
+<span class="nc bnc" id="L659" title="All 2 branches missed.">        if (!&quot;closed&quot;.equals(state))</span>
+<span class="nc" id="L660">            return null;</span>
 
         // TODO
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-<span class="nc" id="L643">        return root.intern(closed_by);</span>
+<span class="nc" id="L666">        return root.intern(closed_by);</span>
     }
 
     /**
@@ -649,7 +672,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the comments count
      */
     public int getCommentsCount() {
-<span class="fc" id="L652">        return comments;</span>
+<span class="fc" id="L675">        return comments;</span>
     }
 
     /**
@@ -658,7 +681,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the pull request
      */
     public PullRequest getPullRequest() {
-<span class="nc" id="L661">        return pull_request;</span>
+<span class="nc" id="L684">        return pull_request;</span>
     }
 
     /**
@@ -667,7 +690,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the boolean
      */
     public boolean isPullRequest() {
-<span class="nc bnc" id="L670" title="All 2 branches missed.">        return pull_request != null;</span>
+<span class="nc bnc" id="L693" title="All 2 branches missed.">        return pull_request != null;</span>
     }
 
     /**
@@ -676,7 +699,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the milestone
      */
     public GHMilestone getMilestone() {
-<span class="fc" id="L679">        return milestone;</span>
+<span class="fc" id="L702">        return milestone;</span>
     }
 
     /**
@@ -684,7 +707,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L687">    public static class PullRequest {</span>
+<span class="fc" id="L710">    public static class PullRequest {</span>
         private String diff_url, patch_url, html_url;
 
         /**
@@ -693,7 +716,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
          * @return the diff url
          */
         public URL getDiffUrl() {
-<span class="nc" id="L696">            return GitHubClient.parseURL(diff_url);</span>
+<span class="nc" id="L719">            return GitHubClient.parseURL(diff_url);</span>
         }
 
         /**
@@ -702,7 +725,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
          * @return the patch url
          */
         public URL getPatchUrl() {
-<span class="nc" id="L705">            return GitHubClient.parseURL(patch_url);</span>
+<span class="nc" id="L728">            return GitHubClient.parseURL(patch_url);</span>
         }
 
         /**
@@ -711,16 +734,16 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L714">            return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L737">            return GitHubClient.parseURL(html_url);</span>
         }
     }
 
     protected static List&lt;String&gt; getLogins(Collection&lt;GHUser&gt; users) {
-<span class="fc" id="L719">        List&lt;String&gt; names = new ArrayList&lt;String&gt;(users.size());</span>
-<span class="fc bfc" id="L720" title="All 2 branches covered.">        for (GHUser a : users) {</span>
-<span class="fc" id="L721">            names.add(a.getLogin());</span>
-<span class="fc" id="L722">        }</span>
-<span class="fc" id="L723">        return names;</span>
+<span class="fc" id="L742">        List&lt;String&gt; names = new ArrayList&lt;String&gt;(users.size());</span>
+<span class="fc bfc" id="L743" title="All 2 branches covered.">        for (GHUser a : users) {</span>
+<span class="fc" id="L744">            names.add(a.getLogin());</span>
+<span class="fc" id="L745">        }</span>
+<span class="fc" id="L746">        return names;</span>
     }
 
     /**
@@ -731,9 +754,9 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public PagedIterable&lt;GHIssueEvent&gt; listEvents() throws IOException {
-<span class="fc" id="L734">        return root.createRequest()</span>
-<span class="fc" id="L735">                .withUrlPath(owner.getApiTailUrl(String.format(&quot;/issues/%s/events&quot;, number)))</span>
-<span class="fc" id="L736">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L757">        return root.createRequest()</span>
+<span class="fc" id="L758">                .withUrlPath(owner.getApiTailUrl(String.format(&quot;/issues/%s/events&quot;, number)))</span>
+<span class="fc" id="L759">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(this));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

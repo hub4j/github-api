@@ -118,20 +118,55 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 <span class="fc" id="L118">        return q(&quot;repo:&quot; + v);</span>
     }
 
+    /**
+     * Order gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder order(GHDirection v) {
+<span class="fc" id="L129">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L130">        return this;</span>
+    }
+
+    /**
+     * Sort gh content search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (Sort.BEST_MATCH.equals(sort)) {</span>
+<span class="fc" id="L142">            req.remove(&quot;sort&quot;);</span>
+        } else {
+<span class="fc" id="L144">            req.with(&quot;sort&quot;, sort);</span>
+        }
+<span class="fc" id="L146">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L152">    public enum Sort {</span>
+<span class="fc" id="L153">        BEST_MATCH, INDEXED</span>
+    }
+
     private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
         private GHContent[] items;
 
         @Override
         GHContent[] getItems(GitHub root) {
-<span class="fc bfc" id="L126" title="All 2 branches covered.">            for (GHContent item : items)</span>
-<span class="fc" id="L127">                item.wrap(root);</span>
-<span class="fc" id="L128">            return items;</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            for (GHContent item : items)</span>
+<span class="fc" id="L162">                item.wrap(root);</span>
+<span class="fc" id="L163">            return items;</span>
         }
     }
 
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L134">        return &quot;/search/code&quot;;</span>
+<span class="fc" id="L169">        return &quot;/search/code&quot;;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

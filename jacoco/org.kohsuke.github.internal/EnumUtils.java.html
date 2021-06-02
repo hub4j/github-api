@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnumUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.internal</a> &gt; <span class="el_source">EnumUtils.java</span></div><h1>EnumUtils.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.internal;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  * Utils for Enums.
  */
 public final class EnumUtils {
+
+<span class="fc" id="L11">    private static final Logger LOGGER = Logger.getLogger(EnumUtils.class.getName());</span>
 
     /**
      * Returns an enum value matching the value if found, null if the value is null and {@code defaultEnum} if the value
@@ -24,17 +27,37 @@ public final class EnumUtils {
      * @return an enum value or null
      */
     public static &lt;E extends Enum&lt;E&gt;&gt; E getNullableEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L28">            return null;</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L31">            return null;</span>
         }
+<span class="fc" id="L33">        return getEnumOrDefault(enumClass, value, defaultEnum);</span>
+    }
+
+    /**
+     * Returns an enum value matching the value if found, {@code defaultEnum} if the value is null or cannot be matched
+     * to a value of the enum.
+     *
+     * @param &lt;E&gt;
+     *            the type of the enum
+     * @param enumClass
+     *            the type of the enum
+     * @param value
+     *            the value to interpret
+     * @param defaultEnum
+     *            the default enum value if the value doesn't match one of the enum value
+     * @return an enum value
+     */
+    public static &lt;E extends Enum&lt;E&gt;&gt; E getEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
         try {
-<span class="fc" id="L31">            return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));</span>
-<span class="fc" id="L32">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L33">            return defaultEnum;</span>
+<span class="fc" id="L52">            return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));</span>
+<span class="fc" id="L53">        } catch (NullPointerException | IllegalArgumentException e) {</span>
+<span class="fc" id="L54">            LOGGER.warning(&quot;Unknown value &quot; + value + &quot; for enum class &quot; + enumClass.getName() + &quot;, defaulting to &quot;</span>
+<span class="fc" id="L55">                    + defaultEnum.name());</span>
+<span class="fc" id="L56">            return defaultEnum;</span>
         }
     }
 
     private EnumUtils() {
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

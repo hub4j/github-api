@@ -43,7 +43,7 @@ import java.util.List;
 
     GHCheckSuite wrap(GitHub root) {
 <span class="fc" id="L45">        this.root = root;</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (owner != null) {</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (owner != null) {</span>
 <span class="fc" id="L47">            owner.wrap(root);</span>
 <span class="pc bpc" id="L48" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
 <span class="fc bfc" id="L49" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
@@ -257,4 +257,4 @@ import java.util.List;
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

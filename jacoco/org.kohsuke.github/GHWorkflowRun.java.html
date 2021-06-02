@@ -188,7 +188,7 @@ import static java.util.Objects.requireNonNull;
      * @return type of event
      */
     public GHEvent getEvent() {
-<span class="fc" id="L191">        return Enum.valueOf(GHEvent.class, event.toUpperCase(Locale.ROOT));</span>
+<span class="fc" id="L191">        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);</span>
     }
 
     /**
@@ -455,4 +455,4 @@ import static java.util.Objects.requireNonNull;
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

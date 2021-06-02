@@ -20,64 +20,72 @@ import java.util.Locale;
 <span class="fc" id="L20">    DEPLOY_KEY,</span>
 <span class="fc" id="L21">    DEPLOYMENT,</span>
 <span class="fc" id="L22">    DEPLOYMENT_STATUS,</span>
-<span class="fc" id="L23">    DOWNLOAD,</span>
-<span class="fc" id="L24">    FOLLOW,</span>
-<span class="fc" id="L25">    FORK,</span>
-<span class="fc" id="L26">    FORK_APPLY,</span>
-<span class="fc" id="L27">    GITHUB_APP_AUTHORIZATION,</span>
-<span class="fc" id="L28">    GIST,</span>
-<span class="fc" id="L29">    GOLLUM,</span>
-<span class="fc" id="L30">    INSTALLATION,</span>
-<span class="fc" id="L31">    INSTALLATION_REPOSITORIES,</span>
-<span class="fc" id="L32">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
-<span class="fc" id="L33">    ISSUE_COMMENT,</span>
-<span class="fc" id="L34">    ISSUES,</span>
-<span class="fc" id="L35">    LABEL,</span>
-<span class="fc" id="L36">    MARKETPLACE_PURCHASE,</span>
-<span class="fc" id="L37">    MEMBER,</span>
-<span class="fc" id="L38">    MEMBERSHIP,</span>
-<span class="fc" id="L39">    META,</span>
-<span class="fc" id="L40">    MILESTONE,</span>
-<span class="fc" id="L41">    ORGANIZATION,</span>
-<span class="fc" id="L42">    ORG_BLOCK,</span>
-<span class="fc" id="L43">    PACKAGE,</span>
-<span class="fc" id="L44">    PAGE_BUILD,</span>
-<span class="fc" id="L45">    PROJECT_CARD,</span>
-<span class="fc" id="L46">    PROJECT_COLUMN,</span>
-<span class="fc" id="L47">    PROJECT,</span>
-<span class="fc" id="L48">    PING,</span>
-<span class="fc" id="L49">    PUBLIC,</span>
-<span class="fc" id="L50">    PULL_REQUEST,</span>
-<span class="fc" id="L51">    PULL_REQUEST_REVIEW,</span>
-<span class="fc" id="L52">    PULL_REQUEST_REVIEW_COMMENT,</span>
-<span class="fc" id="L53">    PUSH,</span>
-<span class="fc" id="L54">    REGISTRY_PACKAGE,</span>
-<span class="fc" id="L55">    RELEASE,</span>
-<span class="fc" id="L56">    REPOSITORY_DISPATCH, // only valid for org hooks</span>
-<span class="fc" id="L57">    REPOSITORY,</span>
-<span class="fc" id="L58">    REPOSITORY_IMPORT,</span>
-<span class="fc" id="L59">    REPOSITORY_VULNERABILITY_ALERT,</span>
-<span class="fc" id="L60">    SECURITY_ADVISORY,</span>
-<span class="fc" id="L61">    STAR,</span>
-<span class="fc" id="L62">    STATUS,</span>
-<span class="fc" id="L63">    TEAM,</span>
-<span class="fc" id="L64">    TEAM_ADD,</span>
-<span class="fc" id="L65">    WATCH,</span>
-<span class="fc" id="L66">    WORKFLOW_DISPATCH,</span>
-<span class="fc" id="L67">    WORKFLOW_RUN,</span>
+<span class="fc" id="L23">    DISCUSSION,</span>
+<span class="fc" id="L24">    DISCUSSION_COMMENT,</span>
+<span class="fc" id="L25">    DOWNLOAD,</span>
+<span class="fc" id="L26">    FOLLOW,</span>
+<span class="fc" id="L27">    FORK,</span>
+<span class="fc" id="L28">    FORK_APPLY,</span>
+<span class="fc" id="L29">    GITHUB_APP_AUTHORIZATION,</span>
+<span class="fc" id="L30">    GIST,</span>
+<span class="fc" id="L31">    GOLLUM,</span>
+<span class="fc" id="L32">    INSTALLATION,</span>
+<span class="fc" id="L33">    INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L34">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L35">    ISSUE_COMMENT,</span>
+<span class="fc" id="L36">    ISSUES,</span>
+<span class="fc" id="L37">    LABEL,</span>
+<span class="fc" id="L38">    MARKETPLACE_PURCHASE,</span>
+<span class="fc" id="L39">    MEMBER,</span>
+<span class="fc" id="L40">    MEMBERSHIP,</span>
+<span class="fc" id="L41">    META,</span>
+<span class="fc" id="L42">    MILESTONE,</span>
+<span class="fc" id="L43">    ORGANIZATION,</span>
+<span class="fc" id="L44">    ORG_BLOCK,</span>
+<span class="fc" id="L45">    PACKAGE,</span>
+<span class="fc" id="L46">    PAGE_BUILD,</span>
+<span class="fc" id="L47">    PROJECT_CARD,</span>
+<span class="fc" id="L48">    PROJECT_COLUMN,</span>
+<span class="fc" id="L49">    PROJECT,</span>
+<span class="fc" id="L50">    PING,</span>
+<span class="fc" id="L51">    PUBLIC,</span>
+<span class="fc" id="L52">    PULL_REQUEST,</span>
+<span class="fc" id="L53">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L54">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L55">    PUSH,</span>
+<span class="fc" id="L56">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L57">    RELEASE,</span>
+<span class="fc" id="L58">    REPOSITORY_DISPATCH, // only valid for org hooks</span>
+<span class="fc" id="L59">    REPOSITORY,</span>
+<span class="fc" id="L60">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L61">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L62">    SCHEDULE,</span>
+<span class="fc" id="L63">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L64">    STAR,</span>
+<span class="fc" id="L65">    STATUS,</span>
+<span class="fc" id="L66">    TEAM,</span>
+<span class="fc" id="L67">    TEAM_ADD,</span>
+<span class="fc" id="L68">    WATCH,</span>
+<span class="fc" id="L69">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L70">    WORKFLOW_RUN,</span>
+
+    /**
+     * Special event type that means we haven't found an enum value corresponding to the event.
+     */
+<span class="fc" id="L75">    UNKNOWN,</span>
 
     /**
      * Special event type that means &quot;every possible event&quot;
      */
-<span class="fc" id="L72">    ALL;</span>
+<span class="fc" id="L80">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
      */
     String symbol() {
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (this == ALL)</span>
-<span class="fc" id="L79">            return &quot;*&quot;;</span>
-<span class="fc" id="L80">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L87">            return &quot;*&quot;;</span>
+<span class="fc" id="L88">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

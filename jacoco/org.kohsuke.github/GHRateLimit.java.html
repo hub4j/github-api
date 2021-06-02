@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
@@ -75,10 +76,10 @@ public class GHRateLimit {
      * Private, but made internal for testing.
      */
     @Nonnull
-<span class="fc" id="L78">    static final GHRateLimit DEFAULT = new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L79">            UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L79">    static final GHRateLimit DEFAULT = new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
 <span class="fc" id="L80">            UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L81">            UnknownLimitRecord.DEFAULT);</span>
+<span class="fc" id="L81">            UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L82">            UnknownLimitRecord.DEFAULT);</span>
 
     /**
      * Creates a new {@link GHRateLimit} from a single record for the specified endpoint with place holders for other
@@ -95,28 +96,28 @@ public class GHRateLimit {
      */
     @Nonnull
     static GHRateLimit fromRecord(@Nonnull Record record, @Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc bfc" id="L98" title="All 4 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE || rateLimitTarget == RateLimitTarget.NONE) {</span>
-<span class="fc" id="L99">            return new GHRateLimit(record,</span>
-<span class="fc" id="L100">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc bfc" id="L99" title="All 4 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE || rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L100">            return new GHRateLimit(record,</span>
 <span class="fc" id="L101">                    UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L102">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
-<span class="fc" id="L104">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L102">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L103">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L105">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
                     record,
-<span class="fc" id="L106">                    UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L107">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="fc" id="L109">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L110">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L107">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L108">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L110">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L111">                    UnknownLimitRecord.DEFAULT,</span>
                     record,
-<span class="fc" id="L112">                    UnknownLimitRecord.DEFAULT);</span>
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
-<span class="fc" id="L114">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
-<span class="fc" id="L115">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L113">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L115">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
 <span class="fc" id="L116">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L117">                    UnknownLimitRecord.DEFAULT,</span>
                     record);
         } else {
-<span class="nc" id="L119">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
+<span class="nc" id="L120">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
         }
     }
 
@@ -124,24 +125,24 @@ public class GHRateLimit {
     GHRateLimit(@Nonnull @JsonProperty(&quot;core&quot;) Record core,
             @Nonnull @JsonProperty(&quot;search&quot;) Record search,
             @Nonnull @JsonProperty(&quot;graphql&quot;) Record graphql,
-<span class="fc" id="L127">            @Nonnull @JsonProperty(&quot;integration_manifest&quot;) Record integrationManifest) {</span>
+<span class="fc" id="L128">            @Nonnull @JsonProperty(&quot;integration_manifest&quot;) Record integrationManifest) {</span>
         // The Nonnull annotation is ignored by Jackson, we have to check manually
-<span class="fc" id="L129">        Objects.requireNonNull(core);</span>
-<span class="fc" id="L130">        Objects.requireNonNull(search);</span>
-<span class="fc" id="L131">        Objects.requireNonNull(graphql);</span>
-<span class="fc" id="L132">        Objects.requireNonNull(integrationManifest);</span>
+<span class="fc" id="L130">        Objects.requireNonNull(core);</span>
+<span class="fc" id="L131">        Objects.requireNonNull(search);</span>
+<span class="fc" id="L132">        Objects.requireNonNull(graphql);</span>
+<span class="fc" id="L133">        Objects.requireNonNull(integrationManifest);</span>
 
-<span class="fc" id="L134">        this.core = core;</span>
-<span class="fc" id="L135">        this.search = search;</span>
-<span class="fc" id="L136">        this.graphql = graphql;</span>
-<span class="fc" id="L137">        this.integrationManifest = integrationManifest;</span>
+<span class="fc" id="L135">        this.core = core;</span>
+<span class="fc" id="L136">        this.search = search;</span>
+<span class="fc" id="L137">        this.graphql = graphql;</span>
+<span class="fc" id="L138">        this.integrationManifest = integrationManifest;</span>
 
         // Deprecated fields
-<span class="fc" id="L140">        this.remaining = core.getRemaining();</span>
-<span class="fc" id="L141">        this.limit = core.getLimit();</span>
+<span class="fc" id="L141">        this.remaining = core.getRemaining();</span>
+<span class="fc" id="L142">        this.limit = core.getLimit();</span>
         // This is wrong but is how this was implemented. Kept for backward compat.
-<span class="fc" id="L143">        this.reset = new Date(core.getResetEpochSeconds());</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L144">        this.reset = new Date(core.getResetEpochSeconds());</span>
+<span class="fc" id="L145">    }</span>
 
     /**
      * Returns the date at which the Core API rate limit will reset.
@@ -150,7 +151,7 @@ public class GHRateLimit {
      */
     @Nonnull
     public Date getResetDate() {
-<span class="fc" id="L153">        return getCore().getResetDate();</span>
+<span class="fc" id="L154">        return getCore().getResetDate();</span>
     }
 
     /**
@@ -160,7 +161,7 @@ public class GHRateLimit {
      * @since 1.100
      */
     public int getRemaining() {
-<span class="fc" id="L163">        return getCore().getRemaining();</span>
+<span class="fc" id="L164">        return getCore().getRemaining();</span>
     }
 
     /**
@@ -170,7 +171,7 @@ public class GHRateLimit {
      * @since 1.100
      */
     public int getLimit() {
-<span class="fc" id="L173">        return getCore().getLimit();</span>
+<span class="fc" id="L174">        return getCore().getLimit();</span>
     }
 
     /**
@@ -180,7 +181,7 @@ public class GHRateLimit {
      * @since 1.100
      */
     public long getResetEpochSeconds() {
-<span class="fc" id="L183">        return getCore().getResetEpochSeconds();</span>
+<span class="fc" id="L184">        return getCore().getResetEpochSeconds();</span>
     }
 
     /**
@@ -190,7 +191,7 @@ public class GHRateLimit {
      * @since 1.100
      */
     public boolean isExpired() {
-<span class="fc" id="L193">        return getCore().isExpired();</span>
+<span class="fc" id="L194">        return getCore().isExpired();</span>
     }
 
     /**
@@ -201,7 +202,7 @@ public class GHRateLimit {
      */
     @Nonnull
     public Record getCore() {
-<span class="fc" id="L204">        return core;</span>
+<span class="fc" id="L205">        return core;</span>
     }
 
     /**
@@ -212,7 +213,7 @@ public class GHRateLimit {
      */
     @Nonnull
     public Record getSearch() {
-<span class="fc" id="L215">        return search;</span>
+<span class="fc" id="L216">        return search;</span>
     }
 
     /**
@@ -223,7 +224,7 @@ public class GHRateLimit {
      */
     @Nonnull
     public Record getGraphQL() {
-<span class="fc" id="L226">        return graphql;</span>
+<span class="fc" id="L227">        return graphql;</span>
     }
 
     /**
@@ -235,32 +236,32 @@ public class GHRateLimit {
      */
     @Nonnull
     public Record getIntegrationManifest() {
-<span class="fc" id="L238">        return integrationManifest;</span>
+<span class="fc" id="L239">        return integrationManifest;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L243">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;, search &quot; + getSearch().toString() + &quot;, graphql &quot;</span>
-<span class="fc" id="L244">                + getGraphQL().toString() + &quot;, integrationManifest &quot; + getIntegrationManifest().toString() + &quot;}&quot;;</span>
+<span class="fc" id="L244">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;, search &quot; + getSearch().toString() + &quot;, graphql &quot;</span>
+<span class="fc" id="L245">                + getGraphQL().toString() + &quot;, integrationManifest &quot; + getIntegrationManifest().toString() + &quot;}&quot;;</span>
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        if (this == o) {</span>
-<span class="nc" id="L250">            return true;</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L251">            return true;</span>
         }
-<span class="pc bpc" id="L252" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L253">            return false;</span>
+<span class="pc bpc" id="L253" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L254">            return false;</span>
         }
-<span class="fc" id="L255">        GHRateLimit rateLimit = (GHRateLimit) o;</span>
-<span class="fc bfc" id="L256" title="All 4 branches covered.">        return getCore().equals(rateLimit.getCore()) &amp;&amp; getSearch().equals(rateLimit.getSearch())</span>
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                &amp;&amp; getGraphQL().equals(rateLimit.getGraphQL())</span>
-<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                &amp;&amp; getIntegrationManifest().equals(rateLimit.getIntegrationManifest());</span>
+<span class="fc" id="L256">        GHRateLimit rateLimit = (GHRateLimit) o;</span>
+<span class="fc bfc" id="L257" title="All 4 branches covered.">        return getCore().equals(rateLimit.getCore()) &amp;&amp; getSearch().equals(rateLimit.getSearch())</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                &amp;&amp; getGraphQL().equals(rateLimit.getGraphQL())</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">                &amp;&amp; getIntegrationManifest().equals(rateLimit.getIntegrationManifest());</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L263">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
+<span class="fc" id="L264">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
     }
 
     /**
@@ -275,16 +276,16 @@ public class GHRateLimit {
     @Nonnull
     GHRateLimit getMergedRateLimit(@Nonnull GHRateLimit newLimit) {
 
-<span class="fc" id="L278">        GHRateLimit merged = new GHRateLimit(getCore().currentOrUpdated(newLimit.getCore()),</span>
-<span class="fc" id="L279">                getSearch().currentOrUpdated(newLimit.getSearch()),</span>
-<span class="fc" id="L280">                getGraphQL().currentOrUpdated(newLimit.getGraphQL()),</span>
-<span class="fc" id="L281">                getIntegrationManifest().currentOrUpdated(newLimit.getIntegrationManifest()));</span>
+<span class="fc" id="L279">        GHRateLimit merged = new GHRateLimit(getCore().currentOrUpdated(newLimit.getCore()),</span>
+<span class="fc" id="L280">                getSearch().currentOrUpdated(newLimit.getSearch()),</span>
+<span class="fc" id="L281">                getGraphQL().currentOrUpdated(newLimit.getGraphQL()),</span>
+<span class="fc" id="L282">                getIntegrationManifest().currentOrUpdated(newLimit.getIntegrationManifest()));</span>
 
-<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (merged.equals(this)) {</span>
-<span class="fc" id="L284">            merged = this;</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (merged.equals(this)) {</span>
+<span class="fc" id="L285">            merged = this;</span>
         }
 
-<span class="fc" id="L287">        return merged;</span>
+<span class="fc" id="L288">        return merged;</span>
     }
 
     /**
@@ -299,18 +300,18 @@ public class GHRateLimit {
      */
     @Nonnull
     Record getRecord(@Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc bfc" id="L302" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE) {</span>
-<span class="fc" id="L303">            return getCore();</span>
-<span class="fc bfc" id="L304" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
-<span class="fc" id="L305">            return getSearch();</span>
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="fc" id="L307">            return getGraphQL();</span>
-<span class="fc bfc" id="L308" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
-<span class="fc" id="L309">            return getIntegrationManifest();</span>
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.NONE) {</span>
-<span class="fc" id="L311">            return UnknownLimitRecord.DEFAULT;</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE) {</span>
+<span class="fc" id="L304">            return getCore();</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L306">            return getSearch();</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L308">            return getGraphQL();</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L310">            return getIntegrationManifest();</span>
+<span class="pc bpc" id="L311" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L312">            return UnknownLimitRecord.DEFAULT;</span>
         } else {
-<span class="nc" id="L313">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
+<span class="nc" id="L314">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
         }
     }
 
@@ -321,7 +322,7 @@ public class GHRateLimit {
      */
     public static class UnknownLimitRecord extends Record {
 
-<span class="fc" id="L324">        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();</span>
+<span class="fc" id="L325">        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();</span>
 
         /**
          * The number of seconds until a {@link UnknownLimitRecord} will expire.
@@ -335,16 +336,16 @@ public class GHRateLimit {
          *
          * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
          */
-<span class="fc" id="L338">        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
+<span class="fc" id="L339">        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
 
         static final int unknownLimit = 1000000;
         static final int unknownRemaining = 999999;
 
         // The default UnknownLimitRecord is an expired record.
-<span class="fc" id="L344">        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);</span>
+<span class="fc" id="L345">        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);</span>
 
         // The starting current UnknownLimitRecord is an expired record.
-<span class="fc" id="L347">        private static UnknownLimitRecord current = DEFAULT;</span>
+<span class="fc" id="L348">        private static final AtomicReference&lt;UnknownLimitRecord&gt; current = new AtomicReference&lt;&gt;(DEFAULT);</span>
 
         /**
          * Create a new unknown record that resets at the specified time.
@@ -353,23 +354,25 @@ public class GHRateLimit {
          *            the epoch second time when this record will expire.
          */
         private UnknownLimitRecord(long resetEpochSeconds) {
-<span class="fc" id="L356">            super(unknownLimit, unknownRemaining, resetEpochSeconds);</span>
-<span class="fc" id="L357">        }</span>
+<span class="fc" id="L357">            super(unknownLimit, unknownRemaining, resetEpochSeconds);</span>
+<span class="fc" id="L358">        }</span>
 
-        static synchronized Record current() {
-<span class="fc bfc" id="L360" title="All 2 branches covered.">            if (current.isExpired()) {</span>
-<span class="fc" id="L361">                current = new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds);</span>
+        static Record current() {
+<span class="fc" id="L361">            Record result = current.get();</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">            if (result.isExpired()) {</span>
+<span class="fc" id="L363">                current.set(new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds));</span>
+<span class="fc" id="L364">                result = current.get();</span>
             }
-<span class="fc" id="L363">            return current;</span>
+<span class="fc" id="L366">            return result;</span>
         }
 
         /**
          * Reset the current UnknownLimitRecord. For use during testing only.
          */
-        static synchronized void reset() {
-<span class="fc" id="L370">            current = DEFAULT;</span>
-<span class="fc" id="L371">            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
-<span class="fc" id="L372">        }</span>
+        static void reset() {
+<span class="fc" id="L373">            current.set(DEFAULT);</span>
+<span class="fc" id="L374">            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
+<span class="fc" id="L375">        }</span>
     }
 
     /**
@@ -396,7 +399,7 @@ public class GHRateLimit {
         /**
          * EpochSeconds time (UTC) at which this instance was created.
          */
-<span class="fc" id="L399">        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;</span>
+<span class="fc" id="L402">        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;</span>
 
         /**
          * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
@@ -421,8 +424,8 @@ public class GHRateLimit {
         public Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
                 @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
                 @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds) {
-<span class="fc" id="L424">            this(limit, remaining, resetEpochSeconds, null);</span>
-<span class="fc" id="L425">        }</span>
+<span class="fc" id="L427">            this(limit, remaining, resetEpochSeconds, null);</span>
+<span class="fc" id="L428">        }</span>
 
         /**
          * Instantiates a new Record. Called by Jackson data binding or during header parsing.
@@ -440,16 +443,16 @@ public class GHRateLimit {
         Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
                 @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
                 @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds,
-<span class="fc" id="L443">                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {</span>
-<span class="fc" id="L444">            this.limit = limit;</span>
-<span class="fc" id="L445">            this.remaining = remaining;</span>
-<span class="fc" id="L446">            this.resetEpochSeconds = resetEpochSeconds;</span>
-<span class="fc" id="L447">            String updatedAt = null;</span>
-<span class="fc bfc" id="L448" title="All 2 branches covered.">            if (responseInfo != null) {</span>
-<span class="fc" id="L449">                updatedAt = responseInfo.headerField(&quot;Date&quot;);</span>
+<span class="fc" id="L446">                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {</span>
+<span class="fc" id="L447">            this.limit = limit;</span>
+<span class="fc" id="L448">            this.remaining = remaining;</span>
+<span class="fc" id="L449">            this.resetEpochSeconds = resetEpochSeconds;</span>
+<span class="fc" id="L450">            String updatedAt = null;</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">            if (responseInfo != null) {</span>
+<span class="fc" id="L452">                updatedAt = responseInfo.headerField(&quot;Date&quot;);</span>
             }
-<span class="fc" id="L451">            this.resetDate = calculateResetDate(updatedAt);</span>
-<span class="fc" id="L452">        }</span>
+<span class="fc" id="L454">            this.resetDate = calculateResetDate(updatedAt);</span>
+<span class="fc" id="L455">        }</span>
 
         /**
          * Determine if the current {@link Record} is outdated compared to another. Rate Limit dates are only accurate
@@ -475,26 +478,26 @@ public class GHRateLimit {
         Record currentOrUpdated(@Nonnull Record other) {
             // This set of checks avoids most calls to isExpired()
             // Depends on UnknownLimitRecord.current() to prevent continuous updating of GHRateLimit rateLimit()
-<span class="fc bfc" id="L478" title="All 2 branches covered.">            if (getResetEpochSeconds() &gt; other.getResetEpochSeconds()</span>
-<span class="fc bfc" id="L479" title="All 2 branches covered.">                    || (getResetEpochSeconds() == other.getResetEpochSeconds()</span>
-<span class="fc bfc" id="L480" title="All 2 branches covered.">                            &amp;&amp; getRemaining() &lt;= other.getRemaining())) {</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">            if (getResetEpochSeconds() &gt; other.getResetEpochSeconds()</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">                    || (getResetEpochSeconds() == other.getResetEpochSeconds()</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">                            &amp;&amp; getRemaining() &lt;= other.getRemaining())) {</span>
                 // If the current record has a later reset
                 // or the current record has the same reset and fewer or same requests remaining
                 // Then it is most recent
-<span class="fc" id="L484">                return this;</span>
-<span class="fc bfc" id="L485" title="All 2 branches covered.">            } else if (!(other instanceof UnknownLimitRecord)) {</span>
+<span class="fc" id="L487">                return this;</span>
+<span class="fc bfc" id="L488" title="All 2 branches covered.">            } else if (!(other instanceof UnknownLimitRecord)) {</span>
                 // If the above is not the case that means other has a later reset
                 // or the same resent and fewer requests remaining.
                 // If the other record is not an unknown record, the the other is more recent
-<span class="fc" id="L489">                return other;</span>
-<span class="fc bfc" id="L490" title="All 4 branches covered.">            } else if (this.isExpired() &amp;&amp; !other.isExpired()) {</span>
+<span class="fc" id="L492">                return other;</span>
+<span class="fc bfc" id="L493" title="All 4 branches covered.">            } else if (this.isExpired() &amp;&amp; !other.isExpired()) {</span>
                 // The other is an unknown record.
                 // If the current record has expired and the other hasn't, return the other.
-<span class="fc" id="L493">                return other;</span>
+<span class="fc" id="L496">                return other;</span>
             }
 
             // If none of the above, the current record is most valid.
-<span class="fc" id="L497">            return this;</span>
+<span class="fc" id="L500">            return this;</span>
         }
 
         /**
@@ -526,23 +529,23 @@ public class GHRateLimit {
          */
         @Nonnull
         private Date calculateResetDate(@CheckForNull String updatedAt) {
-<span class="fc" id="L529">            long updatedAtEpochSeconds = createdAtEpochSeconds;</span>
-<span class="fc bfc" id="L530" title="All 2 branches covered.">            if (!StringUtils.isBlank(updatedAt)) {</span>
+<span class="fc" id="L532">            long updatedAtEpochSeconds = createdAtEpochSeconds;</span>
+<span class="fc bfc" id="L533" title="All 2 branches covered.">            if (!StringUtils.isBlank(updatedAt)) {</span>
                 try {
                     // Get the server date and reset data, will always return a time in GMT
-<span class="fc" id="L533">                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)</span>
-<span class="fc" id="L534">                            .toEpochSecond();</span>
-<span class="nc" id="L535">                } catch (DateTimeParseException e) {</span>
-<span class="nc bnc" id="L536" title="All 2 branches missed.">                    if (LOGGER.isLoggable(FINEST)) {</span>
-<span class="nc" id="L537">                        LOGGER.log(FINEST, &quot;Malformed Date header value &quot; + updatedAt, e);</span>
+<span class="fc" id="L536">                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)</span>
+<span class="fc" id="L537">                            .toEpochSecond();</span>
+<span class="nc" id="L538">                } catch (DateTimeParseException e) {</span>
+<span class="nc bnc" id="L539" title="All 2 branches missed.">                    if (LOGGER.isLoggable(FINEST)) {</span>
+<span class="nc" id="L540">                        LOGGER.log(FINEST, &quot;Malformed Date header value &quot; + updatedAt, e);</span>
                     }
-<span class="fc" id="L539">                }</span>
+<span class="fc" id="L542">                }</span>
             }
 
             // This may seem odd but it results in an accurate or slightly pessimistic reset date
             // based on system time rather than assuming the system time synchronized with the server
-<span class="fc" id="L544">            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;</span>
-<span class="fc" id="L545">            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);</span>
+<span class="fc" id="L547">            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;</span>
+<span class="fc" id="L548">            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);</span>
         }
 
         /**
@@ -551,7 +554,7 @@ public class GHRateLimit {
          * @return an integer
          */
         public int getRemaining() {
-<span class="fc" id="L554">            return remaining;</span>
+<span class="fc" id="L557">            return remaining;</span>
         }
 
         /**
@@ -560,7 +563,7 @@ public class GHRateLimit {
          * @return an integer
          */
         public int getLimit() {
-<span class="fc" id="L563">            return limit;</span>
+<span class="fc" id="L566">            return limit;</span>
         }
 
         /**
@@ -574,7 +577,7 @@ public class GHRateLimit {
          * @see #getResetDate()
          */
         public long getResetEpochSeconds() {
-<span class="fc" id="L577">            return resetEpochSeconds;</span>
+<span class="fc" id="L580">            return resetEpochSeconds;</span>
         }
 
         /**
@@ -585,7 +588,7 @@ public class GHRateLimit {
          * @return true if the rate limit reset date has passed. Otherwise false.
          */
         public boolean isExpired() {
-<span class="fc bfc" id="L588" title="All 2 branches covered.">            return getResetDate().getTime() &lt; System.currentTimeMillis();</span>
+<span class="fc bfc" id="L591" title="All 2 branches covered.">            return getResetDate().getTime() &lt; System.currentTimeMillis();</span>
         }
 
         /**
@@ -598,35 +601,35 @@ public class GHRateLimit {
          */
         @Nonnull
         public Date getResetDate() {
-<span class="fc" id="L601">            return new Date(resetDate.getTime());</span>
+<span class="fc" id="L604">            return new Date(resetDate.getTime());</span>
         }
 
         @Override
         public String toString() {
-<span class="fc" id="L606">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
+<span class="fc" id="L609">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
                     + '}';
         }
 
         @Override
         public boolean equals(Object o) {
-<span class="fc bfc" id="L612" title="All 2 branches covered.">            if (this == o) {</span>
-<span class="fc" id="L613">                return true;</span>
+<span class="fc bfc" id="L615" title="All 2 branches covered.">            if (this == o) {</span>
+<span class="fc" id="L616">                return true;</span>
             }
-<span class="pc bpc" id="L615" title="1 of 4 branches missed.">            if (o == null || getClass() != o.getClass()) {</span>
-<span class="fc" id="L616">                return false;</span>
+<span class="pc bpc" id="L618" title="1 of 4 branches missed.">            if (o == null || getClass() != o.getClass()) {</span>
+<span class="fc" id="L619">                return false;</span>
             }
-<span class="fc" id="L618">            Record record = (Record) o;</span>
-<span class="pc bpc" id="L619" title="1 of 4 branches missed.">            return getRemaining() == record.getRemaining() &amp;&amp; getLimit() == record.getLimit()</span>
-<span class="fc bfc" id="L620" title="All 2 branches covered.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
-<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
+<span class="fc" id="L621">            Record record = (Record) o;</span>
+<span class="pc bpc" id="L622" title="1 of 4 branches missed.">            return getRemaining() == record.getRemaining() &amp;&amp; getLimit() == record.getLimit()</span>
+<span class="fc bfc" id="L623" title="All 2 branches covered.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
+<span class="pc bpc" id="L624" title="1 of 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
         }
 
         @Override
         public int hashCode() {
-<span class="fc" id="L626">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
+<span class="fc" id="L629">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
         }
     }
 
-<span class="fc" id="L630">    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());</span>
+<span class="fc" id="L633">    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

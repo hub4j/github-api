@@ -40,6 +40,40 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testEventsForIssueRename() throws Exception {
+        // Create the issue.
+        GHRepository repo = getRepository();
+        GHIssueBuilder builder = repo.createIssue("Some invalid issue name");
+        GHIssue issue = builder.create();
+
+        // Generate rename event.
+        issue.setTitle("Fixed issue name");
+
+        // Test that the event is present.
+        List<GHIssueEvent> list = issue.listEvents().toList();
+        assertThat(list.size(), equalTo(1));
+
+        GHIssueEvent event = list.get(0);
+        assertThat(event.getIssue().getNumber(), equalTo(issue.getNumber()));
+        assertThat(event.getEvent(), equalTo("renamed"));
+        assertThat(event.getRename(), notNullValue());
+        assertThat(event.getRename().getFrom(), equalTo("Some invalid issue name"));
+        assertThat(event.getRename().getTo(), equalTo("Fixed issue name"));
+
+        // Test that we can get a single event directly.
+        GHIssueEvent eventFromRepo = repo.getIssueEvent(event.getId());
+        assertThat(eventFromRepo.getId(), equalTo(event.getId()));
+        assertThat(eventFromRepo.getCreatedAt(), equalTo(event.getCreatedAt()));
+        assertThat(eventFromRepo.getEvent(), equalTo("renamed"));
+        assertThat(eventFromRepo.getRename(), notNullValue());
+        assertThat(eventFromRepo.getRename().getFrom(), equalTo("Some invalid issue name"));
+        assertThat(eventFromRepo.getRename().getTo(), equalTo("Fixed issue name"));
+
+        // Close the issue.
+        issue.close();
+    }
+
+    @Test
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
         List<GHIssueEvent> list = repo.listIssueEvents().toList();

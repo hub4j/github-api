@@ -21,6 +21,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     private GHMilestone milestone;
     private GHLabel label;
     private GHUser assignee;
+    private GHIssueRename rename;
 
     private GHIssue issue;
 
@@ -142,6 +143,16 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     public GHUser getAssignee() {
         return assignee;
+    }
+
+    /**
+     * Get the {@link GHIssueRename} that contains information about issue old and new name. Only present for event
+     * "renamed", <code>null</code> otherwise.
+     *
+     * @return the GHIssueRename
+     */
+    public GHIssueRename getRename() {
+        return this.rename;
     }
 
     GHIssueEvent wrapUp(GitHub root) {

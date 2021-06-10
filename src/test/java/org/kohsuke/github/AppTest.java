@@ -777,6 +777,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(j.hasPublicMember(b), is(false));
     }
 
+    @Test
+    public void testCreateSimpleRelease() throws Exception {
+        GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
+
+        String tagName = UUID.randomUUID().toString();
+        String releaseName = "release-" + tagName;
+
+        GHRelease release = repo.createRelease(tagName).name(releaseName).prerelease(false).create();
+
+        GHRelease releaseCheck = repo.getRelease(release.getId());
+
+        assertThat(releaseCheck, notNullValue());
+        assertThat(releaseCheck.getTagName(), is(tagName));
+        assertThat(releaseCheck.isPrerelease(), is(false));
+    }
+
     @Ignore("Needs mocking check")
     @Test
     public void testCreateRelease() throws Exception {
@@ -792,7 +808,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         Thread.sleep(3000);
 
         try {
-
             for (GHTag tag : r.listTags()) {
                 if (tagName.equals(tag.getName())) {
                     String ash = tag.getCommit().getSHA1();

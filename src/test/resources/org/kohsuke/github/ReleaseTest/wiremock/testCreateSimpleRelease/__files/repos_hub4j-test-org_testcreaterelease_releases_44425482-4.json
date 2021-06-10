@@ -1,9 +1,9 @@
 {
-  "url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44424367",
-  "assets_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44424367/assets",
-  "upload_url": "https://uploads.github.com/repos/hub4j-test-org/testCreateRelease/releases/44424367/assets{?name,label}",
-  "html_url": "https://github.com/hub4j-test-org/testCreateRelease/releases/tag/8f928732-f833-4723-9e40-827209fde59d",
-  "id": 44424367,
+  "url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44425482",
+  "assets_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44425482/assets",
+  "upload_url": "https://uploads.github.com/repos/hub4j-test-org/testCreateRelease/releases/44425482/assets{?name,label}",
+  "html_url": "https://github.com/hub4j-test-org/testCreateRelease/releases/tag/f9c2647a-6a65-47c5-9c46-4c0a3650ecb1",
+  "id": 44425482,
   "author": {
     "login": "jlengrand",
     "id": 921666,
@@ -24,16 +24,16 @@
     "type": "User",
     "site_admin": false
   },
-  "node_id": "MDc6UmVsZWFzZTQ0NDI0MzY3",
-  "tag_name": "8f928732-f833-4723-9e40-827209fde59d",
+  "node_id": "MDc6UmVsZWFzZTQ0NDI1NDgy",
+  "tag_name": "f9c2647a-6a65-47c5-9c46-4c0a3650ecb1",
   "target_commitish": "main",
-  "name": "release-8f928732-f833-4723-9e40-827209fde59d",
+  "name": "release-f9c2647a-6a65-47c5-9c46-4c0a3650ecb1",
   "draft": false,
   "prerelease": false,
   "created_at": "2021-06-02T21:59:14Z",
-  "published_at": "2021-06-10T15:39:41Z",
+  "published_at": "2021-06-10T15:53:21Z",
   "assets": [],
-  "tarball_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/tarball/8f928732-f833-4723-9e40-827209fde59d",
-  "zipball_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/zipball/8f928732-f833-4723-9e40-827209fde59d",
+  "tarball_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/tarball/f9c2647a-6a65-47c5-9c46-4c0a3650ecb1",
+  "zipball_url": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/zipball/f9c2647a-6a65-47c5-9c46-4c0a3650ecb1",
   "body": null
 }

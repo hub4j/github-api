@@ -82,6 +82,17 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void listProjects() throws IOException {
+        GHUser user = gitHub.getUser("t0m4uk1991");
+        List<GHProject> projects = user.listProjects().toList();
+        assertThat(projects, notNullValue());
+        assertThat(projects.size(), is(3));
+        assertThat(projects.get(0).getName(), is("Project 1"));
+        assertThat(projects.get(1).getName(), is("Project 2"));
+        assertThat(projects.get(2).getName(), is("Project 3"));
+    }
+
+    @Test
     public void listPublicRepositoriesPageSize62() throws IOException {
         GHUser user = gitHub.getUser("kohsuke");
         Iterator<GHRepository> itr = user.listRepositories().withPageSize(62).iterator();

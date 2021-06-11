@@ -100,21 +100,23 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
         String tagName = mockGitHub.getMethodName();
         GHRelease release = repo.createRelease(tagName)
-                .categoryName("announcements")
                 .prerelease(true)
                 .create();
 
         GHRelease releaseCheck = repo.getRelease(release.getId());
-        GHRelease updateCheck = releaseCheck.update().prerelease(false).update();
+        GHRelease updateCheck = releaseCheck.update().categoryName("announcements").prerelease(false).update();
 
         try{
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(true));
+            assertThat(releaseCheck.getDiscussion_url(), nullValue());
 
             assertThat(updateCheck, notNullValue());
             assertThat(updateCheck.getTagName(), is(tagName));
             assertThat(updateCheck.isPrerelease(), is(false));
+            assertThat(updateCheck.getDiscussion_url(), notNullValue());
+
         }
         finally {
             release.delete();

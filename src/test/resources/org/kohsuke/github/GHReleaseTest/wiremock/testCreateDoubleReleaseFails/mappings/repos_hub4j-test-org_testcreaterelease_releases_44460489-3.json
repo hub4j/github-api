@@ -1,0 +1,50 @@
+{
+  "id": "e69f369e-7797-4046-b57c-d3c0bc2c7001",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases_44460489",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases/44460489",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_testcreaterelease_releases_44460489-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Jun 2021 07:05:01 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"1abc54330badd89bb2fb1b3c95846e2a9bf84da1c8618f66614fad4460f52dc5\"",
+      "Last-Modified": "Fri, 11 Jun 2021 07:05:00 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1623398211",
+      "X-RateLimit-Used": "8",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E689:621F:F0A6B9:F5F283:60C30B1C"
+    }
+  },
+  "uuid": "e69f369e-7797-4046-b57c-d3c0bc2c7001",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-testCreateRelease-releases-44460489",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-testCreateRelease-releases-44460489-2",
+  "insertionIndex": 3
+}

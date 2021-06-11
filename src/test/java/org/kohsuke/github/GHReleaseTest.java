@@ -90,7 +90,6 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(true));
 
-
             assertThat(updateCheck, notNullValue());
             assertThat(updateCheck.getTagName(), is(tagName));
             assertThat(updateCheck.isPrerelease(), is(false));
@@ -102,4 +101,19 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void testDeleteRelease() throws Exception {
+        GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
+
+        String tagName = mockGitHub.getMethodName();
+        GHRelease release = repo.createRelease(tagName)
+                .categoryName("announcements")
+                .prerelease(true)
+                .create();
+
+        assertThat(repo.getRelease(release.getId()), notNullValue());
+        release.delete();
+        assertThat(repo.getRelease(release.getId()), nullValue());
+
+    }
 }

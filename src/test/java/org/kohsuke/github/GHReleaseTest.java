@@ -25,6 +25,28 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(false));
+            assertThat(releaseCheck.getDiscussion_url(), notNullValue());
+        }
+        finally {
+            release.delete();
+            assertThat(repo.getRelease(release.getId()), nullValue());
+        }
+    }
+
+    @Test
+    public void testCreateSimpleReleaseWithoutDiscussion() throws Exception {
+        GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
+
+        String tagName = mockGitHub.getMethodName();
+        GHRelease release = repo.createRelease(tagName)
+                .create();
+
+        GHRelease releaseCheck = repo.getRelease(release.getId());
+
+        try{
+            assertThat(releaseCheck, notNullValue());
+            assertThat(releaseCheck.getTagName(), is(tagName));
+            assertThat(releaseCheck.getDiscussion_url(), nullValue());
         }
         finally {
             release.delete();

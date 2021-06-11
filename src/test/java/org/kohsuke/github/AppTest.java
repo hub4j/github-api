@@ -777,42 +777,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(j.hasPublicMember(b), is(false));
     }
 
-    @Ignore("Needs mocking check")
-    @Test
-    public void testCreateRelease() throws Exception {
-        kohsuke();
-
-        GHRepository r = gitHub.getRepository("kohsuke2/testCreateRelease");
-
-        String tagName = UUID.randomUUID().toString();
-        String releaseName = "release-" + tagName;
-
-        GHRelease rel = r.createRelease(tagName).name(releaseName).prerelease(false).create();
-
-        Thread.sleep(3000);
-
-        try {
-            for (GHTag tag : r.listTags()) {
-                if (tagName.equals(tag.getName())) {
-                    String ash = tag.getCommit().getSHA1();
-                    GHRef ref = r.createRef("refs/heads/" + releaseName, ash);
-                    assertThat(("refs/heads/" + releaseName), equalTo(ref.getRef()));
-
-                    for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
-                        // System.out.println(entry.getKey() + "/" + entry.getValue());
-                        if (releaseName.equals(entry.getValue().getName())) {
-                            return;
-                        }
-                    }
-                    fail("branch not found");
-                }
-            }
-            fail("release creation failed! tag not found");
-        } finally {
-            rel.delete();
-        }
-    }
-
     @Test
     public void testRef() throws IOException {
         GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/main");

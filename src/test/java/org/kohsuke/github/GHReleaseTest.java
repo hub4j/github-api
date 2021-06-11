@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThrows;
 
-public class ReleaseTest extends AbstractGitHubWireMockTest {
+public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreateSimpleRelease() throws Exception {

@@ -14,20 +14,16 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
 
         String tagName = mockGitHub.getMethodName();
-        GHRelease release = repo.createRelease(tagName)
-                .categoryName("announcements")
-                .prerelease(false)
-                .create();
+        GHRelease release = repo.createRelease(tagName).categoryName("announcements").prerelease(false).create();
 
         GHRelease releaseCheck = repo.getRelease(release.getId());
 
-        try{
+        try {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(false));
             assertThat(releaseCheck.getDiscussion_url(), notNullValue());
-        }
-        finally {
+        } finally {
             release.delete();
             assertThat(repo.getRelease(release.getId()), nullValue());
         }
@@ -38,17 +34,15 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
 
         String tagName = mockGitHub.getMethodName();
-        GHRelease release = repo.createRelease(tagName)
-                .create();
+        GHRelease release = repo.createRelease(tagName).create();
 
         GHRelease releaseCheck = repo.getRelease(release.getId());
 
-        try{
+        try {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.getDiscussion_url(), nullValue());
-        }
-        finally {
+        } finally {
             release.delete();
             assertThat(repo.getRelease(release.getId()), nullValue());
         }
@@ -62,7 +56,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
         GHRelease release = repo.createRelease(tagName).create();
 
-        try{
+        try {
             GHRelease releaseCheck = repo.getRelease(release.getId());
             assertThat(releaseCheck, notNullValue());
 
@@ -71,8 +65,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             });
 
             assertThat(httpException.getResponseCode(), is(422));
-        }
-        finally{
+        } finally {
             release.delete();
             assertThat(repo.getRelease(release.getId()), nullValue());
         }
@@ -99,14 +92,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
 
         String tagName = mockGitHub.getMethodName();
-        GHRelease release = repo.createRelease(tagName)
-                .prerelease(true)
-                .create();
+        GHRelease release = repo.createRelease(tagName).prerelease(true).create();
 
         GHRelease releaseCheck = repo.getRelease(release.getId());
         GHRelease updateCheck = releaseCheck.update().categoryName("announcements").prerelease(false).update();
 
-        try{
+        try {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(true));
@@ -117,8 +108,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(updateCheck.isPrerelease(), is(false));
             assertThat(updateCheck.getDiscussion_url(), notNullValue());
 
-        }
-        finally {
+        } finally {
             release.delete();
             assertThat(repo.getRelease(releaseCheck.getId()), nullValue());
             assertThat(repo.getRelease(updateCheck.getId()), nullValue());
@@ -130,10 +120,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
 
         String tagName = mockGitHub.getMethodName();
-        GHRelease release = repo.createRelease(tagName)
-                .categoryName("announcements")
-                .prerelease(true)
-                .create();
+        GHRelease release = repo.createRelease(tagName).categoryName("announcements").prerelease(true).create();
 
         assertThat(repo.getRelease(release.getId()), notNullValue());
         release.delete();

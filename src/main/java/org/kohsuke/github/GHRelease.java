@@ -41,7 +41,7 @@ public class GHRelease extends GHObject {
      *
      * @return the discussion url
      */
-    public String getDiscussion_url() {
+    public String getDiscussionUrl() {
         return discussion_url;
     }
 

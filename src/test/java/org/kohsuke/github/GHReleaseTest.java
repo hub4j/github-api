@@ -22,7 +22,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(false));
-            assertThat(releaseCheck.getDiscussion_url(), notNullValue());
+            assertThat(releaseCheck.getDiscussionUrl(), notNullValue());
         } finally {
             release.delete();
             assertThat(repo.getRelease(release.getId()), nullValue());
@@ -41,7 +41,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         try {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
-            assertThat(releaseCheck.getDiscussion_url(), nullValue());
+            assertThat(releaseCheck.getDiscussionUrl(), nullValue());
         } finally {
             release.delete();
             assertThat(repo.getRelease(release.getId()), nullValue());
@@ -101,12 +101,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(releaseCheck, notNullValue());
             assertThat(releaseCheck.getTagName(), is(tagName));
             assertThat(releaseCheck.isPrerelease(), is(true));
-            assertThat(releaseCheck.getDiscussion_url(), nullValue());
+            assertThat(releaseCheck.getDiscussionUrl(), nullValue());
 
             assertThat(updateCheck, notNullValue());
             assertThat(updateCheck.getTagName(), is(tagName));
             assertThat(updateCheck.isPrerelease(), is(false));
-            assertThat(updateCheck.getDiscussion_url(), notNullValue());
+            assertThat(updateCheck.getDiscussionUrl(), notNullValue());
 
         } finally {
             release.delete();

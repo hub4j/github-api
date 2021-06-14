@@ -34,6 +34,16 @@ public class GHRelease extends GHObject {
     private Date published_at;
     private String tarball_url;
     private String zipball_url;
+    private String discussion_url;
+
+    /**
+     * Gets discussion url. Only present if a discussion relating to the release exists
+     *
+     * @return the discussion url
+     */
+    public String getDiscussionUrl() {
+        return discussion_url;
+    }
 
     /**
      * Gets assets url.

@@ -1,0 +1,48 @@
+{
+  "id": "7212361d-bd71-4030-ab0a-d4970c4f3e11",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"discussion_category_name\":\"an invalid cateogry\",\"tag_name\":\"1dbf041f-a540-49b8-bf89-fb13e80950ea\",\"prerelease\":false,\"name\":\"release-1dbf041f-a540-49b8-bf89-fb13e80950ea\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Discussion could not be created. Make sure you passed a valid category name.\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#create-a-release\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 10 Jun 2021 16:10:45 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4975",
+      "X-RateLimit-Reset": "1623344540",
+      "X-RateLimit-Used": "25",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C473:A4A9:61E91B:6DF40B:60C23984"
+    }
+  },
+  "uuid": "7212361d-bd71-4030-ab0a-d4970c4f3e11",
+  "persistent": true,
+  "insertionIndex": 3
+}

@@ -141,7 +141,7 @@ public class ArchTests {
         final String reason = "This project uses `assertThat(...)` instead of other `assert*()` methods.";
 
         final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
-                .and(DescribedPredicate.not(name("assertThat")).or(DescribedPredicate.not(name("assertThrows"))));
+                .and(DescribedPredicate.not(name("assertThat")).and(DescribedPredicate.not(name("assertThrows"))));
 
         final ArchRule onlyAssertThatRule = classes()
                 .should(not(callMethodWhere(target(assertMethodOtherThanAssertThat))))

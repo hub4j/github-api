@@ -231,7 +231,6 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *             In case of any networking error or error from the server.
      */
     @Preview(BAPTISTE)
-    @Deprecated
     public S isTemplate(boolean enabled) throws IOException {
         requester.withPreview(BAPTISTE);
         return with("is_template", enabled);

@@ -100,7 +100,6 @@ public class GHDeployment extends GHObject {
      *
      * @return the original deployment environment
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
         return original_environment;
@@ -123,7 +122,6 @@ public class GHDeployment extends GHObject {
      *
      * @return the environment is transient
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
         return transient_environment;
@@ -136,7 +134,6 @@ public class GHDeployment extends GHObject {
      *
      * @return the environment is used by end-users directly
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
         return production_environment;

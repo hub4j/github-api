@@ -79,7 +79,6 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return true if the push to this branch is restricted via branch protection.
      */
     @Preview(Previews.LUKE_CAGE)
-    @Deprecated
     public boolean isProtected() {
         return protection;
     }
@@ -90,7 +89,6 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return API URL that deals with the protection of this branch.
      */
     @Preview(Previews.LUKE_CAGE)
-    @Deprecated
     public URL getProtectionUrl() {
         return GitHubClient.parseURL(protection_url);
     }
@@ -103,7 +101,6 @@ public class GHBranch extends GitHubInteractiveObject {
      *             the io exception
      */
     @Preview(Previews.LUKE_CAGE)
-    @Deprecated
     public GHBranchProtection getProtection() throws IOException {
         return root.createRequest()
                 .withPreview(Previews.LUKE_CAGE)
@@ -138,7 +135,6 @@ public class GHBranch extends GitHubInteractiveObject {
      * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
      */
     @Preview(Previews.LUKE_CAGE)
-    @Deprecated
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
     }

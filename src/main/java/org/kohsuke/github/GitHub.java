@@ -146,7 +146,6 @@ public class GitHub {
          *            A authorization provider to be used when refreshing this authorization provider.
          */
         @BetaApi
-        @Deprecated
         protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
             this.authorizationProvider = authorizationProvider;
         }
@@ -1106,7 +1105,6 @@ public class GitHub {
      *      GitHub App</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHApp getApp() throws IOException {
         return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
     }
@@ -1201,7 +1199,6 @@ public class GitHub {
      * @return the gh commit search builder
      */
     @Preview(Previews.CLOAK)
-    @Deprecated
     public GHCommitSearchBuilder searchCommits() {
         return new GHCommitSearchBuilder(this);
     }

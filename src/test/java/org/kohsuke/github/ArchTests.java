@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.Closeable;
@@ -68,6 +69,7 @@ public class ArchTests {
         assertThat(classFiles.size(), greaterThan(0));
     }
 
+    @Ignore("No longer using deprecated for this purpose")
     @Test
     public void testPreviewsAreFlaggedAsDeprecated() {
 
@@ -103,6 +105,7 @@ public class ArchTests {
 
     }
 
+    @Ignore("No longer using deprecated for this purpose")
     @Test
     public void testBetaApisAreFlaggedAsDeprecated() {
 
@@ -138,7 +141,7 @@ public class ArchTests {
     @Test
     public void testRequireUseOfAssertThat() {
 
-        final String reason = "This project uses `assertThat(...)` instead of other `assert*()` methods.";
+        final String reason = "This project uses `assertThat(...)` or `assertThrows(...)` instead of other `assert*()` methods.";
 
         final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
                 .and(DescribedPredicate.not(name("assertThat")).and(DescribedPredicate.not(name("assertThrows"))));

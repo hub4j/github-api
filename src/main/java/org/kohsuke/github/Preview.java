@@ -11,8 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p>
  * These APIs are subject to change and not a part of the backward compatibility commitment.
  *
- * It's advised to update the targets documentation with text signify that the preview feature being used is promoted to
- * stable.
+ * It is advised to update the target's documentation with text indicating that a preview feature being used.
  *
  * @author Kohsuke Kawaguchi
  */

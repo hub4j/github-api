@@ -53,7 +53,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
@@ -83,7 +82,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
         this.builder.with("environment", environment);
@@ -100,7 +98,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
         this.builder.with("environment_url", environmentUrl);
@@ -119,7 +116,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);

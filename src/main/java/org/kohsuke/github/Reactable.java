@@ -10,7 +10,6 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @author Kohsuke Kawaguchi
  */
 @Preview(SQUIRREL_GIRL)
-@Deprecated
 public interface Reactable {
     /**
      * List all the reactions left to this object.
@@ -18,7 +17,6 @@ public interface Reactable {
      * @return the paged iterable
      */
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     PagedIterable<GHReaction> listReactions();
 
     /**
@@ -31,6 +29,5 @@ public interface Reactable {
      *             the io exception
      */
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     GHReaction createReaction(ReactionContent content) throws IOException;
 }

@@ -454,7 +454,6 @@ public class GHCommit {
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests() {
         return owner.root.createRequest()
                 .withPreview(GROOT)
@@ -470,7 +469,6 @@ public class GHCommit {
      *             the io exception
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
         return owner.root.createRequest()
                 .withPreview(GROOT)
@@ -566,7 +564,6 @@ public class GHCommit {
      *             on error
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
     }

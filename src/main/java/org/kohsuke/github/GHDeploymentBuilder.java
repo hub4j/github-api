@@ -129,7 +129,6 @@ public class GHDeploymentBuilder {
      *
      * @return the gh deployment builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
         builder.with("transient_environment", transientEnvironment);
@@ -146,7 +145,6 @@ public class GHDeploymentBuilder {
      *
      * @return the gh deployment builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
         builder.with("production_environment", productionEnvironment);

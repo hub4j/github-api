@@ -126,7 +126,6 @@ public class GHAppInstallation extends GHObject {
      * @return the paged iterable
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
 
@@ -326,7 +325,6 @@ public class GHAppInstallation extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
     @Preview(GAMBIT)
-    @Deprecated
     public void deleteInstallation() throws IOException {
         root.createRequest()
                 .method("DELETE")
@@ -348,7 +346,6 @@ public class GHAppInstallation extends GHObject {
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
         return new GHAppCreateTokenBuilder(root,
                 String.format("/app/installations/%d/access_tokens", getId()),
@@ -365,7 +362,6 @@ public class GHAppInstallation extends GHObject {
      * @return a GHAppCreateTokenBuilder instance
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));
     }

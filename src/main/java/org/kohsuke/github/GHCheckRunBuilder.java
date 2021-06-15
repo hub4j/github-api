@@ -48,7 +48,6 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 @Preview(Previews.ANTIOPE)
-@Deprecated
 public final class GHCheckRunBuilder {
 
     protected final GHRepository repo;

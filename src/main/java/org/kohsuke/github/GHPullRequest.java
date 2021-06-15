@@ -577,7 +577,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     @Preview(LYDIAN)
-    @Deprecated
     public void updateBranch() throws IOException {
         root.createRequest()
                 .withPreview(LYDIAN)

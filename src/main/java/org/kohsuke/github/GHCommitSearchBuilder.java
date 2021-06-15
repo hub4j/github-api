@@ -12,7 +12,6 @@ import java.io.IOException;
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
 @Preview(Previews.CLOAK)
-@Deprecated
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     GHCommitSearchBuilder(GitHub root) {
         super(root, CommitSearchResult.class);

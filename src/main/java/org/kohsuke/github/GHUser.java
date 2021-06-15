@@ -143,7 +143,6 @@ public class GHUser extends GHPerson {
      *
      * @return the paged iterable
      */
-    @Deprecated
     @Preview(INERTIA)
     public PagedIterable<GHProject> listProjects() {
         return root.createRequest()

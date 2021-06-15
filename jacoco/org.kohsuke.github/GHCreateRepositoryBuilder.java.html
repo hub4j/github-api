@@ -115,10 +115,9 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      * @see &lt;a href=&quot;https://developer.github.com/v3/previews/&quot;&gt;GitHub API Previews&lt;/a&gt;
      */
     @Preview(BAPTISTE)
-    @Deprecated
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
-<span class="fc" id="L120">        requester.withPreview(BAPTISTE).withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
-<span class="fc" id="L121">        return this;</span>
+<span class="fc" id="L119">        requester.withPreview(BAPTISTE).withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
+<span class="fc" id="L120">        return this;</span>
     }
 
     /**
@@ -129,7 +128,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             if repository cannot be created
      */
     public GHRepository create() throws IOException {
-<span class="fc" id="L132">        return done();</span>
+<span class="fc" id="L131">        return done();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

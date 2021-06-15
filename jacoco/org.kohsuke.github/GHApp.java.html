@@ -194,12 +194,11 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#list-installations&quot;&gt;List installations&lt;/a&gt;
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public PagedIterable&lt;GHAppInstallation&gt; listInstallations() {
-<span class="fc" id="L199">        return root.createRequest()</span>
-<span class="fc" id="L200">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L201">                .withUrlPath(&quot;/app/installations&quot;)</span>
-<span class="fc" id="L202">                .toIterable(GHAppInstallation[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L198">        return root.createRequest()</span>
+<span class="fc" id="L199">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L200">                .withUrlPath(&quot;/app/installations&quot;)</span>
+<span class="fc" id="L201">                .toIterable(GHAppInstallation[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -215,13 +214,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#get-an-installation&quot;&gt;Get an installation&lt;/a&gt;
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
-<span class="fc" id="L220">        return root.createRequest()</span>
-<span class="fc" id="L221">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L222">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
-<span class="fc" id="L223">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L224">                .wrapUp(root);</span>
+<span class="fc" id="L218">        return root.createRequest()</span>
+<span class="fc" id="L219">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L220">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
+<span class="fc" id="L221">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L222">                .wrapUp(root);</span>
     }
 
     /**
@@ -238,13 +236,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      *      installation&lt;/a&gt;
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-<span class="fc" id="L243">        return root.createRequest()</span>
-<span class="fc" id="L244">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L245">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
-<span class="fc" id="L246">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L247">                .wrapUp(root);</span>
+<span class="fc" id="L240">        return root.createRequest()</span>
+<span class="fc" id="L241">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L242">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
+<span class="fc" id="L243">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L244">                .wrapUp(root);</span>
     }
 
     /**
@@ -263,13 +260,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      *      installation&lt;/a&gt;
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-<span class="fc" id="L268">        return root.createRequest()</span>
-<span class="fc" id="L269">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L270">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
-<span class="fc" id="L271">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L272">                .wrapUp(root);</span>
+<span class="fc" id="L264">        return root.createRequest()</span>
+<span class="fc" id="L265">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L266">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
+<span class="fc" id="L267">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L268">                .wrapUp(root);</span>
     }
 
     /**
@@ -285,13 +281,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#get-a-user-installation&quot;&gt;Get a user installation&lt;/a&gt;
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-<span class="fc" id="L290">        return root.createRequest()</span>
-<span class="fc" id="L291">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L292">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
-<span class="fc" id="L293">                .fetch(GHAppInstallation.class)</span>
-<span class="fc" id="L294">                .wrapUp(root);</span>
+<span class="fc" id="L285">        return root.createRequest()</span>
+<span class="fc" id="L286">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L287">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
+<span class="fc" id="L288">                .fetch(GHAppInstallation.class)</span>
+<span class="fc" id="L289">                .wrapUp(root);</span>
     }
 
 }

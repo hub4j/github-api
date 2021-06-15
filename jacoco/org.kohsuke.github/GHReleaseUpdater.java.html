@@ -12,10 +12,10 @@ public class GHReleaseUpdater {
     private final GHRelease base;
     private final Requester builder;
 
-<span class="nc" id="L15">    GHReleaseUpdater(GHRelease base) {</span>
-<span class="nc" id="L16">        this.base = base;</span>
-<span class="nc" id="L17">        this.builder = base.root.createRequest();</span>
-<span class="nc" id="L18">    }</span>
+<span class="fc" id="L15">    GHReleaseUpdater(GHRelease base) {</span>
+<span class="fc" id="L16">        this.base = base;</span>
+<span class="fc" id="L17">        this.builder = base.root.createRequest();</span>
+<span class="fc" id="L18">    }</span>
 
     /**
      * Tag gh release updater.
@@ -87,8 +87,20 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater prerelease(boolean prerelease) {
-<span class="nc" id="L90">        builder.with(&quot;prerelease&quot;, prerelease);</span>
-<span class="nc" id="L91">        return this;</span>
+<span class="fc" id="L90">        builder.with(&quot;prerelease&quot;, prerelease);</span>
+<span class="fc" id="L91">        return this;</span>
+    }
+
+    /**
+     * Optional
+     *
+     * @param categoryName
+     *            the category of the discussion to be created for the release. Category should already exist
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater categoryName(String categoryName) {
+<span class="fc" id="L102">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
+<span class="fc" id="L103">        return this;</span>
     }
 
     /**
@@ -99,10 +111,10 @@ public class GHReleaseUpdater {
      *             the io exception
      */
     public GHRelease update() throws IOException {
-<span class="nc" id="L102">        return builder.method(&quot;PATCH&quot;)</span>
-<span class="nc" id="L103">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
-<span class="nc" id="L104">                .fetch(GHRelease.class)</span>
-<span class="nc" id="L105">                .wrap(base.owner);</span>
+<span class="fc" id="L114">        return builder.method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L115">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
+<span class="fc" id="L116">                .fetch(GHRelease.class)</span>
+<span class="fc" id="L117">                .wrap(base.owner);</span>
     }
 
 }

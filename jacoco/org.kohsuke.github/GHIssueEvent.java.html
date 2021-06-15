@@ -21,6 +21,7 @@ import java.util.Date;
     private GHMilestone milestone;
     private GHLabel label;
     private GHUser assignee;
+    private GHIssueRename rename;
 
     private GHIssue issue;
 
@@ -30,7 +31,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L33">        return id;</span>
+<span class="fc" id="L34">        return id;</span>
     }
 
     /**
@@ -39,7 +40,7 @@ import java.util.Date;
      * @return the node id
      */
     public String getNodeId() {
-<span class="nc" id="L42">        return node_id;</span>
+<span class="nc" id="L43">        return node_id;</span>
     }
 
     /**
@@ -48,7 +49,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L51">        return url;</span>
+<span class="nc" id="L52">        return url;</span>
     }
 
     /**
@@ -57,7 +58,7 @@ import java.util.Date;
      * @return the actor
      */
     public GHUser getActor() {
-<span class="nc" id="L60">        return actor;</span>
+<span class="nc" id="L61">        return actor;</span>
     }
 
     /**
@@ -66,7 +67,7 @@ import java.util.Date;
      * @return the event
      */
     public String getEvent() {
-<span class="fc" id="L69">        return event;</span>
+<span class="fc" id="L70">        return event;</span>
     }
 
     /**
@@ -75,7 +76,7 @@ import java.util.Date;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="nc" id="L78">        return commit_id;</span>
+<span class="nc" id="L79">        return commit_id;</span>
     }
 
     /**
@@ -84,7 +85,7 @@ import java.util.Date;
      * @return the commit url
      */
     public String getCommitUrl() {
-<span class="nc" id="L87">        return commit_url;</span>
+<span class="nc" id="L88">        return commit_url;</span>
     }
 
     /**
@@ -93,7 +94,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L96">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L97">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -102,7 +103,7 @@ import java.util.Date;
      * @return the root
      */
     public GitHub getRoot() {
-<span class="nc" id="L105">        return root;</span>
+<span class="nc" id="L106">        return root;</span>
     }
 
     /**
@@ -111,7 +112,7 @@ import java.util.Date;
      * @return the issue
      */
     public GHIssue getIssue() {
-<span class="fc" id="L114">        return issue;</span>
+<span class="fc" id="L115">        return issue;</span>
     }
 
     /**
@@ -121,7 +122,7 @@ import java.util.Date;
      * @return the milestone
      */
     public GHMilestone getMilestone() {
-<span class="fc" id="L124">        return milestone;</span>
+<span class="fc" id="L125">        return milestone;</span>
     }
 
     /**
@@ -131,7 +132,7 @@ import java.util.Date;
      * @return the label
      */
     public GHLabel getLabel() {
-<span class="fc" id="L134">        return label;</span>
+<span class="fc" id="L135">        return label;</span>
     }
 
     /**
@@ -141,27 +142,37 @@ import java.util.Date;
      * @return the user
      */
     public GHUser getAssignee() {
-<span class="fc" id="L144">        return assignee;</span>
+<span class="fc" id="L145">        return assignee;</span>
+    }
+
+    /**
+     * Get the {@link GHIssueRename} that contains information about issue old and new name. Only present for event
+     * &quot;renamed&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the GHIssueRename
+     */
+    public GHIssueRename getRename() {
+<span class="fc" id="L155">        return this.rename;</span>
     }
 
     GHIssueEvent wrapUp(GitHub root) {
-<span class="fc" id="L148">        this.root = root;</span>
-<span class="fc" id="L149">        return this;</span>
+<span class="fc" id="L159">        this.root = root;</span>
+<span class="fc" id="L160">        return this;</span>
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L153">        this.issue = parent;</span>
-<span class="fc" id="L154">        this.root = parent.root;</span>
-<span class="fc" id="L155">        return this;</span>
+<span class="fc" id="L164">        this.issue = parent;</span>
+<span class="fc" id="L165">        this.root = parent.root;</span>
+<span class="fc" id="L166">        return this;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L160">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L161">                getIssue().getNumber(),</span>
-<span class="nc" id="L162">                getEvent(),</span>
-<span class="nc" id="L163">                getActor().getLogin(),</span>
-<span class="nc" id="L164">                getCreatedAt().toString());</span>
+<span class="nc" id="L171">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L172">                getIssue().getNumber(),</span>
+<span class="nc" id="L173">                getEvent(),</span>
+<span class="nc" id="L174">                getActor().getLogin(),</span>
+<span class="nc" id="L175">                getCreatedAt().toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

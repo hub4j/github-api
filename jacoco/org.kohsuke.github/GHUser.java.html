@@ -28,12 +28,14 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.io.IOException;
 import java.util.*;
 
+import static org.kohsuke.github.internal.Previews.INERTIA;
+
 /**
  * Represents an user of GitHub.
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="fc" id="L36">public class GHUser extends GHPerson {</span>
+<span class="fc" id="L38">public class GHUser extends GHPerson {</span>
 
     /**
      * Gets keys.
@@ -43,7 +45,7 @@ import java.util.*;
      *             the io exception
      */
     public List&lt;GHKey&gt; getKeys() throws IOException {
-<span class="fc" id="L46">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
+<span class="fc" id="L48">        return root.createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -53,8 +55,8 @@ import java.util.*;
      *             the io exception
      */
     public void follow() throws IOException {
-<span class="nc" id="L56">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L58">        root.createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L59">    }</span>
 
     /**
      * Unfollow this user.
@@ -63,8 +65,8 @@ import java.util.*;
      *             the io exception
      */
     public void unfollow() throws IOException {
-<span class="nc" id="L66">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L68">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L69">    }</span>
 
     /**
      * Lists the users that this user is following
@@ -75,7 +77,7 @@ import java.util.*;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHUser&gt; getFollows() throws IOException {
-<span class="nc" id="L78">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
+<span class="nc" id="L80">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
     }
 
     /**
@@ -84,7 +86,7 @@ import java.util.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listFollows() {
-<span class="fc" id="L87">        return listUser(&quot;following&quot;);</span>
+<span class="fc" id="L89">        return listUser(&quot;following&quot;);</span>
     }
 
     /**
@@ -96,7 +98,7 @@ import java.util.*;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHUser&gt; getFollowers() throws IOException {
-<span class="nc" id="L99">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
+<span class="nc" id="L101">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
     }
 
     /**
@@ -105,13 +107,13 @@ import java.util.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listFollowers() {
-<span class="fc" id="L108">        return listUser(&quot;followers&quot;);</span>
+<span class="fc" id="L110">        return listUser(&quot;followers&quot;);</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listUser(final String suffix) {
-<span class="fc" id="L112">        return root.createRequest()</span>
-<span class="fc" id="L113">                .withUrlPath(getApiTailUrl(suffix))</span>
-<span class="fc" id="L114">                .toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L114">        return root.createRequest()</span>
+<span class="fc" id="L115">                .withUrlPath(getApiTailUrl(suffix))</span>
+<span class="fc" id="L116">                .toIterable(GHUser[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -122,7 +124,7 @@ import java.util.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listSubscriptions() {
-<span class="nc" id="L125">        return listRepositories(&quot;subscriptions&quot;);</span>
+<span class="nc" id="L127">        return listRepositories(&quot;subscriptions&quot;);</span>
     }
 
     /**
@@ -131,13 +133,28 @@ import java.util.*;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listStarredRepositories() {
-<span class="nc" id="L134">        return listRepositories(&quot;starred&quot;);</span>
+<span class="nc" id="L136">        return listRepositories(&quot;starred&quot;);</span>
+    }
+
+    /**
+     * Lists all the projects.
+     * &lt;p&gt;
+     * https://docs.github.com/en/rest/reference/projects#list-user-projects
+     *
+     * @return the paged iterable
+     */
+    @Preview(INERTIA)
+    public PagedIterable&lt;GHProject&gt; listProjects() {
+<span class="fc" id="L148">        return root.createRequest()</span>
+<span class="fc" id="L149">                .withPreview(INERTIA)</span>
+<span class="fc" id="L150">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="fc" id="L151">                .toIterable(GHProject[].class, item -&gt; item.wrap(root));</span>
     }
 
     private PagedIterable&lt;GHRepository&gt; listRepositories(final String suffix) {
-<span class="nc" id="L138">        return root.createRequest()</span>
-<span class="nc" id="L139">                .withUrlPath(getApiTailUrl(suffix))</span>
-<span class="nc" id="L140">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
+<span class="nc" id="L155">        return root.createRequest()</span>
+<span class="nc" id="L156">                .withUrlPath(getApiTailUrl(suffix))</span>
+<span class="nc" id="L157">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root));</span>
     }
 
     /**
@@ -148,7 +165,7 @@ import java.util.*;
      * @return the boolean
      */
     public boolean isMemberOf(GHOrganization org) {
-<span class="nc" id="L151">        return org.hasMember(this);</span>
+<span class="nc" id="L168">        return org.hasMember(this);</span>
     }
 
     /**
@@ -159,7 +176,7 @@ import java.util.*;
      * @return the boolean
      */
     public boolean isMemberOf(GHTeam team) {
-<span class="nc" id="L162">        return team.hasMember(this);</span>
+<span class="nc" id="L179">        return team.hasMember(this);</span>
     }
 
     /**
@@ -170,7 +187,7 @@ import java.util.*;
      * @return the boolean
      */
     public boolean isPublicMemberOf(GHOrganization org) {
-<span class="nc" id="L173">        return org.hasPublicMember(this);</span>
+<span class="nc" id="L190">        return org.hasPublicMember(this);</span>
     }
 
     /**
@@ -179,17 +196,17 @@ import java.util.*;
      * @return if the user is marked as hireable
      */
     public boolean isHireable() {
-<span class="fc" id="L182">        return hireable;</span>
+<span class="fc" id="L199">        return hireable;</span>
     }
 
     public String getBio() {
-<span class="fc" id="L186">        return bio;</span>
+<span class="fc" id="L203">        return bio;</span>
     }
 
     static GHUser[] wrap(GHUser[] users, GitHub root) {
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        for (GHUser f : users)</span>
-<span class="fc" id="L191">            f.root = root;</span>
-<span class="fc" id="L192">        return users;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        for (GHUser f : users)</span>
+<span class="fc" id="L208">            f.root = root;</span>
+<span class="fc" id="L209">        return users;</span>
     }
 
     /**
@@ -201,25 +218,25 @@ import java.util.*;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
-<span class="fc" id="L204">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="fc" id="L205">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="fc" id="L206">        for (GHOrganization o : root.createRequest()</span>
-<span class="fc" id="L207">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
-<span class="fc" id="L208">                .toIterable(GHOrganization[].class, null)</span>
-<span class="fc bfc" id="L209" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
-<span class="fc" id="L211">                orgs.add(root.getOrganization(o.getLogin()));</span>
+<span class="fc" id="L221">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="fc" id="L222">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L223">        for (GHOrganization o : root.createRequest()</span>
+<span class="fc" id="L224">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L225">                .toIterable(GHOrganization[].class, null)</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
+<span class="fc" id="L228">                orgs.add(root.getOrganization(o.getLogin()));</span>
         }
-<span class="fc" id="L213">        return orgs;</span>
+<span class="fc" id="L230">        return orgs;</span>
     }
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L220">        return root.createRequest()</span>
-<span class="nc" id="L221">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
-<span class="nc" id="L222">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
+<span class="nc" id="L237">        return root.createRequest()</span>
+<span class="nc" id="L238">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
+<span class="nc" id="L239">                .toIterable(GHEventInfo[].class, item -&gt; item.wrapUp(root));</span>
     }
 
     /**
@@ -230,34 +247,34 @@ import java.util.*;
      *             the io exception
      */
     public PagedIterable&lt;GHGist&gt; listGists() throws IOException {
-<span class="nc" id="L233">        return root.createRequest()</span>
-<span class="nc" id="L234">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
-<span class="nc" id="L235">                .toIterable(GHGist[].class, null);</span>
+<span class="nc" id="L250">        return root.createRequest()</span>
+<span class="nc" id="L251">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L252">                .toIterable(GHGist[].class, null);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L240">        return login.hashCode();</span>
+<span class="fc" id="L257">        return login.hashCode();</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L246">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L247">            return this.login.equals(that.login);</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L263">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L264">            return this.login.equals(that.login);</span>
         }
-<span class="nc" id="L249">        return false;</span>
+<span class="nc" id="L266">        return false;</span>
     }
 
     String getApiTailUrl(String tail) {
-<span class="pc bpc" id="L253" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L254">            tail = '/' + tail;</span>
-<span class="fc" id="L255">        return &quot;/users/&quot; + login + tail;</span>
+<span class="pc bpc" id="L270" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L271">            tail = '/' + tail;</span>
+<span class="fc" id="L272">        return &quot;/users/&quot; + login + tail;</span>
     }
 
     GHUser wrapUp(GitHub root) {
-<span class="fc" id="L259">        super.wrapUp(root);</span>
-<span class="fc" id="L260">        return this;</span>
+<span class="fc" id="L276">        super.wrapUp(root);</span>
+<span class="fc" id="L277">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

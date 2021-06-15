@@ -454,12 +454,11 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable&lt;GHPullRequest&gt; listPullRequests() {
-<span class="fc" id="L459">        return owner.root.createRequest()</span>
-<span class="fc" id="L460">                .withPreview(GROOT)</span>
-<span class="fc" id="L461">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/pulls&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L462">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(owner));</span>
+<span class="fc" id="L458">        return owner.root.createRequest()</span>
+<span class="fc" id="L459">                .withPreview(GROOT)</span>
+<span class="fc" id="L460">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/pulls&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L461">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(owner));</span>
     }
 
     /**
@@ -470,15 +469,14 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable&lt;GHBranch&gt; listBranchesWhereHead() throws IOException {
-<span class="fc" id="L475">        return owner.root.createRequest()</span>
-<span class="fc" id="L476">                .withPreview(GROOT)</span>
-<span class="fc" id="L477">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
-<span class="fc" id="L478">                        owner.getOwnerName(),</span>
-<span class="fc" id="L479">                        owner.getName(),</span>
+<span class="fc" id="L473">        return owner.root.createRequest()</span>
+<span class="fc" id="L474">                .withPreview(GROOT)</span>
+<span class="fc" id="L475">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
+<span class="fc" id="L476">                        owner.getOwnerName(),</span>
+<span class="fc" id="L477">                        owner.getName(),</span>
                         sha))
-<span class="fc" id="L481">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
+<span class="fc" id="L479">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -487,10 +485,10 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable&lt;GHCommitComment&gt; listComments() {
-<span class="nc" id="L490">        return owner.root.createRequest()</span>
-<span class="nc" id="L491">                .withUrlPath(</span>
-<span class="nc" id="L492">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="nc" id="L493">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(owner));</span>
+<span class="nc" id="L488">        return owner.root.createRequest()</span>
+<span class="nc" id="L489">                .withUrlPath(</span>
+<span class="nc" id="L490">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="nc" id="L491">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -511,16 +509,16 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-<span class="fc" id="L514">        GHCommitComment r = owner.root.createRequest()</span>
-<span class="fc" id="L515">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L516">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L517">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L518">                .with(&quot;line&quot;, line)</span>
-<span class="fc" id="L519">                .with(&quot;position&quot;, position)</span>
-<span class="fc" id="L520">                .withUrlPath(</span>
-<span class="fc" id="L521">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L522">                .fetch(GHCommitComment.class);</span>
-<span class="fc" id="L523">        return r.wrap(owner);</span>
+<span class="fc" id="L512">        GHCommitComment r = owner.root.createRequest()</span>
+<span class="fc" id="L513">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L514">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L515">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L516">                .with(&quot;line&quot;, line)</span>
+<span class="fc" id="L517">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L518">                .withUrlPath(</span>
+<span class="fc" id="L519">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L520">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L521">        return r.wrap(owner);</span>
     }
 
     /**
@@ -533,7 +531,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     public GHCommitComment createComment(String body) throws IOException {
-<span class="fc" id="L536">        return createComment(body, null, null, null);</span>
+<span class="fc" id="L534">        return createComment(body, null, null, null);</span>
     }
 
     /**
@@ -544,7 +542,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if statuses cannot be read
      */
     public PagedIterable&lt;GHCommitStatus&gt; listStatuses() throws IOException {
-<span class="nc" id="L547">        return owner.listCommitStatuses(sha);</span>
+<span class="nc" id="L545">        return owner.listCommitStatuses(sha);</span>
     }
 
     /**
@@ -555,7 +553,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     public GHCommitStatus getLastStatus() throws IOException {
-<span class="fc" id="L558">        return owner.getLastCommitStatus(sha);</span>
+<span class="fc" id="L556">        return owner.getLastCommitStatus(sha);</span>
     }
 
     /**
@@ -566,9 +564,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns() throws IOException {
-<span class="nc" id="L571">        return owner.getCheckRuns(sha);</span>
+<span class="nc" id="L568">        return owner.getCheckRuns(sha);</span>
     }
 
     /**
@@ -578,13 +575,13 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     void populate() throws IOException {
-<span class="pc bpc" id="L581" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
-<span class="fc" id="L582">            owner.root.createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
-<span class="fc" id="L583">    }</span>
+<span class="pc bpc" id="L578" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
+<span class="fc" id="L579">            owner.root.createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
+<span class="fc" id="L580">    }</span>
 
     GHCommit wrapUp(GHRepository owner) {
-<span class="fc" id="L586">        this.owner = owner;</span>
-<span class="fc" id="L587">        return this;</span>
+<span class="fc" id="L583">        this.owner = owner;</span>
+<span class="fc" id="L584">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

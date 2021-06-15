@@ -99,15 +99,14 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     public R done() throws IOException {
         R result;
-<span class="pc bpc" id="L105" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
-<span class="nc" id="L106">            result = requester.fetchInto(baseInstance);</span>
+<span class="pc bpc" id="L104" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
+<span class="nc" id="L105">            result = requester.fetchInto(baseInstance);</span>
         } else {
-<span class="fc" id="L108">            result = requester.fetch(returnType);</span>
+<span class="fc" id="L107">            result = requester.fetch(returnType);</span>
         }
-<span class="fc" id="L110">        return result;</span>
+<span class="fc" id="L109">        return result;</span>
     }
 
     /**
@@ -129,10 +128,9 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
-<span class="fc" id="L134">        requester.with(name, value);</span>
-<span class="fc" id="L135">        return continueOrDone();</span>
+<span class="fc" id="L132">        requester.with(name, value);</span>
+<span class="fc" id="L133">        return continueOrDone();</span>
     }
 
     /**
@@ -150,17 +148,16 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
         // well.
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
             // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
             // being based on the previous comparison of class instances passed to the constructor.
-<span class="fc" id="L161">            return (S) done();</span>
+<span class="fc" id="L158">            return (S) done();</span>
         } else {
-<span class="fc" id="L163">            return (S) this;</span>
+<span class="fc" id="L160">            return (S) this;</span>
         }
     }
 }

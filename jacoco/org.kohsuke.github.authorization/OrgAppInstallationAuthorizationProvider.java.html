@@ -35,30 +35,29 @@ public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAut
      *            token from GitHub.
      */
     @BetaApi
-    @Deprecated
     public OrgAppInstallationAuthorizationProvider(String organizationName,
             AuthorizationProvider authorizationProvider) {
-<span class="fc" id="L41">        super(authorizationProvider);</span>
-<span class="fc" id="L42">        this.organizationName = organizationName;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L40">        super(authorizationProvider);</span>
+<span class="fc" id="L41">        this.organizationName = organizationName;</span>
+<span class="fc" id="L42">    }</span>
 
     @Override
     public String getEncodedAuthorization() throws IOException {
-<span class="fc" id="L47">        synchronized (this) {</span>
-<span class="pc bpc" id="L48" title="3 of 4 branches missed.">            if (latestToken == null || Instant.now().isAfter(this.validUntil)) {</span>
-<span class="fc" id="L49">                refreshToken();</span>
+<span class="fc" id="L46">        synchronized (this) {</span>
+<span class="pc bpc" id="L47" title="3 of 4 branches missed.">            if (latestToken == null || Instant.now().isAfter(this.validUntil)) {</span>
+<span class="fc" id="L48">                refreshToken();</span>
             }
-<span class="fc" id="L51">            return String.format(&quot;token %s&quot;, latestToken);</span>
+<span class="fc" id="L50">            return String.format(&quot;token %s&quot;, latestToken);</span>
         }
     }
 
     private void refreshToken() throws IOException {
-<span class="fc" id="L56">        GitHub gitHub = this.gitHub();</span>
-<span class="fc" id="L57">        GHAppInstallation installationByOrganization = gitHub.getApp()</span>
-<span class="fc" id="L58">                .getInstallationByOrganization(this.organizationName);</span>
-<span class="fc" id="L59">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
-<span class="fc" id="L60">        this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));</span>
-<span class="fc" id="L61">        this.latestToken = Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L55">        GitHub gitHub = this.gitHub();</span>
+<span class="fc" id="L56">        GHAppInstallation installationByOrganization = gitHub.getApp()</span>
+<span class="fc" id="L57">                .getInstallationByOrganization(this.organizationName);</span>
+<span class="fc" id="L58">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
+<span class="fc" id="L59">        this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));</span>
+<span class="fc" id="L60">        this.latestToken = Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
+<span class="fc" id="L61">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -100,10 +100,9 @@ import java.util.Map;
      *
      * @return the original deployment environment
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
-<span class="fc" id="L106">        return original_environment;</span>
+<span class="fc" id="L105">        return original_environment;</span>
     }
 
     /**
@@ -112,7 +111,7 @@ import java.util.Map;
      * @return the environment
      */
     public String getEnvironment() {
-<span class="fc" id="L115">        return environment;</span>
+<span class="fc" id="L114">        return environment;</span>
     }
 
     /**
@@ -123,10 +122,9 @@ import java.util.Map;
      *
      * @return the environment is transient
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
-<span class="fc" id="L129">        return transient_environment;</span>
+<span class="fc" id="L127">        return transient_environment;</span>
     }
 
     /**
@@ -136,10 +134,9 @@ import java.util.Map;
      *
      * @return the environment is used by end-users directly
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
-<span class="fc" id="L142">        return production_environment;</span>
+<span class="fc" id="L139">        return production_environment;</span>
     }
 
     /**
@@ -150,7 +147,7 @@ import java.util.Map;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L153">        return root.intern(creator);</span>
+<span class="fc" id="L150">        return root.intern(creator);</span>
     }
 
     /**
@@ -159,7 +156,7 @@ import java.util.Map;
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L162">        return ref;</span>
+<span class="fc" id="L159">        return ref;</span>
     }
 
     /**
@@ -168,7 +165,7 @@ import java.util.Map;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L171">        return sha;</span>
+<span class="fc" id="L168">        return sha;</span>
     }
 
     /**
@@ -176,7 +173,7 @@ import java.util.Map;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L179">        return null;</span>
+<span class="nc" id="L176">        return null;</span>
     }
 
     /**
@@ -187,7 +184,7 @@ import java.util.Map;
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="fc" id="L190">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L187">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -196,11 +193,11 @@ import java.util.Map;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="fc" id="L199">        return root.createRequest()</span>
-<span class="fc" id="L200">                .withUrlPath(statuses_url)</span>
-<span class="fc" id="L201">                .withPreview(Previews.ANT_MAN)</span>
-<span class="fc" id="L202">                .withPreview(Previews.FLASH)</span>
-<span class="fc" id="L203">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
+<span class="fc" id="L196">        return root.createRequest()</span>
+<span class="fc" id="L197">                .withUrlPath(statuses_url)</span>
+<span class="fc" id="L198">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L199">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L200">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.wrap(owner));</span>
     }
 
 }

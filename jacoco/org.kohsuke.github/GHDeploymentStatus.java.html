@@ -56,10 +56,9 @@ import java.util.Locale;
      *
      * @return the target url
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
-<span class="fc" id="L62">        return GitHubClient.parseURL(log_url);</span>
+<span class="fc" id="L61">        return GitHubClient.parseURL(log_url);</span>
     }
 
     /**
@@ -68,7 +67,7 @@ import java.util.Locale;
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-<span class="fc" id="L71">        return GitHubClient.parseURL(deployment_url);</span>
+<span class="fc" id="L70">        return GitHubClient.parseURL(deployment_url);</span>
     }
 
     /**
@@ -78,10 +77,9 @@ import java.util.Locale;
      *
      * @return the deployment environment url
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
-<span class="nc" id="L84">        return GitHubClient.parseURL(environment_url);</span>
+<span class="nc" id="L82">        return GitHubClient.parseURL(environment_url);</span>
     }
 
     /**
@@ -90,7 +88,7 @@ import java.util.Locale;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="fc" id="L93">        return GitHubClient.parseURL(repository_url);</span>
+<span class="fc" id="L91">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -99,7 +97,7 @@ import java.util.Locale;
      * @return the state
      */
     public GHDeploymentState getState() {
-<span class="fc" id="L102">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L100">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -107,7 +105,7 @@ import java.util.Locale;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L110">        return null;</span>
+<span class="nc" id="L108">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

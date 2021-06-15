@@ -126,17 +126,16 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the paged iterable
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
         GitHubRequest request;
 
         try {
-<span class="fc" id="L134">            request = root.createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/installation/repositories&quot;).build();</span>
-<span class="nc" id="L135">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L136">            throw new GHException(&quot;&quot;, e);</span>
-<span class="fc" id="L137">        }</span>
+<span class="fc" id="L133">            request = root.createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+<span class="nc" id="L134">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L135">            throw new GHException(&quot;&quot;, e);</span>
+<span class="fc" id="L136">        }</span>
 
-<span class="fc" id="L139">        return new PagedSearchIterable&lt;&gt;(root, request, GHAppInstallationRepositoryResult.class);</span>
+<span class="fc" id="L138">        return new PagedSearchIterable&lt;&gt;(root, request, GHAppInstallationRepositoryResult.class);</span>
     }
 
     private static class GHAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
@@ -144,9 +143,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc bfc" id="L147" title="All 2 branches covered.">            for (GHRepository item : repositories)</span>
-<span class="fc" id="L148">                item.wrap(root);</span>
-<span class="fc" id="L149">            return repositories;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            for (GHRepository item : repositories)</span>
+<span class="fc" id="L147">                item.wrap(root);</span>
+<span class="fc" id="L148">            return repositories;</span>
         }
     }
 
@@ -159,8 +158,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRepositoriesUrl(String repositoriesUrl) {
-<span class="nc" id="L162">        this.repositoriesUrl = repositoriesUrl;</span>
-<span class="nc" id="L163">    }</span>
+<span class="nc" id="L161">        this.repositoriesUrl = repositoriesUrl;</span>
+<span class="nc" id="L162">    }</span>
 
     /**
      * Gets app id.
@@ -168,7 +167,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the app id
      */
     public long getAppId() {
-<span class="fc" id="L171">        return appId;</span>
+<span class="fc" id="L170">        return appId;</span>
     }
 
     /**
@@ -180,8 +179,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setAppId(long appId) {
-<span class="nc" id="L183">        this.appId = appId;</span>
-<span class="nc" id="L184">    }</span>
+<span class="nc" id="L182">        this.appId = appId;</span>
+<span class="nc" id="L183">    }</span>
 
     /**
      * Gets target id.
@@ -189,7 +188,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the target id
      */
     public long getTargetId() {
-<span class="fc" id="L192">        return targetId;</span>
+<span class="fc" id="L191">        return targetId;</span>
     }
 
     /**
@@ -201,8 +200,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setTargetId(long targetId) {
-<span class="nc" id="L204">        this.targetId = targetId;</span>
-<span class="nc" id="L205">    }</span>
+<span class="nc" id="L203">        this.targetId = targetId;</span>
+<span class="nc" id="L204">    }</span>
 
     /**
      * Gets target type.
@@ -210,7 +209,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the target type
      */
     public GHTargetType getTargetType() {
-<span class="fc" id="L213">        return targetType;</span>
+<span class="fc" id="L212">        return targetType;</span>
     }
 
     /**
@@ -222,8 +221,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setTargetType(GHTargetType targetType) {
-<span class="nc" id="L225">        this.targetType = targetType;</span>
-<span class="nc" id="L226">    }</span>
+<span class="nc" id="L224">        this.targetType = targetType;</span>
+<span class="nc" id="L225">    }</span>
 
     /**
      * Gets permissions.
@@ -231,7 +230,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the permissions
      */
     public Map&lt;String, GHPermissionType&gt; getPermissions() {
-<span class="fc" id="L234">        return permissions;</span>
+<span class="fc" id="L233">        return permissions;</span>
     }
 
     /**
@@ -243,8 +242,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setPermissions(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="nc" id="L246">        this.permissions = permissions;</span>
-<span class="nc" id="L247">    }</span>
+<span class="nc" id="L245">        this.permissions = permissions;</span>
+<span class="nc" id="L246">    }</span>
 
     /**
      * Gets events.
@@ -252,9 +251,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L255">        return events.stream()</span>
-<span class="fc" id="L256">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L257">                .collect(Collectors.toList());</span>
+<span class="fc" id="L254">        return events.stream()</span>
+<span class="fc" id="L255">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L256">                .collect(Collectors.toList());</span>
     }
 
     /**
@@ -266,8 +265,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="nc" id="L269">        this.events = events.stream().map(GHEvent::symbol).collect(Collectors.toList());</span>
-<span class="nc" id="L270">    }</span>
+<span class="nc" id="L268">        this.events = events.stream().map(GHEvent::symbol).collect(Collectors.toList());</span>
+<span class="nc" id="L269">    }</span>
 
     /**
      * Gets single file name.
@@ -275,7 +274,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the single file name
      */
     public String getSingleFileName() {
-<span class="fc" id="L278">        return singleFileName;</span>
+<span class="fc" id="L277">        return singleFileName;</span>
     }
 
     /**
@@ -287,8 +286,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setSingleFileName(String singleFileName) {
-<span class="nc" id="L290">        this.singleFileName = singleFileName;</span>
-<span class="nc" id="L291">    }</span>
+<span class="nc" id="L289">        this.singleFileName = singleFileName;</span>
+<span class="nc" id="L290">    }</span>
 
     /**
      * Gets repository selection.
@@ -296,7 +295,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L299">        return repositorySelection;</span>
+<span class="fc" id="L298">        return repositorySelection;</span>
     }
 
     /**
@@ -308,12 +307,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="nc" id="L311">        this.repositorySelection = repositorySelection;</span>
-<span class="nc" id="L312">    }</span>
+<span class="nc" id="L310">        this.repositorySelection = repositorySelection;</span>
+<span class="nc" id="L311">    }</span>
 
     GHAppInstallation wrapUp(GitHub root) {
-<span class="fc" id="L315">        this.root = root;</span>
-<span class="fc" id="L316">        return this;</span>
+<span class="fc" id="L314">        this.root = root;</span>
+<span class="fc" id="L315">        return this;</span>
     }
 
     /**
@@ -326,14 +325,13 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#delete-an-installation&quot;&gt;Delete an installation&lt;/a&gt;
      */
     @Preview(GAMBIT)
-    @Deprecated
     public void deleteInstallation() throws IOException {
-<span class="fc" id="L331">        root.createRequest()</span>
-<span class="fc" id="L332">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L333">                .withPreview(GAMBIT)</span>
-<span class="fc" id="L334">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId()))</span>
-<span class="fc" id="L335">                .send();</span>
-<span class="fc" id="L336">    }</span>
+<span class="fc" id="L329">        root.createRequest()</span>
+<span class="fc" id="L330">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L331">                .withPreview(GAMBIT)</span>
+<span class="fc" id="L332">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId()))</span>
+<span class="fc" id="L333">                .send();</span>
+<span class="fc" id="L334">    }</span>
 
     /**
      * Starts a builder that creates a new App Installation Token.
@@ -348,10 +346,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="nc" id="L353">        return new GHAppCreateTokenBuilder(root,</span>
-<span class="nc" id="L354">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
+<span class="nc" id="L350">        return new GHAppCreateTokenBuilder(root,</span>
+<span class="nc" id="L351">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
                 permissions);
     }
 
@@ -365,9 +362,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return a GHAppCreateTokenBuilder instance
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder createToken() {
-<span class="fc" id="L370">        return new GHAppCreateTokenBuilder(root, String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
+<span class="fc" id="L366">        return new GHAppCreateTokenBuilder(root, String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

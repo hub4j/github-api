@@ -129,11 +129,10 @@ public class GHDeploymentBuilder {
      *
      * @return the gh deployment builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
-<span class="nc" id="L135">        builder.with(&quot;transient_environment&quot;, transientEnvironment);</span>
-<span class="nc" id="L136">        return this;</span>
+<span class="nc" id="L134">        builder.with(&quot;transient_environment&quot;, transientEnvironment);</span>
+<span class="nc" id="L135">        return this;</span>
     }
 
     /**
@@ -146,11 +145,10 @@ public class GHDeploymentBuilder {
      *
      * @return the gh deployment builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
-<span class="nc" id="L152">        builder.with(&quot;production_environment&quot;, productionEnvironment);</span>
-<span class="nc" id="L153">        return this;</span>
+<span class="nc" id="L150">        builder.with(&quot;production_environment&quot;, productionEnvironment);</span>
+<span class="nc" id="L151">        return this;</span>
     }
 
     /**
@@ -162,8 +160,8 @@ public class GHDeploymentBuilder {
      * @return the gh deployment builder
      */
     public GHDeploymentBuilder description(String description) {
-<span class="fc" id="L165">        builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L166">        return this;</span>
+<span class="fc" id="L163">        builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L164">        return this;</span>
     }
 
     /**
@@ -175,7 +173,7 @@ public class GHDeploymentBuilder {
      *             the io exception
      */
     public GHDeployment create() throws IOException {
-<span class="fc" id="L178">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments&quot;)).fetch(GHDeployment.class).wrap(repo);</span>
+<span class="fc" id="L176">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments&quot;)).fetch(GHDeployment.class).wrap(repo);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

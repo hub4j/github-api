@@ -12,16 +12,15 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see Reactable
  */
 @Preview(SQUIRREL_GIRL)
-@Deprecated
-<span class="fc" id="L16">public class GHReaction extends GHObject {</span>
+<span class="fc" id="L15">public class GHReaction extends GHObject {</span>
 
     private GHUser user;
     private ReactionContent content;
 
     GHReaction wrap(GitHub root) {
-<span class="fc" id="L22">        this.root = root;</span>
-<span class="fc" id="L23">        user.wrapUp(root);</span>
-<span class="fc" id="L24">        return this;</span>
+<span class="fc" id="L21">        this.root = root;</span>
+<span class="fc" id="L22">        user.wrapUp(root);</span>
+<span class="fc" id="L23">        return this;</span>
     }
 
     /**
@@ -30,7 +29,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the content
      */
     public ReactionContent getContent() {
-<span class="fc" id="L33">        return content;</span>
+<span class="fc" id="L32">        return content;</span>
     }
 
     /**
@@ -39,7 +38,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the user
      */
     public GHUser getUser() {
-<span class="fc" id="L42">        return user;</span>
+<span class="fc" id="L41">        return user;</span>
     }
 
     /**
@@ -47,7 +46,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public URL getHtmlUrl() {
-<span class="nc" id="L50">        return null;</span>
+<span class="nc" id="L49">        return null;</span>
     }
 
     /**
@@ -57,7 +56,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L60">        root.createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + getId()).send();</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L59">        root.createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + getId()).send();</span>
+<span class="fc" id="L60">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

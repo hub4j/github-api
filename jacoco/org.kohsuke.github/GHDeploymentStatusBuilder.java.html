@@ -53,11 +53,10 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
-<span class="nc" id="L59">        this.builder.with(&quot;auto_inactive&quot;, autoInactive);</span>
-<span class="nc" id="L60">        return this;</span>
+<span class="nc" id="L58">        this.builder.with(&quot;auto_inactive&quot;, autoInactive);</span>
+<span class="nc" id="L59">        return this;</span>
     }
 
     /**
@@ -69,8 +68,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder description(String description) {
-<span class="fc" id="L72">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L73">        return this;</span>
+<span class="fc" id="L71">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L72">        return this;</span>
     }
 
     /**
@@ -83,11 +82,10 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
-<span class="fc" id="L89">        this.builder.with(&quot;environment&quot;, environment);</span>
-<span class="fc" id="L90">        return this;</span>
+<span class="fc" id="L87">        this.builder.with(&quot;environment&quot;, environment);</span>
+<span class="fc" id="L88">        return this;</span>
     }
 
     /**
@@ -100,11 +98,10 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
-<span class="fc" id="L106">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
-<span class="fc" id="L107">        return this;</span>
+<span class="fc" id="L103">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
+<span class="fc" id="L104">        return this;</span>
     }
 
     /**
@@ -119,11 +116,10 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
-<span class="fc" id="L125">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
-<span class="fc" id="L126">        return this;</span>
+<span class="fc" id="L121">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
+<span class="fc" id="L122">        return this;</span>
     }
 
     /**
@@ -138,8 +134,8 @@ public class GHDeploymentStatusBuilder {
      */
     @Deprecated
     public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
-<span class="fc" id="L141">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
-<span class="fc" id="L142">        return this;</span>
+<span class="fc" id="L137">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
+<span class="fc" id="L138">        return this;</span>
     }
 
     /**
@@ -151,9 +147,9 @@ public class GHDeploymentStatusBuilder {
      *             the io exception
      */
     public GHDeploymentStatus create() throws IOException {
-<span class="fc" id="L154">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
-<span class="fc" id="L155">                .fetch(GHDeploymentStatus.class)</span>
-<span class="fc" id="L156">                .wrap(repo);</span>
+<span class="fc" id="L150">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
+<span class="fc" id="L151">                .fetch(GHDeploymentStatus.class)</span>
+<span class="fc" id="L152">                .wrap(repo);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

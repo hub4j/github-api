@@ -122,24 +122,22 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 <span class="fc" id="L122">    }</span>
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="nc" id="L127">        return owner.root.createRequest()</span>
-<span class="nc" id="L128">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L129">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="nc" id="L130">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="nc" id="L131">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="nc" id="L132">                .fetch(GHReaction.class)</span>
-<span class="nc" id="L133">                .wrap(owner.root);</span>
+<span class="nc" id="L126">        return owner.root.createRequest()</span>
+<span class="nc" id="L127">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L128">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="nc" id="L129">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="nc" id="L130">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="nc" id="L131">                .fetch(GHReaction.class)</span>
+<span class="nc" id="L132">                .wrap(owner.root);</span>
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L139">        return owner.root.createRequest()</span>
-<span class="fc" id="L140">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L141">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="pc" id="L142">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
+<span class="fc" id="L137">        return owner.root.createRequest()</span>
+<span class="fc" id="L138">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L139">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="pc" id="L140">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
     }
 
     /**
@@ -149,19 +147,19 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L152">        owner.root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L150">        owner.root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
+<span class="fc" id="L151">    }</span>
 
     private String getApiTail() {
-<span class="fc" id="L156">        return String.format(&quot;/repos/%s/%s/comments/%s&quot;, owner.getOwnerName(), owner.getName(), getId());</span>
+<span class="fc" id="L154">        return String.format(&quot;/repos/%s/%s/comments/%s&quot;, owner.getOwnerName(), owner.getName(), getId());</span>
     }
 
     GHCommitComment wrap(GHRepository owner) {
-<span class="fc" id="L160">        this.owner = owner;</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (owner.root.isOffline()) {</span>
-<span class="fc" id="L162">            user.wrapUp(owner.root);</span>
+<span class="fc" id="L158">        this.owner = owner;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (owner.root.isOffline()) {</span>
+<span class="fc" id="L160">            user.wrapUp(owner.root);</span>
         }
-<span class="fc" id="L164">        return this;</span>
+<span class="fc" id="L162">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

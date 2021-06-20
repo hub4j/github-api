@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Integration test for {@link GHContent}.
@@ -97,6 +98,20 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(createdContent.getPath(), equalTo(createdFilename));
         assertThat(createdContent.getContent(), equalTo("this is an awesome file I created\n"));
 
+        assertThat(created.getCommit().getSha(), equalTo("ce407cde9c6e4c970e33a955197512a2c1922ecf"));
+        assertThat(created.getCommit().getMessage(), equalTo("Creating a file for integration tests."));
+        assertThat(created.getCommit().getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/ce407cde9c6e4c970e33a955197512a2c1922ecf"));
+        assertThat(created.getCommit().getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(created.getCommit().getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(created.getCommit().getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(created.getCommit().getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(created.getCommit().getTree().getSha(), equalTo("1b852519fae94c3bca109754e408016f49fba41b"));
+        assertThat(created.getCommit().getTree().getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/1b852519fae94c3bca109754e408016f49fba41b"));
+
         GHContent content = repo.getFileContent(createdFilename);
         assertThat(content, is(notNullValue()));
         assertThat(content.getSha(), equalTo(createdContent.getSha()));
@@ -121,6 +136,21 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(new BufferedReader(new InputStreamReader(updatedContent.read())).readLine(),
                 equalTo("this is some new content"));
         assertThat(updatedContent.getContent(), equalTo("this is some new content\n"));
+
+        assertThat(updatedContentResponse.getCommit().getSha(), equalTo("00c7107a9d00cfd9116747ce61c91f2fd9a7acbc"));
+        assertThat(updatedContentResponse.getCommit().getMessage(), equalTo("Updated file for integration tests."));
+        assertThat(updatedContentResponse.getCommit().getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/00c7107a9d00cfd9116747ce61c91f2fd9a7acbc"));
+        assertThat(updatedContentResponse.getCommit().getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(updatedContentResponse.getCommit().getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(updatedContentResponse.getCommit().getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(updatedContentResponse.getCommit().getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(updatedContentResponse.getCommit().getTree().getSha(),
+                equalTo("50e945108f168faeb2eaf15855904e65e70b9336"));
+        assertThat(updatedContentResponse.getCommit().getTree().getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/50e945108f168faeb2eaf15855904e65e70b9336"));
 
         GHContentUpdateResponse deleteResponse = updatedContent.delete("Enough of this foolishness!");
 

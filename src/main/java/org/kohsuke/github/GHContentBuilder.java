@@ -107,7 +107,6 @@ public final class GHContentBuilder {
                 .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repo);
-        response.getCommit().wrapUp(repo);
 
         return response;
     }

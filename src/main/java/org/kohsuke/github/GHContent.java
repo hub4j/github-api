@@ -330,7 +330,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
                 .fetch(GHContentUpdateResponse.class);
 
         response.getContent().wrap(repository);
-        response.getCommit().wrapUp(repository);
 
         this.content = encodedContent;
         return response;
@@ -375,7 +374,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
                 .fetch(GHContentUpdateResponse.class);
 
-        response.getCommit().wrapUp(repository);
         return response;
     }
 

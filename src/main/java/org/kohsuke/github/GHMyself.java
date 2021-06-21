@@ -239,4 +239,23 @@ public class GHMyself extends GHUser {
     //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
     // root.retrieveWithAuth3()
     // }
+
+    /**
+     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
+     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
+     * endpoint.
+     *
+     * @throws IOException
+     *             the io exception
+     * @return list of GHAppInstallation
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
+     *      app installations accessible to the user access token</a>
+     */
+    public List<GHAppInstallation> getAppInstallations() throws IOException {
+        GHAppInstallations ghAppInstallations = root.createRequest()
+                .withUrlPath("/user/installations")
+                .fetch(GHAppInstallations.class);
+        return ghAppInstallations.getInstallations();
+    }
 }

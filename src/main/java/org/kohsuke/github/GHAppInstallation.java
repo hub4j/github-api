@@ -365,4 +365,9 @@ public class GHAppInstallation extends GHObject {
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));
     }
+
+    GHAppInstallation wrap(GitHub root) {
+        this.root = root;
+        return this;
+    }
 }

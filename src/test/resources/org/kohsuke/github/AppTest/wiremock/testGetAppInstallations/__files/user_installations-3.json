@@ -1,0 +1,48 @@
+{
+  "total_count": 1,
+  "installations": [
+    {
+      "id": 17761138,
+      "account": {
+        "login": "t0m4uk1991",
+        "id": 6698785,
+        "node_id": "MDQ6VXNlcjY2OTg3ODU=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6698785?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/t0m4uk1991",
+        "html_url": "https://github.com/t0m4uk1991",
+        "followers_url": "https://api.github.com/users/t0m4uk1991/followers",
+        "following_url": "https://api.github.com/users/t0m4uk1991/following{/other_user}",
+        "gists_url": "https://api.github.com/users/t0m4uk1991/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/t0m4uk1991/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/t0m4uk1991/subscriptions",
+        "organizations_url": "https://api.github.com/users/t0m4uk1991/orgs",
+        "repos_url": "https://api.github.com/users/t0m4uk1991/repos",
+        "events_url": "https://api.github.com/users/t0m4uk1991/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/t0m4uk1991/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "repository_selection": "selected",
+      "access_tokens_url": "https://api.github.com/app/installations/17761138/access_tokens",
+      "repositories_url": "https://api.github.com/installation/repositories",
+      "html_url": "https://github.com/settings/installations/17761138",
+      "app_id": 122478,
+      "app_slug": "hub4j-github-api-test",
+      "target_id": 6698785,
+      "target_type": "User",
+      "permissions": {
+        "metadata": "read",
+        "administration": "read"
+      },
+      "events": [],
+      "created_at": "2021-06-21T17:39:33.000+03:00",
+      "updated_at": "2021-06-21T17:39:33.000+03:00",
+      "single_file_name": null,
+      "has_multiple_single_files": false,
+      "single_file_paths": [],
+      "suspended_by": null,
+      "suspended_at": null
+    }
+  ]
+}

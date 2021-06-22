@@ -245,17 +245,12 @@ public class GHMyself extends GHUser {
      * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
      * endpoint.
      *
-     * @throws IOException
-     *             the io exception
-     * @return list of GHAppInstallation
+     * @return the paged iterable
      * @see <a href=
      *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
      *      app installations accessible to the user access token</a>
      */
-    public List<GHAppInstallation> getAppInstallations() throws IOException {
-        GHAppInstallations ghAppInstallations = root.createRequest()
-                .withUrlPath("/user/installations")
-                .fetch(GHAppInstallations.class);
-        return ghAppInstallations.getInstallations();
+    public PagedIterable<GHAppInstallation> getAppInstallations() {
+        return new GHAppInstallationsIterable(root);
     }
 }

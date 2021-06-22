@@ -239,4 +239,18 @@ public class GHMyself extends GHUser {
     //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
     // root.retrieveWithAuth3()
     // }
+
+    /**
+     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
+     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
+     * endpoint.
+     *
+     * @return the paged iterable
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
+     *      app installations accessible to the user access token</a>
+     */
+    public PagedIterable<GHAppInstallation> getAppInstallations() {
+        return new GHAppInstallationsIterable(root);
+    }
 }

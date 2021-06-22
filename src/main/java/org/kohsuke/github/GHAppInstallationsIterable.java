@@ -41,7 +41,7 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
                 if (result == null) {
                     result = v;
                 }
-                return v.getInstallations(root);
+                return v.getInstallations();
             }
         };
     }

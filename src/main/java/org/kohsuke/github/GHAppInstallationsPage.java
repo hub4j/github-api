@@ -11,10 +11,7 @@ class GHAppInstallationsPage {
         return total_count;
     }
 
-    GHAppInstallation[] getInstallations(GitHub root) {
-        for (GHAppInstallation installation : installations) {
-            installation.wrap(root);
-        }
+    GHAppInstallation[] getInstallations() {
         return installations;
     }
 }

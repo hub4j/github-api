@@ -12,7 +12,6 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see Reactable
  */
 @Preview(SQUIRREL_GIRL)
-@Deprecated
 public class GHReaction extends GHObject {
 
     private GHUser user;

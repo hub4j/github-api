@@ -42,7 +42,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     @Preview(ZZZAX)
-    @Deprecated
     public void enabledSignedCommits() throws IOException {
         requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);
     }
@@ -54,7 +53,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     @Preview(ZZZAX)
-    @Deprecated
     public void disableSignedCommits() throws IOException {
         requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).send();
     }
@@ -85,7 +83,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     @Preview(ZZZAX)
-    @Deprecated
     public boolean getRequiredSignatures() throws IOException {
         return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;
     }

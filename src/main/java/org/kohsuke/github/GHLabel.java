@@ -163,7 +163,6 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     @BetaApi
-    @Deprecated
     static Creator create(GHRepository repository) throws IOException {
         return new Creator(repository);
     }
@@ -210,7 +209,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return a {@link Updater}
      */
     @BetaApi
-    @Deprecated
     public Updater update() {
         return new Updater(this);
     }
@@ -221,7 +219,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return a {@link Setter}
      */
     @BetaApi
-    @Deprecated
     public Setter set() {
         return new Setter(this);
     }
@@ -258,7 +255,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * {@link #done()} is called automatically after the property is set.
      */
     @BetaApi
-    @Deprecated
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
             super(GHLabel.class, base.getApiRoot(), base);
@@ -272,7 +268,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
-    @Deprecated
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
             super(Updater.class, base.getApiRoot(), base);
@@ -286,7 +281,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * Consumer must call {@link #done()} to create the new instance.
      */
     @BetaApi
-    @Deprecated
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {
             super(Creator.class, repository.root, null);

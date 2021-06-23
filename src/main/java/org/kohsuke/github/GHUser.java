@@ -28,6 +28,8 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.io.IOException;
 import java.util.*;
 
+import static org.kohsuke.github.internal.Previews.INERTIA;
+
 /**
  * Represents an user of GitHub.
  *
@@ -132,6 +134,21 @@ public class GHUser extends GHPerson {
      */
     public PagedIterable<GHRepository> listStarredRepositories() {
         return listRepositories("starred");
+    }
+
+    /**
+     * Lists all the projects.
+     * <p>
+     * https://docs.github.com/en/rest/reference/projects#list-user-projects
+     *
+     * @return the paged iterable
+     */
+    @Preview(INERTIA)
+    public PagedIterable<GHProject> listProjects() {
+        return root.createRequest()
+                .withPreview(INERTIA)
+                .withUrlPath(getApiTailUrl("projects"))
+                .toIterable(GHProject[].class, item -> item.wrap(root));
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {

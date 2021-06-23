@@ -744,7 +744,6 @@ public class GHRepository extends GHObject {
      *
      * @return the visibility
      */
-    @Deprecated
     @Preview(NEBULA)
     public Visibility getVisibility() {
         if (visibility == null) {
@@ -763,7 +762,6 @@ public class GHRepository extends GHObject {
      *
      * @return the boolean
      */
-    @Deprecated
     @Preview(BAPTISTE)
     public boolean isTemplate() {
         // isTemplate is still in preview, we do not want to retrieve it unless needed.
@@ -1260,7 +1258,6 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Deprecated
     @Preview(NEBULA)
     public void setVisibility(final Visibility value) throws IOException {
         root.createRequest()
@@ -2014,7 +2011,6 @@ public class GHRepository extends GHObject {
      *      for a specific ref</a>
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
         GitHubRequest request = root.createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
@@ -2088,7 +2084,6 @@ public class GHRepository extends GHObject {
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
         return new GHCheckRunBuilder(this, name, headSHA);
     }
@@ -2101,7 +2096,6 @@ public class GHRepository extends GHObject {
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     @Preview(BAPTISTE)
-    @Deprecated
     public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
         return new GHCheckRunBuilder(this, checkId);
     }
@@ -3286,7 +3280,6 @@ public class GHRepository extends GHObject {
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
-    @Deprecated
     public static class Updater extends GHRepositoryBuilder<Updater> {
         protected Updater(@Nonnull GHRepository repository) {
             super(Updater.class, repository.root, null);
@@ -3304,7 +3297,6 @@ public class GHRepository extends GHObject {
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
-    @Deprecated
     public static class Setter extends GHRepositoryBuilder<GHRepository> {
         protected Setter(@Nonnull GHRepository repository) {
             super(GHRepository.class, repository.root, null);

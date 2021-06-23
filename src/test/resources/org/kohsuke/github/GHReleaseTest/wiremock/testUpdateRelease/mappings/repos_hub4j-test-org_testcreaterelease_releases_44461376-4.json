@@ -1,0 +1,53 @@
+{
+  "id": "4c60bd74-6531-4279-97bf-81db84a44f04",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases_44461376",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases/44461376",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"prerelease\":false}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_testcreaterelease_releases_44461376-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Jun 2021 07:24:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"fc8671e79791ab5293e66d1dd2e7126cfda4d9eccd7c7319679c2bede05e2be1\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1623398211",
+      "X-RateLimit-Used": "15",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E7A3:2A5F:87658F:8BEB7A:60C30F97"
+    }
+  },
+  "uuid": "4c60bd74-6531-4279-97bf-81db84a44f04",
+  "persistent": true,
+  "insertionIndex": 4
+}

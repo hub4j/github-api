@@ -384,6 +384,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(prs, is(not(empty())));
     }
 
+    @Test
+    public void testGetAppInstallations() throws Exception {
+        // To generate test data user-to-server OAuth access token was used
+        // For more details pls read
+        // https://docs.github.com/en/developers/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps#identifying-users-on-your-site
+        final PagedIterable<GHAppInstallation> appInstallation = gitHub.getMyself().getAppInstallations();
+
+        assertThat(appInstallation.toList(), is(not(empty())));
+        assertThat(appInstallation.toList().size(), is(1));
+        final GHAppInstallation ghAppInstallation = appInstallation.toList().get(0);
+        assertThat(ghAppInstallation.getAppId(), is(122478L));
+        assertThat(ghAppInstallation.getAccount().getLogin(), is("t0m4uk1991"));
+    }
+
     @Ignore("Needs mocking check")
     @Test
     public void testRepoPermissions() throws Exception {
@@ -775,43 +789,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         assertThat(j.hasPublicMember(kohsuke), is(true));
         assertThat(j.hasPublicMember(b), is(false));
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void testCreateRelease() throws Exception {
-        kohsuke();
-
-        GHRepository r = gitHub.getRepository("kohsuke2/testCreateRelease");
-
-        String tagName = UUID.randomUUID().toString();
-        String releaseName = "release-" + tagName;
-
-        GHRelease rel = r.createRelease(tagName).name(releaseName).prerelease(false).create();
-
-        Thread.sleep(3000);
-
-        try {
-
-            for (GHTag tag : r.listTags()) {
-                if (tagName.equals(tag.getName())) {
-                    String ash = tag.getCommit().getSHA1();
-                    GHRef ref = r.createRef("refs/heads/" + releaseName, ash);
-                    assertThat(("refs/heads/" + releaseName), equalTo(ref.getRef()));
-
-                    for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
-                        // System.out.println(entry.getKey() + "/" + entry.getValue());
-                        if (releaseName.equals(entry.getValue().getName())) {
-                            return;
-                        }
-                    }
-                    fail("branch not found");
-                }
-            }
-            fail("release creation failed! tag not found");
-        } finally {
-            rel.delete();
-        }
     }
 
     @Test

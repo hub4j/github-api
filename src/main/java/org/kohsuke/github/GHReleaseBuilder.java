@@ -88,6 +88,18 @@ public class GHReleaseBuilder {
     }
 
     /**
+     * Optional
+     *
+     * @param categoryName
+     *            the category of the discussion to be created for the release. Category should already exist
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder categoryName(String categoryName) {
+        builder.with("discussion_category_name", categoryName);
+        return this;
+    }
+
+    /**
      * Create gh release.
      *
      * @return the gh release

@@ -99,7 +99,6 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     public R done() throws IOException {
         R result;
         if (updateInPlace && baseInstance != null) {
@@ -129,7 +128,6 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
         return continueOrDone();
@@ -150,7 +148,6 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
      */
     @Nonnull
     @BetaApi
-    @Deprecated
     protected S continueOrDone() throws IOException {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as

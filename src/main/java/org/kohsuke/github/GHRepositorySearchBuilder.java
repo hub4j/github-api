@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import java.util.Locale;
+
 /**
  * Search repositories.
  *
@@ -50,6 +52,40 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      */
     public GHRepositorySearchBuilder forks(String v) {
         return q("forks:" + v);
+    }
+
+    /**
+     * Searching in forks
+     *
+     * @param fork
+     *            search mode for forks
+     *
+     * @return the gh repository search builder
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks">Searching
+     *      in forks</a>
+     *
+     */
+    public GHRepositorySearchBuilder fork(Fork fork) {
+        return q("fork:" + fork);
+    }
+
+    /**
+     * Search by repository visibility
+     *
+     * @param visibility
+     *            repository visibility
+     *
+     * @return the gh repository search builder
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility">Search
+     *      by repository visibility</a>
+     *
+     */
+    public GHRepositorySearchBuilder visibility(Visibility visibility) {
+        return q("is:" + visibility);
     }
 
     /**
@@ -158,6 +194,33 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      */
     public enum Sort {
         STARS, FORKS, UPDATED
+    }
+
+    /**
+     * The enum Fork.
+     */
+    public enum Fork {
+        ALL_INCLUDING_FORKS("true"), FORKS_ONLY("only");
+
+        private String filterMode;
+        Fork(String mode) {
+            this.filterMode = mode;
+        }
+
+        public String toString() {
+            return filterMode;
+        }
+    }
+
+    /**
+     * The enum Visibility.
+     */
+    public enum Visibility {
+        PUBLIC, INTERNAL, PRIVATE;
+
+        public String toString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 
     private static class RepositorySearchResult extends SearchResult<GHRepository> {

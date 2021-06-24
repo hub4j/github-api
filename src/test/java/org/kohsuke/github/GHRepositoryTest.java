@@ -414,6 +414,32 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void searchAllPublicAndForkedRepos() throws IOException {
+        PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
+                .user("t0m4uk1991")
+                .visibility(GHRepositorySearchBuilder.Visibility.PUBLIC)
+                .fork(GHRepositorySearchBuilder.Fork.ALL_INCLUDING_FORKS)
+                .list();
+        List<GHRepository> u = list.toList();
+        assertThat(u.size(), is(14));
+        assertThat(u.stream().filter(item -> item.getName().equals("github-api")).count(), is(1L));
+        assertThat(u.stream().filter(item -> item.getName().equals("Complete-Python-3-Bootcamp")).count(), is(1L));
+    }
+
+    @Test
+    public void searchForPublicForkedOnlyRepos() throws IOException {
+        PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
+                .user("t0m4uk1991")
+                .visibility(GHRepositorySearchBuilder.Visibility.PUBLIC)
+                .fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY)
+                .list();
+        List<GHRepository> u = list.toList();
+        assertThat(u.size(), is(2));
+        assertThat(u.get(0).getName(), is("github-api"));
+        assertThat(u.get(1).getName(), is("Complete-Python-3-Bootcamp"));
+    }
+
+    @Test
     public void listCommitCommentsSomeComments() throws IOException {
         List<GHCommitComment> commitComments = getRepository()
                 .listCommitComments("499d91f9f846b0087b2a20cf3648b49dc9c2eeef")

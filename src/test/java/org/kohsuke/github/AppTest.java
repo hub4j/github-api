@@ -384,6 +384,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(prs, is(not(empty())));
     }
 
+    @Test
+    public void testGetAppInstallations() throws Exception {
+        // To generate test data user-to-server OAuth access token was used
+        // For more details pls read
+        // https://docs.github.com/en/developers/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps#identifying-users-on-your-site
+        final PagedIterable<GHAppInstallation> appInstallation = gitHub.getMyself().getAppInstallations();
+
+        assertThat(appInstallation.toList(), is(not(empty())));
+        assertThat(appInstallation.toList().size(), is(1));
+        final GHAppInstallation ghAppInstallation = appInstallation.toList().get(0);
+        assertThat(ghAppInstallation.getAppId(), is(122478L));
+        assertThat(ghAppInstallation.getAccount().getLogin(), is("t0m4uk1991"));
+    }
+
     @Ignore("Needs mocking check")
     @Test
     public void testRepoPermissions() throws Exception {

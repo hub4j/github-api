@@ -55,6 +55,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Searching in forks
      *
+     * By default, forks are not shown in search results. Forks are only indexed for code search when they have more
+     * stars than the parent repository. You will not be able to search the code in a fork that has less stars than its
+     * parent. To show forks with more stars than the parent repository in code search results, add
+     * Fork.ALL_INCLUDING_FORKS or Fork.FORKS_ONLY.
+     *
      * @param fork
      *            search mode for forks
      *
@@ -66,6 +71,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *
      */
     public GHRepositorySearchBuilder fork(Fork fork) {
+        if (fork == Fork.DEFAULT) {
+            this.terms.removeIf(term -> term.contains("fork:"));
+            return this;
+        }
+
         return q("fork:" + fork);
     }
 
@@ -200,9 +210,14 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
     /**
      * The enum Fork.
+     *
+     * By default, forks are not shown in search results. Forks are only indexed for code search when they have more
+     * stars than the parent repository. You will not be able to search the code in a fork that has less stars than its
+     * parent. To show forks with more stars than the parent repository in code search results, add
+     * Fork.ALL_INCLUDING_FORKS or Fork.FORKS_ONLY.
      */
     public enum Fork {
-        ALL_INCLUDING_FORKS("true"), FORKS_ONLY("only");
+        ALL_INCLUDING_FORKS("true"), FORKS_ONLY("only"), DEFAULT("ignore");
 
         private String filterMode;
         Fork(String mode) {

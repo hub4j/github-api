@@ -417,7 +417,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void searchAllPublicAndForkedRepos() throws IOException {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
                 .user("t0m4uk1991")
-                .visibility(GHRepositorySearchBuilder.Visibility.PUBLIC)
+                .visibility(GHRepository.Visibility.PUBLIC)
                 .fork(GHRepositorySearchBuilder.Fork.ALL_INCLUDING_FORKS)
                 .list();
         List<GHRepository> u = list.toList();
@@ -430,13 +430,29 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void searchForPublicForkedOnlyRepos() throws IOException {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
                 .user("t0m4uk1991")
-                .visibility(GHRepositorySearchBuilder.Visibility.PUBLIC)
+                .visibility(GHRepository.Visibility.PUBLIC)
                 .fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY)
                 .list();
         List<GHRepository> u = list.toList();
         assertThat(u.size(), is(2));
         assertThat(u.get(0).getName(), is("github-api"));
         assertThat(u.get(1).getName(), is("Complete-Python-3-Bootcamp"));
+    }
+
+    @Test
+    public void ghRepositorySearchBuilderIgnoresUnknownVisibility() {
+        GHRepositorySearchBuilder ghRepositorySearchBuilder;
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.UNKNOWN);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(0L));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.PUBLIC);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.PRIVATE);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.INTERNAL);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
     }
 
     @Test

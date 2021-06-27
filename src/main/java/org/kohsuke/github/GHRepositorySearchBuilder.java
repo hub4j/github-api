@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Locale;
-
 /**
  * Search repositories.
  *
@@ -84,7 +82,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *      by repository visibility</a>
      *
      */
-    public GHRepositorySearchBuilder visibility(Visibility visibility) {
+    public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
+        if (visibility == GHRepository.Visibility.UNKNOWN) {
+            return this;
+        }
+
         return q("is:" + visibility);
     }
 
@@ -209,17 +211,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
         public String toString() {
             return filterMode;
-        }
-    }
-
-    /**
-     * The enum Visibility.
-     */
-    public enum Visibility {
-        PUBLIC, INTERNAL, PRIVATE;
-
-        public String toString() {
-            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 

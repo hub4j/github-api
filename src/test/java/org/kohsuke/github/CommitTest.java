@@ -44,8 +44,10 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 .list()
                 .toList();
 
-        assertThat(commits.get(0).getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
         assertThat(commits.size(), equalTo(29));
+
+        GHCommit commit = commits.get(0);
+        assertThat(commit.getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
 
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")

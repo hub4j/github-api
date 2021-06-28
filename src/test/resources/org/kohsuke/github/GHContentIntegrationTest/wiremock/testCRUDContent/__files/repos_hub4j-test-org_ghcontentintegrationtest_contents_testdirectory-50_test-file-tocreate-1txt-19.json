@@ -1,0 +1,37 @@
+{
+  "content": null,
+  "commit": {
+    "sha": "a67f5449d1f20224cc47c7b235ee0ebb578d15a4",
+    "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6YTY3ZjU0NDlkMWYyMDIyNGNjNDdjN2IyMzVlZTBlYmI1NzhkMTVhNA==",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/a67f5449d1f20224cc47c7b235ee0ebb578d15a4",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/a67f5449d1f20224cc47c7b235ee0ebb578d15a4",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-06-28T20:37:52Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-06-28T20:37:52Z"
+    },
+    "tree": {
+      "sha": "cc7e26f850339a8e8427fa2d983ca6006ad1a78c",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/cc7e26f850339a8e8427fa2d983ca6006ad1a78c"
+    },
+    "message": "Enough of this foolishness!",
+    "parents": [
+      {
+        "sha": "e0cef483cb2da847c7c229edea354db50f287e36",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/e0cef483cb2da847c7c229edea354db50f287e36",
+        "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/e0cef483cb2da847c7c229edea354db50f287e36"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

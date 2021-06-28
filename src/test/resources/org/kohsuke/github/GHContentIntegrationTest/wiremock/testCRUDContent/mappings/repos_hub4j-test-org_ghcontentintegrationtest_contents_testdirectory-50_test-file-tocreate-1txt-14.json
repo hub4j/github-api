@@ -1,5 +1,5 @@
 {
-  "id": "1d4297f8-515f-48b0-8f13-99894911d416",
+  "id": "4f088ffa-5a2f-4992-bdec-a28f88e8ef7d",
   "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt",
   "request": {
     "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test%2Bdirectory%20%2350/test%20file-to%2Bcreate-%231.txt?ref=main",
@@ -12,39 +12,38 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest-50_test-file-tocreate-1txt-1d4297f8.json",
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt-14.json",
     "headers": {
-      "Date": "Tue, 26 Nov 2019 01:09:47 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4915",
-      "X-RateLimit-Reset": "1574734142",
+      "Date": "Mon, 28 Jun 2021 20:37:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
       "ETag": "W/\"da2d3cc78776aec68881668775c46a53f0ee2288\"",
-      "Last-Modified": "Tue, 26 Nov 2019 01:09:46 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "Last-Modified": "Mon, 28 Jun 2021 20:37:51 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4753",
+      "X-RateLimit-Reset": "1624914877",
+      "X-RateLimit-Used": "247",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "EEAB:6915:6C80D:8257B:5DDC7B5B"
+      "X-GitHub-Request-Id": "FF57:52C5:1028262:1189B23:60DA331F"
     }
   },
-  "uuid": "1d4297f8-515f-48b0-8f13-99894911d416",
+  "uuid": "4f088ffa-5a2f-4992-bdec-a28f88e8ef7d",
   "persistent": true,
   "scenarioName": "scenario-1-repos-hub4j-test-org-GHContentIntegrationTest-contents-test+directory #50-test file-to+create-#1.txt",
   "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHContentIntegrationTest-contents-test+directory #50-test file-to+create-#1.txt-3",
-  "insertionIndex": 9
+  "insertionIndex": 14
 }

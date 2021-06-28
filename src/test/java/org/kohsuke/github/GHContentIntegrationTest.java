@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Integration test for {@link GHContent}.
@@ -89,13 +90,51 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n",
                 "Creating a file for integration tests.",
                 createdFilename);
+        int expectedRequestCount = mockGitHub.getRequestCount();
         GHContent createdContent = created.getContent();
 
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
         assertThat(created.getCommit(), notNullValue());
         assertThat(created.getContent(), notNullValue());
-        assertThat(createdContent.getContent(), notNullValue());
+
         assertThat(createdContent.getPath(), equalTo(createdFilename));
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(createdContent.getContent(), notNullValue());
         assertThat(createdContent.getContent(), equalTo("this is an awesome file I created\n"));
+
+        ;
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(created.getCommit().getSHA1(), notNullValue());
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThat(created.getCommit().getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(created.getCommit().getCommitShortInfo().getMessage(),
+                equalTo("Creating a file for integration tests."));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(created.getCommit().getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(created.getCommit().getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(created.getCommit().getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(created.getCommit().getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+
+        assertThat("Resolving GHUser", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(created.getCommit().getTree().getSha(), notNullValue());
+
+        assertThat("Resolving GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(created.getCommit().getTree().getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/"
+                        + created.getCommit().getTree().getSha()));
+
+        assertThat("Resolving GHTree is not cached", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 2));
 
         GHContent content = repo.getFileContent(createdFilename);
         assertThat(content, is(notNullValue()));
@@ -113,14 +152,55 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         GHContentUpdateResponse updatedContentResponse = createdContent.update("this is some new content\n",
                 "Updated file for integration tests.");
+
+        expectedRequestCount = mockGitHub.getRequestCount();
+
         GHContent updatedContent = updatedContentResponse.getContent();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         assertThat(updatedContentResponse.getCommit(), notNullValue());
         assertThat(updatedContentResponse.getContent(), notNullValue());
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
         // due to what appears to be a cache propagation delay, this test is too flaky
         assertThat(new BufferedReader(new InputStreamReader(updatedContent.read())).readLine(),
                 equalTo("this is some new content"));
         assertThat(updatedContent.getContent(), equalTo("this is some new content\n"));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(updatedContentResponse.getCommit().getSHA1(), notNullValue());
+        assertThat(updatedContentResponse.getCommit().getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/"
+                        + updatedContentResponse.getCommit().getSHA1()));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(updatedContentResponse.getCommit().getCommitShortInfo().getMessage(),
+                equalTo("Updated file for integration tests."));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(updatedContentResponse.getCommit().getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(updatedContentResponse.getCommit().getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(updatedContentResponse.getCommit().getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(updatedContentResponse.getCommit().getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+
+        assertThat("Resolving GHUser - was already resolved",
+                mockGitHub.getRequestCount(),
+                equalTo(expectedRequestCount));
+
+        assertThat(updatedContentResponse.getCommit().getTree().getSha(), notNullValue());
+
+        assertThat("Resolving GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        assertThat(updatedContentResponse.getCommit().getTree().getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/"
+                        + updatedContentResponse.getCommit().getTree().getSha()));
+
+        assertThat("Resolving GHTree is not cached", mockGitHub.getRequestCount(), equalTo(expectedRequestCount + 2));
 
         GHContentUpdateResponse deleteResponse = updatedContent.delete("Enough of this foolishness!");
 
@@ -133,7 +213,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         } catch (GHFileNotFoundException e) {
             assertThat(e.getMessage(),
                     endsWith(
-                            "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/repos/contents/#get-contents\"}"));
+                            "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#get-repository-content\"}"));
         }
     }
 

@@ -388,9 +388,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Retrieves all the files associated to this pull request.
+     * Retrieves all the files associated to this pull request. The paginated response returns 30 files per page by
+     * default.
      *
      * @return the paged iterable
+     *
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
+     *      files</a>
      */
     public PagedIterable<GHPullRequestFileDetail> listFiles() {
         return root.createRequest()

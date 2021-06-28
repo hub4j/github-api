@@ -1,8 +1,8 @@
 {
-  "id": "92e4cf09-4909-4a48-9efc-1a579c0ae746",
-  "name": "user",
+  "id": "7b3d0677-7c51-45a6-b2c6-a34823921b31",
+  "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
   "request": {
-    "url": "/user",
+    "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,25 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000-9.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 28 Jun 2021 22:41:28 GMT",
+      "Date": "Mon, 28 Jun 2021 22:41:30 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"e1fbcd337cca68d53989eddca67b8be55e1a50ce95ddcecc2139323007e5da21\"",
-      "Last-Modified": "Mon, 28 Jun 2021 20:48:08 GMT",
+      "ETag": "W/\"5ef515abb3f8502576dd4e84b41dc5d504650f0d559ff828f01485c91e6432b2\"",
+      "Last-Modified": "Tue, 24 Apr 2012 22:54:20 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4940",
+      "X-RateLimit-Remaining": "4931",
       "X-RateLimit-Reset": "1624920219",
-      "X-RateLimit-Used": "60",
+      "X-RateLimit-Used": "69",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,12 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FF9A:9C39:2E55FB:311CD1:60DA5018"
+      "X-GitHub-Request-Id": "FF52:52C5:10B104A:121C9C2:60DA501A"
     }
   },
-  "uuid": "92e4cf09-4909-4a48-9efc-1a579c0ae746",
+  "uuid": "7b3d0677-7c51-45a6-b2c6-a34823921b31",
   "persistent": true,
-  "insertionIndex": 1
+  "scenarioName": "scenario-2-repos-kohsuke-sandbox-ant-commits-8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "requiredScenarioState": "scenario-2-repos-kohsuke-sandbox-ant-commits-8ae38db0ea5837313ab5f39d43a6f73de3bd9000-2",
+  "insertionIndex": 9
 }

@@ -497,10 +497,7 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.createRequest()
-                .withUrlPath(
-                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
-                .toIterable(GHCommitComment[].class, item -> item.wrap(owner));
+        return owner.listCommitComments(sha);
     }
 
     /**

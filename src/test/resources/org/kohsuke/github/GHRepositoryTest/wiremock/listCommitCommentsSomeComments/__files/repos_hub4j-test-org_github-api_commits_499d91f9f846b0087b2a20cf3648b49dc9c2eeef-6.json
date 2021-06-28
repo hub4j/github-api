@@ -1,0 +1,98 @@
+{
+  "sha": "499d91f9f846b0087b2a20cf3648b49dc9c2eeef",
+  "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOjQ5OWQ5MWY5Zjg0NmIwMDg3YjJhMjBjZjM2NDhiNDlkYzljMmVlZWY=",
+  "commit": {
+    "author": {
+      "name": "Sean Sullivan",
+      "email": "github@seansullivan.com",
+      "date": "2019-08-15T19:23:42Z"
+    },
+    "committer": {
+      "name": "Sean Sullivan",
+      "email": "github@seansullivan.com",
+      "date": "2019-08-15T19:23:42Z"
+    },
+    "message": "jackson-databind 2.9.9.3",
+    "tree": {
+      "sha": "f542162741d541dba7c306e31de44d7524733300",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/f542162741d541dba7c306e31de44d7524733300"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/499d91f9f846b0087b2a20cf3648b49dc9c2eeef",
+    "comment_count": 2,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/499d91f9f846b0087b2a20cf3648b49dc9c2eeef",
+  "html_url": "https://github.com/hub4j-test-org/github-api/commit/499d91f9f846b0087b2a20cf3648b49dc9c2eeef",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/499d91f9f846b0087b2a20cf3648b49dc9c2eeef/comments",
+  "author": {
+    "login": "sullis",
+    "id": 30938,
+    "node_id": "MDQ6VXNlcjMwOTM4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/30938?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sullis",
+    "html_url": "https://github.com/sullis",
+    "followers_url": "https://api.github.com/users/sullis/followers",
+    "following_url": "https://api.github.com/users/sullis/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sullis/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sullis/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sullis/subscriptions",
+    "organizations_url": "https://api.github.com/users/sullis/orgs",
+    "repos_url": "https://api.github.com/users/sullis/repos",
+    "events_url": "https://api.github.com/users/sullis/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sullis/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "sullis",
+    "id": 30938,
+    "node_id": "MDQ6VXNlcjMwOTM4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/30938?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sullis",
+    "html_url": "https://github.com/sullis",
+    "followers_url": "https://api.github.com/users/sullis/followers",
+    "following_url": "https://api.github.com/users/sullis/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sullis/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sullis/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sullis/subscriptions",
+    "organizations_url": "https://api.github.com/users/sullis/orgs",
+    "repos_url": "https://api.github.com/users/sullis/repos",
+    "events_url": "https://api.github.com/users/sullis/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sullis/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "3ae8ee8ddb491b00d44d3b079a07bd5803e35900",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/3ae8ee8ddb491b00d44d3b079a07bd5803e35900",
+      "html_url": "https://github.com/hub4j-test-org/github-api/commit/3ae8ee8ddb491b00d44d3b079a07bd5803e35900"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 1,
+    "deletions": 1
+  },
+  "files": [
+    {
+      "sha": "8adad4585dab6a7bb9f030ff3b50e92ed52ef24c",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hub4j-test-org/github-api/blob/499d91f9f846b0087b2a20cf3648b49dc9c2eeef/pom.xml",
+      "raw_url": "https://github.com/hub4j-test-org/github-api/raw/499d91f9f846b0087b2a20cf3648b49dc9c2eeef/pom.xml",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/github-api/contents/pom.xml?ref=499d91f9f846b0087b2a20cf3648b49dc9c2eeef",
+      "patch": "@@ -121,7 +121,7 @@\n     <dependency>\n       <groupId>com.fasterxml.jackson.core</groupId>\n       <artifactId>jackson-databind</artifactId>\n-      <version>2.9.2</version>\n+      <version>2.9.9.3</version>\n     </dependency>\n     <dependency>\n       <groupId>commons-io</groupId>"
+    }
+  ]
+}

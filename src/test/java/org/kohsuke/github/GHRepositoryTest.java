@@ -411,6 +411,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .toList();
 
         assertThat("Commit has no comments", commitComments.isEmpty());
+
+        commitComments = getRepository().getCommit("c413fc1e3057332b93850ea48202627d29a37de5").listComments().toList();
+
+        assertThat("Commit has no comments", commitComments.isEmpty());
     }
 
     @Test
@@ -480,6 +484,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat("Comment text found",
                 commitComments.stream().map(GHCommitComment::getBody).collect(Collectors.toList()),
                 containsInAnyOrder("comment 1", "comment 2"));
+
+        commitComments = getRepository().getCommit("499d91f9f846b0087b2a20cf3648b49dc9c2eeef").listComments().toList();
+
+        assertThat("Two comments present", commitComments.size(), equalTo(2));
+        assertThat("Comment text found",
+                commitComments.stream().map(GHCommitComment::getBody).collect(Collectors.toList()),
+                containsInAnyOrder("comment 1", "comment 2"));
+
     }
 
     @Test // Issue #261

@@ -82,6 +82,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Search by repository visibility
      *
+     * If visibility param value equals to GHRepository.Visibility.UNKNOWN, this search criteria will be ignored.
+     *
      * @param visibility
      *            repository visibility
      *

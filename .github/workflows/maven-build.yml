@@ -84,7 +84,7 @@ jobs:
       run: mvn -B install -D enable-ci --file pom.xml
     - name: Codecov Report 
       if: matrix.os != 'windows' && matrix.java == '8'
-      uses: codecov/codecov-action@v1.5.0  
+      uses: codecov/codecov-action@v1.5.2  
     # JDK 11+
     - name: Maven Install without Code Coverage
       if: matrix.os == 'windows' && matrix.java != '8'

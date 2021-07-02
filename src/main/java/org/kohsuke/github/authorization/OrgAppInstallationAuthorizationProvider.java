@@ -35,7 +35,6 @@ public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAut
      *            token from GitHub.
      */
     @BetaApi
-    @Deprecated
     public OrgAppInstallationAuthorizationProvider(String organizationName,
             AuthorizationProvider authorizationProvider) {
         super(authorizationProvider);

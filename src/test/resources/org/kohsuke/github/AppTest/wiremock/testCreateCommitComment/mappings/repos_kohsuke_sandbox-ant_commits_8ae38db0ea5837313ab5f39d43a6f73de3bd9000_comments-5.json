@@ -1,5 +1,5 @@
 {
-  "id": "c0911355-a85d-40b9-b291-e0c098407d2e",
+  "id": "5a8912b4-7de9-4567-b12b-12a02d59064d",
   "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000_comments",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000/comments",
@@ -21,35 +21,34 @@
     "status": 201,
     "bodyFileName": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000_comments-5.json",
     "headers": {
-      "Date": "Sat, 23 Jan 2021 06:39:40 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Date": "Mon, 28 Jun 2021 22:41:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"de435e64b07783ba615db4fd69d86e8c13c4fe1281f1265937cf7b887dad2579\"",
+      "ETag": "\"0370f56de2fb3daaa1930d56adba70e7db1be13f5fac58a2040e0666c12bdaab\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/46267761",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4943",
-      "X-RateLimit-Reset": "1611386378",
-      "x-ratelimit-used": "57",
+      "X-RateLimit-Remaining": "4935",
+      "X-RateLimit-Reset": "1624920219",
+      "X-RateLimit-Used": "65",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "E9F0:5E21:C00ED:DCE30:600BC4AC"
+      "X-GitHub-Request-Id": "FF9E:9C39:2E5670:311D55:60DA5019",
+      "Location": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/52782621"
     }
   },
-  "uuid": "c0911355-a85d-40b9-b291-e0c098407d2e",
+  "uuid": "5a8912b4-7de9-4567-b12b-12a02d59064d",
   "persistent": true,
   "insertionIndex": 5
 }

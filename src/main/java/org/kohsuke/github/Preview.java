@@ -9,9 +9,9 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Indicates that the method/class/etc marked maps to GitHub API in the preview period.
  * <p>
- * These APIs are subject to change and not a part of the backward compatibility commitment. Always used in conjunction
- * with 'deprecated' to raise awareness to clients. In addition, it's advised to update the targets documentation to
- * signify that the deprecation is required until preview feature being used is promoted to stable.
+ * These APIs are subject to change and not a part of the backward compatibility commitment.
+ *
+ * It is advised to update the target's documentation with text indicating that a preview feature being used.
  *
  * @author Kohsuke Kawaguchi
  */

@@ -30,6 +30,7 @@ import java.net.URL;
  *
  * @author Julien Henry
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
+ * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests files</a>
  */
 public class GHPullRequestFileDetail {
 
@@ -46,7 +47,10 @@ public class GHPullRequestFileDetail {
     String previous_filename;
 
     /**
-     * Gets sha.
+     * Gets sha of the file (not commit sha).
+     *
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
+     *      files</a>
      *
      * @return the sha
      */
@@ -64,7 +68,7 @@ public class GHPullRequestFileDetail {
     }
 
     /**
-     * Gets status.
+     * Gets status (added/modified/deleted)
      *
      * @return the status
      */

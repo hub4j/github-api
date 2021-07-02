@@ -60,7 +60,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the interrupted exception
      */
     @BetaApi
-    @Deprecated
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = { "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" }, justification = "JSON API")
     public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady)

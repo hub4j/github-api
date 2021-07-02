@@ -485,7 +485,6 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root.createRequest()
                 .method("POST")
@@ -497,7 +496,6 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
         return root.createRequest()
                 .withPreview(SQUIRREL_GIRL)

@@ -1,0 +1,48 @@
+{
+  "id": "78307b46-4de1-4554-a60f-d2285eaf5ab8",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"discussion_category_name\":\"an invalid cateogry\",\"tag_name\":\"testCreateReleaseWithUnknownCategoryFails\",\"prerelease\":false,\"name\":\"release-testCreateReleaseWithUnknownCategoryFails\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Discussion could not be created. Make sure you passed a valid category name.\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#create-a-release\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 14 Jun 2021 20:07:53 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4924",
+      "X-RateLimit-Reset": "1623701637",
+      "X-RateLimit-Used": "76",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "F6A0:0CE8:71F565:825F84:60C7B719"
+    }
+  },
+  "uuid": "78307b46-4de1-4554-a60f-d2285eaf5ab8",
+  "persistent": true,
+  "insertionIndex": 3
+}

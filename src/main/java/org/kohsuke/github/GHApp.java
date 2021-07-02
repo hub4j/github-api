@@ -194,7 +194,6 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public PagedIterable<GHAppInstallation> listInstallations() {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
@@ -215,7 +214,6 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationById(long id) throws IOException {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
@@ -238,7 +236,6 @@ public class GHApp extends GHObject {
      *      installation</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
@@ -263,7 +260,6 @@ public class GHApp extends GHObject {
      *      installation</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)
@@ -285,7 +281,6 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
         return root.createRequest()
                 .withPreview(MACHINE_MAN)

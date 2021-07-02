@@ -352,6 +352,15 @@ public class GHCommit {
     }
 
     /**
+     * Gets url.
+     *
+     * @return API URL of this object.
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
+    }
+
+    /**
      * List of files changed/added/removed in this commit.
      *
      * @return Can be empty but never null.
@@ -392,6 +401,7 @@ public class GHCommit {
      *             on error
      */
     public List<GHCommit> getParents() throws IOException {
+        populate();
         List<GHCommit> r = new ArrayList<GHCommit>();
         for (String sha1 : getParentSHA1s())
             r.add(owner.getCommit(sha1));
@@ -406,6 +416,7 @@ public class GHCommit {
      *             the io exception
      */
     public GHUser getAuthor() throws IOException {
+        populate();
         return resolveUser(author);
     }
 
@@ -428,6 +439,7 @@ public class GHCommit {
      *             the io exception
      */
     public GHUser getCommitter() throws IOException {
+        populate();
         return resolveUser(committer);
     }
 
@@ -454,7 +466,6 @@ public class GHCommit {
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests() {
         return owner.root.createRequest()
                 .withPreview(GROOT)
@@ -470,7 +481,6 @@ public class GHCommit {
      *             the io exception
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
         return owner.root.createRequest()
                 .withPreview(GROOT)
@@ -487,10 +497,7 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.createRequest()
-                .withUrlPath(
-                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
-                .toIterable(GHCommitComment[].class, item -> item.wrap(owner));
+        return owner.listCommitComments(sha);
     }
 
     /**
@@ -566,7 +573,6 @@ public class GHCommit {
      *             on error
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
     }

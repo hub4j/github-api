@@ -384,6 +384,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(prs, is(not(empty())));
     }
 
+    @Test
+    public void testGetAppInstallations() throws Exception {
+        // To generate test data user-to-server OAuth access token was used
+        // For more details pls read
+        // https://docs.github.com/en/developers/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps#identifying-users-on-your-site
+        final PagedIterable<GHAppInstallation> appInstallation = gitHub.getMyself().getAppInstallations();
+
+        assertThat(appInstallation.toList(), is(not(empty())));
+        assertThat(appInstallation.toList().size(), is(1));
+        final GHAppInstallation ghAppInstallation = appInstallation.toList().get(0);
+        assertThat(ghAppInstallation.getAppId(), is(122478L));
+        assertThat(ghAppInstallation.getAccount().getLogin(), is("t0m4uk1991"));
+    }
+
     @Ignore("Needs mocking check")
     @Test
     public void testRepoPermissions() throws Exception {
@@ -474,6 +488,16 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getFiles().size(), equalTo(1));
         assertThat(commit.getHtmlUrl().toString(),
                 equalTo("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7"));
+        assertThat(commit.getLinesAdded(), equalTo(40));
+        assertThat(commit.getLinesChanged(), equalTo(48));
+        assertThat(commit.getLinesDeleted(), equalTo(8));
+        assertThat(commit.getParentSHA1s().size(), equalTo(1));
+        assertThat(commit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
+        assertThat(commit.getCommitDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
+        assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(0));
+        assertThat(commit.getCommitShortInfo().getAuthoredDate(), equalTo(commit.getAuthoredDate()));
+        assertThat(commit.getCommitShortInfo().getCommitDate(), equalTo(commit.getCommitDate()));
+        assertThat(commit.getCommitShortInfo().getMessage(), equalTo("creating an RC branch"));
 
         File f = commit.getFiles().get(0);
         assertThat(f.getLinesChanged(), equalTo(48));
@@ -529,6 +553,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHCommit commit = gitHub.getUser("kohsuke")
                 .getRepository("sandbox-ant")
                 .getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
+
+        assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(30));
         GHCommitComment c = commit.createComment("[testing](http://kohsuse.org/)");
         try {
             assertThat(c.getPath(), nullValue());
@@ -540,6 +566,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
             c.update("updated text");
             assertThat(c.getBody(), equalTo("updated text"));
+
+            commit = gitHub.getUser("kohsuke")
+                    .getRepository("sandbox-ant")
+                    .getCommit("8ae38db0ea5837313ab5f39d43a6f73de3bd9000");
+
+            assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(31));
+
         } finally {
             c.delete();
         }
@@ -775,43 +808,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         assertThat(j.hasPublicMember(kohsuke), is(true));
         assertThat(j.hasPublicMember(b), is(false));
-    }
-
-    @Ignore("Needs mocking check")
-    @Test
-    public void testCreateRelease() throws Exception {
-        kohsuke();
-
-        GHRepository r = gitHub.getRepository("kohsuke2/testCreateRelease");
-
-        String tagName = UUID.randomUUID().toString();
-        String releaseName = "release-" + tagName;
-
-        GHRelease rel = r.createRelease(tagName).name(releaseName).prerelease(false).create();
-
-        Thread.sleep(3000);
-
-        try {
-
-            for (GHTag tag : r.listTags()) {
-                if (tagName.equals(tag.getName())) {
-                    String ash = tag.getCommit().getSHA1();
-                    GHRef ref = r.createRef("refs/heads/" + releaseName, ash);
-                    assertThat(("refs/heads/" + releaseName), equalTo(ref.getRef()));
-
-                    for (Map.Entry<String, GHBranch> entry : r.getBranches().entrySet()) {
-                        // System.out.println(entry.getKey() + "/" + entry.getValue());
-                        if (releaseName.equals(entry.getValue().getName())) {
-                            return;
-                        }
-                    }
-                    fail("branch not found");
-                }
-            }
-            fail("release creation failed! tag not found");
-        } finally {
-            rel.delete();
-        }
     }
 
     @Test

@@ -55,10 +55,16 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Searching in forks
      *
-     * By default, forks are not shown in search results. Forks are only indexed for code search when they have more
-     * stars than the parent repository. You will not be able to search the code in a fork that has less stars than its
-     * parent. To show forks with more stars than the parent repository in code search results, add
-     * Fork.ALL_INCLUDING_FORKS or Fork.FORKS_ONLY.
+     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
+     *
+     * <p>
+     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
+     * have more stars than the parent repository.
+     *
+     * <p>
+     * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer
+     * stars than the parent repository. Forks with less stars than the parent repository are not included in the index
+     * for code searching.
      *
      * @param fork
      *            search mode for forks
@@ -71,7 +77,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *
      */
     public GHRepositorySearchBuilder fork(Fork fork) {
-        if (fork == Fork.DEFAULT) {
+        if (Fork.PARENT_ONLY.equals(fork)) {
             this.terms.removeIf(term -> term.contains("fork:"));
             return this;
         }
@@ -82,21 +88,21 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Search by repository visibility
      *
-     * If visibility param value equals to GHRepository.Visibility.UNKNOWN, this search criteria will be ignored.
-     *
      * @param visibility
      *            repository visibility
      *
      * @return the gh repository search builder
-     *
+     * @throws GHException
+     *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
+     *             encountered when reading data.
      * @see <a href=
      *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility">Search
      *      by repository visibility</a>
-     *
      */
     public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
         if (visibility == GHRepository.Visibility.UNKNOWN) {
-            return this;
+            throw new GHException(
+                    "UNKNOWN is a placeholder for unexpected values encountered when reading data. It cannot be passed as a search parameter.");
         }
 
         return q("is:" + visibility);
@@ -211,15 +217,30 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * The enum Fork.
-     *
-     * By default, forks are not shown in search results. Forks are only indexed for code search when they have more
-     * stars than the parent repository. You will not be able to search the code in a fork that has less stars than its
-     * parent. To show forks with more stars than the parent repository in code search results, add
-     * Fork.ALL_INCLUDING_FORKS or Fork.FORKS_ONLY.
+     * The enum for Fork search mode
      */
     public enum Fork {
-        ALL_INCLUDING_FORKS("true"), FORKS_ONLY("only"), DEFAULT("ignore");
+
+        /**
+         * Search in the parent repository and in forks with more stars than the parent repository.
+         *
+         * Forks with the same or fewer stars than the parent repository are still ignored.
+         */
+        PARENT_AND_FORKS("true"),
+
+        /**
+         * Search only in forks with more stars than the parent repository.
+         *
+         * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
+         */
+        FORKS_ONLY("only"),
+
+        /**
+         * (Default) Search only the parent repository.
+         *
+         * Forks are ignored.
+         */
+        PARENT_ONLY("");
 
         private String filterMode;
         Fork(String mode) {

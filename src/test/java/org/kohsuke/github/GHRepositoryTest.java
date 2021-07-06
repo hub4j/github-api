@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
 /**
@@ -422,7 +423,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
                 .user("t0m4uk1991")
                 .visibility(GHRepository.Visibility.PUBLIC)
-                .fork(GHRepositorySearchBuilder.Fork.ALL_INCLUDING_FORKS)
+                .fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS)
                 .list();
         List<GHRepository> u = list.toList();
         assertThat(u.size(), is(14));
@@ -446,8 +447,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void ghRepositorySearchBuilderIgnoresUnknownVisibility() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder;
-        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.UNKNOWN);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(0L));
+
+        GHException exception = assertThrows(GHException.class,
+                () -> new GHRepositorySearchBuilder(gitHub).visibility(Visibility.UNKNOWN));
+        assertThat(exception.getMessage(),
+                startsWith("UNKNOWN is a placeholder for unexpected values encountered when reading data."));
 
         ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.PUBLIC);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
@@ -462,7 +466,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void ghRepositorySearchBuilderForkDefaultResetForksSearchTerms() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.ALL_INCLUDING_FORKS);
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
 
@@ -470,7 +474,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
 
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.DEFAULT);
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 

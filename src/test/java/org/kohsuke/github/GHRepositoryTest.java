@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
 /**
@@ -415,6 +416,66 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         commitComments = getRepository().getCommit("c413fc1e3057332b93850ea48202627d29a37de5").listComments().toList();
 
         assertThat("Commit has no comments", commitComments.isEmpty());
+    }
+
+    @Test
+    public void searchAllPublicAndForkedRepos() throws IOException {
+        PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
+                .user("t0m4uk1991")
+                .visibility(GHRepository.Visibility.PUBLIC)
+                .fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS)
+                .list();
+        List<GHRepository> u = list.toList();
+        assertThat(u.size(), is(14));
+        assertThat(u.stream().filter(item -> item.getName().equals("github-api")).count(), is(1L));
+        assertThat(u.stream().filter(item -> item.getName().equals("Complete-Python-3-Bootcamp")).count(), is(1L));
+    }
+
+    @Test
+    public void searchForPublicForkedOnlyRepos() throws IOException {
+        PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
+                .user("t0m4uk1991")
+                .visibility(GHRepository.Visibility.PUBLIC)
+                .fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY)
+                .list();
+        List<GHRepository> u = list.toList();
+        assertThat(u.size(), is(2));
+        assertThat(u.get(0).getName(), is("github-api"));
+        assertThat(u.get(1).getName(), is("Complete-Python-3-Bootcamp"));
+    }
+
+    @Test
+    public void ghRepositorySearchBuilderIgnoresUnknownVisibility() {
+        GHRepositorySearchBuilder ghRepositorySearchBuilder;
+
+        GHException exception = assertThrows(GHException.class,
+                () -> new GHRepositorySearchBuilder(gitHub).visibility(Visibility.UNKNOWN));
+        assertThat(exception.getMessage(),
+                startsWith("UNKNOWN is a placeholder for unexpected values encountered when reading data."));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.PUBLIC);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.PRIVATE);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub).visibility(Visibility.INTERNAL);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
+    }
+
+    @Test
+    public void ghRepositorySearchBuilderForkDefaultResetForksSearchTerms() {
+        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
     @Test

@@ -727,7 +727,20 @@ public class GHRepository extends GHObject {
      * Visibility of a repository.
      */
     public enum Visibility {
-        PUBLIC, INTERNAL, PRIVATE, UNKNOWN;
+        PUBLIC,
+        INTERNAL,
+        PRIVATE,
+
+        /**
+         * Placeholder for unexpected data values.
+         *
+         * This avoids throwing exceptions during data binding or reading when the list of allowed values returned from
+         * GitHub is expanded.
+         *
+         * Do not pass this value to any methods. If this value is returned during a request, check the log output and
+         * report an issue for the missing value.
+         */
+        UNKNOWN;
 
         public static Visibility from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Visibility.class, value, Visibility.UNKNOWN);

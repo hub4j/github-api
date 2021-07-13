@@ -1,0 +1,46 @@
+{
+  "id": "e3012630-c000-4dd9-9338-b64d2743b66c",
+  "name": "repos_kohsuke_sandbox-ant_comments_52782621_reactions",
+  "request": {
+    "url": "/repos/kohsuke/sandbox-ant/comments/52782621/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 22:41:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"09f1fd8ad1f7a8a86a061a6ee6b2506a7740a8d58da6ba3c8f1d53124411aaf1\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4934",
+      "X-RateLimit-Reset": "1624920219",
+      "X-RateLimit-Used": "66",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FFA0:71CA:E47E15:F58A88:60DA501A"
+    }
+  },
+  "uuid": "e3012630-c000-4dd9-9338-b64d2743b66c",
+  "persistent": true,
+  "insertionIndex": 6
+}

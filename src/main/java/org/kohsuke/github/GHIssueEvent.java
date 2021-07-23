@@ -22,6 +22,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     private GHLabel label;
     private GHUser assignee;
     private GHIssueRename rename;
+    private GHUser reviewRequester;
 
     private GHIssue issue;
 
@@ -153,6 +154,22 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     public GHIssueRename getRename() {
         return this.rename;
+    }
+
+    /**
+     *
+     * Get the {@link GHUser} person who requested a review. Only present for events "review_requested",
+     * "review_request_removed", <code>null</code> otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested">review_requested</a>
+     *      and <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed">review_request_removed</a>
+     */
+    public GHUser getReviewRequester() {
+        return this.reviewRequester;
     }
 
     GHIssueEvent wrapUp(GitHub root) {

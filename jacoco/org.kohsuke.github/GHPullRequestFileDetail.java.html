@@ -30,8 +30,9 @@ import java.net.URL;
  *
  * @author Julien Henry
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files&quot;&gt;List pull requests files&lt;/a&gt;
  */
-<span class="nc" id="L34">public class GHPullRequestFileDetail {</span>
+<span class="nc" id="L35">public class GHPullRequestFileDetail {</span>
 
     String sha;
     String filename;
@@ -46,12 +47,15 @@ import java.net.URL;
     String previous_filename;
 
     /**
-     * Gets sha.
+     * Gets sha of the file (not commit sha).
+     *
+     * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files&quot;&gt;List pull requests
+     *      files&lt;/a&gt;
      *
      * @return the sha
      */
     public String getSha() {
-<span class="nc" id="L54">        return sha;</span>
+<span class="nc" id="L58">        return sha;</span>
     }
 
     /**
@@ -60,16 +64,16 @@ import java.net.URL;
      * @return the filename
      */
     public String getFilename() {
-<span class="nc" id="L63">        return filename;</span>
+<span class="nc" id="L67">        return filename;</span>
     }
 
     /**
-     * Gets status.
+     * Gets status (added/modified/deleted)
      *
      * @return the status
      */
     public String getStatus() {
-<span class="nc" id="L72">        return status;</span>
+<span class="nc" id="L76">        return status;</span>
     }
 
     /**
@@ -78,7 +82,7 @@ import java.net.URL;
      * @return the additions
      */
     public int getAdditions() {
-<span class="nc" id="L81">        return additions;</span>
+<span class="nc" id="L85">        return additions;</span>
     }
 
     /**
@@ -87,7 +91,7 @@ import java.net.URL;
      * @return the deletions
      */
     public int getDeletions() {
-<span class="nc" id="L90">        return deletions;</span>
+<span class="nc" id="L94">        return deletions;</span>
     }
 
     /**
@@ -96,7 +100,7 @@ import java.net.URL;
      * @return the changes
      */
     public int getChanges() {
-<span class="nc" id="L99">        return changes;</span>
+<span class="nc" id="L103">        return changes;</span>
     }
 
     /**
@@ -105,7 +109,7 @@ import java.net.URL;
      * @return the blob url
      */
     public URL getBlobUrl() {
-<span class="nc" id="L108">        return GitHubClient.parseURL(blob_url);</span>
+<span class="nc" id="L112">        return GitHubClient.parseURL(blob_url);</span>
     }
 
     /**
@@ -114,7 +118,7 @@ import java.net.URL;
      * @return the raw url
      */
     public URL getRawUrl() {
-<span class="nc" id="L117">        return GitHubClient.parseURL(raw_url);</span>
+<span class="nc" id="L121">        return GitHubClient.parseURL(raw_url);</span>
     }
 
     /**
@@ -123,7 +127,7 @@ import java.net.URL;
      * @return the contents url
      */
     public URL getContentsUrl() {
-<span class="nc" id="L126">        return GitHubClient.parseURL(contents_url);</span>
+<span class="nc" id="L130">        return GitHubClient.parseURL(contents_url);</span>
     }
 
     /**
@@ -132,7 +136,7 @@ import java.net.URL;
      * @return the patch
      */
     public String getPatch() {
-<span class="nc" id="L135">        return patch;</span>
+<span class="nc" id="L139">        return patch;</span>
     }
 
     /**
@@ -141,7 +145,7 @@ import java.net.URL;
      * @return the previous filename
      */
     public String getPreviousFilename() {
-<span class="nc" id="L144">        return previous_filename;</span>
+<span class="nc" id="L148">        return previous_filename;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

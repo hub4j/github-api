@@ -53,6 +53,62 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
     }
 
     /**
+     * Searching in forks
+     *
+     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
+     *
+     * &lt;p&gt;
+     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
+     * have more stars than the parent repository.
+     *
+     * &lt;p&gt;
+     * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer
+     * stars than the parent repository. Forks with less stars than the parent repository are not included in the index
+     * for code searching.
+     *
+     * @param fork
+     *            search mode for forks
+     *
+     * @return the gh repository search builder
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks&quot;&gt;Searching
+     *      in forks&lt;/a&gt;
+     *
+     */
+    public GHRepositorySearchBuilder fork(Fork fork) {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (Fork.PARENT_ONLY.equals(fork)) {</span>
+<span class="fc" id="L81">            this.terms.removeIf(term -&gt; term.contains(&quot;fork:&quot;));</span>
+<span class="fc" id="L82">            return this;</span>
+        }
+
+<span class="fc" id="L85">        return q(&quot;fork:&quot; + fork);</span>
+    }
+
+    /**
+     * Search by repository visibility
+     *
+     * @param visibility
+     *            repository visibility
+     *
+     * @return the gh repository search builder
+     * @throws GHException
+     *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
+     *             encountered when reading data.
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility&quot;&gt;Search
+     *      by repository visibility&lt;/a&gt;
+     */
+    public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (visibility == GHRepository.Visibility.UNKNOWN) {</span>
+<span class="fc" id="L104">            throw new GHException(</span>
+                    &quot;UNKNOWN is a placeholder for unexpected values encountered when reading data. It cannot be passed as a search parameter.&quot;);
+        }
+
+<span class="fc" id="L108">        return q(&quot;is:&quot; + visibility);</span>
+    }
+
+    /**
      * Created gh repository search builder.
      *
      * @param v
@@ -60,7 +116,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder created(String v) {
-<span class="nc" id="L63">        return q(&quot;created:&quot; + v);</span>
+<span class="nc" id="L119">        return q(&quot;created:&quot; + v);</span>
     }
 
     /**
@@ -71,7 +127,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder pushed(String v) {
-<span class="nc" id="L74">        return q(&quot;pushed:&quot; + v);</span>
+<span class="nc" id="L130">        return q(&quot;pushed:&quot; + v);</span>
     }
 
     /**
@@ -82,7 +138,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder user(String v) {
-<span class="nc" id="L85">        return q(&quot;user:&quot; + v);</span>
+<span class="fc" id="L141">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**
@@ -93,7 +149,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder repo(String v) {
-<span class="nc" id="L96">        return q(&quot;repo:&quot; + v);</span>
+<span class="nc" id="L152">        return q(&quot;repo:&quot; + v);</span>
     }
 
     /**
@@ -104,7 +160,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder language(String v) {
-<span class="fc" id="L107">        return q(&quot;language:&quot; + v);</span>
+<span class="fc" id="L163">        return q(&quot;language:&quot; + v);</span>
     }
 
     /**
@@ -115,7 +171,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder stars(String v) {
-<span class="nc" id="L118">        return q(&quot;stars:&quot; + v);</span>
+<span class="nc" id="L174">        return q(&quot;stars:&quot; + v);</span>
     }
 
     /**
@@ -126,7 +182,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder topic(String v) {
-<span class="nc" id="L129">        return q(&quot;topic:&quot; + v);</span>
+<span class="nc" id="L185">        return q(&quot;topic:&quot; + v);</span>
     }
 
     /**
@@ -137,8 +193,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder order(GHDirection v) {
-<span class="fc" id="L140">        req.with(&quot;order&quot;, v);</span>
-<span class="fc" id="L141">        return this;</span>
+<span class="fc" id="L196">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L197">        return this;</span>
     }
 
     /**
@@ -149,15 +205,51 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder sort(Sort sort) {
-<span class="fc" id="L152">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L153">        return this;</span>
+<span class="fc" id="L208">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L209">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L159">    public enum Sort {</span>
-<span class="fc" id="L160">        STARS, FORKS, UPDATED</span>
+<span class="fc" id="L215">    public enum Sort {</span>
+<span class="fc" id="L216">        STARS, FORKS, UPDATED</span>
+    }
+
+    /**
+     * The enum for Fork search mode
+     */
+<span class="fc" id="L222">    public enum Fork {</span>
+
+        /**
+         * Search in the parent repository and in forks with more stars than the parent repository.
+         *
+         * Forks with the same or fewer stars than the parent repository are still ignored.
+         */
+<span class="fc" id="L229">        PARENT_AND_FORKS(&quot;true&quot;),</span>
+
+        /**
+         * Search only in forks with more stars than the parent repository.
+         *
+         * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
+         */
+<span class="fc" id="L236">        FORKS_ONLY(&quot;only&quot;),</span>
+
+        /**
+         * (Default) Search only the parent repository.
+         *
+         * Forks are ignored.
+         */
+<span class="fc" id="L243">        PARENT_ONLY(&quot;&quot;);</span>
+
+        private String filterMode;
+<span class="fc" id="L246">        Fork(String mode) {</span>
+<span class="fc" id="L247">            this.filterMode = mode;</span>
+<span class="fc" id="L248">        }</span>
+
+        public String toString() {
+<span class="fc" id="L251">            return filterMode;</span>
+        }
     }
 
     private static class RepositorySearchResult extends SearchResult&lt;GHRepository&gt; {
@@ -165,15 +257,15 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc bfc" id="L168" title="All 2 branches covered.">            for (GHRepository item : items)</span>
-<span class="fc" id="L169">                item.wrap(root);</span>
-<span class="fc" id="L170">            return items;</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (GHRepository item : items)</span>
+<span class="fc" id="L261">                item.wrap(root);</span>
+<span class="fc" id="L262">            return items;</span>
         }
     }
 
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L176">        return &quot;/search/repositories&quot;;</span>
+<span class="fc" id="L268">        return &quot;/search/repositories&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -44,10 +44,10 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     public void testIssueReviewRequestedEvent() throws Exception {
         // Create the PR.
         final GHPullRequest pullRequest = getRepository()
-                .createPullRequest("Test PR", "test/stable", "main", "## test");
+                .createPullRequest("ReviewRequestedEventTest", "test/stable", "main", "## test");
 
         final ArrayList<GHUser> reviewers = new ArrayList<>();
-        reviewers.add(gitHub.getUser("t0m4uk1991"));
+        reviewers.add(gitHub.getUser("bitwiseman"));
         // Generate review_requested event.
         pullRequest.requestReviewers(reviewers);
 
@@ -58,6 +58,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         assertThat(event.getEvent(), equalTo("review_requested"));
         assertThat(event.getReviewRequester(), notNullValue());
         assertThat(event.getReviewRequester().getLogin(), equalTo("t0m4uk1991"));
+        assertThat(event.getRequestedReviewer(), notNullValue());
+        assertThat(event.getRequestedReviewer().getLogin(), equalTo("bitwiseman"));
 
         // Close the PR.
         pullRequest.close();

@@ -903,6 +903,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void testIssueSearchInRepo() throws IOException {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues().q("repo:hub4j/github-api").isOpen().list();
+        assertThat(r.getTotalCount(), greaterThan(0));
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            PagedIterable<GHIssueComment> comments = issue.listComments();
+            for (GHIssueComment comment : comments) {
+                assertThat(comment, notNullValue());
+            }
+        }
+    }
+
     @Test // issue #99
     public void testReadme() throws IOException {
         GHContent readme = gitHub.getRepository("hub4j-test-org/test-readme").getReadme();

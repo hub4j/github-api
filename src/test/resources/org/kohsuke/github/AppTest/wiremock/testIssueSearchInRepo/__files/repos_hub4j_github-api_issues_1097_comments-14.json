@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/comments/819660870",
+    "html_url": "https://github.com/hub4j/github-api/issues/1097#issuecomment-819660870",
+    "issue_url": "https://api.github.com/repos/hub4j/github-api/issues/1097",
+    "id": 819660870,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDgxOTY2MDg3MA==",
+    "user": {
+      "login": "JLLeitschuh",
+      "id": 1323708,
+      "node_id": "MDQ6VXNlcjEzMjM3MDg=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1323708?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/JLLeitschuh",
+      "html_url": "https://github.com/JLLeitschuh",
+      "followers_url": "https://api.github.com/users/JLLeitschuh/followers",
+      "following_url": "https://api.github.com/users/JLLeitschuh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/JLLeitschuh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/JLLeitschuh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/JLLeitschuh/subscriptions",
+      "organizations_url": "https://api.github.com/users/JLLeitschuh/orgs",
+      "repos_url": "https://api.github.com/users/JLLeitschuh/repos",
+      "events_url": "https://api.github.com/users/JLLeitschuh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/JLLeitschuh/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2021-04-14T16:42:00Z",
+    "updated_at": "2021-04-14T16:43:00Z",
+    "author_association": "NONE",
+    "body": "https://github.com/hub4j/github-api/blob/e66a72387e6fcd5762e0122f8da17d271d27a756/src/main/java/org/kohsuke/github/GHProjectCard.java#L110-L125\r\n\r\nIt looks like the 'owner' isn't set here:\r\n\r\nhttps://github.com/hub4j/github-api/blob/e66a72387e6fcd5762e0122f8da17d271d27a756/src/main/java/org/kohsuke/github/GHIssue.java#L82-L93",
+    "performed_via_github_app": null
+  }
+]

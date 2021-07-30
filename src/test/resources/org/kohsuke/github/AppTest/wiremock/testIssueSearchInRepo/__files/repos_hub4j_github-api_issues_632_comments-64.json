@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/comments/561236079",
+    "html_url": "https://github.com/hub4j/github-api/issues/632#issuecomment-561236079",
+    "issue_url": "https://api.github.com/repos/hub4j/github-api/issues/632",
+    "id": 561236079,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDU2MTIzNjA3OQ==",
+    "user": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2019-12-03T16:05:38Z",
+    "updated_at": "2019-12-03T16:05:38Z",
+    "author_association": "COLLABORATOR",
+    "body": "It might be possible.  It would depend on it being available as part of the Branch Protection API.  See if you can find it here: https://developer.github.com/v3/repos/branches/#update-branch-protection . \r\n",
+    "performed_via_github_app": null
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/comments/858114291",
+    "html_url": "https://github.com/hub4j/github-api/issues/1143#issuecomment-858114291",
+    "issue_url": "https://api.github.com/repos/hub4j/github-api/issues/1143",
+    "id": 858114291,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDg1ODExNDI5MQ==",
+    "user": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2021-06-09T21:27:16Z",
+    "updated_at": "2021-06-09T21:27:16Z",
+    "author_association": "COLLABORATOR",
+    "body": "@gadams00  We should definitely remove `@Deprecated`.  We plan to do that everywhere, see #1003 . \r\nHowever, we don't want to remove the Preview yet, because we still need to support older versions of GitHub Enterprise where the endpoint is still in preview.  \r\n\r\n",
+    "performed_via_github_app": null
+  }
+]

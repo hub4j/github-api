@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://api.github.com/repos/hub4j/github-api/issues/comments/758905281",
+    "html_url": "https://github.com/hub4j/github-api/issues/1019#issuecomment-758905281",
+    "issue_url": "https://api.github.com/repos/hub4j/github-api/issues/1019",
+    "id": 758905281,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDc1ODkwNTI4MQ==",
+    "user": {
+      "login": "bitwiseman",
+      "id": 1958953,
+      "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bitwiseman",
+      "html_url": "https://github.com/bitwiseman",
+      "followers_url": "https://api.github.com/users/bitwiseman/followers",
+      "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+      "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+      "repos_url": "https://api.github.com/users/bitwiseman/repos",
+      "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2021-01-12T20:06:09Z",
+    "updated_at": "2021-01-12T20:06:09Z",
+    "author_association": "COLLABORATOR",
+    "body": "The docs you mentioned are here: https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-a-release-asset\r\n\r\nWhat `To download the asset's binary content, set the \"Accept\" header of the request to \"application/octet-stream\"` means is that you would do that for the `/repos/{owner}/{repo}/releases/assets/{asset_id}` URL that currently gets the `GHAsset object.   For the `getBrowserDownloadUrl()` url, I thinking you would not set any Accept header. \r\n\r\nFor all the work you're doing there, it would be great to add this functionality to the library to replace all the customer httpClient work you're doing.  \r\n\r\nIf you have time, please submit a PR for a new method on `GHAsset` that takes a `StreamConsumer`. \r\n\r\n",
+    "performed_via_github_app": null
+  }
+]

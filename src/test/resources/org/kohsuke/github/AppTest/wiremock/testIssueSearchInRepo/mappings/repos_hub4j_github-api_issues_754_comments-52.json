@@ -1,0 +1,46 @@
+{
+  "id": "83bff84e-eb60-4f7c-a234-4aa864c049e8",
+  "name": "repos_hub4j_github-api_issues_754_comments",
+  "request": {
+    "url": "/repos/hub4j/github-api/issues/754/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j_github-api_issues_754_comments-52.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 28 Jul 2021 06:01:05 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"60d4fb7729a9be10ab2f4c24610e19095dcb21c28d0df27b7031520ad083aee9\"",
+      "X-OAuth-Scopes": "gist, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4870",
+      "X-RateLimit-Reset": "1627455123",
+      "X-RateLimit-Used": "130",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "64AD:0816:13C88D4:1466ED7:6100F2A0"
+    }
+  },
+  "uuid": "83bff84e-eb60-4f7c-a234-4aa864c049e8",
+  "persistent": true,
+  "insertionIndex": 52
+}

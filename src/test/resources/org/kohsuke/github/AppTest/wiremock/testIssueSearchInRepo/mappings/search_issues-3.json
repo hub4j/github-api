@@ -1,0 +1,48 @@
+{
+  "id": "9b1dfc33-d3c6-472c-951b-b1a55962bb84",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?q=repo%3Ahub4j%2Fgithub-api+is%3Aopen",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_issues-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 28 Jul 2021 06:00:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "X-OAuth-Scopes": "gist, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "28",
+      "X-RateLimit-Reset": "1627452107",
+      "X-RateLimit-Used": "2",
+      "X-RateLimit-Resource": "search",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C441:80F2:214AAE2:2205D26:6100F290",
+      "Link": "<https://api.github.com/search/issues?q=repo%3Ahub4j%2Fgithub-api+is%3Aopen&page=2>; rel=\"next\", <https://api.github.com/search/issues?q=repo%3Ahub4j%2Fgithub-api+is%3Aopen&page=3>; rel=\"last\""
+    }
+  },
+  "uuid": "9b1dfc33-d3c6-472c-951b-b1a55962bb84",
+  "persistent": true,
+  "scenarioName": "scenario-1-search-issues",
+  "requiredScenarioState": "scenario-1-search-issues-2",
+  "insertionIndex": 3
+}

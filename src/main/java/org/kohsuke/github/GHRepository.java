@@ -1709,6 +1709,32 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets a comparison between 2 points in the repository. This would be similar to calling
+     * <code>git log id1...id2</code> against a local repository.
+     *
+     * @param id1
+     *            an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a
+     *            direct tag name
+     * @param id2
+     *            an identifier for the second point to compare to. Can be the same as the first point.
+     * @param perPage
+     *            Results per page (max 100) Default: 30
+     * @param page
+     *            Page number of the results to fetch. Default: 1
+     * @return the comparison output
+     * @throws IOException
+     *             on failure communicating with GitHub
+     */
+    public GHCompare getCompare(String id1, String id2, int perPage, int page) throws IOException {
+        GHCompare compare = root.createRequest()
+                .with("per_page", perPage)
+                .with("page", page)
+                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)))
+                .fetch(GHCompare.class);
+        return compare.wrap(this);
+    }
+
+    /**
      * Retrieves all refs for the github repository.
      *
      * @return an array of GHRef elements coresponding with the refs in the remote repository.

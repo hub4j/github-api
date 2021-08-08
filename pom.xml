@@ -33,7 +33,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.2.3</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.3.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.2.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
@@ -389,7 +389,7 @@
     <dependency>
       <groupId>com.tngtech.archunit</groupId>
       <artifactId>archunit</artifactId>
-      <version>0.19.0</version>
+      <version>0.20.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -426,7 +426,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.12.3</version>
+      <version>2.12.4</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -537,7 +537,7 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.29.0</version>
+      <version>2.30.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

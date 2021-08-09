@@ -1,0 +1,48 @@
+{
+  "id": "898738f1-3211-40c2-95c6-b60589cf14dc",
+  "name": "repos_hub4j-test-org_github-api_compare_e46a9f3f2ac55db96de3c5c4706f2813b3a964658051615eff597f4e49f4f47625e6fc2b49f26bfc",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/compare/e46a9f3f2ac55db96de3c5c4706f2813b3a96465...8051615eff597f4e49f4f47625e6fc2b49f26bfc?per_page=10&page=1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_compare-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 09 Aug 2021 15:50:15 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"53053520f04853fd869f34f78610cb74e757049b085e4439de77b5847c483d24\"",
+      "Last-Modified": "Fri, 20 Dec 2019 00:07:48 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, gist, notifications, repo, user, workflow, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4737",
+      "X-RateLimit-Reset": "1628527584",
+      "X-RateLimit-Used": "263",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "28A7:8E59:5E84DF5:6085251:61114EB7",
+      "Link": "<https://api.github.com/repositories/206888201/compare/e46a9f3f2ac55db96de3c5c4706f2813b3a96465...8051615eff597f4e49f4f47625e6fc2b49f26bfc?per_page=10&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "898738f1-3211-40c2-95c6-b60589cf14dc",
+  "persistent": true,
+  "insertionIndex": 4
+}

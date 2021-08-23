@@ -869,7 +869,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void getCommitsBetween() throws Exception {
-        GHCompare compare = getRepository().getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465", "8051615eff597f4e49f4f47625e6fc2b49f26bfc", 10, 1);
+        GHCompare compare = getRepository().getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465",
+                "8051615eff597f4e49f4f47625e6fc2b49f26bfc",
+                10,
+                1);        
         assertThat(compare.getTotalCommits(), is(9));
 
     }

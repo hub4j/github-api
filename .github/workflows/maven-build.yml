@@ -31,7 +31,7 @@ jobs:
       - name: Maven Install (skipTests)
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B install -DskipTests --file pom.xml
+        run: mvn -B clean install -DskipTests --file pom.xml
   site:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Maven Site
-        run: mvn -B site -D enable-ci --file pom.xml
+        run: mvn -B  clean site -D enable-ci --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
@@ -78,10 +78,10 @@ jobs:
     # JDK 8
     - name: Maven Install without Code Coverage
       if: matrix.os == 'windows' && matrix.java == '8'
-      run: mvn -B install --file pom.xml
+      run: mvn -B clean install --file pom.xml
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows' && matrix.java == '8'
-      run: mvn -B install -D enable-ci --file pom.xml
+      run: mvn -B clean install -D enable-ci --file pom.xml
     - name: Codecov Report 
       if: matrix.os != 'windows' && matrix.java == '8'
       uses: codecov/codecov-action@v2.0.3  
@@ -90,9 +90,9 @@ jobs:
       if: matrix.os == 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+      run: mvn -B clean install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows' && matrix.java != '8'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+      run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"

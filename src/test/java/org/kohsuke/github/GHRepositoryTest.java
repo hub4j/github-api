@@ -869,11 +869,30 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void getCommitsBetween() throws Exception {
-        GHCompare compare = getRepository().getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465",
-                "8051615eff597f4e49f4f47625e6fc2b49f26bfc",
-                10,
-                1);
-        assertThat(compare.getTotalCommits(), is(9));
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        compareCommitsBetween(repository);
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 1));
+    }
 
+    @Test
+    public void getCommitsBetweenPaginated() throws Exception {
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        repository.setCompareUsePaginatedCommits(true);
+        compareCommitsBetween(repository);
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 3));
+    }
+
+    private void compareCommitsBetween(GHRepository repository) throws IOException {
+        GHCompare compare = repository.getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465",
+                "8051615eff597f4e49f4f47625e6fc2b49f26bfc");
+        int actualCount = 0;
+        for (GHCompare.Commit item : compare.listCommits().withPageSize(5)) {
+            assertThat(item, notNullValue());
+            actualCount++;
+        }
+        assertThat(compare.getTotalCommits(), is(9));
+        assertThat(actualCount, is(9));
     }
 }

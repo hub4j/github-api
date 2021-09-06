@@ -125,6 +125,7 @@ public class GHRepository extends GHObject {
     private GHRepository source, parent;
 
     private Boolean isTemplate;
+    private boolean compareUsePaginatedCommits;
 
     static GHRepository read(GitHub root, String owner, String name) throws IOException {
         return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
@@ -1643,6 +1644,13 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     *
+     */
+    public void setCompareUsePaginatedCommits(boolean value) {
+        compareUsePaginatedCommits = value;
+    }
+
+    /**
      * Gets a comparison between 2 points in the repository. This would be similar to calling
      * <code>git log id1...id2</code> against a local repository.
      *
@@ -1656,9 +1664,14 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-        GHCompare compare = root.createRequest()
-                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)))
-                .fetch(GHCompare.class);
+        final Requester requester = root.createRequest()
+                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)));
+
+        if (compareUsePaginatedCommits) {
+            requester.with("per_page", 1).with("page", 1);
+        }
+        requester.injectMappingValue("GHCompare_usePaginatedCommits", compareUsePaginatedCommits);
+        GHCompare compare = requester.fetch(GHCompare.class);
         return compare.wrap(this);
     }
 
@@ -1705,33 +1718,6 @@ public class GHRepository extends GHObject {
         }
 
         return getCompare(id1.getName(), id2.getName());
-
-    }
-
-    /**
-     * Gets a comparison between 2 points in the repository. This would be similar to calling
-     * <code>git log id1...id2</code> against a local repository.
-     *
-     * @param id1
-     *            an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a
-     *            direct tag name
-     * @param id2
-     *            an identifier for the second point to compare to. Can be the same as the first point.
-     * @param perPage
-     *            Results per page (max 100) Default: 30
-     * @param page
-     *            Page number of the results to fetch. Default: 1
-     * @return the comparison output
-     * @throws IOException
-     *             on failure communicating with GitHub
-     */
-    public GHCompare getCompare(String id1, String id2, int perPage, int page) throws IOException {
-        GHCompare compare = root.createRequest()
-                .with("per_page", perPage)
-                .with("page", page)
-                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)))
-                .fetch(GHCompare.class);
-        return compare.wrap(this);
     }
 
     /**

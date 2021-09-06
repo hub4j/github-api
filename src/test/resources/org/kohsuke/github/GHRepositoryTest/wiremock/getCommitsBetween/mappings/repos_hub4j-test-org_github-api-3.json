@@ -1,5 +1,5 @@
 {
-  "id": "ef3d8c1d-9172-46da-ac8a-1edc6cf6b3c0",
+  "id": "df386d5f-8faa-4a45-a75f-f8e4a10156bb",
   "name": "repos_hub4j-test-org_github-api",
   "request": {
     "url": "/repos/hub4j-test-org/github-api",
@@ -15,22 +15,22 @@
     "bodyFileName": "repos_hub4j-test-org_github-api-3.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 09 Aug 2021 15:50:15 GMT",
+      "Date": "Mon, 06 Sep 2021 06:36:45 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"68239e1b082b9a110e0e42ff76b677bc1d6a002a18249e985f429556ee4d3739\"",
+      "ETag": "W/\"d40feb7406c7f1bff6da6f0e6ac361c918802f7368fad85d379f3931420e7a4b\"",
       "Last-Modified": "Mon, 19 Apr 2021 20:09:00 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, gist, notifications, repo, user, workflow, write:packages",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4738",
-      "X-RateLimit-Reset": "1628527584",
-      "X-RateLimit-Used": "262",
+      "X-RateLimit-Remaining": "4976",
+      "X-RateLimit-Reset": "1630912046",
+      "X-RateLimit-Used": "24",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "28A6:8E57:191EE4F:1A913D5:61114EB7"
+      "X-GitHub-Request-Id": "D38E:198D:116C35:1325DA:6135B6FD"
     }
   },
-  "uuid": "ef3d8c1d-9172-46da-ac8a-1edc6cf6b3c0",
+  "uuid": "df386d5f-8faa-4a45-a75f-f8e4a10156bb",
   "persistent": true,
   "insertionIndex": 3
 }

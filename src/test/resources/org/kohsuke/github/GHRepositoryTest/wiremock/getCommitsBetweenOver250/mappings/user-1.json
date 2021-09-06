@@ -1,8 +1,8 @@
 {
-  "id": "df386d5f-8faa-4a45-a75f-f8e4a10156bb",
-  "name": "repos_hub4j-test-org_github-api",
+  "id": "1a68e7d5-d426-47b5-b108-7dea19735144",
+  "name": "user",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api",
+    "url": "/user",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,25 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_hub4j-test-org_github-api-3.json",
+    "bodyFileName": "user-1.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 06 Sep 2021 06:36:45 GMT",
+      "Date": "Mon, 06 Sep 2021 19:23:02 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"d40feb7406c7f1bff6da6f0e6ac361c918802f7368fad85d379f3931420e7a4b\"",
-      "Last-Modified": "Mon, 19 Apr 2021 20:09:00 GMT",
+      "ETag": "W/\"be070c30888ac2f50c6e978dedecec1a3a3cad19cfcba1e83ed5e2a712f7ea41\"",
+      "Last-Modified": "Mon, 06 Sep 2021 18:52:26 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
-      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4976",
-      "X-RateLimit-Reset": "1630912046",
-      "X-RateLimit-Used": "24",
+      "X-RateLimit-Remaining": "4954",
+      "X-RateLimit-Reset": "1630959184",
+      "X-RateLimit-Used": "46",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D38E:198D:116C35:1325DA:6135B6FD"
+      "X-GitHub-Request-Id": "D38A:206B:4850A:52BBD:61366A96"
     }
   },
-  "uuid": "df386d5f-8faa-4a45-a75f-f8e4a10156bb",
+  "uuid": "1a68e7d5-d426-47b5-b108-7dea19735144",
   "persistent": true,
-  "insertionIndex": 3
+  "insertionIndex": 1
 }

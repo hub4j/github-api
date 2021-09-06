@@ -1644,7 +1644,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
+     * of limiting to 250 results.
      *
+     * By default, {@link GHCompare} returns all commits in the comparison as part of the request, limited to 250
+     * results. More recently GitHub added the ability to return the commits as a paginated query allowing for more than
+     * 250 results.
+     *
+     * @param value
+     *            true if you want commits returned in paginated form.
      */
     public void setCompareUsePaginatedCommits(boolean value) {
         compareUsePaginatedCommits = value;

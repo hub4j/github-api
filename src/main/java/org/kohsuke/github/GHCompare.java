@@ -134,6 +134,15 @@ public class GHCompare {
     /**
      * Gets an array of commits.
      *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
      * @return A copy of the array being stored in the class.
      */
     public Commit[] getCommits() {
@@ -146,6 +155,15 @@ public class GHCompare {
 
     /**
      * Iterable of commits for this comparison.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
      *
      * @return iterable of commits
      */

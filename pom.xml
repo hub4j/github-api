@@ -166,7 +166,8 @@
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                      
+                      <exclude>org.kohsuke.github.GHCompare.User</exclude>
+
                       <!-- TODO: Some coverage, but more needed -->
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
@@ -179,11 +180,6 @@
                       <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
                       <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
-                      <exclude>org.kohsuke.github.GHCompare.Commit</exclude>
-                      <exclude>org.kohsuke.github.GHCompare.InnerCommit</exclude>
-                      <exclude>org.kohsuke.github.GHCompare.Tree</exclude>
-                      <exclude>org.kohsuke.github.GHCompare.User</exclude>
-                      <exclude>org.kohsuke.github.GHCompare</exclude>
                       <exclude>org.kohsuke.github.GHDeployKey</exclude>
                       <exclude>org.kohsuke.github.GHEmail</exclude>
                       <exclude>org.kohsuke.github.GHInvitation</exclude>

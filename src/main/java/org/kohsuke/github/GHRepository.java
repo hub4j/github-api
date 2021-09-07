@@ -125,6 +125,7 @@ public class GHRepository extends GHObject {
     private GHRepository source, parent;
 
     private Boolean isTemplate;
+    private boolean compareUsePaginatedCommits;
 
     static GHRepository read(GitHub root, String owner, String name) throws IOException {
         return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
@@ -1643,6 +1644,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
+     * of limiting to 250 results.
+     *
+     * By default, {@link GHCompare} returns all commits in the comparison as part of the request, limited to 250
+     * results. More recently GitHub added the ability to return the commits as a paginated query allowing for more than
+     * 250 results.
+     *
+     * @param value
+     *            true if you want commits returned in paginated form.
+     */
+    public void setCompareUsePaginatedCommits(boolean value) {
+        compareUsePaginatedCommits = value;
+    }
+
+    /**
      * Gets a comparison between 2 points in the repository. This would be similar to calling
      * <code>git log id1...id2</code> against a local repository.
      *
@@ -1656,9 +1672,14 @@ public class GHRepository extends GHObject {
      *             on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-        GHCompare compare = root.createRequest()
-                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)))
-                .fetch(GHCompare.class);
+        final Requester requester = root.createRequest()
+                .withUrlPath(getApiTailUrl(String.format("compare/%s...%s", id1, id2)));
+
+        if (compareUsePaginatedCommits) {
+            requester.with("per_page", 1).with("page", 1);
+        }
+        requester.injectMappingValue("GHCompare_usePaginatedCommits", compareUsePaginatedCommits);
+        GHCompare compare = requester.fetch(GHCompare.class);
         return compare.wrap(this);
     }
 
@@ -1705,7 +1726,6 @@ public class GHRepository extends GHObject {
         }
 
         return getCompare(id1.getName(), id2.getName());
-
     }
 
     /**

@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -153,7 +154,7 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      * @return the bullets
      */
     public List<String> getBullets() {
-        return bullets;
+        return Collections.unmodifiableList(bullets);
     }
 
     /**

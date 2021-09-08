@@ -79,6 +79,7 @@ import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
  * Rather than pasting this 1100 line gist into your source code, please upgrade to OkHttp's request/response API. Your
  * code will be shorter, easier to read, and you'll be able to use interceptors.
  */
+@SuppressFBWarnings(value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" }, justification = "Deprecated external code")
 public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Cloneable {
     static final String SELECTED_PROTOCOL = "ObsoleteUrlFactory-Selected-Protocol";
 

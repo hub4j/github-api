@@ -29,6 +29,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @param repo
      *            the repo
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable risk")
     public GHRepositoryStatistics(GHRepository repo) {
         this.repo = repo;
         this.root = repo.root;
@@ -111,6 +112,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          *
          * @return the root
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GitHub getRoot() {
             return root;
         }
@@ -120,6 +122,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          *
          * @return The author described by these statistics.
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GHUser getAuthor() {
             return author;
         }
@@ -160,7 +163,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * @return The total number of commits authored by the contributor.
          */
         public List<Week> getWeeks() {
-            return weeks;
+            return Collections.unmodifiableList(weeks);
         }
 
         @Override
@@ -262,7 +265,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * @return The number of commits for each day of the week. 0 = Sunday, 1 = Monday, etc.
          */
         public List<Integer> getDays() {
-            return days;
+            return Collections.unmodifiableList(days);
         }
 
         /**
@@ -293,6 +296,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          *
          * @return the root
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GitHub getRoot() {
             return root;
         }
@@ -407,6 +411,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          *
          * @return the root
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GitHub getRoot() {
             return root;
         }

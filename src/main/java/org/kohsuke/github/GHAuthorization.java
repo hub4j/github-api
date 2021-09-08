@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,7 +49,10 @@ public class GHAuthorization extends GHObject {
      * Gets root.
      *
      * @return the root
+     * @deprecated This method should be used internally only.
      */
+    @Deprecated
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -59,7 +63,7 @@ public class GHAuthorization extends GHObject {
      * @return the scopes
      */
     public List<String> getScopes() {
-        return scopes;
+        return Collections.unmodifiableList(scopes);
     }
 
     /**

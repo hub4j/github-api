@@ -118,6 +118,7 @@ public class GHCompare {
      *
      * @return the base commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getBaseCommit() {
         return base_commit;
     }
@@ -127,6 +128,7 @@ public class GHCompare {
      *
      * @return the merge base commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getMergeBaseCommit() {
         return merge_base_commit;
     }
@@ -200,7 +202,19 @@ public class GHCompare {
      *            the owner
      * @return the gh compare
      */
+    @Deprecated
     public GHCompare wrap(GHRepository owner) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    GHCompare lateBind(GHRepository owner) {
         this.owner = owner;
         for (Commit commit : commits) {
             commit.wrapUp(owner);

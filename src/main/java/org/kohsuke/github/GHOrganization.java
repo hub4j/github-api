@@ -413,7 +413,7 @@ public class GHOrganization extends GHPerson {
                 .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
-                .toIterable(GHProject[].class, item -> item.wrap(root));
+                .toIterable(GHProject[].class, item -> item.lateBind(root));
     }
 
     /**
@@ -446,7 +446,7 @@ public class GHOrganization extends GHPerson {
                 .with("body", body)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
                 .fetch(GHProject.class)
-                .wrap(root);
+                .lateBind(root);
     }
 
     /**

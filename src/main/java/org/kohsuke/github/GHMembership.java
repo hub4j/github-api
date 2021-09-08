@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -49,6 +51,7 @@ public class GHMembership extends GitHubInteractiveObject {
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() {
         return user;
     }
@@ -58,6 +61,7 @@ public class GHMembership extends GitHubInteractiveObject {
      *
      * @return the organization
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHOrganization getOrganization() {
         return organization;
     }

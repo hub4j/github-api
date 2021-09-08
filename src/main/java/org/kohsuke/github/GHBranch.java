@@ -50,7 +50,10 @@ public class GHBranch extends GitHubInteractiveObject {
      * Gets root.
      *
      * @return the root
+     * @deprecated This method should be used internally only.
      */
+    @Deprecated
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -60,6 +63,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *
      * @return the repository that this branch is in.
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }

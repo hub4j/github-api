@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -23,6 +25,7 @@ public class GHMilestone extends GHObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -32,6 +35,7 @@ public class GHMilestone extends GHObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -213,9 +217,22 @@ public class GHMilestone extends GHObject {
      *            the repo
      * @return the gh milestone
      */
+    @Deprecated
     public GHMilestone wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh milestone.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh milestone
+     */
+    GHMilestone lateBind(GHRepository repo) {
         this.owner = repo;
         this.root = repo.root;
         return this;
     }
+
 }

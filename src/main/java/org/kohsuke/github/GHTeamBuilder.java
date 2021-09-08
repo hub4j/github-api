@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 /**
@@ -11,6 +13,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     protected final Requester builder;
     private final String orgName;
 
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHTeamBuilder(GitHub root, String orgName, String name) {
         this.root = root;
         this.orgName = orgName;

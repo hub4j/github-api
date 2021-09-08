@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +31,19 @@ public class GHProjectColumn extends GHObject {
      *            the root
      * @return the gh project column
      */
+    @Deprecated
     public GHProjectColumn wrap(GitHub root) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project column.
+     *
+     * @param root
+     *            the root
+     * @return the gh project column
+     */
+    GHProjectColumn lateBind(GitHub root) {
         this.root = root;
         return this;
     }
@@ -41,10 +55,21 @@ public class GHProjectColumn extends GHObject {
      *            the project
      * @return the gh project column
      */
+    @Deprecated
     public GHProjectColumn wrap(GHProject project) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project column.
+     *
+     * @param project
+     *            the project
+     * @return the gh project column
+     */
+    GHProjectColumn lateBind(GHProject project) {
         this.project = project;
-        this.root = project.root;
-        return this;
+        return lateBind(project.root);
     }
 
     /**
@@ -52,6 +77,7 @@ public class GHProjectColumn extends GHObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -63,12 +89,15 @@ public class GHProjectColumn extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class).wrap(root);
+                project = root.createRequest()
+                        .withUrlPath(getProjectUrl().getPath())
+                        .fetch(GHProject.class)
+                        .lateBind(root);
             } catch (FileNotFoundException e) {
-                return null;
             }
         }
         return project;
@@ -139,7 +168,7 @@ public class GHProjectColumn extends GHObject {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
-                .toIterable(GHProjectCard[].class, item -> item.wrap(column));
+                .toIterable(GHProjectCard[].class, item -> item.lateBind(column));
     }
 
     /**
@@ -158,7 +187,7 @@ public class GHProjectColumn extends GHObject {
                 .with("note", note)
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**
@@ -178,6 +207,6 @@ public class GHProjectColumn extends GHObject {
                 .with("content_id", issue.getId())
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)
-                .wrap(this);
+                .lateBind(this);
     }
 }

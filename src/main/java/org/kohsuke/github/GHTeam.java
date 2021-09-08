@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -379,6 +381,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHOrganization getOrganization() throws IOException {
         refresh(organization);
         return organization;

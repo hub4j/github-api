@@ -28,6 +28,7 @@ public class GHTag extends GitHubInteractiveObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -37,6 +38,7 @@ public class GHTag extends GitHubInteractiveObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -55,6 +57,7 @@ public class GHTag extends GitHubInteractiveObject {
      *
      * @return the commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHCommit getCommit() {
         return commit;
     }

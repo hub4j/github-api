@@ -4,9 +4,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A Github App Installation Token.
@@ -25,7 +23,10 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      * Gets root.
      *
      * @return the root
+     * @deprecated This method should be used internally only.
      */
+    @Deprecated
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -39,7 +40,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @Deprecated
     public void setRoot(GitHub root) {
-        this.root = root;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -48,7 +49,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      * @return the permissions
      */
     public Map<String, String> getPermissions() {
-        return permissions;
+        return Collections.unmodifiableMap(permissions);
     }
 
     /**
@@ -60,7 +61,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @Deprecated
     public void setPermissions(Map<String, String> permissions) {
-        this.permissions = permissions;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -81,7 +82,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @Deprecated
     public void setToken(String token) {
-        this.token = token;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -90,7 +91,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      * @return the repositories
      */
     public List<GHRepository> getRepositories() {
-        return repositories;
+        return GitHubClient.unmodifiableListOrNull(repositories);
     }
 
     /**
@@ -102,7 +103,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @Deprecated
     public void setRepositories(List<GHRepository> repositories) {
-        this.repositories = repositories;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -123,7 +124,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-        this.repositorySelection = repositorySelection;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**

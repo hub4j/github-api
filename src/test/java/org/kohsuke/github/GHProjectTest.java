@@ -21,11 +21,13 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testCreatedProject() {
+    public void testCreatedProject() throws IOException {
         assertThat(project, notNullValue());
         assertThat(project.getName(), equalTo("test-project"));
         assertThat(project.getBody(), equalTo("This is a test project"));
         assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
+        assertThat(project.getHtmlUrl().toString(), containsString("/orgs/hub4j-test-org/projects/"));
+        assertThat(project.getUrl().toString(), containsString("/projects/"));
     }
 
     @Test

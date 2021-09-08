@@ -148,7 +148,7 @@ public class GHUser extends GHPerson {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(getApiTailUrl("projects"))
-                .toIterable(GHProject[].class, item -> item.wrap(root));
+                .toIterable(GHProject[].class, item -> item.lateBind(root));
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {

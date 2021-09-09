@@ -26,6 +26,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.internal.Previews;
 
@@ -501,6 +502,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
         client.requireCredential();
@@ -1141,7 +1143,10 @@ public class GitHub {
      *             the io exception
      */
     public GHProject getProject(long id) throws IOException {
-        return createRequest().withPreview(INERTIA).withUrlPath("/projects/" + id).fetch(GHProject.class).wrap(this);
+        return createRequest().withPreview(INERTIA)
+                .withUrlPath("/projects/" + id)
+                .fetch(GHProject.class)
+                .lateBind(this);
     }
 
     /**
@@ -1157,7 +1162,7 @@ public class GitHub {
         return createRequest().withPreview(INERTIA)
                 .withUrlPath("/projects/columns/" + id)
                 .fetch(GHProjectColumn.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**
@@ -1173,7 +1178,7 @@ public class GitHub {
         return createRequest().withPreview(INERTIA)
                 .withUrlPath("/projects/columns/cards/" + id)
                 .fetch(GHProjectCard.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**

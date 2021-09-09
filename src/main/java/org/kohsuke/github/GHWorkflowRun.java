@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
 import org.kohsuke.github.internal.EnumUtils;
@@ -178,6 +179,7 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return head repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getHeadRepository() {
         return headRepository;
     }
@@ -218,6 +220,7 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return owner;
     }

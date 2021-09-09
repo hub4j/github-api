@@ -40,6 +40,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return repository;
     }

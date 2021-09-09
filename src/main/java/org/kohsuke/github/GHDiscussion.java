@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class GHDiscussion extends GHObject {
      * @return the team for this discussion
      */
     @Nonnull
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHTeam getTeam() {
         return team;
     }

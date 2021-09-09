@@ -55,6 +55,7 @@ public class GHKey extends GitHubInteractiveObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }

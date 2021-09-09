@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -80,6 +82,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *
      * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPullRequest getParent() {
         return owner;
     }

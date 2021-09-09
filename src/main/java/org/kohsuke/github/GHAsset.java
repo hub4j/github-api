@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -85,6 +87,7 @@ public class GHAsset extends GHObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -93,7 +96,10 @@ public class GHAsset extends GHObject {
      * Gets root.
      *
      * @return the root
+     * @deprecated This method should be used internally only.
      */
+    @Deprecated
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }

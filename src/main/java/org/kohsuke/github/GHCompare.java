@@ -1,9 +1,17 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Iterator;
+
+import javax.annotation.Nonnull;
 
 /**
  * The model user for comparing 2 commits in the GitHub API.
@@ -20,6 +28,9 @@ public class GHCompare {
     private GHCommit.File[] files;
 
     private GHRepository owner;
+
+    @JacksonInject("GHCompare_usePaginatedCommits")
+    private boolean usePaginatedCommits;
 
     /**
      * Gets url.
@@ -107,6 +118,7 @@ public class GHCompare {
      *
      * @return the base commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getBaseCommit() {
         return base_commit;
     }
@@ -116,6 +128,7 @@ public class GHCompare {
      *
      * @return the merge base commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getMergeBaseCommit() {
         return merge_base_commit;
     }
@@ -123,16 +136,56 @@ public class GHCompare {
     /**
      * Gets an array of commits.
      *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
      * @return A copy of the array being stored in the class.
      */
     public Commit[] getCommits() {
-        Commit[] newValue = new Commit[commits.length];
-        System.arraycopy(commits, 0, newValue, 0, commits.length);
-        return newValue;
+        try {
+            return listCommits().withPageSize(100).toArray();
+        } catch (IOException e) {
+            throw new GHException(e.getMessage(), e);
+        }
     }
 
     /**
-     * Gets an array of commits.
+     * Iterable of commits for this comparison.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
+     * @return iterable of commits
+     */
+    public PagedIterable<Commit> listCommits() {
+        if (usePaginatedCommits) {
+            return new GHCompareCommitsIterable();
+        } else {
+            // if not using paginated commits, adapt the returned commits array
+            return new PagedIterable<Commit>() {
+                @NotNull
+                @Override
+                public PagedIterator<Commit> _iterator(int pageSize) {
+                    return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
+                }
+            };
+        }
+    }
+
+    /**
+     * Gets an array of files.
      *
      * @return A copy of the array being stored in the class.
      */
@@ -149,7 +202,19 @@ public class GHCompare {
      *            the owner
      * @return the gh compare
      */
+    @Deprecated
     public GHCompare wrap(GHRepository owner) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    GHCompare lateBind(GHRepository owner) {
         this.owner = owner;
         for (Commit commit : commits) {
             commit.wrapUp(owner);
@@ -282,5 +347,55 @@ public class GHCompare {
      */
     public static enum Status {
         behind, ahead, identical, diverged
+    }
+
+    /**
+     * Iterable for commit listing.
+     */
+    class GHCompareCommitsIterable extends PagedIterable<Commit> {
+
+        private GHCompare result;
+
+        public GHCompareCommitsIterable() {
+        }
+
+        @Nonnull
+        @Override
+        public PagedIterator<Commit> _iterator(int pageSize) {
+            try {
+                GitHubRequest request = owner.getRoot()
+                        .createRequest()
+                        .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
+                        .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
+                        .build();
+
+                // page_size must be set for GHCompare commit pagination
+                if (pageSize == 0) {
+                    pageSize = 10;
+                }
+                return new PagedIterator<>(
+                        adapt(GitHubPageIterator
+                                .create(owner.getRoot().getClient(), GHCompare.class, request, pageSize)),
+                        item -> item.wrapUp(owner));
+            } catch (MalformedURLException e) {
+                throw new GHException("Malformed URL", e);
+            }
+        }
+
+        protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
+            return new Iterator<Commit[]>() {
+                public boolean hasNext() {
+                    return base.hasNext();
+                }
+
+                public Commit[] next() {
+                    GHCompare v = base.next();
+                    if (result == null) {
+                        result = v;
+                    }
+                    return v.commits;
+                }
+            };
+        }
     }
 }

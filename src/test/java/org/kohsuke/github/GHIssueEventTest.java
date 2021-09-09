@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -37,6 +38,31 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
         // Close the issue.
         issue.close();
+    }
+
+    @Test
+    public void testIssueReviewRequestedEvent() throws Exception {
+        // Create the PR.
+        final GHPullRequest pullRequest = getRepository()
+                .createPullRequest("ReviewRequestedEventTest", "test/stable", "main", "## test");
+
+        final ArrayList<GHUser> reviewers = new ArrayList<>();
+        reviewers.add(gitHub.getUser("bitwiseman"));
+        // Generate review_requested event.
+        pullRequest.requestReviewers(reviewers);
+
+        // Test that the event is present.
+        final List<GHIssueEvent> list = pullRequest.listEvents().toList();
+        assertThat(list.size(), equalTo(1));
+        final GHIssueEvent event = list.get(0);
+        assertThat(event.getEvent(), equalTo("review_requested"));
+        assertThat(event.getReviewRequester(), notNullValue());
+        assertThat(event.getReviewRequester().getLogin(), equalTo("t0m4uk1991"));
+        assertThat(event.getRequestedReviewer(), notNullValue());
+        assertThat(event.getRequestedReviewer().getLogin(), equalTo("bitwiseman"));
+
+        // Close the PR.
+        pullRequest.close();
     }
 
     @Test

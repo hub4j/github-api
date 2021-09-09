@@ -866,4 +866,123 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(status.getState(), equalTo(GHCommitState.SUCCESS));
         assertThat(status.getContext(), equalTo("ci/circleci: build"));
     }
+
+    @Test
+    public void listCommitsBetween() throws Exception {
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        GHCompare compare = repository.getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465",
+                "8051615eff597f4e49f4f47625e6fc2b49f26bfc");
+        int actualCount = 0;
+        for (GHCompare.Commit item : compare.listCommits().withPageSize(5)) {
+            assertThat(item, notNullValue());
+            actualCount++;
+        }
+        assertThat(compare.getTotalCommits(), is(9));
+        assertThat(actualCount, is(9));
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 1));
+    }
+
+    @Test
+    public void listCommitsBetweenPaginated() throws Exception {
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        repository.setCompareUsePaginatedCommits(true);
+        GHCompare compare = repository.getCompare("e46a9f3f2ac55db96de3c5c4706f2813b3a96465",
+                "8051615eff597f4e49f4f47625e6fc2b49f26bfc");
+        int actualCount = 0;
+        for (GHCompare.Commit item : compare.listCommits().withPageSize(5)) {
+            assertThat(item, notNullValue());
+            actualCount++;
+        }
+        assertThat(compare.getTotalCommits(), is(9));
+        assertThat(actualCount, is(9));
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 3));
+    }
+
+    @Test
+    public void getCommitsBetweenOver250() throws Exception {
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        GHCompare compare = repository.getCompare("4261c42949915816a9f246eb14c3dfd21a637bc2",
+                "94ff089e60064bfa43e374baeb10846f7ce82f40");
+        int actualCount = 0;
+        for (GHCompare.Commit item : compare.getCommits()) {
+            assertThat(item, notNullValue());
+            actualCount++;
+        }
+        assertThat(compare.getTotalCommits(), is(283));
+        assertThat(actualCount, is(250));
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 1));
+
+        // Additional GHCompare checks
+        assertThat(compare.getAheadBy(), equalTo(283));
+        assertThat(compare.getBehindBy(), equalTo(0));
+        assertThat(compare.getStatus(), equalTo(GHCompare.Status.ahead));
+        assertThat(compare.getDiffUrl().toString(),
+                endsWith(
+                        "compare/4261c42949915816a9f246eb14c3dfd21a637bc2...94ff089e60064bfa43e374baeb10846f7ce82f40.diff"));
+        assertThat(compare.getHtmlUrl().toString(),
+                endsWith(
+                        "compare/4261c42949915816a9f246eb14c3dfd21a637bc2...94ff089e60064bfa43e374baeb10846f7ce82f40"));
+        assertThat(compare.getPatchUrl().toString(),
+                endsWith(
+                        "compare/4261c42949915816a9f246eb14c3dfd21a637bc2...94ff089e60064bfa43e374baeb10846f7ce82f40.patch"));
+        assertThat(compare.getPermalinkUrl().toString(),
+                endsWith("compare/hub4j-test-org:4261c42...hub4j-test-org:94ff089"));
+        assertThat(compare.getUrl().toString(),
+                endsWith(
+                        "compare/4261c42949915816a9f246eb14c3dfd21a637bc2...94ff089e60064bfa43e374baeb10846f7ce82f40"));
+
+        assertThat(compare.getBaseCommit().getSHA1(), equalTo("4261c42949915816a9f246eb14c3dfd21a637bc2"));
+
+        assertThat(compare.getMergeBaseCommit().getSHA1(), equalTo("4261c42949915816a9f246eb14c3dfd21a637bc2"));
+        // it appears this field is not present in the returned JSON. Strange.
+        assertThat(compare.getMergeBaseCommit().getCommit().getSha(), nullValue());
+        assertThat(compare.getMergeBaseCommit().getCommit().getUrl(),
+                endsWith("/commits/4261c42949915816a9f246eb14c3dfd21a637bc2"));
+        assertThat(compare.getMergeBaseCommit().getCommit().getMessage(),
+                endsWith("[maven-release-plugin] prepare release github-api-1.123"));
+        assertThat(compare.getMergeBaseCommit().getCommit().getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(compare.getMergeBaseCommit().getCommit().getCommitter().getName(), equalTo("Liam Newman"));
+
+        assertThat(compare.getMergeBaseCommit().getCommit().getTree().getSha(),
+                equalTo("5da98090976978c93aba0bdfa550e05675543f99"));
+        assertThat(compare.getMergeBaseCommit().getCommit().getTree().getUrl(),
+                endsWith("/git/trees/5da98090976978c93aba0bdfa550e05675543f99"));
+
+        assertThat(compare.getFiles().length, equalTo(300));
+        assertThat(compare.getFiles()[0].getFileName(), equalTo(".github/PULL_REQUEST_TEMPLATE.md"));
+        assertThat(compare.getFiles()[0].getLinesAdded(), equalTo(8));
+        assertThat(compare.getFiles()[0].getLinesChanged(), equalTo(15));
+        assertThat(compare.getFiles()[0].getLinesDeleted(), equalTo(7));
+        assertThat(compare.getFiles()[0].getFileName(), equalTo(".github/PULL_REQUEST_TEMPLATE.md"));
+        assertThat(compare.getFiles()[0].getPatch(), startsWith("@@ -1,15 +1,16 @@"));
+        assertThat(compare.getFiles()[0].getPreviousFilename(), nullValue());
+        assertThat(compare.getFiles()[0].getStatus(), equalTo("modified"));
+        assertThat(compare.getFiles()[0].getSha(), equalTo("e4234f5f6f39899282a6ef1edff343ae1269222e"));
+
+        assertThat(compare.getFiles()[0].getBlobUrl().toString(),
+                endsWith("/blob/94ff089e60064bfa43e374baeb10846f7ce82f40/.github/PULL_REQUEST_TEMPLATE.md"));
+        assertThat(compare.getFiles()[0].getRawUrl().toString(),
+                endsWith("/raw/94ff089e60064bfa43e374baeb10846f7ce82f40/.github/PULL_REQUEST_TEMPLATE.md"));
+    }
+
+    @Test
+    public void getCommitsBetweenPaged() throws Exception {
+        GHRepository repository = getRepository();
+        int startingCount = mockGitHub.getRequestCount();
+        repository.setCompareUsePaginatedCommits(true);
+        GHCompare compare = repository.getCompare("4261c42949915816a9f246eb14c3dfd21a637bc2",
+                "94ff089e60064bfa43e374baeb10846f7ce82f40");
+        int actualCount = 0;
+        for (GHCompare.Commit item : compare.getCommits()) {
+            assertThat(item, notNullValue());
+            actualCount++;
+        }
+        assertThat(compare.getTotalCommits(), is(283));
+        assertThat(actualCount, is(283));
+        assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 4));
+    }
+
 }

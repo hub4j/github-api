@@ -66,7 +66,19 @@ public class GHDeployKey {
      *            the repo
      * @return the gh deploy key
      */
+    @Deprecated
     public GHDeployKey wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh deploy key.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
+     */
+    GHDeployKey lateBind(GHRepository repo) {
         this.owner = repo;
         return this;
     }

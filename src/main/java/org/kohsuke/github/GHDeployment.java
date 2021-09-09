@@ -4,6 +4,7 @@ import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -81,7 +82,7 @@ public class GHDeployment extends GHObject {
      * @return the payload
      */
     public Map<String, Object> getPayloadMap() {
-        return (Map<String, Object>) payload;
+        return Collections.unmodifiableMap((Map<String, Object>) payload);
     }
 
     /**
@@ -197,7 +198,7 @@ public class GHDeployment extends GHObject {
                 .withUrlPath(statuses_url)
                 .withPreview(Previews.ANT_MAN)
                 .withPreview(Previews.FLASH)
-                .toIterable(GHDeploymentStatus[].class, item -> item.wrap(owner));
+                .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
     }
 
 }

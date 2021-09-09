@@ -65,6 +65,7 @@ public class GHThread extends GHObject {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return repository;
     }

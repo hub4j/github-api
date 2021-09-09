@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.kohsuke.github.internal.Previews.ZZZAX;
 
@@ -260,7 +261,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the contexts
          */
         public Collection<String> getContexts() {
-            return contexts;
+            return Collections.unmodifiableCollection(contexts);
         }
 
         /**
@@ -305,7 +306,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the teams
          */
         public Collection<GHTeam> getTeams() {
-            return teams;
+            return Collections.unmodifiableCollection(teams);
         }
 
         /**
@@ -332,7 +333,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the users
          */
         public Collection<GHUser> getUsers() {
-            return users;
+            return Collections.unmodifiableCollection(users);
         }
 
         /**

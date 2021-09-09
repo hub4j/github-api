@@ -154,16 +154,6 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets tag name.
      *
      * @return the tag name
@@ -210,7 +200,7 @@ public class GHRelease extends GHObject {
 
     GHRelease wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        owner.root();
         return this;
     }
 
@@ -258,7 +248,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = owner.root.createRequest().method("POST");
+        Requester builder = owner.root().createRequest().method("POST");
         String url = getUploadUrl();
         // strip the helpful garbage from the url
         url = url.substring(0, url.indexOf('{'));
@@ -303,7 +293,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHAsset> listAssets() throws IOException {
-        Requester builder = owner.root.createRequest();
+        Requester builder = owner.root().createRequest();
         return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
     }
 
@@ -314,7 +304,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
+        root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 
     /**

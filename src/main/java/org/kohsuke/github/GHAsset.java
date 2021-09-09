@@ -93,18 +93,6 @@ public class GHAsset extends GHObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     * @deprecated This method should be used internally only.
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets size.
      *
      * @return the size
@@ -140,7 +128,7 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -150,7 +138,7 @@ public class GHAsset extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     private String getApiRoute() {
@@ -159,7 +147,7 @@ public class GHAsset extends GHObject {
 
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
-        this.root = owner.root;
+        owner.root();
         return this;
     }
 

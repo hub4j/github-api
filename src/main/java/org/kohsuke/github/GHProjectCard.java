@@ -47,7 +47,6 @@ public class GHProjectCard extends GHObject {
      * @return the gh project card
      */
     GHProjectCard lateBind(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -73,17 +72,7 @@ public class GHProjectCard extends GHObject {
     GHProjectCard lateBind(GHProjectColumn column) {
         this.column = column;
         this.project = column.project;
-        return lateBind(column.root);
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
+        return lateBind(column.root());
     }
 
     /**
@@ -97,10 +86,10 @@ public class GHProjectCard extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.createRequest()
+                project = root().createRequest()
                         .withUrlPath(getProjectUrl().getPath())
                         .fetch(GHProject.class)
-                        .lateBind(root);
+                        .lateBind(root());
             } catch (FileNotFoundException e) {
             }
         }
@@ -118,10 +107,10 @@ public class GHProjectCard extends GHObject {
     public GHProjectColumn getColumn() throws IOException {
         if (column == null) {
             try {
-                column = root.createRequest()
+                column = root().createRequest()
                         .withUrlPath(getColumnUrl().getPath())
                         .fetch(GHProjectColumn.class)
-                        .lateBind(root);
+                        .lateBind(root());
             } catch (FileNotFoundException e) {
             }
         }
@@ -140,12 +129,12 @@ public class GHProjectCard extends GHObject {
             return null;
         try {
             if (content_url.contains("/pulls")) {
-                return root.createRequest()
+                return root().createRequest()
                         .withUrlPath(getContentUrl().getPath())
                         .fetch(GHPullRequest.class)
-                        .wrap(root);
+                        .wrap(root());
             } else {
-                return root.createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class).wrap(root);
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class).wrap(root());
             }
         } catch (FileNotFoundException e) {
             return null;
@@ -232,7 +221,7 @@ public class GHProjectCard extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -251,6 +240,6 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 }

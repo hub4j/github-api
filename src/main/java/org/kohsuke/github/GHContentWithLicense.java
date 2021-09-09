@@ -14,7 +14,7 @@ class GHContentWithLicense extends GHContent {
     GHContentWithLicense wrap(GHRepository owner) {
         super.wrap(owner);
         if (license != null)
-            license.wrap(owner.root);
+            license.wrap(owner.root());
         return this;
     }
 }

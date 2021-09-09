@@ -51,18 +51,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     * @deprecated This method should be used internally only.
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Sets root.
      *
      * @param root
@@ -136,12 +124,12 @@ public class GHAppInstallation extends GHObject {
         GitHubRequest request;
 
         try {
-            request = root.createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
+            request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
         } catch (MalformedURLException e) {
             throw new GHException("", e);
         }
 
-        return new PagedSearchIterable<>(root, request, GHAppInstallationRepositoryResult.class);
+        return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
     }
 
     private static class GHAppInstallationRepositoryResult extends SearchResult<GHRepository> {
@@ -317,7 +305,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     GHAppInstallation wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -332,7 +319,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Preview(GAMBIT)
     public void deleteInstallation() throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("DELETE")
                 .withPreview(GAMBIT)
                 .withUrlPath(String.format("/app/installations/%d", getId()))
@@ -353,7 +340,7 @@ public class GHAppInstallation extends GHObject {
      */
     @BetaApi
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
-        return new GHAppCreateTokenBuilder(root,
+        return new GHAppCreateTokenBuilder(root(),
                 String.format("/app/installations/%d/access_tokens", getId()),
                 permissions);
     }
@@ -369,6 +356,6 @@ public class GHAppInstallation extends GHObject {
      */
     @BetaApi
     public GHAppCreateTokenBuilder createToken() {
-        return new GHAppCreateTokenBuilder(root, String.format("/app/installations/%d/access_tokens", getId()));
+        return new GHAppCreateTokenBuilder(root(), String.format("/app/installations/%d/access_tokens", getId()));
     }
 }

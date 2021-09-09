@@ -47,7 +47,7 @@ public class GHCommitPointer {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() throws IOException {
         if (user != null)
-            return user.root.intern(user);
+            return user.root().intern(user);
         return user;
     }
 
@@ -100,8 +100,8 @@ public class GHCommitPointer {
     }
 
     void wrapUp(GitHub root) {
-        if (user != null)
-            user.root = root;
+        if (user != null) {
+        }
         if (repo != null)
             repo.wrap(root);
     }

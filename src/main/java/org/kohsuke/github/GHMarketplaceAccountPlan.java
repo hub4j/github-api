@@ -25,10 +25,10 @@ public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {
     GHMarketplaceAccountPlan wrapUp(GitHub root) {
         super.wrapUp(root);
         if (this.marketplacePendingChange != null)
-            this.marketplacePendingChange.wrapUp(this.root);
+            this.marketplacePendingChange.wrapUp(this.root());
 
         if (this.marketplacePurchase != null)
-            this.marketplacePurchase.wrapUp(this.root);
+            this.marketplacePurchase.wrapUp(this.root());
 
         return this;
     }

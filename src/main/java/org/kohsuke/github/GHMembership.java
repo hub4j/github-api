@@ -74,11 +74,10 @@ public class GHMembership extends GitHubInteractiveObject {
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
+        root().createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 
     GHMembership wrap(GitHub root) {
-        this.root = root;
         if (user != null)
             user = root.getUser(user.wrapUp(root));
         if (organization != null)

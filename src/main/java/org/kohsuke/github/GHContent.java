@@ -232,7 +232,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-        root.createRequest().withUrlPath(url).fetchInto(this);
+        root().createRequest().withUrlPath(url).fetchInto(this);
     }
 
     /**
@@ -246,7 +246,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 
-        return root.createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -> item.wrap(repository));
+        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -> item.wrap(repository));
     }
 
     /**
@@ -315,7 +315,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
             throws IOException {
         String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);
 
-        Requester requester = root.createRequest()
+        Requester requester = root().createRequest()
                 .method("POST")
                 .with("path", path)
                 .with("message", commitMessage)
@@ -362,7 +362,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = root.createRequest()
+        Requester requester = root().createRequest()
                 .method("POST")
                 .with("path", path)
                 .with("message", commitMessage)
@@ -386,12 +386,11 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     GHContent wrap(GHRepository owner) {
         this.repository = owner;
-        this.root = owner.root;
+        owner.root();
         return this;
     }
 
     GHContent wrap(GitHub root) {
-        this.root = root;
         if (repository != null)
             repository.wrap(root);
         return this;
@@ -404,6 +403,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-        root.createRequest().setRawUrlPath(url).fetchInto(this);
+        root().createRequest().setRawUrlPath(url).fetchInto(this);
     }
 }

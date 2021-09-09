@@ -44,7 +44,6 @@ public class GHProjectColumn extends GHObject {
      * @return the gh project column
      */
     GHProjectColumn lateBind(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -69,17 +68,7 @@ public class GHProjectColumn extends GHObject {
      */
     GHProjectColumn lateBind(GHProject project) {
         this.project = project;
-        return lateBind(project.root);
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
+        return lateBind(project.root());
     }
 
     /**
@@ -93,10 +82,10 @@ public class GHProjectColumn extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.createRequest()
+                project = root().createRequest()
                         .withUrlPath(getProjectUrl().getPath())
                         .fetch(GHProject.class)
-                        .lateBind(root);
+                        .lateBind(root());
             } catch (FileNotFoundException e) {
             }
         }
@@ -134,7 +123,7 @@ public class GHProjectColumn extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -153,7 +142,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -165,7 +154,7 @@ public class GHProjectColumn extends GHObject {
      */
     public PagedIterable<GHProjectCard> listCards() throws IOException {
         final GHProjectColumn column = this;
-        return root.createRequest()
+        return root().createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .toIterable(GHProjectCard[].class, item -> item.lateBind(column));
@@ -181,7 +170,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("note", note)
@@ -200,7 +189,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")

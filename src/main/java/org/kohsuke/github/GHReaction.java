@@ -20,7 +20,6 @@ public class GHReaction extends GHObject {
     private ReactionContent content;
 
     GHReaction wrap(GitHub root) {
-        this.root = root;
         user.wrapUp(root);
         return this;
     }
@@ -59,6 +58,6 @@ public class GHReaction extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withPreview(SQUIRREL_GIRL).withUrlPath("/reactions/" + getId()).send();
+        root().createRequest().method("DELETE").withPreview(SQUIRREL_GIRL).withUrlPath("/reactions/" + getId()).send();
     }
 }

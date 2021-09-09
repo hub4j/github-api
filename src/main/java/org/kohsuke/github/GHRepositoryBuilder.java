@@ -238,7 +238,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
     @Override
     public GHRepository done() throws IOException {
-        return super.done().wrap(this.root);
+        return super.done().wrap(this.root());
     }
 
     S archive() throws IOException {

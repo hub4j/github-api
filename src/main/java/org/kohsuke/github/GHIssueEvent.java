@@ -103,16 +103,6 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets issue.
      *
      * @return the issue
@@ -200,13 +190,12 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     GHIssueEvent wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
-        this.root = parent.root;
+        parent.root();
         return this;
     }
 

@@ -535,7 +535,6 @@ public class GitHub {
         GHUser u = users.get(login);
         if (u == null) {
             u = createRequest().withUrlPath("/users/" + login).fetch(GHUser.class);
-            u.root = this;
             users.put(u.getLogin(), u);
         }
         return u;
@@ -559,7 +558,6 @@ public class GitHub {
     protected GHUser getUser(GHUser orig) {
         GHUser u = users.get(orig.getLogin());
         if (u == null) {
-            orig.root = this;
             users.put(orig.getLogin(), orig);
             return orig;
         }
@@ -1342,7 +1340,10 @@ public class GitHub {
 
     @Nonnull
     Requester createRequest() {
-        return new Requester(client).injectMappingValue(this);
+        Requester requester = new Requester(client);
+        // For classes that extend GitHub, treat them still as a GitHub instance
+        requester.injectMappingValue(GitHub.class.getName(), this);
+        return requester;
     }
 
     GHUser intern(GHUser user) throws IOException {

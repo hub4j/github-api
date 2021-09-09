@@ -20,18 +20,6 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     private GHRepositorySelection repositorySelection;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     * @deprecated This method should be used internally only.
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Sets root.
      *
      * @param root
@@ -145,7 +133,6 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     }
 
     GHAppInstallationToken wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 }

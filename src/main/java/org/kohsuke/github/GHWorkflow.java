@@ -87,7 +87,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-        root.createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").fetchHttpStatusCode();
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void enable() throws IOException {
-        root.createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").fetchHttpStatusCode();
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void dispatch(String ref, Map<String, Object> inputs) throws IOException {
-        Requester requester = root.createRequest()
+        Requester requester = root().createRequest()
                 .method("POST")
                 .withUrlPath(getApiRoute(), "dispatches")
                 .with("ref", ref);
@@ -140,7 +140,7 @@ public class GHWorkflow extends GHObject {
         if (owner == null) {
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
 
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
@@ -148,11 +148,10 @@ public class GHWorkflow extends GHObject {
 
     GHWorkflow wrapUp(GHRepository owner) {
         this.owner = owner;
-        return wrapUp(owner.root);
+        return wrapUp(owner.root());
     }
 
     GHWorkflow wrapUp(GitHub root) {
-        this.root = root;
         if (owner != null)
             owner.wrap(root);
         return this;

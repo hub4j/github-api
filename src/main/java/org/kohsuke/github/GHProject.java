@@ -55,16 +55,6 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
@@ -76,15 +66,18 @@ public class GHProject extends GHObject {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
-                    owner = root.createRequest()
+                    owner = root().createRequest()
                             .withUrlPath(getOwnerUrl().getPath())
                             .fetch(GHOrganization.class)
-                            .wrapUp(root);
+                            .wrapUp(root());
                 } else if (owner_url.contains("/users/")) {
-                    owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);
+                    owner = root().createRequest()
+                            .withUrlPath(getOwnerUrl().getPath())
+                            .fetch(GHUser.class)
+                            .wrapUp(root());
                 } else if (owner_url.contains("/repos/")) {
                     String[] pathElements = getOwnerUrl().getPath().split("/");
-                    owner = GHRepository.read(root, pathElements[1], pathElements[2]);
+                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -179,7 +172,6 @@ public class GHProject extends GHObject {
      * @return the gh project
      */
     GHProject lateBind(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -204,11 +196,11 @@ public class GHProject extends GHObject {
      */
     GHProject lateBind(GHRepository repo) {
         this.owner = repo;
-        return lateBind(repo.root);
+        return lateBind(repo.root());
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -302,7 +294,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -314,7 +306,7 @@ public class GHProject extends GHObject {
      */
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.createRequest()
+        return root().createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
@@ -330,7 +322,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)

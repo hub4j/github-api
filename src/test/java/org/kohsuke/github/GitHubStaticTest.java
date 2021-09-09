@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
 /**
@@ -314,7 +315,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         // this makes sure they don't break.
 
         GHRepository repo = getTempRepository();
-        assertThat(repo.getRoot(), not(nullValue()));
+        assertThat(repo.root(), not(nullValue()));
         assertThat(repo.getResponseHeaderFields(), not(nullValue()));
 
         String repoString = GitHub.getMappingObjectWriter().writeValueAsString(repo);
@@ -326,7 +327,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
                 .readValue(repoString);
 
         // This should never happen if the internal method isn't used
-        assertThat(readRepo.getRoot(), nullValue());
+        final GHRepository readRepoFinal = readRepo;
+        assertThrows(NullPointerException.class, () -> readRepoFinal.getRoot());
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);

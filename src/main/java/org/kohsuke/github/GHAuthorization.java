@@ -46,18 +46,6 @@ public class GHAuthorization extends GHObject {
     // private GHUser user;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     * @deprecated This method should be used internally only.
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets scopes.
      *
      * @return the scopes
@@ -159,7 +147,6 @@ public class GHAuthorization extends GHObject {
     }
 
     GHAuthorization wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 

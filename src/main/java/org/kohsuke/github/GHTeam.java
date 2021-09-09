@@ -48,7 +48,7 @@ public class GHTeam extends GHObject implements Refreshable {
 
     GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
-        this.root = owner.root;
+        owner.root();
         return this;
     }
 
@@ -59,7 +59,7 @@ public class GHTeam extends GHObject implements Refreshable {
 
     static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
         for (GHTeam t : teams) {
-            t.root = owner.root;
+            owner.root();
         }
         return teams;
     }
@@ -118,7 +118,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void setDescription(String description) throws IOException {
-        root.createRequest().method("PATCH").with("description", description).withUrlPath(api("")).send();
+        root().createRequest().method("PATCH").with("description", description).withUrlPath(api("")).send();
     }
 
     /**
@@ -130,7 +130,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void setPrivacy(Privacy privacy) throws IOException {
-        root.createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
+        root().createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 
     /**
@@ -155,10 +155,10 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers(String role) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(api("/members"))
                 .with("role", role)
-                .toIterable(GHUser[].class, item -> item.wrapUp(root));
+                .toIterable(GHUser[].class, item -> item.wrapUp(root()));
     }
 
     /**
@@ -198,7 +198,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHTeam> listChildTeams() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(api("/teams"))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
     }
@@ -223,7 +223,7 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root.createRequest().withUrlPath("/teams/" + getId() + "/members/" + user.getLogin()).send();
+            root().createRequest().withUrlPath("/teams/" + getId() + "/members/" + user.getLogin()).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -251,9 +251,9 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(api("/repos"))
-                .toIterable(GHRepository[].class, item -> item.wrap(root));
+                .toIterable(GHRepository[].class, item -> item.wrap(root()));
     }
 
     /**
@@ -268,7 +268,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-        root.createRequest().method("PUT").withUrlPath(api("/memberships/" + u.getLogin())).send();
+        root().createRequest().method("PUT").withUrlPath(api("/memberships/" + u.getLogin())).send();
     }
 
     /**
@@ -284,7 +284,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("PUT")
                 .with("role", role)
                 .withUrlPath(api("/memberships/" + user.getLogin()))
@@ -300,7 +300,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(api("/members/" + u.getLogin())).send();
+        root().createRequest().method("DELETE").withUrlPath(api("/members/" + u.getLogin())).send();
     }
 
     /**
@@ -326,7 +326,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("PUT")
                 .with("permission", permission)
                 .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
@@ -342,7 +342,10 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName())).send();
+        root().createRequest()
+                .method("DELETE")
+                .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
+                .send();
     }
 
     /**
@@ -352,7 +355,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(api("")).send();
+        root().createRequest().method("DELETE").withUrlPath(api("")).send();
     }
 
     private String api(String tail) {
@@ -389,7 +392,7 @@ public class GHTeam extends GHObject implements Refreshable {
 
     @Override
     public void refresh() throws IOException {
-        root.createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root);
+        root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
     }
 
     @Override

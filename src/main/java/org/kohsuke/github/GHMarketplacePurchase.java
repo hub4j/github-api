@@ -29,9 +29,8 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      * @return an instance of the GHMarketplacePurchase class
      */
     GHMarketplacePurchase wrapUp(GitHub root) {
-        this.root = root;
         if (plan != null) { // sanity check
-            this.plan.wrapUp(this.root);
+            this.plan.wrapUp(this.root());
         }
         return this;
     }

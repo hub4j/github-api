@@ -24,7 +24,6 @@ public class GHInvitation extends GHObject {
     private String html_url;
 
     GHInvitation wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -35,7 +34,7 @@ public class GHInvitation extends GHObject {
      *             the io exception
      */
     public void accept() throws IOException {
-        root.createRequest().method("PATCH").withUrlPath("/user/repository_invitations/" + id).send();
+        root().createRequest().method("PATCH").withUrlPath("/user/repository_invitations/" + id).send();
     }
 
     /**
@@ -45,7 +44,7 @@ public class GHInvitation extends GHObject {
      *             the io exception
      */
     public void decline() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath("/user/repository_invitations/" + id).send();
+        root().createRequest().method("DELETE").withUrlPath("/user/repository_invitations/" + id).send();
     }
 
     @Override

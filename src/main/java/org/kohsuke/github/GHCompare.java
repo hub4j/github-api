@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 public class GHCompare {
 
     private String url, html_url, permalink_url, diff_url, patch_url;
-    public Status status;
+    private Status status;
     private int ahead_by, behind_by, total_commits;
     private Commit base_commit, merge_base_commit;
     private Commit[] commits;
@@ -363,7 +363,7 @@ public class GHCompare {
         @Override
         public PagedIterator<Commit> _iterator(int pageSize) {
             try {
-                GitHubRequest request = owner.getRoot()
+                GitHubRequest request = owner.root()
                         .createRequest()
                         .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
                         .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
@@ -374,8 +374,7 @@ public class GHCompare {
                     pageSize = 10;
                 }
                 return new PagedIterator<>(
-                        adapt(GitHubPageIterator
-                                .create(owner.getRoot().getClient(), GHCompare.class, request, pageSize)),
+                        adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
                         item -> item.wrapUp(owner));
             } catch (MalformedURLException e) {
                 throw new GHException("Malformed URL", e);

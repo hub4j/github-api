@@ -65,7 +65,6 @@ class GHPermission {
 
     void wrapUp(GitHub root) {
         if (user != null) {
-            user.root = root;
         }
     }
 

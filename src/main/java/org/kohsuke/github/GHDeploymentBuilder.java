@@ -23,7 +23,8 @@ public class GHDeploymentBuilder {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable")
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.root.createRequest()
+        this.builder = repo.root()
+                .createRequest()
                 .withPreview(Previews.ANT_MAN)
                 .withPreview(Previews.FLASH)
                 .method("POST");

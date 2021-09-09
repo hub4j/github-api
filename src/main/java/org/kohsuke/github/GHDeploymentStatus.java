@@ -42,9 +42,9 @@ public class GHDeploymentStatus extends GHObject {
      */
     GHDeploymentStatus lateBind(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
+        owner.root();
         if (creator != null)
-            creator.wrapUp(root);
+            creator.wrapUp(root());
         return this;
     }
 

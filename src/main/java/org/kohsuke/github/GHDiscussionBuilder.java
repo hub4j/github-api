@@ -31,7 +31,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
     protected GHDiscussionBuilder(@Nonnull Class<S> intermediateReturnType,
             @Nonnull GHTeam team,
             @CheckForNull GHDiscussion baseInstance) {
-        super(GHDiscussion.class, intermediateReturnType, team.root, baseInstance);
+        super(GHDiscussion.class, intermediateReturnType, team.root(), baseInstance);
 
         this.team = team;
 

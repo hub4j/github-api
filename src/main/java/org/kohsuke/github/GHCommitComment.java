@@ -91,7 +91,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.login);
+        return owner == null || owner.root().isOffline() ? user : owner.root().getUser(user.login);
     }
 
     /**
@@ -114,7 +114,8 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.createRequest()
+        owner.root()
+                .createRequest()
                 .method("PATCH")
                 .with("body", body)
                 .withUrlPath(getApiTail())
@@ -124,21 +125,23 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiTail() + "/reactions")
                 .fetch(GHReaction.class)
-                .wrap(owner.root);
+                .wrap(owner.root());
     }
 
     @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiTail() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
+                .toIterable(GHReaction[].class, item -> item.wrap(owner.root()));
     }
 
     /**
@@ -148,7 +151,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.createRequest().method("DELETE").withUrlPath(getApiTail()).send();
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiTail()).send();
     }
 
     private String getApiTail() {
@@ -157,8 +160,8 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
-        if (owner.root.isOffline()) {
-            user.wrapUp(owner.root);
+        if (owner.root().isOffline()) {
+            user.wrapUp(owner.root());
         }
         return this;
     }

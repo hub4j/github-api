@@ -30,11 +30,10 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      * @return an instance of the GHMarketplaceUserPurchase class
      */
     GHMarketplaceUserPurchase wrapUp(GitHub root) {
-        this.root = root;
         if (this.account != null)
-            this.account.wrapUp(this.root);
+            this.account.wrapUp(this.root());
         if (this.plan != null)
-            this.plan.wrapUp(this.root);
+            this.plan.wrapUp(this.root());
         return this;
     }
 

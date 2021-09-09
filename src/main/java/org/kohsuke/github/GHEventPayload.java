@@ -118,7 +118,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
     }
 
     void wrapUp(GitHub root) {
-        this.root = root;
         if (sender != null) {
             sender.wrapUp(root);
         }
@@ -395,7 +394,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequest getPullRequest() {
-            pullRequest.root = root;
+            root();
             return pullRequest;
         }
 

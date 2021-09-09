@@ -11,7 +11,7 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
     private final GHRepository repo;
 
     GHWorkflowJobQueryBuilder(GHWorkflowRun workflowRun) {
-        super(workflowRun.getRepository().root);
+        super(workflowRun.getRepository().root());
         this.repo = workflowRun.getRepository();
         req.withUrlPath(repo.getApiTailUrl("actions/runs"), String.valueOf(workflowRun.getId()), "jobs");
     }

@@ -15,7 +15,7 @@ class GHHooks {
     static abstract class Context extends GitHubInteractiveObject {
 
         private Context(GitHub root) {
-            this.root = root;
+            super(root);
         }
 
         /**
@@ -27,8 +27,8 @@ class GHHooks {
          */
         public List<GHHook> getHooks() throws IOException {
 
-            GHHook[] hookArray = root.createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse
-                                                                                                          // bug
+            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse
+                                                                                                            // bug
             // requires this
             // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
@@ -47,7 +47,7 @@ class GHHooks {
          *             the io exception
          */
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
+            GHHook hook = root().createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
             return wrap(hook);
         }
 
@@ -75,7 +75,7 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = root.createRequest()
+            GHHook hook = root().createRequest()
                     .method("POST")
                     .with("name", name)
                     .with("active", active)
@@ -101,7 +101,7 @@ class GHHooks {
         private final GHUser owner;
 
         private RepoContext(GHRepository repository, GHUser owner) {
-            super(repository.root);
+            super(repository.root());
             this.repository = repository;
             this.owner = owner;
         }
@@ -131,7 +131,7 @@ class GHHooks {
         private final GHOrganization organization;
 
         private OrgContext(GHOrganization organization) {
-            super(organization.root);
+            super(organization.root());
             this.organization = organization;
         }
 

@@ -25,7 +25,6 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      * @return an instance of the GHMarketplaceAccount class
      */
     GHMarketplaceAccount wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 

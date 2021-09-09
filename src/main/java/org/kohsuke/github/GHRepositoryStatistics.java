@@ -31,8 +31,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable risk")
     public GHRepositoryStatistics(GHRepository repo) {
+        super(repo.root());
         this.repo = repo;
-        this.root = repo.root;
     }
 
     /**
@@ -85,9 +85,9 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(getApiTailUrl("contributors"))
-                .toIterable(ContributorStats[].class, item -> item.wrapUp(root));
+                .toIterable(ContributorStats[].class, item -> item.wrapUp(root()));
     }
 
     /**
@@ -105,16 +105,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        /**
-         * Gets root.
-         *
-         * @return the root
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-        public GitHub getRoot() {
-            return root;
         }
 
         /**
@@ -229,7 +219,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         }
 
         ContributorStats wrapUp(GitHub root) {
-            this.root = root;
             return this;
         }
     }
@@ -243,9 +232,9 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the io exception
      */
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(getApiTailUrl("commit_activity"))
-                .toIterable(CommitActivity[].class, item -> item.wrapUp(root));
+                .toIterable(CommitActivity[].class, item -> item.wrapUp(root()));
     }
 
     /**
@@ -287,18 +276,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         }
 
         CommitActivity wrapUp(GitHub root) {
-            this.root = root;
             return this;
-        }
-
-        /**
-         * Gets root.
-         *
-         * @return the root
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-        public GitHub getRoot() {
-            return root;
         }
 
         @Override
@@ -317,7 +295,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      */
     public List<CodeFrequency> getCodeFrequency() throws IOException {
         try {
-            CodeFrequency[] list = root.createRequest()
+            CodeFrequency[] list = root().createRequest()
                     .withUrlPath(getApiTailUrl("code_frequency"))
                     .fetch(CodeFrequency[].class);
 
@@ -391,7 +369,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the io exception
      */
     public Participation getParticipation() throws IOException {
-        return root.createRequest().withUrlPath(getApiTailUrl("participation")).fetch(Participation.class);
+        return root().createRequest().withUrlPath(getApiTailUrl("participation")).fetch(Participation.class);
     }
 
     /**
@@ -404,16 +382,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        /**
-         * Gets root.
-         *
-         * @return the root
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-        public GitHub getRoot() {
-            return root;
         }
 
         /**
@@ -435,7 +403,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         }
 
         Participation wrapUp(GitHub root) {
-            this.root = root;
             return this;
         }
     }
@@ -449,7 +416,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the io exception
      */
     public List<PunchCardItem> getPunchCard() throws IOException {
-        PunchCardItem[] list = root.createRequest()
+        PunchCardItem[] list = root().createRequest()
                 .withUrlPath(getApiTailUrl("punch_card"))
                 .fetch(PunchCardItem[].class);
         return Arrays.asList(list);

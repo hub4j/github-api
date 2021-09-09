@@ -36,7 +36,6 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      * @return an instance of the GHMarketplacePlan class
      */
     GHMarketplacePlan wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 
@@ -178,6 +177,6 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      *      all GitHub accounts (user or organization) on a specific plan</a>
      */
     public GHMarketplaceListAccountBuilder listAccounts() {
-        return new GHMarketplaceListAccountBuilder(root, this.id);
+        return new GHMarketplaceListAccountBuilder(root(), this.id);
     }
 }

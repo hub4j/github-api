@@ -20,7 +20,7 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
 
     @BetaApi
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
-        this.root = root;
+        super(root);
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
     }
@@ -79,7 +79,7 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(apiUrlTail)
                 .fetch(GHAppInstallationToken.class)
-                .wrapUp(root);
+                .wrapUp(root());
     }
 
 }

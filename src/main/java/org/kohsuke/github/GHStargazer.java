@@ -48,6 +48,6 @@ public class GHStargazer {
 
     void wrapUp(GHRepository repository) {
         this.repository = repository;
-        user.wrapUp(repository.root);
+        user.wrapUp(repository.root());
     }
 }

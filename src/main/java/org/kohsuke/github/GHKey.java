@@ -51,16 +51,6 @@ public class GHKey extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Is verified boolean.
      *
      * @return the boolean
@@ -70,7 +60,6 @@ public class GHKey extends GitHubInteractiveObject {
     }
 
     GHKey wrap(GitHub root) {
-        this.root = root;
         return this;
     }
 
